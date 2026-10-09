@@ -442,3 +442,29 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - stales: [ip-approvals-api, ip-spec, ip-build-plan, ip-data-contract, ip-routes-and-views, ip-testing, ip-wiki-lint, ov-arch-data-flows, schema, ops-approval-workflow] (no approvals.json exists, so nothing is actually stale)
 - next: p0.16 / IP-10 of ip-build-plan (interactive_plan/README.md review, ip-* tags settled by evidence and status active, owner requests for comp-interactive-plan and the ip-testing §4 manual checks, HANDOFF; evidence IP-10-final-lint.json)
 - commit: 6a78a78
+
+## [2026-10-09] decide | IP-10 delegated details: perf tag kept, README known issue, failed self-referencing lint run kept
+
+- session: s01
+- pages: [ip-spec, ip-approvals-api, ip-build-plan, ip-data-contract, ip-routes-and-views, ip-testing, ip-wiki-lint, handoff-2026-10-09-s01]
+- sources: [raw/owner/2026-10-09-s01-wave0c.md, raw/evidence/phase-p0-planning/interactive-plan/IP-9-perf.txt, raw/evidence/phase-p0-planning/interactive-plan/IP-10-final-lint.json]
+- result: Decided by Claude under the wave 0c delegation policy (the owner can overturn any of them in the app). (1) The only integrity tag left on the ip-* pages naming phase-p0-planning (ip-spec §5 perf targets) is kept, with the IP-9 numbers cited in the body: warm medians are met, but the 300-page case was not measured (real wiki 198 files) and the cold-request misses (first request about 2.2 s, lint-cold 1.0-1.4 s) were not re-measured after the IP-9 review removed git from the in-server lint. (2) All seven ip-* pages set to `status: active` (volatile key, SCHEMA §10.2). (3) README lists the open /architecture hover-label overlap (review finding, medium, not fixed) under "Known issues" and points to the edge table. (4) The first IP-10 evidence run reported 3 REF-DANGLING errors only because STATUS.md and the new handoff link IP-10-final-lint.json, which that run itself creates; it is kept as IP-10-final-lint.20261009-0423-selfref-fail.json and the immediate re-run (no file edits in between) is the evidence. (5) Integrity tags outside wiki/interactive-plan/ that the evidence covers (phase-p0-planning `unverified` x4, adr-0016 atomic rename, Q-210 coverage pin) are not edited by the app builder (ip-build-plan stop conditions); they are listed for the owner/integrator in the handoff, as is the comp-interactive-plan update (ip-build-plan IP-10 step 3).
+- stales: [ip-spec, ip-approvals-api, ip-build-plan, ip-data-contract, ip-routes-and-views, ip-testing, ip-wiki-lint] (only ip-spec's content hash changed; no approvals.json exists, so nothing is actually stale)
+- commit: 6118d32
+
+## [2026-10-09] lint | p0.16 (IP-10 documentation, evidence, handoff): final lint:wiki 0 errors, gate PASS
+
+- session: s01
+- pages: [ip-spec, ip-approvals-api, ip-build-plan, ip-data-contract, ip-routes-and-views, ip-testing, ip-wiki-lint, handoff-2026-10-09-s01, status-live]
+- sources: [raw/evidence/phase-p0-planning/interactive-plan/IP-10-final-lint.json, raw/evidence/phase-p0-planning/interactive-plan/IP-10-final-lint.20261009-0423-selfref-fail.json]
+- result: interactive_plan/README.md rewritten for the handoff (start `npm run dev:local` -> http://127.0.0.1:3417, scripts table, environment variables, approvals rule, spec links, known issues). Gate (node v24.20.0): `npm run lint:wiki:json` exit 0, 12 passed 1 skipped, report 0 errors, 34 warnings, 2 info over 195 pages, git ok, approvals.json absent (IP-10-final-lint.json); warning codes unchanged since IP-5 (INT-NUMBER-NOSRC 23, UNV-MIRROR 8, CONTRADICTION 2, MERMAID-RULES 1; dispositions in the IP-5 lint entry); `npm run lint:wiki` exit 0; tools/quick_lint.py 195 files 0 errors. MANIFEST.sha256 gained 2 lines. plan/approvals.json absent before and after. The app build (IP-0 to IP-10) is complete.
+- next: owner opens the app (`npm run dev:local`, http://127.0.0.1:3417/), runs the ip-testing §4 manual checks and approves the Wave 1 items in the app; then p0.17
+- commit: 6118d32
+
+## [2026-10-09] handoff | s01 end of the plan-app build: handoff-2026-10-09-s01
+
+- session: s01
+- pages: [handoff-2026-10-09-s01, status-live]
+- result: Handoff written (SCHEMA §9.5): lint run (0 errors), handoff page, STATUS (current_task p0.17, next action for the owner in the app, last_handoff), this entry, local commits only (never pushed). Open review issue carried forward: /architecture full edge labels on hover/focus overlap each other and nodes (medium; 22 labels, 19 overlapping pairs at 1440x900); fix and E2E overlap assertion not done. Rejected review item: a verify exit 1 caused by another session's server on port 3419 (environmental).
+- next: owner approves Wave 1 in the app; Claude RESUMEs and ingests the approvals, then p0.17
+- commit: 6118d32

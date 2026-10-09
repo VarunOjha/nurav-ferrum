@@ -234,17 +234,17 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 
 ## Handoffs
 
-_None yet._
+- [handoff-2026-10-09-s01](operations/handoffs/handoff-2026-10-09-s01.md) | final | Handoff s01 (2026-10-09): interactive_plan built (IP-0 to IP-10); owner approves Wave 1 in the app | End of the plan-app build: what is done, owner next steps in the app, open review issue, integrator requests
 
 ## Interactive plan
 
-- [ip-approvals-api](interactive-plan/ip-approvals-api.md) | draft | Interactive plan app: approvals API (GET/POST /api/approvals) | GET/POST /api/approvals: validation, loopback guard, locking, atomic write, approval snapshots, optional log append
-- [ip-build-plan](interactive-plan/ip-build-plan.md) | draft | Interactive plan app: build plan (one workflow, gated steps IP-0 to IP-10) | Gated build steps IP-0 to IP-10 for the plan app, resume rule and stop conditions
-- [ip-data-contract](interactive-plan/ip-data-contract.md) | draft | Interactive plan app: data contract (wiki loading, zod models, hashes, approval state) | What the app reads and writes: wiki loader, zod models, hash algorithm and vectors, approvals file, effective states, gates
-- [ip-routes-and-views](interactive-plan/ip-routes-and-views.md) | draft | Interactive plan app: routes, views and UI rules | Route map and views (dashboard, architecture, roadmap, phases, decisions, risks, research, approvals inbox, lint)
-- [ip-spec](interactive-plan/ip-spec.md) | draft | Interactive plan app: product specification | Product specification of the local Next.js plan app: purpose, users, scope, non-goals, architecture, pinned stack
-- [ip-testing](interactive-plan/ip-testing.md) | draft | Interactive plan app: test plan and quality gates | Unit, lint, E2E and manual tests for the plan app and the evidence each gate saves
-- [ip-wiki-lint](interactive-plan/ip-wiki-lint.md) | draft | Interactive plan app: wiki lint (npm run lint:wiki) and gate report | npm run lint:wiki rules (SCHEMA §9.3 plus derived checks), git-backed checks and the gate report
+- [ip-approvals-api](interactive-plan/ip-approvals-api.md) | active | Interactive plan app: approvals API (GET/POST /api/approvals) | GET/POST /api/approvals: validation, loopback guard, locking, atomic write, approval snapshots, optional log append
+- [ip-build-plan](interactive-plan/ip-build-plan.md) | active | Interactive plan app: build plan (one workflow, gated steps IP-0 to IP-10) | Gated build steps IP-0 to IP-10 for the plan app, resume rule and stop conditions
+- [ip-data-contract](interactive-plan/ip-data-contract.md) | active | Interactive plan app: data contract (wiki loading, zod models, hashes, approval state) | What the app reads and writes: wiki loader, zod models, hash algorithm and vectors, approvals file, effective states, gates
+- [ip-routes-and-views](interactive-plan/ip-routes-and-views.md) | active | Interactive plan app: routes, views and UI rules | Route map and views (dashboard, architecture, roadmap, phases, decisions, risks, research, approvals inbox, lint)
+- [ip-spec](interactive-plan/ip-spec.md) | active | Interactive plan app: product specification | Product specification of the local Next.js plan app: purpose, users, scope, non-goals, architecture, pinned stack
+- [ip-testing](interactive-plan/ip-testing.md) | active | Interactive plan app: test plan and quality gates | Unit, lint, E2E and manual tests for the plan app and the evidence each gate saves
+- [ip-wiki-lint](interactive-plan/ip-wiki-lint.md) | active | Interactive plan app: wiki lint (npm run lint:wiki) and gate report | npm run lint:wiki rules (SCHEMA §9.3 plus derived checks), git-backed checks and the gate report
 
 ## Raw sources
 

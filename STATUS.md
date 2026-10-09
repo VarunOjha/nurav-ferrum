@@ -13,10 +13,10 @@ related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-buil
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.16
-next_action: "p0.16 / IP-10 of ip-build-plan: review interactive_plan/README.md (rewritten in the IP-9 review fixes), settle the ip-* UNVERIFIED tags with evidence citations and set status active, ask the owner to update comp-interactive-plan and run the ip-testing §4 manual checks, then HANDOFF; gate = npm run lint:wiki 0 errors, evidence IP-10-final-lint.json [p0.16]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
+current_task: p0.17
+next_action: "Owner: cd interactive_plan, npm run dev:local (Node: export PATH=\"/c/Program Files/nodejs:$PATH\"), open http://127.0.0.1:3417/, run the ip-testing §4 manual checks and approve the Wave 1 items in the app (ip-* pages, adr-0016, schema, the other P0 pages; ops-approval-workflow §8); also update comp-interactive-plan to implemented. Then Claude: RESUME, ingest the approvals, p0.17 [p0.17]."
 blocked_on: []
-last_handoff: null
+last_handoff: handoff-2026-10-09-s01
 ---
 
 # STATUS — live state (read this first every session)
@@ -32,7 +32,7 @@ last_handoff: null
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) its architecture, roadmap, decisions, risks and research views (IP-8) and its accessibility, security and timing checks with a green `npm run verify` and coverage thresholds (IP-9); IP-10 remains; nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) its architecture, roadmap, decisions, risks and research views (IP-8) and its accessibility, security and timing checks with a green `npm run verify` and coverage thresholds (IP-9) and its README, final lint and handoff (IP-10, the app build is complete); nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -136,6 +136,11 @@ yet (every approvable page is PENDING).**
   lint:wiki 0 errors, 143 E2E), coverage thresholds met
   ([IP-9-review-fixes.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-9-review-fixes.txt)). Details: the IP-9
   review `decide`, `schema` and `code` log entries.
+- p0.16 / IP-10 done (commit `6118d32`): `interactive_plan/README.md` (start `npm run dev:local` -> http://127.0.0.1:3417, scripts table, environment
+  variables, approvals rule, spec links, known issues); the seven `ip-*` pages `status: active`; the ip-spec §5 perf tag kept with a
+  logged reason and an IP-9-perf.txt citation; final `npm run lint:wiki` 0 errors, 34 warnings, 2 info
+  ([IP-10-final-lint.json](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-10-final-lint.json)); handoff
+  [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md). Details: the IP-10 log entries.
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -146,7 +151,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.16 / IP-9 review fixes verified and committed 2026-10-09 (`6a78a78`); next p0.16 / IP-10)
+(empty: p0.16 / IP-10 verified and committed 2026-10-09 (`6118d32`); the app build is complete; next the owner in the app, then p0.17)
 
 ## Blockers
 
@@ -159,7 +164,7 @@ yet (every approvable page is PENDING).**
 | Index ids for upper-case evidence names (Q-219) | Quick lint reported 1 INDEX-MISSING error (IP-0-toolchain); paused the build before IP-1 | Owner | **Resolved 2026-10-08**: index lists evidence folders (adr-0020); quick lint 0 errors |
 | `sources` format on the real wiki (found by the IP-2 loader) | Holds p0.11 / IP-2: the real-wiki loader test reports 4 FM-MISSING errors | Owner / integrator | **Resolved 2026-10-09** (wave 0c items 1-3, Q-220): any wiki-relative path or https URL; raw research notes exempt; IP-2 gate passed |
 | Rust (rustup/cargo), MSVC Build Tools | Block P1 toolchain tasks; do not block P0 | Claude runs winget, owner clicks UAC (adr-0021) | Not installed |
-| Owner approvals | Every phase entry gate; `plan/approvals.json` does not exist | Owner (plan app) | Pending — plan app not built yet |
+| Owner approvals | Every phase entry gate; `plan/approvals.json` does not exist | Owner (plan app) | Pending — the plan app is built (IP-10, 2026-10-09); the owner approves in the app (`npm run dev:local`, http://127.0.0.1:3417/) |
 
 Exact install and verification commands: [wiki/operations/ops-environment-setup.md](wiki/operations/ops-environment-setup.md).
 
@@ -176,15 +181,27 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-
 
 ## Next action
 
-1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.16 / IP-10: documentation, evidence, handoff) by following
-   [ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-1 to IP-10 (mapping table on
-   [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Node: `export PATH="/c/Program Files/nodejs:$PATH"`.
-   Wiki lint (normative since IP-5): `cd interactive_plan && npm run lint:wiki` (`lint:wiki:json` for evidence, `npm run gate`
-   for the entry-gate checklist); fallback `python tools/quick_lint.py` (exits 1 on errors); tool tests:
-   `python -m unittest discover -s tools -p "test_*.py"`.
-2. After IP-10: the owner approves Wave 1 in the app (fix the reading-pass findings of the p0.8 lint log
-   entry first), then Wave 2, then `phase-p0-planning#exit` (p0.17–p0.18). Before the exit approval, re-run
-   `npm audit` in `interactive_plan/` and record it (accepted risk until then, ip-spec §7, wave 0c item 8).
+1. **Owner, in the app** (the build p0.9–p0.16 / IP-0–IP-10 is complete): `cd interactive_plan`, then
+   `export PATH="/c/Program Files/nodejs:$PATH"` and `npm run dev:local`, open <http://127.0.0.1:3417/>.
+   Run the [ip-testing](wiki/interactive-plan/ip-testing.md) §4 manual checks, then **approve the Wave 1 items in the app**
+   ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)): the `ip-*` pages and `adr-0016`
+   again (bootstrap approvals were in chat), `schema` (closes Q-004, Q-207), the other P0 pages; answer Q-005 and Q-108.
+   Claude never writes `plan/approvals.json`.
+2. **Owner / integrator requests** (outside the IP area, not changed by the app builder): set `comp-interactive-plan` to
+   `implemented` with `last_verified_commit` = `6118d32`; settle the integrity tags the evidence now covers
+   (phase-p0-planning `unverified` x4 by IP-1-scaffold.txt/IP-1-spikes.txt, adr-0016 atomic rename by IP-4-tests.txt,
+   Q-210 coverage pin by IP-1-scaffold.txt); risk-r22 (`.gitattributes`) still needs its own check. List in the
+   [handoff](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+3. **Unresolved review issue (medium, open):** `/architecture` full edge labels shown when a component is hovered or focused
+   still overlap each other and nodes (22 labels, 19 overlapping pairs at 1440x900 on "WebView manager"; some run off the pane
+   or hide behind "App shell"). The default view is fixed (zoom 0.7, short TB chips). Fix not done: reserve label space in
+   dagre (edge label width/height, larger nodesep/ranksep) or wrap labels, or list the active edges in the side panel and keep
+   chips on the canvas; add an E2E assertion of no bounding-box overlap. The edge table below the graph has every edge in full.
+4. **Rejected / unfixed review item:** `npm run verify` exit 1 because port 3419 was held by another session's `next dev`;
+   environmental, not a code defect (ports 3417–3420 free, the full verify then exited 0). Stop servers on 3417–3420 before a gate run.
+5. After the owner's approvals: Claude RESUMEs, ingests them, then p0.17 (walkthrough revisions), Wave 2, and
+   `phase-p0-planning#exit` (p0.18). Before the exit approval, re-run `npm audit` in `interactive_plan/` and record it
+   (accepted risk until then, ip-spec §7, wave 0c item 8).
 
 ## Pending owner approvals
 
@@ -195,4 +212,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after the p0.16 / IP-9 review fixes; next p0.16 / IP-10). Last handoff: none yet.
+2026-10-09, session s01 (after p0.16 / IP-10; next: the owner approves Wave 1 in the app). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
