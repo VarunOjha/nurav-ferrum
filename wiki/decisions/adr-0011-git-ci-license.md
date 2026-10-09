@@ -8,7 +8,7 @@ sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/owner/2026-10-08-s01-wave0.md
-related: [adr-0003, adr-0005, adr-0018, phase-p1-foundation, comp-core]
+related: [adr-0003, adr-0005, adr-0021, adr-0018, phase-p1-foundation, comp-core]
 approvable: true
 date: 2026-10-08
 decided_by: owner

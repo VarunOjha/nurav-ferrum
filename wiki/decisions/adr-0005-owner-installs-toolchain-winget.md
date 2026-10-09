@@ -2,18 +2,20 @@
 id: adr-0005
 type: decision
 title: "Owner installs the toolchain via winget; Claude supplies exact commands and verifies"
-status: accepted
+status: superseded
 updated: 2026-10-08
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-08-s01-wave0.md
-related: [adr-0006, adr-0011, adr-0016, phase-p0-planning, phase-p1-foundation, comp-app-shell, comp-interactive-plan, comp-webview2-runtime]
+  - raw/owner/2026-10-08-s01-wave0b.md
+related: [adr-0021, adr-0006, adr-0011, adr-0016, phase-p0-planning, phase-p1-foundation, comp-app-shell, comp-interactive-plan, comp-webview2-runtime]
 approvable: true
 date: 2026-10-08
 decided_by: owner
 supersedes: []
+superseded_by: adr-0021
 options:
   - "Claude runs installers itself"
   - "Owner installs via winget with exact commands supplied by Claude"
@@ -30,6 +32,8 @@ unverified:
 ---
 
 # ADR-0005: The owner installs the toolchain via winget; Claude supplies exact commands and verifies
+
+> **Superseded by [ADR-0021](adr-0021-claude-runs-toolchain-installs.md)** (owner answer to Q-218, [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md)): Claude runs all toolchain installs, including elevated ones; kernel drivers still need separate owner approval. This page is kept unchanged below as the record of the original decision.
 
 ## Context
 
@@ -95,7 +99,7 @@ Rules:
 - Claude never runs elevated installers. It may run read-only checks.
 - **Never install the vulnerable WinRing0 driver.** Any kernel driver (PawnIO for energy, [ADR-0009](adr-0009-benchmark-hardware-energy.md)) needs a separate, explicit owner approval.
 
-> **CONTRADICTION:** a later owner directive widens who may install. In session s01 the owner said "Feel free to run install." (Claude may run installs such as winget or npm without asking), and Node.js LTS was then installed **by Claude** with `winget install -e --id OpenJS.NodeJS.LTS` on the owner's authorisation (v24.20.0) ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), "Standing directives"). The quoted Q2 choice above ("Owner installs via winget") is not edited here. Registered as [Q-218](../overview/ov-open-questions.md#q-218-who-runs-toolchain-installs-after-the-standing-install-directive); until it is answered, the narrower rule (owner runs elevated installers; driver installs need separate approval) is the safe reading for P1.
+> **Resolved contradiction (2026-10-08):** a later owner directive widened who may install ("Feel free to run install.", [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)); Claude then installed Node.js LTS v24.20.0 with winget. This was registered as [Q-218](../overview/ov-open-questions.md#q-218-who-runs-toolchain-installs-after-the-standing-install-directive), which the owner answered "Claude runs all toolchain installs" ([raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md)). Resolved by DECIDE (SCHEMA §9.1.1): [ADR-0021](adr-0021-claude-runs-toolchain-installs.md) supersedes this ADR. The quoted Q2 choice above is not edited.
 
 ## Consequences
 

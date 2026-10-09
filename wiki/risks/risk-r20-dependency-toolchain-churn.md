@@ -8,7 +8,7 @@ sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
-related: [phase-p1-foundation, phase-p0-planning, adr-0005, adr-0011, adr-0016, comp-interactive-plan, comp-app-shell, risk-r02, risk-r03, qual-ci-plan]
+related: [phase-p1-foundation, phase-p0-planning, adr-0005, adr-0021, adr-0011, adr-0016, comp-interactive-plan, comp-app-shell, risk-r02, risk-r03, qual-ci-plan]
 approvable: true
 tags: [dependencies, toolchain, versions]
 likelihood: 4
@@ -42,7 +42,7 @@ Verified facts that make churn likely during a multi-month project:
 - Mermaid 12.0.0 is a new breaking major; 11.17.2 is the mature alternative (NX §4).
 - gray-matter was last published in 2021 (NX §1).
 
-The owner installs the toolchain via winget (adr-0005). Rust and the MSVC Build Tools were not installed on 2026-10-08 (scoping decisions).
+Claude installs the toolchain via winget, the owner confirming UAC prompts (adr-0021, superseding adr-0005). Rust and the MSVC Build Tools were not installed on 2026-10-08 (scoping decisions).
 
 Sources: [tauri-webview2-capabilities](../raw/research/tauri-webview2-capabilities.md), [nextjs-stack](../raw/research/nextjs-stack.md), [scoping decisions](../raw/01-scoping-decisions.md). Abbreviations: TW = tauri-webview2-capabilities, MM = measurement-methodology, RW = related-work-seed, NX = nextjs-stack, LW = llm-wiki-pattern.
 
@@ -70,4 +70,4 @@ Roll back to the last recorded working versions and treat the upgrade as its own
 
 ## Affects
 
-`phase-p1-foundation`, `phase-p0-planning`, `adr-0005`, `adr-0011`, `adr-0016`, `comp-interactive-plan`, `comp-app-shell`, `risk-r02`, `risk-r03`, `qual-ci-plan`
+`phase-p1-foundation`, `phase-p0-planning`, `adr-0005`, `adr-0021`, `adr-0011`, `adr-0016`, `comp-interactive-plan`, `comp-app-shell`, `risk-r02`, `risk-r03`, `qual-ci-plan`

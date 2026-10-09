@@ -7,7 +7,8 @@ updated: 2026-10-08
 sources:
   - raw/research/llm-wiki-pattern.md
   - raw/01-scoping-decisions.md
-related: [schema, adr-0002, adr-0003, ops-session-protocol, ops-approval-workflow, ops-multi-agent-workflow, ip-wiki-lint, ov-open-questions, glossary]
+  - raw/owner/2026-10-08-s01-wave0b.md
+related: [schema, adr-0002, adr-0003, ops-session-protocol, ops-approval-workflow, ops-multi-agent-workflow, ip-wiki-lint, ov-open-questions, glossary, adr-0020]
 approvable: true
 audience: claude
 trigger: "A new raw source arrives (ingest), a question must be answered from the wiki (query), end of session / phase gate / bulk edit (lint), or a decision is made or changed (decide)."
@@ -104,22 +105,27 @@ fix (ip-testing has a parity test).
 **Bootstrap fallback:** the quick lint below, a read-only stdlib Python script. It covers FILE-ENCODING,
 FM-MISSING, FM-ENUM, FM-TYPE-DIR, ID-PATTERN, ID-DUP, REF-DANGLING (frontmatter ids and relative body
 links), UNV-NOPHASE and INDEX-MISSING: the subset that SCHEMA §9.5 requires at HANDOFF. **Where it
-lives:** as the repo file `tools/quick_lint.py` (planning tooling, not Ferrum code; Q-216, created in
-task p0.8), so every session runs the same script instead of re-extracting it. Until that file exists,
-save the block below to the session scratchpad. The approval checker of
-[ops-approval-workflow §4](ops-approval-workflow.md#4-checking-approval-state-as-claude) is stored the
-same way as `tools/approvals_check.py`. Run from the repo root:
+lives:** the repo file [`tools/quick_lint.py`](../../tools/quick_lint.py) (planning tooling, not Ferrum
+code; owner answer to Q-216, [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md)),
+so every session runs the same script. The block below is its exact text: `tools/test_quick_lint.py`
+fails if the two differ, so change both in the same edit. INDEX-MISSING checks raw evidence and bench
+files per first-level folder (SCHEMA §11, [adr-0020](../decisions/adr-0020-index-lists-evidence-folders.md)).
+The approval checker of
+[ops-approval-workflow §4](ops-approval-workflow.md#4-checking-approval-state-as-claude) lives next to it
+as `tools/approvals_check.py`. Run from the repo root:
 
 ```bash
-python "<scratchpad>/quick_lint.py" | tr -d '\r'            # all findings
-python "<scratchpad>/quick_lint.py" REF-DANGLING | tr -d '\r'   # only lines containing this text
+python tools/quick_lint.py | tr -d '\r'                 # all findings
+python tools/quick_lint.py REF-DANGLING | tr -d '\r'    # only lines containing this text
+python -m unittest discover -s tools -p "test_*.py"     # the scripts' own tests (stdlib only)
 ```
 
 ```python
 #!/usr/bin/env python3
 """Ferrum quick wiki lint (read-only, stdlib only). Run from the repo root.
 Covers the SCHEMA §9.3 subset needed at HANDOFF: FILE-ENCODING, FM-MISSING, FM-ENUM, FM-TYPE-DIR,
-ID-PATTERN, ID-DUP, REF-DANGLING (frontmatter ids + relative body links), UNV-NOPHASE, INDEX-MISSING.
+ID-PATTERN, ID-DUP, REF-DANGLING (frontmatter ids + relative body links), UNV-NOPHASE, INDEX-MISSING
+(raw evidence/bench files per first-level folder, SCHEMA §11 / adr-0020).
 Not covered (do by hand or with the plan app's lint): REF-RECIPROCAL, ORPHAN, STALE-UPDATED, ADR-CHAIN,
 PHASE-ORDER, TRUST-EDGE, UNV-PASTDUE, INT-NUMBER-NOSRC, HYP-NO-DATA, RAW-IMMUTABLE, APPROVAL-STALE."""
 import glob, os, re, sys
@@ -264,11 +270,20 @@ if os.path.exists('wiki/index.md'):
     for i, f in ids.items():
         if i not in listed and i not in ('index', 'status-live'):
             E('INDEX-MISSING', f, f'{i} not in index.md')
-    raw = {os.path.basename(p).rsplit('.', 1)[0] for p in glob.glob('wiki/raw/**/*', recursive=True)
-           if os.path.isfile(p) and not p.endswith('MANIFEST.sha256')
-           and 'raw/research/' not in p.replace(os.sep, '/')}  # SCHEMA §11 raw index ids (notes use their own id)
+    raw = set()  # SCHEMA §11 raw index labels (research notes use their own id)
+    for p in glob.glob('wiki/raw/**/*', recursive=True):
+        p = p.replace(os.sep, '/')
+        if not os.path.isfile(p) or p.endswith('MANIFEST.sha256') or 'raw/research/' in p:
+            continue
+        r = p.split('wiki/raw/', 1)[1].split('/')
+        if r[0] in ('evidence', 'bench'):  # adr-0020: one line per first-level evidence/bench folder
+            if len(r) < 3:
+                E('INDEX-MISSING', p, 'evidence/bench file must sit in a folder (SCHEMA §11)'); continue
+            raw.add(re.sub(r'[^a-z0-9.-]', '-', (r[0] + '/' + r[1]).lower()).rstrip('-'))
+        else:
+            raw.add(os.path.basename(p).rsplit('.', 1)[0])
     for i in raw - listed - set(ids):
-        E('INDEX-MISSING', 'wiki/index.md', f'raw file {i} not listed')
+        E('INDEX-MISSING', 'wiki/index.md', f'raw file or folder {i} not listed')
     for i in listed - set(ids) - raw:
         E('INDEX-MISSING', 'wiki/index.md', f'lists unknown id {i}')
 else:

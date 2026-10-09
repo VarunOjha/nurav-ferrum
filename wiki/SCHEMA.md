@@ -8,7 +8,8 @@ sources:
   - raw/research/llm-wiki-pattern.md
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
-related: [adr-0001, adr-0002, adr-0003, adr-0014, adr-0016, comp-interactive-plan]
+  - raw/owner/2026-10-08-s01-wave0b.md
+related: [adr-0001, adr-0002, adr-0003, adr-0014, adr-0016, adr-0020, comp-interactive-plan]
 approvable: true
 ---
 
@@ -16,7 +17,7 @@ approvable: true
 
 This file is the **constitution** of the Ferrum wiki. Every session, human or LLM, follows it. Where a rule says **MUST**, a check (the lint tool, the plan app, or Claude doing a manual lint) can test it mechanically. A rule that says **SHOULD** is guidance.
 
-Status of this document: `review`. The amendment batch of 2026-10-08 is applied (see `log.md`). The owner has not yet approved it (approval key `schema` in `plan/approvals.json`). Until it is approved, it is the working convention for P0 only.
+Status of this document: `review`. The amendment batch of 2026-10-08 is applied, and so is the §11 change of adr-0020 (index lists evidence and bench folders; see `log.md`). The owner has not yet approved it (approval key `schema` in `plan/approvals.json`). Until it is approved, it is the working convention for P0 only.
 
 ---
 
@@ -430,7 +431,7 @@ Resume/handoff protocol, toolchain setup, git workflow, lint procedure, plan-app
 | phase | `^phase-p[0-8]-[a-z0-9-]+$` | Fixed: `phase-p0-planning`, `phase-p1-foundation`, `phase-p2-minimal-container`, `phase-p3-tabs-sessions`, `phase-p4-security`, `phase-p5-telemetry`, `phase-p6-benchmark-harness`, `phase-p7-lifecycle`, `phase-p8-research-paper` |
 | task (inside phase) | `^p[0-8]\.[0-9]+$` | `p1.4` |
 | component | `^comp-[a-z0-9-]+$` | Fixed: `comp-app-shell, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-core, comp-benchmark-harness, comp-research-analysis, comp-baseline-app, comp-webview2-runtime, comp-interactive-plan`. Modelling nodes added by the architecture area (2026-10-08): `comp-tab-content` (untrusted web content), `comp-windows-os` and `comp-competitor-browsers` (external) |
-| decision | `^adr-[0-9]{4}$` | `adr-0001` … `adr-0019` registered; next free `adr-0020` (always confirm with `ls wiki/decisions/adr-*.md`, sorted, last entry) |
+| decision | `^adr-[0-9]{4}$` | `adr-0001` … `adr-0021` registered; next free `adr-0022` (always confirm with `ls wiki/decisions/adr-*.md`, sorted, last entry) |
 | risk | `^risk-r[0-9]{2,}$` | `risk-r01` … `risk-r25` registered; next free `risk-r26` |
 | research-question | `^rq-[0-9]{2,}$` | `rq-01` |
 | hypothesis | `^hyp-[0-9]{2,}$` | `hyp-01` |
@@ -477,7 +478,7 @@ Every operation ends with a `log.md` entry (§12). The ops marked *(gist)* come 
 
 ### 9.3 LINT *(gist + Ferrum checks)*
 
-Run at the end of every session (inside HANDOFF), at every phase gate, and after any bulk edit. **Normative tool:** `npm run lint:wiki` in `interactive_plan/` once plan-app step IP-5 has passed ([ip-wiki-lint](interactive-plan/ip-wiki-lint.md)). Before that, and as a fallback, Claude runs the stdlib Python quick lint ([ops-wiki-maintenance §5](operations/ops-wiki-maintenance.md#5-lint)) plus the manual checks listed there, and records the results in the `lint` log entry. P1 task p1.10 extends the TS lint with the git-backed rules; it does not build a second linter.
+Run at the end of every session (inside HANDOFF), at every phase gate, and after any bulk edit. **Normative tool:** `npm run lint:wiki` in `interactive_plan/` once plan-app step IP-5 has passed ([ip-wiki-lint](interactive-plan/ip-wiki-lint.md)). Before that, and as a fallback, Claude runs the stdlib Python quick lint `tools/quick_lint.py` (its text is embedded in [ops-wiki-maintenance §5](operations/ops-wiki-maintenance.md#5-lint); Q-216) plus the manual checks listed there, and records the results in the `lint` log entry. P1 task p1.10 extends the TS lint with the git-backed rules; it does not build a second linter.
 
 | Code | Severity | Check |
 |---|---|---|
@@ -491,7 +492,7 @@ Run at the end of every session (inside HANDOFF), at every phase gate, and after
 | `REF-DANGLING` | error | An id in `related`, `depends_on`, `risks`, `decisions`, `experiments`, `connects.to`, `rq`, `hypotheses`, `metrics`, `workloads`, `supersedes`, `superseded_by`, `phase`, `owner_phase`, `phase_introduced` does not resolve; or a relative body link points to a missing file |
 | `REF-RECIPROCAL` | error | rq↔hyp or hyp↔exp lists disagree |
 | `ORPHAN` | warn | A page (other than singletons) has no inbound reference from any other page's frontmatter or body |
-| `INDEX-MISSING` | error | A page is missing from `index.md`, or the index lists a missing page |
+| `INDEX-MISSING` | error | A page or raw file is missing from `index.md`, or the index lists a missing page or folder; raw evidence and bench files are checked per folder (§11, adr-0020) |
 | `STALE-UPDATED` | warn | `updated` is older than the file's last git commit date (`git log -1 --format=%cs -- <file>`); error if `updated` is in the future |
 | `ADR-CHAIN` | error | ADR with `status: superseded` has no `superseded_by`; A `supersedes` B but B is not `superseded`; `accepted` ADR without approval (§10.4) |
 | `PHASE-ORDER` | error | `depends_on` cycle, or a dependency with order ≥ the phase's own order; duplicate `order`; duplicate task id |
@@ -681,6 +682,9 @@ The plan app (TypeScript) MUST produce identical results. A shared test vector s
 - One line per page. The line MUST match this regex:
   `^- \[([a-z0-9.-]+)\]\(([^)]+)\) \| ([a-z-]+) \| (.+?) \| (.+)$`
   The groups are: id, relative path from `wiki/`, status, title, one-line summary. Raw files show status `raw`. A raw file without frontmatter (e.g. `raw/00-master-prompt.md`) is listed under `Raw sources` with id = its basename without `.md` (e.g. `00-master-prompt`); a raw research note uses its frontmatter id. Ids of this form are index labels only, not page ids.
+- **Raw evidence and bench files are listed per folder, not per file** (adr-0020, owner answer Q-219). Files under `raw/evidence/` and `raw/bench/` get no line of their own. Instead each **first-level folder** below them (`raw/evidence/<phase-id>/`, `raw/bench/<run-id>/`) that contains at least one file, directly or in a subfolder, has one line under `Raw sources`. Its label is the folder path relative to `wiki/raw/`, lower-cased, with `/` and every other character outside `[a-z0-9.-]` replaced by `-` and no trailing `-`; its link is the folder path with a trailing slash; its status is `raw`.
+  Example: `- [evidence-phase-p0-planning](raw/evidence/phase-p0-planning/) | raw | Evidence folder: phase-p0-planning | P0 test-gate evidence`
+  A file placed directly in `raw/evidence/` or `raw/bench/` (outside any folder) is an `INDEX-MISSING` error. Raw files at the `raw/` top level and under `raw/owner/`, `raw/research/` and `raw/assets/` are still listed one per file.
   Example: `- [adr-0007](decisions/adr-0007-child-webviews.md) | proposed | Child WebViews in one window | Trusted shell + one untrusted child WebView per tab (Tauri unstable multi-webview)`
 - Neither the title nor the summary may contain ` | `. Sort order within a category: by `order` for phases, numerically for numbered ids, alphabetically otherwise.
 - `index.md` is updated in the same edit that creates, renames the title of, or changes the status of a page.

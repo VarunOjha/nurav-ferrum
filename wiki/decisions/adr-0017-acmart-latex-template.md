@@ -70,7 +70,7 @@ Sources: [raw/research/related-work-seed.md](../raw/research/related-work-seed.m
 ### Negative
 
 - If the eventual venue is IEEE or USENIX, there is a porting cost, kept low by the portability rules above.
-- A LaTeX distribution must be installed by the owner, via winget per [ADR-0005](adr-0005-owner-installs-toolchain-winget.md). That it installs and builds the class here is UNVERIFIED[phase-p8-research-paper].
+- A LaTeX distribution must be installed via winget; Claude runs the install per [ADR-0021](adr-0021-claude-runs-toolchain-installs.md) (superseding ADR-0005). That it installs and builds the class here is UNVERIFIED[phase-p8-research-paper].
 - The venue's AI-disclosure policy is unknown and must be checked before submission: UNVERIFIED[phase-p8-research-paper].
 
 ### Follow-ups

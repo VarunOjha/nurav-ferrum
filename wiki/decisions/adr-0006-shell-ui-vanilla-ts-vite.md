@@ -8,7 +8,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/nextjs-stack.md
-related: [adr-0007, adr-0005, adr-0015, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, comp-app-shell, comp-security-engine]
+related: [adr-0007, adr-0005, adr-0021, adr-0015, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, comp-app-shell, comp-security-engine]
 approvable: true
 date: 2026-10-08
 decided_by: owner

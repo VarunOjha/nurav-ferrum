@@ -11,7 +11,7 @@ approvable: false
 
 # Wiki index
 
-Catalogue of every wiki page and raw source (SCHEMA §11). One line per page: `[id](path) | status | title | summary`. Read this first when answering a question from the wiki (SCHEMA §9.2). Paths are relative to `wiki/`. The live state and next action are in the root `STATUS.md`, which is not listed here.
+Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench files are listed per folder, adr-0020). One line per page: `[id](path) | status | title | summary`. Read this first when answering a question from the wiki (SCHEMA §9.2). Paths are relative to `wiki/`. The live state and next action are in the root `STATUS.md`, which is not listed here.
 
 ## Overview
 
@@ -79,7 +79,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11). One line per page: `[
 - [adr-0002](decisions/adr-0002-llm-wiki-documentation-system.md) | accepted | Karpathy's LLM Wiki pattern as the documentation and decision system | Karpathy LLM-wiki pattern (raw, wiki, schema layers) as the documentation and decision system (directive 7)
 - [adr-0003](decisions/adr-0003-multi-session-resumability.md) | accepted | Multi-session resumability protocol (checkpoint, handoff, resume) | Checkpoint after every task, handoff and resume protocol, STATUS.md, open/sealed benchmark runs (directive 6)
 - [adr-0004](decisions/adr-0004-goal-app-and-research-equally.md) | accepted | Goal: a usable application and a rigorous research framework, equally and in lock-step | Usable app and research weighted equally; every phase delivers a capability plus its research hooks (Q1)
-- [adr-0005](decisions/adr-0005-owner-installs-toolchain-winget.md) | accepted | Owner installs the toolchain via winget; Claude supplies exact commands and verifies | Owner installs Rust, MSVC Build Tools and Node via winget; Claude supplies commands and verifies (Q2)
+- [adr-0005](decisions/adr-0005-owner-installs-toolchain-winget.md) | superseded | Owner installs the toolchain via winget; Claude supplies exact commands and verifies | Superseded by adr-0021: owner installs Rust, MSVC Build Tools and Node via winget; Claude supplies commands and verifies (Q2)
 - [adr-0006](decisions/adr-0006-shell-ui-vanilla-ts-vite.md) | accepted | Shell UI stack is vanilla TypeScript + Vite | Shell UI in vanilla TypeScript built with Vite, no framework (Q3)
 - [adr-0007](decisions/adr-0007-child-webviews.md) | accepted | Child WebViews in one window (trusted shell + one untrusted child WebView per tab, Tauri multi-webview unstable feature) | Trusted shell WebView plus one untrusted child WebView per tab in one window, Tauri unstable multi-webview (Q4)
 - [adr-0008](decisions/adr-0008-network-logging-metadata-jsonl.md) | accepted | Network call logging is metadata-only JSONL written to a folder | Network log is metadata only (URL, method, status, type, timing, sizes, tab, decision) as JSONL; no headers or bodies (Q5)
@@ -94,6 +94,8 @@ Catalogue of every wiki page and raw source (SCHEMA §11). One line per page: `[
 - [adr-0017](decisions/adr-0017-acmart-latex-template.md) | proposed | Manuscript in the ACM acmart LaTeX template (venue TBD) | Proposed: ACM acmart LaTeX template for the manuscript; venue undecided (Q-124)
 - [adr-0018](decisions/adr-0018-repo-root-cargo-workspace.md) | proposed | Repository root is the project root; Cargo workspace mirrors master prompt §12 layout | Proposed: repo root is the project root; Cargo workspace mirrors master prompt §12 plus listed additions (Q-106)
 - [adr-0019](decisions/adr-0019-raw-webview2-com-boundary.md) | proposed | Raw WebView2 COM access confined to one audited module behind a safe Rust API | Proposed: confine all unsafe WebView2 COM code to one module with documented invariants (Q-110, Q-211)
+- [adr-0020](decisions/adr-0020-index-lists-evidence-folders.md) | accepted | index.md lists raw evidence and bench folders, not individual files | index.md lists each first-level raw/evidence and raw/bench folder instead of every file; SCHEMA §11 and INDEX-MISSING updated (Q-219)
+- [adr-0021](decisions/adr-0021-claude-runs-toolchain-installs.md) | accepted | Claude runs all toolchain installs, including elevated ones; kernel drivers need separate owner approval | Claude runs winget, npm, rustup and pip installs incl. MSVC Build Tools (owner clicks UAC); drivers need separate approval; supersedes adr-0005 (Q-218)
 
 ## Risks
 
@@ -248,10 +250,10 @@ _None yet._
 - [00-master-prompt](raw/00-master-prompt.md) | raw | RAW SOURCE — Ferrum master prompt (verbatim, as supplied by the project owner on 2026-10-08) | The owner's full requirements for Ferrum, stored verbatim (immutable)
 - [01-scoping-decisions](raw/01-scoping-decisions.md) | raw | RAW SOURCE — Scoping Q&A and owner directives (session 1, 2026-10-08) | Owner answers Q1-Q14, owner directives 1-9 and the environment observed in session s01 (immutable)
 - [2026-10-08-s01-wave0](raw/owner/2026-10-08-s01-wave0.md) | raw | RAW SOURCE — Owner answers, Approval Wave 0 (session s01, 2026-10-08) | Owner answers Q-006, Q-007, Q-102, Q-103, Q-104, Q-210, standing install/deletion directives, Node 24.20.0 install, chat approval of the ip-* pages and adr-0016
-- [env-webview2-pv](raw/evidence/phase-p0-planning/env-webview2-pv.txt) | raw | Raw evidence: WebView2 Evergreen runtime version (registry pv) | Registry pv value of the WebView2 Evergreen runtime (154.0.4258.62), captured 2026-10-08 (P0 evidence)
+- [2026-10-08-s01-wave0b](raw/owner/2026-10-08-s01-wave0b.md) | raw | RAW SOURCE — Owner answers Q-216, Q-218, Q-219 (session s01, 2026-10-08) | Owner answers: commit the lint and approval-check scripts under tools/ (Q-216), Claude runs all toolchain installs (Q-218), index lists evidence folders not files (Q-219)
+- [evidence-phase-p0-planning](raw/evidence/phase-p0-planning/) | raw | Evidence folder: phase-p0-planning | P0 test-gate evidence: WebView2 runtime pv, p0.8 manual lint, tools check, and interactive-plan/ IP-n gate outputs (SCHEMA §11, adr-0020)
 - [research-llm-wiki-pattern](raw/research/llm-wiki-pattern.md) | raw | Karpathy's LLM Wiki pattern and its adaptation for Ferrum | Karpathy's LLM Wiki gist: three layers, ingest/query/lint, index and log conventions
 - [research-measurement-methodology](raw/research/measurement-methodology.md) | raw | Defensible measurement methodology on Windows 11 for Chromium browsers vs WebView2 apps | Defensible measurement on Windows 11 for Chromium browsers vs WebView2 apps (memory and CPU attribution, timing, energy, fairness, statistics)
 - [research-nextjs-stack](raw/research/nextjs-stack.md) | raw | Next.js stack for the interactive_plan dashboard (versions, config, risks) | Next.js stack for the plan app: versions, configuration and risks (registry snapshot 2026-10-08)
 - [research-related-work-seed](raw/research/related-work-seed.md) | raw | Related-work SEED list (tab lifecycle, browser/WebView resource use, energy measurement, mobile lifecycle, cost-aware eviction) | Seed list: tab lifecycle, browser and WebView resource use, energy measurement, mobile lifecycle, cost-aware eviction
 - [research-tauri-webview2-capabilities](raw/research/tauri-webview2-capabilities.md) | raw | Tauri 2 / wry / WebView2 capability verification (versions, multi-webview, IPC isolation, lifecycle APIs, CDP, OAuth) | Tauri 2 / wry / WebView2 capability check: versions, multi-webview, IPC isolation, lifecycle APIs, CDP, OAuth
-- [wiki-lint-manual](raw/evidence/phase-p0-planning/wiki-lint-manual.md) | raw | RAW EVIDENCE — p0.8 manual wiki lint (phase-p0-planning, session s01, 2026-10-08) | p0.8 lint evidence: every SCHEMA §9.3 code with its result (0 errors), warning dispositions, raw manifest and its sha256

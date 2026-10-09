@@ -9,6 +9,7 @@ sources:
   - raw/research/llm-wiki-pattern.md
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-08-s01-wave0.md
+  - raw/owner/2026-10-08-s01-wave0b.md
 related: [schema, adr-0001, adr-0014, adr-0016, comp-interactive-plan, ip-data-contract, ip-spec, ip-build-plan, phase-p0-planning, ops-session-protocol, ops-resume-after-interruption, ov-open-questions]
 approvable: true
 audience: both
@@ -99,23 +100,33 @@ and asks the owner, who approves `<phase-id>#exit` in the plan app after checkin
 
 Once the plan app exists, its approvals and gate views and `npm run lint:wiki` (see
 [ip-spec](../interactive-plan/ip-spec.md)) are the primary check. Until then, and as an independent
-cross-check, use the read-only stdlib Python script below (Python 3.12.10 is installed per the raw
-environment record). Its hash function is the SCHEMA §10.2 reference verbatim. Session s01 tested it on
+cross-check, use the read-only stdlib Python script [`tools/approvals_check.py`](../../tools/approvals_check.py)
+(Python 3.12.10 is installed per the raw environment record). The owner chose to version it under
+`tools/` with tests (Q-216, [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md)).
+The block below is its exact text; `tools/test_approvals_check.py` fails if the two differ, so change
+both in the same edit. Its hash function is the SCHEMA §10.2 reference verbatim. Session s01 tested it on
 a scratch copy of the wiki: APPROVED, then APPROVED_VOLATILE_DRIFT after a `status` flip plus CRLF
 conversion, then STALE after a body edit, and a `--gate` run that listed the blocking ids. It never
 writes any file. Two checks were added after that test and were run on the real wiki in the same
 session (no `approvals.json`): the P0 bootstrap branch (`--gate phase-p0-planning` prints `BOOTSTRAP`
 and exits) and the `PHASE-DONE-NO-EXIT` warning for a phase whose `status: done` has no approved
-`<phase-id>#exit` key. Phase P1 should move it to `scripts/approvals_check.py` with tests, or retire it in
-favour of the plan app's lint.
+`<phase-id>#exit` key. Added when it moved to `tools/` (2026-10-08, owner answer to Q-216):
+the SCHEMA §10.2 `bootstrap_hash` check on `schema` (a changed `CLAUDE.md` makes `schema` STALE), the
+fail-closed `Q-FORMAT` rule (a question section with a missing, repeated or unknown `status`, a missing or
+unparsable `blocking` list, or a duplicate id is reported and treated as **open and blocking every
+phase**, SCHEMA §9.3), and the CONTRADICTION registration rule of SCHEMA §9.7 step 4 (an open
+`> **CONTRADICTION:**` blockquote on a page in the dependency set blocks the gate unless it names a
+`Q-NNN` that exists in the register; a registered one is decided by that question's `blocking` list).
+`tools/test_approvals_check.py` exercises each of these on temporary fixtures, never on the real
+`plan/approvals.json`. Exit code: 1 when `--gate` reports BLOCKED or a `Q-FORMAT` error exists.
 
-Save it to the session scratchpad (not the repo) and run it from the repo root:
+Run it from the repo root:
 
 ```bash
-python "<scratchpad>/approvals_check.py"                             # states of recorded approvals
-python "<scratchpad>/approvals_check.py" --pending                   # plus approvable pages with no record
-python "<scratchpad>/approvals_check.py" --gate phase-p1-foundation  # full entry-gate check
-python "<scratchpad>/approvals_check.py" --gate phase-p0-planning    # prints BOOTSTRAP (no approval gate)
+python tools/approvals_check.py                             # states of recorded approvals
+python tools/approvals_check.py --pending                   # plus approvable pages with no record
+python tools/approvals_check.py --gate phase-p1-foundation  # full entry-gate check
+python tools/approvals_check.py --gate phase-p0-planning    # prints BOOTSTRAP (no approval gate)
 ```
 
 Git Bash note: Python on Windows prints CRLF line endings. Strip `\r` (pipe through `tr -d '\r'`)
@@ -124,8 +135,10 @@ before pasting its output into JSON or comparing strings.
 ```python
 #!/usr/bin/env python3
 """Ferrum approval-state checker (read-only). Run from the repo root.
-Usage: python approvals_check.py [--gate <phase-id>] [--pending]
-Mirrors wiki/SCHEMA.md §10.2 (hashes), §10.3 (states), §9.7 (entry gate). Never writes any file."""
+Usage: python tools/approvals_check.py [--gate <phase-id>] [--pending]
+Mirrors wiki/SCHEMA.md §10.2 (hashes, bootstrap_hash), §10.3 (states), §9.7 (entry gate: dependencies,
+dependency set, open questions with fail-closed Q-FORMAT, unregistered CONTRADICTION blockquotes).
+Never writes any file. Exit code 1 when --gate reports BLOCKED or a Q-FORMAT error exists, else 0."""
 import glob, hashlib, json, os, re, sys
 
 def norm(b):
@@ -189,6 +202,9 @@ def state(key):
         return 'REJECTED'
     if e['status'] == 'changes-requested':
         return 'CHANGES_REQUESTED'
+    if key == 'schema' and e.get('bootstrap_hash') and os.path.exists('CLAUDE.md'):
+        if hashes('CLAUDE.md')[0] != e['bootstrap_hash']:  # SCHEMA §10.2: CLAUDE.md drift stales schema
+            return 'STALE'
     c, s = hashes(pages[pid][0])
     if c == e.get('content_hash'):
         return 'APPROVED'
@@ -196,11 +212,56 @@ def state(key):
         return 'APPROVED_VOLATILE_DRIFT'
     return 'STALE'
 
+def questions():
+    """ov-open-questions sections -> {qid: (status, blocking set or None)}; None = blocks every phase."""
+    oq, out, errs = 'wiki/overview/ov-open-questions.md', {}, []
+    if not os.path.exists(oq):
+        return out, errs
+    for sec in re.split(r'(?m)^## ', norm(open(oq, 'rb').read()).decode('utf-8'))[1:]:
+        m = re.match(r'(Q-\d{3}) ', sec)
+        if not m:
+            continue
+        qid, bad = m.group(1), []
+        st = re.findall(r'(?m)^- status:\s*(\S*)\s*$', sec)
+        bl = re.findall(r'(?m)^- blocking:\s*(.*?)\s*$', sec)
+        if len(st) != 1 or st[0] not in ('open', 'answered', 'withdrawn'):
+            bad.append('status missing, repeated or unknown')
+        ids = None
+        if len(bl) == 1 and re.fullmatch(r'\[\s*(?:[a-z0-9#.-]+\s*(?:,\s*[a-z0-9#.-]+\s*)*)?\]', bl[0]):
+            ids = {x.strip() for x in bl[0][1:-1].split(',') if x.strip()}
+        else:
+            bad.append('blocking missing, repeated or unparsable')
+        if qid in out:
+            bad.append('duplicate question id')
+        if bad:  # fail closed (SCHEMA §9.3 Q-FORMAT): open and blocking every phase
+            errs.append(f'Q-FORMAT {qid}: ' + '; '.join(bad))
+            out[qid] = ('open', None)
+        else:
+            out[qid] = (st[0], ids)
+    return out, errs
+
+def contradictions(path):
+    """Open '> **CONTRADICTION:**' blockquotes in a page -> list of (line no, Q ids named in the quote)."""
+    lines, out = norm(open(path, 'rb').read()).decode('utf-8').split('\n'), []
+    for i, line in enumerate(lines):
+        if re.match(r'^> \*\*CONTRADICTION:\*\*', line):
+            quote, j = [line], i + 1
+            while j < len(lines) and lines[j].startswith('>'):
+                quote.append(lines[j]); j += 1
+            out.append((i + 1, sorted(set(re.findall(r'Q-\d{3}', ' '.join(quote))))))
+    return out
+
 OK = {'APPROVED', 'APPROVED_VOLATILE_DRIFT'}
 args = sys.argv[1:]
+rc = 0
 print('approvals.json entries:', len(approvals))
 for k in sorted(approvals):
     print(f'  {state(k):24} {k}')
+
+qs, qerrs = questions()
+for e in qerrs:
+    print('  ' + e + ' (treated as open, blocking every phase)')
+    rc = 1
 
 for pid, (p, fm) in sorted(pages.items()):  # PHASE-DONE-NO-EXIT: done needs an approved #exit key
     if fm.get('type') == 'phase' and fm.get('status') == 'done' and state(pid + '#exit') not in OK:
@@ -218,8 +279,8 @@ if '--gate' in args:
     if ph == 'phase-p0-planning':  # bootstrap: approvals cannot exist before the plan app
         print('BOOTSTRAP: phase-p0-planning has no approval-based entry gate (CLAUDE.md section 1 step 10).')
         print('  Authority: wiki/raw/01-scoping-decisions.md. Plan-app build (p0.9-p0.16) needs the owner chat')
-        print('  confirmation of Q-101 and of the ip-* pages, transcribed to wiki/raw/owner/ (ip-build-plan IP-0).')
-        sys.exit(0)
+        print('  approval of the ip-* pages and adr-0016 (Approval Wave 0), transcribed to wiki/raw/owner/.')
+        sys.exit(rc)
     fm = pages[ph][1]
     deps = {ph, 'schema'} | set(fm.get('decisions', [])) | set(fm.get('experiments', [])) | set(fm.get('components', []))
     deps |= {i for i, (_, f) in pages.items() if f.get('phase_introduced') == ph}
@@ -235,17 +296,22 @@ if '--gate' in args:
         print(f'  {st:24} {d}')
         if st not in OK:
             blocked.append(d)
-    oq = 'wiki/overview/ov-open-questions.md'
-    if os.path.exists(oq):
-        for sec in re.split(r'(?m)^## ', norm(open(oq, 'rb').read()).decode('utf-8'))[1:]:
-            qid = sec.split()[0]
-            st = re.search(r'(?m)^- status:\s*(\S+)', sec)
-            bl = re.search(r'(?m)^- blocking:\s*\[(.*?)\]', sec)
-            ids = {x.strip() for x in bl.group(1).split(',')} if bl else set()
-            if st and st.group(1) == 'open' and ids & deps:
-                print(f'  OPEN QUESTION {qid} blocks {sorted(ids & deps)}')
-                blocked.append(qid)
+    for qid, (st, ids) in sorted(qs.items()):
+        if st == 'open' and (ids is None or ids & deps):
+            print(f'  OPEN QUESTION {qid} blocks {"every phase (Q-FORMAT)" if ids is None else sorted(ids & deps)}')
+            blocked.append(qid)
+    for d in sorted(deps):  # SCHEMA §9.7 step 4: a blockquote naming no Q-NNN is unregistered and blocks
+        if d in pages:
+            for ln, named in contradictions(pages[d][0]):
+                named = [q for q in named if q in qs]  # a Q id missing from the register does not register it
+                if not named:
+                    print(f'  UNREGISTERED CONTRADICTION {pages[d][0]}:{ln}')
+                    blocked.append(f'{d}:CONTRADICTION')
+                else:
+                    print(f'  registered CONTRADICTION {pages[d][0]}:{ln} -> {", ".join(named)}')
     print('ENTRY GATE:', 'PASS' if not blocked else 'BLOCKED by ' + ', '.join(blocked))
+    rc = rc or (1 if blocked else 0)
+sys.exit(rc)
 ```
 
 The minimal frontmatter parser handles top-level scalars and lists of scalars, which is enough for the
@@ -347,7 +413,7 @@ frontmatter wins and the table is fixed.
 |---|---|---|---|---|
 | 0 | Before the plan app is built; **in chat**, transcribed to `wiki/raw/owner/` | `ip-spec`, `ip-data-contract`, `ip-routes-and-views`, `ip-approvals-api`, `ip-wiki-lint`, `ip-testing`, `ip-build-plan`, `adr-0016` | Q-006, Q-007, Q-103, Q-210 (and Q-102 Node line); all answered and the keys approved in chat on 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)) | Claude may build `interactive_plan/` as specified (P0 tasks p0.9–p0.16). No Ferrum code |
 | 1 | After IP-10, **in the app** | `schema` (covers `CLAUDE.md` via `bootstrap_hash`), the seven `ip-*` pages and `adr-0016` again, `phase-p0-planning`, `adr-0001`, `adr-0002`, `adr-0003`, `adr-0004`, `adr-0014`, `comp-interactive-plan`; then `phase-p0-planning#exit` | Q-207 and Q-004 (closed by approving `schema`), Q-005, Q-108 | The wiki conventions, the resumability protocol and the gating rules; P0 is done |
-| 2 | P1 entry | `phase-p1-foundation`, `adr-0005`, `adr-0006`, `adr-0007`, `adr-0010`, `adr-0011`, `adr-0012`, `adr-0018`, `adr-0019`, `comp-core`, `comp-webview2-runtime`, `comp-windows-os` | Q-106, Q-110, Q-211, Q-218 (Q-104 answered 2026-10-08) | Toolchain install (you run winget), repo scaffold and layout, the four de-risking spikes including raw COM in spike S3. Still no product features |
+| 2 | P1 entry | `phase-p1-foundation`, `adr-0021`, `adr-0006`, `adr-0007`, `adr-0010`, `adr-0011`, `adr-0012`, `adr-0018`, `adr-0019`, `comp-core`, `comp-webview2-runtime`, `comp-windows-os` | Q-106, Q-110, Q-211 (Q-104 and Q-218 answered 2026-10-08) | Toolchain install (Claude runs winget, you confirm UAC; adr-0021), repo scaffold and layout, the four de-risking spikes including raw COM in spike S3. Still no product features |
 | 3 | P2 entry | `phase-p2-minimal-container`, `adr-0015`, `comp-app-shell`, `comp-webview-manager`, `comp-security-engine`, `comp-tab-content`, plus the new ADRs from p1.9 and any page p1.9 revised (they are STALE) | Q-109, Q-202, Q-214 | Milestone M1: a minimal working container |
 | 4 | P3 entry | `phase-p3-tabs-sessions` (+ anything STALE) | Q-107, Q-111, Q-209 | M2: tabs, sessions and the per-site profile route |
 | 5 | P4 entry | `phase-p4-security`, `adr-0008`, `exp-security-overhead`, `exp-isolation-overhead` | Q-112, Q-113, Q-202, Q-212 | M3: the security engine and its test suite |

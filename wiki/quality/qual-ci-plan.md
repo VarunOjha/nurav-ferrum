@@ -9,7 +9,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/nextjs-stack.md
-related: [qual-testing-strategy, qual-definition-of-done, qual-phase-gate-checklist, qual-security-testing-plan, ov-risk-register, adr-0011, adr-0005, adr-0006, adr-0012, adr-0013, adr-0016, adr-0018, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p4-security, phase-p6-benchmark-harness, comp-interactive-plan, comp-app-shell, comp-benchmark-harness, comp-research-analysis, ip-testing, ip-wiki-lint, risk-r19, risk-r20, risk-r22]
+related: [qual-testing-strategy, qual-definition-of-done, qual-phase-gate-checklist, qual-security-testing-plan, ov-risk-register, adr-0011, adr-0005, adr-0021, adr-0006, adr-0012, adr-0013, adr-0016, adr-0018, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p4-security, phase-p6-benchmark-harness, comp-interactive-plan, comp-app-shell, comp-benchmark-harness, comp-research-analysis, ip-testing, ip-wiki-lint, risk-r19, risk-r20, risk-r22]
 approvable: true
 phase: phase-p1-foundation
 tags: [ci, github-actions, quality]

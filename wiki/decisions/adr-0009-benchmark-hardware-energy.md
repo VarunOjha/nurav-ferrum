@@ -10,7 +10,7 @@ sources:
   - raw/research/measurement-methodology.md
   - raw/research/related-work-seed.md
   - raw/research/tauri-webview2-capabilities.md
-related: [adr-0012, adr-0013, adr-0005, risk-r04, risk-r05, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-energy, exp-baseline-footprint, comp-benchmark-harness, comp-research-analysis]
+related: [adr-0012, adr-0013, adr-0005, adr-0021, risk-r04, risk-r05, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-energy, exp-baseline-footprint, comp-benchmark-harness, comp-research-analysis]
 approvable: true
 date: 2026-10-08
 decided_by: owner

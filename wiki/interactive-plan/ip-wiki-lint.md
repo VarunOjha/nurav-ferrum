@@ -7,7 +7,8 @@ updated: 2026-10-08
 sources:
   - raw/research/llm-wiki-pattern.md
   - raw/research/nextjs-stack.md
-related: [ip-spec, ip-data-contract, ip-testing, ip-build-plan, ip-routes-and-views, schema, adr-0002, adr-0003, comp-interactive-plan, phase-p1-foundation]
+  - raw/owner/2026-10-08-s01-wave0b.md
+related: [ip-spec, ip-data-contract, ip-testing, ip-build-plan, ip-routes-and-views, schema, adr-0002, adr-0003, comp-interactive-plan, phase-p1-foundation, adr-0020]
 approvable: true
 phase: phase-p0-planning
 audience: both
@@ -60,7 +61,7 @@ SCHEMA §9.3 says the lint script is "planned deliverable of `phase-p1-foundatio
 | `REF-DANGLING` | error | Any reference field ([ip-data-contract](ip-data-contract.md) §4.2) that does not resolve; task refs (`spike`, `current_task`) that match no phase task; `sources` entries `raw/…` that do not exist; relative body links (outside fenced code) to missing files or missing heading anchors (anchors via the `rehype-slug` slug algorithm on target headings) |
 | `REF-RECIPROCAL` | error | `rq.hypotheses` ↔ `hyp.rq`; `hyp.experiments` ↔ `exp.hypotheses` |
 | `ORPHAN` | warn | No inbound reference from another page's frontmatter or body. Links from `index.md` and `log.md` do **not** count, since everything is in the index. Singletons are exempt |
-| `INDEX-MISSING` | error | A page is not listed in `index.md`, an index line points at a missing file, or a line fails the SCHEMA §11 regex. The status column must equal the page's `status` (or `raw`) |
+| `INDEX-MISSING` | error | A page is not listed in `index.md`, an index line points at a missing file or folder, or a line fails the SCHEMA §11 regex. The status column must equal the page's `status` (or `raw`). Raw files: those at the `raw/` top level and under `raw/owner/`, `raw/research/` and `raw/assets/` each need their own line; files under `raw/evidence/` and `raw/bench/` are **not** listed individually; instead each first-level folder (`raw/evidence/<phase-id>/`, `raw/bench/<run-id>/`) containing a file needs one line whose label is the folder path relative to `wiki/raw/`, lower-cased, non-`[a-z0-9.-]` characters (including `/`) replaced by `-`, no trailing `-` (SCHEMA §11, [adr-0020](../decisions/adr-0020-index-lists-evidence-folders.md)); a file directly in `raw/evidence/` or `raw/bench/` is an error |
 | `STALE-UPDATED` | warn / error | warn when `updated` < `git log -1 --format=%cs -- <file>`; **error** when `updated` > today (local date) |
 | `ADR-CHAIN` | error | `superseded` without `superseded_by`; A supersedes B but B is not superseded; `accepted` without (approval counts-as-approved **or** `decided_by: owner` with a `raw/` source), per SCHEMA §10.4.3 |
 | `PHASE-ORDER` | error | A cycle in `depends_on` (DFS), a dependency whose order ≥ own order, a duplicate `order`, `order` not equal to N in `phase-pN-…`, or a duplicate task id across all phases |

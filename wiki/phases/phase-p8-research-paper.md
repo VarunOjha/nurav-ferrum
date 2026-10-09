@@ -9,7 +9,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/research/measurement-methodology.md
   - raw/research/related-work-seed.md
-related: [phase-p7-lifecycle, phase-p6-benchmark-harness, comp-research-analysis, risk-r04, risk-r05, adr-0004, adr-0013, adr-0017, exp-baseline-footprint, exp-startup, exp-navigation, exp-rendering, exp-energy, exp-reliability, exp-security-overhead, exp-isolation-overhead, exp-lifecycle-policies]
+related: [phase-p7-lifecycle, phase-p6-benchmark-harness, comp-research-analysis, risk-r04, risk-r05, adr-0004, adr-0013, adr-0017, adr-0021, exp-baseline-footprint, exp-startup, exp-navigation, exp-rendering, exp-energy, exp-reliability, exp-security-overhead, exp-isolation-overhead, exp-lifecycle-policies]
 approvable: true
 phase: phase-p8-research-paper
 tags: [milestone-m7, research, paper, statistics, reproducibility, integrity]
@@ -33,7 +33,7 @@ deliverables:
   - "Limitations, threats to validity and negative results documented."
 tasks:
   - id: p8.1
-    title: "Set up the manuscript project in research/paper/ with the template from adr-0017 (or its replacement); owner installs the LaTeX toolchain via winget; build script"
+    title: "Set up the manuscript project in research/paper/ with the template from adr-0017 (or its replacement); Claude installs the LaTeX toolchain via winget (owner confirms UAC, adr-0021); build script"
     verify: "latexmk (or the chosen build command) produces a PDF from the skeleton with zero errors; toolchain version recorded."
   - id: p8.2
     title: "Analyse C1 and C2 with the P6 pipeline: descriptive statistics, bootstrap CIs, effect sizes, multiple-comparison correction; experiments to status analyzed; hypotheses to supported, not-supported or inconclusive"

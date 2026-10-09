@@ -9,7 +9,8 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/owner/2026-10-08-s01-wave0.md
-related: [adr-0005, adr-0011, phase-p1-foundation, comp-webview2-runtime, comp-interactive-plan, ops-session-protocol, ov-open-questions]
+  - raw/owner/2026-10-08-s01-wave0b.md
+related: [adr-0021, adr-0005, adr-0011, phase-p1-foundation, comp-webview2-runtime, comp-interactive-plan, ops-session-protocol, ov-open-questions]
 approvable: true
 audience: both
 trigger: "Before P0 plan-app work (Node), before P1 (Rust, MSVC), on a new machine, or when a tool is reported missing."
@@ -27,13 +28,15 @@ unverified:
 
 # Environment setup
 
-The owner installs the toolchain with winget; Claude supplies exact commands and verifies the result
-(owner decision Q2, adr-0005, [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)). In session s01
-the owner then gave a standing directive, "Feel free to run install.", and Claude installed Node LTS with
-winget on that authorisation ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)).
-How far that directive reaches (elevated installers such as the MSVC Build Tools, drivers) is open
-question Q-218 (CONTRADICTION on adr-0005). Until it is answered, Claude does not elevate or install
-drivers on its own (see CLAUDE.md §9).
+**Claude runs all toolchain installs** (winget, npm, rustup, pip), including elevated ones such as the
+MSVC Build Tools; the owner clicks through the UAC prompts. Kernel drivers (for example an
+energy-measurement driver) still need a separate, explicit owner approval. This is the owner's answer to
+Q-218 ([raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md)), recorded in
+[ADR-0021](../decisions/adr-0021-claude-runs-toolchain-installs.md), which supersedes adr-0005 (owner
+decision Q2, "Owner installs via winget", [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)).
+Node LTS was installed by Claude in session s01 under the earlier standing directive "Feel free to run
+install." ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)). Claude records the
+exact installed versions as evidence after every install.
 
 ## 1. Current state
 
@@ -53,7 +56,7 @@ The s01 observations above should be captured as a raw environment record at the
 (`wiki/raw/evidence/phase-p1-foundation/environment.md`), because SCHEMA §7.5 requires versions to cite a
 raw record.
 
-## 2. Install commands (owner runs these in PowerShell)
+## 2. Install commands (Claude runs these in PowerShell)
 
 Exact commands from the raw scoping record (Claude defaults proposed in session 1):
 
@@ -71,7 +74,8 @@ Notes:
   new major ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §2). The owner answered Q-102:
   stay on Node 24 LTS for now; moving to 26 needs its own ADR ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)).
   A winget pin (`winget pin add --id OpenJS.NodeJS.LTS`) may prevent the move `UNVERIFIED[phase-p1-foundation]`.
-- The Build Tools install is large and may need elevation and a reboot. Run it when convenient.
+- The Build Tools install is large, needs elevation (the owner confirms the UAC prompt) and may need a
+  reboot. Claude tells the owner before starting it.
 - `rustup default stable-msvc` must run in a **new** terminal opened after the rustup install, so that
   `rustup` is on PATH.
 - Tauri 2.12.1 requires Rust ≥ 1.90 ([raw/research/tauri-webview2-capabilities.md](../raw/research/tauri-webview2-capabilities.md)).
@@ -122,7 +126,7 @@ then a minimal Tauri app), not these version commands.
 - **Linker shadowing.** In Git Bash, `/usr/bin/link` (coreutils) is found before MSVC's `link.exe`; the raw
   record notes that the `link.exe` on PATH is Git's. Whether `cargo build` in Git Bash still finds the MSVC
   linker is `UNVERIFIED[phase-p1-foundation]`. Until verified, run Rust and Tauri builds from PowerShell.
-- **Which shell for what.** winget and installers: PowerShell (owner). `grep`/`sed`/log recipes and the
+- **Which shell for what.** winget and installers: PowerShell (Claude runs them; owner confirms UAC). `grep`/`sed`/log recipes and the
   wiki scripts: Git Bash. npm/Next.js: either. Cargo/Tauri: PowerShell until the linker question is settled.
 - **Python output in Git Bash** has CRLF line endings; strip `\r` when capturing it.
 - **Paths with spaces.** The repo is under `C:\Users\Varun Ojha\...`. Quote every path. Whether

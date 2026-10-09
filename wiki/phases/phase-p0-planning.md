@@ -148,7 +148,7 @@ P0 creates the project's memory and its approval mechanism before any Ferrum cod
 ## Out of scope
 
 - Any Rust, Tauri, Cargo workspace or shell UI code. These start in [P1](phase-p1-foundation.md) (scaffold and spikes) and [P2](phase-p2-minimal-container.md).
-- Installing Rust or MSVC Build Tools (P1, adr-0005). Only Node is installed now, per Q13.
+- Installing Rust or MSVC Build Tools (P1, adr-0021, which supersedes adr-0005). Only Node is installed now, per Q13.
 - Deploying the plan app anywhere. It runs on `127.0.0.1` only.
 - Any performance claim. No measurements exist.
 

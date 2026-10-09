@@ -12,7 +12,7 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/research/related-work-seed.md
   - raw/research/llm-wiki-pattern.md
-related: [phase-p0-planning, phase-p2-minimal-container, schema, risk-r01, risk-r02, risk-r03, risk-r04, risk-r05, risk-r06, risk-r15, risk-r18, risk-r20, adr-0019, comp-windows-os, comp-benchmark-harness, ov-research-plan, ops-environment-setup, qual-ci-plan, ov-arch-repo-layout, adr-0005, adr-0007, adr-0010, adr-0011, adr-0012, adr-0018, comp-core, comp-webview2-runtime]
+related: [phase-p0-planning, phase-p2-minimal-container, schema, risk-r01, risk-r02, risk-r03, risk-r04, risk-r05, risk-r06, risk-r15, risk-r18, risk-r20, adr-0019, comp-windows-os, comp-benchmark-harness, ov-research-plan, ops-environment-setup, qual-ci-plan, ov-arch-repo-layout, adr-0005, adr-0021, adr-0007, adr-0010, adr-0011, adr-0012, adr-0018, comp-core, comp-webview2-runtime]
 approvable: true
 phase: phase-p1-foundation
 tags: [toolchain, scaffold, ci, spikes, de-risking, literature-review]
@@ -24,7 +24,7 @@ entry_criteria:
   - "phase-p0-planning has status done and key phase-p0-planning#exit is APPROVED in plan/approvals.json."
   - "Owner approval recorded and not stale in plan/approvals.json (effective state APPROVED or APPROVED_VOLATILE_DRIFT) for the P1 dependency set: schema, phase-p1-foundation, every ADR in decisions, every component in components."
   - "No open Q-NNN in ov-open-questions blocks any id in the dependency set."
-  - "Owner is available to run the winget install commands (adr-0005); Claude does not install system software itself."
+  - "Owner is available to confirm the UAC prompts of the toolchain installs Claude runs (adr-0021, superseding adr-0005); no kernel driver is installed in P1 (drivers need separate owner approval)."
 deliverables:
   - "Installed and recorded toolchain: rustup/rustc/cargo (stable-msvc, Rust >= 1.90), MSVC Build Tools, Node LTS, Python, Git (raw/evidence/phase-p1-foundation/toolchain.txt)."
   - "Benchmark machine inventory (CPU model and Zen generation, RAM, GPU, display, power plan, browser and WebView2 versions)."
@@ -39,7 +39,7 @@ deliverables:
   - "Literature review protocol and first batch of verified reading notes (research track start)."
 tasks:
   - id: p1.1
-    title: "Owner installs the toolchain with the exact winget commands in the body; Claude verifies and records versions and installs cargo-deny with 'cargo install cargo-deny --locked'"
+    title: "Claude installs the toolchain with the exact winget commands in the body (owner clicks through UAC prompts, adr-0021); Claude verifies and records versions and installs cargo-deny with 'cargo install cargo-deny --locked'"
     verify: "rustc -Vv shows host x86_64-pc-windows-msvc and release >= 1.90; cargo -V, rustup show, node --version, npm --version, python --version, git --version and 'cargo deny --version' outputs saved to raw/evidence/phase-p1-foundation/toolchain.txt; 'cargo new --lib' in a temp dir followed by 'cargo build' links successfully (proves MSVC linker)."
   - id: p1.2
     title: "Record the benchmark machine inventory and current browser/WebView2 versions; owner answers CPU/RAM and meter questions"
@@ -100,7 +100,7 @@ test_gate:
     - "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/ci-local.ps1 (Windows PowerShell 5.1, which ships with Windows 11; PowerShell 7 is not required)"
     - "Spike S4 Playwright script (spikes/s4-playwright-cdp) exits 0"
   manual:
-    - "Owner ran the winget commands and confirms each completed (or reports the error text)."
+    - "Owner confirmed the UAC prompts of the installs Claude ran (adr-0021) and saw each complete (or reports the error text)."
     - "Owner performs the Alt+Tab keyboard-focus and window-resize checks of spike S1 and records the outcome."
     - "Owner reviews the four spike reports and chooses the profile route (S2) and confirms the hosting model (adr-0007) or asks for an alternative."
     - "Owner creates the GitHub remote, pushes, and reports the CI result, or explicitly defers remote creation."
@@ -127,7 +127,7 @@ exit_criteria:
   - "Literature review protocol exists; first reading batch recorded."
   - "Owner approved key phase-p1-foundation#exit."
 risks: [risk-r01, risk-r02, risk-r03, risk-r04, risk-r05, risk-r06, risk-r15, risk-r18, risk-r20]
-decisions: [adr-0005, adr-0006, adr-0007, adr-0010, adr-0011, adr-0012, adr-0014, adr-0018, adr-0019]
+decisions: [adr-0021, adr-0006, adr-0007, adr-0010, adr-0011, adr-0012, adr-0014, adr-0018, adr-0019]
 experiments: []
 components: [comp-core, comp-webview2-runtime, comp-windows-os]
 unverified:
@@ -149,9 +149,9 @@ P1 turns an empty repository into a working Rust workspace and, before any M1 de
 
 ## Scope
 
-### Toolchain (p1.1, adr-0005)
+### Toolchain (p1.1, adr-0021)
 
-The owner runs these commands (exact text from [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), "Claude defaults proposed"). Claude does not run installers.
+Claude runs these commands in PowerShell (exact text from [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), "Claude defaults proposed"); the owner clicks through the UAC prompts. This follows [ADR-0021](../decisions/adr-0021-claude-runs-toolchain-installs.md), which supersedes adr-0005 (owner answer to Q-218, [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md)). Kernel drivers are not covered and need a separate owner approval.
 
 ```powershell
 winget install -e --id Rustlang.Rustup
@@ -274,7 +274,7 @@ flowchart LR
 
 - Each task is one commit. Each spike writes its report incrementally: the table rows are filled as each check runs, so an interrupted spike resumes at the first empty row.
 - Spikes are time-boxed at one session each. If a spike overruns, Claude writes the partial report, logs it, and asks the owner whether to continue, change route or accept the risk.
-- The owner's winget run (p1.1) is asynchronous. Claude records the pending state in `STATUS.md` (`blocked_on`) and continues with tasks that do not need Rust (p1.13, p1.14).
+- The elevated installs of p1.1 wait for the owner's UAC confirmation and may need a reboot. Claude records the pending state in `STATUS.md` (`blocked_on`) and continues with tasks that do not need Rust (p1.13, p1.14).
 
 ## Owner review checkpoint (adr-0014)
 

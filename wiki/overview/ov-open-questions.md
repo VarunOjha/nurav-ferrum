@@ -12,7 +12,8 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/research/related-work-seed.md
   - raw/owner/2026-10-08-s01-wave0.md
-related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability]
+  - raw/owner/2026-10-08-s01-wave0b.md
+related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability]
 approvable: false
 audience: owner
 tags: [questions, owner]
@@ -68,7 +69,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 |---|---|
 | Building `interactive_plan/` in P0 (comp-interactive-plan) | none (Q-006, Q-007, Q-103, Q-210 answered 2026-10-08) |
 | `schema` approval (part of every phase entry) | Q-207 |
-| P1 entry | Q-106, Q-110 (via adr-0019), Q-211 (via adr-0019), Q-218 (adr-0005) |
+| P1 entry | Q-106, Q-110 (via adr-0019), Q-211 (via adr-0019) |
 | P2 entry | Q-109, Q-110 (via adr-0019), Q-202, Q-211 (via adr-0019), Q-214 |
 | P3 entry | Q-107, Q-111, Q-209 |
 | P4 entry | Q-112, Q-113, Q-202, Q-212 |
@@ -76,8 +77,8 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P6 entry (incl. exp-energy, exp-reliability) | Q-116, Q-117, Q-118, Q-119, Q-120, Q-121, Q-122, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
-| Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-105, Q-108, Q-215, Q-216, Q-217, Q-219 |
-| Answered | Q-006, Q-007, Q-101, Q-102, Q-103, Q-104, Q-210 |
+| Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-105, Q-108, Q-215, Q-217 |
+| Answered | Q-006, Q-007, Q-101, Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -699,8 +700,12 @@ states the limitation.
 
 - asked: 2026-10-08
 - blocking: []
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md), owner answer: "**Yes, commit under tools/**" — `tools/quick_lint.py` and `tools/approvals_check.py`, versioned and tested; the plan app's TS lint remains primary, the Python scripts are Node-free fallbacks.
+
+Applied 2026-10-08: both scripts are committed under `tools/` with stdlib tests (`python -m unittest discover -s tools -p "test_*.py"`);
+their text stays embedded in [ops-wiki-maintenance §5](../operations/ops-wiki-maintenance.md#5-lint) and
+[ops-approval-workflow §4](../operations/ops-approval-workflow.md#4-checking-approval-state-as-claude), and the tests fail if file and page differ.
 
 Proposed (SCHEMA §9.3 as amended, [ops-wiki-maintenance §5](../operations/ops-wiki-maintenance.md#5-lint)):
 the TypeScript `npm run lint:wiki` inside `interactive_plan/` is normative once IP-5 passes, sharing the
@@ -725,8 +730,11 @@ confirm (2); it holds only the P8 exit review.
 
 - asked: 2026-10-08
 - blocking: [phase-p1-foundation]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md), owner answer: "**Claude runs all toolchain installs**" — Claude runs winget/npm/rustup/pip installs, including MSVC Build Tools (owner clicks through UAC prompts). Kernel drivers (e.g. energy-measurement driver) still require separate owner approval. adr-0005 is superseded.
+
+Applied 2026-10-08 by DECIDE: [adr-0021](../decisions/adr-0021-claude-runs-toolchain-installs.md) (accepted, case (b)) supersedes
+[adr-0005](../decisions/adr-0005-owner-installs-toolchain-winget.md), whose CONTRADICTION blockquote is resolved.
 
 Raised by the ingest of [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md) (session s01). adr-0005 (accepted, case (b)) quotes
 the owner's scoping answer Q2: "Owner installs via winget (Claude supplies exact commands)". The later
@@ -743,8 +751,11 @@ that supersedes adr-0005 (DECIDE). It holds P1 entry, because P1 installs Rust a
 
 - asked: 2026-10-08
 - blocking: []
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md), owner answer: "**List folders, not files**" — wiki/index.md lists each evidence folder (e.g. `raw/evidence/phase-p0-planning/`) instead of every file; scales to benchmark result files later. Requires a small SCHEMA §11 change + lint update, recorded as an ADR.
+
+Applied 2026-10-08: option (b), recorded in [adr-0020](../decisions/adr-0020-index-lists-evidence-folders.md);
+SCHEMA §11, the quick lint and [ip-wiki-lint](../interactive-plan/ip-wiki-lint.md) `INDEX-MISSING` updated.
 
 Found at p0.9 / IP-0 (session s01). SCHEMA §11 makes a raw file's index id its basename without the
 extension, and the index-line regex allows only `[a-z0-9.-]` in ids. The P0 evidence names fixed on

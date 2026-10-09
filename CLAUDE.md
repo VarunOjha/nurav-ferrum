@@ -16,7 +16,8 @@ WILL be interrupted. Assume you remember nothing; the files are the memory.
    If `wiki/log.md` does not exist, P0 integration (task p0.7) was interrupted: skip this step and
    follow the STATUS **In-flight** recovery command.
 3. Read `plan/approvals.json` (missing file = every page PENDING). Compute effective states with the
-   checker in [ops-approval-workflow](wiki/operations/ops-approval-workflow.md#4-checking-approval-state-as-claude).
+   checker `python tools/approvals_check.py`
+   ([ops-approval-workflow](wiki/operations/ops-approval-workflow.md#4-checking-approval-state-as-claude)).
 4. Read the latest handoff (`STATUS.md` `last_handoff`, else newest in `wiki/operations/handoffs/`).
 5. Read `wiki/index.md` (if it is missing, same rule as step 2: follow STATUS In-flight).
 6. Read the current phase page in `wiki/phases/`.
@@ -86,7 +87,8 @@ files, removing a lock file) without explicit owner consent.
 
 ## 5. Session end — HANDOFF (SCHEMA §9.5)
 
-1. Quick lint (at minimum FM-*, ID-*, REF-DANGLING, INDEX-MISSING) — recipe in
+1. Quick lint (at minimum FM-*, ID-*, REF-DANGLING, INDEX-MISSING): `python tools/quick_lint.py` from the
+   repo root (until the plan app's `npm run lint:wiki` exists) — details in
    [ops-wiki-maintenance](wiki/operations/ops-wiki-maintenance.md#5-lint).
 2. Write `wiki/operations/handoffs/handoff-YYYY-MM-DD-sNN.md` per
    [ops-handoff-template](wiki/operations/ops-handoff-template.md) (file name starts with the id, SCHEMA
@@ -136,9 +138,10 @@ Every op appends `## [YYYY-MM-DD] <op> | <title>` to `wiki/log.md` (append-only)
 
 ## 9. Ask the owner
 
-Ask whenever a decision is the owner's: scope, priorities, anything security-relevant, installs,
-admin rights or drivers, spending, licensing, publishing, choices between ADR options, and any
-destructive git action. Record questions as `## Q-NNN` in
+Ask whenever a decision is the owner's: scope, priorities, anything security-relevant, kernel drivers,
+admin rights beyond toolchain installs, spending, licensing, publishing, choices between ADR options, and any
+destructive git action. Toolchain installs (winget, npm, rustup, pip, including elevated ones such as
+the MSVC Build Tools) are pre-authorised: Claude runs them and the owner clicks through UAC (adr-0021). Record questions as `## Q-NNN` in
 [wiki/overview/ov-open-questions.md](wiki/overview/ov-open-questions.md); record answers verbatim in
 `wiki/raw/owner/`. Batch non-urgent questions; ask blocking ones immediately.
 
@@ -152,6 +155,6 @@ Details: [ops-multi-agent-workflow](wiki/operations/ops-multi-agent-workflow.md)
 ## 11. Environment quick facts
 
 Windows 11, repo path contains a space — always quote paths. Git Bash for POSIX commands; PowerShell for
-winget. Toolchain status and commands: [ops-environment-setup](wiki/operations/ops-environment-setup.md).
+winget (Claude runs installs, adr-0021). Toolchain status and commands: [ops-environment-setup](wiki/operations/ops-environment-setup.md).
 Current phase: **P0 planning — no Ferrum application code** (no Rust, no Tauri project) until the
 owner approves P1 entry. The only code in P0 is the `interactive_plan/` planning tool the owner asked for.
