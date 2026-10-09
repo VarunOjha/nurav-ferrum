@@ -13,8 +13,8 @@ related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-buil
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.14
-next_action: "p0.14 / IP-4 of ip-build-plan: write interactive_plan/lib/approvals/store.ts, lock.ts, the guard and app/api/approvals/route.ts (ip-approvals-api), plus the optional log append and the snapshot write (ip-testing §1.4 Snapshots); run ip-testing §1.4 and §1.5 incl. the cross-process test 3 times in a row, save IP-4-tests.txt and commit [p0.14]. Tests must only use temp data dirs; never write plan/approvals.json. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
+current_task: p0.13
+next_action: "p0.13 / IP-5 of ip-build-plan: write interactive_plan/lib/lint/ with every rule of ip-wiki-lint §2, §2.1 and the git-backed rules (§3), tests/lint/wiki-lint.test.ts under vitest.lint.config.mts, and the lint:wiki:json and gate scripts; run them against the real wiki, fix real-wiki errors in wiki/interactive-plan/ only (others: list in the log, stop before IP-9), save IP-5-lint.json and IP-5-gate.txt and commit [p0.13]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
 blocked_on: []
 last_handoff: null
 ---
@@ -32,7 +32,7 @@ last_handoff: null
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2) and its hash/state/gate modules (IP-3), IP-4 to IP-10 remain; nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3) and its approvals store + API (IP-4), IP-5 to IP-10 remain; nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -83,6 +83,12 @@ yet (every approvable page is PENDING).**
   401 generated inputs) agree; 571 unit tests, lint:wiki, typecheck, eslint, quick lint and 29 tool tests green
   ([IP-3-tests.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt)). Delegated details in the `decide` log entry
   of 2026-10-09 (bootstrap_hash fail-closed, also in tools/approvals_check.py; entry-gate step 4 added to ip-data-contract §8.3).
+- p0.14 / IP-4 done (commit `6cc1a07`): `lib/approvals/{store,lock,guard,logAppend,view,file,errors,time,api}.ts` and
+  `app/api/approvals/route.ts`; 670 unit tests incl. the store, guard and route suites (every ip-approvals-api §2.2 code reached);
+  the cross-process test (4 node processes x 10 submits + a concurrent reader) green in the full run and 3 more times in a row;
+  lint:wiki, typecheck, eslint, quick lint, 29 tool tests green; plan/approvals.json untouched
+  ([IP-4-tests.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-4-tests.txt)). Windows refuses a rename over an open
+  file (EPERM, observed); the retry budget is 6 attempts (20-320 ms backoff). Delegated details in the IP-4 `decide` log entry.
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -93,7 +99,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.12 / IP-3 verified and committed 2026-10-09)
+(empty: p0.14 / IP-4 verified and committed 2026-10-09)
 
 ## Blockers
 
@@ -123,7 +129,7 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-
 
 ## Next action
 
-1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.14 / IP-4: approvals store + API) by following
+1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.13 / IP-5: wiki lint + gate report) by following
    [ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-1 to IP-10 (mapping table on
    [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Node: `export PATH="/c/Program Files/nodejs:$PATH"`.
    Wiki lint until IP-5: `python tools/quick_lint.py` (exits 1 on errors) and `cd interactive_plan && npm run lint:wiki`; tool tests: `python -m unittest discover -s tools -p "test_*.py"`.
@@ -140,4 +146,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.12 / IP-3; next p0.14 / IP-4). Last handoff: none yet.
+2026-10-09, session s01 (after p0.14 / IP-4; next p0.13 / IP-5). Last handoff: none yet.
