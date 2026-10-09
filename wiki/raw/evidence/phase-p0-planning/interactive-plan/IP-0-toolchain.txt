@@ -1,0 +1,21 @@
+RAW EVIDENCE - IP-0 toolchain (p0.9), phase-p0-planning, session s01
+Immutable raw evidence (SCHEMA 3.1). Captured 2026-10-09T04:12:08Z in Git Bash from the repo root,
+HEAD 3d18185, with PATH prefixed by /c/Program Files/nodejs (Node is not on the default
+PATH of the Claude Code Bash shell; raw/owner/2026-10-08-s01-wave0.md).
+
+$ node -v
+v24.20.0
+[exit 0]
+$ npm -v
+11.19.0
+[exit 0]
+$ git --version
+git version 2.52.0.windows.1
+[exit 0]
+$ command -v node npm
+/c/Program Files/nodejs/node
+/c/Program Files/nodejs/npm
+
+$ node -e (IP-0 gate: major === 24 and version >= 24.15)
+node 24.20.0: major=24 minor=20 -> IP-0 gate PASS
+[exit 0]

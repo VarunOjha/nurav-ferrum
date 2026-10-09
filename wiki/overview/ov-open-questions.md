@@ -76,7 +76,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P6 entry (incl. exp-energy, exp-reliability) | Q-116, Q-117, Q-118, Q-119, Q-120, Q-121, Q-122, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
-| Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-105, Q-108, Q-215, Q-216, Q-217 |
+| Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-105, Q-108, Q-215, Q-216, Q-217, Q-219 |
 | Answered | Q-006, Q-007, Q-101, Q-102, Q-103, Q-104, Q-210 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
@@ -738,3 +738,24 @@ owner keeps elevated installers (MSVC Build Tools) and any driver; (b) Claude ma
 installs, including elevated ones, with driver installs still needing separate approval; (c) keep
 adr-0005 as written (owner runs every winget install). Recommended default: (a), recorded by a new ADR
 that supersedes adr-0005 (DECIDE). It holds P1 entry, because P1 installs Rust and MSVC.
+
+## Q-219 Index ids for upper-case evidence file names (SCHEMA §11 vs the P0 evidence names)
+
+- asked: 2026-10-08
+- blocking: []
+- status: open
+- answer: none yet
+
+Found at p0.9 / IP-0 (session s01). SCHEMA §11 makes a raw file's index id its basename without the
+extension, and the index-line regex allows only `[a-z0-9.-]` in ids. The P0 evidence names fixed on
+[phase-p0-planning](../phases/phase-p0-planning.md) (`IP-0-toolchain.txt`, `IP-1-scaffold.txt`, …,
+`IP-10-final-lint.json`) contain upper-case letters, so no index line can list them, and the quick lint
+of [ops-wiki-maintenance §5](../operations/ops-wiki-maintenance.md#5-lint) reports `INDEX-MISSING` for
+each one (ip-wiki-lint §2 speaks only of pages, so the TS lint may differ). Options: (a) lower-case the
+index label and compare case-insensitively (SCHEMA §11 and quick-lint change); (b) exempt
+`raw/evidence/` and `raw/bench/` files from the per-file index requirement and list their folders
+instead; (c) rename future evidence files to lower case (`ip-1-scaffold.txt`, …) in the phase page and
+ip-build-plan; `IP-0-toolchain.txt` stays as written, since raw files are never renamed. Each changes
+lint semantics, so Claude does not choose. It holds no phase entry, but a clean lint is required by IP-9,
+IP-10 and the P0 exit; until it is answered the quick lint reports one `INDEX-MISSING` error per
+upper-case evidence file.
