@@ -2,18 +2,19 @@
 id: status-live
 type: status
 title: "Ferrum live status and next action"
-status: awaiting-owner
+status: active
 updated: 2026-10-08
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
+  - raw/owner/2026-10-08-s01-wave0b.md
 related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.10
-next_action: "Ask the owner Q-219 (wiki/overview/ov-open-questions.md: index ids for upper-case evidence names such as IP-0-toolchain.txt; the quick lint reports 1 INDEX-MISSING error until it is answered). After the answer: ingest it, apply the chosen fix, re-run the quick lint to 0 errors, then start p0.10 / IP-1 of wiki/interactive-plan/ip-build-plan.md (scaffold + spikes; Node via export PATH=\"/c/Program Files/nodejs:$PATH\")."
-blocked_on: [Q-219]
+next_action: "Start p0.10 / IP-1 of wiki/interactive-plan/ip-build-plan.md (scaffold interactive_plan/ + spikes; Node via export PATH=\"/c/Program Files/nodejs:$PATH\"). Lint with python tools/quick_lint.py (0 errors at a68667b)."
+blocked_on: []
 last_handoff: null
 ---
 
@@ -55,6 +56,13 @@ yet (every approvable page is PENDING).**
   Q-006, Q-007, Q-102, Q-103, Q-104, Q-210 answered; new Q-218 (CONTRADICTION on adr-0005, installs).
 - p0.9 / IP-0 done (commit `1cfc2d5`): Node v24.20.0, npm 11.19.0, git 2.52.0.windows.1; gate PASS
   ([IP-0-toolchain.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt)).
+- Wave 0b ingested (commit `a68667b`, [raw/owner/2026-10-08-s01-wave0b.md](wiki/raw/owner/2026-10-08-s01-wave0b.md)):
+  Q-216 (scripts committed as `tools/quick_lint.py` and `tools/approvals_check.py` with stdlib tests),
+  Q-218 ([adr-0021](wiki/decisions/adr-0021-claude-runs-toolchain-installs.md): Claude runs all toolchain
+  installs, owner clicks UAC, drivers need separate approval; supersedes adr-0005) and Q-219
+  ([adr-0020](wiki/decisions/adr-0020-index-lists-evidence-folders.md): index lists evidence/bench folders;
+  SCHEMA §11 changed). Quick lint 0 errors, 27 tool tests OK
+  ([tools-wave0b-check.txt](wiki/raw/evidence/phase-p0-planning/tools-wave0b-check.txt)).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -65,7 +73,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-none (p0.9 / IP-0 verified and committed as `1cfc2d5`)
+none (ingest-wave0b verified and committed as `a68667b`)
 
 ## Blockers
 
@@ -74,35 +82,32 @@ none (p0.9 / IP-0 verified and committed as `1cfc2d5`)
 | Owner answers to Approval Wave 0 (`ip-*` pages + adr-0016 approved in chat; Q-006, Q-007, Q-103, Q-210; Q-102 Node line) | Blocked building `interactive_plan/` (p0.9–p0.16) | Owner (chat) | **Resolved 2026-10-08**: transcribed in [wiki/raw/owner/2026-10-08-s01-wave0.md](wiki/raw/owner/2026-10-08-s01-wave0.md) and ingested |
 | Node.js on PATH | Needed to scaffold/run `interactive_plan/` | Claude (workaround) | Node v24.20.0 is installed in `C:\Program Files\nodejs` but is **not on the default PATH** of the Claude Code Bash shell. Workaround: start every Bash call with `export PATH="/c/Program Files/nodejs:$PATH"`. Not blocking |
 | Local commits (Q-104) | Recovery relied on STATUS + log only | Owner | **Resolved 2026-10-08**: yes, one local commit per verified task, never push |
-| Who runs toolchain installs (Q-218; CONTRADICTION on adr-0005) | Holds P1 entry | Owner | Open (raised at the 2026-10-08 ingest) |
-| Index ids for upper-case evidence names (Q-219) | Quick lint reports 1 INDEX-MISSING error (IP-0-toolchain); IP-9/IP-10 and the P0 exit need a clean lint. The build is paused before IP-1 (ip-build-plan stop condition: SCHEMA ambiguity in lint semantics) | Owner | Open |
-| Rust (rustup/cargo), MSVC Build Tools | Block P1 toolchain tasks; do not block P0 | Owner (winget, adr-0005) | Not installed |
+| Who runs toolchain installs (Q-218; CONTRADICTION on adr-0005) | Held P1 entry | Owner | **Resolved 2026-10-08**: Claude runs all toolchain installs (adr-0021 supersedes adr-0005) |
+| Index ids for upper-case evidence names (Q-219) | Quick lint reported 1 INDEX-MISSING error (IP-0-toolchain); paused the build before IP-1 | Owner | **Resolved 2026-10-08**: index lists evidence folders (adr-0020); quick lint 0 errors |
+| Rust (rustup/cargo), MSVC Build Tools | Block P1 toolchain tasks; do not block P0 | Claude runs winget, owner clicks UAC (adr-0021) | Not installed |
 | Owner approvals | Every phase entry gate; `plan/approvals.json` does not exist | Owner (plan app) | Pending — plan app not built yet |
 
 Exact install and verification commands: [wiki/operations/ops-environment-setup.md](wiki/operations/ops-environment-setup.md).
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **41 open**, 7 answered (Q-006, Q-007, Q-101,
-Q-102, Q-103, Q-104, Q-210), 3 withdrawn (Q-001–Q-003). Answer them by wave, not all at once
+[ov-open-questions](wiki/overview/ov-open-questions.md): **38 open**, 10 answered (Q-006, Q-007, Q-101,
+Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219), 3 withdrawn (Q-001–Q-003). Answer them by wave, not all at once
 ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
-- **Now (pauses the plan-app build before IP-1):** Q-219 (index ids for upper-case evidence file names).
 - **Wave 0 (before the plan app):** done 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](wiki/raw/owner/2026-10-08-s01-wave0.md)).
 - **Wave 1 (P0 exit):** Q-207 and Q-004 (closed by approving `schema`), Q-005, Q-108.
-- **Wave 2 (P1 entry):** Q-106, Q-110, Q-211, Q-218 (new: who runs toolchain installs).
+- **Wave 2 (P1 entry):** Q-106, Q-110, Q-211 (Q-218 answered 2026-10-08, adr-0021).
 - Later waves: see the "Summary by gate" table on the register.
 
 ## Next action
 
-1. **Ask the owner Q-219** (index ids for upper-case evidence names; see the register). Transcribe the
-   answer to `wiki/raw/owner/`, ingest it, apply the fix, and re-run the quick lint to 0 errors.
-2. **Then build `interactive_plan/`** (p0.10–p0.16, starting with p0.10 / IP-1) by following
+1. **Build `interactive_plan/`** (p0.10–p0.16, starting with p0.10 / IP-1: scaffold + spikes) by following
    [ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-1 to IP-10 (mapping table on
-   [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Wave 0 is transcribed in
-   [raw/owner/2026-10-08-s01-wave0.md](wiki/raw/owner/2026-10-08-s01-wave0.md).
-3. After IP-10: the owner approves Wave 1 in the app (fix the reading-pass findings of the p0.8 lint log
-   entry first), then Wave 2 (answer Q-218 too), then `phase-p0-planning#exit` (p0.17–p0.18).
+   [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Node: `export PATH="/c/Program Files/nodejs:$PATH"`.
+   Wiki lint until IP-5: `python tools/quick_lint.py`; tool tests: `python -m unittest discover -s tools -p "test_*.py"`.
+2. After IP-10: the owner approves Wave 1 in the app (fix the reading-pass findings of the p0.8 lint log
+   entry first), then Wave 2, then `phase-p0-planning#exit` (p0.17–p0.18).
 
 ## Pending owner approvals
 
@@ -113,4 +118,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-08, session s01 (after p0.9 / IP-0; awaiting the owner on Q-219). Last handoff: none yet.
+2026-10-08, session s01 (after the wave-0b ingest, commit `a68667b`; next p0.10 / IP-1). Last handoff: none yet.

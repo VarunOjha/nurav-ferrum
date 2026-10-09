@@ -179,3 +179,39 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: IP-0 preconditions 0-2 hold (p0.8 lint clean, Wave 0 transcribed, Q-006/Q-007/Q-103/Q-210 answered). With PATH prefixed by /c/Program Files/nodejs: node -v v24.20.0, npm -v 11.19.0, git --version 2.52.0.windows.1; gate (major 24 and >= 24.15) PASS, exit 0. Evidence appended to MANIFEST.sha256 (11 lines, verify 0 problems). Adding the evidence file makes the quick lint report 1 INDEX-MISSING error, because SCHEMA §11 index ids must be lower case and the mandated name is IP-0-toolchain; registered as Q-219 (lint semantics, owner decides) and not worked around. Build paused before IP-1 per the ip-build-plan stop condition on SCHEMA ambiguities that change lint semantics.
 - next: owner answers Q-219, then p0.10 / IP-1 (scaffold + spikes)
 - commit: 1cfc2d5
+
+## [2026-10-08] ingest | Owner answers Q-216, Q-218, Q-219 (wave 0b, s01)
+
+- session: s01
+- pages: [ov-open-questions, adr-0005, ops-environment-setup, phase-p1-foundation, phase-p0-planning, phase-p8-research-paper, adr-0006, adr-0009, adr-0011, adr-0017, qual-ci-plan, risk-r20, ops-approval-workflow, ops-wiki-maintenance, ip-wiki-lint, index]
+- sources: [raw/owner/2026-10-08-s01-wave0b.md]
+- result: Q-216 (commit the lint and approval-check scripts under tools/), Q-218 (Claude runs all toolchain installs incl. MSVC Build Tools; owner clicks UAC; kernel drivers need separate approval; adr-0005 superseded) and Q-219 (index lists evidence folders, not files) set to answered with quotes and the source path. Raw file appended to MANIFEST.sha256 and listed in index.md. The adr-0005 CONTRADICTION blockquote is resolved (rewritten as "Resolved contradiction", decision text unchanged). Pages that said the owner runs installs now cite adr-0021. adr-0016 and ip-build-plan (chat-approved, Wave 0) still list adr-0005 in related and quote the owner's Q13 wording; they were deliberately not edited, to keep the Wave 0 approval intact (a superseded ADR is still a valid reference).
+- stales: [adr-0005, ops-environment-setup, phase-p1-foundation, phase-p0-planning, phase-p8-research-paper, adr-0006, adr-0009, adr-0011, adr-0017, qual-ci-plan, risk-r20, ops-approval-workflow, ops-wiki-maintenance, ip-wiki-lint] (no approvals.json exists, so nothing is actually stale; this stales approval of ip-wiki-lint, chat-approved in Wave 0, edited under SCHEMA §10.4 rule 2)
+- commit: a68667b
+
+## [2026-10-08] decide | adr-0020 (index lists evidence folders) and adr-0021 (Claude runs toolchain installs, supersedes adr-0005)
+
+- session: s01
+- pages: [adr-0020, adr-0021, adr-0005, phase-p1-foundation, ops-approval-workflow, index]
+- sources: [raw/owner/2026-10-08-s01-wave0b.md]
+- result: adr-0020 and adr-0021 created with decided_by owner and status accepted under SCHEMA §10.4 rule 3(b) (verbatim owner decision quoted; Claude elaboration binding only once APPROVED in the plan app). adr-0021 supersedes adr-0005, which is set to superseded with superseded_by adr-0021. phase-p1-foundation decisions now list adr-0021 instead of adr-0005 (Wave 2 table in ops-approval-workflow §8 updated likewise); Q-218 no longer holds P1 entry. Next free ADR id adr-0022.
+- stales: [adr-0005, phase-p1-foundation, ops-approval-workflow] (no approvals.json exists, so nothing is actually stale)
+- commit: a68667b
+
+## [2026-10-08] schema | SCHEMA §11 raw evidence/bench folders (adr-0020), §8 registry, §9.3 tools/ fallback; CLAUDE.md
+
+- session: s01
+- pages: [schema, ip-wiki-lint, ops-wiki-maintenance]
+- sources: [raw/owner/2026-10-08-s01-wave0b.md]
+- result: SCHEMA §11: files under raw/evidence/ and raw/bench/ are no longer listed individually; each first-level folder (raw/evidence/<phase-id>/, raw/bench/<run-id>/) gets one index line, label = folder path relative to wiki/raw/, lower-cased, non-[a-z0-9.-] characters replaced by -, no trailing -; link = folder path with trailing slash; a file directly in raw/evidence/ or raw/bench/ is INDEX-MISSING; raw top-level, raw/owner/, raw/research/ and raw/assets/ files are still listed per file. The §11 line regex is unchanged. §9.3 INDEX-MISSING row and the fallback lint location (tools/quick_lint.py) updated; §8 registry adr-0001…adr-0021, next free adr-0022. CLAUDE.md §1 step 3 and §5 point to tools/approvals_check.py and tools/quick_lint.py; §9 and §11 state that toolchain installs are pre-authorised (adr-0021) while kernel drivers still need the owner. ip-wiki-lint INDEX-MISSING and the ops-wiki-maintenance §5 quick lint implement the same rule. Index: per-file lines for env-webview2-pv and wiki-lint-manual replaced by the folder line evidence-phase-p0-planning.
+- stales: [schema, ip-wiki-lint, ops-wiki-maintenance] (schema also via the CLAUDE.md bootstrap_hash; this stales approval of ip-wiki-lint; no approvals.json exists, so nothing is actually stale)
+- commit: a68667b
+
+## [2026-10-08] lint | tools/ committed (Q-216); quick lint over the whole wiki after the wave-0b ingest
+
+- session: s01
+- pages: [ops-wiki-maintenance, ops-approval-workflow, index]
+- sources: [raw/evidence/phase-p0-planning/tools-wave0b-check.txt]
+- result: 0 errors, 0 warnings. tools/quick_lint.py (byte-identical to the ops-wiki-maintenance §5 block) reports 193 files checked, 0 errors; the IP-0-toolchain INDEX-MISSING error of the p0.9 entry is gone. tools/approvals_check.py (byte-identical to the ops-approval-workflow §4 block) adds the SCHEMA §10.2 bootstrap_hash check, fail-closed Q-FORMAT and the §9.7 step 4 CONTRADICTION-registration rule; on the real wiki it reports no Q-FORMAT errors, BOOTSTRAP for phase-p0-planning and BLOCKED for phase-p1-foundation (nothing approved; Q-106, Q-110, Q-207, Q-211 open; adr-0010 CONTRADICTION registered via Q-107). python -m unittest discover -s tools -p "test_*.py": 27 tests OK (fixtures in temp dirs; the hash vectors of ip-data-contract §7 all match; the real plan/approvals.json stayed absent). The test output contains ResourceWarning lines from the SCHEMA §10.2 reference's unclosed open() (harmless; the reference is kept verbatim). MANIFEST.sha256 now 13 lines, verify 0 problems, sha256 30491b184cc8bdea744ff96ce359209b4e02293c53f0a3bf7ed0d7c06a1124de.
+- next: p0.10 / IP-1 of ip-build-plan (scaffold + spikes)
+- commit: a68667b
