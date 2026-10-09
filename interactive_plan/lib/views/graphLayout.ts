@@ -6,6 +6,7 @@
 import { Graph, layout } from "@dagrejs/dagre";
 import type { ComponentGraph, PhaseDag, TraceGraph } from "../wiki/graph";
 import { TRACE_LAYER } from "../wiki/graph";
+import { CHIP_H, CHIP_MARGIN, CHIP_MAX, chipSize } from "./edgeLabels";
 
 export interface Box {
   id: string;
@@ -32,14 +33,36 @@ const LANE_PAD = 36;
 const LANE_GAP = 24;
 const SUB_GAP = 24;
 
+/**
+ * Architecture spacing (IP-10 follow-up): the gap between columns holds a CHIP_MAX-character edge chip
+ * with its margins and some curve on both sides, and rows are far enough apart for a chip between them.
+ * dagre gets the same chip size as the edge label, so its ordering accounts for the labels too.
+ */
+export const ARCH_LABEL = { width: chipSize("x".repeat(CHIP_MAX)).w + 2 * CHIP_MARGIN, height: CHIP_H + 2 * CHIP_MARGIN };
+export const ARCH_COL_GAP = ARCH_LABEL.width + 40;
+export const ARCH_ROW_GAP = ARCH_LABEL.height + 16;
+
+interface Spacing {
+  colGap: number;
+  rowGap: number;
+  /** Edge label size reserved by dagre (labelpos "c"). */
+  label?: { width: number; height: number };
+}
+const DEFAULT_SPACING: Spacing = { colGap: COL_GAP, rowGap: ROW_GAP };
+
 /** dagre LR layout; returns node centres. Edges to unknown ids are ignored. */
-export function dagreLayout(ids: readonly string[], edges: readonly { from: string; to: string }[], size = { w: NODE_W, h: NODE_H }): Map<string, { x: number; y: number }> {
+export function dagreLayout(
+  ids: readonly string[],
+  edges: readonly { from: string; to: string }[],
+  size = { w: NODE_W, h: NODE_H },
+  spacing: Spacing = DEFAULT_SPACING,
+): Map<string, { x: number; y: number }> {
   const g = new Graph();
-  g.setGraph({ rankdir: "LR", nodesep: ROW_GAP, ranksep: COL_GAP, marginx: 0, marginy: 0 });
+  g.setGraph({ rankdir: "LR", nodesep: spacing.rowGap, ranksep: spacing.colGap, marginx: 0, marginy: 0 });
   g.setDefaultEdgeLabel(() => ({}));
   const set = new Set(ids);
   for (const id of ids) g.setNode(id, { width: size.w, height: size.h });
-  for (const e of edges) if (set.has(e.from) && set.has(e.to) && e.from !== e.to) g.setEdge(e.from, e.to);
+  for (const e of edges) if (set.has(e.from) && set.has(e.to) && e.from !== e.to) g.setEdge(e.from, e.to, spacing.label ? { ...spacing.label, labelpos: "c" } : {});
   layout(g);
   const out = new Map<string, { x: number; y: number }>();
   for (const id of ids) {
@@ -68,7 +91,9 @@ function stackInBands(
   col: Map<string, number>,
   pos: Map<string, { x: number; y: number }>,
   maxRows = Number.POSITIVE_INFINITY,
+  spacing: Spacing = DEFAULT_SPACING,
 ): { boxes: Box[]; lanes: Lane[] } {
+  const { colGap, rowGap } = spacing;
   const boxes: Box[] = [];
   const lanes: Lane[] = [];
   const maxCol = Math.max(0, ...[...col.values()]);
@@ -88,9 +113,9 @@ function stackInBands(
   let x = LANE_PAD;
   for (let c = 0; c <= maxCol; c++) {
     colX.push(x);
-    x += subCols[c] * NODE_W + (subCols[c] - 1) * SUB_GAP + COL_GAP;
+    x += subCols[c] * NODE_W + (subCols[c] - 1) * SUB_GAP + colGap;
   }
-  const laneW = x - COL_GAP + LANE_PAD;
+  const laneW = x - colGap + LANE_PAD;
   let top = 0;
   groups.forEach((g, gi) => {
     if (g.ids.length === 0) return;
@@ -99,11 +124,11 @@ function stackInBands(
       ids.forEach((id, i) => {
         const sub = Math.floor(i / maxRows);
         const row = i % maxRows;
-        boxes.push({ id, x: colX[c] + sub * (NODE_W + SUB_GAP), y: top + LANE_PAD + row * (NODE_H + ROW_GAP), w: NODE_W, h: NODE_H });
+        boxes.push({ id, x: colX[c] + sub * (NODE_W + SUB_GAP), y: top + LANE_PAD + row * (NODE_H + rowGap), w: NODE_W, h: NODE_H });
       });
       rows = Math.max(rows, Math.min(ids.length, maxRows));
     }
-    const h = 2 * LANE_PAD + rows * NODE_H + (rows - 1) * ROW_GAP;
+    const h = 2 * LANE_PAD + rows * NODE_H + (rows - 1) * rowGap;
     lanes.push({ id: g.id, label: g.label, x: 0, y: top, w: laneW, h });
     top += h + LANE_GAP;
   });
@@ -119,9 +144,12 @@ export const TRUST_LANES = [
 
 /** Architecture: dagre columns, then one swim-lane per trust level (ip-routes-and-views §3.2). */
 export function layoutArchitecture(g: Pick<ComponentGraph, "nodes" | "edges">): { boxes: Box[]; lanes: Lane[] } {
+  const spacing: Spacing = { colGap: ARCH_COL_GAP, rowGap: ARCH_ROW_GAP, label: ARCH_LABEL };
   const pos = dagreLayout(
     g.nodes.map((n) => n.id),
     g.edges,
+    { w: NODE_W, h: NODE_H },
+    spacing,
   );
   const col = columnsOf(pos);
   const groups = TRUST_LANES.map((l) => ({
@@ -129,7 +157,7 @@ export function layoutArchitecture(g: Pick<ComponentGraph, "nodes" | "edges">): 
     label: l.label,
     ids: g.nodes.filter((n) => (n.dangling ? "missing" : n.trust_level) === l.id).map((n) => n.id),
   }));
-  return stackInBands(groups, col, pos);
+  return stackInBands(groups, col, pos, Number.POSITIVE_INFINITY, spacing);
 }
 
 /** Roadmap DAG: dagre positions as they are (dependencies to the left). */

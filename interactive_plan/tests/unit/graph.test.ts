@@ -8,7 +8,8 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 import { initialViewport } from "@/lib/views/viewport";
-import { edgesBehindNodes, layoutArchitecture, layoutPhaseDag, layoutTrace, NODE_H, NODE_W, type Box } from "@/lib/views/graphLayout";
+import { bezierPoint, CHIP_MARGIN, CHIP_MAX, chipSize, chipText, placeChips } from "@/lib/views/edgeLabels";
+import { ARCH_COL_GAP, ARCH_LABEL, edgesBehindNodes, layoutArchitecture, layoutPhaseDag, layoutTrace, NODE_H, NODE_W, type Box } from "@/lib/views/graphLayout";
 import { adrSectionCheck, decisionRows, filterDecisions, sortRisks, supersessionChain } from "@/lib/views/registers";
 import { cycleNodes } from "@/lib/wiki/cycles";
 import { componentGraph, phaseDag, riskBand, riskMatrix, traceGraph, traceSubgraph, type GapKind } from "@/lib/wiki/graph";
@@ -628,5 +629,52 @@ describe("edgesBehindNodes", () => {
     // dagre may already bend e3 around p7 vertically; if the three share a row, e3 must be routed below
     const sameRow = new Set(boxes.map((b) => b.y)).size === 1;
     if (sameRow) expect(below.has("e3")).toBe(true);
+  });
+});
+
+// IP-10 follow-up: architecture hover labels overlapped (22 labels, 19 overlapping pairs on the real wiki).
+describe("edge chips", () => {
+  it("chipText keeps short labels and cuts long ones to CHIP_MAX characters with an ellipsis", () => {
+    expect(chipText("TB")).toBe("TB");
+    expect(chipText("x".repeat(CHIP_MAX))).toBe("x".repeat(CHIP_MAX));
+    const cut = chipText("tab and navigation commands (create, close, activate) (rust-api)");
+    expect(cut).toHaveLength(CHIP_MAX);
+    expect(cut.endsWith("…")).toBe(true);
+    expect(chipText("  a \n  b  ")).toBe("a b");
+  });
+
+  it("bezierPoint matches xyflow's curve ends and centre (t=0.5 is getBezierPath's labelX/labelY)", () => {
+    const s = { x: 0, y: 0 };
+    const t = { x: 200, y: 100 };
+    expect(bezierPoint(s, t, 0)).toEqual(s);
+    expect(bezierPoint(s, t, 1)).toEqual(t);
+    // controls (100,0) and (100,100): centre = 0.125*s + 0.375*c1 + 0.375*c2 + 0.125*t
+    expect(bezierPoint(s, t, 0.5)).toEqual({ x: 100, y: 50 });
+  });
+
+  it("placeChips never overlaps a node or another chip and drops a chip that has no free spot", () => {
+    const a = { x: 0, y: 0, w: 220, h: 76 };
+    const b = { x: 420, y: 0, w: 220, h: 76 };
+    const reqs = Array.from({ length: 30 }, (_, i) => ({ id: `e${i}`, text: chipText(`edge label number ${i} with a long tail`), from: a, to: b }));
+    const at = placeChips(reqs, [a, b]);
+    expect(at.size).toBeGreaterThan(0);
+    expect(at.size).toBeLessThan(30);
+    const boxes = [...at.entries()].map(([id, p]) => {
+      const { w, h } = chipSize(reqs.find((r) => r.id === id)!.text);
+      return { x: p.x - w / 2, y: p.y - h / 2, w, h };
+    });
+    const hit = (p: { x: number; y: number; w: number; h: number }, q: typeof p) => p.x < q.x + q.w && q.x < p.x + p.w && p.y < q.y + q.h && q.y < p.y + p.h;
+    boxes.forEach((p, i) => {
+      expect(hit(p, a) || hit(p, b)).toBe(false);
+      boxes.slice(i + 1).forEach((q) => expect(hit(p, q)).toBe(false));
+    });
+    // earlier requests win: the first one is always placed, in the middle of its curve
+    expect(at.get("e0")).toEqual({ x: 320, y: 38 });
+    expect(placeChips([{ id: "x", text: "", from: a, to: b }], [])).toEqual(new Map());
+  });
+
+  it("the architecture layout reserves a full chip (plus margins) between columns", () => {
+    expect(ARCH_LABEL.width).toBe(chipSize("x".repeat(CHIP_MAX)).w + 2 * CHIP_MARGIN);
+    expect(ARCH_COL_GAP).toBeGreaterThan(ARCH_LABEL.width);
   });
 });

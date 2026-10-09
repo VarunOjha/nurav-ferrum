@@ -10,14 +10,21 @@
  * IP-9 review: the initial viewport never zooms out below `fitMinZoom` (a larger graph is shown from
  * its top-left corner and panned), with labelMode "active" only the edges of the hovered, focused or
  * opened node show their full label, and `route: "below"` edges leave and enter at the bottom.
+ *
+ * IP-10 follow-up (hover labels overlapped: 22 labels, 19 overlapping pairs on "WebView manager"):
+ * labelMode "active" now draws only short chips on the canvas (the `short` marker, or the label cut to
+ * CHIP_MAX characters for the active node's edges), each placed on its curve where it hits no node and
+ * no other chip (lib/views/edgeLabels.ts), and lists the full text of the active node's edges in a
+ * region beside the graph (data-testid "graph-edges").
  */
 import "@xyflow/react/dist/style.css";
-import { Background, Controls, Handle, MarkerType, Position, ReactFlow, type Edge, type Node, type NodeProps } from "@xyflow/react";
+import { Background, BaseEdge, Controls, EdgeLabelRenderer, getBezierPath, Handle, MarkerType, Position, ReactFlow, type Edge, type EdgeProps, type Node, type NodeProps } from "@xyflow/react";
 import Link from "next/link";
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { chipSize, chipText, placeChips, type ChipRequest } from "@/lib/views/edgeLabels";
 import { initialViewport, type Viewport } from "@/lib/views/viewport";
 import { useEffectiveTheme } from "../theme";
-import type { FlowBadge, FlowGraphProps, FlowNodeSpec, FlowPanel } from "./types";
+import type { FlowBadge, FlowEdgeSpec, FlowGraphProps, FlowNodeSpec, FlowPanel } from "./types";
 
 type ItemData = { spec: FlowNodeSpec };
 type LaneData = { title: string };
@@ -91,6 +98,80 @@ function LaneNode({ data }: NodeProps<Node<LaneData>>) {
 
 const NODE_TYPES = { item: ItemNode, lane: LaneNode };
 
+type ChipData = { chip?: string; chipClass?: string; lx?: number; ly?: number; full: string };
+
+/**
+ * Bezier edge whose label is a short chip at the position chosen by placeChips (not drawn without one).
+ * The chip is HTML in xyflow's label layer, so it sits above every edge line, and its width is the
+ * width placeChips reserved (text that would not fit is cut with an ellipsis by CSS).
+ */
+function ChipEdge({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd, data }: EdgeProps<Edge<ChipData>>) {
+  const [path] = getBezierPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
+  const chip = data?.chip;
+  const show = !!chip && data.lx !== undefined && data.ly !== undefined;
+  return (
+    <>
+      <BaseEdge id={id} path={path} markerEnd={markerEnd} />
+      {show && (
+        <EdgeLabelRenderer>
+          <div
+            className={["fg-chip", data!.chipClass ?? ""].join(" ").trim()}
+            data-edge={id}
+            title={data!.full}
+            aria-hidden="true"
+            style={{ width: chipSize(chip).w, transform: `translate(-50%, -50%) translate(${data!.lx}px, ${data!.ly}px)` }}
+          >
+            {chip}
+          </div>
+        </EdgeLabelRenderer>
+      )}
+    </>
+  );
+}
+
+const EDGE_TYPES = { chip: ChipEdge };
+
+/** Full text of the active node's edges, beside the graph (labelMode "active"). */
+function EdgeList({ id, nodes, edges }: { id: string | null; nodes: FlowNodeSpec[]; edges: FlowEdgeSpec[] }) {
+  const node = id ? nodes.find((n) => n.id === id && n.kind === "item") : undefined;
+  const titleOf = (x: string) => nodes.find((n) => n.id === x && n.kind === "item")?.title ?? x;
+  const out = node ? edges.filter((e) => e.from === node.id) : [];
+  const inc = node ? edges.filter((e) => e.to === node.id && e.from !== node.id) : [];
+  const row = (e: FlowEdgeSpec, other: string, to: boolean) => (
+    <li key={e.id} data-edge={e.id} className={(e.classes ?? []).includes("fg-edge-bad") ? "fg-edges-bad" : undefined}>
+      <span className="sr-only">{to ? "to " : "from "}</span>
+      <strong>{titleOf(other)}</strong>: {e.label ?? e.short ?? ""}
+    </li>
+  );
+  return (
+    <section className="fg-edges" aria-labelledby="fg-edges-title" aria-live="polite" data-testid="graph-edges">
+      <h2 id="fg-edges-title" className="panel-title">
+        {node ? `Edges of ${node.title}` : "Edges"}
+      </h2>
+      {!node ? (
+        <p className="muted small">Hover, focus or open a component to list its edges here in full.</p>
+      ) : out.length + inc.length === 0 ? (
+        <p className="muted small">No edges.</p>
+      ) : (
+        <>
+          {out.length > 0 && (
+            <>
+              <h3 className="fg-edges-sub">Outgoing ({out.length})</h3>
+              <ul className="plain-list fg-edges-list">{out.map((e) => row(e, e.to, true))}</ul>
+            </>
+          )}
+          {inc.length > 0 && (
+            <>
+              <h3 className="fg-edges-sub">Incoming ({inc.length})</h3>
+              <ul className="plain-list fg-edges-list">{inc.map((e) => row(e, e.from, false))}</ul>
+            </>
+          )}
+        </>
+      )}
+    </section>
+  );
+}
+
 function SidePanel({ panel, onClose }: { panel: FlowPanel; onClose: () => void }) {
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => heading.current?.focus(), [panel.id]);
@@ -145,6 +226,12 @@ export default function FlowGraph({ nodes, edges, label, height, testId, fitMinZ
   const theme = useEffectiveTheme();
   const [openId, setOpenId] = useState<string | null>(null);
   const [hoverId, setHoverId] = useState<string | null>(null);
+  // The edge list keeps the last active node, so the pointer can move over to it and read it.
+  const [listId, setListId] = useState<string | null>(null);
+  const setActive = useCallback((id: string | null) => {
+    setHoverId(id);
+    if (id) setListId(id);
+  }, []);
   const canvas = useRef<HTMLElement | null>(null);
   const [viewport, setViewport] = useState<Viewport | null>(null);
   // Initial view from the canvas size before first paint: fit, but never below fitMinZoom.
@@ -157,6 +244,7 @@ export default function FlowGraph({ nodes, edges, label, height, testId, fitMinZ
   const open = useCallback((id: string, el: HTMLElement) => {
     trigger.current = el;
     setOpenId(id);
+    setListId(id);
   }, []);
   const close = useCallback(() => {
     setOpenId(null);
@@ -197,9 +285,48 @@ export default function FlowGraph({ nodes, edges, label, height, testId, fitMinZ
     [nodes],
   );
   const active = hoverId ?? openId;
+  const chips = labelMode === "active";
+  // Chip positions (labelMode "active"): the active node's edges first, then the short markers.
+  const placed = useMemo(() => {
+    if (!chips) return new Map<string, { x: number; y: number }>();
+    const box = new Map(nodes.filter((n) => n.kind === "item").map((n) => [n.id, { x: n.x, y: n.y, w: n.w, h: n.h }] as const));
+    const isActive = (e: FlowEdgeSpec) => active !== null && (e.from === active || e.to === active);
+    const req = (e: FlowEdgeSpec): ChipRequest | null => {
+      const from = box.get(e.from);
+      const to = box.get(e.to);
+      const text = isActive(e) ? chipText(e.label ?? "") : (e.short ?? "");
+      return from && to && text ? { id: e.id, text, from, to } : null;
+    };
+    const ordered = [...edges.filter(isActive), ...edges.filter((e) => !isActive(e))].map(req).filter((r): r is ChipRequest => r !== null);
+    return placeChips(ordered, [...box.values()]);
+  }, [chips, nodes, edges, active]);
   const rfEdges = useMemo<Edge[]>(
     () =>
-      edges.map((e) => ({
+      edges.map((e): Edge => {
+        if (chips) {
+          const at = placed.get(e.id);
+          const on = active !== null && (e.from === active || e.to === active);
+          return {
+            id: e.id,
+            source: e.from,
+            target: e.to,
+            sourceHandle: "r",
+            targetHandle: "l",
+            type: "chip",
+            className: ["fg-edge", ...(on ? ["fg-edge-active"] : []), ...(e.classes ?? [])].join(" "),
+            markerEnd: { type: MarkerType.ArrowClosed, width: 18, height: 18 },
+            focusable: false,
+            selectable: false,
+            data: {
+              chip: on ? chipText(e.label ?? "") : e.short,
+              chipClass: [on ? "fg-chip-active" : "", ...(e.classes ?? []).map((c) => c.replace("fg-edge-", "fg-chip-"))].filter(Boolean).join(" "),
+              lx: at?.x,
+              ly: at?.y,
+              full: e.label ?? "",
+            },
+          };
+        }
+        return {
         id: e.id,
         source: e.from,
         target: e.to,
@@ -214,20 +341,23 @@ export default function FlowGraph({ nodes, edges, label, height, testId, fitMinZ
         labelBgPadding: [6, 3] as [number, number],
         labelBgBorderRadius: 4,
         data: { full: e.label ?? "" },
-      })),
-    [edges, labelMode, active],
+        };
+      }),
+    [edges, labelMode, active, chips, placed],
   );
   const panel = openId ? nodes.find((n) => n.id === openId)?.panel ?? null : null;
+  const side = !!panel || chips;
 
   return (
-    <div className={panel ? "fg-wrap fg-wrap-open" : "fg-wrap"}>
+    <div className={side ? "fg-wrap fg-wrap-open" : "fg-wrap"}>
       <section className="fg-canvas" style={{ height }} aria-label={label} data-testid={testId} data-label-mode={labelMode} ref={canvas}>
         <OpenPanel.Provider value={open}>
-          <SetActive.Provider value={setHoverId}>
+          <SetActive.Provider value={setActive}>
           <ReactFlow
             nodes={rfNodes}
             edges={rfEdges}
             nodeTypes={NODE_TYPES}
+            edgeTypes={EDGE_TYPES}
             colorMode={theme}
             viewport={viewport ?? { x: 0, y: 0, zoom: 1 }}
             onViewportChange={setViewport}
@@ -249,7 +379,12 @@ export default function FlowGraph({ nodes, edges, label, height, testId, fitMinZ
           </SetActive.Provider>
         </OpenPanel.Provider>
       </section>
-      {panel && <SidePanel panel={panel} onClose={close} />}
+      {side && (
+        <div className="fg-side">
+          {panel && <SidePanel panel={panel} onClose={close} />}
+          {chips && <EdgeList id={active ?? listId} nodes={nodes} edges={edges} />}
+        </div>
+      )}
     </div>
   );
 }

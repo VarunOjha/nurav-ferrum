@@ -9,6 +9,7 @@ import LazyFlowGraph from "@/components/graph/LazyFlowGraph";
 import type { FlowEdgeSpec, FlowNodeSpec } from "@/components/graph/types";
 import { getApprovals, getIndex } from "@/lib/server/data";
 import { approvalLabel, toneOf } from "@/lib/ui/tone";
+import { CHIP_MAX } from "@/lib/views/edgeLabels";
 import { layoutArchitecture, TRUST_LANES } from "@/lib/views/graphLayout";
 import { componentGraph, type ComponentEdge, type ComponentNode } from "@/lib/wiki/graph";
 import { pageHref, wikiHref } from "@/lib/wiki/routes";
@@ -100,8 +101,9 @@ export default async function ArchitectureRoute({ searchParams }: PageProps<"/ar
     from: e.from,
     to: e.to,
     label: edgeLabel(e),
-    // Full labels show for the hovered, focused or opened component (they overlapped at any zoom when
-    // all 42 were drawn, IP-9 review); the others keep a short marker. The edge table has every label.
+    // The canvas draws chips only (IP-10 follow-up): this short marker, or for the hovered, focused or
+    // opened component the label cut to CHIP_MAX characters, placed where it hits no node or chip. The
+    // full labels are in the list beside the graph (active component) and in the edge table (all).
     short: e.trustEdgeError ? "TRUST-EDGE" : e.dangling ? "missing" : e.crossesTrustBoundary ? "TB" : undefined,
     classes: [e.crossesTrustBoundary ? "fg-edge-tb" : "", e.trustEdgeError || e.dangling ? "fg-edge-bad" : ""].filter(Boolean),
   }));
@@ -157,8 +159,9 @@ export default async function ArchitectureRoute({ searchParams }: PageProps<"/ar
           <span className="legend-box legend-dotted" aria-hidden="true" /> dotted border: not shipped
         </li>
         <li>
-          Lanes: trust level. Edge labels show for the component under the pointer, in focus or open in the panel; the table below lists all of them.
-          Drag to pan. Tab moves through the components; Enter opens the details panel.
+          Lanes: trust level. The canvas shows short edge chips only: TB markers, and for the component under the pointer, in focus or open in the
+          panel, its edge labels cut to {CHIP_MAX} characters; the list beside the graph gives that component&apos;s edges in full and the table below
+          lists every edge. Drag to pan. Tab moves through the components; Enter opens the details panel.
         </li>
       </ul>
 
@@ -188,7 +191,7 @@ export default async function ArchitectureRoute({ searchParams }: PageProps<"/ar
               </thead>
               <tbody>
                 {edges.map((e) => (
-                  <tr key={e.id} data-edge={e.id} className={e.trustEdgeError || e.dangling ? "row-bad" : undefined}>
+                  <tr key={e.id} data-edge={e.id} data-from={e.from} data-to={e.to} className={e.trustEdgeError || e.dangling ? "row-bad" : undefined}>
                     <td>
                       <a href={`/go/${encodeURIComponent(e.from)}`}>{titleOf(e.from)}</a> <span className="mono small muted">{e.from}</span>
                     </td>

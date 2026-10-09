@@ -62,9 +62,13 @@ test("backlinks list the expected ids, grouped by field", async ({ page }) => {
 
 test("search finds a body word, from the top-bar box", async ({ page }) => {
   await page.goto("/wiki");
-  await page.keyboard.press("/");
   const box = page.getByRole("combobox", { name: "Search the wiki" });
-  await expect(box).toBeFocused();
+  // The "/" shortcut is a client handler: a key pressed before hydration is lost (seen once in the
+  // IP-10 follow-up gate run under load), so press again until the box has focus.
+  await expect(async () => {
+    await page.keyboard.press("/");
+    await expect(box).toBeFocused({ timeout: 1000 });
+  }).toPass({ timeout: 15_000 });
   await box.fill(FX.bodyWord);
   await box.press("Enter");
   await expect(page).toHaveURL(`/search?q=${FX.bodyWord}`);

@@ -2100,6 +2100,74 @@ mark {
     animation: none !important;
   }
 }
+/* IP-10 follow-up: the side column holds the details panel and the active node's edge list */
+.fg-side {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  min-width: 0;
+}
+.fg-edges {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.8rem 1rem;
+  min-width: 0;
+  max-height: 760px;
+  overflow-y: auto;
+}
+.fg-edges-sub {
+  margin: 0.6rem 0 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.fg-edges-list {
+  margin: 0;
+  padding-left: 0;
+}
+.fg-edges-list li {
+  font-size: 0.84rem;
+  padding: 0.25rem 0;
+  border-top: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+.fg-edges-bad {
+  color: var(--red-fg);
+}
+.react-flow__edge.fg-edge-active .react-flow__edge-path {
+  stroke: var(--text);
+}
+/* Edge chips (lib/views/edgeLabels.ts): keep these box metrics in sync with CHIP_H / CHIP_PAD_X */
+.fg-chip {
+  position: absolute;
+  box-sizing: border-box;
+  font-size: 11px;
+  line-height: 13px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  pointer-events: none;
+}
+.fg-chip-tb {
+  font-weight: 600;
+}
+.fg-chip-active {
+  border-color: var(--text-muted);
+}
+.fg-chip-bad {
+  color: var(--red-fg);
+  border-color: var(--red-fg);
+  font-weight: 600;
+}
 .fg-panel {
   border: 1px solid var(--border);
   border-radius: var(--radius);

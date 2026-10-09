@@ -36,7 +36,7 @@ Then open <http://127.0.0.1:3417/>. The dashboard shows the current phase, the n
 | `test`, `test:coverage` | Vitest unit and component tests (with coverage thresholds) |
 | `lint:wiki`, `lint:wiki:json` | The normative wiki lint (JSON report with `WIKI_LINT_JSON=1`) |
 | `gate` | Entry-gate checklist of every phase |
-| `test:e2e` | Playwright against a temp fixture copy on ports 3418/3419 |
+| `test:e2e` | Playwright against a temp fixture copy on ports 3418/3419, plus a read-only real-wiki server on 3420 |
 | `perf` | Server-render timing per route on the real wiki, read-only |
 | `verify` | typecheck, lint, test, lint:wiki, build, test:e2e in one run |
 
@@ -73,8 +73,10 @@ npm run perf            # server-render timing per route on the real wiki (read-
 ```
 
 E2E runs against a temporary copy of a fixture wiki on ports 3418 and 3419; it never touches the
-real `plan/approvals.json`, `wiki/log.md` or `STATUS.md` (the teardown checks this). Stop any server
-on 3418/3419 first. `IP3_REQUIRE_PYTHON=1` makes a missing Python fail the hash cross-check and
+real `plan/approvals.json`, `wiki/log.md` or `STATUS.md` (the teardown checks this). One spec
+(`architecture-real.spec.ts`, the hover-label overlap check) needs the real component graph and runs
+against a third server of the same build on 3420 with `PLAN_READONLY=1` and `PLAN_APPEND_LOG=0`.
+Stop any server on 3418-3420 first (the app on 3417 can keep running). `IP3_REQUIRE_PYTHON=1` makes a missing Python fail the hash cross-check and
 `IP_REQUIRE_BIND_PROBE=1` makes a machine without a probe-able network address fail the bind test
 (both are set for gate runs).
 
@@ -99,6 +101,10 @@ decision is [adr-0016](../wiki/decisions/adr-0016-interactive-plan-nextjs.md); t
 
 ## Known issues
 
-- `/architecture`: when a component is hovered, focused or opened, its full edge labels can overlap
-  each other and nearby nodes (review of 2026-10-09; open). The edge table below the graph lists the
-  same edges in full.
+- Timing: the first request after the server starts (about 2.2 s) and a request after the 10 s lint
+  memo expires (1.0-1.4 s) are slower than the 500 ms target of ip-spec §5; warm requests meet it.
+  Accepted as a limitation of a local single-user tool (2026-10-09).
+- `/architecture` (fixed 2026-10-09): the canvas shows short edge chips only (TB markers, and the
+  hovered/focused/open component's labels cut to 24 characters, placed where they hit no node or other
+  chip; a chip with no free spot is left out). The full text of that component's edges is in the list
+  beside the graph, and every edge is in the table below it.

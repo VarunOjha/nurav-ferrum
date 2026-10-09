@@ -20,12 +20,20 @@ test("node count equals the fixture components; TB edge has the TB marker; edge 
   await expect(page.locator(`${graph} [data-node-id='comp-fixture-shell']`)).toHaveClass(/fg-dotted/);
   await expect(page.locator(`${graph} [data-node-id='comp-fixture-shell']`)).toContainText("not shipped");
 
-  const tb = page.locator(`${graph} .react-flow__edge.fg-edge-tb`);
+  await expect(page.locator(`${graph} .react-flow__edge.fg-edge-tb`)).toHaveCount(1);
+  // IP-10 follow-up: edge labels are HTML chips above the edge lines (lib/views/edgeLabels.ts)
+  const tb = page.locator(`${graph} .fg-chip.fg-chip-tb`);
   await expect(tb).toHaveCount(1);
   // IP-9 review: only a short marker until an endpoint is hovered, focused or opened; then the full label
   await expect(tb).toHaveText("TB");
+  await expect(page.getByTestId("graph-edges")).toContainText("Hover, focus or open a component");
   await page.locator(`${graph} [data-node-id='comp-fixture-shell']`).hover();
   await expect(tb).toContainText("TB · creates (rust-api)");
+  // IP-10 follow-up: the full text of the active component's edges is listed beside the graph
+  const list = page.getByTestId("graph-edges");
+  await expect(list.getByRole("heading", { level: 2 })).toHaveText("Edges of Fixture shell");
+  await expect(list.locator("li[data-edge]")).toHaveCount(1);
+  await expect(list.locator("li[data-edge]")).toContainText("Fixture content: TB · creates (rust-api)");
   await page.mouse.move(1, 1);
   await expect(tb).toHaveText("TB");
   await page.locator(`${graph} [data-node-id='comp-fixture-content'] .fg-hit`).focus();
