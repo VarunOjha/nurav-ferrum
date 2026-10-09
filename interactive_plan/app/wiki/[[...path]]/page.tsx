@@ -4,15 +4,17 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import ApproveBar from "@/components/ApproveBar";
 import { StatusBadge, TypeBadge } from "@/components/Badges";
 import Markdown from "@/components/Markdown";
 import { Backlinks, FindingsBanner, FrontmatterPanel, PageHeader, SourcesAndRelated } from "@/components/wiki/PageParts";
 import WikiTree from "@/components/wiki/WikiTree";
-import { getApprovals, getIndex, getLint } from "@/lib/server/data";
+import { approveBarProps } from "@/lib/server/approveBar";
+import { config, getApprovals, getIndex, getLint } from "@/lib/server/data";
 import { backlinkGroups } from "@/lib/wiki/backlinks";
 import type { LintFinding } from "@/lib/wiki/findings";
 import { linkTargetInfo, type WikiIndex, type WikiPage } from "@/lib/wiki/load";
-import { resolveWikiParam, wikiHref } from "@/lib/wiki/routes";
+import { pageHref, resolveWikiParam, wikiHref } from "@/lib/wiki/routes";
 import { pageTitle } from "@/lib/wiki/search";
 import { ancestorDirs, buildTree, type TreeNode } from "@/lib/wiki/tree";
 
@@ -83,6 +85,9 @@ async function PageView({ idx, page }: { idx: WikiIndex; page: WikiPage }) {
   const [view, findings, yamlText] = await Promise.all([getApprovals().catch(() => null), pageFindings(page), frontmatterYaml(idx, page)]);
   const approvals = view && page.id ? view.items.filter((i) => i.id === page.id) : [];
   const isRaw = page.kind === "raw" || page.kind === "raw-research";
+  const pageItem = approvals.find((a) => !a.exit) ?? null;
+  const bar = !isRaw && pageItem ? await approveBarProps(pageItem, "Page approval", config(), idx.bootstrapHash) : null;
+  const typed = pageHref(page);
   return (
     <article className="page" data-kind={page.kind}>
       {isRaw && <RawBanner />}
@@ -97,6 +102,12 @@ async function PageView({ idx, page }: { idx: WikiIndex; page: WikiPage }) {
         approvals={approvals}
         approvable={fm.approvable === true}
       />
+      {typed !== wikiHref(page.path) && (
+        <p className="small">
+          <a href={typed}>Open the {str(fm.type) ?? "typed"} view →</a>
+        </p>
+      )}
+      {bar && <ApproveBar {...bar} />}
       <SourcesAndRelated sources={strs(fm.sources)} related={strs(fm.related)} exists={info.exists} known={known} />
       <FrontmatterPanel rawFm={page.rawFm} yamlText={yamlText} known={known} />
       <div className="page-body">

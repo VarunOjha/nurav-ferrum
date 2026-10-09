@@ -168,14 +168,18 @@ describe("routes", () => {
     expect(goTarget(idx, "status-live")).toBe("/");
     expect(goTarget(idx, "Q-901")).toMatch(/^\/wiki\/overview\/ov-open-questions\.md#q-901-/);
     expect(goTarget(idx, "Q-999")).toBeNull();
-    expect(goTarget(idx, "p0.1")).toBe("/wiki/phases/phase-p0-fixture-plan.md");
+    expect(goTarget(idx, "p0.1")).toBe("/phases/phase-p0-fixture-plan");
     expect(goTarget(idx, "p8.99")).toBeNull();
     expect(goTarget(idx, "nope")).toBeNull();
   });
 
-  it("pageHref falls back to the wiki browser while no typed route exists", async () => {
+  it("pageHref uses a typed route once it exists (phase since IP-7) and the wiki browser otherwise", async () => {
     const idx = await loadMini();
-    expect(pageHref(idx.byId.get("phase-p0-fixture-plan")!)).toBe("/wiki/phases/phase-p0-fixture-plan.md");
+    expect(pageHref(idx.byId.get("phase-p0-fixture-plan")!)).toBe("/phases/phase-p0-fixture-plan");
+    expect(pageHref(idx.byId.get("phase-p0-fixture-plan")!, false)).toBe("/wiki/phases/phase-p0-fixture-plan.md");
+    // decision views arrive in IP-8: until then an ADR opens in the wiki browser
+    expect(pageHref(idx.byId.get("adr-0901")!)).toBe("/wiki/decisions/adr-0901-fixture-decision.md");
+    expect(goTarget(idx, "phase-p1-fixture-build")).toBe("/phases/phase-p1-fixture-build");
   });
 
   it("editDistance and closeMatches", () => {

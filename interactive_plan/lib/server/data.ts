@@ -5,7 +5,10 @@
  * signature, because the git-backed rules spawn git (ip-wiki-lint §3).
  */
 import { statSync } from "node:fs";
+import path from "node:path";
 import { cache } from "react";
+import { readApprovals, type ApprovalsRead } from "../approvals/file";
+import { withMutex } from "../approvals/lock";
 import { getView, type ApprovalsView } from "../approvals/view";
 import { getConfig, type PlanConfig } from "../config";
 import { buildLintContext } from "../lint/context";
@@ -18,6 +21,12 @@ export const config = cache((): PlanConfig => getConfig());
 export const getIndex = cache((): Promise<WikiIndex> => loadWiki(config()));
 
 export const getApprovals = cache((): Promise<ApprovalsView> => getView(config()));
+
+/** approvals.json as read (for the entry-gate evaluation); read under the same in-process mutex as the API GET. */
+export const getApprovalsFile = cache((): Promise<ApprovalsRead> => {
+  const cfg = config();
+  return withMutex(path.join(cfg.dataDir, ".approvals.lock"), () => readApprovals(cfg.approvalsFile));
+});
 
 const LINT_TTL_MS = 10_000;
 let lintMemo: { sig: string; at: number; report: LintReport } | null = null;

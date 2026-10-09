@@ -18,11 +18,13 @@ export function wikiHref(wikiPath: string, anchor?: string | null): string {
 }
 
 /**
- * Typed views by page type. Empty until the typed routes exist: IP-7 adds `phase` -> /phases/[id]
- * and IP-8 adds `decision` -> /decisions/[id] (decided 2026-10-09, IP-6: /go never redirects to a
- * route that does not exist yet).
+ * Typed views by page type. A type is registered by the build step that adds its route: IP-7 added
+ * `phase` -> /phases/[id]; IP-8 adds `decision` -> /decisions/[id] (decided 2026-10-09, IP-6: /go
+ * never redirects to a route that does not exist yet).
  */
-export const TYPED_ROUTES: Readonly<Record<string, (id: string) => string>> = {};
+export const TYPED_ROUTES: Readonly<Record<string, (id: string) => string>> = {
+  phase: (id) => `/phases/${encodeURIComponent(id)}`,
+};
 
 /** Where a page is shown: its typed view if one exists, the dashboard for STATUS.md, else the wiki browser. */
 export function pageHref(p: Pick<WikiPage, "id" | "path" | "kind" | "fm" | "rawFm">, typed = true): string {

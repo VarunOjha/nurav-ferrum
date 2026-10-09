@@ -15,7 +15,7 @@ export interface GateReport {
   text: string;
 }
 
-const CHECK_TEXT: Record<string, string> = {
+export const CHECK_TEXT: Record<string, string> = {
   "phase-exists": "the phase page exists and is valid",
   "dependencies-done": "1. every depends_on phase has status done and an approved #exit",
   "dependency-set-approved": "2. every id of the dependency set counts as approved",

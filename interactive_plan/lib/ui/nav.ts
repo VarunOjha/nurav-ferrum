@@ -20,8 +20,8 @@ export const NAV: readonly NavItem[] = [
   { href: "/research", label: "Research", ready: false, step: "IP-8" },
   { href: "/wiki", label: "Wiki", ready: true },
   { href: "/log", label: "Log", ready: true },
-  { href: "/approvals", label: "Approvals", ready: false, step: "IP-7" },
-  { href: "/lint", label: "Lint", ready: false, step: "IP-7" },
+  { href: "/approvals", label: "Approvals", ready: true },
+  { href: "/lint", label: "Lint", ready: true },
 ];
 
 /** Is `href` the active section for `pathname`? */

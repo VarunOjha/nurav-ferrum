@@ -8,6 +8,7 @@ import SearchBox from "@/components/SearchBox";
 import ThemeToggle from "@/components/ThemeToggle";
 import { THEME_INIT_SCRIPT } from "@/components/themeScript";
 import { config, getApprovals, getIndex, getLint } from "@/lib/server/data";
+import { needsAttentionCount } from "@/lib/views/inbox";
 import { suggestionList, type Suggestion } from "@/lib/wiki/search";
 import "./globals.css";
 
@@ -29,7 +30,7 @@ async function shellData() {
   try {
     const [idx, view] = await Promise.all([getIndex(), getApprovals()]);
     out.suggestions = suggestionList(idx);
-    out.pending = view.counts.PENDING + view.counts.STALE + view.counts.CHANGES_REQUESTED;
+    out.pending = needsAttentionCount(view.items);
     if (view.file.exists && !view.file.valid) out.approvalsInvalid = view.file.error ?? "invalid file";
   } catch (e) {
     out.loadError = e instanceof Error ? e.message : String(e);
@@ -65,10 +66,15 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
               <div className="topbar-tools">
                 <SearchBox items={d.suggestions} />
                 {d.pending !== null && (
-                  <span className="pending-counter" title="Approvals needing attention: pending + stale + changes requested">
+                  <Link
+                    href="/approvals"
+                    className="pending-counter"
+                    title="Approvals needing attention: pending + stale + changes requested"
+                    data-testid="pending-counter"
+                  >
                     <span className="pending-count">{d.pending}</span>
                     <span className="pending-label">to review</span>
-                  </span>
+                  </Link>
                 )}
                 <ThemeToggle />
               </div>
@@ -92,7 +98,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
               <strong>
                 Wiki lint: {d.lintErrors} error{d.lintErrors === 1 ? "" : "s"}.
               </strong>{" "}
-              Run <code>cd interactive_plan &amp;&amp; npm run lint:wiki</code> for the report.
+              <Link href="/lint">Open the lint report</Link> (same engine as <code>cd interactive_plan &amp;&amp; npm run lint:wiki</code>).
             </div>
           )}
           {d.readonly && (

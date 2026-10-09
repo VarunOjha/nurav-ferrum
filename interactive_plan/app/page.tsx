@@ -1,22 +1,47 @@
-// `/`: interim home until the full dashboard of IP-7 (ip-routes-and-views §3.1): STATUS next action,
-// current phase/task, the last 5 log entries and entry points to the views built so far.
+// Dashboard `/` (ip-routes-and-views §3.1): next action from STATUS.md, phase progress strip with the
+// sessions budget and last activity, the current phase's entry gate, approval counts, blockers, the
+// last 5 log entries (the RESUME recipe) and the lint summary.
 import Link from "next/link";
-import { StatusBadge } from "@/components/Badges";
-import { getIndex } from "@/lib/server/data";
+import { ApprovalBadge, StatusBadge } from "@/components/Badges";
+import { EFFECTIVE_STATES } from "@/lib/approvals/state";
+import { CHECK_TEXT } from "@/lib/lint/gateReport";
+import { getApprovals, getApprovalsFile, getIndex, getLint } from "@/lib/server/data";
 import { OP_TONES } from "@/lib/ui/tone";
+import { approvalsMap, blockers, lastActivity, phaseStrip, progress, stateCounts } from "@/lib/views/dashboard";
+import { eligibleItems } from "@/lib/views/inbox";
+import { entryGate } from "@/lib/wiki/gates";
 
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
-  const idx = await getIndex();
-  const s = idx.status;
-  const last5 = idx.log.slice(-5).reverse();
+const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 100) : 0);
+
+function IdOrQ({ id, known }: { id: string; known: boolean }) {
   return (
-    <article className="page narrow-wide">
+    <a href={`/go/${encodeURIComponent(id)}`} className={known ? "id-link" : "id-link link-missing"} title={known ? undefined : "missing (REF-DANGLING)"}>
+      {id}
+    </a>
+  );
+}
+
+export default async function Dashboard() {
+  const idx = await getIndex();
+  const [view, file, lint] = await Promise.all([getApprovals(), getApprovalsFile(), getLint().catch(() => null)]);
+  const s = idx.status;
+  const known = (id: string) => idx.byId.has(id) || idx.openQuestions.some((q) => q.id === id);
+  const cells = phaseStrip(idx);
+  const prog = progress(cells);
+  const activity = lastActivity(idx.log);
+  const items = eligibleItems(view.items);
+  const counts = stateCounts(items);
+  const blocks = blockers(idx, items);
+  const gate = s ? entryGate(idx, approvalsMap(file), s.current_phase) : null;
+  const last5 = idx.log.slice(-5).reverse();
+
+  return (
+    <article className="page page-wide">
       <header className="page-header">
         <p className="eyebrow">Ferrum plan</p>
-        <h1 className="page-title">Overview</h1>
-        <p className="muted">The full dashboard (phase progress, gate checklist, approval counts, blockers) arrives in build step IP-7.</p>
+        <h1 className="page-title">Dashboard</h1>
       </header>
 
       <div className="cards">
@@ -51,9 +76,132 @@ export default async function Home() {
                   </dd>
                 </div>
               </dl>
+              {s.blocked_on.length > 0 && (
+                <div className="blocked-on banner banner-amber" data-testid="blocked-on">
+                  <strong>Blocked on:</strong>{" "}
+                  <ul className="inline-list">
+                    {s.blocked_on.map((b) => (
+                      <li key={b}>
+                        <IdOrQ id={b} known={known(b)} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </>
           ) : (
             <p className="banner banner-amber">STATUS.md is missing or invalid.</p>
+          )}
+        </section>
+
+        <section className="card card-wide" aria-labelledby="phases-title">
+          <h2 id="phases-title" className="card-title">
+            Phase progress
+          </h2>
+          <ol className="phase-strip" data-testid="phase-strip">
+            {cells.map((c) => (
+              <li key={c.id} className={`phase-cell${c.id === s?.current_phase ? " phase-current" : ""}`} data-status={c.status}>
+                <a href={`/phases/${encodeURIComponent(c.id)}`} className="phase-cell-link">
+                  <span className="phase-order mono">P{c.order}</span>
+                  <span className="phase-name">{c.title}</span>
+                </a>
+                <StatusBadge status={c.status} />
+                <span className="muted small">
+                  {c.milestone ?? "no milestone"} · {c.est_sessions} session{c.est_sessions === 1 ? "" : "s"}
+                </span>
+                {c.id === s?.current_phase && <span className="sr-only">(current phase)</span>}
+              </li>
+            ))}
+          </ol>
+          <div className="meters">
+            <div className="meter-row">
+              <span className="small">
+                Phases done: <strong data-testid="phases-done">{prog.done}</strong> of {prog.total}
+              </span>
+              <meter min={0} max={prog.total} value={prog.done} aria-label={`Phases done: ${prog.done} of ${prog.total}`} />
+              <span className="muted small">{pct(prog.done, prog.total)} %</span>
+            </div>
+            <div className="meter-row">
+              <span className="small">
+                Sessions budget (planning estimate): {prog.sessionsDone} of {prog.sessionsTotal}
+              </span>
+              <meter
+                min={0}
+                max={Math.max(1, prog.sessionsTotal)}
+                value={prog.sessionsDone}
+                aria-label={`Estimated sessions of done phases: ${prog.sessionsDone} of ${prog.sessionsTotal}`}
+              />
+              <span className="muted small">{pct(prog.sessionsDone, prog.sessionsTotal)} %</span>
+            </div>
+          </div>
+          <p className="small">
+            Last activity:{" "}
+            {activity ? (
+              <>
+                <span className="mono">{activity.task}</span> · {activity.date} · {activity.title}
+              </>
+            ) : (
+              <span className="muted">no code log entry names a task yet</span>
+            )}
+          </p>
+          <p className="muted small">Task progress is not shown as a percentage: task status is not stored on phase pages (SCHEMA §6.3).</p>
+        </section>
+
+        {gate && s && (
+          <section className="card" aria-labelledby="gate-title">
+            <h2 id="gate-title" className="card-title">
+              Entry gate: <a href={`/phases/${encodeURIComponent(s.current_phase)}`}>{s.current_phase}</a>
+            </h2>
+            <ul className="gate-list" data-testid="dashboard-gate">
+              {gate.items.map((it) => (
+                <li key={it.check} data-ok={it.ok}>
+                  <span className={`chip chip-xs chip-${it.ok ? "green" : "amber"}`}>{it.ok ? "✓ ok" : "✗ open"}</span> {CHECK_TEXT[it.check] ?? it.check}
+                  {!it.ok && <span className="muted small"> ({it.ids.length})</span>}
+                </li>
+              ))}
+            </ul>
+            <p className="small">
+              {gate.bootstrapException ? "Bootstrap exception (SCHEMA §9.7): informative only." : gate.ok && file.valid ? "The gate passes." : "The gate is blocked."}
+            </p>
+          </section>
+        )}
+
+        <section className="card" aria-labelledby="counts-title">
+          <h2 id="counts-title" className="card-title">
+            Approvals
+          </h2>
+          <ul className="count-list" data-testid="approval-counts">
+            {EFFECTIVE_STATES.map((st) => (
+              <li key={st} data-state={st}>
+                <Link href={`/approvals?state=${st}`} className="count-link">
+                  <span className="count-num" data-testid={`count-${st}`}>
+                    {counts[st]}
+                  </span>{" "}
+                  <ApprovalBadge state={st} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="muted small">
+            Over {items.length} approvable keys. <Link href="/approvals">Open the inbox →</Link>
+          </p>
+        </section>
+
+        <section className="card" aria-labelledby="blockers-title">
+          <h2 id="blockers-title" className="card-title">
+            Blockers
+          </h2>
+          {blocks.length === 0 ? (
+            <p className="muted small">None.</p>
+          ) : (
+            <ul className="plain-list" data-testid="blockers">
+              {blocks.map((b) => (
+                <li key={`${b.kind}:${b.id}`} data-kind={b.kind}>
+                  <span className="chip chip-xs chip-amber">{b.kind}</span> <IdOrQ id={b.id.replace(/#exit$/, "")} known={known(b.id.replace(/#exit$/, ""))} />{" "}
+                  <span className="small">{b.text}</span>
+                </li>
+              ))}
+            </ul>
           )}
         </section>
 
@@ -61,7 +209,7 @@ export default async function Home() {
           <h2 id="log-title" className="card-title">
             Recent log
           </h2>
-          <ol className="mini-log">
+          <ol className="mini-log" data-testid="recent-log">
             {last5.map((e) => (
               <li key={e.line}>
                 <span className={`chip chip-xs chip-${OP_TONES[e.op] ?? "neutral"}`}>{e.op}</span> <span className="muted small">{e.date}</span>
@@ -69,29 +217,26 @@ export default async function Home() {
               </li>
             ))}
           </ol>
-          <Link href="/log" className="card-link">
+          <Link href="/log?view=last5" className="card-link">
             Open the log →
           </Link>
         </section>
 
-        <section className="card" aria-labelledby="go-title">
-          <h2 id="go-title" className="card-title">
-            Browse
+        <section className="card" aria-labelledby="lint-title">
+          <h2 id="lint-title" className="card-title">
+            Wiki lint
           </h2>
-          <ul className="link-list">
-            <li>
-              <Link href="/wiki">Wiki browser</Link> <span className="muted small">tree, index, every page</span>
-            </li>
-            <li>
-              <Link href="/search">Search</Link> <span className="muted small">press / anywhere</span>
-            </li>
-            <li>
-              <Link href="/log">Log timeline</Link>
-            </li>
-            <li>
-              <Link href="/go/schema">SCHEMA</Link>
-            </li>
-          </ul>
+          {lint ? (
+            <p data-testid="lint-counts">
+              <span className="chip chip-red chip-strong">{lint.summary.errors} errors</span>{" "}
+              <span className="chip chip-amber chip-strong">{lint.summary.warnings} warnings</span>
+            </p>
+          ) : (
+            <p className="muted small">The lint run failed; open the report for details.</p>
+          )}
+          <Link href="/lint" className="card-link">
+            Open the lint report →
+          </Link>
         </section>
       </div>
     </article>

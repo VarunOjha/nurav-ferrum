@@ -125,7 +125,7 @@ Done 2026-10-09: 0 real-wiki errors, so no stop condition (`IP-5-lint.json` in t
 
 **Do:** `/`, `/approvals`, `/phases/[id]`, `ApproveBar`, and `/lint` ([ip-routes-and-views](ip-routes-and-views.md) §3.1, §3.4, §3.11, §3.12).
 
-**Gate:** the `ApproveBar` component tests ([ip-testing](ip-testing.md) §1.7), `dashboard.spec.ts`, **`approval-flow.spec.ts`**, `approval-race.spec.ts` and `exit-approval.spec.ts` pass, plus the guard test that the real `plan/approvals.json` was not touched. Evidence: `IP-7-tests.txt`.
+**Gate:** the `ApproveBar` component tests ([ip-testing](ip-testing.md) §1.7), `dashboard.spec.ts`, **`approval-flow.spec.ts`**, `approval-race.spec.ts` and `exit-approval.spec.ts` pass, plus the guard test that the real `plan/approvals.json` was not touched. The gate runs the full unit suite and the full Playwright suite (so the IP-6 specs re-run against the new routes), plus `npm run typecheck`, `npm run lint` and `npm run lint:wiki`. Done 2026-10-09 ([IP-7-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-7-tests.txt)). Evidence: `IP-7-tests.txt`.
 
 ## IP-8: Architecture, roadmap, decisions, risks, research
 

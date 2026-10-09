@@ -10,6 +10,7 @@ sources:
   - raw/00-master-prompt.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-7-tests.txt
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-testing, comp-interactive-plan, adr-0016, adr-0014, schema]
 approvable: true
 phase: phase-p0-planning
@@ -48,7 +49,7 @@ Every view is a **server component** that calls the pure `lib/` functions from [
 
 A missing id or path returns a 404 page that lists close matches (by edit distance on ids).
 
-`/go/[id]` details (decided 2026-10-09, IP-6): besides page ids it accepts an open-question id `Q-NNN` (the question's heading anchor on `ov-open-questions`) and a task id `pN.M` (the phase page that defines the task). `status-live` goes to the dashboard `/`. It redirects to a typed view only once that route exists: the build step that adds `/phases/[id]` (IP-7) or `/decisions/[id]` (IP-8) registers it in `lib/wiki/routes.ts`; until then every page opens in `/wiki/<path>`. `/wiki/[...path]` serves only paths in the loaded file set, so nothing outside `wiki/` can be read.
+`/go/[id]` details (decided 2026-10-09, IP-6): besides page ids it accepts an open-question id `Q-NNN` (the question's heading anchor on `ov-open-questions`) and a task id `pN.M` (the phase page that defines the task). `status-live` goes to the dashboard `/`. It redirects to a typed view only once that route exists: the build step that adds `/phases/[id]` (IP-7) or `/decisions/[id]` (IP-8) registers it in `lib/wiki/routes.ts`; until then every page opens in `/wiki/<path>`. Since IP-7 a phase id and a task id go to `/phases/<id>`. `/wiki/[...path]` serves only paths in the loaded file set, so nothing outside `wiki/` can be read.
 
 ```mermaid
 flowchart TB
@@ -70,10 +71,10 @@ flowchart TB
 
 ## 2. Global layout
 
-- **Top bar:** the project name "Ferrum plan", nav links (Dashboard, Roadmap, Architecture, Decisions, Risks, Research, Wiki, Log, Approvals, Lint), a search box (`/` focuses it), the theme toggle, and a **pending-approvals counter** (PENDING + STALE + CHANGES_REQUESTED). A nav entry whose route a later build step adds is shown disabled, with the step in its tooltip, never as a link to a 404 (IP-6). The theme toggle has three states: System (follows `prefers-color-scheme`), Light and Dark.
+- **Top bar:** the project name "Ferrum plan", nav links (Dashboard, Roadmap, Architecture, Decisions, Risks, Research, Wiki, Log, Approvals, Lint), a search box (`/` focuses it), the theme toggle, and a **pending-approvals counter** (PENDING + STALE + CHANGES_REQUESTED over the eligible keys of §3.11, linking to `/approvals`). A nav entry whose route a later build step adds is shown disabled, with the step in its tooltip, never as a link to a 404 (IP-6). The theme toggle has three states: System (follows `prefers-color-scheme`), Light and Dark.
 - **Global banners:**
   - red if `approvals.json` is invalid
-  - amber if lint reports errors (count, links to `/lint`; until `/lint` exists in IP-7 the banner prints the `npm run lint:wiki` command instead). The layout runs the same lint engine, memoised for 10 s on the file signature because the git-backed rules spawn git
+  - amber if lint reports errors (count, links to `/lint` and names the `npm run lint:wiki` command). The layout runs the same lint engine, memoised for 10 s on the file signature because the git-backed rules spawn git
   - grey "read-only mode" when `PLAN_READONLY=1`
 - **Page shell** for every page-backed view:
   - title, id (copy button), type badge, status badge, `updated`, effective-approval badge
@@ -94,12 +95,14 @@ flowchart TB
 Cards, top to bottom:
 
 1. **Next action:** `STATUS.md` `next_action` (verbatim, monospace), `current_phase`, `current_task`, `session` and STATUS `status` (`active|blocked|awaiting-owner`). `blocked_on` renders as id links / `Q-NNN` anchors into `ov-open-questions`, shown prominently in amber.
-2. **Phase progress:** a horizontal strip of the 9 phases (P0–P8) in `order`. Each phase shows its status badge, milestone label (M1–M7) and `est_sessions`. Progress = phases `done` / 9. A second bar shows **sessions budget**: the sum of `est_sessions` for done phases over the total. It is labelled as a planning estimate. Task-level progress is not shown as a percentage, because task status is not stored on phase pages (SCHEMA §6.3). Instead the strip shows "last activity", the newest `code` log entry that mentions a `pN.M`.
+2. **Phase progress:** a horizontal strip of the 9 phases (P0–P8) in `order` (the denominator is 9, or the number of phase pages if that is larger). Each phase shows its status badge, milestone label (M1–M7) and `est_sessions`. Progress = phases `done` / 9. A second bar shows **sessions budget**: the sum of `est_sessions` for done phases over the total. It is labelled as a planning estimate. Task-level progress is not shown as a percentage, because task status is not stored on phase pages (SCHEMA §6.3). Instead the strip shows "last activity", the newest `code` log entry that mentions a `pN.M`.
 3. **Current phase gate:** the `entryGate` checklist for `STATUS.current_phase` (see [ip-data-contract](ip-data-contract.md) §8.3), with a link to the phase.
 4. **Approval status counts:** counts per effective state over all approvables, as stacked labelled numbers. Each count links to `/approvals?state=…`.
 5. **Blockers:** the union of STATUS `blocked_on`, phases with `status: blocked`, open `Q-NNN` sections, and STALE approvals in the current or next phase's dependency set.
 6. **Recent log:** the last 5 entries. This mirrors `grep "^## \[" wiki/log.md | tail -5` from RESUME (SCHEMA §9.6).
 7. **Lint summary:** error and warning counts with a link to `/lint`.
+
+Decided 2026-10-09 (IP-7): the counts of card 4 and the top-bar counter use the same eligible keys as the inbox (§3.11), so a planned phase's `#exit` key, which nobody can act on yet, is not counted as pending. "Next phase" in card 5 is the phase after `STATUS.current_phase` in `order`. The view model is the pure `lib/views/dashboard.ts`.
 
 ### 3.2 Architecture `/architecture`
 
@@ -129,7 +132,7 @@ Sections, all read from frontmatter:
 - entry criteria
 - deliverables
 - **Tasks** table (`id`, `title`, `verify`)
-- **Test gate**: automated (as copyable commands), manual and evidence. Each evidence path is checked for existence under `wiki/raw/evidence/<phase-id>/` and shown ✓ or ✗.
+- **Test gate**: automated (as copyable commands), manual and evidence. Each evidence path is checked for existence under `wiki/raw/evidence/<phase-id>/` and shown ✓ or ✗. An entry that starts with `raw/` is read as a wiki-relative path (the real phase pages write `raw/evidence/<phase-id>/…`), any other entry as a file name in that folder; an entry outside the phase's folder is marked as such (decided 2026-10-09, IP-7).
 - exit criteria
 - risks (with L×I score)
 - decisions (with approval states)
@@ -137,7 +140,7 @@ Sections, all read from frontmatter:
 - components
 - the rendered markdown body
 
-Two **approve bars**: one for the page itself (key = phase id), and one for the milestone exit (key `<phase-id>#exit`). The exit bar is shown only when status ∈ {gate-review, done} or a record already exists.
+Two **approve bars**: one for the page itself (key = phase id), and one for the milestone exit (key `<phase-id>#exit`). The exit bar is shown only when status ∈ {gate-review, done} or a record already exists; otherwise a closed panel says when it opens. A phase page that fails validation renders its findings and a link to `/wiki/<path>` instead of the sections. An unknown id or a non-phase id gives 404.
 
 **Approve bar** (client component; also used on every approvable page view):
 
@@ -146,7 +149,8 @@ Two **approve bars**: one for the page itself (key = phase id), and one for the 
 - Buttons: **Approve**, **Request changes**, **Reject**, with a comment textarea. The comment is required for Request changes and Reject.
 - Sends `seen_content_hash` = the hash rendered on the page ([ip-approvals-api](ip-approvals-api.md) §2). On `409 PAGE_CHANGED` it shows "This page changed since you loaded it – reload to review the new version".
 - After success, the page refreshes (`router.refresh()`) and announces the new state in an `aria-live="polite"` region.
-- Disabled, with an explanation, when the state is INVALID or in read-only mode.
+- Disabled, with an explanation, when the state is INVALID or in read-only mode (also when the page cannot be hashed, or for key `schema` when root `CLAUDE.md` is missing). For key `schema` it also shows the short `CLAUDE.md` hash and sends it as `seen_bootstrap_hash` ([ip-approvals-api](ip-approvals-api.md) §2).
+- Since IP-7 the bar appears on `/phases/[id]`, in the inbox review mode and on `/wiki/<path>` for every approvable page (raw files never have one). Component: `components/ApproveBar.tsx`; server props (record, snapshot diff) from `lib/server/approveBar.ts`.
 
 ### 3.5 Decisions `/decisions` and `/decisions/[id]`
 
@@ -218,17 +222,18 @@ Two **approve bars**: one for the page itself (key = phase id), and one for the 
 ### 3.11 Approvals inbox `/approvals`
 
 - One row per approvable key (pages with `approvable: true` plus eligible `#exit` keys). Columns: key, type, title, phase, effective state, last decision + timestamp, and comment excerpt.
-- **Default filter:** "needs attention" = PENDING, STALE, CHANGES_REQUESTED. Tabs: All / Pending / Stale / Changes requested / Approved / Rejected / Invalid.
-- **Grouping:** by phase (pages with a `phase` field, or in a phase's dependency set). Ungrouped items go under "Cross-cutting".
-- Each row opens the page view with its approve bar. A **review mode** steps through the filtered list one page at a time (`j`/`k` keys) and shows the approve bar beside the rendered page.
+- **Default filter:** "needs attention" = PENDING, STALE, CHANGES_REQUESTED. Tabs: All / Pending / Stale / Changes requested / Approved / Rejected / Invalid. "Stale" lists STALE only; APPROVED_VOLATILE_DRIFT counts as approved and is listed under "Approved" (decided 2026-10-09, IP-7). The dashboard's `?state=` links open the matching tab.
+- **Eligible `#exit` keys:** a phase's exit key is listed only when the phase status is `gate-review` or `done`, or a record for it already exists (the same rule as the exit bar of §3.4).
+- **Grouping:** by phase (pages with a `phase` field, or in a phase's dependency set). Ungrouped items go under "Cross-cutting". A phase page and its exit key go under that phase; a page in several dependency sets goes under the first phase in `order` (decided 2026-10-09, IP-7).
+- Each row opens the page view with its approve bar. A **review mode** steps through the filtered list one page at a time (`j`/`k` keys) and shows the approve bar beside the rendered page. Its URL is `/approvals?tab=<tab>&review=1&i=<n>`; `j`/`k` are ignored while typing in a field or with a modifier key.
 - STALE and APPROVED_VOLATILE_DRIFT rows show "approved <timestamp>, content changed since" and a **Diff since approval** view: a line diff between the record's `snapshot` ([ip-approvals-api](ip-approvals-api.md) §2.1 step 8) and the current file, computed by the pure function `lib/approvals/diff.ts`. If a record has no snapshot (approved before snapshots existed), the row says so and, if git history exists, shows the command `git log -p --follow -- <path>` (the app does not run it).
-- **Wave filter:** a "Current wave" tab shows only the keys in the dependency set of the next phase's entry gate (`entryGate(nextPhase)`), matching the approval waves in [ops-approval-workflow §8](../operations/ops-approval-workflow.md#8-approval-waves). It is the default view when the inbox would otherwise list more than about 30 pending keys.
+- **Wave filter:** a "Current wave" tab shows only the keys in the dependency set of the next phase's entry gate (`entryGate(nextPhase)`; the next phase is the one after `STATUS.current_phase` in `order`, or the current phase if it is the last), matching the approval waves in [ops-approval-workflow §8](../operations/ops-approval-workflow.md#8-approval-waves). It is the default view when the inbox would otherwise list more than about 30 pending keys.
 - An "Orphaned approvals" section lists keys that do not resolve (INVALID).
 - **No bulk approve.** Every approval is one explicit click on one page, so each one has the owner's attention (SCHEMA §10.1 "explicit owner click").
 
 ### 3.12 Lint `/lint`
 
-Runs the same lint engine as `npm run lint:wiki` ([ip-wiki-lint](ip-wiki-lint.md)). Findings are grouped by severity and then by code, with file links. It also shows the exact command for future sessions: `cd interactive_plan && npm run lint:wiki`.
+Runs the same lint engine as `npm run lint:wiki` ([ip-wiki-lint](ip-wiki-lint.md)). Findings are grouped by severity and then by code, with file links. It also shows the exact command for future sessions: `cd interactive_plan && npm run lint:wiki`. The file links open `/wiki/<path>`; the line number is shown as text, because the wiki view has no per-line anchors. The grouping is the pure `groupFindings` of `lib/views/phase.ts`.
 
 ## 4. UI quality rules
 

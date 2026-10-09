@@ -9,6 +9,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-7-tests.txt
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-build-plan, comp-interactive-plan, adr-0016, schema]
 approvable: true
 phase: phase-p0-planning
@@ -135,6 +136,8 @@ Files `tests/unit/components/*.test.tsx`, each with the `// @vitest-environment 
   - disabled when the state is INVALID or in read-only mode
   - shows the 409 message
   - announces through `aria-live`
+  - since IP-7 also (`approve-bar.test.tsx`, fetch and router mocked): the request body (`seen_content_hash`; `seen_bootstrap_hash` for key `schema` only), other API error codes and network failures, the disabled reasons for an unhashable page and for `schema` without `CLAUDE.md`, the stored decision and history, and the "Diff since approval" toggle (diff lines, or the no-snapshot note)
+- IP-7 view models (`views.test.ts`, node): the dashboard strip, progress, last activity, blockers and counts; the inbox tabs, eligible `#exit` keys, current wave, grouping and review cursor; the exit-bar rule, evidence checks and lint grouping of the phase view; the server snapshot diff on a temp copy (the real `plan/approvals.json` is fingerprinted before and after)
 - `Markdown`:
   - GFM tables render
   - relative links are rewritten
@@ -157,6 +160,8 @@ Files `tests/unit/components/*.test.tsx`, each with the `// @vitest-environment 
 2. Set `PLAN_REPO_ROOT=<tmp>`, `PLAN_WIKI_DIR`, `PLAN_DATA_DIR` and `PLAN_STATUS_FILE` for the `webServer`.
 3. Build and start (`npm run build && npx next start -H 127.0.0.1 -p 3418`).
 
+Since IP-7 the overlay also holds `phases/phase-p2-fixture-review.md` (status `gate-review`, so its `#exit` key is eligible) and one evidence file for it under `raw/evidence/phase-p2-fixture-review/`. The specs that change temp files (`approval-flow`, `approval-race`, `exit-approval`, `dashboard`) save the bytes they touch (page files, `<tmp>/plan/approvals.json`, `<tmp>/wiki/log.md`) in `beforeAll` and restore them in `afterAll`, so every spec sees the fixture as shipped whatever the file order; they also check mid-run that the real guarded files are unchanged. The dashboard spec writes a known `<tmp>/plan/approvals.json` (records computed from the fixture files: one APPROVED, one REJECTED, one STALE, one orphan) so its expected counts are fixed (decided 2026-10-09, IP-7).
+
 Decided 2026-10-09 (IP-6): the setup runs when the config is loaded, not in a `globalSetup` file, because Playwright starts the `webServer` before `globalSetup`; worker processes inherit `PLAN_E2E_ROOT` and skip it. The overlay holds the E2E-only cases (a dangling link, an integrity tag, a CONTRADICTION blockquote, raw HTML, a malformed log heading) that the lint-clean `mini-wiki` must not contain (§2).
 
 The tests **never touch the real `plan/approvals.json` or `wiki/`**. The guard in `tests/e2e/global-teardown.ts` fails the run if the real `plan/approvals.json`, `wiki/log.md` or `STATUS.md` changed (mtime and sha256), then removes the temp copy. The temp dir is deliberately created under a directory name containing a space; `next build` and `next start` run against it on Windows ([IP-6-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt)).
@@ -164,7 +169,7 @@ The tests **never touch the real `plan/approvals.json` or `wiki/`**. The guard i
 | Spec | Asserts |
 |---|---|
 | `views.spec.ts` | Each route in [ip-routes-and-views](ip-routes-and-views.md) §1 returns 200, has an `h1`, and logs no console errors. 404 for an unknown id. `/go/<id>` redirects |
-| `dashboard.spec.ts` | `next_action` from the fixture STATUS.md is shown verbatim. Approval counts equal the fixture's expected counts. `blocked_on` links resolve |
+| `dashboard.spec.ts` | `next_action` from the fixture STATUS.md is shown verbatim. Approval counts equal the fixture's expected counts. `blocked_on` links resolve. Since IP-7 also: the top-bar counter, the `?state=` link into the inbox, the phase strip and budget, the gate card, blockers, recent log and the `/lint` report |
 | `architecture.spec.ts` | Node count equals the fixture components. A TB edge has the TB marker. Clicking a node opens the panel with a page link. The edge table alternative exists |
 | `roadmap.spec.ts` | 9 phase nodes. Bar widths are proportional to `est_sessions`. Clicking navigates to the phase |
 | `risks.spec.ts` | Heatmap cell (L, I) contains the fixture risk id. The table is sortable by score |
@@ -172,8 +177,8 @@ The tests **never touch the real `plan/approvals.json` or `wiki/`**. The guard i
 | `wiki.spec.ts` | A page renders GFM tables. A mermaid block renders an SVG (real mermaid, both themes). Backlinks list the expected ids. Search finds a body word. A dangling link is styled as missing. A raw file shows the immutable banner and no approve bar |
 | `log.spec.ts` | Entries newest-first. The op filter works. A malformed heading appears as a finding |
 | **`approval-flow.spec.ts`** | **(1)** inbox shows fixture page `adr-0901` as PENDING → **(2)** open it, Approve → the UI shows APPROVED → **(3)** read `<tmp>/plan/approvals.json` from the test: the record has `status: approved`, both hashes equal the Node-computed hashes of the fixture file, `approved_by: owner`, and a valid timestamp → **(4)** edit only `status:`/`updated:` in the fixture file → reload → APPROVED_VOLATILE_DRIFT → **(5)** edit the body → reload → **STALE**, and the inbox lists it under Stale → **(6)** Request changes with an empty comment is blocked; with a comment → CHANGES_REQUESTED and `history` length 1 → **(7)** `log.md` gained `approval` entries in the SCHEMA §12 format |
-| `approval-race.spec.ts` | Load the page, modify the file on disk, then click Approve → 409 message shown, and approvals.json unchanged |
-| `exit-approval.spec.ts` | The exit bar is hidden for a `planned` phase. For a `gate-review` fixture phase it is shown, and approving writes the key `<phase-id>#exit` |
+| `approval-race.spec.ts` | Load the page, modify the file on disk, then click Approve → 409 message shown, and approvals.json unchanged (page `ov-fixture-project`; `log.md` unchanged too) |
+| `exit-approval.spec.ts` | The exit bar is hidden for a `planned` phase. For a `gate-review` fixture phase it is shown, and approving writes the key `<phase-id>#exit`. Since IP-7 also: the API answers 409 `EXIT_NOT_READY` for the planned phase's exit key, and the phase view shows the entry gate, tasks, risk scores and evidence ✓/✗ |
 | `security.spec.ts` | POST with `Origin: http://evil.example` → 403. POST with `Host: evil.example:3418` → 403. `text/plain` → 415. PUT → not 2xx. `PLAN_READONLY=1` server project → buttons disabled, POST 403 |
 | `a11y.spec.ts` | Keyboard only: reach and operate the approve bar, navigate graph nodes, toggle theme. Every page has a single `h1` and landmarks. Optional axe scan if the owner approves `@axe-core/playwright` ([ip-spec](ip-spec.md) §9 item 5) |
 | `theme.spec.ts` | `prefers-color-scheme: dark` emulation gives dark tokens. The toggle overrides and persists across reloads. No flash: the attribute is set before first paint, checked via the initial HTML |
