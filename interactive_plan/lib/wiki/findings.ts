@@ -50,6 +50,8 @@ export const SEVERITY: Readonly<Record<string, Severity>> = {
   "Q-FORMAT": "error",
   "Q-BLOCK-UNGATED": "warn",
   "PHASE-DONE-NO-EXIT": "warn",
+  // SCHEMA §10.3 "INVALID: lint error"; adopted into the §9.3 table by adr-0022 (IP-9 review)
+  "APPROVAL-INVALID": "error",
   // ip-wiki-lint §2.1 (warn until SCHEMA adopts them)
   "FM-VOLATILE": "warn",
   "FM-YAML-SUBSET": "warn",
@@ -60,7 +62,6 @@ export const SEVERITY: Readonly<Record<string, Severity>> = {
   "EXP-RESULTS": "warn",
   "RISK-SCORE": "warn",
   "STATUS-APPROVED": "warn",
-  "APPROVAL-INVALID": "warn",
   "UNV-MIRROR": "warn",
   "MERMAID-RULES": "warn",
 };

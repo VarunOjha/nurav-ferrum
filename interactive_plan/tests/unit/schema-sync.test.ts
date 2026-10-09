@@ -4,6 +4,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
+import { ERROR_CODES, ERROR_STATUS } from "@/lib/approvals/errors";
 import { SEVERITY } from "@/lib/wiki/findings";
 import { UNVERIFIED_TAG } from "@/lib/wiki/links";
 import { LOG_BULLET_KEYS, LOG_HEADING, LOG_OPS } from "@/lib/wiki/log";
@@ -173,5 +174,17 @@ describe("SCHEMA.md <-> lib/wiki/schemas.ts", () => {
       // codes outside the §9.3 table are ip-wiki-lint §2.1 proposals: warn until adopted
       else expect(sev, code).toBe("warn");
     }
+  });
+});
+
+// IP-9 review: the code -> HTTP status table of ip-approvals-api §2.2 equals lib/approvals/errors.ts.
+describe("ip-approvals-api §2.2 <-> lib/approvals/errors.ts", () => {
+  it("every error code has the status the spec lists, and the spec lists every code", () => {
+    const doc = readFileSync(path.join(REAL_WIKI, "interactive-plan", "ip-approvals-api.md"), "utf8").replace(/\r\n/g, "\n");
+    const sec = doc.slice(doc.indexOf("### 2.2 Error envelope"), doc.indexOf("## 3. Local-only guard"));
+    const table: Record<string, number> = {};
+    for (const m of sec.matchAll(/^\| `([A-Z_]+)` \| (\d{3}) \|$/gm)) table[m[1]] = Number(m[2]);
+    expect(Object.keys(table).length).toBe(ERROR_CODES.length);
+    expect(table).toEqual({ ...ERROR_STATUS });
   });
 });

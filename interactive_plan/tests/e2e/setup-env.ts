@@ -1,6 +1,6 @@
 // E2E environment (ip-testing §3 setup). Runs once in the Playwright main process (from
 // playwright.config.ts): copies the fixture wiki to `<os tmp>/ferrum plan e2e/run-*` (a path with a
-// space, on purpose), overlays tests/fixtures/e2e-overlay, writes STATUS.md and an empty plan/ dir,
+// space, on purpose), overlays tests/fixtures/e2e-overlay, writes STATUS.md, CLAUDE.md and an empty plan/ dir,
 // and fingerprints the real files the guard in global-teardown.ts re-checks.
 import { createHash } from "node:crypto";
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -49,6 +49,8 @@ export function prepareE2eRoot(): E2eEnv {
   cpSync(path.join(FIXTURES, "mini-wiki"), env.wikiDir, { recursive: true });
   cpSync(path.join(FIXTURES, "e2e-overlay"), env.wikiDir, { recursive: true });
   cpSync(path.join(FIXTURES, "status", "STATUS.md"), env.statusFile);
+  // Root CLAUDE.md (bootstrap file approved with `schema`, shown on the schema page).
+  cpSync(path.join(FIXTURES, "status", "CLAUDE.md"), path.join(root, "CLAUDE.md"));
   mkdirSync(env.dataDir, { recursive: true });
   process.env.PLAN_E2E_ROOT = root;
   process.env.PLAN_E2E_GUARD = JSON.stringify(GUARDED.map((p) => [p, fingerprint(p)]));

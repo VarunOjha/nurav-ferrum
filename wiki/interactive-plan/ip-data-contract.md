@@ -257,7 +257,7 @@ Why this matches the Python reference:
 
 The file **at `approvals.path`'s current location** (looked up by id, see §8) as raw bytes on disk. For `<phase-id>#exit`, the file is the phase page.
 
-For key `schema` only, the record also stores **`bootstrap_hash`** = `content_hash` of root `CLAUDE.md` (SCHEMA §10.2). If the current `CLAUDE.md` hash differs, the effective state of `schema` is `STALE`, regardless of the scope hash. The schema page view renders `CLAUDE.md` below `SCHEMA.md`, and the POST for `schema` sends `seen_bootstrap_hash` as well.
+For key `schema` only, the record also stores **`bootstrap_hash`** = `content_hash` of root `CLAUDE.md` (SCHEMA §10.2). If the current `CLAUDE.md` hash differs, the effective state of `schema` is `STALE`, regardless of the scope hash. The schema page view renders `CLAUDE.md` below `SCHEMA.md`, and the POST for `schema` sends `seen_bootstrap_hash` as well. Implemented in the IP-9 review (it was missing): `/wiki/SCHEMA.md` and the inbox review mode read `CLAUDE.md` once (`lib/server/bootstrap.ts`), render it in a labelled section below the SCHEMA body with its full hash, and the approve bar sends the hash of exactly those bytes; without `CLAUDE.md` the bar stays disabled.
 
 Details decided in IP-3 (2026-10-09, delegation policy; the `decide` log entry of that date): the loader computes the current hash once per load (`WikiIndex.bootstrapHash`). A stored `bootstrap_hash` with `CLAUDE.md` missing counts as a difference (**fail closed**, `STALE`). A `schema` record without `bootstrap_hash` (the app always writes one, so only a hand-made record lacks it) is judged on the page hashes alone. `rejected` and `changes-requested` take precedence over the check. `tools/approvals_check.py` does the same.
 

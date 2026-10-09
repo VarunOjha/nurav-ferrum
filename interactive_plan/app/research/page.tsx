@@ -65,7 +65,9 @@ export default async function ResearchRoute({ searchParams }: PageProps<"/resear
         ...(n.kind === "hypothesis" ? [n.preregistered ? { text: "preregistered", tone: "blue" as const } : { text: "not preregistered", tone: "amber" as const }] : []),
         ...(gaps.length ? [{ text: `gap ×${gaps.length}`, tone: "red" as const, title: gaps.map((k) => GAP_TEXT[k]).join("; ") }] : []),
       ],
-      classes: [`fg-tone-${toneOf(n.status)}`, gaps.length ? "fg-gap" : ""].filter(Boolean),
+      // fg-compact: one-line title and one row of badges, so the node never clips its id (IP-9 review);
+      // the full title is the control's tooltip.
+      classes: [`fg-tone-${toneOf(n.status)}`, "fg-compact", gaps.length ? "fg-gap" : ""].filter(Boolean),
       href: hrefOf(n),
       ariaLabel: `${EYEBROW[n.kind]} ${n.title} (${n.id}), ${n.status}${gaps.length ? `, ${gaps.length} gap${gaps.length === 1 ? "" : "s"}` : ""}: open the page`,
     };
@@ -140,7 +142,7 @@ export default async function ResearchRoute({ searchParams }: PageProps<"/resear
       {g.nodes.length === 0 ? (
         <p className="muted">No research pages.</p>
       ) : (
-        <LazyFlowGraph nodes={nodes} edges={edges} label="Research traceability graph" height={height} testId="trace-graph" />
+        <LazyFlowGraph nodes={nodes} edges={edges} label="Research traceability graph" height={height} testId="trace-graph" fitMinZoom={0.6} />
       )}
 
       <section className="panel" aria-labelledby="gaps-title">

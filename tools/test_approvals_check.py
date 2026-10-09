@@ -192,6 +192,15 @@ class ApprovalsFixture(unittest.TestCase):
         self.assertIn('STALE                    schema', out)
         self.assertIn('BLOCKED by schema', out)
 
+    def test_exit_key_on_non_phase_is_invalid(self):
+        # IP-9 review: the app reports INVALID (state.ts); the checker reported APPROVED
+        self.approve('adr-0001#exit', 'wiki/decisions/adr-0001-a.md')
+        self.approve('phase-p1-foundation#exit', 'wiki/phases/phase-p1-foundation.md')
+        rc, out = self.gate()
+        self.assertRegex(out, r'INVALID\s+adr-0001#exit')
+        self.assertNotRegex(out, r'APPROVED\s+adr-0001#exit')
+        self.assertRegex(out, r'APPROVED\s+phase-p1-foundation#exit')
+
     def test_missing_claude_md_stales_schema_fail_closed(self):
         os.remove(self.path('CLAUDE.md'))
         rc, out = self.gate()

@@ -1,8 +1,11 @@
 // wiki.spec (ip-testing §3): GFM tables, mermaid renders an SVG with real mermaid in both themes,
 // backlinks list the expected ids, search finds a body word, a dangling link is styled as missing, and
 // a raw file shows the immutable banner and no approve bar. Plus the other §3.7 markers.
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { expect, test } from "@playwright/test";
-import { collectErrors, FX } from "./helpers";
+import { contentHash } from "../../lib/approvals/hash";
+import { collectErrors, e2eEnv, FX } from "./helpers";
 
 test("a page renders a GFM table", async ({ page }) => {
   await page.goto(FX.projectPath);
@@ -139,4 +142,41 @@ test("frontmatter panel shows fields with id links and the raw YAML", async ({ p
   await expect(panel.locator("tr", { hasText: "related" }).getByRole("link", { name: "comp-fixture-shell" })).toBeVisible();
   await panel.getByText("Raw YAML").click();
   await expect(panel.locator(".raw-yaml pre")).toContainText("decided_by: claude-proposed");
+});
+
+// ip-data-contract §6.2 (IP-9 review): the schema page renders root CLAUDE.md below SCHEMA.md, shows its
+// full hash, and the approve bar sends the hash of that text as seen_bootstrap_hash.
+test("the schema page renders root CLAUDE.md with its full hash; the approve bar is enabled", async ({ page }) => {
+  const errors = collectErrors(page);
+  const expected = contentHash(readFileSync(path.join(e2eEnv().root, "CLAUDE.md")));
+  await page.goto("/wiki/SCHEMA.md");
+  const section = page.getByTestId("bootstrap-section");
+  await expect(section).toBeVisible();
+  await expect(section.locator("#bootstrap-title")).toContainText("CLAUDE.md");
+  await expect(section).toContainText("quokkabootstrap");
+  await expect(section.getByTestId("bootstrap-hash")).toHaveText(expected);
+  // links of the root file are re-based: wiki/SCHEMA.md -> the wiki page, STATUS.md -> the dashboard
+  await expect(section.getByRole("link", { name: "wiki/SCHEMA.md" })).toHaveAttribute("href", "/wiki/SCHEMA.md");
+  await expect(section.getByRole("link", { name: "STATUS.md" })).toHaveAttribute("href", "/");
+  // the section comes after the SCHEMA body
+  const order = await page.evaluate(() => {
+    const body = document.querySelector(".page > .page-body");
+    const sec = document.querySelector("[data-testid='bootstrap-section']");
+    return body && sec ? body.compareDocumentPosition(sec) & Node.DOCUMENT_POSITION_FOLLOWING : 0;
+  });
+  expect(order).toBeTruthy();
+  const bar = page.locator("[data-testid='approve-bar'][data-key='schema']");
+  await expect(bar.getByRole("button", { name: "Approve", exact: true })).toBeEnabled();
+  await expect(bar).toContainText(expected.slice(7, 19));
+  // the POST carries exactly that hash (intercepted, never sent to the server)
+  let sent: Record<string, unknown> | null = null;
+  await page.route("**/api/approvals", async (route) => {
+    sent = route.request().postDataJSON() as Record<string, unknown>;
+    await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: { code: "LOCK_TIMEOUT", message: "intercepted by the test", details: {} } }) });
+  });
+  await bar.getByRole("button", { name: "Approve", exact: true }).click();
+  await expect.poll(() => sent).not.toBeNull();
+  expect(sent!.key).toBe("schema");
+  expect(sent!.seen_bootstrap_hash).toBe(expected);
+  expect(errors.filter((e) => !/503/.test(e))).toEqual([]);
 });

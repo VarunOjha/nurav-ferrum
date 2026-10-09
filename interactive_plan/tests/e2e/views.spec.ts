@@ -62,6 +62,21 @@ test("unknown wiki path: 404", async ({ page }) => {
   expect(res?.status()).toBe(404);
 });
 
+// IP-9 review: the 404 view re-renders the root layout on the client; the pre-paint theme script must
+// not log React's "Encountered a script tag" error there (and still set the theme before paint).
+test("404 views log no console errors (theme script) and keep the stored theme", async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.addInitScript(() => localStorage.setItem("ferrum-plan-theme", "dark"));
+  for (const p of ["/wiki/SCHEMA", "/decisions/adr-0999-nope", "/go/adr-0902", "/phases/phase-p9-nope"]) {
+    const res = await page.goto(p);
+    expect(res?.status(), p).toBe(404);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Not found");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.waitForLoadState("networkidle");
+  }
+  expect(errors.filter((e) => !/status of 404/.test(e))).toEqual([]);
+});
+
 test("path traversal does not escape wiki/", async ({ request }) => {
   for (const p of ["/wiki/..%2FSTATUS.md", "/wiki/%2E%2E/STATUS.md", "/wiki/raw/..%5C..%5CSTATUS.md"]) {
     const res = await request.get(p, { maxRedirects: 0 });
@@ -145,7 +160,7 @@ test("approvals review mode steps with j/k and shows the page beside its approve
 test("the inbox has no bulk approve: one row per key, no approve buttons in the list", async ({ page }) => {
   await page.goto("/approvals?tab=all");
   await expect(page.getByRole("button", { name: /approve/i })).toHaveCount(0);
-  const keys = await page.locator("tbody tr").evaluateAll((els) => els.map((e) => e.getAttribute("data-key")));
+  const keys = await page.locator("tbody tr[data-key]").evaluateAll((els) => els.map((e) => e.getAttribute("data-key")));
   expect(new Set(keys).size).toBe(keys.length);
   expect(keys).toContain("phase-p2-fixture-review#exit");
   expect(keys).not.toContain("phase-p1-fixture-build#exit");

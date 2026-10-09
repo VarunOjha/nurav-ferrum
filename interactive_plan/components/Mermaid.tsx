@@ -5,6 +5,11 @@
  * the app (re-rendered when the theme changes). A render error shows the source and the message and
  * never breaks the page. Node ids that name a page (SCHEMA §14, `-` -> `_`) are wired to that page
  * after render: focusable, a tooltip, click/Enter opens /go/<id>. No `click` directives are used.
+ *
+ * IP-9 review fixes: mermaid's strict sanitiser keeps `<img src>` in HTML labels, so the SVG is
+ * passed through stripExternalResources() before insertion (no request to another host; the CSP
+ * `img-src 'self' data:` blocks it as well). Wide diagrams keep at least MIN_SCALE of their native
+ * size and scroll horizontally inside the holder instead of shrinking to unreadable text.
  */
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
@@ -17,6 +22,42 @@ export interface MermaidProps {
 }
 
 let renderSeq = 0;
+
+/** Smallest render scale (rendered width / viewBox width) before the holder scrolls instead. */
+export const MIN_SCALE = 0.8;
+
+const SAFE_URL = /^(data:image\/|#)/i;
+
+/**
+ * Removes every `<img>` and SVG `<image>` whose source is not a `data:` image or a fragment, and
+ * every `src`/`href`/`xlink:href`/`srcset` attribute on other elements that points anywhere but a
+ * fragment (`#…`). Parsed in an inert `<template>`, so nothing loads while sanitising.
+ */
+export function stripExternalResources(svg: string): string {
+  const t = document.createElement("template");
+  t.innerHTML = svg;
+  const root = t.content;
+  root.querySelectorAll("img, image").forEach((el) => {
+    const src = el.getAttribute("src") ?? el.getAttribute("href") ?? el.getAttribute("xlink:href") ?? "";
+    if (!SAFE_URL.test(src.trim()) || el.hasAttribute("srcset")) el.remove();
+  });
+  root.querySelectorAll("*").forEach((el) => {
+    for (const name of ["src", "srcset", "href", "xlink:href", "background", "poster"]) {
+      const v = el.getAttribute(name);
+      if (v !== null && !v.trim().startsWith("#")) el.removeAttribute(name);
+    }
+    const style = el.getAttribute("style");
+    if (style && /url\(\s*['"]?(?!#)/i.test(style)) el.setAttribute("style", style.replace(/url\(\s*['"]?(?!#)[^)]*\)/gi, "none"));
+  });
+  return t.innerHTML;
+}
+
+/** Keeps a rendered SVG at no less than MIN_SCALE of its viewBox width (the holder scrolls). */
+export function applyMinScale(svgEl: SVGSVGElement): void {
+  const vb = svgEl.getAttribute("viewBox");
+  const w = vb ? Number(vb.trim().split(/[\s,]+/)[2]) : NaN;
+  if (Number.isFinite(w) && w > 0) svgEl.style.minWidth = `${Math.round(w * MIN_SCALE)}px`;
+}
 
 /** Mermaid node id of a rendered node group (`data-id`, else `…flowchart-<id>-<n>`). */
 export function nodeIdOf(el: Element): string | null {
@@ -50,7 +91,7 @@ export default function Mermaid({ source, nodeLinks }: MermaidProps) {
           theme: theme === "dark" ? "dark" : "default",
         });
         const { svg } = await mermaid.render(renderId, source);
-        if (!cancelled) setResult({ svg, error: null, key });
+        if (!cancelled) setResult({ svg: stripExternalResources(svg), error: null, key });
       } catch (e) {
         // mermaid may leave its temporary render container behind on a parse error.
         document.getElementById("d" + renderId)?.remove();
@@ -66,6 +107,11 @@ export default function Mermaid({ source, nodeLinks }: MermaidProps) {
   const svg = result?.svg ?? null;
   const error = result?.error ?? null;
   const stale = result !== null && result.key !== key;
+
+  useEffect(() => {
+    const el = holder.current?.querySelector("svg");
+    if (el) applyMinScale(el);
+  }, [svg]);
 
   useEffect(() => {
     const root = holder.current;
@@ -120,7 +166,7 @@ export default function Mermaid({ source, nodeLinks }: MermaidProps) {
           ref={holder}
           className="mermaid-svg"
           aria-busy={stale}
-          // mermaid output, sanitised by mermaid itself under securityLevel 'strict'.
+          // mermaid output, sanitised by mermaid (securityLevel 'strict') and stripExternalResources().
           dangerouslySetInnerHTML={{ __html: svg }}
         />
       ) : (

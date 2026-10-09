@@ -6,11 +6,11 @@
     "node": ">=24.15 <27"
   },
   "scripts": {
-    "dev": "next dev",
-    "dev:local": "next dev -H 127.0.0.1 -p 3417",
+    "dev": "node scripts/serve.mjs dev",
+    "dev:local": "node scripts/serve.mjs dev",
     "build": "next build",
-    "start": "next start",
-    "start:local": "next build && next start -H 127.0.0.1 -p 3417",
+    "start": "node scripts/serve.mjs start",
+    "start:local": "next build && node scripts/serve.mjs start",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",

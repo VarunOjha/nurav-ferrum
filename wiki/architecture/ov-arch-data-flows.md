@@ -3,7 +3,7 @@ id: ov-arch-data-flows
 type: overview
 title: "Architecture: runtime data flows"
 status: review
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
@@ -100,7 +100,7 @@ sequenceDiagram
   W-->>T: PidSet{pid, creation_time, kind, frames}
   T->>O: GetProcessMemoryInfo (EX2), GetProcessTimes, QueryProcessCycleTime (off UI thread)
   O-->>T: counters
-  T->>T: aggregate (sum PrivateUsage over the set; never sum per-process peaks)
+  T->>T: aggregate (sum PrivateUsage over the set, never sum per-process peaks)
   T->>M: ProcessSample + pressure signal
   T->>T: append samples.jsonl (export dir)
 ```

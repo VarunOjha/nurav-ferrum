@@ -9,7 +9,7 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/owner/2026-10-09-s01-wave0c.md
-related: [ip-spec, ip-data-contract, ip-testing, ip-build-plan, ip-routes-and-views, schema, adr-0002, adr-0003, comp-interactive-plan, phase-p1-foundation, adr-0020]
+related: [ip-spec, ip-data-contract, ip-testing, ip-build-plan, ip-routes-and-views, schema, adr-0002, adr-0003, comp-interactive-plan, phase-p1-foundation, adr-0020, adr-0022]
 approvable: true
 phase: phase-p0-planning
 audience: both
@@ -64,8 +64,8 @@ SCHEMA §9.3 makes `npm run lint:wiki` the normative lint tool once IP-5 has pas
 | `ORPHAN` | warn | No inbound reference from another page's frontmatter, `sources` or body. Links from `index.md` and `log.md` do **not** count, since everything is in the index. Singletons and `STATUS.md` are exempt |
 | `INDEX-MISSING` | error | A page is not listed in `index.md`, an index line points at a missing file or folder, or a line fails the SCHEMA §11 regex. The status column must equal the page's `status` (or `raw`). Raw files: those at the `raw/` top level and under `raw/owner/`, `raw/research/` and `raw/assets/` each need their own line; files under `raw/evidence/` and `raw/bench/` are **not** listed individually; instead each first-level folder (`raw/evidence/<phase-id>/`, `raw/bench/<run-id>/`) containing a file needs one line whose label is the folder path relative to `wiki/raw/`, lower-cased, non-`[a-z0-9.-]` characters (including `/`) replaced by `-`, no trailing `-` (SCHEMA §11, [adr-0020](../decisions/adr-0020-index-lists-evidence-folders.md)); a file directly in `raw/evidence/` or `raw/bench/` is an error. A page counts as listed when a line's link resolves to its file, and the label must be its id. A page whose frontmatter has no parsable id (`FM-MISSING`) needs no line. Missing raw files and folders are reported on `wiki/index.md`, missing pages on the page |
 | `STALE-UPDATED` | warn / error | warn when `updated` < `git log -1 --format=%cs -- <file>`; **error** when `updated` > today (local date) |
-| `ADR-CHAIN` | error | `superseded` without `superseded_by`; an **accepted** A supersedes B but B is not superseded (SCHEMA §9.4 step 2 marks B only once A is accepted, so a proposed A is not an error; decided in IP-5); `accepted` without (approval counts-as-approved **or** `decided_by: owner` with a `raw/` source), per SCHEMA §10.4.3 |
-| `PHASE-ORDER` | error | A cycle in `depends_on` (DFS), a dependency whose order ≥ own order, a duplicate `order`, `order` not equal to N in `phase-pN-…`, or a duplicate task id across all phases |
+| `ADR-CHAIN` | error | `superseded` without `superseded_by`; an **accepted** A supersedes B but B is not superseded (SCHEMA §9.4 step 2 marks B only once A is accepted, so a proposed A is not an error; decided in IP-5); `accepted` without (approval counts-as-approved **or** `decided_by: owner` with a `raw/` source), per SCHEMA §10.4.3; `accepted` while the approval state is `REJECTED` or `CHANGES_REQUESTED`, whatever `decided_by` says (§10.4.4: case (b) only covers an ADR the owner has not overturned in the app; PENDING and STALE keep it; IP-9 review, [adr-0022](../decisions/adr-0022-approval-invalid-is-a-lint-error.md)) |
+| `PHASE-ORDER` | error | A cycle in `depends_on` (every phase in a strongly connected component of size > 1 or with a self-loop, `lib/wiki/cycles.ts`, shared with the roadmap; a plain DFS missed phases that reach the cycle only through a finished node, IP-9 review), a `depends_on` id that resolves to a page that is not a phase (SCHEMA §6.3; it would read as an INVALID `#exit` key in the entry gate), a dependency whose order ≥ own order, a duplicate `order`, `order` not equal to N in `phase-pN-…`, or a duplicate task id across all phases |
 | `TRUST-EDGE` | error | `crosses_trust_boundary` differs from (`trust_level(from)` ≠ `trust_level(to)`) |
 | `UNV-NOPHASE` | error | The SCHEMA §7.1 tag keyword (uppercase, case-sensitive) not immediately followed by a bracketed phase id that matches the §7.1 regex, in page bodies outside fenced code blocks and outside inline code spans (a keyword in backticks quotes the syntax, as in `tools/quick_lint.py`; decided in IP-5). Exempt: `raw/`, and the rule text inside `SCHEMA.md` §7 |
 | `UNV-PASTDUE` | error | An inline integrity tag naming phase P, or a frontmatter `unverified[].verify_in = P`, where P has `status: done` or `P.order < order(STATUS.current_phase)`. A well-formed tag inside inline code counts, because SCHEMA §7.1 exempts only fenced code. `log.md` is exempt: it is append-only, so the tags its entries quote can never be edited (decided in IP-5) |
@@ -79,6 +79,7 @@ SCHEMA §9.3 makes `npm run lint:wiki` the normative lint tool once IP-5 has pas
 | `Q-FORMAT` | error | An `ov-open-questions` section without exactly one valid `- status:` line or with an unparsable `- blocking:` list, or a duplicate `Q-NNN`; treated as open and blocking every phase (loader, [ip-data-contract](ip-data-contract.md) §5.3) |
 | `Q-BLOCK-UNGATED` | warn | An **open** question's `blocking` id is in no phase's dependency set (SCHEMA §9.7 step 3), so it gates nothing. Answered and withdrawn questions are not checked |
 | `PHASE-DONE-NO-EXIT` | warn | A phase with `status: done` whose `<phase-id>#exit` approval does not count as approved |
+| `APPROVAL-INVALID` | error | SCHEMA §10.3: an approvals key whose page is missing or not approvable, or a `#exit` key on a non-phase page; an invalid or unreadable `approvals.json` is one finding on the file. Adopted into the SCHEMA §9.3 table as an **error** by [adr-0022](../decisions/adr-0022-approval-invalid-is-a-lint-error.md) (IP-9 review; it was a §2.1 warn before, which contradicted §10.3 "lint error") |
 
 ### 2.1 Additional checks derived from MUST rules elsewhere in SCHEMA
 
@@ -95,15 +96,14 @@ SCHEMA does not list these codes in §9.3, but each enforces an explicit SCHEMA 
 | `EXP-RESULTS` | §6.8: `results_ref` is required when the status is `complete` or `analyzed` |
 | `RISK-SCORE` | §6.5: a stored score must equal L × I |
 | `STATUS-APPROVED` | §10.4.5: an `overview` or `schema` page with `status: approved` but no counts-as-approved approval |
-| `APPROVAL-INVALID` | §10.3: an approvals key whose page is missing or not approvable, or a `#exit` key on a non-phase page; an invalid `approvals.json` is one finding on the file |
 | `UNV-MIRROR` | §7.1: the set of phases in inline tags differs from the set in the frontmatter `unverified` list (`log.md` is exempt, as for `UNV-PASTDUE`) |
-| `MERMAID-RULES` | §14: a `click` directive, `%%{init` or an HTML tag in a mermaid block (not class annotations such as `<<trait>>`), or a flowchart or state diagram with more than 30 nodes (a heuristic count of node ids) |
+| `MERMAID-RULES` | §14: a `click` directive, `%%{init` or an HTML tag in a mermaid block (not class annotations such as `<<trait>>`), a flowchart or state diagram with more than 30 nodes (a heuristic count of node ids), or a `;` in the text of a `sequenceDiagram` line (mermaid ends a statement there, so the diagram does not parse; `#59;` entities are fine; added after the IP-9 review found `ov-arch-data-flows` unrenderable) |
 
 Before IP-5, `LOG-FORMAT` was listed in this table. SCHEMA §9.3 lists it (and `Q-FORMAT`) as an error, so both are in the §2 table now.
 
 ## 3. Git-backed checks
 
-These are the only rules that spawn a process (`git`, via `execFile` with a fixed argument list, cwd = repo root). They run in the lint CLI, **not** inside the web server's request path.
+These are the only rules that spawn a process (`git`, via `execFile` with a fixed argument list, cwd = repo root). They run in the lint CLI, **not** inside the web server's request path. The web server's lint (layout banner, `/lint`, per-page findings) builds its context with `{ git: false }` (`lib/server/data.ts`), so it never spawns git; this was confirmed and enforced in the IP-9 review (2026-10-09), when the server was found running git in the request path.
 
 The git commands are batched (implemented in IP-5 in `lib/lint/git.ts`). git is used only when the repo root is the git top level, so a fixture wiki inside this repo is never judged by the repo's history.
 

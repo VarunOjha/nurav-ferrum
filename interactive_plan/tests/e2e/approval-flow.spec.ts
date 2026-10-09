@@ -98,7 +98,13 @@ test("(5) editing the body gives STALE; the inbox lists it under Stale with a di
   const row = page.locator(`tr[data-key='${FX.adr}']`);
   await expect(row).toHaveAttribute("data-state", "STALE");
   await expect(row).toContainText("content changed since");
-  await expect(page.locator("tbody tr")).toHaveCount(1);
+  await expect(page.locator("tbody tr[data-key]")).toHaveCount(1);
+  // §3.11 (IP-9 review): the inbox row itself carries the diff since approval
+  const inboxDiff = page.locator(`[data-testid='inbox-diff'][data-key='${FX.adr}']`);
+  await expect(inboxDiff).toHaveCount(1);
+  await inboxDiff.locator("summary").click();
+  await expect(inboxDiff.locator(".diff-del")).toContainText(["Simple."]);
+  await expect(inboxDiff.locator(".diff-add")).toContainText(["Simple, and changed after the approval."]);
 });
 
 test("(6) Request changes needs a comment; with one it records CHANGES_REQUESTED with history 1", async ({ page }) => {

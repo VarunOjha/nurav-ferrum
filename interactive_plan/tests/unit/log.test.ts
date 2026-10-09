@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseFrontmatterBytes } from "@/lib/wiki/frontmatter";
-import { LOG_HEADING, parseLog } from "@/lib/wiki/log";
+import { inlineList, LOG_HEADING, parseLog } from "@/lib/wiki/log";
 import { codes, REAL_WIKI } from "./helpers";
 
 describe("LOG_HEADING (SCHEMA §12)", () => {
@@ -97,5 +97,32 @@ describe("parseLog", () => {
     expect(r.entries.length).toBe(headings);
     expect(r.entries.length).toBeGreaterThan(0);
     for (const e of r.entries) expect(raw.toString("utf8").split(/\r?\n/)[e.line - 1]).toMatch(LOG_HEADING);
+  });
+});
+
+// IP-9 review: a bracketed list followed by a parenthetical (wiki/log.md line 352 and others) produced
+// bogus ids such as "[ip-testing" and "ip-approvals-api] (no approvals.json exists".
+describe("bracketed lists with a trailing note", () => {
+  const LINE_352 =
+    "- stales: [ip-routes-and-views, ip-testing, ip-build-plan, ip-spec] (no approvals.json exists, so nothing is actually stale; the ip-* pages are re-approved in the app after IP-10)";
+  it("links only the ids inside the brackets and keeps the parenthetical as a note", () => {
+    const body = `## [2026-10-09] decide | x\n\n- session: s01\n- pages: [a, b]\n${LINE_352}\n`;
+    const { entries, findings } = parseLog(body);
+    expect(findings).toEqual([]);
+    expect(entries[0].stales).toEqual(["ip-routes-and-views", "ip-testing", "ip-build-plan", "ip-spec"]);
+    expect(entries[0].notes?.stales).toBe("(no approvals.json exists, so nothing is actually stale; the ip-* pages are re-approved in the app after IP-10)");
+    expect(entries[0].pages).toEqual(["a", "b"]);
+    expect(entries[0].notes?.pages).toBeUndefined();
+  });
+  it("inlineList: plain lists, empty lists, unbracketed values", () => {
+    expect(inlineList("[schema] (no approvals exist yet)")).toEqual({ items: ["schema"], note: "(no approvals exist yet)" });
+    expect(inlineList("[]")).toEqual({ items: [], note: null });
+    expect(inlineList("a, b")).toEqual({ items: ["a", "b"], note: null });
+    expect(inlineList('["x", \'y\']')).toEqual({ items: ["x", "y"], note: null });
+  });
+  it("on the real wiki/log.md no stales/pages id contains brackets, parentheses or spaces", async () => {
+    const { entries } = parseLog(readFileSync(path.join(REAL_WIKI, "log.md"), "utf8").replace(/\r\n/g, "\n"));
+    const bad = entries.flatMap((e) => [...e.pages, ...e.stales]).filter((id) => /[[\]() ]/.test(id));
+    expect(bad).toEqual([]);
   });
 });

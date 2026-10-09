@@ -48,6 +48,11 @@ export interface FlowEdgeSpec {
   from: string;
   to: string;
   label?: string;
+  /** Label shown while neither endpoint is active, when the graph's labelMode is "active" (e.g. "TB"). */
+  short?: string;
+  /** "below": leaves and enters at the bottom of the nodes (smoothstep), so an edge that skips a
+   * rank does not run behind the node in between (roadmap). */
+  route?: "below";
   /** fg-edge-tb (dashed, thick), fg-edge-bad (red), fg-edge-crit, fg-edge-dangling. */
   classes?: string[];
 }
@@ -59,4 +64,15 @@ export interface FlowGraphProps {
   label: string;
   height: number;
   testId?: string;
+  /**
+   * Smallest zoom the initial fit may use (default 0.15). A graph that would need less is shown at this
+   * zoom from its top-left corner and is panned (drag, scroll bars of the controls) instead of shrunk
+   * to unreadable text (IP-9 review).
+   */
+  fitMinZoom?: number;
+  /**
+   * "always" (default): every edge label is drawn. "active": only the edges of the hovered, focused or
+   * opened node show their full label; the others show `short` (or nothing), so labels never pile up.
+   */
+  labelMode?: "always" | "active";
 }

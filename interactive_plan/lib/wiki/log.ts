@@ -35,6 +35,8 @@ export interface LogEntry {
   sources: string[];
   result?: string;
   stales: string[];
+  /** Free text after a bracketed `pages`/`sources`/`stales` list, e.g. `(no approvals.json exists …)`. */
+  notes?: Partial<Record<"pages" | "sources" | "stales", string>>;
   next?: string;
   commit?: string;
   /** 1-based file line of the heading. */
@@ -43,13 +45,22 @@ export interface LogEntry {
   raw: string;
 }
 
-function inlineList(v: string): string[] {
+/**
+ * A §12 list value: `[a, b]`, optionally followed by free text such as `(no approvals.json exists, …)`
+ * (IP-9 review: the trailing note used to be split on commas into bogus ids). Only the ids inside the
+ * brackets are list items; the rest is returned as the note. A value without brackets is a plain
+ * comma list.
+ */
+export function inlineList(v: string): { items: string[]; note: string | null } {
   const t = v.trim();
-  const inner = t.startsWith("[") && t.endsWith("]") ? t.slice(1, -1) : t;
-  return inner
+  const m = /^\[([^\]]*)\]\s*(.*)$/.exec(t);
+  const inner = m ? m[1] : t;
+  const note = m && m[2].trim() !== "" ? m[2].trim() : null;
+  const items = inner
     .split(",")
     .map((x) => x.trim().replace(/^["']|["']$/g, ""))
     .filter((x) => x !== "");
+  return { items, note };
 }
 
 /**
@@ -112,18 +123,27 @@ export function parseLog(
       case "session":
         entry.session = val;
         break;
-      case "pages":
-        entry.pages = inlineList(val);
+      case "pages": {
+        const l = inlineList(val);
+        entry.pages = l.items;
+        if (l.note) entry.notes = { ...entry.notes, pages: l.note };
         break;
-      case "sources":
-        entry.sources = inlineList(val);
+      }
+      case "sources": {
+        const l = inlineList(val);
+        entry.sources = l.items;
+        if (l.note) entry.notes = { ...entry.notes, sources: l.note };
         break;
+      }
       case "result":
         entry.result = val;
         break;
-      case "stales":
-        entry.stales = inlineList(val);
+      case "stales": {
+        const l = inlineList(val);
+        entry.stales = l.items;
+        if (l.note) entry.notes = { ...entry.notes, stales: l.note };
         break;
+      }
       case "next":
         entry.next = val;
         break;

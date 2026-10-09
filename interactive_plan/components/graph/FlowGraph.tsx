@@ -6,11 +6,16 @@
  * activates them; xyflow's own node focus is switched off so focus never stops twice per node.
  * Nothing is draggable, connectable or selectable: the graph is a read-only view. Re-themes with the
  * app theme (colorMode); no animations, so prefers-reduced-motion has nothing to disable.
+ *
+ * IP-9 review: the initial viewport never zooms out below `fitMinZoom` (a larger graph is shown from
+ * its top-left corner and panned), with labelMode "active" only the edges of the hovered, focused or
+ * opened node show their full label, and `route: "below"` edges leave and enter at the bottom.
  */
 import "@xyflow/react/dist/style.css";
 import { Background, Controls, Handle, MarkerType, Position, ReactFlow, type Edge, type Node, type NodeProps } from "@xyflow/react";
 import Link from "next/link";
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { initialViewport, type Viewport } from "@/lib/views/viewport";
 import { useEffectiveTheme } from "../theme";
 import type { FlowBadge, FlowGraphProps, FlowNodeSpec, FlowPanel } from "./types";
 
@@ -18,6 +23,8 @@ type ItemData = { spec: FlowNodeSpec };
 type LaneData = { title: string };
 
 const OpenPanel = createContext<(id: string, trigger: HTMLElement) => void>(() => {});
+/** Hover/focus tracking for labelMode "active" (null = the pointer or focus left the node). */
+const SetActive = createContext<(id: string | null) => void>(() => {});
 
 function Badge({ b }: { b: FlowBadge }) {
   return (
@@ -30,6 +37,9 @@ function Badge({ b }: { b: FlowBadge }) {
 function ItemNode({ data }: NodeProps<Node<ItemData>>) {
   const s = data.spec;
   const open = useContext(OpenPanel);
+  const setActive = useContext(SetActive);
+  const on = () => setActive(s.id);
+  const off = () => setActive(null);
   const body = (
     <>
       {s.eyebrow && <span className="fg-eyebrow">{s.eyebrow}</span>}
@@ -45,18 +55,28 @@ function ItemNode({ data }: NodeProps<Node<ItemData>>) {
     </>
   );
   return (
-    <div className={["fg-node", ...(s.classes ?? [])].join(" ")} data-node-id={s.id} style={{ width: s.w, height: s.h }}>
-      <Handle type="target" position={Position.Left} isConnectable={false} className="fg-handle" />
+    <div
+      className={["fg-node", ...(s.classes ?? [])].join(" ")}
+      data-node-id={s.id}
+      style={{ width: s.w, height: s.h }}
+      onMouseEnter={on}
+      onMouseLeave={off}
+      onFocus={on}
+      onBlur={off}
+    >
+      <Handle type="target" id="l" position={Position.Left} isConnectable={false} className="fg-handle" />
+      <Handle type="target" id="bt" position={Position.Bottom} isConnectable={false} className="fg-handle" />
       {s.href ? (
-        <Link href={s.href} className="fg-hit nodrag nopan" aria-label={s.ariaLabel}>
+        <Link href={s.href} className="fg-hit nodrag nopan" aria-label={s.ariaLabel} title={s.title}>
           {body}
         </Link>
       ) : (
-        <button type="button" className="fg-hit nodrag nopan" aria-label={s.ariaLabel} onClick={(e) => open(s.id, e.currentTarget)}>
+        <button type="button" className="fg-hit nodrag nopan" aria-label={s.ariaLabel} title={s.title} onClick={(e) => open(s.id, e.currentTarget)}>
           {body}
         </button>
       )}
-      <Handle type="source" position={Position.Right} isConnectable={false} className="fg-handle" />
+      <Handle type="source" id="r" position={Position.Right} isConnectable={false} className="fg-handle" />
+      <Handle type="source" id="b" position={Position.Bottom} isConnectable={false} className="fg-handle" />
     </div>
   );
 }
@@ -121,9 +141,18 @@ function SidePanel({ panel, onClose }: { panel: FlowPanel; onClose: () => void }
   );
 }
 
-export default function FlowGraph({ nodes, edges, label, height, testId }: FlowGraphProps) {
+export default function FlowGraph({ nodes, edges, label, height, testId, fitMinZoom = 0.15, labelMode = "always" }: FlowGraphProps) {
   const theme = useEffectiveTheme();
   const [openId, setOpenId] = useState<string | null>(null);
+  const [hoverId, setHoverId] = useState<string | null>(null);
+  const canvas = useRef<HTMLElement | null>(null);
+  const [viewport, setViewport] = useState<Viewport | null>(null);
+  // Initial view from the canvas size before first paint: fit, but never below fitMinZoom.
+  useLayoutEffect(() => {
+    const el = canvas.current;
+    if (!el) return;
+    setViewport(initialViewport(nodes, { w: el.clientWidth, h: el.clientHeight }, { minZoom: fitMinZoom }));
+  }, [nodes, fitMinZoom]);
   const trigger = useRef<HTMLElement | null>(null);
   const open = useCallback((id: string, el: HTMLElement) => {
     trigger.current = el;
@@ -167,34 +196,41 @@ export default function FlowGraph({ nodes, edges, label, height, testId }: FlowG
       ),
     [nodes],
   );
+  const active = hoverId ?? openId;
   const rfEdges = useMemo<Edge[]>(
     () =>
       edges.map((e) => ({
         id: e.id,
         source: e.from,
         target: e.to,
-        label: e.label,
+        sourceHandle: e.route === "below" ? "b" : "r",
+        targetHandle: e.route === "below" ? "bt" : "l",
+        type: e.route === "below" ? "smoothstep" : "default",
+        label: labelMode === "always" || (active !== null && (e.from === active || e.to === active)) ? e.label : e.short,
         className: ["fg-edge", ...(e.classes ?? [])].join(" "),
         markerEnd: { type: MarkerType.ArrowClosed, width: 18, height: 18 },
         focusable: false,
         selectable: false,
         labelBgPadding: [6, 3] as [number, number],
         labelBgBorderRadius: 4,
+        data: { full: e.label ?? "" },
       })),
-    [edges],
+    [edges, labelMode, active],
   );
   const panel = openId ? nodes.find((n) => n.id === openId)?.panel ?? null : null;
 
   return (
     <div className={panel ? "fg-wrap fg-wrap-open" : "fg-wrap"}>
-      <section className="fg-canvas" style={{ height }} aria-label={label} data-testid={testId}>
+      <section className="fg-canvas" style={{ height }} aria-label={label} data-testid={testId} data-label-mode={labelMode} ref={canvas}>
         <OpenPanel.Provider value={open}>
+          <SetActive.Provider value={setHoverId}>
           <ReactFlow
             nodes={rfNodes}
             edges={rfEdges}
             nodeTypes={NODE_TYPES}
             colorMode={theme}
-            fitView
+            viewport={viewport ?? { x: 0, y: 0, zoom: 1 }}
+            onViewportChange={setViewport}
             fitViewOptions={{ padding: 0.08 }}
             minZoom={0.15}
             maxZoom={1.75}
@@ -210,6 +246,7 @@ export default function FlowGraph({ nodes, edges, label, height, testId }: FlowG
             <Background gap={24} size={1} />
             <Controls showInteractive={false} position="bottom-left" />
           </ReactFlow>
+          </SetActive.Provider>
         </OpenPanel.Provider>
       </section>
       {panel && <SidePanel panel={panel} onClose={close} />}

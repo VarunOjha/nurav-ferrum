@@ -70,6 +70,8 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
 4. Add the npm scripts from [ip-testing](ip-testing.md) §0 (`typecheck` is `next typegen && tsc --noEmit`, owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 7), plus:
    - `dev:local` = `next dev -H 127.0.0.1 -p 3417`
    - `start:local` = `next build && next start -H 127.0.0.1 -p 3417`
+
+   (IP-9 review, 2026-10-09: `dev`, `dev:local`, `start` and `start:local` now run `scripts/serve.mjs`, which binds 127.0.0.1 on `PLAN_PORT`, default 3417; [ip-approvals-api](ip-approvals-api.md) §3 item 1.)
 5. Install test dependencies approved under Q-210: `npm install -D --save-exact @vitest/coverage-v8@<version matching the pinned vitest>` (exact version taken from the registry at this moment and recorded in the evidence) and `npx playwright install chromium` (downloads a browser into the user profile; record the output).
 6. Add `.gitignore` entries `.next/`, `node_modules/`, `.lint/`, `test-results/`, `playwright-report/`, and the repo-level `plan/.approvals.lock` and `plan/approvals.json.tmp-*`. These are the only edits outside `interactive_plan/`, and they are logged.
 7. **Spike S1, fs outside the root:** a temporary route reads `../wiki/SCHEMA.md` and writes and deletes `../plan/.spike-<rand>`, under both `next dev` and `next start`.

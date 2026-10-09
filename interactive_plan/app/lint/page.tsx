@@ -52,6 +52,10 @@ export default async function LintRoute() {
             <span className="chip chip-amber chip-strong">{report.summary.warnings} warnings</span>{" "}
             <span className="chip chip-neutral">{report.summary.info} info</span> <span className="muted small">over {report.summary.pages} pages</span>
           </p>
+          <p className="muted small" data-testid="lint-git-note">
+            This view never runs git (ip-wiki-lint §3): the git-backed checks of STALE-UPDATED and RAW-IMMUTABLE run only in{" "}
+            <code>npm run lint:wiki</code>; here RAW-IMMUTABLE uses <code>wiki/raw/MANIFEST.sha256</code>.
+          </p>
           {groups.length === 0 && <p className="muted">No findings.</p>}
           {groups.map((g) => (
             <section key={g.severity} className="panel" aria-labelledby={`sev-${g.severity}`} data-severity={g.severity}>

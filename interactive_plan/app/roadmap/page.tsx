@@ -8,7 +8,7 @@ import LazyFlowGraph from "@/components/graph/LazyFlowGraph";
 import type { FlowEdgeSpec, FlowNodeSpec } from "@/components/graph/types";
 import { getApprovals, getIndex } from "@/lib/server/data";
 import { toneOf } from "@/lib/ui/tone";
-import { layoutPhaseDag } from "@/lib/views/graphLayout";
+import { edgesBehindNodes, layoutPhaseDag } from "@/lib/views/graphLayout";
 import { exitBarVisible } from "@/lib/views/phase";
 import { phaseDag, riskMatrix } from "@/lib/wiki/graph";
 
@@ -56,7 +56,19 @@ export default async function RoadmapRoute() {
       ariaLabel: `${n.title} (${n.id}), ${n.status}${crit ? ", on the critical path" : ""}: open the phase`,
     };
   });
-  const edges: FlowEdgeSpec[] = dag.edges.map((e) => ({ id: e.id, from: e.from, to: e.to, classes: e.critical ? ["fg-edge-crit"] : [] }));
+  // An edge that would run behind the phase in between (P6 -> P8 behind P7) is routed below the row.
+  const below = edgesBehindNodes(boxes, dag.edges);
+  const edges: FlowEdgeSpec[] = dag.edges.map((e) => ({
+    id: e.id,
+    from: e.from,
+    to: e.to,
+    route: below.has(e.id) ? "below" : undefined,
+    classes: e.critical ? ["fg-edge-crit"] : [],
+  }));
+  const dagBottom = Math.max(0, ...boxes.map((b) => b.y + b.h)) - Math.min(0, ...boxes.map((b) => b.y));
+  // Shown at zoom >= 0.8 and panned sideways: the pane is only as tall as the rows need (plus the
+  // routed-below edges and the zoom controls).
+  const dagHeight = Math.min(520, Math.max(200, Math.round(dagBottom * 0.8) + 150));
 
   // Timeline geometry (px). Bars are proportional to est_sessions: width = est_sessions × unit.
   const total = Math.max(1, dag.totalSessions);
@@ -92,8 +104,8 @@ export default async function RoadmapRoute() {
         <h2 id="dag-title" className="panel-title">
           Phase dependencies
         </h2>
-        <p className="muted small">Arrows point from a dependency to the phase that needs it. The critical path is marked and drawn thicker. Tab moves through the phases; Enter opens one.</p>
-        {nodes.length === 0 ? <p className="muted">No phase pages.</p> : <LazyFlowGraph nodes={nodes} edges={edges} label="Phase dependency graph" height={360} testId="phase-dag" />}
+        <p className="muted small">Arrows point from a dependency to the phase that needs it. The critical path is marked and drawn thicker. Drag to pan; Tab moves through the phases; Enter opens one.</p>
+        {nodes.length === 0 ? <p className="muted">No phase pages.</p> : <LazyFlowGraph nodes={nodes} edges={edges} label="Phase dependency graph" height={dagHeight} testId="phase-dag" fitMinZoom={0.8} />}
       </section>
 
       <section className="panel" aria-labelledby="timeline-title">

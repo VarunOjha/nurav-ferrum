@@ -6,7 +6,7 @@ import Link from "next/link";
 import NavLinks from "@/components/NavLinks";
 import SearchBox from "@/components/SearchBox";
 import ThemeToggle from "@/components/ThemeToggle";
-import { THEME_INIT_SCRIPT } from "@/components/themeScript";
+import ThemeInitScript from "@/components/ThemeInitScript";
 import { config, getApprovals, getIndex, getLint } from "@/lib/server/data";
 import { needsAttentionCount } from "@/lib/views/inbox";
 import { suggestionList, type Suggestion } from "@/lib/wiki/search";
@@ -48,7 +48,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <ThemeInitScript />
       </head>
       <body>
         <a href="#main" className="skip-link">

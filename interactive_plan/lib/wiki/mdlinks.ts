@@ -43,3 +43,18 @@ export function rewriteHref(fromPath: string, href: string, exists: (wikiPath: s
   }
   return { kind: "internal", href: wikiHref(resolvedPath, anchor), target: resolvedPath };
 }
+
+/**
+ * Re-bases the inline links of a repo-root markdown file (root CLAUDE.md, shown on the schema page,
+ * ip-data-contract §6.2) so that it can be rendered as if it sat at the wiki root: `wiki/<x>` becomes
+ * `<x>`, any other relative target becomes `../<x>` (STATUS.md -> dashboard, other repo files are
+ * "outside wiki/"). Absolute URLs, anchors and root-relative links are kept. Pure.
+ */
+export function rebaseRootLinks(markdown: string): string {
+  return markdown.replace(/\]\(([^)\s]+)((?:\s+"[^"]*")?)\)/g, (all, target: string, title: string) => {
+    if (target.startsWith("#") || target.startsWith("/") || SCHEME.test(target)) return all;
+    const t = target.startsWith("./") ? target.slice(2) : target;
+    const next = t.startsWith("wiki/") ? t.slice(5) || "./" : `../${t}`;
+    return `](${next}${title})`;
+  });
+}

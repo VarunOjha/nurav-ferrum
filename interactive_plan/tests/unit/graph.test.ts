@@ -7,8 +7,10 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
-import { layoutArchitecture, layoutPhaseDag, layoutTrace, NODE_H, NODE_W, type Box } from "@/lib/views/graphLayout";
+import { initialViewport } from "@/lib/views/viewport";
+import { edgesBehindNodes, layoutArchitecture, layoutPhaseDag, layoutTrace, NODE_H, NODE_W, type Box } from "@/lib/views/graphLayout";
 import { adrSectionCheck, decisionRows, filterDecisions, sortRisks, supersessionChain } from "@/lib/views/registers";
+import { cycleNodes } from "@/lib/wiki/cycles";
 import { componentGraph, phaseDag, riskBand, riskMatrix, traceGraph, traceSubgraph, type GapKind } from "@/lib/wiki/graph";
 import { loadWiki, type WikiIndex } from "@/lib/wiki/load";
 import { loadMini, page } from "./helpers";
@@ -541,5 +543,90 @@ describe("decision register", () => {
     expect(supersessionChain(idx, "adr-0002")).toEqual(["adr-0001", "adr-0002", "adr-0003", "adr-0009"]);
     expect(supersessionChain(idx, "adr-0005")).toEqual(["adr-0006", "adr-0005"]);
     expect(supersessionChain(idx, "adr-0404")).toEqual(["adr-0404"]);
+  });
+});
+
+// IP-9 review: the stack-slice DFS missed p4 (its only way back onto the cycle runs through p2, already
+// finished when p4 is visited). cycleNodes is the SCC helper used by PHASE-ORDER and phaseDag.
+describe("cycleNodes (SCC)", () => {
+  const graph = (edges: Record<string, string[]>) => (id: string) => edges[id] ?? [];
+  it("reports every node of the cycle p1 -> p4 -> p2 -> p3 -> p1, including p4", () => {
+    const edges = { p1: ["p2", "p4"], p2: ["p3"], p3: ["p1"], p4: ["p2"] };
+    expect([...cycleNodes(["p1", "p2", "p3", "p4"], graph(edges))].sort()).toEqual(["p1", "p2", "p3", "p4"]);
+    // the same in any visiting order
+    expect([...cycleNodes(["p4", "p3", "p2", "p1"], graph(edges))].sort()).toEqual(["p1", "p2", "p3", "p4"]);
+  });
+  it("self-loops count; acyclic nodes, dependants of a cycle and unknown ids do not", () => {
+    const edges = { a: ["a"], b: ["c"], c: ["d", "zz"], d: ["c"], e: ["c"], f: [] };
+    expect([...cycleNodes(["a", "b", "c", "d", "e", "f"], graph(edges))].sort()).toEqual(["a", "c", "d"]);
+    expect(cycleNodes([], graph({})).size).toBe(0);
+  });
+  it("handles a long chain without recursion", () => {
+    const n = 20000;
+    const ids = Array.from({ length: n }, (_, i) => `n${i}`);
+    const edges = Object.fromEntries(ids.map((id, i) => [id, i + 1 < n ? [`n${i + 1}`] : ["n0"]]));
+    expect(cycleNodes(ids, graph(edges)).size).toBe(n);
+  });
+});
+
+// IP-9 review: graphs were fitted at 0.15-0.45 zoom (unreadable); the roadmap P6 -> P8 edge ran behind P7.
+describe("initialViewport", () => {
+  const boxes = [
+    { x: 0, y: 0, w: 220, h: 76 },
+    { x: 2640, y: 0, w: 220, h: 76 },
+  ];
+  it("never zooms out below minZoom: a wide graph starts at its left edge and is panned", () => {
+    const v = initialViewport(boxes, { w: 1000, h: 300 }, { minZoom: 0.8 });
+    expect(v.zoom).toBe(0.8);
+    expect(v.x).toBe(16);
+    // the height fits: centred vertically
+    expect(v.y).toBeCloseTo((300 - 76 * 0.8) / 2, 6);
+  });
+  it("fits a small graph, never above zoom 1, centred", () => {
+    const v = initialViewport([{ x: 100, y: 50, w: 220, h: 76 }], { w: 1000, h: 400 }, { minZoom: 0.7 });
+    expect(v.zoom).toBe(1);
+    expect(v.x).toBe((1000 - 220) / 2 - 100);
+    expect(v.y).toBe((400 - 76) / 2 - 50);
+  });
+  it("uses the fit zoom when it is above minZoom; empty input and a zero canvas are safe", () => {
+    const v = initialViewport(boxes, { w: 2000, h: 600 }, { minZoom: 0.5 });
+    expect(v.zoom).toBeCloseTo((2000 - 32) / 2860, 6);
+    expect(initialViewport([], { w: 100, h: 100 }, { minZoom: 0.5 })).toEqual({ x: 16, y: 16, zoom: 1 });
+    expect(initialViewport(boxes, { w: 0, h: 0 }, { minZoom: 0.5 }).zoom).toBe(1);
+  });
+});
+
+describe("edgesBehindNodes", () => {
+  const row = (ids: string[]): Box[] => ids.map((id, i) => ({ id, x: i * 330, y: 0, w: NODE_W, h: NODE_H }));
+  it("flags an edge that skips a node in the same row (P6 -> P8 behind P7), not the neighbours", () => {
+    const boxes = row(["p6", "p7", "p8"]);
+    const edges = [
+      { id: "p6>p7", from: "p6", to: "p7" },
+      { id: "p7>p8", from: "p7", to: "p8" },
+      { id: "p6>p8", from: "p6", to: "p8" },
+    ];
+    expect([...edgesBehindNodes(boxes, edges)]).toEqual(["p6>p8"]);
+  });
+  it("does not flag an edge that passes above or below the node in between, or one with unknown ends", () => {
+    const boxes: Box[] = [
+      { id: "a", x: 0, y: 0, w: NODE_W, h: NODE_H },
+      { id: "m", x: 330, y: 200, w: NODE_W, h: NODE_H },
+      { id: "b", x: 660, y: 0, w: NODE_W, h: NODE_H },
+    ];
+    expect(edgesBehindNodes(boxes, [{ id: "a>b", from: "a", to: "b" }, { id: "x", from: "a", to: "zz" }]).size).toBe(0);
+  });
+  it("on the real-size layout of a chain with a skip edge, layoutPhaseDag + edgesBehindNodes route it below", () => {
+    const nodes = ["p6", "p7", "p8"].map((id) => ({ id }));
+    const edges = [
+      { id: "e1", from: "p6", to: "p7" },
+      { id: "e2", from: "p7", to: "p8" },
+      { id: "e3", from: "p6", to: "p8" },
+    ];
+    const boxes = layoutPhaseDag({ nodes, edges } as unknown as Parameters<typeof layoutPhaseDag>[0]);
+    const below = edgesBehindNodes(boxes, edges);
+    expect(below.has("e1") || below.has("e2")).toBe(false);
+    // dagre may already bend e3 around p7 vertically; if the three share a row, e3 must be routed below
+    const sameRow = new Set(boxes.map((b) => b.y)).size === 1;
+    if (sameRow) expect(below.has("e3")).toBe(true);
   });
 });

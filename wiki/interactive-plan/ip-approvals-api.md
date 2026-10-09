@@ -119,18 +119,38 @@ Steps 1-3 look only at the request, so they run before the lock: a refused reque
 
 Every non-2xx response is `{ "error": { "code": "…", "message": "…", "details": {…} } }`. Codes: `FORBIDDEN_ORIGIN, READ_ONLY, BAD_REQUEST, UNSUPPORTED_MEDIA_TYPE, COMMENT_REQUIRED, UNKNOWN_KEY, NOT_APPROVABLE, NOT_A_PHASE, EXIT_NOT_READY, UNHASHABLE, PAGE_CHANGED, APPROVALS_FILE_INVALID, LOCK_TIMEOUT, WRITE_FAILED`. Other methods (PUT, PATCH, DELETE) are not exported. The expected answer is 405, and an E2E test asserts that it is not 2xx.
 
+HTTP status per code (`lib/approvals/errors.ts`; `tests/unit/schema-sync.test.ts` parses this table and `route.test.ts` checks every code against literal numbers, IP-9 review):
+
+| Code | HTTP status |
+|---|---|
+| `FORBIDDEN_ORIGIN` | 403 |
+| `READ_ONLY` | 403 |
+| `BAD_REQUEST` | 400 |
+| `UNSUPPORTED_MEDIA_TYPE` | 415 |
+| `COMMENT_REQUIRED` | 400 |
+| `UNKNOWN_KEY` | 404 |
+| `NOT_APPROVABLE` | 422 |
+| `NOT_A_PHASE` | 422 |
+| `EXIT_NOT_READY` | 409 |
+| `UNHASHABLE` | 422 |
+| `PAGE_CHANGED` | 409 |
+| `APPROVALS_FILE_INVALID` | 500 |
+| `LOCK_TIMEOUT` | 503 |
+| `WRITE_FAILED` | 500 |
+
 ## 3. Local-only guard (no authentication otherwise)
 
 The app has no login. Its safety rests on: (a) binding to loopback, and (b) refusing requests that did not come from the app's own page on loopback. This blocks other machines, other local web pages (CSRF) and DNS-rebinding.
 
-1. **Bind:** every npm script starts the server with `-H 127.0.0.1 -p ${PLAN_PORT:-3417}`. The research note only says to pass `-H` explicitly, because the default bind address is unverified ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.4). The flag binds loopback only under both `next start` and `next dev`: IP-1 spike S3 found the only listener on 127.0.0.1 and connections to the LAN IPv4 and the WSL vEthernet address refused ([IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)). IP-9 repeated this from every non-loopback address of the machine (LAN and WSL IPv4, global and link-local IPv6) for the E2E servers on 3418 and 3419: all refused with `ECONNREFUSED`, while a throwaway listener on all interfaces was reachable on each of those addresses (`security.spec.ts`, [IP-9-verify.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt)).
-2. **Host check** (GET and POST): the `Host` header must be exactly one of `127.0.0.1:<port>`, `localhost:<port>` or `[::1]:<port>`. Otherwise the response is 403. This defeats DNS rebinding, because a rebinding page sends its own hostname as Host.
+1. **Bind:** every npm script starts the server with `-H 127.0.0.1 -p ${PLAN_PORT:-3417}`. `dev`, `dev:local`, `start` and `start:local` all go through `scripts/serve.mjs`, which reads `PLAN_PORT` with the same rule as `lib/config.ts` (digits only, default 3417) and refuses caller-supplied `-H`/`-p`, so the bound port is always the port the Host check expects (IP-9 review fix, 2026-10-09). The research note only says to pass `-H` explicitly, because the default bind address is unverified ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.4). The flag binds loopback only under both `next start` and `next dev`: IP-1 spike S3 found the only listener on 127.0.0.1 and connections to the LAN IPv4 and the WSL vEthernet address refused ([IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)). IP-9 repeated this from every non-loopback address of the machine (LAN and WSL IPv4, global and link-local IPv6) for the E2E servers on 3418 and 3419: all refused with `ECONNREFUSED`, while a throwaway listener on all interfaces was reachable on each of those addresses (`security.spec.ts`, [IP-9-verify.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt)).
+2. **Host check** (every route, every method): the `Host` header must be exactly one of `127.0.0.1:<port>`, `localhost:<port>` or `[::1]:<port>`. Otherwise the response is 403. This defeats DNS rebinding, because a rebinding page sends its own hostname as Host. The check runs in `proxy.ts` (Next 16 proxy, no matcher) for pages, `/_next` assets and the API alike, so a rebinding page cannot read the wiki either; the API handlers repeat it inside `checkLocal`. Before the IP-9 review only `/api/approvals` was checked and every page answered any Host (reviewer finding, fixed 2026-10-09; `security.spec.ts`).
 3. **Origin check** (POST): `Origin` must be present and equal to `http://` + the `Host` value. If `Sec-Fetch-Site` is present, it must be `same-origin`. A missing Origin on POST gets 403.
 4. **Content type** (POST): `application/json` only. Anything else gets `415 UNSUPPORTED_MEDIA_TYPE`. Cross-site HTML forms cannot send this type without a CORS preflight, and the route answers no preflight: there is no OPTIONS handler and no CORS headers.
 5. **No CORS headers** are emitted at all.
 6. **Body size limit:** 16 KiB, checked against `Content-Length` and while reading the body. Over the limit: `400 BAD_REQUEST`.
+7. **No framing, same-origin subresources** (every route, `lib/security/policy.ts` through `headers()` in `next.config.ts`): `X-Frame-Options: DENY` and a `Content-Security-Policy` with `frame-ancestors 'none'`, `default-src 'self'`, `img-src 'self' data:`, `connect-src 'self'`, `object-src 'none'`, `base-uri 'self'`, `form-action 'self'` (scripts `'self' 'unsafe-inline'`, plus `'unsafe-eval'` under `next dev` only). Without it another origin could frame the app and turn one click into a same-origin approve POST that passes checks 2-4 (clickjacking), and a Mermaid label `<img src>` could make the browser contact another host. Both were demonstrated by the IP-9 review and are now covered by `security.spec.ts`. The Mermaid component also removes `<img>`/`<image>` elements with a non-`data:` source from the rendered SVG before inserting it.
 
-The guard is a pure function `checkLocal(req, port): GuardResult`, unit-tested with a header matrix ([ip-testing](ip-testing.md) §1).
+The guard is a pure function `checkLocal(req, port): GuardResult` (its Host part is `checkHost`, used by `proxy.ts` through `lib/security/hostGate.ts`), unit-tested with a header matrix ([ip-testing](ip-testing.md) §1).
 
 ## 4. Concurrency and atomicity
 

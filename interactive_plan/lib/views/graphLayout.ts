@@ -170,3 +170,32 @@ export function layoutTrace(g: Pick<TraceGraph, "nodes" | "edges">): Box[] {
   const maxRows = Math.max(TRACE_MIN_ROWS, counts[0], counts[1], counts[2]);
   return stackInBands([{ id: "trace", label: "", ids: g.nodes.map((n) => n.id) }], col, adjusted, maxRows).boxes;
 }
+
+/**
+ * Ids of the edges whose straight line would run behind another node (an edge that skips a rank in
+ * the same row, e.g. P6 -> P8 behind P7 on the roadmap). Those are drawn with route "below".
+ */
+export function edgesBehindNodes(boxes: readonly Box[], edges: readonly { id: string; from: string; to: string }[]): Set<string> {
+  const at = new Map(boxes.map((b) => [b.id, b] as const));
+  const out = new Set<string>();
+  for (const e of edges) {
+    const a = at.get(e.from);
+    const b = at.get(e.to);
+    if (!a || !b) continue;
+    const x1 = a.x + a.w;
+    const x2 = b.x;
+    const y1 = a.y + a.h / 2;
+    const y2 = b.y + b.h / 2;
+    for (const n of boxes) {
+      if (n.id === e.from || n.id === e.to || n.x + n.w <= Math.min(x1, x2) || n.x >= Math.max(x1, x2)) continue;
+      // the line's y where it crosses the node's horizontal centre
+      const t = x2 === x1 ? 0.5 : (n.x + n.w / 2 - x1) / (x2 - x1);
+      const y = y1 + (y2 - y1) * Math.min(1, Math.max(0, t));
+      if (y >= n.y && y <= n.y + n.h) {
+        out.add(e.id);
+        break;
+      }
+    }
+  }
+  return out;
+}

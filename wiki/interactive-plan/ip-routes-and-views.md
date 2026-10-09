@@ -72,7 +72,7 @@ flowchart TB
 - **Top bar:** the project name "Ferrum plan", nav links (Dashboard, Roadmap, Architecture, Decisions, Risks, Research, Wiki, Log, Approvals, Lint), a search box (`/` focuses it), the theme toggle, and a **pending-approvals counter** (PENDING + STALE + CHANGES_REQUESTED over the eligible keys of §3.11, linking to `/approvals`). A nav entry whose route a later build step adds is shown disabled, with the step in its tooltip, never as a link to a 404 (IP-6). The theme toggle has three states: System (follows `prefers-color-scheme`), Light and Dark.
 - **Global banners:**
   - red if `approvals.json` is invalid
-  - amber if lint reports errors (count, links to `/lint` and names the `npm run lint:wiki` command). The layout runs the same lint engine, memoised for 10 s on the file signature because the git-backed rules spawn git
+  - amber if lint reports errors (count, links to `/lint` and names the `npm run lint:wiki` command). The layout runs the same lint engine **without git** (ip-wiki-lint §3: the git-backed rules run only in the lint CLI; STALE-UPDATED shows its info line and RAW-IMMUTABLE uses the MANIFEST.sha256 fallback), memoised for 10 s on the file signature (decided 2026-10-09 in the IP-9 review; `/lint` names `npm run lint:wiki` for the git rules)
   - grey "read-only mode" when `PLAN_READONLY=1`
 - **Page shell** for every page-backed view:
   - title, id (copy button), type badge, status badge, `updated`, effective-approval badge
@@ -92,7 +92,7 @@ flowchart TB
 
 Cards, top to bottom:
 
-1. **Next action:** `STATUS.md` `next_action` (verbatim, monospace), `current_phase`, `current_task`, `session` and STATUS `status` (`active|blocked|awaiting-owner`). `blocked_on` renders as id links / `Q-NNN` anchors into `ov-open-questions`, shown prominently in amber.
+1. **Next action:** `STATUS.md` `next_action` (verbatim, monospace), `current_phase`, `current_task`, `session` and STATUS `status` (`active|blocked|awaiting-owner`). `blocked_on` renders as id links / `Q-NNN` anchors into `ov-open-questions`, shown prominently in amber. Below them, the STATUS body section whose heading contains "Next action" ([ip-data-contract](ip-data-contract.md) §5.1), rendered as Markdown with its links re-based to the repo root (added in the IP-9 review; it was computed but never shown).
 2. **Phase progress:** a horizontal strip of the 9 phases (P0–P8) in `order` (the denominator is 9, or the number of phase pages if that is larger). Each phase shows its status badge, milestone label (M1–M7) and `est_sessions`. Progress = phases `done` / 9. A second bar shows **sessions budget**: the sum of `est_sessions` for done phases over the total. It is labelled as a planning estimate. Task-level progress is not shown as a percentage, because task status is not stored on phase pages (SCHEMA §6.3). Instead the strip shows "last activity", the newest `code` log entry that mentions a `pN.M`.
 3. **Current phase gate:** the `entryGate` checklist for `STATUS.current_phase` (see [ip-data-contract](ip-data-contract.md) §8.3), with a link to the phase.
 4. **Approval status counts:** counts per effective state over all approvables, as stacked labelled numbers. Each count links to `/approvals?state=…`.
@@ -124,6 +124,11 @@ Decided 2026-10-09 (IP-8):
 - **Side panel:** it also lists the component's outgoing edges. Focus moves to its heading, and Close returns focus to the node.
 - **Components table:** a table of trust level, status, shipped and approval state follows the edge table.
 
+Decided 2026-10-09 (IP-9 review, the default view was unreadable: fit at scale 0.455 with 42 overlapping, clipped edge labels):
+
+- **Zoom:** the initial view never zooms out below 0.7 (`lib/views/viewport.ts`); a larger graph starts at its top-left corner and is panned. The zoom controls still allow zooming out by hand.
+- **Edge labels:** only the edges of the component under the pointer, in focus or open in the side panel show their full label; the others show a short marker (`TB`, `TRUST-EDGE`, `missing`) or nothing. The edge table keeps every label.
+
 ### 3.3 Roadmap `/roadmap`
 
 - **Phase DAG:** xyflow, nodes = phases ordered by `order`, edges = `depends_on`, coloured by status, with the critical path highlighted.
@@ -138,6 +143,7 @@ Decided 2026-10-09 (IP-8):
 - **Exit approval column:** uses the eligibility rule of §3.4, so a planned phase shows "not open".
 - **Timeline labels:** do not repeat a leading `P<order>` that the title already has.
 - **Per-phase table:** it is the text alternative of the DAG and the timeline.
+- **Zoom and routing (IP-9 review):** the DAG is shown at zoom ≥ 0.8 and panned sideways, in a pane only as tall as its rows need (it was fit at 0.40 in a mostly empty pane). An edge whose straight line would run behind another phase (P6 → P8 behind P7) leaves and enters at the bottom of the nodes (`edgesBehindNodes`).
 
 ### 3.4 Phase detail `/phases/[id]`
 
@@ -211,6 +217,8 @@ Decided 2026-10-09 (IP-8):
   - each diagram keeps a "show source" toggle
   - a render error shows the source and the error message; it never breaks the page
   - node ids that equal a page id with `-`→`_` (SCHEMA §14) get a tooltip linking to that page, wired after render, never with `click` directives
+  - IP-9 review: the rendered SVG is passed through `stripExternalResources` before insertion (mermaid's strict mode keeps `<img src>` in HTML labels, which made the browser contact another host), and the CSP `img-src 'self' data:` blocks such requests too ([ip-approvals-api](ip-approvals-api.md) §3 item 7)
+  - IP-9 review: a diagram keeps at least 0.8 of its native size (`MIN_SCALE`) and scrolls horizontally inside its figure instead of shrinking to 5-9 px text
 - **Frontmatter panel:** a readable key/value table with id references as links, and a "raw YAML" toggle.
 - **Integrity markers:** inline integrity tags (SCHEMA §7.1) are highlighted as amber chips linking to the target phase. `> **CONTRADICTION:**` blockquotes get a red border.
 - **Backlinks:** a list of pages whose frontmatter refs or body links point to this page, grouped by reference field (`related`, `depends_on`, `connects`, body link, …).
@@ -233,6 +241,7 @@ Decided 2026-10-09 (IP-8):
   - reciprocity mismatches (`REF-RECIPROCAL`)
 - **Filter:** pick one rq to show its subgraph only.
 - **Text alternative:** a nested list rq → hyp → exp → metrics/workloads.
+- **Nodes (IP-9 review):** one title line (full title as the tooltip) and one badge row, so the id line is never covered (40 of 72 real nodes clipped before); the initial zoom is at least 0.6.
 - A sankey diagram is **not** used. A graph shows many-to-many links and gaps more clearly, and it avoids an extra dependency.
 
 Decided 2026-10-09 (IP-8):

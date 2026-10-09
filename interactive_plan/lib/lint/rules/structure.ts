@@ -6,6 +6,7 @@
  */
 import { countsAsApproved, stateOf } from "../../approvals/state";
 import { finding, type LintFinding } from "../../wiki/findings";
+import { cycleNodes } from "../../wiki/cycles";
 import { dependencySet } from "../../wiki/gates";
 import type { WikiIndex, WikiPage } from "../../wiki/load";
 import type { ComponentPage, DecisionPage, Page } from "../../wiki/schemas";
@@ -38,9 +39,22 @@ export const adrChain: Rule = {
           }
         }
         // SCHEMA §10.4.3: approval counts as approved, or decided_by owner with a raw/ source.
-        const approved = countsAsApproved(stateOf(fm.id, approvals.approvals, idx));
+        const state = stateOf(fm.id, approvals.approvals, idx);
+        const approved = countsAsApproved(state);
         const ownerRaw = fm.decided_by === "owner" && fm.sources.some((s) => s.startsWith("raw/"));
-        if (!approved && !ownerRaw) {
+        // §10.4.3 case (b) keeps an owner ADR approvable so the owner can overturn it in the app;
+        // §10.4.4: once the owner rejected it (or requested changes) it must not stay accepted,
+        // whatever decided_by says (IP-9 review fix, adr-0022).
+        if (state === "REJECTED" || state === "CHANGES_REQUESTED") {
+          out.push(
+            finding(
+              "ADR-CHAIN",
+              p.repoPath,
+              `${fm.id} is accepted, but its approval state is ${state}: set status ${state === "REJECTED" ? "rejected and DECIDE again" : "proposed and revise it"} (SCHEMA §10.4.4)`,
+              { id: fm.id },
+            ),
+          );
+        } else if (!approved && !ownerRaw) {
           out.push(
             finding("ADR-CHAIN", p.repoPath, `${fm.id} is accepted without an approval and without decided_by: owner plus a raw/ source (SCHEMA §10.4.3)`, {
               id: fm.id,
@@ -68,6 +82,12 @@ export const phaseOrder: Rule = {
       if (n && Number(n[1]) !== order) out.push(finding("PHASE-ORDER", p.repoPath, `order ${order} differs from the N in ${id}`, { id }));
       for (const d of p.fm.depends_on) {
         const dp = byId.get(d);
+        // SCHEMA §6.3: depends_on lists phase ids. An id that resolves to another page type would read
+        // as `<id>#exit` (INVALID) in the entry gate and block it silently (IP-9 review fix).
+        const target = idx.byId.get(d);
+        if (!dp && target && target.fm?.type !== "phase") {
+          out.push(finding("PHASE-ORDER", p.repoPath, `depends on ${d}, which is a ${target.fm?.type ?? "page without valid frontmatter"}, not a phase (SCHEMA §6.3)`, { id }));
+        }
         if (dp && dp.fm.order >= order) {
           out.push(finding("PHASE-ORDER", p.repoPath, `depends on ${d} whose order ${dp.fm.order} is not lower than ${order}`, { id }));
         }
@@ -76,23 +96,9 @@ export const phaseOrder: Rule = {
     for (const [order, ids] of byOrder) {
       if (ids.length > 1) for (const id of ids) out.push(finding("PHASE-ORDER", byId.get(id)!.repoPath, `order ${order} is shared by ${ids.join(", ")}`, { id }));
     }
-    // Cycles (DFS, white/grey/black); each phase on a cycle is reported once.
-    const colour = new Map<string, 0 | 1 | 2>();
-    const onCycle = new Set<string>();
-    const stack: string[] = [];
-    const visit = (id: string) => {
-      colour.set(id, 1);
-      stack.push(id);
-      for (const d of byId.get(id)!.fm.depends_on) {
-        if (!byId.has(d)) continue;
-        const c = colour.get(d) ?? 0;
-        if (c === 1) for (const x of stack.slice(stack.indexOf(d))) onCycle.add(x);
-        else if (c === 0) visit(d);
-      }
-      stack.pop();
-      colour.set(id, 2);
-    };
-    for (const id of [...byId.keys()].sort()) if ((colour.get(id) ?? 0) === 0) visit(id);
+    // Cycles: every phase in a strongly connected component of size > 1 or with a self-loop, reported
+    // once (lib/wiki/cycles.ts, shared with the roadmap's phaseDag; IP-9 review fix).
+    const onCycle = cycleNodes([...byId.keys()].sort(), (id) => byId.get(id)!.fm.depends_on);
     for (const id of [...onCycle].sort()) out.push(finding("PHASE-ORDER", byId.get(id)!.repoPath, `${id} is on a depends_on cycle`, { id }));
     // Task ids are unique across all phases.
     const tasks = new Map<string, string[]>();

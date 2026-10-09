@@ -74,3 +74,14 @@ test("keyboard: Tab reaches the phase nodes and Enter opens one", async ({ page 
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL("/phases/phase-p1-fixture-build");
 });
+
+// IP-9 review: the DAG was fitted at scale 0.40 (5px text) in a mostly empty 358px pane.
+test("the phase DAG is shown at zoom >= 0.8 in a pane sized to its rows", async ({ page }) => {
+  await page.goto("/roadmap");
+  const dag = page.locator('[data-testid="phase-dag"]');
+  await expect(dag.locator(".react-flow__node-item")).toHaveCount(PHASES.length);
+  const scale = await dag.locator(".react-flow__viewport").evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).a);
+  expect(scale).toBeGreaterThanOrEqual(0.8 - 1e-6);
+  const paneH = await dag.evaluate((el) => el.getBoundingClientRect().height);
+  expect(paneH).toBeLessThanOrEqual(520);
+});

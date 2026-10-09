@@ -249,7 +249,11 @@ export const mermaidRules: Rule = {
     for (const p of bodyPages(idx)) {
       for (const b of mermaidBlocks(p.body, p.bodyStartLine)) {
         const problems: string[] = [];
+        const isSequence = /^\s*sequenceDiagram\b/.test(b.lines.find((l) => l.trim() !== "" && !l.trim().startsWith("%%")) ?? "");
         b.lines.forEach((l, k) => {
+          // mermaid's sequence grammar ends a statement at ';', so a ';' in message or note text is a
+          // parse error ("Diagram could not be rendered"; ov-arch-data-flows, IP-9 review).
+          if (isSequence && !l.trim().startsWith("%%") && /:.*;/.test(l.replace(/#\w+;/g, ""))) problems.push(`';' in sequence-diagram text ends the statement (line ${b.line + 1 + k})`);
           if (/^\s*click\s/.test(l)) problems.push(`click directive (line ${b.line + 1 + k})`);
           if (/%%\{\s*init/.test(l)) problems.push(`%%{init}%% override (line ${b.line + 1 + k})`);
           // HTML tags such as <br>, <b>, <i/>; not classDiagram annotations like <<trait>>.

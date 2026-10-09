@@ -92,7 +92,7 @@ export default async function DecisionsRoute({ searchParams }: PageProps<"/decis
           <tbody>
             {rows.map((r) => (
               <tr key={r.id} data-adr={r.id} data-state={r.state} className={r.awaiting ? "row-awaiting" : undefined}>
-                <td className="mono small">
+                <td className="mono small nowrap">
                   <a href={href(r.id)}>{r.id}</a>
                 </td>
                 <td>
@@ -103,7 +103,7 @@ export default async function DecisionsRoute({ searchParams }: PageProps<"/decis
                   <StatusBadge status={r.status} />
                 </td>
                 <td className="small">{r.decided_by === "owner" ? "owner-decided (confirm or overturn)" : "claude-proposed"}</td>
-                <td className="mono small">{r.date}</td>
+                <td className="mono small nowrap">{r.date}</td>
                 <td>{STATES.includes(r.state) ? <ApprovalBadge state={r.state} /> : <span className="muted small">{r.state}</span>}</td>
                 <td className="small">
                   {r.supersedes.length === 0 ? (

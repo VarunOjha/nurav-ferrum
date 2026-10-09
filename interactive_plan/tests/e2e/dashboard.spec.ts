@@ -53,6 +53,12 @@ test("next_action is shown verbatim with phase, task, session and status", async
   await expect(card).toContainText("p0.1");
   await expect(card).toContainText("s91");
   await expect(card).toContainText("active");
+  // ip-data-contract §5.1: the STATUS.md body section whose heading contains "Next action" (IP-9 review)
+  const section = card.getByTestId("next-action-section");
+  await expect(section).toBeVisible();
+  await expect(section.locator("ol li")).toHaveText("Run npm test.");
+  await expect(section.locator("code")).toHaveText("npm test");
+  await expect(section).not.toContainText("Last updated");
 });
 
 test("approval counts equal the fixture's expected counts and link to the inbox", async ({ page }) => {
@@ -66,8 +72,12 @@ test("approval counts equal the fixture's expected counts and link to the inbox"
   await page.locator("li[data-state='STALE'] a").click();
   await expect(page).toHaveURL("/approvals?state=STALE");
   await expect(page.getByRole("link", { name: /^Stale/ })).toHaveAttribute("aria-current", "page");
-  await expect(page.locator("tbody tr")).toHaveCount(1);
+  await expect(page.locator("tbody tr[data-key]")).toHaveCount(1);
   await expect(page.locator("tr[data-key='adr-0901']")).toHaveAttribute("data-state", "STALE");
+  // no snapshot in this record: the row says so and names the git command (§3.11, IP-9 review)
+  const note = page.locator("[data-testid='inbox-diff'][data-key='adr-0901']");
+  await note.locator("summary").click();
+  await expect(note.getByTestId("inbox-diff-note")).toContainText("git log -p --follow -- wiki/decisions/adr-0901-fixture-decision.md");
   await expect(page.getByTestId("orphans")).toContainText("adr-0999");
 });
 

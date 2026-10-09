@@ -24,7 +24,7 @@ approvable: false
 - session: s91
 - pages: [phase-p0-fixture-plan]
 - result: loader written
-- stales: [adr-0901]
+- stales: [adr-0901] (fixture note, with a comma, after the list)
 - commit: abc1234
 
 ## [2026-10-03] lint | fixture lint pass

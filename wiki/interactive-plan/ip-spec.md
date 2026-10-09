@@ -117,7 +117,7 @@ flowchart LR
   claude --> lib_lint
 ```
 
-- **Runtime:** `next start` (production build) or `next dev`, always started with `-H 127.0.0.1` on a fixed port (default `3417`, override with `PLAN_PORT`). All route handlers declare `export const runtime = 'nodejs'`.
+- **Runtime:** `next start` (production build) or `next dev`, always started with `-H 127.0.0.1` on a fixed port (default `3417`, override with `PLAN_PORT`; the npm scripts go through `scripts/serve.mjs`, ip-approvals-api §3). Every route sends `X-Frame-Options: DENY` and a same-origin Content-Security-Policy, and `proxy.ts` refuses any non-loopback `Host` ([ip-approvals-api](ip-approvals-api.md) §3). All route handlers declare `export const runtime = 'nodejs'`.
 - **File locations** come from environment variables. The defaults are relative to the app directory:
 
 | Variable | Default | Purpose |

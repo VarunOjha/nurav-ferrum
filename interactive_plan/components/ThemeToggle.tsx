@@ -3,7 +3,8 @@
  * Theme toggle (ip-routes-and-views §4): System / Light / Dark. "System" follows
  * prefers-color-scheme; Light and Dark set data-theme on <html> and persist in localStorage.
  */
-import { setChoice, useThemeChoice, type ThemeChoice } from "./theme";
+import { useEffect } from "react";
+import { readChoice, setChoice, useThemeChoice, type ThemeChoice } from "./theme";
 
 const OPTIONS: { value: ThemeChoice; label: string; icon: React.ReactNode }[] = [
   {
@@ -44,6 +45,13 @@ const OPTIONS: { value: ThemeChoice; label: string; icon: React.ReactNode }[] = 
 
 export default function ThemeToggle() {
   const choice = useThemeChoice();
+  // When React renders the root layout on the client (a 404 from notFound()), <html> loses the
+  // data-theme the pre-paint script set; re-apply the stored choice on mount (IP-9 review).
+  useEffect(() => {
+    const stored = readChoice();
+    const html = document.documentElement;
+    if (stored !== "system" && html.getAttribute("data-theme") !== stored) html.setAttribute("data-theme", stored);
+  }, []);
   return (
     <div className="theme-toggle" role="group" aria-label="Colour theme">
       {OPTIONS.map((o) => (

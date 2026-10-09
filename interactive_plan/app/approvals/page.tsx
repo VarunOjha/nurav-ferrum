@@ -5,10 +5,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ApproveBar from "@/components/ApproveBar";
 import { ApprovalBadge, TypeBadge } from "@/components/Badges";
+import BootstrapSection from "@/components/BootstrapSection";
 import Markdown from "@/components/Markdown";
 import ReviewKeys from "@/components/ReviewKeys";
+import SnapshotDiffView from "@/components/SnapshotDiffView";
 import type { ApprovalItem } from "@/lib/approvals/view";
 import { approveBarProps } from "@/lib/server/approveBar";
+import { readBootstrap } from "@/lib/server/bootstrap";
+import { snapshotDiff, type SnapshotDiff } from "@/lib/server/snapshot";
 import { config, getApprovals, getIndex } from "@/lib/server/data";
 import { chooseTab, eligibleItems, filterItems, groupByPhase, lastDecision, reviewCursor, TABS, waveKeys, wavePhase, type TabId } from "@/lib/views/inbox";
 import { linkTargetInfo } from "@/lib/wiki/load";
@@ -27,12 +31,13 @@ const href = (tab: TabId, extra: Record<string, string> = {}) => {
   return `/approvals?${q.toString()}`;
 };
 
-function Row({ it, fmPhase, openHref }: { it: ApprovalItem; fmPhase: string | null; openHref: string }) {
+function Row({ it, fmPhase, openHref, diff }: { it: ApprovalItem; fmPhase: string | null; openHref: string; diff: SnapshotDiff | null }) {
   const last = lastDecision(it.record);
   const changed = it.state === "STALE" || it.state === "APPROVED_VOLATILE_DRIFT";
   return (
+    <>
     <tr data-key={it.key} data-state={it.state}>
-      <td>
+      <td className="nowrap">
         <a href={openHref} className="mono">
           {it.key}
         </a>
@@ -41,7 +46,7 @@ function Row({ it, fmPhase, openHref }: { it: ApprovalItem; fmPhase: string | nu
         <TypeBadge type={it.exit ? "milestone exit" : it.type} />
       </td>
       <td>{it.title ?? <span className="muted">untitled</span>}</td>
-      <td className="mono small">{fmPhase ?? ""}</td>
+      <td className="mono small nowrap">{fmPhase ?? ""}</td>
       <td>
         <ApprovalBadge state={it.state} />
         {it.moved && <span className="muted small"> (moved)</span>}
@@ -58,6 +63,14 @@ function Row({ it, fmPhase, openHref }: { it: ApprovalItem; fmPhase: string | nu
       </td>
       <td className="small">{last?.comment ?? ""}</td>
     </tr>
+    {changed && diff && (
+      <tr className="inbox-diff-row" data-diff-for={it.key}>
+        <td colSpan={7}>
+          <SnapshotDiffView diff={diff} itemKey={it.key} />
+        </td>
+      </tr>
+    )}
+    </>
   );
 }
 
@@ -98,7 +111,8 @@ export default async function ApprovalsRoute({ searchParams }: PageProps<"/appro
     const cur = reviewCursor(list.length, one(sp.i));
     const it = cur ? list[cur.i] : null;
     const page = it ? idx.byId.get(it.id) : undefined;
-    const bar = it ? await approveBarProps(it, it.exit ? "Milestone exit" : "Page approval", cfg, idx.bootstrapHash) : null;
+    const bootstrap = it?.key === "schema" ? await readBootstrap(cfg) : null;
+    const bar = it ? await approveBarProps(it, it.exit ? "Milestone exit" : "Page approval", cfg, bootstrap?.hash ?? null) : null;
     const info = linkTargetInfo(idx);
     const prevHref = cur && cur.prev !== null ? href(tab, { review: "1", i: String(cur.prev) }) : null;
     const nextHref = cur && cur.next !== null ? href(tab, { review: "1", i: String(cur.next) }) : null;
@@ -141,6 +155,7 @@ export default async function ApprovalsRoute({ searchParams }: PageProps<"/appro
                 <a href={openHref(it)}>Open the full page view</a> · <code>{it.path}</code>
               </p>
               <Markdown source={page.body} path={page.path} exists={info.exists} knownIds={new Set(idx.byId.keys())} />
+              {bootstrap && <BootstrapSection source={bootstrap.source} hash={bootstrap.hash} exists={info.exists} knownIds={new Set(idx.byId.keys())} />}
             </div>
             <aside className="review-side" aria-label="Approve bar">
               <ApproveBar {...bar} />
@@ -152,6 +167,8 @@ export default async function ApprovalsRoute({ searchParams }: PageProps<"/appro
   }
 
   const groups = groupByPhase(idx, list);
+  // §3.11: STALE and drift rows carry their diff since approval (or the no-snapshot note).
+  const diffs = new Map<string, SnapshotDiff | null>(await Promise.all(list.map(async (it) => [it.key, await snapshotDiff(it, cfg)] as const)));
   const wp = wavePhase(idx);
   return (
     <article className="page page-wide">
@@ -207,7 +224,7 @@ export default async function ApprovalsRoute({ searchParams }: PageProps<"/appro
                 </thead>
                 <tbody>
                   {g.items.map((it) => (
-                    <Row key={it.key} it={it} fmPhase={fmPhase(it)} openHref={openHref(it)} />
+                    <Row key={it.key} it={it} fmPhase={fmPhase(it)} openHref={openHref(it)} diff={diffs.get(it.key) ?? null} />
                   ))}
                 </tbody>
               </table>

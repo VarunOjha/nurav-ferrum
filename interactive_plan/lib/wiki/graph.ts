@@ -3,6 +3,7 @@
  * riskMatrix. All pure: they read the loaded WikiIndex only (no fs, no approvals). Only zod-valid pages
  * whose id is unique (`byId.get(id) === page`) take part; invalid pages are reported by the lint.
  */
+import { cycleNodes } from "./cycles";
 import { reciprocalFindings } from "../lint/rules/refs";
 import type { WikiIndex, WikiPage } from "./load";
 import type { ComponentPage, PhasePage } from "./schemas";
@@ -183,35 +184,12 @@ export function phaseDag(idx: Idx): PhaseDag {
     deps.set(p.id, ds);
   }
 
-  // Cycle detection (iterative DFS colouring; every node on a back-edge cycle is collected).
-  const cycle = new Set<string>();
-  const colour = new Map<string, 0 | 1 | 2>();
-  const stack: string[] = [];
-  const visit = (start: string) => {
-    const work: { id: string; i: number }[] = [{ id: start, i: 0 }];
-    colour.set(start, 1);
-    stack.push(start);
-    while (work.length) {
-      const top = work[work.length - 1];
-      const ds = deps.get(top.id)!;
-      if (top.i < ds.length) {
-        const d = ds[top.i++];
-        const c = colour.get(d) ?? 0;
-        if (c === 0) {
-          colour.set(d, 1);
-          stack.push(d);
-          work.push({ id: d, i: 0 });
-        } else if (c === 1) {
-          for (let k = stack.lastIndexOf(d); k < stack.length; k++) cycle.add(stack[k]);
-        }
-      } else {
-        colour.set(top.id, 2);
-        stack.pop();
-        work.pop();
-      }
-    }
-  };
-  for (const p of list) if (!colour.get(p.id)) visit(p.id);
+  // Cycle detection: every phase in a strongly connected component of size > 1, or with a self-loop
+  // (lib/wiki/cycles.ts, shared with the PHASE-ORDER lint rule).
+  const cycle = cycleNodes(
+    list.map((p) => p.id),
+    (id) => deps.get(id) ?? [],
+  );
 
   // Schedule: start = max(end(dep)); phases on or depending on a cycle stay unscheduled.
   const schedule = new Map<string, ScheduleSlot>();

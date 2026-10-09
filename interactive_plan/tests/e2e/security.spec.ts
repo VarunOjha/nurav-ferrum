@@ -7,6 +7,9 @@
 //   shows the read-only banner, disables the approve buttons and answers a valid POST with 403 READ_ONLY.
 // - Bind: neither server accepts connections on any non-loopback address of this machine (repeats IP-1
 //   spike S3 from another interface's address, ip-approvals-api §3 item 1).
+// - IP-9 review fixes: every route answers a spoofed Host with 403 (proxy.ts, DNS rebinding) and sends
+//   X-Frame-Options DENY + CSP frame-ancestors 'none'; a page on another origin that frames the app and
+//   clicks the approve button gets a blocked frame and sends no POST (clickjacking).
 // Raw requests go through node:http so the Host header is exactly what the test sets.
 import http from "node:http";
 import net from "node:net";
@@ -144,6 +147,78 @@ test.describe("guard (port 3418)", () => {
   });
 });
 
+test.describe("every route: Host allowlist and security headers (IP-9 review)", () => {
+  const ROUTES = ["/", "/wiki", FX.rawPath, FX.adrPath, "/approvals", "/log", "/lint", "/search?q=a", "/decisions", "/roadmap", "/research", "/architecture", "/risks", `/go/${FX.adr}`, "/no-such-page", "/favicon.ico"];
+
+  test("a spoofed Host (DNS rebinding) gets 403 on every page route and leaks no wiki content", async () => {
+    for (const route of ROUTES) {
+      const r = await raw(PORT, "GET", route, { Host: `attacker.example:${PORT}` });
+      expect(r.status, route).toBe(403);
+      expect(r.body, route).toMatch(/^403 FORBIDDEN_ORIGIN/);
+      expect(r.body, route).not.toContain(FX.bodyWord);
+      expect(r.headers["x-frame-options"], route).toBe("DENY");
+    }
+    // a loopback Host with the wrong port is refused too
+    expect((await raw(PORT, "GET", "/wiki", { Host: "127.0.0.1:3417" })).status).toBe(403);
+  });
+
+  test("a static asset with a spoofed Host gets 403 as well", async ({ page }) => {
+    await page.goto("/wiki");
+    const asset = await page.evaluate(() => Array.from(document.scripts).map((s) => s.src).find((src) => src.includes("/_next/static/")) ?? null);
+    expect(asset).not.toBeNull();
+    const p = new URL(asset!).pathname;
+    expect((await raw(PORT, "GET", p, { Host: `127.0.0.1:${PORT}` })).status).toBe(200);
+    expect((await raw(PORT, "GET", p, { Host: `attacker.example:${PORT}` })).status).toBe(403);
+  });
+
+  test("loopback Hosts are served, with X-Frame-Options DENY and a same-origin CSP (control)", async () => {
+    for (const host of [`127.0.0.1:${PORT}`, `localhost:${PORT}`]) {
+      for (const route of ["/", FX.adrPath, "/api/approvals"]) {
+        const r = await raw(PORT, "GET", route, { Host: host });
+        expect(r.status, `${host}${route}`).toBe(200);
+        expect(r.headers["x-frame-options"], route).toBe("DENY");
+        const csp = String(r.headers["content-security-policy"]);
+        for (const d of ["frame-ancestors 'none'", "img-src 'self' data:", "connect-src 'self'", "default-src 'self'"]) expect(csp, route).toContain(d);
+      }
+    }
+  });
+
+  test("clickjacking: another origin cannot frame the app, and a click on the frame sends no POST", async ({ page }) => {
+    const attacker = http.createServer((_req, res) => {
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(
+        `<!doctype html><html><body style="margin:0"><button id="bait" style="position:absolute;left:0;top:0;width:1360px;height:900px">Win a prize</button>` +
+          `<iframe id="victim" src="${ORIGIN}${FX.adrView}" style="position:absolute;left:0;top:0;width:1360px;height:900px;opacity:0.01;border:0;z-index:2"></iframe></body></html>`,
+      );
+    });
+    await new Promise<void>((resolve) => attacker.listen(0, "127.0.0.1", () => resolve()));
+    const aport = (attacker.address() as net.AddressInfo).port;
+    const posts: string[] = [];
+    const frameDocs: { url: string; status: number }[] = [];
+    page.on("request", (r) => {
+      if (r.method() === "POST") posts.push(r.url());
+    });
+    page.on("response", (r) => {
+      if (r.request().resourceType() === "document" && r.url().startsWith(ORIGIN)) frameDocs.push({ url: r.url(), status: r.status() });
+    });
+    try {
+      await page.goto(`http://localhost:${aport}/`);
+      await expect.poll(() => frameDocs.length).toBeGreaterThan(0);
+      // The browser refused to render the framed document: the frame holds no app content at all.
+      const frame = page.frames().find((f) => f !== page.mainFrame());
+      expect(frame).toBeDefined();
+      const appNodes = await frame!.evaluate(() => document.querySelectorAll("[data-testid='approve-bar'], .topbar").length).catch(() => 0);
+      expect(appNodes).toBe(0);
+      // Click everywhere the approve button could be.
+      for (const [x, y] of [[200, 300], [400, 500], [680, 450], [100, 800]]) await page.mouse.click(x, y);
+      await page.waitForLoadState("networkidle");
+      expect(posts).toEqual([]);
+    } finally {
+      await new Promise<void>((resolve) => attacker.close(() => resolve()));
+    }
+  });
+});
+
 test.describe("PLAN_READONLY=1 (port 3419, same build and fixture)", () => {
   test("the API reports readonly and refuses a valid POST with 403 READ_ONLY", async () => {
     const get = await raw(RO_PORT, "GET", "/api/approvals", { Host: `127.0.0.1:${RO_PORT}` });
@@ -209,13 +284,24 @@ function probe(host: string, port: number): Promise<string> {
   });
 }
 
+/** IP_REQUIRE_BIND_PROBE=1 (gate runs) turns "nothing to probe from" into a failure; otherwise it is a
+ * visible skip, so `npm run verify` on an offline machine is not red for a reason unrelated to the code. */
+const REQUIRE_BIND_PROBE = process.env.IP_REQUIRE_BIND_PROBE === "1";
+
+function noProbe(reason: string): void {
+  if (REQUIRE_BIND_PROBE) expect(false, `${reason} (IP_REQUIRE_BIND_PROBE=1)`).toBe(true);
+  test.info().annotations.push({ type: "skip-reason", description: reason });
+  console.log(`bind probe: SKIPPED: ${reason}`);
+  test.skip(true, reason);
+}
+
 test("bind: both servers accept 127.0.0.1 and refuse every non-loopback address of this machine", async () => {
   test.setTimeout(120_000);
   expect(await probe("127.0.0.1", PORT)).toBe("open");
   expect(await probe("127.0.0.1", RO_PORT)).toBe("open");
   const addrs = externalAddresses();
   console.log(`bind probe: non-loopback addresses: ${addrs.join(", ") || "none"}`);
-  expect(addrs.length, "this machine has no non-loopback address to probe from").toBeGreaterThan(0);
+  if (addrs.length === 0) return noProbe("this machine has no non-loopback address to probe from");
 
   // Control: a throwaway listener on every interface (:: dual-stack) must be reachable on each address,
   // so a refusal below means "not listening there", not "this address is unreachable from here".
@@ -234,7 +320,7 @@ test("bind: both servers accept 127.0.0.1 and refuse every non-loopback address 
     await new Promise<void>((resolve) => ctl.close(() => resolve()));
   }
   // At least the IPv4 LAN/vEthernet addresses must pass the control, or the check proves nothing.
-  expect(reachable.filter((a) => net.isIPv4(a)).length, "no IPv4 address passed the control probe").toBeGreaterThan(0);
+  if (reachable.filter((a) => net.isIPv4(a)).length === 0) return noProbe("no IPv4 address passed the control probe");
 
   const results = await Promise.all(
     reachable.flatMap((a) => [PORT, RO_PORT].map(async (port) => [a, port, await probe(a, port)] as const)),

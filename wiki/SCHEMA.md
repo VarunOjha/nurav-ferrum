@@ -432,7 +432,7 @@ Resume/handoff protocol, toolchain setup, git workflow, lint procedure, plan-app
 | phase | `^phase-p[0-8]-[a-z0-9-]+$` | Fixed: `phase-p0-planning`, `phase-p1-foundation`, `phase-p2-minimal-container`, `phase-p3-tabs-sessions`, `phase-p4-security`, `phase-p5-telemetry`, `phase-p6-benchmark-harness`, `phase-p7-lifecycle`, `phase-p8-research-paper` |
 | task (inside phase) | `^p[0-8]\.[0-9]+$` | `p1.4` |
 | component | `^comp-[a-z0-9-]+$` | Fixed: `comp-app-shell, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-core, comp-benchmark-harness, comp-research-analysis, comp-baseline-app, comp-webview2-runtime, comp-interactive-plan`. Modelling nodes added by the architecture area (2026-10-08): `comp-tab-content` (untrusted web content), `comp-windows-os` and `comp-competitor-browsers` (external) |
-| decision | `^adr-[0-9]{4}$` | `adr-0001` … `adr-0021` registered; next free `adr-0022` (always confirm with `ls wiki/decisions/adr-*.md`, sorted, last entry) |
+| decision | `^adr-[0-9]{4}$` | `adr-0001` … `adr-0022` registered; next free `adr-0023` (always confirm with `ls wiki/decisions/adr-*.md`, sorted, last entry) |
 | risk | `^risk-r[0-9]{2,}$` | `risk-r01` … `risk-r25` registered; next free `risk-r26` |
 | research-question | `^rq-[0-9]{2,}$` | `rq-01` |
 | hypothesis | `^hyp-[0-9]{2,}$` | `hyp-01` |
@@ -510,6 +510,7 @@ Run at the end of every session (inside HANDOFF), at every phase gate, and after
 | `Q-FORMAT` | error | An `ov-open-questions` section lacks `- status:` or has an unparsable `- blocking:` list. The checker then treats that question as **open and blocking every phase** (fail closed) |
 | `Q-BLOCK-UNGATED` | warn | A `Q-NNN` `blocking` id is in no phase's dependency set (e.g. a risk id), so it gates nothing; list the phase id instead |
 | `PHASE-DONE-NO-EXIT` | warn | A phase has `status: done` but key `<phase-id>#exit` is not APPROVED |
+| `APPROVAL-INVALID` | error | An `approvals.json` key whose state is INVALID (§10.3: page missing or `approvable: false`, or a `#exit` key on a non-phase page), or an invalid or unreadable `approvals.json` ([adr-0022](decisions/adr-0022-approval-invalid-is-a-lint-error.md)) |
 
 [ip-wiki-lint](interactive-plan/ip-wiki-lint.md) proposes further codes derived from MUST rules in this file (e.g. `ADR-SECTIONS`, `FM-YAML-SUBSET`). Until they are added to this table they report as **warn** only.
 

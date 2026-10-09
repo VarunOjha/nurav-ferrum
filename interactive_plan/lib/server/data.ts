@@ -2,7 +2,9 @@
  * Per-request data access for the server components (ip-spec §5.3 "pure logic, thin pages"). React
  * `cache()` dedupes the loads inside one request (layout + page); the loader's own mtime cache keeps
  * re-parsing to changed files only. The lint report is memoised for a few seconds on the file
- * signature, because the git-backed rules spawn git (ip-wiki-lint §3).
+ * signature. It runs WITHOUT git (ip-wiki-lint §3: the git-backed rules run in the lint CLI, never
+ * in the request path; decided 2026-10-09 in the IP-9 review): STALE-UPDATED reports its info line
+ * and RAW-IMMUTABLE falls back to wiki/raw/MANIFEST.sha256.
  */
 import { statSync } from "node:fs";
 import path from "node:path";
@@ -46,7 +48,7 @@ export const getLint = cache(async (): Promise<LintReport> => {
   const sig = [idx.pages.map((p) => `${p.path}:${p.mtimeMs}:${p.size}`).join("|"), fileSig(cfg.approvalsFile)].join("#");
   const now = Date.now();
   if (lintMemo && lintMemo.sig === sig && now - lintMemo.at < LINT_TTL_MS) return lintMemo.report;
-  const report = runLint(await buildLintContext(cfg));
+  const report = runLint(await buildLintContext(cfg, { git: false }));
   lintMemo = { sig, at: now, report };
   return report;
 });

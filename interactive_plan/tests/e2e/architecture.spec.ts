@@ -22,6 +22,13 @@ test("node count equals the fixture components; TB edge has the TB marker; edge 
 
   const tb = page.locator(`${graph} .react-flow__edge.fg-edge-tb`);
   await expect(tb).toHaveCount(1);
+  // IP-9 review: only a short marker until an endpoint is hovered, focused or opened; then the full label
+  await expect(tb).toHaveText("TB");
+  await page.locator(`${graph} [data-node-id='comp-fixture-shell']`).hover();
+  await expect(tb).toContainText("TB · creates (rust-api)");
+  await page.mouse.move(1, 1);
+  await expect(tb).toHaveText("TB");
+  await page.locator(`${graph} [data-node-id='comp-fixture-content'] .fg-hit`).focus();
   await expect(tb).toContainText("TB · creates (rust-api)");
   await expect(page.locator(`${graph} .react-flow__edge.fg-edge-bad`)).toHaveCount(0);
 
@@ -96,4 +103,16 @@ test("filters: only trust-boundary edges, hide not-shipped, edge kind", async ({
   await page.getByRole("link", { name: "Clear filters" }).click();
   await expect(page).toHaveURL("/architecture");
   await expect(page.getByTestId("edge-table").locator("tbody tr")).toHaveCount(1);
+});
+
+// IP-9 review: the graph was fitted at scale 0.455 (0.15 on a phone), which shrank the node text to ~7px.
+test("the initial zoom is never below 0.7, also on a phone-width viewport", async ({ page }) => {
+  for (const width of [1360, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/architecture");
+    await expect(page.locator(`${graph} .react-flow__node-item`)).toHaveCount(2);
+    const scale = await page.locator(`${graph} .react-flow__viewport`).evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).a);
+    expect(scale, `width ${width}`).toBeGreaterThanOrEqual(0.7 - 1e-6);
+    expect(scale, `width ${width}`).toBeLessThanOrEqual(1 + 1e-6);
+  }
 });

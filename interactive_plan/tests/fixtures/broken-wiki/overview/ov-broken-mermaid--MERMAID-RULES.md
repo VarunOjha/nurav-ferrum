@@ -24,3 +24,9 @@ classDiagram
     <<trait>>
   }
 ```
+
+```mermaid
+sequenceDiagram
+  A->>B: one; two
+  A->>B: escaped #59; is fine
+```

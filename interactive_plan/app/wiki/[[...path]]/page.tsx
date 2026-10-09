@@ -6,10 +6,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ApproveBar from "@/components/ApproveBar";
 import { StatusBadge, TypeBadge } from "@/components/Badges";
+import BootstrapSection from "@/components/BootstrapSection";
 import Markdown from "@/components/Markdown";
 import { Backlinks, FindingsBanner, FrontmatterPanel, PageHeader, SourcesAndRelated } from "@/components/wiki/PageParts";
 import WikiTree from "@/components/wiki/WikiTree";
 import { approveBarProps } from "@/lib/server/approveBar";
+import { readBootstrap } from "@/lib/server/bootstrap";
 import { config, getApprovals, getIndex, getLint } from "@/lib/server/data";
 import { backlinkGroups } from "@/lib/wiki/backlinks";
 import type { LintFinding } from "@/lib/wiki/findings";
@@ -86,7 +88,9 @@ async function PageView({ idx, page }: { idx: WikiIndex; page: WikiPage }) {
   const approvals = view && page.id ? view.items.filter((i) => i.id === page.id) : [];
   const isRaw = page.kind === "raw" || page.kind === "raw-research";
   const pageItem = approvals.find((a) => !a.exit) ?? null;
-  const bar = !isRaw && pageItem ? await approveBarProps(pageItem, "Page approval", config(), idx.bootstrapHash) : null;
+  // The schema page also renders root CLAUDE.md; the bar sends the hash of exactly that text (ip-data-contract §6.2).
+  const bootstrap = !isRaw && page.id === "schema" ? await readBootstrap(config()) : null;
+  const bar = !isRaw && pageItem ? await approveBarProps(pageItem, "Page approval", config(), bootstrap?.hash ?? null) : null;
   const typed = pageHref(page);
   return (
     <article className="page" data-kind={page.kind}>
@@ -113,6 +117,12 @@ async function PageView({ idx, page }: { idx: WikiIndex; page: WikiPage }) {
       <div className="page-body">
         <Markdown source={page.body} path={page.path} exists={info.exists} knownIds={new Set(idx.byId.keys())} />
       </div>
+      {bootstrap && <BootstrapSection source={bootstrap.source} hash={bootstrap.hash} exists={info.exists} knownIds={new Set(idx.byId.keys())} />}
+      {page.id === "schema" && !isRaw && !bootstrap && (
+        <p className="banner banner-red" role="alert">
+          Root <code>CLAUDE.md</code> is missing or unreadable, so <code>schema</code> cannot be approved (SCHEMA §10.2).
+        </p>
+      )}
       {page.id && <Backlinks groups={backlinkGroups(idx, page.id)} known={known} />}
     </article>
   );

@@ -100,6 +100,9 @@ export default async function ArchitectureRoute({ searchParams }: PageProps<"/ar
     from: e.from,
     to: e.to,
     label: edgeLabel(e),
+    // Full labels show for the hovered, focused or opened component (they overlapped at any zoom when
+    // all 42 were drawn, IP-9 review); the others keep a short marker. The edge table has every label.
+    short: e.trustEdgeError ? "TRUST-EDGE" : e.dangling ? "missing" : e.crossesTrustBoundary ? "TB" : undefined,
     classes: [e.crossesTrustBoundary ? "fg-edge-tb" : "", e.trustEdgeError || e.dangling ? "fg-edge-bad" : ""].filter(Boolean),
   }));
   const height = Math.min(760, Math.max(360, (lanes.at(-1) ? lanes.at(-1)!.y + lanes.at(-1)!.h : 0) * 0.75 + 80));
@@ -153,13 +156,16 @@ export default async function ArchitectureRoute({ searchParams }: PageProps<"/ar
         <li>
           <span className="legend-box legend-dotted" aria-hidden="true" /> dotted border: not shipped
         </li>
-        <li>Lanes: trust level. Tab moves through the components; Enter opens the details panel.</li>
+        <li>
+          Lanes: trust level. Edge labels show for the component under the pointer, in focus or open in the panel; the table below lists all of them.
+          Drag to pan. Tab moves through the components; Enter opens the details panel.
+        </li>
       </ul>
 
       {nodes.length === 0 ? (
         <p className="muted">No component pages{filtered ? " match the filters" : ""}.</p>
       ) : (
-        <LazyFlowGraph nodes={specs} edges={edgeSpecs} label="Component graph" height={height} testId="arch-graph" />
+        <LazyFlowGraph nodes={specs} edges={edgeSpecs} label="Component graph" height={height} testId="arch-graph" fitMinZoom={0.7} labelMode="active" />
       )}
 
       <section className="panel" aria-labelledby="edges-title">

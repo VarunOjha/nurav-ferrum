@@ -154,6 +154,7 @@ export default async function LogPage({ searchParams }: PageProps<"/log">) {
                         <dt>pages</dt>
                         <dd>
                           <IdLinks ids={e.pages} known={known} />
+                          {e.notes?.pages && <span className="muted small log-list-note"> {e.notes.pages}</span>}
                         </dd>
                       </div>
                     )}
@@ -162,6 +163,12 @@ export default async function LogPage({ searchParams }: PageProps<"/log">) {
                         <dt>stales</dt>
                         <dd>
                           <IdLinks ids={e.stales} known={known} />
+                          {e.notes?.stales && (
+                            <span className="muted small log-list-note" data-testid="stales-note">
+                              {" "}
+                              {e.notes.stales}
+                            </span>
+                          )}
                         </dd>
                       </div>
                     )}

@@ -60,6 +60,8 @@ def state(key):
     pid = key.split('#')[0]
     if pid not in pages or pages[pid][1].get('approvable') != 'true':
         return 'INVALID' if key in approvals else 'PENDING' if pid in pages else 'INVALID'
+    if key.endswith('#exit') and pages[pid][1].get('type') != 'phase':  # SCHEMA §10.3, as the plan app
+        return 'INVALID'
     e = approvals.get(key)
     if not e:
         return 'PENDING'

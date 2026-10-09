@@ -41,7 +41,7 @@ export const approvalStale: Rule = {
 
 export const approvalInvalid: Rule = {
   code: "APPROVAL-INVALID",
-  severity: "warn",
+  severity: "error",
   run({ idx, approvals, approvalsPath }) {
     if (!approvals.valid) {
       return [finding("APPROVAL-INVALID", approvalsPath, `approvals file is invalid (${approvals.error ?? "unknown error"}); every state reads INVALID`)];

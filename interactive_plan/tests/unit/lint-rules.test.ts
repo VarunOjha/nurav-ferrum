@@ -107,7 +107,8 @@ describe("broken-wiki (golden)", () => {
     ]);
     expect(of("MERMAID-RULES").map((f) => f.message)).toEqual([
       "mermaid block: HTML in a label (line 17); click directive (line 18) (SCHEMA §14)",
-    ]); // the classDiagram <<trait>> block is clean
+      "mermaid block: ';' in sequence-diagram text ends the statement (line 30) (SCHEMA §14)",
+    ]); // the classDiagram <<trait>> block is clean; the `#59;` entity on line 31 is not a ';' (IP-9 review)
     expect(of("REF-DANGLING").map((f) => f.message)).toEqual([
       "body link adr-0999-does-not-exist.md points to a missing file",
       "body link #no-such-heading: no heading with anchor #no-such-heading",
@@ -131,9 +132,9 @@ describe("broken-wiki (golden)", () => {
   });
 
   it("summary and report format", () => {
-    expect(report.summary).toEqual({ errors: 49, warnings: 20, info: 4, pages: 58 });
+    expect(report.summary).toEqual({ errors: 49, warnings: 21, info: 4, pages: 58 });
     const text = formatReport(report).split("\n");
-    expect(text[text.length - 1]).toBe("lint: 49 errors, 20 warnings, 4 info (pages: 58)");
+    expect(text[text.length - 1]).toBe("lint: 49 errors, 21 warnings, 4 info (pages: 58)");
     expect(text[0]).toMatch(/^ERROR [A-Z-]+ wiki\/\S+ {2}\S/);
     expect(text).toContain("ERROR LOG-FORMAT wiki/log.md:19  entry dated 2026-10-01 follows an entry dated 2026-10-02");
     // sorted by severity, then path, then line
@@ -228,8 +229,50 @@ describe("approval-dependent rules (temp mini-wiki copy, in-memory approvals)", 
     ]);
     const bad = await lint({}, { valid: false });
     expect(codesOf(bad, "APPROVAL-INVALID")).toEqual([
-      ["warn", "plan/approvals.json", "approvals file is invalid (invalid JSON: x); every state reads INVALID"],
+      ["error", "plan/approvals.json", "approvals file is invalid (invalid JSON: x); every state reads INVALID"],
     ]);
+    // SCHEMA §10.3 "INVALID: lint error" (adr-0022, IP-9 review): every finding is an error, so the run is not clean
+    expect(codesOf(fs, "APPROVAL-INVALID").map((x) => x[0])).toEqual(["error", "error", "error"]);
+    expect(fs.filter((f) => f.severity === "error").map((f) => f.code)).toContain("APPROVAL-INVALID");
+  });
+
+  // IP-9 review: an owner-decided (case (b)) ADR that the owner then REJECTED or sent back must not stay accepted.
+  it("ADR-CHAIN: an accepted decided_by owner ADR with a raw/ source is flagged once REJECTED or CHANGES_REQUESTED", async () => {
+    t.edit("decisions/adr-0901-fixture-decision.md", "status: proposed", "status: accepted");
+    t.edit("decisions/adr-0901-fixture-decision.md", "decided_by: claude-proposed", "decided_by: owner");
+    try {
+      // case (b): PENDING (no record) and STALE keep the exemption
+      expect(codesOf(await lint({}), "ADR-CHAIN")).toEqual([]);
+      for (const status of ["rejected", "changes-requested"] as const) {
+        const fs = await lint((idx) => ({ "adr-0901": recordFor(idx.byId.get("adr-0901")!, { status }) }));
+        const msgs = codesOf(fs, "ADR-CHAIN");
+        expect(msgs, status).toHaveLength(1);
+        expect(msgs[0][0]).toBe("error");
+        expect(msgs[0][2]).toMatch(status === "rejected" ? /approval state is REJECTED: set status rejected/ : /approval state is CHANGES_REQUESTED/);
+      }
+    } finally {
+      t.edit("decisions/adr-0901-fixture-decision.md", "decided_by: owner", "decided_by: claude-proposed");
+      t.edit("decisions/adr-0901-fixture-decision.md", "status: accepted", "status: proposed");
+    }
+  });
+
+  // IP-9 review: depends_on must list phases (SCHEMA §6.3); an ADR id there blocked the entry gate silently.
+  it("PHASE-ORDER: a depends_on id that resolves to a non-phase page is an error; cycles are found by SCC", async () => {
+    t.edit("phases/phase-p1-fixture-build.md", "depends_on: [phase-p0-fixture-plan]", "depends_on: [phase-p0-fixture-plan, adr-0901]");
+    try {
+      const msgs = codesOf(await lint({}), "PHASE-ORDER");
+      expect(msgs).toEqual([["error", "wiki/phases/phase-p1-fixture-build.md", "depends on adr-0901, which is a decision, not a phase (SCHEMA §6.3)"]]);
+    } finally {
+      t.edit("phases/phase-p1-fixture-build.md", "depends_on: [phase-p0-fixture-plan, adr-0901]", "depends_on: [phase-p0-fixture-plan]");
+    }
+    t.edit("phases/phase-p0-fixture-plan.md", "depends_on: []", "depends_on: [phase-p0-fixture-plan]");
+    try {
+      const msgs = codesOf(await lint({}), "PHASE-ORDER").map((x) => x[2]);
+      expect(msgs).toContain("phase-p0-fixture-plan is on a depends_on cycle");
+      expect(msgs).not.toContain("phase-p1-fixture-build is on a depends_on cycle");
+    } finally {
+      t.edit("phases/phase-p0-fixture-plan.md", "depends_on: [phase-p0-fixture-plan]", "depends_on: []");
+    }
   });
 
   it("STATUS-APPROVED and ADR-CHAIN accepted: an approval of the current content satisfies them", async () => {

@@ -2,7 +2,7 @@
  * Local-only guard (ip-approvals-api §3). Pure: looks only at the request's method and headers.
  *
  * - Host (GET and POST): exactly `127.0.0.1:<port>`, `localhost:<port>` or `[::1]:<port>` (defeats
- *   DNS rebinding).
+ *   DNS rebinding). proxy.ts applies the same Host check (checkHost) to every other route too.
  * - Origin (POST): present and equal to `http://` + Host; `Sec-Fetch-Site`, if present, must be
  *   `same-origin` (CSRF).
  * - Content type (POST): `application/json` only (415 otherwise); no CORS preflight is answered.
@@ -26,11 +26,19 @@ export const allowedHosts = (port: number): string[] => [`127.0.0.1:${port}`, `l
 /** Media type without parameters, lower-cased (`application/json; charset=utf-8` -> `application/json`). */
 export const mediaType = (ct: string | null): string => (ct ?? "").split(";")[0].trim().toLowerCase();
 
-export function checkLocal(req: Pick<Request, "method" | "headers">, port: number): GuardResult {
-  const host = req.headers.get("host");
+/** Host allowlist only (every route, via proxy.ts; DNS rebinding). */
+export function checkHost(headers: Pick<Headers, "get">, port: number): GuardResult {
+  const host = headers.get("host");
   if (host === null || !allowedHosts(port).includes(host.toLowerCase())) {
     return deny(403, "FORBIDDEN_ORIGIN", `Host ${JSON.stringify(host)} is not a loopback host on port ${port}`);
   }
+  return { ok: true };
+}
+
+export function checkLocal(req: Pick<Request, "method" | "headers">, port: number): GuardResult {
+  const hg = checkHost(req.headers, port);
+  if (!hg.ok) return hg;
+  const host = req.headers.get("host") as string;
   if (req.method === "GET" || req.method === "HEAD") return { ok: true };
 
   const origin = req.headers.get("origin");

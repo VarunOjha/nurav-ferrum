@@ -48,12 +48,17 @@ afterAll(() => {
   for (const d of dirs) rmSync(d, { recursive: true, force: true });
 });
 
-async function both(wiki: string, status: string | null): Promise<{ py: string[]; ts: string[]; pyOut: string }> {
+async function both(wiki: string, status: string | null): Promise<{ py: string[]; ts: string[]; pyOut: string; pyStatus: number | null }> {
   const root = mkdtempSync(path.join(os.tmpdir(), "ip5 parity "));
   dirs.push(root);
   cpSync(wiki, path.join(root, "wiki"), { recursive: true });
   if (status) copyFileSync(status, path.join(root, "STATUS.md"));
   const r = spawnSync("python", [path.join(REPO_ROOT, "tools", "quick_lint.py")], { cwd: root, encoding: "utf8" });
+  // "Python found nothing" must not be confused with "Python did not run" (IP-9 review): no traceback,
+  // and the summary line proves the script reached its end.
+  expect(r.error, "quick_lint.py could not be started").toBeUndefined();
+  expect(r.stderr, r.stderr).not.toMatch(/Traceback/);
+  expect(r.stdout).toMatch(/^\d+ files checked, \d+ errors, \d+ warnings\r?$/m);
   const py = new Set<string>();
   for (const line of r.stdout.split(/\r?\n/)) {
     const m = /^ERROR (\S+)\s+(.+?): /.exec(line);
@@ -69,18 +74,20 @@ async function both(wiki: string, status: string | null): Promise<{ py: string[]
       .findings.filter((f) => f.severity === "error" && PY_CODES.includes(f.code))
       .map((f) => `${f.code} ${f.path}`),
   );
-  return { py: [...py].sort(), ts: [...ts].sort(), pyOut: r.stdout };
+  return { py: [...py].sort(), ts: [...ts].sort(), pyOut: r.stdout + r.stderr, pyStatus: r.status };
 }
 
 describe.runIf(hasPython)(`parity with tools/quick_lint.py (${hasPython ? python.stdout.trim() : "no python"})`, () => {
   it("mini-wiki: both clean", async () => {
-    const { py, ts, pyOut } = await both(MINI_WIKI, MINI_STATUS);
+    const { py, ts, pyOut, pyStatus } = await both(MINI_WIKI, MINI_STATUS);
+    expect(pyStatus, pyOut).toBe(0);
     expect(py, pyOut).toEqual([]);
     expect(ts).toEqual([]);
   });
 
   it("broken-wiki: the same {code, path} set, apart from the documented known differences", async () => {
-    const { py, ts, pyOut } = await both(BROKEN_WIKI, null);
+    const { py, ts, pyOut, pyStatus } = await both(BROKEN_WIKI, null);
+    expect(pyStatus, pyOut).toBe(1); // quick_lint.py exits 1 on errors (wave 0c item 6)
     const onlyPython = py.filter((x) => !ts.includes(x));
     const onlyTs = ts.filter((x) => !py.includes(x));
     console.log(`python: ${py.length} {code,path} pairs; TS: ${ts.length}; shared: ${py.length - onlyPython.length}`);

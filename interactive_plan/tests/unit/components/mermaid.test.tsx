@@ -13,7 +13,7 @@ vi.mock("mermaid", () => ({ default: mermaidMock }));
 const push = vi.hoisted(() => vi.fn());
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
 
-import Mermaid, { nodeIdOf } from "@/components/Mermaid";
+import Mermaid, { applyMinScale, MIN_SCALE, nodeIdOf, stripExternalResources } from "@/components/Mermaid";
 
 beforeEach(() => {
   mermaidMock.initialize.mockReset();
@@ -97,5 +97,40 @@ describe("Mermaid", () => {
     const d = document.createElementNS("http://www.w3.org/2000/svg", "g");
     d.setAttribute("id", "mmdR1einpfiv5b-1-flowchart-comp_fixture_shell-0");
     expect([nodeIdOf(a), nodeIdOf(b), nodeIdOf(c), nodeIdOf(d)]).toEqual(["x_y", "comp_core", null, "comp_fixture_shell"]);
+  });
+
+  // IP-9 review: mermaid strict keeps <img src> in HTML labels (beacon to another host observed).
+  it("strips external images and URLs from the rendered SVG before insertion", async () => {
+    mermaidMock.render.mockResolvedValue({
+      svg:
+        '<svg viewBox="0 0 1000 200"><foreignObject><div><img src="http://127.0.0.1:3473/beacon.png?leak=1"><span>label</span></div></foreignObject>' +
+        '<image href="https://evil.example/x.png"></image><image href="data:image/png;base64,AAAA"></image>' +
+        '<a href="https://evil.example/">x</a><use href="#arrow"></use><rect style="fill: url(https://evil.example/p.svg); stroke: url(#grad)"></rect></svg>',
+    });
+    const { container } = render(<Mermaid source={"flowchart LR\n a"} />);
+    await waitFor(() => expect(container.querySelector('[data-state="rendered"]')).not.toBeNull());
+    const html = container.querySelector(".mermaid-svg")!.innerHTML;
+    expect(html).not.toContain("beacon.png");
+    expect(html).not.toContain("evil.example");
+    expect(container.querySelector("img")).toBeNull();
+    expect(container.querySelectorAll("image")).toHaveLength(1);
+    expect(container.querySelector("use")!.getAttribute("href")).toBe("#arrow");
+    expect(container.querySelector("rect")!.getAttribute("style")).toContain("url(#grad)");
+    expect(html).toContain("label");
+  });
+
+  it("stripExternalResources drops srcset images and protocol-relative sources", () => {
+    const out = stripExternalResources('<svg><img src="data:image/png;base64,AA" srcset="//x.example/a.png 2x"><img src="//x.example/b.png"></svg>');
+    expect(out).not.toContain("x.example");
+    expect(out).not.toContain("<img");
+  });
+
+  it("keeps wide diagrams at MIN_SCALE of their viewBox width (the holder scrolls)", async () => {
+    mermaidMock.render.mockResolvedValue({ svg: '<svg viewBox="0 0 3000 400" style="max-width: 3000px"></svg>' });
+    const { container } = render(<Mermaid source={"flowchart LR\n a"} />);
+    await waitFor(() => expect((container.querySelector(".mermaid-svg svg") as SVGSVGElement | null)?.style.minWidth).toBe(`${3000 * MIN_SCALE}px`));
+    const bare = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    applyMinScale(bare);
+    expect(bare.style.minWidth).toBe("");
   });
 });

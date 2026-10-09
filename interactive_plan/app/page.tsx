@@ -3,6 +3,7 @@
 // last 5 log entries (the RESUME recipe) and the lint summary.
 import Link from "next/link";
 import { ApprovalBadge, StatusBadge } from "@/components/Badges";
+import Markdown from "@/components/Markdown";
 import { EFFECTIVE_STATES } from "@/lib/approvals/state";
 import { CHECK_TEXT } from "@/lib/lint/gateReport";
 import { getApprovals, getApprovalsFile, getIndex, getLint } from "@/lib/server/data";
@@ -10,6 +11,8 @@ import { OP_TONES } from "@/lib/ui/tone";
 import { approvalsMap, blockers, lastActivity, phaseStrip, progress, stateCounts } from "@/lib/views/dashboard";
 import { eligibleItems } from "@/lib/views/inbox";
 import { entryGate } from "@/lib/wiki/gates";
+import { linkTargetInfo } from "@/lib/wiki/load";
+import { rebaseRootLinks } from "@/lib/wiki/mdlinks";
 
 export const dynamic = "force-dynamic";
 
@@ -76,6 +79,16 @@ export default async function Dashboard() {
                   </dd>
                 </div>
               </dl>
+              {idx.statusNextAction && (
+                <details className="next-action-section" data-testid="next-action-section" open>
+                  <summary className="small">
+                    STATUS.md <q>Next action</q> section
+                  </summary>
+                  <div className="page-body">
+                    <Markdown source={rebaseRootLinks(idx.statusNextAction)} path="STATUS.md" exists={linkTargetInfo(idx).exists} knownIds={new Set(idx.byId.keys())} />
+                  </div>
+                </details>
+              )}
               {s.blocked_on.length > 0 && (
                 <div className="blocked-on banner banner-amber" data-testid="blocked-on">
                   <strong>Blocked on:</strong>{" "}

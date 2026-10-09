@@ -47,10 +47,36 @@ async function post(s: TempStore, b: unknown, deps: StoreDeps = {}, headers?: Re
 }
 const codeOf = (j: Record<string, unknown>) => (j.error as { code: string } | undefined)?.code;
 
+/**
+ * The HTTP status of every error code, written out independently of lib/approvals/errors.ts (IP-9
+ * review: comparing against ERROR_STATUS compared the code with itself). Must equal the
+ * ip-approvals-api §2.2 table, which schema-sync.test.ts parses.
+ */
+const EXPECTED_STATUS: Record<ApprovalErrorCode, number> = {
+  FORBIDDEN_ORIGIN: 403,
+  READ_ONLY: 403,
+  BAD_REQUEST: 400,
+  UNSUPPORTED_MEDIA_TYPE: 415,
+  COMMENT_REQUIRED: 400,
+  UNKNOWN_KEY: 404,
+  NOT_APPROVABLE: 422,
+  NOT_A_PHASE: 422,
+  EXIT_NOT_READY: 409,
+  UNHASHABLE: 422,
+  PAGE_CHANGED: 409,
+  APPROVALS_FILE_INVALID: 500,
+  LOCK_TIMEOUT: 503,
+  WRITE_FAILED: 500,
+};
+
+it("ERROR_STATUS equals the literal status table", () => {
+  expect(ERROR_STATUS).toEqual(EXPECTED_STATUS);
+});
+
 const reached = new Map<ApprovalErrorCode, number>();
 function expectError(r: { status: number; json: Record<string, unknown> }, code: ApprovalErrorCode) {
   expect(codeOf(r.json), JSON.stringify(r.json)).toBe(code);
-  expect(r.status).toBe(ERROR_STATUS[code]);
+  expect(r.status).toBe(EXPECTED_STATUS[code]);
   const err = r.json.error as Record<string, unknown>;
   expect(Object.keys(err).sort()).toEqual(["code", "details", "message"]);
   expect(typeof err.message).toBe("string");

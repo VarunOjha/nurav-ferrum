@@ -2378,3 +2378,62 @@ mark {
   display: grid;
   gap: 0.3rem;
 }
+
+/* IP-9 review fixes ------------------------------------------------------------------------------ */
+/* Ids, keys, dates and phases in table cells do not break at their hyphens. */
+.data-table .nowrap {
+  white-space: nowrap;
+}
+/* Long unbroken list items (paths, ids) wrap inside their panel instead of widening the page. */
+.plain-list > li {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+/* Filter selects with long option text stay inside their card and the viewport. */
+.filters label {
+  grid-template-columns: minmax(0, 1fr);
+}
+.filters select {
+  max-width: min(100%, calc(100vw - 4rem));
+}
+/* Research graph nodes: one title line and one badge row, so the id line is never covered. */
+.fg-compact .fg-title {
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+.fg-compact .fg-badges {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.fg-hit {
+  overflow: hidden;
+}
+/* Wide mermaid diagrams keep a readable scale (Mermaid.tsx MIN_SCALE) and scroll in their holder. */
+.mermaid-svg {
+  overflow-x: auto;
+  max-width: 100%;
+}
+/* Inbox diff rows and the dashboard's STATUS "Next action" section. */
+.inbox-diff-row td {
+  border-top: 0;
+  padding-top: 0;
+}
+.inbox-diff summary {
+  cursor: pointer;
+}
+.inbox-diff .diff {
+  max-height: 22rem;
+  overflow: auto;
+}
+.next-action-section {
+  margin: 0.4rem 0 0.6rem;
+}
+.next-action-section .page-body {
+  font-size: 0.9rem;
+}
+.bootstrap-section {
+  margin-top: 1.5rem;
+}
+.hash-full {
+  overflow-wrap: anywhere;
+}
