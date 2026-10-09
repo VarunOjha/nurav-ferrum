@@ -1,0 +1,426 @@
+IP-9 gate evidence (ip-build-plan IP-9; phase-p0-planning p0.16 mapping): npm run verify in one run, then the coverage thresholds (ip-testing §1.6).
+date: 2026-10-09 (session s01)
+node -v: v24.20.0
+npm -v: 11.19.0
+python --version: Python 3.12.10
+cwd: interactive_plan/
+commands (in this order, output appended verbatim below, ANSI codes stripped):
+  1. IP3_REQUIRE_PYTHON=1 npm run verify   (typecheck && lint && test && lint:wiki && build && test:e2e)
+  2. IP3_REQUIRE_PYTHON=1 npm run test:coverage   (thresholds in vitest.config.mts: lib/approvals/** 90/90, lib/wiki/** 80/80, lib/lint/** 80/80 lines/branches)
+  3. real plan/approvals.json fingerprint before and after
+Playwright HTML report of command 1: playwright-report.zip (same folder).
+
+===== 1. IP3_REQUIRE_PYTHON=1 npm run verify =====
+
+> interactive_plan@0.1.0 verify
+> npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e
+
+
+> interactive_plan@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+> interactive_plan@0.1.0 lint
+> eslint .
+
+
+> interactive_plan@0.1.0 test
+> vitest run
+
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+
+ Test Files  24 passed (24)
+      Tests  830 passed (830)
+   Start at  03:06:17
+   Duration  12.79s (tests 71%, import 14%, environment 9%, transform 6%)
+
+
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors
+real wiki: 199 files loaded (193 ids), 48 log entries, 52 open-question sections; loader findings by code: {}
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > every `sources` path entry names an existing wiki file (SCHEMA §5.1, REF-DANGLING)
+real wiki: 587 sources path entries checked
+
+stdout | tests/lint/real-wiki-graphs.test.ts > real wiki graphs (IP-8, read-only) > roadmap: 9 phases P0-P8, acyclic, every phase scheduled, a critical path from P0
+roadmap: 9 phases, 49 sessions, critical path phase-p0-planning -> phase-p1-foundation -> phase-p2-minimal-container -> phase-p3-tabs-sessions -> phase-p4-security -> phase-p5-telemetry -> phase-p6-benchmark-harness -> phase-p7-lifecycle -> phase-p8-research-paper
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > the slug algorithm agrees with every heading anchor written in the real wiki
+real wiki: 81 body links with a heading anchor into a loaded page checked
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > body links to missing files (informational; the REF-DANGLING rule is enforced by lint:wiki, IP-5)
+real wiki: 0 body links to missing files
+
+ ✓ tests/lint/real-wiki-loader.test.ts (6 tests) 619ms
+stdout | tests/lint/real-wiki-graphs.test.ts > real wiki graphs (IP-8, read-only) > architecture: every edge target is a component, no TRUST-EDGE mismatch, lanes without overlaps
+architecture: 15 components, 42 edges (15 TB), lanes trusted, untrusted, external
+
+stdout | tests/lint/real-wiki-graphs.test.ts > real wiki graphs (IP-8, read-only) > risks: every risk is placed in exactly one heatmap cell
+risks: 25; bands {"low":0,"moderate":3,"high":5,"critical":17}
+
+stdout | tests/lint/real-wiki-graphs.test.ts > real wiki graphs (IP-8, read-only) > research: the traceability graph builds; gaps are listed for the reader (not failed on)
+research: 72 nodes, 150 edges, 1 gaps
+  gap exp-few-trials exp-reliability: experiment with trials.target < 30: target 10
+
+ ✓ tests/lint/real-wiki-graphs.test.ts (4 tests) 714ms
+stdout | tests/lint/wiki-lint.test.ts > wiki lint (real wiki, read-only) > runs every rule and prints the report
+wiki lint: wiki wiki, status STATUS.md, approvals plan/approvals.json (absent), git ok, today 2026-10-09
+WARN UNV-MIRROR wiki/SCHEMA.md  inline tags name phase-p1-foundation but the frontmatter unverified list does not (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/architecture/ov-arch-configuration.md  the frontmatter unverified list names phase-p7-lifecycle but no inline tag does (SCHEMA §7.1)
+WARN CONTRADICTION wiki/decisions/adr-0009-benchmark-hardware-energy.md:42  open CONTRADICTION blockquote (registered as Q-116, Q-122, Q-123)
+WARN CONTRADICTION wiki/decisions/adr-0010-isolation-webview2-profiles.md:46  open CONTRADICTION blockquote (registered as Q-107)
+WARN UNV-MIRROR wiki/phases/phase-p0-planning.md  the frontmatter unverified list names phase-p0-planning but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p3-tabs-sessions.md  the frontmatter unverified list names phase-p3-tabs-sessions but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p5-telemetry.md  the frontmatter unverified list names phase-p5-telemetry but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p6-benchmark-harness.md  the frontmatter unverified list names phase-p6-benchmark-harness but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p7-lifecycle.md  the frontmatter unverified list names phase-p7-lifecycle but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p8-research-paper.md  the frontmatter unverified list names phase-p8-research-paper but no inline tag does (SCHEMA §7.1)
+WARN INT-NUMBER-NOSRC wiki/research/experiments/exp-navigation.md:75  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-01-idle-memory-vs-browsers.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-02-overhead-vs-tauri-baseline.md:35  "20%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-03-background-cpu-without-lifecycle.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-04-startup-window-visible.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-05-navigation-non-inferiority.md:35  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-06-rendering-non-inferiority.md:40  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-07-energy-per-workload.md:36  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-08-adaptive-reduces-memory.md:38  "15%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-10-adaptive-restore-latency.md:35  "20%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-11-lifecycle-safety.md:34  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-12-security-overhead-small.md:39  "1 ms" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-13-profiles-cheaper-than-udfs.md:36  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-14-memory-growth-non-inferior.md:36  "10 MiB" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-15-restore-and-recovery.md:37  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-loaf-blocking.md:51  "50 ms" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-memory-growth-slope.md:45  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-nav-failure-rate.md:40  "30 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-peak-tree-private-commit.md:44  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-recovery-time.md:45  "60 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-tree-private-commit.md:50  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN MERMAID-RULES wiki/research/ov-research-plan.md:41  mermaid block: about 31 nodes (more than 30; split it) (SCHEMA §14)
+WARN INT-NUMBER-NOSRC wiki/research/ov-research-statistical-analysis-plan.md:84  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/ov-research-statistical-analysis-plan.md:112  "80%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+INFO SCHEMA-SPLIT CLAUDE.md  compare CLAUDE.md rules with SCHEMA.md (manual; not mechanically checkable, SCHEMA §9.3, §9.6)
+INFO CONTRADICTION wiki/  reminder: also do the semantic contradiction pass (claims that disagree between pages, with an accepted ADR or a raw source)
+lint: 0 errors, 34 warnings, 2 info (pages: 193)
+
+ ✓ tests/lint/wiki-lint.test.ts (3 tests | 1 skipped) 1652ms
+
+ Test Files  3 passed (3)
+      Tests  12 passed | 1 skipped (13)
+   Start at  03:06:31
+   Duration  2.30s (tests 68%, import 18%, transform 13%)
+
+
+> interactive_plan@0.1.0 build
+> next build
+
+▲ Next.js 16.4.0 (Turbopack)
+✓ Running next.config.ts took 34ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1956ms
+  Running TypeScript ...
+  Finished TypeScript in 3.1s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/3) ...
+✓ Generating static pages using 15 workers (3/3) in 2.6s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /api/approvals
+├ ƒ /approvals
+├ ƒ /architecture
+├ ƒ /decisions
+├ ƒ /decisions/[id]
+├ ƒ /go/[id]
+├ ƒ /lint
+├ ƒ /log
+├ ƒ /phases/[id]
+├ ƒ /research
+├ ƒ /risks
+├ ƒ /roadmap
+├ ƒ /search
+└ ƒ /wiki/[[...path]]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> interactive_plan@0.1.0 test:e2e
+> playwright test
+
+
+Running 131 tests using 1 worker
+
+  ✓    1 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /: one h1, landmarks, skip link, named controls (1.1s)
+  ✓    2 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /wiki: one h1, landmarks, skip link, named controls (1.1s)
+  ✓    3 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /wiki/decisions/adr-0901-fixture-decision.md: one h1, landmarks, skip link, named controls (1.1s)
+  ✓    4 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /wiki/overview/ov-fixture-render.md: one h1, landmarks, skip link, named controls (1.1s)
+  ✓    5 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /wiki/raw/00-fixture-source.md: one h1, landmarks, skip link, named controls (1.0s)
+  ✓    6 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /search?q=shell: one h1, landmarks, skip link, named controls (940ms)
+  ✓    7 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /log: one h1, landmarks, skip link, named controls (954ms)
+  ✓    8 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /approvals: one h1, landmarks, skip link, named controls (1.1s)
+  ✓    9 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /phases/phase-p2-fixture-review: one h1, landmarks, skip link, named controls (1.0s)
+  ✓   10 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /lint: one h1, landmarks, skip link, named controls (924ms)
+  ✓   11 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /architecture: one h1, landmarks, skip link, named controls (1.0s)
+  ✓   12 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /roadmap: one h1, landmarks, skip link, named controls (1.1s)
+  ✓   13 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /decisions: one h1, landmarks, skip link, named controls (886ms)
+  ✓   14 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /decisions/adr-0901: one h1, landmarks, skip link, named controls (963ms)
+  ✓   15 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /risks: one h1, landmarks, skip link, named controls (899ms)
+  ✓   16 [chromium] › tests\e2e\a11y.spec.ts:76:7 › /research: one h1, landmarks, skip link, named controls (1.1s)
+  ✓   17 [chromium] › tests\e2e\a11y.spec.ts:127:7 › approve bar, keyboard only › reach the comment box from the skip link, Request changes needs a comment, then record it with Enter (831ms)
+  ✓   18 [chromium] › tests\e2e\a11y.spec.ts:159:5 › graph nodes: Tab reaches the architecture nodes from the skip link and Enter opens the panel (547ms)
+  ✓   19 [chromium] › tests\e2e\a11y.spec.ts:170:5 › graph nodes: Tab reaches the roadmap and research nodes and Enter follows them (1.1s)
+  ✓   20 [chromium] › tests\e2e\a11y.spec.ts:191:5 › theme: the toggle is reachable and operable with the keyboard (622ms)
+  ✓   21 [chromium] › tests\e2e\approval-flow.spec.ts:34:5 › (1) the inbox lists adr-0901 as PENDING (330ms)
+  ✓   22 [chromium] › tests\e2e\approval-flow.spec.ts:44:5 › (2) open it and Approve: the UI shows APPROVED; (3) the stored record matches the file (810ms)
+  ✓   23 [chromium] › tests\e2e\approval-flow.spec.ts:75:5 › (4) editing only status:/updated: gives APPROVED_VOLATILE_DRIFT (578ms)
+  ✓   24 [chromium] › tests\e2e\approval-flow.spec.ts:85:5 › (5) editing the body gives STALE; the inbox lists it under Stale with a diff since approval (727ms)
+  ✓   25 [chromium] › tests\e2e\approval-flow.spec.ts:104:5 › (6) Request changes needs a comment; with one it records CHANGES_REQUESTED with history 1 (844ms)
+  ✓   26 [chromium] › tests\e2e\approval-flow.spec.ts:133:5 › (7) log.md gained approval entries in the SCHEMA §12 format (5ms)
+  ✓   27 [chromium] › tests\e2e\approval-flow.spec.ts:152:5 › the server wrote only the temp copy: the real plan/approvals.json, log.md and STATUS.md are unchanged (4ms)
+  ✓   28 [chromium] › tests\e2e\approval-race.spec.ts:27:5 › a file changed after the page was rendered is refused with 409 and nothing is written (887ms)
+  ✓   29 [chromium] › tests\e2e\architecture.spec.ts:10:5 › node count equals the fixture components; TB edge has the TB marker; edge table alternative (889ms)
+  ✓   30 [chromium] › tests\e2e\architecture.spec.ts:39:5 › clicking a node opens the side panel with a link to the full page (723ms)
+  ✓   31 [chromium] › tests\e2e\architecture.spec.ts:56:5 › keyboard: Tab walks the nodes in reading order, Enter opens the panel, Close returns focus (587ms)
+  ✓   32 [chromium] › tests\e2e\architecture.spec.ts:86:5 › filters: only trust-boundary edges, hide not-shipped, edge kind (1.2s)
+  ✓   33 [chromium] › tests\e2e\dashboard.spec.ts:47:5 › next_action is shown verbatim with phase, task, session and status (397ms)
+  ✓   34 [chromium] › tests\e2e\dashboard.spec.ts:58:5 › approval counts equal the fixture's expected counts and link to the inbox (521ms)
+  ✓   35 [chromium] › tests\e2e\dashboard.spec.ts:74:5 › blocked_on links resolve (619ms)
+  ✓   36 [chromium] › tests\e2e\dashboard.spec.ts:91:5 › phase strip, gate card, blockers, recent log and lint card (875ms)
+  ✓   37 [chromium] › tests\e2e\decisions.spec.ts:7:5 › register: adr-0901 listed as claude-proposed and awaiting approval; filters (1.1s)
+  ✓   38 [chromium] › tests\e2e\decisions.spec.ts:26:5 › detail: approve bar, required sections, pages that list the ADR (633ms)
+  ✓   39 [chromium] › tests\e2e\decisions.spec.ts:39:5 › /go/<adr> opens the decision view; unknown and non-decision ids are 404 (392ms)
+  ✓   40 [chromium] › tests\e2e\exit-approval.spec.ts:26:5 › the exit bar is hidden for a planned phase; the page bar is shown (358ms)
+  ✓   41 [chromium] › tests\e2e\exit-approval.spec.ts:43:5 › the phase view shows the entry gate, tasks and the test gate with evidence checks (396ms)
+  ✓   42 [chromium] › tests\e2e\exit-approval.spec.ts:60:5 › a gate-review phase shows the exit bar; approving writes <phase-id>#exit (730ms)
+  ✓   43 [chromium] › tests\e2e\log.spec.ts:7:5 › entries are newest first by default (383ms)
+  ✓   44 [chromium] › tests\e2e\log.spec.ts:14:5 › the chronological toggle reverses the order (415ms)
+  ✓   45 [chromium] › tests\e2e\log.spec.ts:21:5 › the op filter works (443ms)
+  ✓   46 [chromium] › tests\e2e\log.spec.ts:31:5 › clicking an op chip filters by that op; session and page filters work (653ms)
+  ✓   47 [chromium] › tests\e2e\log.spec.ts:41:5 › a malformed heading appears as a LOG-FORMAT finding (290ms)
+  ✓   48 [chromium] › tests\e2e\log.spec.ts:48:5 › the last-5 view matches the RESUME recipe (292ms)
+  ✓   49 [chromium] › tests\e2e\log.spec.ts:54:5 › entry pages link to /go/<id> (264ms)
+  ✓   50 [chromium] › tests\e2e\research.spec.ts:10:5 › gaps are highlighted in the graph and listed in the table (977ms)
+  ✓   51 [chromium] › tests\e2e\research.spec.ts:31:5 › columns RQ → hypothesis → experiment → metric/workload/phase, with badges (585ms)
+  ✓   52 [chromium] › tests\e2e\research.spec.ts:44:5 › text alternative: nested rq → hyp → exp → metrics/workloads (327ms)
+  ✓   53 [chromium] › tests\e2e\research.spec.ts:57:5 › the rq filter shows one question's subgraph; nodes open their page (1.1s)
+  ✓   54 [chromium] › tests\e2e\risks.spec.ts:7:5 › heatmap cell (L3, I4) holds risk-r91; (L1, I2) holds risk-r92; bands are labelled (808ms)
+  ✓   55 [chromium] › tests\e2e\risks.spec.ts:26:5 › the register is sortable by score (both directions) (794ms)
+  ✓   56 [chromium] › tests\e2e\risks.spec.ts:49:5 › the open + mitigating toggle hides the resolved risk (666ms)
+  ✓   57 [chromium] › tests\e2e\roadmap.spec.ts:14:5 › one DAG node per phase, critical path marked, no console errors (951ms)
+  ✓   58 [chromium] › tests\e2e\roadmap.spec.ts:29:5 › timeline bars are proportional to est_sessions and start at the end of their dependencies (445ms)
+  ✓   59 [chromium] › tests\e2e\roadmap.spec.ts:57:5 › clicking a DAG node or a timeline bar opens the phase (1.0s)
+  ✓   60 [chromium] › tests\e2e\roadmap.spec.ts:67:5 › keyboard: Tab reaches the phase nodes and Enter opens one (583ms)
+  ✓   61 [chromium] › tests\e2e\security.spec.ts:75:7 › guard (port 3418) › POST with Origin http://evil.example -> 403 FORBIDDEN_ORIGIN (25ms)
+  ✓   62 [chromium] › tests\e2e\security.spec.ts:82:7 › guard (port 3418) › POST with Host evil.example:3418 -> 403 (DNS rebinding); GET with that Host -> 403 too (28ms)
+  ✓   63 [chromium] › tests\e2e\security.spec.ts:92:7 › guard (port 3418) › POST without Origin, or with Sec-Fetch-Site: cross-site -> 403 (20ms)
+  ✓   64 [chromium] › tests\e2e\security.spec.ts:107:7 › guard (port 3418) › POST with Content-Type text/plain -> 415 (a form or no-cors fetch cannot reach the store) (16ms)
+  ✓   65 [chromium] › tests\e2e\security.spec.ts:114:7 › guard (port 3418) › PUT, PATCH and DELETE -> not 2xx (16ms)
+  ✓   66 [chromium] › tests\e2e\security.spec.ts:122:7 › guard (port 3418) › a CORS preflight is not answered with Access-Control-Allow-* headers (5ms)
+  ✓   67 [chromium] › tests\e2e\security.spec.ts:133:7 › guard (port 3418) › a well-formed same-origin request is accepted by the guard (control: the refusals above are the guard's) (15ms)
+  ✓   68 [chromium] › tests\e2e\security.spec.ts:148:7 › PLAN_READONLY=1 (port 3419, same build and fixture) › the API reports readonly and refuses a valid POST with 403 READ_ONLY (181ms)
+  ✓   69 [chromium] › tests\e2e\security.spec.ts:160:7 › PLAN_READONLY=1 (port 3419, same build and fixture) › the UI shows the read-only banner and every approve button is disabled with the reason (766ms)
+  ✓   70 [chromium] › tests\e2e\security.spec.ts:177:7 › PLAN_READONLY=1 (port 3419, same build and fixture) › the writable server shows no read-only banner (control) (342ms)
+bind probe: non-loopback addresses: fe80::1dd0:fad3:d103:5ba6%48, 172.27.64.1, 2605:a601:152d:1900::6, 2605:a601:152d:1900:9d73:a9d1:6dd3:1221, 2605:a601:152d:1900:157c:371c:b3b4:3fd, 2605:a601:152d:1900:3c4c:2c7b:6471:5e75, 2605:a601:152d:1900:7918:6007:4d5d:4492, 2605:a601:152d:1900:7986:7f10:51fc:d027, 2605:a601:152d:1900:98a3:c245:94:ea1d, 2605:a601:152d:1900:d843:76bb:9706:d979, 2605:a601:152d:1900:ddfe:1e78:30d8:7e92, fe80::3ae2:8411:2738:e4f7%9, 192.168.1.237
+bind probe: control listener fe80::1dd0:fad3:d103:5ba6%48 port 61047 -> open
+bind probe: control listener 172.27.64.1 port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900::6 port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900:9d73:a9d1:6dd3:1221 port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900:157c:371c:b3b4:3fd port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900:3c4c:2c7b:6471:5e75 port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900:7918:6007:4d5d:4492 port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900:7986:7f10:51fc:d027 port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900:98a3:c245:94:ea1d port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900:d843:76bb:9706:d979 port 61047 -> open
+bind probe: control listener 2605:a601:152d:1900:ddfe:1e78:30d8:7e92 port 61047 -> open
+bind probe: control listener fe80::3ae2:8411:2738:e4f7%9 port 61047 -> open
+bind probe: control listener 192.168.1.237 port 61047 -> open
+bind probe: fe80::1dd0:fad3:d103:5ba6%48 port 3418 -> ECONNREFUSED
+bind probe: fe80::1dd0:fad3:d103:5ba6%48 port 3419 -> ECONNREFUSED
+bind probe: 172.27.64.1 port 3418 -> ECONNREFUSED
+bind probe: 172.27.64.1 port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900::6 port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900::6 port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:9d73:a9d1:6dd3:1221 port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:9d73:a9d1:6dd3:1221 port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:157c:371c:b3b4:3fd port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:157c:371c:b3b4:3fd port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:3c4c:2c7b:6471:5e75 port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:3c4c:2c7b:6471:5e75 port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:7918:6007:4d5d:4492 port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:7918:6007:4d5d:4492 port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:7986:7f10:51fc:d027 port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:7986:7f10:51fc:d027 port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:98a3:c245:94:ea1d port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:98a3:c245:94:ea1d port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:d843:76bb:9706:d979 port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:d843:76bb:9706:d979 port 3419 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:ddfe:1e78:30d8:7e92 port 3418 -> ECONNREFUSED
+bind probe: 2605:a601:152d:1900:ddfe:1e78:30d8:7e92 port 3419 -> ECONNREFUSED
+bind probe: fe80::3ae2:8411:2738:e4f7%9 port 3418 -> ECONNREFUSED
+bind probe: fe80::3ae2:8411:2738:e4f7%9 port 3419 -> ECONNREFUSED
+bind probe: 192.168.1.237 port 3418 -> ECONNREFUSED
+bind probe: 192.168.1.237 port 3419 -> ECONNREFUSED
+  ✓   71 [chromium] › tests\e2e\security.spec.ts:212:5 › bind: both servers accept 127.0.0.1 and refuse every non-loopback address of this machine (2.1s)
+  ✓   72 [chromium] › tests\e2e\theme.spec.ts:11:5 › prefers-color-scheme: dark emulation gives the dark tokens (318ms)
+  ✓   73 [chromium] › tests\e2e\theme.spec.ts:19:5 › prefers-color-scheme: light gives the light tokens (273ms)
+  ✓   74 [chromium] › tests\e2e\theme.spec.ts:25:5 › the toggle overrides the OS preference and persists across reloads (824ms)
+  ✓   75 [chromium] › tests\e2e\theme.spec.ts:51:5 › no flash: the theme script is inline in <head> of the initial HTML (43ms)
+  ✓   76 [chromium] › tests\e2e\theme.spec.ts:58:5 › no flash: data-theme is already set when <body> is first inserted (285ms)
+  ✓   77 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /: 200, one h1, no console errors (845ms)
+  ✓   78 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki: 200, one h1, no console errors (940ms)
+  ✓   79 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/decisions/adr-0901-fixture-decision.md: 200, one h1, no console errors (839ms)
+  ✓   80 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/overview/ov-fixture-project.md: 200, one h1, no console errors (961ms)
+  ✓   81 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/overview/ov-fixture-render.md: 200, one h1, no console errors (934ms)
+  ✓   82 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/raw: 200, one h1, no console errors (824ms)
+  ✓   83 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/raw/00-fixture-source.md: 200, one h1, no console errors (809ms)
+  ✓   84 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/raw/research/fixture-note.md: 200, one h1, no console errors (825ms)
+  ✓   85 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /search: 200, one h1, no console errors (763ms)
+  ✓   86 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /search?q=shell: 200, one h1, no console errors (786ms)
+  ✓   87 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /log: 200, one h1, no console errors (819ms)
+  ✓   88 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /log?op=code&order=oldest: 200, one h1, no console errors (813ms)
+  ✓   89 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /approvals: 200, one h1, no console errors (828ms)
+  ✓   90 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /approvals?tab=all: 200, one h1, no console errors (884ms)
+  ✓   91 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /approvals?tab=wave: 200, one h1, no console errors (873ms)
+  ✓   92 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /approvals?tab=all&review=1&i=2: 200, one h1, no console errors (836ms)
+  ✓   93 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /phases/phase-p0-fixture-plan: 200, one h1, no console errors (863ms)
+  ✓   94 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /phases/phase-p1-fixture-build: 200, one h1, no console errors (839ms)
+  ✓   95 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /phases/phase-p2-fixture-review: 200, one h1, no console errors (843ms)
+  ✓   96 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /lint: 200, one h1, no console errors (807ms)
+  ✓   97 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /architecture: 200, one h1, no console errors (811ms)
+  ✓   98 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /architecture?tb=1&hide=1: 200, one h1, no console errors (806ms)
+  ✓   99 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /roadmap: 200, one h1, no console errors (932ms)
+  ✓  100 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /decisions: 200, one h1, no console errors (788ms)
+  ✓  101 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /decisions?status=proposed&state=PENDING: 200, one h1, no console errors (785ms)
+  ✓  102 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /decisions/adr-0901: 200, one h1, no console errors (821ms)
+  ✓  103 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /risks: 200, one h1, no console errors (843ms)
+  ✓  104 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /risks?sort=id&dir=asc&active=1: 200, one h1, no console errors (810ms)
+  ✓  105 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /research: 200, one h1, no console errors (961ms)
+  ✓  106 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /research?rq=rq-92: 200, one h1, no console errors (908ms)
+  ✓  107 [chromium] › tests\e2e\views.spec.ts:53:5 › unknown /go id: 404 with close matches (287ms)
+  ✓  108 [chromium] › tests\e2e\views.spec.ts:60:5 › unknown wiki path: 404 (233ms)
+  ✓  109 [chromium] › tests\e2e\views.spec.ts:65:5 › path traversal does not escape wiki/ (62ms)
+  ✓  110 [chromium] › tests\e2e\views.spec.ts:75:5 › /go/<id> redirects to the page view (341ms)
+  ✓  111 [chromium] › tests\e2e\views.spec.ts:87:5 › /go resolves a task id and an open-question id (502ms)
+  ✓  112 [chromium] › tests\e2e\views.spec.ts:94:5 › /phases/<id> is 404 for a non-phase or unknown id (347ms)
+  ✓  113 [chromium] › tests\e2e\views.spec.ts:101:5 › every nav entry is a link since IP-8 (821ms)
+  ✓  114 [chromium] › tests\e2e\views.spec.ts:118:5 › the Approvals and Lint nav entries are links since IP-7 (585ms)
+  ✓  115 [chromium] › tests\e2e\views.spec.ts:128:5 › approvals review mode steps with j/k and shows the page beside its approve bar (526ms)
+  ✓  116 [chromium] › tests\e2e\views.spec.ts:145:5 › the inbox has no bulk approve: one row per key, no approve buttons in the list (343ms)
+  ✓  117 [chromium] › tests\e2e\wiki.spec.ts:7:5 › a page renders a GFM table (521ms)
+  ✓  118 [chromium] › tests\e2e\wiki.spec.ts:16:7 › a mermaid block renders an SVG with real mermaid (light theme) (567ms)
+  ✓  119 [chromium] › tests\e2e\wiki.spec.ts:16:7 › a mermaid block renders an SVG with real mermaid (dark theme) (846ms)
+  ✓  120 [chromium] › tests\e2e\wiki.spec.ts:32:5 › mermaid re-renders when the theme is toggled (641ms)
+  ✓  121 [chromium] › tests\e2e\wiki.spec.ts:43:5 › show source toggles the diagram source (555ms)
+  ✓  122 [chromium] › tests\e2e\wiki.spec.ts:51:5 › backlinks list the expected ids, grouped by field (338ms)
+  ✓  123 [chromium] › tests\e2e\wiki.spec.ts:60:5 › search finds a body word, from the top-bar box (427ms)
+  ✓  124 [chromium] › tests\e2e\wiki.spec.ts:74:5 › an exact id in the search box jumps to the page (651ms)
+  ✓  125 [chromium] › tests\e2e\wiki.spec.ts:84:5 › search ranks the exact id first and filters by type (519ms)
+  ✓  126 [chromium] › tests\e2e\wiki.spec.ts:92:5 › a dangling link is styled as missing; a valid one resolves (351ms)
+  ✓  127 [chromium] › tests\e2e\wiki.spec.ts:102:5 › integrity tags, CONTRADICTION blockquotes and raw HTML (383ms)
+  ✓  128 [chromium] › tests\e2e\wiki.spec.ts:112:5 › a raw file shows the immutable banner and no approve bar (302ms)
+  ✓  129 [chromium] › tests\e2e\wiki.spec.ts:119:5 › the tree shows raw/ collapsed and labelled immutable, the current file marked (367ms)
+  ✓  130 [chromium] › tests\e2e\wiki.spec.ts:127:5 › the tree filters by type (305ms)
+  ✓  131 [chromium] › tests\e2e\wiki.spec.ts:134:5 › frontmatter panel shows fields with id links and the raw YAML (434ms)
+E2E guard: 3 real files unchanged (approvals.json absent, log.md same mtime+sha256, STATUS.md same mtime+sha256)
+
+  131 passed (1.7m)
+verify exit: 0
+
+===== 2. IP3_REQUIRE_PYTHON=1 npm run test:coverage =====
+
+> interactive_plan@0.1.0 test:coverage
+> vitest run --coverage
+
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+      Coverage enabled with v8
+
+
+ Test Files  24 passed (24)
+      Tests  830 passed (830)
+   Start at  03:08:30
+   Duration  15.36s (tests 69%, import 14%, environment 8%, transform 7%, worker 2%)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|--------------------------------------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                
+-------------------|---------|----------|---------|---------|--------------------------------------------------
+All files          |   95.79 |     88.9 |   95.14 |   97.24 |                                                  
+ lib/approvals     |    95.3 |    91.29 |   89.77 |   96.71 |                                                  
+  api.ts           |   94.11 |    93.33 |     100 |    92.3 | 61-62                                            
+  file.ts          |     100 |    83.33 |     100 |     100 | 45,78-80                                         
+  guard.ts         |   95.55 |    96.96 |   83.33 |     100 | 58                                               
+  hash.ts          |   97.14 |       90 |     100 |   96.66 | 71                                               
+  lock.ts          |   85.39 |    90.38 |      65 |   90.66 | 29,98,109,148,165,170-171                        
+  logAppend.ts     |   96.42 |       90 |     100 |   95.65 | 52                                               
+  store.ts         |   95.65 |    89.65 |   93.33 |   96.72 | 141,148,222,250                                  
+  time.ts          |     100 |    66.66 |     100 |     100 | 9                                                
+  view.ts          |   97.95 |    84.48 |     100 |     100 | 48-49,93-95,121                                  
+ lib/lint          |   96.17 |    84.27 |   95.65 |   97.29 |                                                  
+  context.ts       |   85.71 |     61.9 |      50 |   83.33 | 46                                               
+  gateReport.ts    |      96 |    82.14 |     100 |      95 | 51                                               
+  git.ts           |   96.87 |    87.87 |     100 |     100 | 29-45,76-78,89,93,110                            
+  run.ts           |     100 |     92.3 |     100 |     100 | 68                                               
+  util.ts          |   94.28 |    88.88 |    90.9 |   92.59 | 20-21                                            
+ lib/lint/rules    |    93.6 |     84.1 |   96.73 |   96.38 |                                                  
+  approvals.ts     |     100 |    91.66 |     100 |     100 | 47,53                                            
+  gitRules.ts      |   97.56 |    91.17 |     100 |     100 | 19,31,50                                         
+  indexRule.ts     |   80.41 |    78.48 |     100 |   83.33 | 52,70-71,75-76,81-82,103-104,108-109,133,138-139 
+  integrity.ts     |   94.41 |    78.68 |   96.29 |   98.57 | 29-30                                            
+  refs.ts          |   98.19 |    90.21 |     100 |     100 | 55,66,81,96,125-126,161-163,185                  
+  structure.ts     |    94.7 |    84.44 |   94.87 |   97.81 | 147-149                                          
+ lib/server        |   43.75 |    80.64 |   38.46 |   44.73 |                                                  
+  data.ts          |       0 |        0 |       0 |       0 | 19-51                                            
+  snapshot.ts      |     100 |    92.85 |     100 |     100 | 35                                               
+ lib/ui            |   66.66 |       60 |   66.66 |   66.66 |                                                  
+  nav.ts           |       0 |        0 |       0 |       0 | 14-30                                            
+ lib/views         |   98.75 |    81.95 |   98.85 |     100 |                                                  
+  dashboard.ts     |     100 |    73.91 |     100 |     100 | 31,112,119,124,132                               
+  graphLayout.ts   |   99.02 |    67.85 |     100 |     100 | 42-52,78,82,96                                   
+  inbox.ts         |     100 |    92.53 |     100 |     100 | 52,77,112,141                                    
+  phase.ts         |     100 |       85 |     100 |     100 | 62                                               
+  registers.ts     |   94.73 |    81.81 |   93.33 |     100 | 36-38,90-105,117                                 
+ lib/wiki          |    98.4 |    93.13 |   99.02 |   99.42 |                                                  
+  backlinks.ts     |   96.15 |    86.36 |     100 |     100 | 21,28,35                                         
+  findings.ts      |   83.33 |    84.61 |     100 |     100 | 75,79                                            
+  frontmatter.ts   |   95.65 |     90.9 |     100 |   96.25 | 91-93                                            
+  gates.ts         |   98.38 |       95 |     100 |     100 | 95,121                                           
+  graph.ts         |   99.31 |    91.15 |     100 |     100 | 12,23,159,180,223,466,480,514-536                
+  links.ts         |    99.3 |    94.93 |     100 |     100 | 120,159,254,258                                  
+  load.ts          |   96.06 |    91.11 |   94.44 |   99.01 | 144                                              
+  log.ts           |     100 |    96.87 |     100 |     100 | 110                                              
+  mdlinks.ts       |   95.83 |       96 |     100 |     100 | 35                                               
+  routes.ts        |   98.76 |    94.44 |     100 |     100 | 33,66,96                                         
+  schemas.ts       |   99.39 |     97.7 |     100 |     100 | 177,472,560                                      
+  search.ts        |      99 |     87.5 |   96.77 |    98.7 | 72                                               
+  status.ts        |   93.75 |       70 |     100 |   92.85 | 28                                               
+  tree.ts          |     100 |     97.5 |     100 |     100 | 60                                               
+-------------------|---------|----------|---------|---------|--------------------------------------------------
+
+=============================== Coverage summary ===============================
+Statements   : 95.79% ( 2959/3089 )
+Branches     : 88.9% ( 1915/2154 )
+Functions    : 95.14% ( 510/536 )
+Lines        : 97.24% ( 2403/2471 )
+================================================================================
+test:coverage exit: 0
+
+===== 3. real plan/approvals.json =====
+approvals.json before: absent
+approvals.json after: absent

@@ -152,6 +152,13 @@ Registering `decision → /decisions/[id]` in `TYPED_ROUTES` changed the `/go/ad
 
 **Gate:** `npm run verify` is green in one run, and the coverage thresholds (§1.6) are met. A `lint:wiki` failure on a file outside `wiki/interactive-plan/` is a stop condition (report to the integrator, do not proceed), never a silent pass. Evidence: `IP-9-verify.txt`, `IP-9-perf.txt`, `playwright-report.zip`.
 
+The IP-9 run (decided 2026-10-09, under the wave 0c delegation policy):
+
+- The coverage thresholds of [ip-testing](ip-testing.md) §1.6 are `coverage.thresholds` globs in `vitest.config.mts`. `npm run verify` stays as defined; the gate runs `npm run test:coverage` right after it, and both outputs go into `IP-9-verify.txt`.
+- `PLAN_READONLY` is checked twice. `security.spec.ts` uses a second Playwright `webServer` (port 3419, same build and fixture). `npm run perf` uses the real wiki (POST → 403 `READ_ONLY`, banner, disabled buttons, real files unchanged).
+- The timing script is `scripts/perf-routes.mjs` (`npm run perf`). It reports the median of 5 warm runs per route as specified. It also reports the server's first request and one request per route after the layout's 10 s lint memo has expired, because that memo makes warm runs cheaper. Every number is app evidence only.
+- No axe scan: `@axe-core/playwright` needs the owner's consent (Q-008, open). `a11y.spec.ts` checks landmarks, headings, accessible names and keyboard operation instead.
+
 ## IP-10: Documentation, evidence, handoff
 
 **Do:**

@@ -11,6 +11,8 @@ sources:
   - raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-7-tests.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-9-perf.txt
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-build-plan, comp-interactive-plan, adr-0016, schema]
 approvable: true
 phase: phase-p0-planning
@@ -32,15 +34,16 @@ Facts used here: Vitest cannot test async Server Components, so logic lives in p
 | `typecheck` | `next typegen && tsc --noEmit` (Next 16 generates `LayoutProps`/`PageProps` into `.next/types`, so plain `tsc --noEmit` fails on a clean checkout; [IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt); owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 7) | 0 errors |
 | `lint` | `eslint .` (flat config, eslint-config-next 16.4.0) | 0 errors, 0 warnings |
 | `test` | `vitest run` (unit + component; excludes `tests/lint`, `tests/e2e`; does not load the real wiki pages; the only real files read are `wiki/SCHEMA.md` (schema-sync test, §1.2, and the Python reference of §1.3) and the §7 vector block of `ip-data-contract` (§1.3)) | all pass |
-| `test:coverage` | `vitest run --coverage` for `lib/**` | thresholds in §1.6 (provider `@vitest/coverage-v8`, exact pin at install; owner consent is Q-210) |
+| `test:coverage` | `vitest run --coverage` for `lib/**` | thresholds in §1.6 (provider `@vitest/coverage-v8`, exact pin at install; owner consent is Q-210); since IP-9 the thresholds are configured in `vitest.config.mts` and a miss fails the run |
 | `lint:wiki` | `vitest run --config vitest.lint.config.mts`: every test under `tests/lint/` except the gate report, i.e. the [ip-wiki-lint](ip-wiki-lint.md) suite `wiki-lint.test.ts` (IP-5) the real-wiki loader test `real-wiki-loader.test.ts` (IP-2: zero `FM-*` and loader errors, every `sources` path exists) and the real-wiki graph test `real-wiki-graphs.test.ts` (IP-8: 9 phases P0–P8, acyclic, all scheduled; no dangling or TRUST-EDGE component edge; every risk placed once; the research gaps printed, not failed on), all against the **real** wiki, read-only | 0 errors (warnings listed) |
 | `lint:wiki:json` | `node scripts/with-env.mjs WIKI_LINT_JSON=1 -- vitest run --config vitest.lint.config.mts`: the same, plus the JSON report (`WIKI_LINT_OUT`, default `.lint/wiki-lint.json`) | as `lint:wiki` |
 | `gate` | `vitest run --config vitest.gate.config.mts`: the entry-gate checklist of `GATE_PHASE` or `STATUS.current_phase` ([ip-wiki-lint](ip-wiki-lint.md) §4) | the gate passes |
 | `build` | `next build` | succeeds |
 | `test:e2e` | `playwright test` (its `webServer` runs `next build && next start -H 127.0.0.1 -p 3418` with temp data dirs) | all pass |
 | `verify` | `typecheck && lint && test && lint:wiki && build && test:e2e` | the single "green" command for every build step and future change |
+| `perf` | `node scripts/perf-routes.mjs`: times every route's server render on the **real** wiki (production build, `PLAN_READONLY=1`, port 3420; 1 warm-up + 5 runs, median; plus one request after the lint memo expired), the first-load JS per page and the read-only refusal, and checks the real files are unchanged (IP-9) | app evidence only, never a Ferrum result; exit 1 only if a check (status 200, read-only, real files) fails |
 
-E2E uses port 3418, separate from the owner's 3417. Next 16 refuses a second `next dev`/`next build` on the same project ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.2). So **stop the owner's dev server before `npm run test:e2e`**. The E2E config detects a running instance (the port probe fails) and aborts with that message.
+E2E uses port 3418, separate from the owner's 3417, plus a second `next start` of the same build on 3419 with `PLAN_READONLY=1` for `security.spec.ts` (since IP-9). Next 16 refuses a second `next dev`/`next build` on the same project ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.2). So **stop the owner's dev server before `npm run test:e2e`**. The E2E config detects a running instance (the port probe fails) and aborts with that message.
 
 ## 1. Unit tests (vitest; `tests/unit/`)
 
@@ -139,7 +142,7 @@ Since IP-8 `graph.test.ts` (temp wikis built from small pages, plus the mini-wik
 - the decision register helpers: awaiting-first ordering, filters, the ADR-SECTIONS order rule and the supersession chain (cycle-safe)
 - risk sorting in both directions
 
-**Coverage thresholds** (on `lib/**`): 90 % lines and branches for `lib/approvals/**`, 80 % for `lib/wiki/**` and `lib/lint/**`. These are targets set by this plan. Reaching them is checked by the coverage run, not assumed.
+**Coverage thresholds** (on `lib/**`): 90 % lines and branches for `lib/approvals/**`, 80 % for `lib/wiki/**` and `lib/lint/**`. These are targets set by this plan. Reaching them is checked by the coverage run, not assumed. Since IP-9 they are `coverage.thresholds` globs in `vitest.config.mts`, so `npm run test:coverage` exits 1 when one is missed (checked once with a deliberately raised threshold). The IP-9 run met them ([IP-9-verify.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt)); three store tests were added there for uncovered failure paths (a half-written lock judged by mtime, a log that cannot be opened, an unreadable approvals file).
 
 ### 1.7 Component tests (jsdom)
 
@@ -196,8 +199,8 @@ The tests **never touch the real `plan/approvals.json` or `wiki/`**. The guard i
 | **`approval-flow.spec.ts`** | **(1)** inbox shows fixture page `adr-0901` as PENDING → **(2)** open it, Approve → the UI shows APPROVED → **(3)** read `<tmp>/plan/approvals.json` from the test: the record has `status: approved`, both hashes equal the Node-computed hashes of the fixture file, `approved_by: owner`, and a valid timestamp → **(4)** edit only `status:`/`updated:` in the fixture file → reload → APPROVED_VOLATILE_DRIFT → **(5)** edit the body → reload → **STALE**, and the inbox lists it under Stale → **(6)** Request changes with an empty comment is blocked; with a comment → CHANGES_REQUESTED and `history` length 1 → **(7)** `log.md` gained `approval` entries in the SCHEMA §12 format |
 | `approval-race.spec.ts` | Load the page, modify the file on disk, then click Approve → 409 message shown, and approvals.json unchanged (page `ov-fixture-project`; `log.md` unchanged too) |
 | `exit-approval.spec.ts` | The exit bar is hidden for a `planned` phase. For a `gate-review` fixture phase it is shown, and approving writes the key `<phase-id>#exit`. Since IP-7 also: the API answers 409 `EXIT_NOT_READY` for the planned phase's exit key, and the phase view shows the entry gate, tasks, risk scores and evidence ✓/✗ |
-| `security.spec.ts` | POST with `Origin: http://evil.example` → 403. POST with `Host: evil.example:3418` → 403. `text/plain` → 415. PUT → not 2xx. `PLAN_READONLY=1` server project → buttons disabled, POST 403 |
-| `a11y.spec.ts` | Keyboard only: reach and operate the approve bar, navigate graph nodes, toggle theme. Every page has a single `h1` and landmarks. Optional axe scan if the owner approves `@axe-core/playwright` ([ip-spec](ip-spec.md) §9 item 5) |
+| `security.spec.ts` | POST with `Origin: http://evil.example` → 403. POST with `Host: evil.example:3418` → 403. `text/plain` → 415. PUT → not 2xx. `PLAN_READONLY=1` server project → buttons disabled, POST 403. Since IP-9 (decided 2026-10-09): raw `node:http` requests so the `Host` header is exactly the test's; also a GET with a foreign Host → 403, a missing Origin and `Sec-Fetch-Site: cross-site` → 403, PATCH/DELETE not 2xx, no `Access-Control-Allow-*` on a preflight, and a same-origin control request that reaches the store (409). Every refusal leaves the temp `approvals.json` byte-identical. The read-only server is a second Playwright `webServer` (3419, same build and fixture, `PLAN_READONLY=1`): banner shown, every approve and exit button and the comment box disabled with the reason, a valid POST → 403 `READ_ONLY`. **Bind:** both servers accept 127.0.0.1 and refuse (`ECONNREFUSED`) every non-loopback address of the machine (IPv4, IPv6, link-local); a throwaway listener on all interfaces must be reachable on each address first, so a refusal means "not listening there" |
+| `a11y.spec.ts` | Keyboard only: reach and operate the approve bar, navigate graph nodes, toggle theme. Every page has a single `h1` and landmarks. Optional axe scan if the owner approves `@axe-core/playwright` ([ip-spec](ip-spec.md) §9 item 5). Since IP-9: 16 routes checked for `lang`, one `h1`, banner/navigation/main/contentinfo, a first-Tab skip link that moves focus to `main`, and an accessible name on every visible link, button and form field; from the skip link, Tab reaches the comment box, then Approve / Request changes / Reject in order; Request changes without a comment gives the alert, with one (Space) records `changes-requested` (temp files restored); Tab + Enter on architecture, roadmap and research nodes; the theme toggle by Enter and Space. No axe scan: Q-008 is still open |
 | `theme.spec.ts` | `prefers-color-scheme: dark` emulation gives dark tokens. The toggle overrides and persists across reloads. No flash: the attribute is set before first paint, checked via the initial HTML |
 
 The fixture wiki uses ids in a reserved fixture range (`adr-09xx`, `risk-r9x`, `rq-9x`) so they can never be confused with real pages, and it validates clean under `lint:wiki` (asserted in §2).
@@ -211,4 +214,4 @@ The fixture wiki uses ids in a reserved fixture range (`adr-09xx`, `risk-r9x`, `
 
 ## 5. Evidence
 
-At the end of the build workflow, the outputs of `npm run verify` and `npm run lint:wiki:json` (and the Playwright HTML report, zipped) go to `wiki/raw/evidence/phase-p0-planning/interactive-plan/`, with the date and the `node -v` / `npm -v` output. A pass is never claimed without saved output (SCHEMA §9.7).
+IP-9 saved `IP-9-verify.txt` (verify + coverage), `IP-9-perf.txt` (`npm run perf`) and `playwright-report.zip`. At the end of the build workflow, the outputs of `npm run verify` and `npm run lint:wiki:json` (and the Playwright HTML report, zipped) go to `wiki/raw/evidence/phase-p0-planning/interactive-plan/`, with the date and the `node -v` / `npm -v` output. A pass is never claimed without saved output (SCHEMA §9.7).

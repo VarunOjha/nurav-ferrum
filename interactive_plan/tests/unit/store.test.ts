@@ -2,16 +2,16 @@
 // root (mini-wiki copy, temp plan/ dir). The real plan/approvals.json is fingerprinted before and
 // after and must be untouched (SCHEMA §10.1: Claude never writes it).
 import { spawn } from "node:child_process";
-import { existsSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, statSync, utimesSync, writeFileSync } from "node:fs";
 import * as fsp from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { ApprovalError } from "@/lib/approvals/errors";
-import { serializeApprovals, type RawApprovals } from "@/lib/approvals/file";
+import { readApprovals, serializeApprovals, type RawApprovals } from "@/lib/approvals/file";
 import { contentHash, hashes, normalizeEol } from "@/lib/approvals/hash";
 import { ApprovalsFile } from "@/lib/approvals/model";
-import { formatApprovalEntry, logComment, separatorFor } from "@/lib/approvals/logAppend";
+import { appendApprovalLog, formatApprovalEntry, logComment, separatorFor } from "@/lib/approvals/logAppend";
 import { RENAME_BACKOFF_MS, submit, writeAtomic, type StoreFs } from "@/lib/approvals/store";
 import { parseFrontmatterBytes } from "@/lib/wiki/frontmatter";
 import { parseLog } from "@/lib/wiki/log";
@@ -565,6 +565,24 @@ describe("lock", () => {
     ).rejects.toMatchObject({ code: "ENOSPC" });
   });
 
+  it("a half-written lock without started_at is judged by its mtime (IP-9): older than 30 s is broken", async () => {
+    const s = store();
+    await fsp.mkdir(s.dataDir, { recursive: true });
+    const clock = fakeClock();
+    const lockFile = path.join(s.dataDir, ".approvals.lock");
+    writeFileSync(lockFile, "{\"pid\": 4");
+    const old = (clock.now() - 31_000) / 1000;
+    utimesSync(lockFile, old, old);
+    const stale: { holder: string }[] = [];
+    const r = await submit(body("adr-0901", "approved", await s.hashOf("adr-0901")), s.cfg, {
+      clock,
+      lock: { onStale: (i) => stale.push(i) },
+    });
+    expect(r.item.state).toBe("APPROVED");
+    expect(stale.map((i) => i.holder)).toEqual(["pid ?"]);
+    expect(s.dataFiles().filter((f) => /\.lock|\.stale-/.test(f))).toEqual([]);
+  });
+
   it("the lock is released after a refused submit", async () => {
     const s = store();
     await expectCode(submit(body("adr-0901", "approved", "sha256:" + "0".repeat(64)), s.cfg), "PAGE_CHANGED");
@@ -635,6 +653,20 @@ describe("log append (PLAN_APPEND_LOG)", () => {
     expect(readJson(s).approvals["adr-0901"].status).toBe("approved");
   });
 
+  it("a log path that cannot be opened for writing gives LOG_APPEND_FAILED, not a throw (IP-9)", async () => {
+    const s = store({ appendLog: true });
+    const dir = path.join(s.root, "log-is-a-dir");
+    mkdirSync(dir);
+    const r = await appendApprovalLog(dir, {
+      key: "adr-0901",
+      status: "approved",
+      timestamp: "2026-10-09T14:03:12+05:30",
+      contentHash: "sha256:" + "a".repeat(64),
+      comment: "",
+    });
+    expect(r).toMatchObject({ appended: false, warning: "LOG_APPEND_FAILED" });
+  });
+
   it("PLAN_APPEND_LOG=0 leaves the log untouched", async () => {
     const s = store({ appendLog: false });
     const before = s.read("log.md");
@@ -665,5 +697,16 @@ describe("log append (PLAN_APPEND_LOG)", () => {
     expect(e.split("\n")[0]).toMatch(LOG_HEADING);
     expect(e).toContain("- pages: [phase-p1-x]\n");
     expect(e.endsWith('comment: ""\n')).toBe(true);
+  });
+});
+
+describe("readApprovals (IP-9)", () => {
+  it("a read error other than ENOENT makes the file invalid (fail closed), never PENDING", async () => {
+    const fs = { readFile: (() => Promise.reject(errno("EACCES"))) as unknown as typeof fsp.readFile };
+    const r = await readApprovals("C:/nowhere/approvals.json", fs);
+    expect(r.exists).toBe(true);
+    expect(r.valid).toBe(false);
+    expect(r.data).toBeNull();
+    expect(r.error).toMatch(/^cannot read: /);
   });
 });

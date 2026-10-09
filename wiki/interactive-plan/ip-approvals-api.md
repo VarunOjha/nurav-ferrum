@@ -10,6 +10,7 @@ sources:
   - raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-4-tests.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt
 related: [ip-spec, ip-data-contract, ip-routes-and-views, ip-testing, comp-interactive-plan, adr-0016, adr-0011, schema]
 approvable: true
 phase: phase-p0-planning
@@ -122,7 +123,7 @@ Every non-2xx response is `{ "error": { "code": "…", "message": "…", "detail
 
 The app has no login. Its safety rests on: (a) binding to loopback, and (b) refusing requests that did not come from the app's own page on loopback. This blocks other machines, other local web pages (CSRF) and DNS-rebinding.
 
-1. **Bind:** every npm script starts the server with `-H 127.0.0.1 -p ${PLAN_PORT:-3417}`. The research note only says to pass `-H` explicitly, because the default bind address is unverified ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.4). The flag binds loopback only under both `next start` and `next dev`: IP-1 spike S3 found the only listener on 127.0.0.1 and connections to the LAN IPv4 and the WSL vEthernet address refused ([IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)). An IP-9 check repeats this from another interface's address.
+1. **Bind:** every npm script starts the server with `-H 127.0.0.1 -p ${PLAN_PORT:-3417}`. The research note only says to pass `-H` explicitly, because the default bind address is unverified ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.4). The flag binds loopback only under both `next start` and `next dev`: IP-1 spike S3 found the only listener on 127.0.0.1 and connections to the LAN IPv4 and the WSL vEthernet address refused ([IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)). IP-9 repeated this from every non-loopback address of the machine (LAN and WSL IPv4, global and link-local IPv6) for the E2E servers on 3418 and 3419: all refused with `ECONNREFUSED`, while a throwaway listener on all interfaces was reachable on each of those addresses (`security.spec.ts`, [IP-9-verify.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt)).
 2. **Host check** (GET and POST): the `Host` header must be exactly one of `127.0.0.1:<port>`, `localhost:<port>` or `[::1]:<port>`. Otherwise the response is 403. This defeats DNS rebinding, because a rebinding page sends its own hostname as Host.
 3. **Origin check** (POST): `Origin` must be present and equal to `http://` + the `Host` value. If `Sec-Fetch-Site` is present, it must be `same-origin`. A missing Origin on POST gets 403.
 4. **Content type** (POST): `application/json` only. Anything else gets `415 UNSUPPORTED_MEDIA_TYPE`. Cross-site HTML forms cannot send this type without a CORS preflight, and the route answers no preflight: there is no OPTIONS handler and no CORS headers.
