@@ -92,9 +92,9 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
 
 ## IP-3: Hashes + effective state + gates
 
-**Do:** `lib/approvals/hash.ts`, `state.ts` and `lib/wiki/gates.ts` ([ip-data-contract](ip-data-contract.md) §6–§8).
+**Do:** `lib/approvals/hash.ts`, `state.ts` and `lib/wiki/gates.ts` ([ip-data-contract](ip-data-contract.md) §6–§8), plus `lib/approvals/model.ts` (the §8.1 zod schemas, shared with the IP-4 store) and the pure `lib/approvals/diff.ts` ([ip-routes-and-views](ip-routes-and-views.md) §3.11). The loader fills `contentHash`/`scopeHash` and `bootstrapHash`.
 
-**Gate:** [ip-testing](ip-testing.md) §1.3 passes, **including the Python cross-check** (Python 3.12.10 is on the machine per [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md); the test must not be skipped here). A failing vector is a stop condition: never adjust expected values to match the code. Evidence: `IP-3-tests.txt`.
+**Gate:** [ip-testing](ip-testing.md) §1.3 passes, **including the Python cross-check** (Python 3.12.10 is on the machine per [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md); the test must not be skipped here, so the gate runs `IP3_REQUIRE_PYTHON=1 npm run test`), plus `npm run typecheck`, `npm run lint` and `npm run lint:wiki`. Done 2026-10-09 ([IP-3-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt)). A failing vector is a stop condition: never adjust expected values to match the code. Evidence: `IP-3-tests.txt`.
 
 ## IP-4: Approvals store + API route
 

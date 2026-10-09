@@ -33,7 +33,7 @@ Facts used here: Vitest cannot test async Server Components, so logic lives in p
 |---|---|---|
 | `typecheck` | `next typegen && tsc --noEmit` (Next 16 generates `LayoutProps`/`PageProps` into `.next/types`, so plain `tsc --noEmit` fails on a clean checkout; [IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt); owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 7) | 0 errors |
 | `lint` | `eslint .` (flat config, eslint-config-next 16.4.0) | 0 errors, 0 warnings |
-| `test` | `vitest run` (unit + component; excludes `tests/lint`, `tests/e2e`; does not load the real wiki pages, the only real file read is `wiki/SCHEMA.md` by the schema-sync test, §1.2) | all pass |
+| `test` | `vitest run` (unit + component; excludes `tests/lint`, `tests/e2e`; does not load the real wiki pages; the only real files read are `wiki/SCHEMA.md` (schema-sync test, §1.2, and the Python reference of §1.3) and the §7 vector block of `ip-data-contract` (§1.3)) | all pass |
 | `test:coverage` | `vitest run --coverage` for `lib/**` | thresholds in §1.6 (provider `@vitest/coverage-v8`, exact pin at install; owner consent is Q-210) |
 | `lint:wiki` | `vitest run --config vitest.lint.config.mts`: every test under `tests/lint/`, i.e. the [ip-wiki-lint](ip-wiki-lint.md) suite (IP-5) and the real-wiki loader test `real-wiki-loader.test.ts` (IP-2: zero `FM-*` and loader errors, every `sources` path exists), all against the **real** wiki, read-only | 0 errors (warnings listed) |
 | `build` | `next build` | succeeds |
@@ -71,7 +71,7 @@ Pure `lib/` modules run under environment `node`. React components run under `js
 ### 1.3 Hash and stale logic (`hash.vectors.test.ts`, `state.test.ts`)
 
 - All vectors in [ip-data-contract](ip-data-contract.md) §7, read from that page's fenced `json` block at test time. Both hashes must match exactly.
-- **Python cross-check:** if `python --version` succeeds, extract the §10.2 code block from SCHEMA.md into a temp file, run it on each vector written to a temp file, and assert equality. Otherwise the test is skipped with a visible message, never silently.
+- **Python cross-check:** if `python --version` succeeds, extract the §10.2 code block from SCHEMA.md into a temp file, run it on each vector written to a temp file, and assert equality. Otherwise the test is skipped with a visible message, never silently. Since IP-3 it also runs the extracted code (one Python process, `sys.argv` set per file) on 401 generated inputs (CR/LF/CRLF mixes, volatile look-alike keys, extra fences, random bytes, one input holding every byte value) and asserts TS = Python, including which inputs raise `ValueError`. The environment variable `IP3_REQUIRE_PYTHON=1` turns a missing Python into a failure; the IP-3 gate run sets it.
 - Missing closing fence → `HashError('NO_CLOSING_FENCE')`.
 - `normalizeEol` property test: for 1,000 random byte arrays drawn from `{\r, \n, a, 0xFF}`, the result equals a reference `replace(/\r\n/g,'\n').replace(/\r/g,'\n')` over latin1.
 - `effectiveState` truth table: each row of SCHEMA §10.3, including:
@@ -80,14 +80,15 @@ Pure `lib/` modules run under environment `node`. React components run under `js
   - a moved path → state unchanged, `moved: true`
   - `countsAsApproved` true only for APPROVED and APPROVED_VOLATILE_DRIFT
 - `entryGate`: dependency not done, dependency exit not approved, a STALE ADR in the set, a blocking open Q, a malformed Q section (fail closed), and all-green.
-- **Snapshot diff** (`diff.test.ts`): approve a temp-copy page (snapshot written), edit two body lines, and assert `diff(snapshot, current)` reports exactly those two lines; a snapshot is never overwritten by a second approval of the same hash.
-- **Bootstrap hash:** approve `schema` in a temp data dir, change `CLAUDE.md` in the temp copy, and assert `schema` becomes STALE.
+- **Snapshot diff** (`diff.test.ts`): approve a temp-copy page (snapshot written), edit two body lines, and assert `diff(snapshot, current)` reports exactly those two lines. In IP-3 the test writes the snapshot itself (the normalised bytes, ip-approvals-api §2.1 step 8); that `store.ts` writes it on approval and never overwrites it on a second approval of the same hash is tested with the store in §1.4 (decided 2026-10-09, IP-3).
+- **Bootstrap hash:** approve `schema` in a temp data dir, change `CLAUDE.md` in the temp copy, and assert `schema` becomes STALE. In IP-3 the record is built from the loaded hashes and written to the temp data dir by the test (the store comes in IP-4); a line-ending-only change keeps APPROVED, and a missing `CLAUDE.md` gives STALE (fail closed, ip-data-contract §6.2).
 
 ### 1.4 Approvals store: concurrency and atomicity (`store.test.ts`)
 
 Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to a temp dir.
 
 - First write creates `plan/approvals.json`, and its contents validate with zod.
+- **Snapshots:** an approval writes `plan/snapshots/<page-id>/<content-hash-hex>.md` holding the normalised bytes (its content hash equals the record's) before the approvals file, and a second approval of the same hash leaves the snapshot byte-identical (moved here from §1.3 in IP-3).
 - A second decision on the same key moves the old record into `history`. Three decisions give two history items, in order, and the earlier items are unchanged byte for byte.
 - `seen_content_hash` mismatch → `PAGE_CHANGED` and the file is unchanged.
 - An invalid existing file (bad JSON, wrong `schema_version`) → `APPROVALS_FILE_INVALID`, and the file is unchanged byte for byte.

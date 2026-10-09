@@ -4,6 +4,7 @@ import { cpSync, mkdtempSync, readFileSync, rmSync, utimesSync, writeFileSync } 
 import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { hashes } from "@/lib/approvals/hash";
 import { checkLinks } from "@/lib/wiki/links";
 import { clearWikiCache, linkTargetInfo, loadWiki, type WikiIndex } from "@/lib/wiki/load";
 import { BROKEN_WIKI, FIXTURES, loadBroken, loadMini, MINI_STATUS, MINI_WIKI } from "./helpers";
@@ -123,8 +124,13 @@ describe("mini-wiki (clean fixture)", () => {
     expect(exp.unverifiedTags).toEqual([{ phase: "phase-p1-fixture-build", line: exp.bodyStartLine + 3 }]);
   });
 
-  it("leaves hashes null until IP-3 wires lib/approvals/hash.ts", () => {
-    expect(idx.pages.every((p) => p.contentHash === null && p.scopeHash === null)).toBe(true);
+  it("fills content and scope hashes from the raw file bytes (IP-3, ip-data-contract §6)", () => {
+    for (const p of idx.pages) {
+      const abs = p.kind === "status" ? MINI_STATUS : path.join(MINI_WIKI, p.path);
+      const h = hashes(readFileSync(abs));
+      expect([p.contentHash, p.scopeHash], p.path).toEqual([h.content, h.scope]);
+    }
+    expect(idx.bootstrapHash).toBeNull(); // no CLAUDE.md in the fixtures root
   });
 });
 

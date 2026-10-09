@@ -67,8 +67,9 @@ def state(key):
         return 'REJECTED'
     if e['status'] == 'changes-requested':
         return 'CHANGES_REQUESTED'
-    if key == 'schema' and e.get('bootstrap_hash') and os.path.exists('CLAUDE.md'):
-        if hashes('CLAUDE.md')[0] != e['bootstrap_hash']:  # SCHEMA §10.2: CLAUDE.md drift stales schema
+    if key == 'schema' and e.get('bootstrap_hash'):  # SCHEMA §10.2: CLAUDE.md drift stales schema
+        cur = 'sha256:' + hashlib.sha256(norm(open('CLAUDE.md', 'rb').read())).hexdigest() if os.path.exists('CLAUDE.md') else None
+        if cur != e['bootstrap_hash']:  # a missing CLAUDE.md counts as drift (fail closed, as the plan app)
             return 'STALE'
     c, s = hashes(pages[pid][0])
     if c == e.get('content_hash'):

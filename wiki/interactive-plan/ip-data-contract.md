@@ -10,15 +10,13 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt
 related: [ip-spec, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-testing, comp-interactive-plan, adr-0016, schema]
 approvable: true
 phase: phase-p0-planning
 audience: both
 trigger: "Read before changing how the plan app reads wiki/, STATUS.md or plan/approvals.json, or computes hashes and approval states; re-check after any SCHEMA.md change"
 tags: [interactive-plan, data-model, approvals, hashing]
-unverified:
-  - claim: "Node Buffer latin1 decode/encode round-trips all 256 byte values unchanged, so the JS scope-hash regex matches the Python bytes regex"
-    verify_in: phase-p0-planning
 ---
 
 # Interactive plan app: data contract
@@ -165,6 +163,7 @@ interface WikiIndex {
   backlinks: Map<string, Set<string>>;    // id -> ids referencing it (frontmatter refs + body links)
   status: StatusLive | null;              // parsed STATUS.md
   log: LogEntry[]; openQuestions: OpenQuestion[];
+  bootstrapHash: string | null;           // content_hash of <repo root>/CLAUDE.md (section 6.2), null if missing
 }
 ```
 
@@ -247,7 +246,7 @@ export function hashes(raw: Uint8Array): { content: string; scope: string } {
 Why this matches the Python reference:
 
 - Hashing works on **bytes**, never on decoded UTF-8 strings.
-- The frontmatter is mapped byte to char through `latin1`, which round-trips every byte value `UNVERIFIED[phase-p0-planning]` (pinned by vector v09).
+- The frontmatter is mapped byte to char through `latin1`, which round-trips every byte value: a unit test checks all 256 values, vector v09 pins non-ASCII UTF-8, and the Python cross-check agrees on 401 generated inputs, one of them holding every byte value inside the frontmatter ([IP-3-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt)).
 - In JS, without the `s` flag, `.` excludes `\n`, `\r`, ` ` and ` `. The last two cannot occur in latin1 text, and `\r` has already been normalised away. So `.` behaves like Python's bytes-mode `.` (anything except `\n`), and multiline `^` behaves the same way.
 - The BOM is **not** stripped before hashing. Neither is it by the Python reference, and a BOM is a lint error anyway.
 
@@ -257,13 +256,15 @@ The file **at `approvals.path`'s current location** (looked up by id, see §8) a
 
 For key `schema` only, the record also stores **`bootstrap_hash`** = `content_hash` of root `CLAUDE.md` (SCHEMA §10.2). If the current `CLAUDE.md` hash differs, the effective state of `schema` is `STALE`, regardless of the scope hash. The schema page view renders `CLAUDE.md` below `SCHEMA.md`, and the POST for `schema` sends `seen_bootstrap_hash` as well.
 
+Details decided in IP-3 (2026-10-09, delegation policy; the `decide` log entry of that date): the loader computes the current hash once per load (`WikiIndex.bootstrapHash`). A stored `bootstrap_hash` with `CLAUDE.md` missing counts as a difference (**fail closed**, `STALE`). A `schema` record without `bootstrap_hash` (the app always writes one, so only a hand-made record lacks it) is judged on the page hashes alone. `rejected` and `changes-requested` take precedence over the check. `tools/approvals_check.py` does the same.
+
 ### 6.3 Unhashable pages
 
 A page that starts with `---\n` but has no closing fence throws `NO_CLOSING_FENCE`. The page is shown with state `INVALID` and cannot be approved (POST → 422).
 
 ## 7. Hash test vectors (shared with the Python reference)
 
-The values below were computed on 2026-10-08 by running the SCHEMA §10.2 Python reference (Python 3.12.10, per [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)) on each `input` encoded as UTF-8. `input` is a JSON string, so `\n`, `\r` and `\uXXXX` are escapes. The unit test `hash.vectors.test.ts` **reads this fenced block from this page at test time**, so there is a single source of truth. If `python` is on PATH, it also re-runs the reference implementation extracted from SCHEMA.md on each vector and asserts that both agree.
+The values below were computed by running the SCHEMA §10.2 Python reference (Python 3.12.10, per [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)) on each `input` encoded as UTF-8: v01–v10 on 2026-10-08, v11–v15 (more line-ending and volatile-key edge cases) on 2026-10-09 in IP-3, with the code block extracted from SCHEMA.md; the same run re-confirmed v01–v10 ([IP-3-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt)). `input` is a JSON string, so `\n`, `\r` and `\uXXXX` are escapes. The unit test `hash.vectors.test.ts` **reads this fenced block from this page at test time**, so there is a single source of truth. If `python` is on PATH, it also re-runs the reference implementation extracted from SCHEMA.md on each vector and asserts that both agree.
 
 ```json
 [
@@ -296,7 +297,22 @@ The values below were computed on 2026-10-08 by running the SCHEMA §10.2 Python
    "scope_hash": "sha256:24c19830a7767fc292908559d3a6642f5180782eb8cb970aacce3c0adb993824"},
   {"name": "v10-empty-frontmatter", "input": "---\n---\nbody\n",
    "content_hash": "sha256:b798967e97edb1a5ba916ddff44964faa067b0ed348af17ea3aa6e617730aa64",
-   "scope_hash": "sha256:b798967e97edb1a5ba916ddff44964faa067b0ed348af17ea3aa6e617730aa64"}
+   "scope_hash": "sha256:b798967e97edb1a5ba916ddff44964faa067b0ed348af17ea3aa6e617730aa64"},
+  {"name": "v11-mixed-eol", "input": "---\r\nid: ip-x\rstatus: draft\r\nupdated: 2026-10-08\n---\r# T\r\n",
+   "content_hash": "sha256:ac7c2f3291f3d6de3efaceac04e736347d57880f424b72e81f42e4c2a3944bbd",
+   "scope_hash": "sha256:86291af5a046d82b2432cb4b8c68324bd272b1e9be775493dd804976819d0781"},
+  {"name": "v12-cr-before-crlf", "input": "a\r\r\nb\n\rc\r",
+   "content_hash": "sha256:24afb4914b5064bbab48d9900a0ef5d2c2a9108786c16f17dbe613db04fe53d7",
+   "scope_hash": "sha256:24afb4914b5064bbab48d9900a0ef5d2c2a9108786c16f17dbe613db04fe53d7"},
+  {"name": "v13-crlf-volatile-change", "input": "---\r\nid: ip-x\r\nstatus: active\r\nupdated: 2026-10-09\r\n---\r\n# T\r\n",
+   "content_hash": "sha256:ea4f4da541dc8c56ea8c15fc6ff8cdc45967e0766fab8be62c6924dd7ebff53f",
+   "scope_hash": "sha256:86291af5a046d82b2432cb4b8c68324bd272b1e9be775493dd804976819d0781"},
+  {"name": "v14-volatile-edge-cases", "input": "---\nid: ip-x\nstatus\t: tab removed\nStatus: capital kept\nupdated:\n last_verified_commit: indented kept\nlast_verified_commit: abc1234\n---\nB\n",
+   "content_hash": "sha256:c13ae11ffc870defc8614a3a3d374df4a2543ac0c6c2e7a2b73ddf94e6461af6",
+   "scope_hash": "sha256:74740e4a2dce83d3c1937ef5184993096dfec22f6baa462957c6cd304269bf2a"},
+  {"name": "v15-second-fence-in-body", "input": "---\nid: ip-x\nstatus: draft\n---\nbody\n---\nstatus: after second fence kept\n---\n",
+   "content_hash": "sha256:d7da8adef18a31b63f2683d3a3b3aa60d013f05efb1bbb0be50dda38f047e1a7",
+   "scope_hash": "sha256:7f90926db8ecd82bffa2eaada4b342e577d8b0db49c2b9182c5a2cf630ca30de"}
 ]
 ```
 
@@ -313,11 +329,18 @@ What each vector demonstrates:
 | v08 | Lone `\r` is normalised to `\n` before fence detection |
 | v09 | Non-ASCII UTF-8 bytes are hashed unchanged |
 | v10 | Empty frontmatter block |
+| v11 = v01 | Mixed CRLF, lone CR and LF in one file normalise to the LF file (CR before the closing fence and in the body included) |
+| v12 | `\r\r\n` becomes `\n\n` (CRLF is replaced first, then the remaining CR); a trailing lone CR becomes `\n`; no frontmatter, so scope = content |
+| v13 | CRLF file whose only change against v01 is `status`/`updated`: content = v03, scope = v01 |
+| v14 | `status<TAB>:` and an empty `updated:` are removed; `Status:` (case differs) and an indented `last_verified_commit:` are kept |
+| v15 | Only the **first** closing fence ends the frontmatter: a `status:` line between a second pair of `---` lines in the body is kept |
 | (no vector) | `"---\nid: x\nno close\n"` → Python raises `ValueError`; TS must throw `HashError('NO_CLOSING_FENCE')` |
 
 ## 8. Approvals: file model and effective state
 
-### 8.1 `plan/approvals.json` (zod, `lib/approvals/store.ts`)
+### 8.1 `plan/approvals.json` (zod, `lib/approvals/model.ts`, used by `store.ts`)
+
+The schemas live in `lib/approvals/model.ts` (IP-3), so the pure state and gate modules share them with the store (IP-4) without importing its fs code.
 
 ```ts
 const Hash     = z.string().regex(/^sha256:[0-9a-f]{64}$/);
@@ -354,6 +377,8 @@ function effectiveState(key: string, rec: Rec | undefined, idx: WikiIndex): Effe
   if (!rec) return 'PENDING';
   if (rec.status === 'rejected') return 'REJECTED';
   if (rec.status === 'changes-requested') return 'CHANGES_REQUESTED';
+  if (key === 'schema' && rec.bootstrap_hash !== undefined
+      && rec.bootstrap_hash !== idx.bootstrapHash) return 'STALE';    // section 6.2
   if (rec.content_hash === page.contentHash) return 'APPROVED';
   if (rec.scope_hash === page.scopeHash) return 'APPROVED_VOLATILE_DRIFT';
   return 'STALE';
@@ -377,7 +402,10 @@ export const countsAsApproved = (e: Effective) => e === 'APPROVED' || e === 'APP
    - `schema`
 
    Each must satisfy `countsAsApproved`. Failures are listed with their state.
-3. **No blocking open questions:** no `Q-NNN` with `status: open` whose `blocking` list intersects the dependency set.
-4. **Overall** = all items ok.
+3. **No blocking open questions:** no `Q-NNN` with `status: open` whose `blocking` list intersects the dependency set. A malformed section (`Q-FORMAT`, §5.3) blocks every phase.
+4. **No unregistered contradictions** (SCHEMA §9.7 step 4): no `> **CONTRADICTION:**` blockquote on a page of the dependency set that names no `Q-NNN` present in the register. A blockquote naming a registered question is left to step 3. The blockquote is the marker line plus the following lines starting with `>`.
+5. **Overall** = all items ok.
+
+Also decided in IP-3 (2026-10-09, delegation policy; aligned with `tools/approvals_check.py --gate`): items carry `details[]` (`{id, detail}`, e.g. the effective state) beside `ids[]`; an id that is not a valid phase page gives a single failing `phase-exists` item; and `phase-p0-planning` reports `bootstrapException: true` with overall ok (SCHEMA §9.7 P0 bootstrap exception), while its items are still computed for display. Step 4 was missing from this list before IP-3; SCHEMA wins (§3.4).
 
 **The app only reports.** It never changes a phase `status`. Claude does that per SCHEMA §9.7 and logs it.

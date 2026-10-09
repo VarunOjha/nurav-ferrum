@@ -6,6 +6,7 @@
 import { existsSync } from "node:fs";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
+import { contentHash, tryHashes } from "../approvals/hash";
 import type { PlanConfig } from "../config";
 import { finding, type LintFinding } from "./findings";
 import { parseFrontmatterBytes } from "./frontmatter";
@@ -40,7 +41,7 @@ export interface WikiPage {
   body: string;
   /** 1-based file line of the first body line. */
   bodyStartLine: number;
-  /** Filled by lib/approvals/hash.ts from IP-3 (ip-data-contract §6); null until then. */
+  /** SCHEMA §10.2 hashes of the raw bytes (lib/approvals/hash.ts); both null when unhashable (ip-data-contract §6.3). */
   contentHash: string | null;
   scopeHash: string | null;
   headings: Heading[];
@@ -69,6 +70,8 @@ export interface WikiIndex {
   /** Every file under the wiki dir (wiki-relative) and every directory (with a trailing `/`). */
   files: Set<string>;
   wikiDir: string;
+  /** content_hash of `<repoRoot>/CLAUDE.md` (SCHEMA §10.2 bootstrap_hash), null if the file is missing. */
+  bootstrapHash: string | null;
 }
 
 export type LoadConfig = Pick<PlanConfig, "wikiDir" | "statusFile" | "repoRoot">;
@@ -102,6 +105,7 @@ function parseFile(bytes: Buffer, wikiPath: string, repoPath: string, kind: Page
     fm = v.fm;
     if (v.type) findings.push(...checkIdAndPath(v.type, id ?? undefined, wikiPath, repoPath, kind === "status"));
   }
+  const h = tryHashes(bytes);
   const links = extractLinks(p.body, wikiPath, p.bodyStartLine).map((l) => ({
     ...l,
     resolvedPath: l.resolvedPath === null ? null : canonical(wikiDir, l.resolvedPath),
@@ -115,8 +119,8 @@ function parseFile(bytes: Buffer, wikiPath: string, repoPath: string, kind: Page
     rawFm: p.rawFm,
     body: p.body,
     bodyStartLine: p.bodyStartLine,
-    contentHash: null,
-    scopeHash: null,
+    contentHash: h?.content ?? null,
+    scopeHash: h?.scope ?? null,
     headings: extractHeadings(p.body, p.bodyStartLine),
     links,
     unverifiedTags: kind === "wiki" || kind === "status" ? extractUnverifiedTags(p.body, p.bodyStartLine) : [],
@@ -232,6 +236,9 @@ export async function loadWiki(cfg: LoadConfig): Promise<WikiIndex> {
     oq.findings.push(...r.findings);
   }
 
+  const claudeMd = path.join(path.resolve(cfg.repoRoot), "CLAUDE.md");
+  const bootstrapHash = existsSync(claudeMd) ? contentHash(await readFile(claudeMd)) : null;
+
   const statusFm = statusPage?.fm && statusPage.fm.type === "status" ? (statusPage.fm as StatusLive) : null;
   return {
     pages,
@@ -245,6 +252,7 @@ export async function loadWiki(cfg: LoadConfig): Promise<WikiIndex> {
     openQuestions,
     files,
     wikiDir,
+    bootstrapHash,
   };
 }
 

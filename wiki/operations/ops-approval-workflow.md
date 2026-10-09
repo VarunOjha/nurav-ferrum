@@ -3,7 +3,7 @@ id: ops-approval-workflow
 type: operations
 title: "Approval workflow: plan/approvals.json, content hashes, phase gates"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/llm-wiki-pattern.md
@@ -111,7 +111,8 @@ writes any file. Two checks were added after that test and were run on the real 
 session (no `approvals.json`): the P0 bootstrap branch (`--gate phase-p0-planning` prints `BOOTSTRAP`
 and exits) and the `PHASE-DONE-NO-EXIT` warning for a phase whose `status: done` has no approved
 `<phase-id>#exit` key. Added when it moved to `tools/` (2026-10-08, owner answer to Q-216):
-the SCHEMA §10.2 `bootstrap_hash` check on `schema` (a changed `CLAUDE.md` makes `schema` STALE), the
+the SCHEMA §10.2 `bootstrap_hash` check on `schema` (a changed `CLAUDE.md` makes `schema` STALE; since
+IP-3, 2026-10-09, a missing `CLAUDE.md` does too, fail closed, matching the plan app), the
 fail-closed `Q-FORMAT` rule (a question section with a missing, repeated or unknown `status`, a missing or
 unparsable `blocking` list, or a duplicate id is reported and treated as **open and blocking every
 phase**, SCHEMA §9.3), and the CONTRADICTION registration rule of SCHEMA §9.7 step 4 (an open
@@ -202,8 +203,9 @@ def state(key):
         return 'REJECTED'
     if e['status'] == 'changes-requested':
         return 'CHANGES_REQUESTED'
-    if key == 'schema' and e.get('bootstrap_hash') and os.path.exists('CLAUDE.md'):
-        if hashes('CLAUDE.md')[0] != e['bootstrap_hash']:  # SCHEMA §10.2: CLAUDE.md drift stales schema
+    if key == 'schema' and e.get('bootstrap_hash'):  # SCHEMA §10.2: CLAUDE.md drift stales schema
+        cur = 'sha256:' + hashlib.sha256(norm(open('CLAUDE.md', 'rb').read())).hexdigest() if os.path.exists('CLAUDE.md') else None
+        if cur != e['bootstrap_hash']:  # a missing CLAUDE.md counts as drift (fail closed, as the plan app)
             return 'STALE'
     c, s = hashes(pages[pid][0])
     if c == e.get('content_hash'):

@@ -192,6 +192,12 @@ class ApprovalsFixture(unittest.TestCase):
         self.assertIn('STALE                    schema', out)
         self.assertIn('BLOCKED by schema', out)
 
+    def test_missing_claude_md_stales_schema_fail_closed(self):
+        os.remove(self.path('CLAUDE.md'))
+        rc, out = self.gate()
+        self.assertIn('STALE                    schema', out)
+        self.assertIn('BLOCKED by schema', out)
+
     def test_open_question_blocking_dependency_blocks(self):
         self.write('wiki/overview/ov-open-questions.md', QHEAD + q('Q-001', 'open', '[adr-0001]'))
         rc, out = self.gate()
@@ -288,7 +294,7 @@ class ApprovalsRepo(unittest.TestCase):
         doc = read(CONTRACT)
         sec = doc[doc.index('## 7. Hash test vectors'):]
         vectors = json.loads(re.search(r'```json\n(.*?)\n```', sec, re.S).group(1))
-        self.assertEqual(len(vectors), 10)
+        self.assertEqual(len(vectors), 15)  # v01-v10 (2026-10-08) + v11-v15 (IP-3, 2026-10-09)
         d = tempfile.mkdtemp(prefix='hv-')
         try:
             for v in vectors:
