@@ -170,3 +170,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - stales: [ov-arch-data-flows, ops-git-conventions, ops-environment-setup] (no approvals.json exists, so nothing is actually stale)
 - next: p0.9 / IP-0: record node -v, npm -v, git --version as raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt
 - commit: 04b27b9
+
+## [2026-10-08] code | p0.9 (IP-0 preconditions): toolchain recorded, Node gate passed
+
+- session: s01
+- pages: [ov-open-questions, status-live]
+- sources: [raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt, raw/owner/2026-10-08-s01-wave0.md]
+- result: IP-0 preconditions 0-2 hold (p0.8 lint clean, Wave 0 transcribed, Q-006/Q-007/Q-103/Q-210 answered). With PATH prefixed by /c/Program Files/nodejs: node -v v24.20.0, npm -v 11.19.0, git --version 2.52.0.windows.1; gate (major 24 and >= 24.15) PASS, exit 0. Evidence appended to MANIFEST.sha256 (11 lines, verify 0 problems). Adding the evidence file makes the quick lint report 1 INDEX-MISSING error, because SCHEMA §11 index ids must be lower case and the mandated name is IP-0-toolchain; registered as Q-219 (lint semantics, owner decides) and not worked around. Build paused before IP-1 per the ip-build-plan stop condition on SCHEMA ambiguities that change lint semantics.
+- next: owner answers Q-219, then p0.10 / IP-1 (scaffold + spikes)
+- commit: 1cfc2d5
