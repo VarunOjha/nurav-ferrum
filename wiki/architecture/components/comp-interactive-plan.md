@@ -2,8 +2,9 @@
 id: comp-interactive-plan
 type: component
 title: "Interactive plan app (Next.js, planning tooling, not shipped)"
-status: planned
-updated: 2026-10-08
+status: implemented
+updated: 2026-10-09
+last_verified_commit: 3eaa641
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -42,3 +43,5 @@ Planning tooling for owner review (adr-0016; [Next.js note](../../raw/research/n
 Several edges may join the same pair of nodes with different `kind`s. Trust-boundary edges render dashed. Grouping by `trust_level` gives the trusted / untrusted / external swimlanes.
 
 It is built in phase-p0-planning (tasks p0.10–p0.16), per the owner directive "first the interactive plan comes together". The timing question Q-101 is answered by owner directives 2 and 4 in [raw/01-scoping-decisions.md](../../raw/01-scoping-decisions.md); the build starts after Approval Wave 0 ([ops-approval-workflow §8](../../operations/ops-approval-workflow.md#8-approval-waves)).
+
+**Implemented (2026-10-09).** Build steps IP-0 to IP-10 of [ip-build-plan](../../interactive-plan/ip-build-plan.md) are done; `npm run verify` passed in one run at commit `3eaa641` (the /architecture edge-label fix that closed the last open review issue), evidence [IP-10-arch-labels-fix.txt](../../raw/evidence/phase-p0-planning/interactive-plan/IP-10-arch-labels-fix.txt). Responsibilities, interfaces and `connects` are unchanged by the build.
