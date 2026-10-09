@@ -178,10 +178,12 @@ describe("frontmatterRefs", () => {
 });
 
 describe("integrity tags", () => {
-  it("extracts UNVERIFIED[phase] with file lines, outside fenced and inline code", () => {
-    const body = "a UNVERIFIED[phase-p1-foundation] b\n```\nUNVERIFIED[phase-p2-x]\n```\n`UNVERIFIED[phase-p3-x]` UNVERIFIED[phase-p4-security]\n";
+  it("extracts UNVERIFIED[phase] with file lines outside fenced code; well-formed tags in inline code count (IP-5)", () => {
+    const body =
+      "a UNVERIFIED[phase-p1-foundation] b\n```\nUNVERIFIED[phase-p2-x]\n```\n`UNVERIFIED[phase-p3-x]` UNVERIFIED[phase-p4-security]\n`UNVERIFIED[phase-pN-slug]` `UNVERIFIED`\n";
     expect(extractUnverifiedTags(body, 20)).toEqual([
       { phase: "phase-p1-foundation", line: 20 },
+      { phase: "phase-p3-x", line: 24 },
       { phase: "phase-p4-security", line: 24 },
     ]);
   });

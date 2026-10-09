@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { hashes } from "@/lib/approvals/hash";
+import { LOADER_CODES } from "@/lib/lint/rules/refs";
 import { checkLinks } from "@/lib/wiki/links";
 import { clearWikiCache, linkTargetInfo, loadWiki, type WikiIndex } from "@/lib/wiki/load";
 import { BROKEN_WIKI, FIXTURES, loadBroken, loadMini, MINI_STATUS, MINI_WIKI } from "./helpers";
@@ -134,12 +135,21 @@ describe("mini-wiki (clean fixture)", () => {
   });
 });
 
-/** Codes encoded in a broken-wiki file name: `<id-part>--CODE[--CODE...].md`. */
+/**
+ * Loader codes encoded in a broken-wiki file name: `<id-part>--CODE[--CODE...].md`. Since IP-5 the
+ * names also carry lint-only codes (tests/unit/lint-rules.test.ts checks those); the loader must give
+ * exactly the loader codes of the name.
+ */
 function expectedFromName(p: string): string[] {
   const base = path.posix.basename(p, ".md");
   const parts = base.split("--");
-  return parts.slice(1).sort();
+  return parts
+    .slice(1)
+    .filter((c) => (LOADER_CODES as readonly string[]).includes(c) || (c === "REF-DANGLING" && BODY_LINK_FIXTURES.includes(base)))
+    .sort();
 }
+/** The REF-DANGLING fixtures about body links (the others are frontmatter/sources/tag checks of the lint). */
+const BODY_LINK_FIXTURES = ["adr-0967--REF-DANGLING", "adr-0968--REF-DANGLING"];
 
 describe("broken-wiki (golden)", () => {
   let idx: WikiIndex;
@@ -151,7 +161,7 @@ describe("broken-wiki (golden)", () => {
   it("each file triggers exactly the codes named in its file name", () => {
     const info = linkTargetInfo(idx);
     const named = idx.pages.filter((p) => p.path.includes("--"));
-    expect(named.length).toBe(21);
+    expect(named.length).toBe(51);
     for (const p of named) {
       const got = new Set([...p.findings, ...checkLinks(p.links, p.repoPath, info)].map((f) => f.code));
       expect([...got].sort(), p.path).toEqual(expectedFromName(p.path));

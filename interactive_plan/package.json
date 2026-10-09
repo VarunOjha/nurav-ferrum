@@ -16,6 +16,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint:wiki": "vitest run --config vitest.lint.config.mts",
+    "lint:wiki:json": "node scripts/with-env.mjs WIKI_LINT_JSON=1 -- vitest run --config vitest.lint.config.mts",
+    "gate": "vitest run --config vitest.gate.config.mts",
     "test:e2e": "playwright test",
     "verify": "npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e"
   },

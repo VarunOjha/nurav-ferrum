@@ -34,3 +34,5 @@ experiments: []
 # Fixture P0
 
 Plan the fixture. Next: [P1](phase-p1-fixture-build.md).
+
+Checks: the [open questions](../overview/ov-open-questions.md), the [test strategy](../quality/qual-fixture-strategy.md) and the [research note](../raw/research/fixture-note.md).

@@ -15,11 +15,14 @@ export interface LintFinding {
 }
 
 /**
- * Severity of each code the loader and parsers emit. SCHEMA §9.3 codes keep their SCHEMA
- * severity; the ip-wiki-lint §2.1 additions (FM-VOLATILE, FM-YAML-SUBSET) report as warn until
- * SCHEMA adopts them. LOG-FORMAT and Q-FORMAT are in the SCHEMA §9.3 table (error).
+ * Default severity of every lint code (SCHEMA §9.3 table; ip-wiki-lint §2, §2.1). SCHEMA §9.3 codes
+ * keep their SCHEMA severity; the ip-wiki-lint §2.1 additions report as warn until SCHEMA adopts them.
+ * Codes whose severity varies (STALE-UPDATED warn/error, APPROVAL-STALE info/warn, the info lines of
+ * the git-backed rules) pass an explicit `severity` to `finding()`. SCHEMA-SPLIT is an error in SCHEMA
+ * §9.3 but is not mechanically checkable: the lint only prints the manual reminder, as info.
  */
 export const SEVERITY: Readonly<Record<string, Severity>> = {
+  // SCHEMA §9.3
   "FM-MISSING": "error",
   "FM-ENUM": "error",
   "FM-TYPE-DIR": "error",
@@ -28,20 +31,48 @@ export const SEVERITY: Readonly<Record<string, Severity>> = {
   "ID-PATTERN": "error",
   "ID-DUP": "error",
   "REF-DANGLING": "error",
+  "REF-RECIPROCAL": "error",
+  ORPHAN: "warn",
+  "INDEX-MISSING": "error",
+  "STALE-UPDATED": "warn",
+  "ADR-CHAIN": "error",
+  "PHASE-ORDER": "error",
+  "TRUST-EDGE": "error",
+  "UNV-NOPHASE": "error",
+  "UNV-PASTDUE": "error",
+  "INT-NUMBER-NOSRC": "warn",
+  "HYP-NO-DATA": "error",
+  "RAW-IMMUTABLE": "error",
+  "APPROVAL-STALE": "info",
+  CONTRADICTION: "warn",
+  "SCHEMA-SPLIT": "info",
   "LOG-FORMAT": "error",
   "Q-FORMAT": "error",
+  "Q-BLOCK-UNGATED": "warn",
+  "PHASE-DONE-NO-EXIT": "warn",
+  // ip-wiki-lint §2.1 (warn until SCHEMA adopts them)
   "FM-VOLATILE": "warn",
   "FM-YAML-SUBSET": "warn",
+  "ADR-SECTIONS": "warn",
+  "HANDOFF-SECTIONS": "warn",
+  "COMP-UNSAFE": "warn",
+  "COMP-LVC": "warn",
+  "EXP-RESULTS": "warn",
+  "RISK-SCORE": "warn",
+  "STATUS-APPROVED": "warn",
+  "APPROVAL-INVALID": "warn",
+  "UNV-MIRROR": "warn",
+  "MERMAID-RULES": "warn",
 };
 
 export function finding(
   code: string,
   path: string,
   message: string,
-  extra: { id?: string; line?: number; hint?: string } = {},
+  extra: { id?: string; line?: number; hint?: string; severity?: Severity } = {},
 ): LintFinding {
-  const severity = SEVERITY[code];
-  if (!severity) throw new Error(`unknown finding code ${code}`);
+  const severity = extra.severity ?? SEVERITY[code];
+  if (!SEVERITY[code] || !severity) throw new Error(`unknown finding code ${code}`);
   const f: LintFinding = { code, severity, path, message };
   if (extra.id !== undefined) f.id = extra.id;
   if (extra.line !== undefined) f.line = extra.line;

@@ -18,3 +18,5 @@ f5c286670a74b681d17a327a71ef6e27712440b1ef155319c35ad6dab135db6d  owner/2026-10-
 f97359cfbf08290d45376101fd5bb1270abe582026a3716ba11d7cdb5ed673b7  evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt
 67c681b1602ef8def74032e7f677f7dae5a693e58045cc95d9e3e89f8e6c9fb4  evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt
 33a7b10e46ab5d2ba088bc83dd1a07a514c08f79710cf6f6f31cda9a38f306e1  evidence/phase-p0-planning/interactive-plan/IP-4-tests.txt
+c9b14c5f0ff4099b23d40f04a08203a33c129a605407667d2b6dc2b65d65ab12  evidence/phase-p0-planning/interactive-plan/IP-5-gate.txt
+5b063f002d930126b266cc6120966476eaf429eae30e75d7f0785cd28972d6e5  evidence/phase-p0-planning/interactive-plan/IP-5-lint.json

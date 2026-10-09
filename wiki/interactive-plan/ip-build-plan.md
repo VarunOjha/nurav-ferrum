@@ -104,7 +104,7 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
 
 ## IP-5: Wiki lint + gate report
 
-**Do:** `lib/lint/` with every rule in [ip-wiki-lint](ip-wiki-lint.md) §2 and §2.1, the git-backed rules (§3), `tests/lint/wiki-lint.test.ts` (under the `vitest.lint.config.mts` of IP-2), and the `lint:wiki:json` and `gate` scripts. Confirm the vitest-as-runner approach (`UNVERIFIED[phase-p0-planning]` in [ip-wiki-lint](ip-wiki-lint.md) §1).
+**Do:** `lib/lint/` with every rule in [ip-wiki-lint](ip-wiki-lint.md) §2 and §2.1, the git-backed rules (§3), `tests/lint/wiki-lint.test.ts` (under the `vitest.lint.config.mts` of IP-2), and the `lint:wiki:json` and `gate` scripts. Confirm the vitest-as-runner approach of [ip-wiki-lint](ip-wiki-lint.md) §1 (confirmed in IP-5 with `reporters: ["default"]` and `silent: false`, [IP-5-gate.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-5-gate.txt)).
 
 **Gate:**
 
@@ -113,7 +113,7 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
 - Real-wiki errors in `wiki/interactive-plan/` are fixed in this step. Errors elsewhere are listed in the log for the integrator or owner, and are **not** fixed by the app builder. If such errors remain, this is a **stop condition** before IP-9: report them to the integrator and do not proceed until they are fixed (IP-9 and IP-10 need 0 real-wiki errors).
 - `npm run gate` prints the P0 checklist.
 
-Evidence: `IP-5-lint.json`, `IP-5-gate.txt`.
+Done 2026-10-09: 0 real-wiki errors, so no stop condition (`IP-5-lint.json` in the same folder as [IP-5-gate.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-5-gate.txt)). Evidence: `IP-5-lint.json`, `IP-5-gate.txt`.
 
 ## IP-6: App shell, markdown, wiki browser, search, log
 

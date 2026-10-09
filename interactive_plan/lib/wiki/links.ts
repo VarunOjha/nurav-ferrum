@@ -264,13 +264,17 @@ export function frontmatterRefs(fm: unknown): FmRef[] {
 
 export const UNVERIFIED_TAG = /UNVERIFIED\[(phase-p[0-8]-[a-z0-9-]+)\]/g;
 
-/** Inline UNVERIFIED[phase] tags outside fenced and inline code, with file line numbers. */
+/**
+ * Inline UNVERIFIED[phase] tags outside fenced code, with file line numbers. A well-formed tag inside
+ * an inline code span counts: SCHEMA §7.1 exempts only raw/, fenced code and its own rule text, and the
+ * wiki writes real tags in backticks (decided 2026-10-09, IP-5; a skipped tag would escape UNV-PASTDUE).
+ * Bare keywords inside inline code are quotations of the syntax and are not UNV-NOPHASE (lib/lint).
+ */
 export function extractUnverifiedTags(body: string, bodyStartLine = 1): { phase: string; line: number }[] {
   const out: { phase: string; line: number }[] = [];
   const lines = blankFencedCode(body).split("\n");
   for (let i = 0; i < lines.length; i++) {
-    const line = stripInlineCode(lines[i]);
-    for (const m of line.matchAll(UNVERIFIED_TAG)) out.push({ phase: m[1], line: bodyStartLine + i });
+    for (const m of lines[i].matchAll(UNVERIFIED_TAG)) out.push({ phase: m[1], line: bodyStartLine + i });
   }
   return out;
 }

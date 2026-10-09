@@ -1,0 +1,473 @@
+{
+  "schema_version": 1,
+  "tool": "interactive_plan lib/lint (npm run lint:wiki:json)",
+  "generated_at": "2026-10-09T06:17:23.442Z",
+  "today": "2026-10-09",
+  "wiki_dir": "wiki",
+  "repo_root": "ferrum-rust-webclient",
+  "git": "ok",
+  "approvals_file": {
+    "path": "plan/approvals.json",
+    "exists": false,
+    "valid": true
+  },
+  "node": "v24.20.0",
+  "summary": {
+    "errors": 0,
+    "warnings": 35,
+    "info": 2,
+    "pages": 193
+  },
+  "clean": true,
+  "counts_by_code": {
+    "info CONTRADICTION": 1,
+    "info SCHEMA-SPLIT": 1,
+    "warn CONTRADICTION": 2,
+    "warn INT-NUMBER-NOSRC": 23,
+    "warn MERMAID-RULES": 1,
+    "warn UNV-MIRROR": 9
+  },
+  "rules": [
+    {
+      "code": "FILE-ENCODING",
+      "severity": "error"
+    },
+    {
+      "code": "FM-MISSING",
+      "severity": "error"
+    },
+    {
+      "code": "FM-ENUM",
+      "severity": "error"
+    },
+    {
+      "code": "FM-TYPE-DIR",
+      "severity": "error"
+    },
+    {
+      "code": "FM-UNKNOWN-KEY",
+      "severity": "warn"
+    },
+    {
+      "code": "FM-VOLATILE",
+      "severity": "warn"
+    },
+    {
+      "code": "FM-YAML-SUBSET",
+      "severity": "warn"
+    },
+    {
+      "code": "ID-PATTERN",
+      "severity": "error"
+    },
+    {
+      "code": "ID-DUP",
+      "severity": "error"
+    },
+    {
+      "code": "LOG-FORMAT",
+      "severity": "error"
+    },
+    {
+      "code": "Q-FORMAT",
+      "severity": "error"
+    },
+    {
+      "code": "REF-DANGLING",
+      "severity": "error"
+    },
+    {
+      "code": "REF-RECIPROCAL",
+      "severity": "error"
+    },
+    {
+      "code": "ORPHAN",
+      "severity": "warn"
+    },
+    {
+      "code": "INDEX-MISSING",
+      "severity": "error"
+    },
+    {
+      "code": "STALE-UPDATED",
+      "severity": "warn"
+    },
+    {
+      "code": "ADR-CHAIN",
+      "severity": "error"
+    },
+    {
+      "code": "PHASE-ORDER",
+      "severity": "error"
+    },
+    {
+      "code": "TRUST-EDGE",
+      "severity": "error"
+    },
+    {
+      "code": "UNV-NOPHASE",
+      "severity": "error"
+    },
+    {
+      "code": "UNV-PASTDUE",
+      "severity": "error"
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn"
+    },
+    {
+      "code": "HYP-NO-DATA",
+      "severity": "error"
+    },
+    {
+      "code": "RAW-IMMUTABLE",
+      "severity": "error"
+    },
+    {
+      "code": "APPROVAL-STALE",
+      "severity": "info"
+    },
+    {
+      "code": "CONTRADICTION",
+      "severity": "warn"
+    },
+    {
+      "code": "SCHEMA-SPLIT",
+      "severity": "info"
+    },
+    {
+      "code": "Q-BLOCK-UNGATED",
+      "severity": "warn"
+    },
+    {
+      "code": "PHASE-DONE-NO-EXIT",
+      "severity": "warn"
+    },
+    {
+      "code": "ADR-SECTIONS",
+      "severity": "warn"
+    },
+    {
+      "code": "HANDOFF-SECTIONS",
+      "severity": "warn"
+    },
+    {
+      "code": "COMP-UNSAFE",
+      "severity": "warn"
+    },
+    {
+      "code": "COMP-LVC",
+      "severity": "warn"
+    },
+    {
+      "code": "EXP-RESULTS",
+      "severity": "warn"
+    },
+    {
+      "code": "RISK-SCORE",
+      "severity": "warn"
+    },
+    {
+      "code": "STATUS-APPROVED",
+      "severity": "warn"
+    },
+    {
+      "code": "APPROVAL-INVALID",
+      "severity": "warn"
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn"
+    },
+    {
+      "code": "MERMAID-RULES",
+      "severity": "warn"
+    }
+  ],
+  "findings": [
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/SCHEMA.md",
+      "message": "inline tags name phase-p1-foundation but the frontmatter unverified list does not (SCHEMA §7.1)",
+      "id": "schema"
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/architecture/ov-arch-configuration.md",
+      "message": "the frontmatter unverified list names phase-p7-lifecycle but no inline tag does (SCHEMA §7.1)",
+      "id": "ov-arch-configuration"
+    },
+    {
+      "code": "CONTRADICTION",
+      "severity": "warn",
+      "path": "wiki/decisions/adr-0009-benchmark-hardware-energy.md",
+      "message": "open CONTRADICTION blockquote (registered as Q-116, Q-122, Q-123)",
+      "id": "adr-0009",
+      "line": 42
+    },
+    {
+      "code": "CONTRADICTION",
+      "severity": "warn",
+      "path": "wiki/decisions/adr-0010-isolation-webview2-profiles.md",
+      "message": "open CONTRADICTION blockquote (registered as Q-107)",
+      "id": "adr-0010",
+      "line": 46
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/interactive-plan/ip-build-plan.md",
+      "message": "inline tags name phase-p0-planning but the frontmatter unverified list does not (SCHEMA §7.1)",
+      "id": "ip-build-plan"
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/phases/phase-p0-planning.md",
+      "message": "the frontmatter unverified list names phase-p0-planning but no inline tag does (SCHEMA §7.1)",
+      "id": "phase-p0-planning"
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/phases/phase-p3-tabs-sessions.md",
+      "message": "the frontmatter unverified list names phase-p3-tabs-sessions but no inline tag does (SCHEMA §7.1)",
+      "id": "phase-p3-tabs-sessions"
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/phases/phase-p5-telemetry.md",
+      "message": "the frontmatter unverified list names phase-p5-telemetry but no inline tag does (SCHEMA §7.1)",
+      "id": "phase-p5-telemetry"
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/phases/phase-p6-benchmark-harness.md",
+      "message": "the frontmatter unverified list names phase-p6-benchmark-harness but no inline tag does (SCHEMA §7.1)",
+      "id": "phase-p6-benchmark-harness"
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/phases/phase-p7-lifecycle.md",
+      "message": "the frontmatter unverified list names phase-p7-lifecycle but no inline tag does (SCHEMA §7.1)",
+      "id": "phase-p7-lifecycle"
+    },
+    {
+      "code": "UNV-MIRROR",
+      "severity": "warn",
+      "path": "wiki/phases/phase-p8-research-paper.md",
+      "message": "the frontmatter unverified list names phase-p8-research-paper but no inline tag does (SCHEMA §7.1)",
+      "id": "phase-p8-research-paper"
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/experiments/exp-navigation.md",
+      "message": "\"95%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "exp-navigation",
+      "line": 75
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-01-idle-memory-vs-browsers.md",
+      "message": "\"10%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-01",
+      "line": 39
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-02-overhead-vs-tauri-baseline.md",
+      "message": "\"20%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-02",
+      "line": 35
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-03-background-cpu-without-lifecycle.md",
+      "message": "\"10%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-03",
+      "line": 39
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-04-startup-window-visible.md",
+      "message": "\"10%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-04",
+      "line": 39
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-05-navigation-non-inferiority.md",
+      "message": "\"10%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-05",
+      "line": 35
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-06-rendering-non-inferiority.md",
+      "message": "\"10%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-06",
+      "line": 40
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-07-energy-per-workload.md",
+      "message": "\"10%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-07",
+      "line": 36
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-08-adaptive-reduces-memory.md",
+      "message": "\"15%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-08",
+      "line": 38
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-10-adaptive-restore-latency.md",
+      "message": "\"20%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-10",
+      "line": 35
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-11-lifecycle-safety.md",
+      "message": "\"95%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-11",
+      "line": 34
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-12-security-overhead-small.md",
+      "message": "\"1 ms\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-12",
+      "line": 39
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-13-profiles-cheaper-than-udfs.md",
+      "message": "\"10%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-13",
+      "line": 36
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-14-memory-growth-non-inferior.md",
+      "message": "\"10 MiB\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-14",
+      "line": 36
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/hypotheses/hyp-15-restore-and-recovery.md",
+      "message": "\"95%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "hyp-15",
+      "line": 37
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/metrics/metric-loaf-blocking.md",
+      "message": "\"50 ms\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "metric-loaf-blocking",
+      "line": 51
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/metrics/metric-memory-growth-slope.md",
+      "message": "\"1 s\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "metric-memory-growth-slope",
+      "line": 45
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/metrics/metric-nav-failure-rate.md",
+      "message": "\"30 s\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "metric-nav-failure-rate",
+      "line": 40
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/metrics/metric-peak-tree-private-commit.md",
+      "message": "\"1 s\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "metric-peak-tree-private-commit",
+      "line": 44
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/metrics/metric-recovery-time.md",
+      "message": "\"60 s\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "metric-recovery-time",
+      "line": 45
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/metrics/metric-tree-private-commit.md",
+      "message": "\"1 s\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "metric-tree-private-commit",
+      "line": 50
+    },
+    {
+      "code": "MERMAID-RULES",
+      "severity": "warn",
+      "path": "wiki/research/ov-research-plan.md",
+      "message": "mermaid block: about 31 nodes (more than 30; split it) (SCHEMA §14)",
+      "id": "ov-research-plan",
+      "line": 41
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/ov-research-statistical-analysis-plan.md",
+      "message": "\"95%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "ov-research-statistical-analysis-plan",
+      "line": 84
+    },
+    {
+      "code": "INT-NUMBER-NOSRC",
+      "severity": "warn",
+      "path": "wiki/research/ov-research-statistical-analysis-plan.md",
+      "message": "\"80%\" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)",
+      "id": "ov-research-statistical-analysis-plan",
+      "line": 112
+    },
+    {
+      "code": "SCHEMA-SPLIT",
+      "severity": "info",
+      "path": "CLAUDE.md",
+      "message": "compare CLAUDE.md rules with SCHEMA.md (manual; not mechanically checkable, SCHEMA §9.3, §9.6)"
+    },
+    {
+      "code": "CONTRADICTION",
+      "severity": "info",
+      "path": "wiki/",
+      "message": "reminder: also do the semantic contradiction pass (claims that disagree between pages, with an accepted ADR or a raw source)"
+    }
+  ]
+}

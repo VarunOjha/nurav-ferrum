@@ -156,7 +156,7 @@ interface WikiPage {
   scopeHash: string | null;
   headings: { depth: number; text: string; slug: string }[];
   links: { href: string; resolvedPath: string | null; anchor: string | null }[];
-  unverifiedTags: { phase: string; line: number }[];
+  unverifiedTags: { phase: string; line: number }[];  // outside fenced code; a tag in inline code counts (IP-5)
   findings: LintFinding[];    // from parsing + validation + cross-page rules
   mtimeMs: number; size: number;
 }

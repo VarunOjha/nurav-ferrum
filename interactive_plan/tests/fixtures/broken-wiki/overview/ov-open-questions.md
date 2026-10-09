@@ -42,3 +42,5 @@ approvable: false
 - asked: 2026-10-01
 - blocking: []
 - status: answered
+
+See the [fixture hub](ov-broken-hub.md).

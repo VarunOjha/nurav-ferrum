@@ -155,15 +155,21 @@ describe("SCHEMA.md <-> lib/wiki/schemas.ts", () => {
     expect(m![1]).toBe(UNVERIFIED_TAG.source);
   });
 
-  it("§9.3 severities equal the loader's severities for every code it emits", () => {
+  it("§9.3 severities equal the lint's default severities, and every §9.3 code is implemented", () => {
     const rows = section(/^### 9\.3 /).filter((l) => /^\| `[A-Z-]+` \|/.test(l));
     const table: Record<string, string> = {};
     for (const r of rows) {
       const c = cells(r);
-      table[ticks(c[0])[0]] = c[1];
+      // the leading word is the default; e.g. "info (warn when ...)" or "warn ... error if ..." vary per finding
+      table[ticks(c[0])[0]] = /^[a-z]+/.exec(c[1])![0];
     }
+    expect(Object.keys(table).length).toBeGreaterThanOrEqual(27);
+    // SCHEMA-SPLIT is not mechanically checkable: the lint prints the manual reminder as info (ip-wiki-lint §2)
+    const NOT_MECHANICAL: Record<string, string> = { "SCHEMA-SPLIT": "info" };
+    for (const code of Object.keys(table)) expect(SEVERITY[code], `${code} has no lint severity`).toBeDefined();
     for (const [code, sev] of Object.entries(SEVERITY)) {
-      if (code in table) expect(sev, code).toBe(table[code]);
+      if (code in NOT_MECHANICAL) expect(sev, code).toBe(NOT_MECHANICAL[code]);
+      else if (code in table) expect(sev, code).toBe(table[code]);
       // codes outside the §9.3 table are ip-wiki-lint §2.1 proposals: warn until adopted
       else expect(sev, code).toBe("warn");
     }
