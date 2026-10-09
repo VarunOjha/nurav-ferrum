@@ -2,18 +2,19 @@
 id: status-live
 type: status
 title: "Ferrum live status and next action"
-status: active
-updated: 2026-10-08
+status: awaiting-owner
+updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-08-s01-wave0b.md
+  - raw/owner/2026-10-09-s01-wave0c.md
 related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.11
-next_action: "Start p0.11 / IP-2 of wiki/interactive-plan/ip-build-plan.md (lib/config.ts, lib/wiki loader + zod schemas, fixtures; cd interactive_plan, Node via export PATH=\"/c/Program Files/nodejs:$PATH\"). Gate so far: npm run typecheck && npm run lint && npm run build (green at 2c997fa)."
+current_task: p0.12
+next_action: "p0.12 / IP-3 of ip-build-plan: write interactive_plan/lib/approvals/hash.ts, state.ts and lib/wiki/gates.ts (ip-data-contract §6-§8), then run the ip-testing §1.3 tests incl. the Python cross-check (must not be skipped; a failing vector is a stop condition), save IP-3-tests.txt and commit [p0.12]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
 blocked_on: []
 last_handoff: null
 ---
@@ -31,7 +32,7 @@ last_handoff: null
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1 done), IP-2 to IP-10 remain; nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), IP-3 to IP-10 remain; nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -68,6 +69,15 @@ yet (every approvable page is PENDING).**
   ([adr-0020](wiki/decisions/adr-0020-index-lists-evidence-folders.md): index lists evidence/bench folders;
   SCHEMA §11 changed). Quick lint 0 errors, 27 tool tests OK
   ([tools-wave0b-check.txt](wiki/raw/evidence/phase-p0-planning/tools-wave0b-check.txt)).
+- Wave 0c ingested (2026-10-09, [raw/owner/2026-10-09-s01-wave0c.md](wiki/raw/owner/2026-10-09-s01-wave0c.md)): `sources`
+  may be any wiki-relative path or https URL (SCHEMA §5.1, Q-220), raw research notes exempt, real-wiki loader test in
+  `npm run lint:wiki`, `tools/quick_lint.py` exits 1 on errors, typecheck = `next typegen && tsc --noEmit`, npm audit
+  accepted until the P0 exit recheck, stale "owner installs Node" wording removed from adr-0016/ip-build-plan/ip-spec;
+  IP-1-settled tags turned into evidence citations. Standing delegation policy: Claude decides tooling/schema/lint
+  consistency questions and logs them; scope, product behaviour, security posture, methodology, cost and deletion
+  still go to the owner.
+- p0.11 / IP-2 done: `lib/config.ts`, `lib/wiki/*` loader + zod schemas, fixtures, 477 unit tests + 6 real-wiki tests
+  green, typecheck + eslint exit 0 ([IP-2-tests.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt)).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -78,7 +88,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-none (p0.10 / IP-1 verified and committed as `2c997fa`)
+(empty: ingest-wave0c and p0.11 / IP-2 verified and committed 2026-10-09)
 
 ## Blockers
 
@@ -89,6 +99,7 @@ none (p0.10 / IP-1 verified and committed as `2c997fa`)
 | Local commits (Q-104) | Recovery relied on STATUS + log only | Owner | **Resolved 2026-10-08**: yes, one local commit per verified task, never push |
 | Who runs toolchain installs (Q-218; CONTRADICTION on adr-0005) | Held P1 entry | Owner | **Resolved 2026-10-08**: Claude runs all toolchain installs (adr-0021 supersedes adr-0005) |
 | Index ids for upper-case evidence names (Q-219) | Quick lint reported 1 INDEX-MISSING error (IP-0-toolchain); paused the build before IP-1 | Owner | **Resolved 2026-10-08**: index lists evidence folders (adr-0020); quick lint 0 errors |
+| `sources` format on the real wiki (found by the IP-2 loader) | Holds p0.11 / IP-2: the real-wiki loader test reports 4 FM-MISSING errors | Owner / integrator | **Resolved 2026-10-09** (wave 0c items 1-3, Q-220): any wiki-relative path or https URL; raw research notes exempt; IP-2 gate passed |
 | Rust (rustup/cargo), MSVC Build Tools | Block P1 toolchain tasks; do not block P0 | Claude runs winget, owner clicks UAC (adr-0021) | Not installed |
 | Owner approvals | Every phase entry gate; `plan/approvals.json` does not exist | Owner (plan app) | Pending — plan app not built yet |
 
@@ -96,8 +107,8 @@ Exact install and verification commands: [wiki/operations/ops-environment-setup.
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **38 open**, 10 answered (Q-006, Q-007, Q-101,
-Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219), 3 withdrawn (Q-001–Q-003). Answer them by wave, not all at once
+[ov-open-questions](wiki/overview/ov-open-questions.md): **38 open**, 11 answered (Q-006, Q-007, Q-101,
+Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003). Answer them by wave, not all at once
 ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
 - **Wave 0 (before the plan app):** done 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](wiki/raw/owner/2026-10-08-s01-wave0.md)).
@@ -107,12 +118,13 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219), 3 withdrawn (Q-001–Q-003). A
 
 ## Next action
 
-1. **Build `interactive_plan/`** (p0.11–p0.16, continuing with p0.11 / IP-2: wiki loader + zod schemas) by following
+1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.12 / IP-3: hashes + effective state + gates) by following
    [ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-1 to IP-10 (mapping table on
    [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Node: `export PATH="/c/Program Files/nodejs:$PATH"`.
-   Wiki lint until IP-5: `python tools/quick_lint.py`; tool tests: `python -m unittest discover -s tools -p "test_*.py"`.
+   Wiki lint until IP-5: `python tools/quick_lint.py` (exits 1 on errors) and `cd interactive_plan && npm run lint:wiki`; tool tests: `python -m unittest discover -s tools -p "test_*.py"`.
 2. After IP-10: the owner approves Wave 1 in the app (fix the reading-pass findings of the p0.8 lint log
-   entry first), then Wave 2, then `phase-p0-planning#exit` (p0.17–p0.18).
+   entry first), then Wave 2, then `phase-p0-planning#exit` (p0.17–p0.18). Before the exit approval, re-run
+   `npm audit` in `interactive_plan/` and record it (accepted risk until then, ip-spec §7, wave 0c item 8).
 
 ## Pending owner approvals
 
@@ -123,4 +135,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-08, session s01 (after p0.10 / IP-1, commit `2c997fa`; next p0.11 / IP-2). Last handoff: none yet.
+2026-10-09, session s01 (after wave 0c ingest and p0.11 / IP-2; next p0.12 / IP-3). Last handoff: none yet.

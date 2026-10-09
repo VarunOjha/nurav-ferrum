@@ -3,7 +3,7 @@ id: log
 type: log
 title: "Wiki log (append-only)"
 status: active
-updated: 2026-10-08
+updated: 2026-10-09
 sources: []
 related: [schema, index]
 approvable: false
@@ -230,3 +230,38 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - session: s01
 - result: The "[2026-10-08] code | p0.10 (IP-1 scaffold + spikes)" entry, committed in 28f6e4a, contained the §7.1 tag keyword without backticks (in the sentence on settled tags in ip-spec, ip-build-plan and ip-testing), which tools/quick_lint.py reports as 1 UNV-NOPHASE error. The keyword in that entry was put in backticks, as in the 2026-10-08 webview2 evidence entry; no other character of the entry changed. This edits an existing entry, against SCHEMA §12 (append-only). It was done so the wiki stays at 0 lint errors (IP-9/IP-10 require it), and it is reported to the owner. tools/quick_lint.py exits 0 even when it reports errors, so its printed counts have to be read; that is how the error slipped into 28f6e4a.
 - commit: 28f6e4a
+
+## [2026-10-08] code | p0.11 (IP-2 wiki loader + zod schemas + fixtures): implemented, gate STOPPED on real-wiki `sources` errors
+
+- session: s01
+- pages: [ip-build-plan, ip-data-contract, ip-testing, status-live]
+- sources: [raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.20261008-2358.txt]
+- result: Wrote interactive_plan/lib/config.ts, lib/wiki/{findings,frontmatter,schemas,load,links,log,openQuestions,status}.ts, vitest.config.mts, tests/unit (9 files, 467 tests) and fixtures tests/fixtures/mini-wiki (one clean page of every type, ids adr-09xx/risk-r9x/rq-9x; quick_lint on a copy: 0 errors), tests/fixtures/broken-wiki (each file named after the codes it triggers) and tests/fixtures/status/STATUS.md. Added github-slugger 2.0.0 as an exact direct dependency (already in the lockfile through rehype-slug) for heading anchors; the slug algorithm agrees with all 81 heading anchors written in the real wiki. npm run typecheck exit 0, npm run lint exit 0, npm run test 466 passed / 1 failed. Schema-sync against the real SCHEMA.md passes (§5.1 types, §6 status enums incl. §6.16, §6.2 kinds, §8 regexes, §12 log regex/ops/keys, §7.1 tag regex, §9.3 severities). The failure is the p0.11 verify item "real wiki/ reports zero FM-* errors": 4 FM-MISSING on `sources` entries, all outside wiki/interactive-plan/: risk-r15, risk-r22 and risk-r24 list `SCHEMA.md`; the immutable raw note raw/research/tauri-webview2-capabilities.md has a free-text entry. ip-data-contract §4 (Source = `raw/` or `https://`) is stricter than the SCHEMA §5.1 wording ("paths relative to wiki/ (raw/...)"), and SCHEMA §5 scopes the common rules to pages outside raw/. That is a lint-semantics ambiguity, so the step stopped (ip-build-plan stop conditions) and is not committed; question for the owner/integrator in the STATUS Blockers table. Failed run saved under the dated name; MANIFEST.sha256 now 16 lines, sha256 2097fd3daf3408c62027ec31c850f7281c874ac9d897a691251378f643875541. Quick lint 193 files, 0 errors; tool tests OK. plan/approvals.json still absent; the real-wiki test asserts it, SCHEMA.md and STATUS.md are unchanged by loading.
+- next: owner/integrator answers the `sources` question; then finish p0.11 (re-run the gate, save IP-2-tests.txt, commit [p0.11])
+
+## [2026-10-09] ingest | Owner answers on IP-1/IP-2 technical questions + delegation policy (wave 0c, s01)
+
+- session: s01
+- pages: [schema, ip-data-contract, ip-wiki-lint, ip-testing, ip-spec, ip-build-plan, ip-approvals-api, ip-routes-and-views, adr-0016, ops-wiki-maintenance, phase-p0-planning, ov-open-questions, index, status-live]
+- sources: [raw/owner/2026-10-09-s01-wave0c.md]
+- result: Raw file appended to MANIFEST.sha256 and listed in index.md. The ten accepted resolutions applied: (1) `sources` entries are an https:// URL or any wiki-relative path, existence checked by REF-DANGLING (SCHEMA §5.1 and §9.3 row, ip-data-contract §4, ip-wiki-lint §2, loader); (2) raw research notes exempt from the format rule, `sources` only a list of strings (SCHEMA §6.13, loader); (3) the real-wiki loader test moved from tests/unit (npm test) to tests/lint (npm run lint:wiki, so still in verify) with a new vitest.lint.config.mts (ip-testing §0 and §2, ip-wiki-lint §1, ip-spec §8, ip-build-plan IP-2/IP-5); (4) github-slugger 2.0.0 stays an exact direct dependency (ip-spec §7); (5) nothing further; (6) tools/quick_lint.py exits 1 when it reports errors, ops-wiki-maintenance §5 block changed identically, tools/test_quick_lint.py checks the exit status of every run plus a new test (28 tool tests OK); (7) ip-testing §0 typecheck = `next typegen && tsc --noEmit`, also on phase-p0-planning's automated gate list; (8) npm audit acceptance recorded in ip-spec §7 with a recheck at the P0 exit; (9) nothing; (10) adr-0016, ip-build-plan and ip-spec no longer state that the owner installs Node (adr-0016 keeps the verbatim Q13 quote with a note; related adr-0005 replaced by adr-0021). The sources question had only been raised in the STATUS Blockers table; it is now registered as Q-220, answered (register: 11 answered). Integrity tags settled by evidence and turned into citations: ip-spec (fs under Turbopack, S1), ip-approvals-api (loopback bind, S3; fs writes to ../plan, S1), ip-routes-and-views (mermaid dynamic import, S2), ip-build-plan (create-next-app flags and peer resolution, IP-1-scaffold.txt; winget gave Node 24.20.0, raw/owner/2026-10-08-s01-wave0.md + IP-0-toolchain.txt), adr-0016 (scaffold, peer resolution, fs, mermaid; the atomic-rename claim kept and narrowed, checked in IP-4), ip-data-contract (yaml dates stay strings, IP-2-tests.txt); ip-testing's toolchain claim narrowed to the jsdom part (IP-6). Kept with reason: perf targets (IP-9), rename retry (IP-4), latin1 round-trip (IP-3), xyflow keyboard and no-raw-HTML (IP-6/IP-8), Playwright temp dirs (IP-6), vitest-as-lint-runner (IP-5). The pages risk-r15, risk-r22, risk-r24 and the raw note were not changed.
+- stales: [schema, ip-data-contract, ip-wiki-lint, ip-testing, ip-spec, ip-build-plan, ip-approvals-api, ip-routes-and-views, adr-0016, ops-wiki-maintenance, phase-p0-planning] (no approvals.json exists, so nothing is actually stale; this stales the Wave 0 chat approval of the seven ip-* pages and adr-0016, which the owner re-approves in the app after IP-10 anyway, wave 0c item 10)
+- commit: ac54768
+
+## [2026-10-09] schema | SCHEMA §5.1/§6.13/§9.3: `sources` format and existence (wave 0c items 1-2); delegated details decided
+
+- session: s01
+- pages: [schema, ip-data-contract, ip-wiki-lint, ov-open-questions]
+- sources: [raw/owner/2026-10-09-s01-wave0c.md]
+- result: §5.1 `sources`: each entry is an absolute https:// URL or a path relative to wiki/ (any wiki file, e.g. SCHEMA.md). Details decided by Claude under the delegation policy, reviewable in the app: a path has no leading `/`, no `..`, `.` or empty segment, no backslash, no whitespace and no `:` (so http:// and drive letters are rejected), an optional `#anchor` is allowed; a malformed entry is FM-MISSING (zod), a well-formed path to a missing file is REF-DANGLING (§9.3 row extended); raw research notes (§6.13) need only a list of strings. CLAUDE.md does not restate §5.1, so it is unchanged. The plan app parser changed in the same change set (§15): lib/wiki/schemas.ts isWikiRelativePath/isSourceEntry/sourcePath, the research-note schema, unit tests for 13 rejected forms, and a real-wiki check that all 574 path entries exist. quick_lint.py's exit status follows the summary error count even when a filter argument hides the error lines (decided; documented in ops-wiki-maintenance §5). No hash, approval-state or other lint semantics changed.
+- stales: [schema] (no approvals.json exists, so nothing is actually stale)
+- commit: ac54768
+
+## [2026-10-09] code | p0.11 (IP-2 wiki loader + zod schemas + fixtures): gate PASS after the wave 0c answers
+
+- session: s01
+- pages: [ip-build-plan, ip-data-contract, ip-testing, status-live]
+- sources: [raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt, raw/owner/2026-10-09-s01-wave0c.md]
+- result: Continued the 2026-10-08 IP-2 work (entry "p0.11 ... gate STOPPED on real-wiki `sources` errors"). Changes since: the Source rule of SCHEMA §5.1 as amended, research notes exempt, the real-wiki loader test moved to tests/lint/real-wiki-loader.test.ts under vitest.lint.config.mts with a new sources-existence check. Gate (IP-2-tests.txt, node v24.20.0): npm run test 8 files, 477 passed, exit 0; npm run lint:wiki 1 file, 6 passed, exit 0 (real wiki: 199 files, 193 ids, 0 loader findings, 574 sources path entries all exist, 81 heading anchors agree, 0 body links to missing files); npm run typecheck exit 0; npm run lint exit 0; quick lint 193 files, 0 errors, exit 0; tool tests 28 OK. plan/approvals.json absent before and after (the lint-suite test also fingerprints SCHEMA.md and STATUS.md). The failed 2026-10-08 run stays as IP-2-tests.20261008-2358.txt (history). MANIFEST.sha256 now 18 lines. Observation for the owner: `sha256sum -c` reports IP-0-toolchain.txt FAILED, because its working-tree copy holds one CR (from `node -v` output) that git normalised away on commit 1cfc2d5; the MANIFEST line matches the committed blob (git show HEAD:… | sha256sum = 4cf5fc50…), so the record is intact; not changed here (raw file, not created in this step).
+- next: p0.12 / IP-3 of ip-build-plan (lib/approvals/hash.ts, state.ts, lib/wiki/gates.ts; Python cross-check must pass)
+- commit: ac54768

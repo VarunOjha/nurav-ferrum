@@ -3,7 +3,7 @@ id: index
 type: index
 title: "Wiki index (catalogue of every page)"
 status: active
-updated: 2026-10-08
+updated: 2026-10-09
 sources: []
 related: [schema, log]
 approvable: false
@@ -251,6 +251,7 @@ _None yet._
 - [01-scoping-decisions](raw/01-scoping-decisions.md) | raw | RAW SOURCE — Scoping Q&A and owner directives (session 1, 2026-10-08) | Owner answers Q1-Q14, owner directives 1-9 and the environment observed in session s01 (immutable)
 - [2026-10-08-s01-wave0](raw/owner/2026-10-08-s01-wave0.md) | raw | RAW SOURCE — Owner answers, Approval Wave 0 (session s01, 2026-10-08) | Owner answers Q-006, Q-007, Q-102, Q-103, Q-104, Q-210, standing install/deletion directives, Node 24.20.0 install, chat approval of the ip-* pages and adr-0016
 - [2026-10-08-s01-wave0b](raw/owner/2026-10-08-s01-wave0b.md) | raw | RAW SOURCE — Owner answers Q-216, Q-218, Q-219 (session s01, 2026-10-08) | Owner answers: commit the lint and approval-check scripts under tools/ (Q-216), Claude runs all toolchain installs (Q-218), index lists evidence folders not files (Q-219)
+- [2026-10-09-s01-wave0c](raw/owner/2026-10-09-s01-wave0c.md) | raw | RAW SOURCE — Owner answers: IP-1/IP-2 technical questions + delegation policy (session s01, 2026-10-09) | Owner accepts ten IP-1/IP-2 resolutions (sources may be any wiki-relative path, raw notes exempt, real-wiki loader test in lint:wiki, quick_lint exit code, typecheck, npm audit acceptance) and delegates tooling/schema/lint consistency decisions to Claude
 - [evidence-phase-p0-planning](raw/evidence/phase-p0-planning/) | raw | Evidence folder: phase-p0-planning | P0 test-gate evidence: WebView2 runtime pv, p0.8 manual lint, tools check, and interactive-plan/ IP-n gate outputs (SCHEMA §11, adr-0020)
 - [research-llm-wiki-pattern](raw/research/llm-wiki-pattern.md) | raw | Karpathy's LLM Wiki pattern and its adaptation for Ferrum | Karpathy's LLM Wiki gist: three layers, ingest/query/lint, index and log conventions
 - [research-measurement-methodology](raw/research/measurement-methodology.md) | raw | Defensible measurement methodology on Windows 11 for Chromium browsers vs WebView2 apps | Defensible measurement on Windows 11 for Chromium browsers vs WebView2 apps (memory and CPU attribution, timing, energy, fairness, statistics)
