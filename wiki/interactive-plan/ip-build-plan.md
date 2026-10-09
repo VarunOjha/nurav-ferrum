@@ -2,7 +2,7 @@
 id: ip-build-plan
 type: operations
 title: "Interactive plan app: build plan (one workflow, gated steps IP-0 to IP-10)"
-status: draft
+status: active
 updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md

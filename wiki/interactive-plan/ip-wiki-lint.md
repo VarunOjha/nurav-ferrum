@@ -2,7 +2,7 @@
 id: ip-wiki-lint
 type: operations
 title: "Interactive plan app: wiki lint (npm run lint:wiki) and gate report"
-status: draft
+status: active
 updated: 2026-10-09
 sources:
   - raw/research/llm-wiki-pattern.md

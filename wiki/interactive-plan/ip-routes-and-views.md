@@ -2,7 +2,7 @@
 id: ip-routes-and-views
 type: operations
 title: "Interactive plan app: routes, views and UI rules"
-status: draft
+status: active
 updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md

@@ -2,7 +2,7 @@
 id: ip-testing
 type: operations
 title: "Interactive plan app: test plan and quality gates"
-status: draft
+status: active
 updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md

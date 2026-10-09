@@ -2,7 +2,7 @@
 id: ip-approvals-api
 type: operations
 title: "Interactive plan app: approvals API (GET/POST /api/approvals)"
-status: draft
+status: active
 updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md

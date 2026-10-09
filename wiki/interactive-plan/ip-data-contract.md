@@ -2,7 +2,7 @@
 id: ip-data-contract
 type: operations
 title: "Interactive plan app: data contract (wiki loading, zod models, hashes, approval state)"
-status: draft
+status: active
 updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md
