@@ -96,6 +96,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 - [adr-0019](decisions/adr-0019-raw-webview2-com-boundary.md) | proposed | Raw WebView2 COM access confined to one audited module behind a safe Rust API | Proposed: confine all unsafe WebView2 COM code to one module with documented invariants (Q-110, Q-211)
 - [adr-0020](decisions/adr-0020-index-lists-evidence-folders.md) | accepted | index.md lists raw evidence and bench folders, not individual files | index.md lists each first-level raw/evidence and raw/bench folder instead of every file; SCHEMA §11 and INDEX-MISSING updated (Q-219)
 - [adr-0021](decisions/adr-0021-claude-runs-toolchain-installs.md) | accepted | Claude runs all toolchain installs, including elevated ones; kernel drivers need separate owner approval | Claude runs winget, npm, rustup and pip installs incl. MSVC Build Tools (owner clicks UAC); drivers need separate approval; supersedes adr-0005 (Q-218)
+- [adr-0022](decisions/adr-0022-approval-invalid-is-a-lint-error.md) | proposed | APPROVAL-INVALID is a lint error; overturned owner ADRs fail ADR-CHAIN | Claude-proposed (IP-9 review): APPROVAL-INVALID added to SCHEMA §9.3 as an error; ADR-CHAIN flags accepted ADRs that are REJECTED or CHANGES_REQUESTED
 
 ## Risks
 

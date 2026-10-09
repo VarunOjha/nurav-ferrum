@@ -14,7 +14,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.16
-next_action: "p0.16 / IP-10 of ip-build-plan: write interactive_plan/README.md, settle the ip-* UNVERIFIED tags with evidence citations and set status active, ask the owner to update comp-interactive-plan and run the ip-testing §4 manual checks, then HANDOFF; gate = npm run lint:wiki 0 errors, evidence IP-10-final-lint.json [p0.16]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
+next_action: "p0.16 / IP-10 of ip-build-plan: review interactive_plan/README.md (rewritten in the IP-9 review fixes), settle the ip-* UNVERIFIED tags with evidence citations and set status active, ask the owner to update comp-interactive-plan and run the ip-testing §4 manual checks, then HANDOFF; gate = npm run lint:wiki 0 errors, evidence IP-10-final-lint.json [p0.16]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
 blocked_on: []
 last_handoff: null
 ---
@@ -127,6 +127,15 @@ yet (every approvable page is PENDING).**
   (app evidence only, [IP-9-perf.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-9-perf.txt)): warm medians
   27-178 ms, under the 500 ms target; the first request (about 2.2 s) and requests after the 10 s lint memo expires (1.0-1.4 s)
   miss it (owner question in the IP-9 log entries). Delegated details in the IP-9 `decide` log entry.
+- p0.16 / IP-9 review fixes done (commit `6a78a78`): 26 reviewer findings, 25 fixed and 1 environmental (no change). Every
+  route sends `X-Frame-Options: DENY` and a same-origin CSP and refuses a non-loopback `Host` (`proxy.ts`); server scripts run
+  `scripts/serve.mjs` (127.0.0.1, `PLAN_PORT`); CLAUDE.md shown on the schema page, STATUS "Next action" section on the
+  dashboard, inbox diffs; APPROVAL-INVALID is a lint error (SCHEMA §9.3,
+  [adr-0022](wiki/decisions/adr-0022-approval-invalid-is-a-lint-error.md), claude-proposed), ADR-CHAIN/PHASE-ORDER/MERMAID-RULES
+  tightened, approvals_check `#exit` fix; graph, mermaid, phone-width and log fixes; `npm run verify` exit 0 (869 unit,
+  lint:wiki 0 errors, 143 E2E), coverage thresholds met
+  ([IP-9-review-fixes.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-9-review-fixes.txt)). Details: the IP-9
+  review `decide`, `schema` and `code` log entries.
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -137,7 +146,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.16 / IP-9 verified and committed 2026-10-09; next p0.16 / IP-10)
+(empty: p0.16 / IP-9 review fixes verified and committed 2026-10-09 (`6a78a78`); next p0.16 / IP-10)
 
 ## Blockers
 
@@ -186,4 +195,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.16 / IP-9; next p0.16 / IP-10). Last handoff: none yet.
+2026-10-09, session s01 (after the p0.16 / IP-9 review fixes; next p0.16 / IP-10). Last handoff: none yet.
