@@ -1,0 +1,30 @@
+# Node / Next.js (interactive_plan)
+node_modules/
+.next/
+out/
+test-results/
+playwright-report/
+coverage/
+.lint/
+*.tsbuildinfo
+next-env.d.ts
+
+# approvals store temp/lock files (plan app)
+plan/.approvals.lock
+plan/approvals.json.tmp-*
+
+# Rust (later phases)
+target/
+
+# Local / sensitive (never commit browser profiles, tokens, raw browsing data)
+.env*
+!.env.example
+**/EBWebView/
+*.user-data/
+logs/netlog/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

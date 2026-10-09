@@ -1,0 +1,12 @@
+# Raw evidence: WebView2 Evergreen runtime version (registry pv)
+
+- captured: 2026-10-08T19:42:30-05:00 (session s01, integration pass, Git Bash with MSYS_NO_PATHCONV=1)
+- command: reg query "HKLM\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" /v pv
+- exit code: 0
+
+Output (verbatim):
+
+```text
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}
+    pv    REG_SZ    154.0.4258.62
+```
