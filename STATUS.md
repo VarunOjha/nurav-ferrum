@@ -13,8 +13,8 @@ related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-buil
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.13
-next_action: "p0.13 / IP-9 of ip-build-plan: a11y.spec.ts and security.spec.ts (ip-testing §3), time each route's server render against the real wiki (5 runs, median; app evidence only, ip-spec §5 targets), check PLAN_READONLY mode; gate = npm run verify green in one run + coverage thresholds (ip-testing §1.6); save IP-9-verify.txt, IP-9-perf.txt, playwright-report.zip and commit [p0.13]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
+current_task: p0.16
+next_action: "p0.16 / IP-10 of ip-build-plan: write interactive_plan/README.md, settle the ip-* UNVERIFIED tags with evidence citations and set status active, ask the owner to update comp-interactive-plan and run the ip-testing §4 manual checks, then HANDOFF; gate = npm run lint:wiki 0 errors, evidence IP-10-final-lint.json [p0.16]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
 blocked_on: []
 last_handoff: null
 ---
@@ -32,7 +32,7 @@ last_handoff: null
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) and its architecture, roadmap, decisions, risks and research views (IP-8); IP-9 and IP-10 remain; nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) its architecture, roadmap, decisions, risks and research views (IP-8) and its accessibility, security and timing checks with a green `npm run verify` and coverage thresholds (IP-9); IP-10 remains; nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -118,6 +118,15 @@ yet (every approvable page is PENDING).**
   ([IP-8-tests.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt)). The first gate run exposed a Windows
   lock race in the IP-4 store (raw EPERM on `.approvals.lock`); fixed (busy-retry until LOCK_TIMEOUT) and re-run green. Delegated
   details in the IP-8 `decide` log entry. Integrator item: `exp-reliability` has `trials.target` 10 (< 30).
+- p0.16 / IP-9 done (commit `0e5282e`): `a11y.spec.ts` (landmarks, one h1, skip link, named controls on 16 routes; keyboard-only approve bar,
+  graph nodes, theme), `security.spec.ts` (guard refusals, a second `PLAN_READONLY=1` server on 3419, loopback-only bind probe
+  with a control listener: 13 non-loopback addresses refused), coverage thresholds enforced in `vitest.config.mts`, `npm run perf`;
+  `npm run verify` green in one run (830 unit, lint:wiki 0 errors, 131 E2E) and `npm run test:coverage` thresholds met
+  ([IP-9-verify.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt),
+  [playwright-report.zip](wiki/raw/evidence/phase-p0-planning/interactive-plan/playwright-report.zip)). Timing on the real wiki
+  (app evidence only, [IP-9-perf.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-9-perf.txt)): warm medians
+  27-178 ms, under the 500 ms target; the first request (about 2.2 s) and requests after the 10 s lint memo expires (1.0-1.4 s)
+  miss it (owner question in the IP-9 log entries). Delegated details in the IP-9 `decide` log entry.
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -128,7 +137,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.13 / IP-8 verified and committed 2026-10-09; next p0.13 / IP-9)
+(empty: p0.16 / IP-9 verified and committed 2026-10-09; next p0.16 / IP-10)
 
 ## Blockers
 
@@ -158,7 +167,7 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-
 
 ## Next action
 
-1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.13 / IP-9: accessibility, performance, security, full verify) by following
+1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.16 / IP-10: documentation, evidence, handoff) by following
    [ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-1 to IP-10 (mapping table on
    [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Node: `export PATH="/c/Program Files/nodejs:$PATH"`.
    Wiki lint (normative since IP-5): `cd interactive_plan && npm run lint:wiki` (`lint:wiki:json` for evidence, `npm run gate`
@@ -177,4 +186,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.13 / IP-8; next p0.13 / IP-9). Last handoff: none yet.
+2026-10-09, session s01 (after p0.16 / IP-9; next p0.16 / IP-10). Last handoff: none yet.
