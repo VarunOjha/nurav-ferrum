@@ -15,6 +15,11 @@ sources:
 related: [ov-project, schema, ops-session-protocol, ops-approval-workflow, ops-wiki-maintenance]
 approvable: false
 tags: [glossary]
+unverified:
+  - claim: "A Job Object captures the complete process tree of Chrome, Edge and WebView2"
+    verify_in: phase-p6-benchmark-harness
+  - claim: "Reading AMD energy counters on Windows needs admin rights"
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # Glossary

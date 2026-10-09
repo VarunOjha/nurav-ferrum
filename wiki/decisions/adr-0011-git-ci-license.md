@@ -7,6 +7,7 @@ updated: 2026-10-08
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
+  - raw/owner/2026-10-08-s01-wave0.md
 related: [adr-0003, adr-0005, adr-0018, phase-p1-foundation, comp-core]
 approvable: true
 date: 2026-10-08
@@ -72,7 +73,7 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
    Whether runners can build and smoke-test the Tauri/WebView2 app is UNVERIFIED[phase-p1-foundation]. Whether the audit tools run there is also UNVERIFIED[phase-p1-foundation].
 3. **CI never runs benchmarks.** Shared runners are not a controlled environment ([ADR-0009](adr-0009-benchmark-hardware-energy.md)). CI may run benchmark-harness *unit* tests and fixture validation only.
 4. **License.** Dual `MIT OR Apache-2.0`, with `LICENSE-MIT` and `LICENSE-APACHE` at the repo root plus `license = "MIT OR Apache-2.0"` in every crate's `Cargo.toml`. The master prompt's single `LICENSE` file name is replaced by the two files. This is a minor deviation the owner can see.
-5. **Commits.** The owner has not yet said whether Claude may make **local** commits. That is open question Q-104. The proposed default is yes: one commit per completed task, ending with the session's attribution trailer, never pushed.
+5. **Commits.** The owner answered Q-104 on 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)): "**Yes, starting now in P0** — one local commit per verified task; never push". Claude makes one local commit per verified task, ending with the session's attribution trailer, and never pushes ([ops-git-conventions](../operations/ops-git-conventions.md)).
 6. **What is never committed:** browser profiles, user-data folders, auth tokens, network logs from personal browsing, or raw personal telemetry (master prompt §12). `.gitignore` covers these from P1.
 
 ## Consequences
@@ -85,12 +86,12 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
 ### Negative
 
 - Without a remote, CI cannot run. The P1 gate either waits for the owner to create the remote (Q-105) or accepts local equivalents of the CI commands as evidence, with the first CI run deferred and recorded.
-- With no local-commit authorisation, resumability falls back to STATUS and the log only ([ADR-0003](adr-0003-multi-session-resumability.md)).
+- Before Q-104 was answered (2026-10-08), resumability rested on STATUS and the log only ([ADR-0003](adr-0003-multi-session-resumability.md)). Local commits are now authorised, so git history is available for recovery.
 
 ### Follow-ups
 
 - P1: `.gitignore`, license files, `.github/workflows/ci.yml`, dependency-audit config, plus the CI pass recorded as evidence (a link to the run, or local command output if there is no remote yet).
-- Q-104 (local commits) and Q-105 (remote: name, visibility, timing), in [ov-open-questions](../overview/ov-open-questions.md). Recommended default for Q-105: before P1 exit the owner creates an **empty** repository (no README or license, to avoid merge conflicts); it stays private until the M1 review (P2 exit), when the owner decides on public. Until a remote exists, the P1 gate accepts local outputs of the CI commands and the first hosted CI run is recorded later as additional evidence.
+- Q-104 (local commits) is answered (yes, see Decision item 5). Q-105 (remote: name, visibility, timing) is open, in [ov-open-questions](../overview/ov-open-questions.md). Recommended default for Q-105: before P1 exit the owner creates an **empty** repository (no README or license, to avoid merge conflicts); it stays private until the M1 review (P2 exit), when the owner decides on public. Until a remote exists, the P1 gate accepts local outputs of the CI commands and the first hosted CI run is recorded later as additional evidence.
 
 ### Related risks and phases
 

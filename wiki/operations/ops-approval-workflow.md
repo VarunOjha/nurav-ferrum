@@ -8,6 +8,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/research/llm-wiki-pattern.md
   - raw/research/nextjs-stack.md
+  - raw/owner/2026-10-08-s01-wave0.md
 related: [schema, adr-0001, adr-0014, adr-0016, comp-interactive-plan, ip-data-contract, ip-spec, ip-build-plan, phase-p0-planning, ops-session-protocol, ops-resume-after-interruption, ov-open-questions]
 approvable: true
 audience: both
@@ -344,9 +345,9 @@ frontmatter wins and the table is fixed.
 
 | Wave | When | Approve these keys | Answer first | What approving commits you to |
 |---|---|---|---|---|
-| 0 | Before the plan app is built; **in chat**, transcribed to `wiki/raw/owner/` | `ip-spec`, `ip-data-contract`, `ip-routes-and-views`, `ip-approvals-api`, `ip-wiki-lint`, `ip-testing`, `ip-build-plan`, `adr-0016` | Q-006, Q-007, Q-103, Q-210 (and Q-102 Node line) | Claude may build `interactive_plan/` as specified (P0 tasks p0.9–p0.16). No Ferrum code |
-| 1 | After IP-10, **in the app** | `schema` (covers `CLAUDE.md` via `bootstrap_hash`), the seven `ip-*` pages and `adr-0016` again, `phase-p0-planning`, `adr-0001`, `adr-0002`, `adr-0003`, `adr-0004`, `adr-0014`, `comp-interactive-plan`; then `phase-p0-planning#exit` | Q-207 and Q-004 (closed by approving `schema`), Q-005, Q-102, Q-108 | The wiki conventions, the resumability protocol and the gating rules; P0 is done |
-| 2 | P1 entry | `phase-p1-foundation`, `adr-0005`, `adr-0006`, `adr-0007`, `adr-0010`, `adr-0011`, `adr-0012`, `adr-0018`, `adr-0019`, `comp-core`, `comp-webview2-runtime`, `comp-windows-os` | Q-104, Q-106, Q-110, Q-211 | Toolchain install (you run winget), repo scaffold and layout, the four de-risking spikes including raw COM in spike S3. Still no product features |
+| 0 | Before the plan app is built; **in chat**, transcribed to `wiki/raw/owner/` | `ip-spec`, `ip-data-contract`, `ip-routes-and-views`, `ip-approvals-api`, `ip-wiki-lint`, `ip-testing`, `ip-build-plan`, `adr-0016` | Q-006, Q-007, Q-103, Q-210 (and Q-102 Node line); all answered and the keys approved in chat on 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)) | Claude may build `interactive_plan/` as specified (P0 tasks p0.9–p0.16). No Ferrum code |
+| 1 | After IP-10, **in the app** | `schema` (covers `CLAUDE.md` via `bootstrap_hash`), the seven `ip-*` pages and `adr-0016` again, `phase-p0-planning`, `adr-0001`, `adr-0002`, `adr-0003`, `adr-0004`, `adr-0014`, `comp-interactive-plan`; then `phase-p0-planning#exit` | Q-207 and Q-004 (closed by approving `schema`), Q-005, Q-108 | The wiki conventions, the resumability protocol and the gating rules; P0 is done |
+| 2 | P1 entry | `phase-p1-foundation`, `adr-0005`, `adr-0006`, `adr-0007`, `adr-0010`, `adr-0011`, `adr-0012`, `adr-0018`, `adr-0019`, `comp-core`, `comp-webview2-runtime`, `comp-windows-os` | Q-106, Q-110, Q-211, Q-218 (Q-104 answered 2026-10-08) | Toolchain install (you run winget), repo scaffold and layout, the four de-risking spikes including raw COM in spike S3. Still no product features |
 | 3 | P2 entry | `phase-p2-minimal-container`, `adr-0015`, `comp-app-shell`, `comp-webview-manager`, `comp-security-engine`, `comp-tab-content`, plus the new ADRs from p1.9 and any page p1.9 revised (they are STALE) | Q-109, Q-202, Q-214 | Milestone M1: a minimal working container |
 | 4 | P3 entry | `phase-p3-tabs-sessions` (+ anything STALE) | Q-107, Q-111, Q-209 | M2: tabs, sessions and the per-site profile route |
 | 5 | P4 entry | `phase-p4-security`, `adr-0008`, `exp-security-overhead`, `exp-isolation-overhead` | Q-112, Q-113, Q-202, Q-212 | M3: the security engine and its test suite |

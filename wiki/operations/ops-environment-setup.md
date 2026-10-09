@@ -8,6 +8,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
   - raw/research/tauri-webview2-capabilities.md
+  - raw/owner/2026-10-08-s01-wave0.md
 related: [adr-0005, adr-0011, phase-p1-foundation, comp-webview2-runtime, comp-interactive-plan, ops-session-protocol, ov-open-questions]
 approvable: true
 audience: both
@@ -27,8 +28,12 @@ unverified:
 # Environment setup
 
 The owner installs the toolchain with winget; Claude supplies exact commands and verifies the result
-(owner decision Q2, adr-0005, [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)). Claude does
-not run installers, elevate, or install drivers on its own (see CLAUDE.md §9).
+(owner decision Q2, adr-0005, [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)). In session s01
+the owner then gave a standing directive, "Feel free to run install.", and Claude installed Node LTS with
+winget on that authorisation ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)).
+How far that directive reaches (elevated installers such as the MSVC Build Tools, drivers) is open
+question Q-218 (CONTRADICTION on adr-0005). Until it is answered, Claude does not elevate or install
+drivers on its own (see CLAUDE.md §9).
 
 ## 1. Current state
 
@@ -39,7 +44,7 @@ not run installers, elevate, or install drivers on its own (see CLAUDE.md §9).
 | Python | 3.12.10 (no PyYAML) | raw scoping record; PyYAML absence observed in s01 |
 | WebView2 Runtime | 154.0.4258.62 | raw scoping record; re-read from the registry in s01 (same value) |
 | Edge / Chrome | 154.0.4258.x / 154.0.8037.x | raw scoping record |
-| Node.js / npm | **Installed**: `node.exe` v24.20.0, npm 11.19.0 in `C:\Program Files\nodejs`, which is on the machine PATH. Not visible to the s01 Claude session, which started before the install | Observed in s01 (2026-10-08); not yet in a raw record |
+| Node.js / npm | **Installed** by Claude on the owner's authorisation (`winget install -e --id OpenJS.NodeJS.LTS`): `node.exe` v24.20.0 in `C:\Program Files\nodejs`. **Not on the default PATH of the Claude Code Bash shell**: prepend it with `export PATH="/c/Program Files/nodejs:$PATH"` in every Bash call. The owner chose to stay on Node 24 LTS (Q-102). npm version: see the IP-0 evidence | [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md); `raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt` (p0.9) |
 | Rust (rustup/rustc/cargo) | **Not installed** (`rustc` not found; `%USERPROFILE%\.cargo\bin` absent) | raw scoping record; re-checked in s01 |
 | MSVC Build Tools | **Not installed** (`C:\Program Files (x86)\Microsoft Visual Studio\Installer\` absent) | raw scoping record; re-checked in s01 |
 | winget | Present (v1.29.380) | Observed in s01 |
@@ -63,7 +68,8 @@ Notes:
 
 - Node is already installed (24.20.0). Do **not** run the Node line again, and avoid `winget upgrade --all`
   without checking: Node 26 becomes LTS on 2026-10-28, after which `OpenJS.NodeJS.LTS` may resolve to a
-  new major ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §2). Pinning is open question Q-102.
+  new major ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §2). The owner answered Q-102:
+  stay on Node 24 LTS for now; moving to 26 needs its own ADR ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)).
   A winget pin (`winget pin add --id OpenJS.NodeJS.LTS`) may prevent the move `UNVERIFIED[phase-p1-foundation]`.
 - The Build Tools install is large and may need elevation and a reboot. Run it when convenient.
 - `rustup default stable-msvc` must run in a **new** terminal opened after the rustup install, so that

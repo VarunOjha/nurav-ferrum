@@ -11,10 +11,14 @@ sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/nextjs-stack.md
   - raw/research/related-work-seed.md
+  - raw/owner/2026-10-08-s01-wave0.md
 related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability]
 approvable: false
 audience: owner
 tags: [questions, owner]
+unverified:
+  - claim: "@vitest/coverage-v8 exact version matching the pinned vitest is available from the registry at install time"
+    verify_in: phase-p0-planning
 ---
 
 # Open questions for the owner
@@ -62,9 +66,9 @@ hold. Approval waves, which tell you which questions to answer first, are in
 
 | Gate held | Open questions |
 |---|---|
-| Building `interactive_plan/` in P0 (comp-interactive-plan) | Q-006, Q-007, Q-103, Q-210 |
+| Building `interactive_plan/` in P0 (comp-interactive-plan) | none (Q-006, Q-007, Q-103, Q-210 answered 2026-10-08) |
 | `schema` approval (part of every phase entry) | Q-207 |
-| P1 entry | Q-104, Q-106, Q-110 (via adr-0019), Q-211 (via adr-0019) |
+| P1 entry | Q-106, Q-110 (via adr-0019), Q-211 (via adr-0019), Q-218 (adr-0005) |
 | P2 entry | Q-109, Q-110 (via adr-0019), Q-202, Q-211 (via adr-0019), Q-214 |
 | P3 entry | Q-107, Q-111, Q-209 |
 | P4 entry | Q-112, Q-113, Q-202, Q-212 |
@@ -72,8 +76,8 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P6 entry (incl. exp-energy, exp-reliability) | Q-116, Q-117, Q-118, Q-119, Q-120, Q-121, Q-122, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
-| Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-102, Q-105, Q-108, Q-215, Q-216, Q-217 |
-| Answered | Q-101 |
+| Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-105, Q-108, Q-215, Q-216, Q-217 |
+| Answered | Q-006, Q-007, Q-101, Q-102, Q-103, Q-104, Q-210 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -137,8 +141,8 @@ Please confirm or strike each one.
 
 - asked: 2026-10-08
 - blocking: [comp-interactive-plan]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), owner answer: "**Yes** (recommended default accepted)". The plan app appends `approval` entries (`PLAN_APPEND_LOG=1`).
 
 Raised in [ip-spec](../interactive-plan/ip-spec.md) §9 item 2. SCHEMA §10.1 allows the plan app to write
 these entries. Recommended default: yes (`PLAN_APPEND_LOG=1`). The alternative is that Claude adds them at
@@ -148,8 +152,8 @@ the next RESUME.
 
 - asked: 2026-10-08
 - blocking: [comp-interactive-plan]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), owner answer: "**No** (recommended default accepted; history append-only)". No reset action; SCHEMA §10.1 is unchanged.
 
 Raised in [ip-spec](../interactive-plan/ip-spec.md) §9 item 3. SCHEMA §10.1 allows only
 `approved | changes-requested | rejected`, and `history` is append-only. Recommended default: no reset
@@ -186,23 +190,24 @@ pages are re-approved in the app after IP-10.
 
 - asked: 2026-10-08
 - blocking: []
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), owner answer: "**Stay on Node 24 LTS for now**; reconsider 26 later via its own ADR". The same file records the install (`winget install -e --id OpenJS.NodeJS.LTS`, v24.20.0) and that Node is not on the default PATH of the s01 shell.
 
-Raised in adr-0005 and adr-0016. It holds only the P0 exit review.
+Raised in adr-0005 and adr-0016. It held only the P0 exit review.
 
-Partial evidence: session s01 observed `node.exe` v24.20.0 and npm 11.19.0 in `C:\Program Files\nodejs`.
-This is not yet recorded as a raw file. Node 26 becomes LTS on 2026-10-28
+Evidence: the owner-answer file above records `"/c/Program Files/nodejs/node.exe" --version` giving `v24.20.0`;
+the IP-0 evidence file `raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt` (task p0.9)
+records `node -v`, `npm -v` and `git --version`. Node 26 becomes LTS on 2026-10-28
 ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §2).
 
-Remaining question: keep Node 24 (and stop winget upgrades from moving it), or move to 26 later?
+Answered: keep Node 24 for now. Moving to 26 needs its own ADR; avoid winget upgrades that move the major.
 
 ## Q-103 Mermaid 12.x or 11.17.2 for the plan app?
 
 - asked: 2026-10-08
 - blocking: [comp-interactive-plan]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), owner answer: "**12.x pinned exact**, fall back to 11.17.2 on rendering problems (default accepted)".
 
 Raised in adr-0016. Mermaid 12.0.0 (2026-09-10) is a breaking release, and 11.17.2 is the mature line
 ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §4). The answer is needed before the
@@ -213,10 +218,10 @@ plan app installs its dependencies. Recommended default: 12.x pinned to an exact
 
 - asked: 2026-10-08
 - blocking: [phase-p1-foundation]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), owner answer: "**Yes, starting now in P0** — one local commit per verified task; never push".
 
-Raised in adr-0011 and adr-0003. The repository has no commits yet. The proposed default is yes: one
+Raised in adr-0011 and adr-0003. When it was raised the repository had no commits. The proposed default is yes: one
 local commit per verified task, and never a push ([ops-git-conventions](../operations/ops-git-conventions.md)).
 Without commits, interruption recovery cannot rely on git history. The question blocks P1 entry. An
 earlier answer would also let P0 checkpoints be commits.
@@ -624,8 +629,8 @@ the user. Only relevant if per-site profiles are adopted (Q-107).
 
 - asked: 2026-10-08
 - blocking: [comp-interactive-plan]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), owner answer: "**Yes**: `@vitest/coverage-v8` (exact pin) and `npx playwright install chromium` (default accepted)".
 
 Raised by the review of [ip-build-plan](../interactive-plan/ip-build-plan.md) and
 [ip-testing](../interactive-plan/ip-testing.md). The IP-9 coverage gate needs a Vitest coverage provider
@@ -715,3 +720,21 @@ Raised in [ov-research-plan](../research/ov-research-plan.md). (1) "Time to inte
 FCP/LCP plus LoAF, because TTI is retired upstream (this is Q-115, which gates P5). (2) The master
 prompt's `h-*` and `m-*` id prefixes are written `hyp-*` and `metric-*` to follow SCHEMA §8. Please
 confirm (2); it holds only the P8 exit review.
+
+## Q-218 Who runs toolchain installs after the standing install directive?
+
+- asked: 2026-10-08
+- blocking: [phase-p1-foundation]
+- status: open
+- answer: none yet
+
+Raised by the ingest of [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md) (session s01). adr-0005 (accepted, case (b)) quotes
+the owner's scoping answer Q2: "Owner installs via winget (Claude supplies exact commands)". The later
+standing directive says "Feel free to run install." and Claude installed Node LTS with winget on that
+authorisation. A `> **CONTRADICTION:**` blockquote on
+[adr-0005](../decisions/adr-0005-owner-installs-toolchain-winget.md) records this (SCHEMA §9.1.1).
+Options: (a) Claude may run non-elevated installs (npm packages, winget user-scope installs) and the
+owner keeps elevated installers (MSVC Build Tools) and any driver; (b) Claude may run all toolchain
+installs, including elevated ones, with driver installs still needing separate approval; (c) keep
+adr-0005 as written (owner runs every winget install). Recommended default: (a), recorded by a new ADR
+that supersedes adr-0005 (DECIDE). It holds P1 entry, because P1 installs Rust and MSVC.

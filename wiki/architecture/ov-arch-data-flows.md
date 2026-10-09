@@ -22,6 +22,8 @@ unverified:
     verify_in: phase-p5-telemetry
   - claim: "FCP/LCP can be read from a tab via host-initiated script or CDP without adding IPC to the page"
     verify_in: phase-p5-telemetry
+  - claim: "The IPC rejection of untrusted tab content holds end to end"
+    verify_in: phase-p4-security
 ---
 
 # Runtime data flows

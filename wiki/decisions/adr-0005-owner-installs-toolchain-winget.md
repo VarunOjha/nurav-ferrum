@@ -8,6 +8,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/nextjs-stack.md
+  - raw/owner/2026-10-08-s01-wave0.md
 related: [adr-0006, adr-0011, adr-0016, phase-p0-planning, phase-p1-foundation, comp-app-shell, comp-interactive-plan, comp-webview2-runtime]
 approvable: true
 date: 2026-10-08
@@ -94,6 +95,8 @@ Rules:
 - Claude never runs elevated installers. It may run read-only checks.
 - **Never install the vulnerable WinRing0 driver.** Any kernel driver (PawnIO for energy, [ADR-0009](adr-0009-benchmark-hardware-energy.md)) needs a separate, explicit owner approval.
 
+> **CONTRADICTION:** a later owner directive widens who may install. In session s01 the owner said "Feel free to run install." (Claude may run installs such as winget or npm without asking), and Node.js LTS was then installed **by Claude** with `winget install -e --id OpenJS.NodeJS.LTS` on the owner's authorisation (v24.20.0) ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), "Standing directives"). The quoted Q2 choice above ("Owner installs via winget") is not edited here. Registered as [Q-218](../overview/ov-open-questions.md#q-218-who-runs-toolchain-installs-after-the-standing-install-directive); until it is answered, the narrower rule (owner runs elevated installers; driver installs need separate approval) is the safe reading for P1.
+
 ## Consequences
 
 ### Positive
@@ -105,7 +108,7 @@ Rules:
 
 - Whether the Visual Studio 2022 Build Tools id and workload flags give a toolchain sufficient for Tauri 2.12.1 is UNVERIFIED[phase-p1-foundation]. A newer Visual Studio generation may exist. This was not researched.
 - Whether the installed stable Rust is ≥ 1.90 is UNVERIFIED[phase-p1-foundation]. It is almost certainly met by any current stable, but it must be observed.
-- If Node is installed after 2026-10-28 it may be v26. Pinning with `winget ... --version 24.20.0` is UNVERIFIED[phase-p1-foundation]. Which Node the owner actually installed in session 1 is unknown until checked (open question Q-102 in [ov-open-questions](../overview/ov-open-questions.md)).
+- If Node is installed after 2026-10-28 it may be v26. Pinning with `winget ... --version 24.20.0` is UNVERIFIED[phase-p1-foundation]. Node v24.20.0 was installed in session s01 and the owner chose to stay on Node 24 LTS (Q-102, answered: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)).
 
 ### Follow-ups
 

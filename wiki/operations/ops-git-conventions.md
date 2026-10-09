@@ -7,20 +7,27 @@ updated: 2026-10-08
 sources:
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
+  - raw/owner/2026-10-08-s01-wave0.md
 related: [adr-0011, adr-0003, adr-0014, ops-session-protocol, ops-resume-after-interruption, ov-open-questions]
 approvable: true
 audience: claude
 trigger: "Every commit, every checkpoint, and any time a git command could change or discard history."
 tags: [git, commits, ci]
+unverified:
+  - claim: "Whether large benchmark outputs under wiki/raw/bench/ are committed in full, compressed or kept outside git"
+    verify_in: phase-p6-benchmark-harness
+  - claim: "A pre-commit hook or CI job can enforce that the component page is updated in the same commit as the code"
+    verify_in: phase-p1-foundation
 ---
 
 # Git conventions
 
 Owner decision Q8 ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)): git + GitHub Actions
 (windows-latest), dual MIT OR Apache-2.0, **Claude never pushes**, the owner creates the remote
-(adr-0011). The repository was initialised with `git init -b main` in session s01 and has **no commits
-yet** (observed 2026-10-08). Whether Claude may make local commits during P0, including the first one,
-is open question Q-104 in [ov-open-questions](../overview/ov-open-questions.md).
+(adr-0011). The repository was initialised with `git init -b main` in session s01. The owner answered
+Q-104 on 2026-10-08: "**Yes, starting now in P0** — one local commit per verified task; never push"
+([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md),
+[ov-open-questions](../overview/ov-open-questions.md)). Local commits are therefore authorised from P0 on.
 
 ## 1. Hard rules
 

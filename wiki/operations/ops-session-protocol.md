@@ -8,6 +8,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
   - raw/research/llm-wiki-pattern.md
+  - raw/owner/2026-10-08-s01-wave0.md
 related: [schema, adr-0001, adr-0003, adr-0011, adr-0014, ops-resume-after-interruption, ops-handoff-template, ops-approval-workflow, ops-git-conventions, ops-wiki-maintenance, ops-multi-agent-workflow, ops-environment-setup, ov-open-questions, ip-build-plan, phase-p0-planning]
 approvable: true
 audience: claude
@@ -146,8 +147,9 @@ If the session must stop mid-task (budget, owner request), make a **wip checkpoi
 `wip(<scope>): … [pN.M]` only if the tree builds; otherwise leave the tree dirty. In both cases leave
 In-flight filled with an accurate `intent` and add `- state: partial — <what remains>`.
 
-Until the owner answers Q-104 (whether Claude may make local commits in P0), the checkpoint is
-STATUS + log only; the handoff lists uncommitted paths.
+The owner answered Q-104 on 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)):
+local commits are authorised from P0 on, one per verified task, never pushed. Before that answer the
+checkpoint was STATUS + log only.
 
 ## 5. Token / context budget
 
