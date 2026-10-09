@@ -3,10 +3,11 @@ id: ip-testing
 type: operations
 title: "Interactive plan app: test plan and quality gates"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
+  - raw/owner/2026-10-09-s01-wave0c.md
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-build-plan, comp-interactive-plan, adr-0016, schema]
 approvable: true
 phase: phase-p0-planning
@@ -14,7 +15,7 @@ audience: both
 trigger: "Read before writing or changing tests for interactive_plan/, and before declaring any build step of the plan app done"
 tags: [interactive-plan, testing, vitest, playwright]
 unverified:
-  - claim: "The Vitest 5 + Vite 8 + @vitejs/plugin-react 6 + jsdom 30 combination installs and runs together on Node 24"
+  - claim: "jsdom 30 runs React component tests under Vitest 5 + Vite 8 + @vitejs/plugin-react 6 on Node 24 (install verified in IP-1, vitest+vite run verified in IP-2; jsdom is first used by the IP-6 component tests)"
     verify_in: phase-p0-planning
   - claim: "Playwright 1.64 webServer can run next build and next start against a temp PLAN_DATA_DIR and PLAN_WIKI_DIR on Windows with a path containing a space"
     verify_in: phase-p0-planning
@@ -24,17 +25,17 @@ unverified:
 
 The owner directive is "phase-wise testing and rigorous testing" ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), directive 5). The app holds the project's approval record, so the parts that can lose or misstate an approval (hashing, state, store, guard) get the deepest tests.
 
-Facts used here: Vitest cannot test async Server Components, so logic lives in pure modules. E2E runs against a production build. Next 16 removed `next lint`, so ESLint runs directly. All from [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.2 and §3.6. That the whole tool combination runs together is `UNVERIFIED[phase-p0-planning]` and is checked in IP-1 of [ip-build-plan](ip-build-plan.md).
+Facts used here: Vitest cannot test async Server Components, so logic lives in pure modules. E2E runs against a production build. Next 16 removed `next lint`, so ESLint runs directly. All from [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.2 and §3.6. The whole combination installed without peer errors in IP-1 ([IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)), and Vitest 5 + Vite 8 run the unit suite on Node 24 since IP-2 ([IP-2-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt)). That jsdom 30 runs the component tests with them is still `UNVERIFIED[phase-p0-planning]`, checked by the first component test in IP-6.
 
 ## 0. Commands (the full gate)
 
 | npm script | Command | Must |
 |---|---|---|
-| `typecheck` | `tsc --noEmit` | 0 errors |
+| `typecheck` | `next typegen && tsc --noEmit` (Next 16 generates `LayoutProps`/`PageProps` into `.next/types`, so plain `tsc --noEmit` fails on a clean checkout; [IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt); owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 7) | 0 errors |
 | `lint` | `eslint .` (flat config, eslint-config-next 16.4.0) | 0 errors, 0 warnings |
-| `test` | `vitest run` (unit + component; excludes `tests/lint`, `tests/e2e`) | all pass |
+| `test` | `vitest run` (unit + component; excludes `tests/lint`, `tests/e2e`; does not load the real wiki pages, the only real file read is `wiki/SCHEMA.md` by the schema-sync test, §1.2) | all pass |
 | `test:coverage` | `vitest run --coverage` for `lib/**` | thresholds in §1.6 (provider `@vitest/coverage-v8`, exact pin at install; owner consent is Q-210) |
-| `lint:wiki` | [ip-wiki-lint](ip-wiki-lint.md) suite against the **real** wiki | 0 errors (warnings listed) |
+| `lint:wiki` | `vitest run --config vitest.lint.config.mts`: every test under `tests/lint/`, i.e. the [ip-wiki-lint](ip-wiki-lint.md) suite (IP-5) and the real-wiki loader test `real-wiki-loader.test.ts` (IP-2: zero `FM-*` and loader errors, every `sources` path exists), all against the **real** wiki, read-only | 0 errors (warnings listed) |
 | `build` | `next build` | succeeds |
 | `test:e2e` | `playwright test` (its `webServer` runs `next build && next start -H 127.0.0.1 -p 3418` with temp data dirs) | all pass |
 | `verify` | `typecheck && lint && test && lint:wiki && build && test:e2e` | the single "green" command for every build step and future change |
@@ -139,7 +140,7 @@ Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to
 ## 2. Wiki lint tests (`tests/lint/`)
 
 - **Golden rule tests** (in `tests/unit/lint-rules.test.ts`, so they run in `npm test`): each rule against `tests/fixtures/broken-wiki/` gives exactly the expected `{code, path}` set (snapshot), and `tests/fixtures/mini-wiki/` gives zero errors.
-- **Real-wiki suite** (`npm run lint:wiki`): runs every rule on the real `wiki/` and fails on errors. It must pass at the end of the build workflow. Errors found in pages outside `wiki/interactive-plan/` are reported to the integrator and not fixed by the app builder (area ownership).
+- **Real-wiki suite** (`npm run lint:wiki`, `tests/lint/`): runs every rule on the real `wiki/` and fails on errors. Every test that loads the real wiki pages lives here, not in `tests/unit/` (the §1.2 schema-sync test, which reads only `wiki/SCHEMA.md`, stays a unit test), so `npm test` does not depend on wiki content (owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 3); the real-wiki loader test of IP-2 is the first member. It must pass at the end of the build workflow. Errors found in pages outside `wiki/interactive-plan/` are reported to the integrator and not fixed by the app builder (area ownership).
 - **Gate report** (`npm run gate`): a smoke test that it runs and prints a checklist for `phase-p0-planning`.
 - **Parity with the Python fallback** (`lint-parity.test.ts`): if `python --version` succeeds, run `tools/quick_lint.py` (SCHEMA §9.3 fallback, Q-216) on `tests/fixtures/mini-wiki/` and `tests/fixtures/broken-wiki/` and assert that the set of `{code, path}` findings for the codes the Python script covers equals the TS lint's set for those codes. Skipped with a visible message if Python is absent.
 

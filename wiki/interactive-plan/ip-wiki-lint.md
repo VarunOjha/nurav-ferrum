@@ -3,11 +3,12 @@ id: ip-wiki-lint
 type: operations
 title: "Interactive plan app: wiki lint (npm run lint:wiki) and gate report"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/research/llm-wiki-pattern.md
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-08-s01-wave0b.md
+  - raw/owner/2026-10-09-s01-wave0c.md
 related: [ip-spec, ip-data-contract, ip-testing, ip-build-plan, ip-routes-and-views, schema, adr-0002, adr-0003, comp-interactive-plan, phase-p1-foundation, adr-0020]
 approvable: true
 phase: phase-p0-planning
@@ -36,7 +37,7 @@ SCHEMA §9.3 says the lint script is "planned deliverable of `phase-p1-foundatio
 ## 1. Mechanism
 
 - **Engine:** `lib/lint/` holds pure TS rules over the `WikiIndex` ([ip-data-contract](ip-data-contract.md) §4.1), plus two optional git-backed rules (§3). Each rule is `{ code, severity, run(ctx): Finding[] }`. A `Finding` is `{ code, severity: 'error'|'warn'|'info', path, id?, line?, message, hint? }`.
-- **Runner:** a vitest suite, `tests/lint/wiki-lint.test.ts`, under a dedicated config `vitest.lint.config.mts` (environment `node`, include `tests/lint/**`). This avoids adding a TS script runner. Whether vitest 5 behaves as needed is `UNVERIFIED[phase-p0-planning]` and is checked in IP-5 of [ip-build-plan](ip-build-plan.md). If it does not, the fallback is a compiled script step, decided then and logged.
+- **Runner:** a vitest suite, `tests/lint/wiki-lint.test.ts`, under a dedicated config `vitest.lint.config.mts` (environment `node`, include `tests/lint/**`). The config and the first member of the suite, the real-wiki loader test `tests/lint/real-wiki-loader.test.ts`, exist since IP-2 (wave 0c item 3: tests that read the real wiki run under `lint:wiki`, not `npm test`). This avoids adding a TS script runner. Whether vitest 5 behaves as needed is `UNVERIFIED[phase-p0-planning]` and is checked in IP-5 of [ip-build-plan](ip-build-plan.md). If it does not, the fallback is a compiled script step, decided then and logged.
 - **npm scripts:**
   - `"lint:wiki": "vitest run --config vitest.lint.config.mts"`
   - `"lint:wiki:json": "cross-env WIKI_LINT_JSON=1 …"`. Better is a plain `node -e` env shim, so the extra dependency `cross-env` is not needed. The exact form is decided in IP-5.
@@ -58,7 +59,7 @@ SCHEMA §9.3 says the lint script is "planned deliverable of `phase-p1-foundatio
 | `FILE-ENCODING` | error | A leading `EF BB BF`, or a file that does not end in exactly one `\n` (zero, or `\n\n`) |
 | `ID-PATTERN` | error | The id fails its type regex (SCHEMA §8), or the basename is not `id` or `id-*` |
 | `ID-DUP` | error | `WikiIndex.duplicates` is non-empty. Research-note ids are included |
-| `REF-DANGLING` | error | Any reference field ([ip-data-contract](ip-data-contract.md) §4.2) that does not resolve; task refs (`spike`, `current_task`) that match no phase task; `sources` entries `raw/…` that do not exist; relative body links (outside fenced code) to missing files or missing heading anchors (anchors via the `rehype-slug` slug algorithm on target headings) |
+| `REF-DANGLING` | error | Any reference field ([ip-data-contract](ip-data-contract.md) §4.2) that does not resolve; task refs (`spike`, `current_task`) that match no phase task; `sources` path entries (any wiki-relative path, e.g. `raw/…` or `SCHEMA.md`; not URLs, not on raw research notes) that do not exist (SCHEMA §5.1; owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) items 1 and 2); relative body links (outside fenced code) to missing files or missing heading anchors (anchors via the `rehype-slug` slug algorithm on target headings) |
 | `REF-RECIPROCAL` | error | `rq.hypotheses` ↔ `hyp.rq`; `hyp.experiments` ↔ `exp.hypotheses` |
 | `ORPHAN` | warn | No inbound reference from another page's frontmatter or body. Links from `index.md` and `log.md` do **not** count, since everything is in the index. Singletons are exempt |
 | `INDEX-MISSING` | error | A page is not listed in `index.md`, an index line points at a missing file or folder, or a line fails the SCHEMA §11 regex. The status column must equal the page's `status` (or `raw`). Raw files: those at the `raw/` top level and under `raw/owner/`, `raw/research/` and `raw/assets/` each need their own line; files under `raw/evidence/` and `raw/bench/` are **not** listed individually; instead each first-level folder (`raw/evidence/<phase-id>/`, `raw/bench/<run-id>/`) containing a file needs one line whose label is the folder path relative to `wiki/raw/`, lower-cased, non-`[a-z0-9.-]` characters (including `/`) replaced by `-`, no trailing `-` (SCHEMA §11, [adr-0020](../decisions/adr-0020-index-lists-evidence-folders.md)); a file directly in `raw/evidence/` or `raw/bench/` is an error |

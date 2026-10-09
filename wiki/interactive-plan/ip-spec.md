@@ -3,12 +3,13 @@ id: ip-spec
 type: operations
 title: "Interactive plan app: product specification"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
   - raw/research/nextjs-stack.md
   - raw/research/llm-wiki-pattern.md
+  - raw/owner/2026-10-09-s01-wave0c.md
 related: [comp-interactive-plan, adr-0016, adr-0002, adr-0003, adr-0001, adr-0014, schema, phase-p0-planning, ip-data-contract, ip-routes-and-views, ip-approvals-api, ip-wiki-lint, ip-testing, ip-build-plan]
 approvable: true
 phase: phase-p0-planning
@@ -16,8 +17,6 @@ audience: both
 trigger: "Read before building, changing or running the interactive_plan/ Next.js app; the owner approves this page before the app is built"
 tags: [interactive-plan, nextjs, planning-tooling]
 unverified:
-  - claim: "Reading ../wiki and writing ../plan at runtime via node:fs works under Turbopack in next dev and next start"
-    verify_in: phase-p0-planning
   - claim: "Performance targets for page render on the owner's machine are achievable"
     verify_in: phase-p0-planning
 ---
@@ -38,7 +37,7 @@ The pages that make up the full specification:
 | [ip-testing](ip-testing.md) | Unit, lint, E2E, typecheck, eslint, build gates |
 | [ip-build-plan](ip-build-plan.md) | Step-by-step implementation plan for one build workflow, with test gates |
 
-Binding owner inputs: Q13 (owner installs Node LTS) and Q14 (approve in the UI, persisted to `plan/approvals.json` via a local Next.js API route) in [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md). Owner directives 2, 4 and 9 in the same file ("set up a Next.js application … visualize this whole thing", "First the interactive plan comes together. I then approve everything else."). The governing decision is `adr-0016`. The data rules come from [SCHEMA.md](../SCHEMA.md) §5, §6 and §10.
+Binding owner inputs: Q13 (Node LTS for the plan app; installed by Claude on the owner's authorisation, [adr-0021](../decisions/adr-0021-claude-runs-toolchain-installs.md), Node 24 kept per Q-102) and Q14 (approve in the UI, persisted to `plan/approvals.json` via a local Next.js API route) in [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md). Owner directives 2, 4 and 9 in the same file ("set up a Next.js application … visualize this whole thing", "First the interactive plan comes together. I then approve everything else."). The governing decision is `adr-0016`. The data rules come from [SCHEMA.md](../SCHEMA.md) §5, §6 and §10.
 
 ## 1. Purpose
 
@@ -131,7 +130,7 @@ flowchart LR
 | `PLAN_APPEND_LOG` | `1` | `0` disables appending `approval` entries to `wiki/log.md` |
 | `PLAN_PORT` | `3417` | Port used by npm scripts |
 
-- **Module rule:** wiki files are **never `import`ed**. Turbopack does not resolve files outside the project root ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.5). They are read with `node:fs/promises` at request time. That this works under Turbopack in `next dev` and `next start` is `UNVERIFIED[phase-p0-planning]` and is checked by spike IP-1 in [ip-build-plan](ip-build-plan.md).
+- **Module rule:** wiki files are **never `import`ed**. Turbopack does not resolve files outside the project root ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.5). They are read with `node:fs/promises` at request time. This works under Turbopack in both `next dev` and `next start`: spike S1 of IP-1 read `../wiki/SCHEMA.md` and wrote, read back and deleted `../plan/.spike-*` from a route handler at request time ([IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)).
 - `next.config.ts` sets `turbopack.root` explicitly to the `interactive_plan/` directory. This guards against later lockfiles in the repo root ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.5).
 
 ## 7. Technology (pinned exactly; versions from the 2026-10-08 registry snapshot)
@@ -146,14 +145,14 @@ Source: [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §1 and 
 | Styling | tailwindcss 4.3.3 + @tailwindcss/turbopack 4.3.3 (what create-next-app 16.4 emits, research note §3.1) |
 | Lint | eslint 9.39.x (exact patch recorded at install) + eslint-config-next 16.4.0, flat config |
 | Graphs | @xyflow/react 12.12.0 + @dagrejs/dagre 3.1.1 |
-| Markdown | react-markdown 10.1.0 + remark-gfm 4.0.1 + rehype-slug 6.0.0 |
+| Markdown | react-markdown 10.1.0 + remark-gfm 4.0.1 + rehype-slug 6.0.0; github-slugger 2.0.0 as an exact direct dependency (the slug algorithm rehype-slug uses, needed by the loader for heading anchors; owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 4) |
 | Diagrams | mermaid 12.1.0 with `layout: 'dagre'`, `look: 'classic'`, `securityLevel: 'strict'` (fallback 11.17.2, owner decision, see §9) |
 | Frontmatter | yaml 2.9.1 + an in-house frontmatter splitter (not gray-matter, unmaintained since 2021) |
 | Validation | zod 4.6.5 |
 | Unit tests | vitest 5.0.3, @vitejs/plugin-react 6.1.2, vite-tsconfig-paths 6.1.1, jsdom 30.1.2, @testing-library/react 16.3.3, @testing-library/dom 10.4.2 |
 | E2E | @playwright/test 1.64.0 (Chromium) |
 
-Scaffold command (research note §3.1; the combined flag set has not been run yet, so it is checked in IP-1):
+Scaffold command (research note §3.1; the combined flag set ran unchanged in IP-1 in the repo path containing a space, [IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)):
 
 ```text
 npx create-next-app@16.4.0 interactive_plan --ts --tailwind --eslint --app --turbopack --import-alias "@/*" --use-npm --disable-git --no-cache-components --no-agent-feedback --no-react-compiler
@@ -161,12 +160,14 @@ npx create-next-app@16.4.0 interactive_plan --ts --tailwind --eslint --app --tur
 
 The generator's `typescript ^5` and `eslint ^9` ranges are then replaced with the exact pins above. No package is installed with `@latest`.
 
+**npm audit (accepted risk, owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 8):** at IP-1 `npm audit` reported 7 findings, 2 low in production dependencies (katex through mermaid 12.1.0) and 5 high in dev tooling ([IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)). The only offered fix is `npm audit fix --force`, which would downgrade mermaid to 10.8.0. For a local-only planning tool bound to 127.0.0.1 these are accepted: no `npm audit fix --force`. **Recheck `npm audit` at the P0 exit** (before `phase-p0-planning#exit` is approved) and record the result in the exit evidence.
+
 ## 8. Directory layout (target)
 
 ```text
 interactive_plan/
 ├── package.json  package-lock.json  .nvmrc  next.config.ts  tsconfig.json
-├── eslint.config.mjs  vitest.config.mts  playwright.config.ts
+├── eslint.config.mjs  vitest.config.mts  vitest.lint.config.mts  playwright.config.ts
 ├── app/                     # routes (see ip-routes-and-views)
 │   ├── layout.tsx  page.tsx  globals.css
 │   ├── architecture/ roadmap/ phases/[id]/ decisions/ decisions/[id]/
@@ -181,7 +182,7 @@ interactive_plan/
 │   └── lint/                # rules/*.ts run.ts format.ts
 └── tests/
     ├── unit/                # vitest (node + jsdom)
-    ├── lint/wiki-lint.test.ts   # `npm run lint:wiki` against the real wiki
+    ├── lint/                # `npm run lint:wiki`: wiki-lint.test.ts + real-wiki-loader.test.ts (real wiki, read-only)
     ├── e2e/*.spec.ts        # Playwright
     └── fixtures/            # mini-wiki/, plan/, broken-wiki/
 ```

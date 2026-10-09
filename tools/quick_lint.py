@@ -173,3 +173,4 @@ for line in errs:
 for w in warns:
     print('WARN ', w)
 print(f'{len(docs)} files checked, {len(errs)} errors, {len(warns)} warnings')
+sys.exit(1 if errs else 0)  # non-zero when any error was found (owner answer 2026-10-09, wave 0c item 6)

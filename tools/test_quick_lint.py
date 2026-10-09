@@ -17,14 +17,19 @@ SCRIPT = os.path.join(TOOLS, 'quick_lint.py')
 DOC = os.path.join(REPO, 'wiki', 'operations', 'ops-wiki-maintenance.md')
 
 
-def run_lint(cwd):
+def run_lint(cwd, *args):
     env = dict(os.environ, PYTHONIOENCODING='utf-8')
-    r = subprocess.run([sys.executable, SCRIPT], cwd=cwd, capture_output=True, text=True, encoding='utf-8', env=env)
+    r = subprocess.run([sys.executable, SCRIPT, *args], cwd=cwd, capture_output=True, text=True, encoding='utf-8',
+                       env=env)
     out = r.stdout.replace('\r', '')
     m = re.search(r'(\d+) files checked, (\d+) errors, (\d+) warnings', out)
     if not m:
         raise AssertionError(f'unexpected output (rc={r.returncode}):\n{out}\n{r.stderr}')
-    return int(m.group(2)), out
+    n = int(m.group(2))
+    # Exit status 1 iff the summary reports errors (owner answer 2026-10-09, wave 0c item 6).
+    if r.returncode != (1 if n else 0):
+        raise AssertionError(f'exit status {r.returncode} does not match {n} errors:\n{out}\n{r.stderr}')
+    return n, out
 
 
 INDEX_FM = ('---\nid: index\ntype: index\ntitle: "Index"\nstatus: active\nupdated: 2026-10-08\n'
@@ -90,6 +95,16 @@ class QuickLintFixture(unittest.TestCase):
         n, out = run_lint(self.d)
         self.assertGreaterEqual(n, 1, out)
         self.assertIn('lists unknown id evidence-phase-p9-gone', out)
+
+    def test_exit_status_is_0_when_clean_and_1_on_errors(self):
+        self.index('master', 'owner', 'evidence', 'bench')
+        self.assertEqual(run_lint(self.d)[0], 0)
+        self.index('master', 'owner', 'evidence')
+        self.assertEqual(run_lint(self.d)[0], 1)
+        # A filter that hides every error line still exits 1: the status follows the summary count.
+        n, out = run_lint(self.d, 'NO-SUCH-CODE')
+        self.assertEqual(n, 1, out)
+        self.assertNotIn('ERROR', out)
 
     def test_owner_raw_files_are_still_listed_individually(self):
         self.index('master', 'evidence', 'bench')

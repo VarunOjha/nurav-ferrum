@@ -3,7 +3,7 @@ id: ov-open-questions
 type: overview
 title: "Open questions for the owner (canonical register)"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -13,6 +13,7 @@ sources:
   - raw/research/related-work-seed.md
   - raw/owner/2026-10-08-s01-wave0.md
   - raw/owner/2026-10-08-s01-wave0b.md
+  - raw/owner/2026-10-09-s01-wave0c.md
 related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability]
 approvable: false
 audience: owner
@@ -78,7 +79,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
 | Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-105, Q-108, Q-215, Q-217 |
-| Answered | Q-006, Q-007, Q-101, Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219 |
+| Answered | Q-006, Q-007, Q-101, Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -770,3 +771,17 @@ ip-build-plan; `IP-0-toolchain.txt` stays as written, since raw files are never 
 lint semantics, so Claude does not choose. It holds no phase entry, but a clean lint is required by IP-9,
 IP-10 and the P0 exit; until it is answered the quick lint reports one `INDEX-MISSING` error per
 upper-case evidence file.
+
+## Q-220 Format of `sources` entries on the real wiki (found by the IP-2 loader)
+
+- asked: 2026-10-08
+- blocking: []
+- status: answered
+- answer: [raw/owner/2026-10-09-s01-wave0c.md](../raw/owner/2026-10-09-s01-wave0c.md), owner answer: "**Accept all; Claude decides these**" — a page's `sources` entry may be any wiki-relative path (e.g. `SCHEMA.md`) or an `https://` URL, non-existent targets are caught by REF-DANGLING; raw research notes are exempt from the strict format rule (only a list of strings); the real-wiki loader test moves from `npm test` to `lint:wiki`.
+
+Applied 2026-10-09: SCHEMA §5.1, §6.13 and the §9.3 `REF-DANGLING` row, [ip-data-contract](../interactive-plan/ip-data-contract.md) §4,
+[ip-wiki-lint](../interactive-plan/ip-wiki-lint.md) §2, [ip-testing](../interactive-plan/ip-testing.md) §0 and the
+loader (`interactive_plan/lib/wiki/schemas.ts`). Registered after the fact for traceability; the question was
+first raised on 2026-10-08 in the STATUS Blockers table, when the IP-2 loader reported 4 `FM-MISSING`
+findings on the real wiki (risk-r15, risk-r22 and risk-r24 list `SCHEMA.md`; the immutable research note
+raw/research/tauri-webview2-capabilities.md has a free-text entry). Those pages were not changed.

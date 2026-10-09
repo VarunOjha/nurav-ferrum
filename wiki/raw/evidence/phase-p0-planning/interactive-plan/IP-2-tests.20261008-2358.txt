@@ -1,0 +1,543 @@
+# IP-2 gate run (p0.11) -- 2026-10-08 23:58 -0500
+node v24.20.0, npm 11.19.0, HEAD 1359bb3 + uncommitted IP-2 working tree
+
+$ npm run test -- --reporter=verbose
+
+> interactive_plan@0.1.0 test
+> vitest run --reporter=verbose
+
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+ ✓ tests/unit/config.test.ts > getConfig > defaults are relative to the app directory's parent 4ms
+ ✓ tests/unit/config.test.ts > getConfig > environment overrides (relative values resolve against cwd) 1ms
+ ✓ tests/unit/config.test.ts > getConfig > PLAN_REPO_ROOT moves the derived defaults; junk values fall back 1ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > matches valid headings and captures date, op, title 3ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## [2026-10-8] code | x" 1ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## [2026-10-08] build | x" 0ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## [2026-10-08] code x" 0ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## [2026-10-08] code | " 0ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## 2026-10-08 code | x" 0ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "### [2026-10-08] code | x" 0ms
+ ✓ tests/unit/log.test.ts > parseLog > splits entries and parses bullets leniently 5ms
+ ✓ tests/unit/log.test.ts > parseLog > malformed `## [` heading -> LOG-FORMAT, and the following bullets belong to no entry 1ms
+ ✓ tests/unit/log.test.ts > parseLog > entries out of date order -> LOG-FORMAT 1ms
+ ✓ tests/unit/log.test.ts > parseLog > a top-level bullet key outside SCHEMA §12 -> LOG-FORMAT 0ms
+ ✓ tests/unit/log.test.ts > parseLog > headings inside fenced code are ignored; other ## headings end an entry 0ms
+ ✓ tests/unit/log.test.ts > parseLog > the real wiki/log.md parses: one entry per `## [` heading 18ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > valid page -> fm + body, no findings 15ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > CRLF input parses the same as LF 3ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > lone CR is normalised before fence detection 1ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > no opening fence -> FM-MISSING 1ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > opening fence not at byte 0 -> FM-MISSING 1ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > no closing fence -> FM-MISSING 0ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > BOM -> FILE-ENCODING, and the page still parses 2ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > final-newline rule: zero, one and two trailing \n 5ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > empty frontmatter block parses to {} 1ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > raw files (requireFrontmatter false) get no findings 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > anchors and aliases -> FM-YAML-SUBSET 2ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > explicit tags -> FM-YAML-SUBSET 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > multi-document stream -> FM-YAML-SUBSET (and no frontmatter object) 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > duplicate keys are rejected 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > unquoted `: ` in a string is a YAML error, not a silent mis-parse 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > dates stay strings: 2026-10-08 -> "2026-10-08" (yaml 2.9.1, YAML 1.2 core schema) 2ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > datesToStrings converts a Date back to YYYY-MM-DD (UTC), recursively 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > booleans and integers keep their types 1ms
+ ✓ tests/unit/frontmatter.test.ts > volatile keys (SCHEMA §5, §10.2) > block scalars for status/updated -> FM-VOLATILE 3ms
+ ✓ tests/unit/frontmatter.test.ts > volatile keys (SCHEMA §5, §10.2) > a multi-line plain scalar -> FM-VOLATILE 1ms
+ ✓ tests/unit/frontmatter.test.ts > volatile keys (SCHEMA §5, §10.2) > a mapping or list value -> FM-VOLATILE 2ms
+ ✓ tests/unit/frontmatter.test.ts > volatile keys (SCHEMA §5, §10.2) > single-line plain, double- and single-quoted values are fine; nested status is not volatile 2ms
+ ✓ tests/unit/frontmatter.test.ts > normalizeEol (SCHEMA §10.2 N) > CRLF -> LF, lone CR -> LF, nothing else 0ms
+ ✓ tests/unit/links.test.ts > resolveHref > resolves ../ relative links with an anchor 3ms
+ ✓ tests/unit/links.test.ts > resolveHref > resolves same-directory and nested links 1ms
+ ✓ tests/unit/links.test.ts > resolveHref > links leaving the wiki keep a ../ prefix 0ms
+ ✓ tests/unit/links.test.ts > resolveHref > anchor-only links point at the page itself 0ms
+ ✓ tests/unit/links.test.ts > resolveHref > external links resolve to null 1ms
+ ✓ tests/unit/links.test.ts > resolveHref > folder links keep the trailing slash; percent-encoding is decoded 0ms
+ ✓ tests/unit/links.test.ts > extractLinks > finds inline links, images and reference definitions with line numbers 1ms
+ ✓ tests/unit/links.test.ts > extractLinks > ignores links inside fenced code (``` and ~~~, longer fences) and inline code 1ms
+ ✓ tests/unit/links.test.ts > extractLinks > an unclosed fence hides the rest of the body 0ms
+ ✓ tests/unit/links.test.ts > headings and slugs (rehype-slug = github-slugger) > slugs like GitHub: lowercase, punctuation dropped, spaces to - 2ms
+ ✓ tests/unit/links.test.ts > headings and slugs (rehype-slug = github-slugger) > headings inside fenced code are ignored; closing #s are stripped; line numbers are file lines 0ms
+ ✓ tests/unit/links.test.ts > headings and slugs (rehype-slug = github-slugger) > headingPlainText strips inline markdown 1ms
+ ✓ tests/unit/links.test.ts > checkLinks (REF-DANGLING) > existing file + existing anchor -> no finding 1ms
+ ✓ tests/unit/links.test.ts > checkLinks (REF-DANGLING) > missing file -> REF-DANGLING 1ms
+ ✓ tests/unit/links.test.ts > checkLinks (REF-DANGLING) > missing anchor on a markdown target -> REF-DANGLING 0ms
+ ✓ tests/unit/links.test.ts > checkLinks (REF-DANGLING) > external links are not checked; links in fenced code are ignored 0ms
+ ✓ tests/unit/links.test.ts > frontmatterRefs > collects every ip-data-contract §4.2 field, connects[].to and STATUS fields 0ms
+ ✓ tests/unit/links.test.ts > integrity tags > extracts UNVERIFIED[phase] with file lines, outside fenced and inline code 0ms
+ ✓ tests/unit/links.test.ts > integrity tags > blankFencedCode keeps line count; stripInlineCode keeps length 2ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §5.1 `type` enum (+ research-note, raw only) equals PAGE_TYPES 3ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §6.N `- status:` lines and the §6.16 singleton table equal STATUS_ENUMS 3ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §6.2 connects `kind` enum equals EDGE_KINDS 1ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §8 id regexes equal ID_PATTERNS and the non-page patterns 4ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §12 log heading regex, ops and bullet keys equal lib/wiki/log.ts 1ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §7.1 UNVERIFIED regex equals lib/wiki/links.ts 0ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §9.3 severities equal the loader's severities for every code it emits 1ms
+ ✓ tests/unit/open-questions.test.ts > the real register > parses every `## Q-NNN` section with no Q-FORMAT findings 8ms
+ ✓ tests/unit/open-questions.test.ts > the real register > non-Q `##` headings end a section (the Summary table is not parsed as fields) 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > a valid section 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > no status line -> Q-FORMAT, treated as open and blocking every phase 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > repeated status -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > unknown status -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > status with trailing text -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > unparsable blocking (scalar) -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > unparsable blocking (bad chars) -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > no blocking line -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > repeated blocking -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > a duplicate Q id -> Q-FORMAT on the second section 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > sections inside fenced code are ignored 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > has a minimal valid fixture in mini-wiki that passes with no findings 2ms
+ ✓ tests/unit/schemas.test.ts > type overview > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > enum field ["audience"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type overview > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type component > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type component > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `path` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `crate` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `trust_level` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `phase_introduced` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `responsibilities` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `connects` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type component > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type component > enum field ["trust_level"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type component > enum field ["connects","0","kind"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type component > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `milestone` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `order` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `depends_on` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `est_sessions` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `entry_criteria` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `deliverables` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `tasks` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `test_gate` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `exit_criteria` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `risks` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `decisions` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `experiments` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > enum field ["milestone"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `date` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `decided_by` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `supersedes` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > enum field ["decided_by"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `likelihood` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `impact` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `mitigation` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `spike` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `owner_phase` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `question` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `hypotheses` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `rq` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `prediction` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `null_hypothesis` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `metrics` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `experiments` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `hypotheses` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `workloads` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `configurations` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `metrics` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `trials` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `analysis` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `phase` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > enum field ["trials","order"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `unit` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `definition` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `boundary_start` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `boundary_end` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `method` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `tool` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `normalization` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `support` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > enum field ["support"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `workload_kind` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `master_prompt_ref` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `parameters` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `fixture_path` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > enum field ["workload_kind"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `scope` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `test_kinds` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `tooling` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > enum field ["test_kinds","0"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `sources` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `audience` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `trigger` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > enum field ["audience"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `session` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `phase` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `next_action` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `uncommitted` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `open_questions` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type index > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type index > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type index > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type index > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type log > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type log > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type log > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type log > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type status > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type status > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `session` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `current_phase` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `current_task` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `next_action` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `blocked_on` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `last_handoff` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type status > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type status > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type field > missing type -> FM-MISSING; unknown type -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type field > a non-object frontmatter is treated as empty 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources must be raw/ paths or https:// URLs 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > updated must be YYYY-MM-DD 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > a malformed id -> ID-PATTERN 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > risk likelihood/impact are integers 1-5; spike is a task id or null 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > phase order is an integer 0-8 and task ids match pN.M 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > STATUS blocked_on accepts ids and Q-NNN; current_task may be null 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > unverified[].verify_in must be a phase id 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > covers every page type 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > phase: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > component: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > decision: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > risk: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > research-question: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > hypothesis: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > experiment: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > metric: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > workload: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > overview: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > quality: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > operations: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > handoff: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > research-note: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > glossary: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > index: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > log: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > schema: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > status: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > basename rule: basename == id or starts with id + '-' 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > basename exceptions: SCHEMA.md, STATUS.md, research notes without the research- prefix 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > id pattern failure and basename failure are both reported 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > overview/ov-project.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > overview/glossary.md allows glossary 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > overview/sub/ov-x.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > architecture/ov-architecture.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > architecture/components/comp-x.md allows component 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > phases/phase-p1-x.md allows phase 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > decisions/adr-0001-x.md allows decision 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > risks/risk-r01-x.md allows risk 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > risks/ov-risk-register.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/ov-research-x.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/questions/rq-01.md allows research-question 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/hypotheses/hyp-01.md allows hypothesis 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/experiments/exp-x.md allows experiment 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/metrics/metric-x.md allows metric 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/workloads/wl-x.md allows workload 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > quality/qual-x.md allows quality 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > operations/ops-x.md allows operations 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > operations/handoffs/handoff-2026-10-08-s01.md allows handoff 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > interactive-plan/ip-spec.md allows operations 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > interactive-plan/ov-x.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > raw/research/note.md allows research-note 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > SCHEMA.md allows schema 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > index.md allows index 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > log.md allows log 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > phases/adr-0001.md rejects decision 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > overview/sub/glossary.md rejects glossary 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/questions/ov-x.md rejects overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/hyp-01.md rejects hypothesis 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > operations/handoffs/ops-x.md rejects operations 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > decisions/ov-x.md rejects overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > raw/research/sub/note.md rejects research-note 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > raw/note.md rejects research-note 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > other.md rejects overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > phases/status.md rejects status 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > STATUS.md allows only status 0ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > loads every page with zero findings (errors and warnings) and zero dangling links 2ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > has one clean page of every type, ids in the fixture range 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > builds byId, byPath, kinds and repo paths 0ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > parses STATUS.md frontmatter and the Next action section 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > parses the log and the open-questions register 0ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > computes backlinks from frontmatter refs and body links 0ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > extracts headings, links and integrity tags with file line numbers 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > leaves hashes null until IP-3 wires lib/approvals/hash.ts 0ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > each file triggers exactly the codes named in its file name 1ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > log.md: malformed heading, out-of-order entry, unknown bullet key -> 3 LOG-FORMAT 1ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > ov-open-questions: 4 malformed sections -> 4 Q-FORMAT, all treated as open and blocking 0ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > other files are clean; duplicates map lists both paths; a missing STATUS.md is not a crash 0ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > cross-page findings do not accumulate across loads (cache hits) 4ms
+ ✓ tests/unit/load.test.ts > cache (mtime + size) > re-parses only changed files 50ms
+ ✓ tests/unit/load.test.ts > cache (mtime + size) > a page that becomes invalid shows findings instead of failing the load 9ms
+ ✓ tests/unit/load.test.ts > the broken-wiki fixture directory exists next to mini-wiki 0ms
+stdout | tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors
+real wiki: 198 files loaded (193 ids), 31 log entries, 51 open-question sections; loader findings by code: {"error FM-MISSING":4}
+  ERROR FM-MISSING wiki/raw/research/tauri-webview2-capabilities.md  `sources.3` has no valid value: must start with raw/ or https:// (got "crate source (downloaded from static.crates.io): tauri-2.12.1, tauri-runtime-2.12.1, tauri-runtime-wry-2.12.1, tauri-utils-2.10.1, wry-0.57.0, webview2-com-0.39.1, webview2-com-sys-0.39.1, tauri-3.0.0-alpha.4")
+  ERROR FM-MISSING wiki/risks/risk-r15-session-interruption.md  `sources.1` has no valid value: must start with raw/ or https:// (got "SCHEMA.md")
+  ERROR FM-MISSING wiki/risks/risk-r22-approval-integrity.md  `sources.0` has no valid value: must start with raw/ or https:// (got "SCHEMA.md")
+  ERROR FM-MISSING wiki/risks/risk-r24-owner-review-bottleneck.md  `sources.1` has no valid value: must start with raw/ or https:// (got "SCHEMA.md")
+
+stdout | tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > the slug algorithm agrees with every heading anchor written in the real wiki
+real wiki: 81 body links with a heading anchor into a loaded page checked
+
+stdout | tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > body links to missing files (informational; the REF-DANGLING rule is enforced by lint:wiki, IP-5)
+real wiki: 0 body links to missing files
+
+ × tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors 8ms
+   → expected [ …(4) ] to deeply equal []
+ ✓ tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > reports zero other loader errors (FILE-ENCODING, ID-*, LOG-FORMAT, Q-FORMAT) 1ms
+ ✓ tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > parses STATUS.md, the log and the open-questions register 1ms
+ ✓ tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > the slug algorithm agrees with every heading anchor written in the real wiki 2ms
+ ✓ tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > body links to missing files (informational; the REF-DANGLING rule is enforced by lint:wiki, IP-5) 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/real-wiki.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors
+AssertionError: expected [ …(4) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "ERROR FM-MISSING wiki/raw/research/tauri-webview2-capabilities.md  `sources.3` has no valid value: must start with raw/ or https:// (got \"crate source (downloaded from static.crates.io): tauri-2.12.1, tauri-runtime-2.12.1, tauri-runtime-wry-2.12.1, tauri-utils-2.10.1, wry-0.57.0, webview2-com-0.39.1, webview2-com-sys-0.39.1, tauri-3.0.0-alpha.4\")",
++   "ERROR FM-MISSING wiki/risks/risk-r15-session-interruption.md  `sources.1` has no valid value: must start with raw/ or https:// (got \"SCHEMA.md\")",
++   "ERROR FM-MISSING wiki/risks/risk-r22-approval-integrity.md  `sources.0` has no valid value: must start with raw/ or https:// (got \"SCHEMA.md\")",
++   "ERROR FM-MISSING wiki/risks/risk-r24-owner-review-bottleneck.md  `sources.1` has no valid value: must start with raw/ or https:// (got \"SCHEMA.md\")",
++ ]
+
+ ❯ tests/unit/real-wiki.test.ts:49:25
+     47|     );
+     48|     for (const f of all) console.log("  " + fmt(f));
+     49|     expect(fm.map(fmt)).toEqual([]);
+       |                         ^
+     50|   });
+     51|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 466 passed (467)
+   Start at  23:58:17
+   Duration  1.05s (import 48%, tests 27%, transform 24%, worker 2%)
+
+exit: 1
+
+$ npm run typecheck
+
+> interactive_plan@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+exit: 0
+
+$ npm run lint
+
+> interactive_plan@0.1.0 lint
+> eslint .
+
+exit: 0

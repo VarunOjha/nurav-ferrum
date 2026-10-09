@@ -3,11 +3,12 @@ id: ip-routes-and-views
 type: operations
 title: "Interactive plan app: routes, views and UI rules"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-testing, comp-interactive-plan, adr-0016, adr-0014, schema]
 approvable: true
 phase: phase-p0-planning
@@ -18,8 +19,6 @@ unverified:
   - claim: "react-markdown 10.1.0 does not render raw HTML from markdown unless a raw-HTML rehype plugin is added"
     verify_in: phase-p0-planning
   - claim: "@xyflow/react 12.12.0 nodes can be made keyboard-focusable and activatable for click-through"
-    verify_in: phase-p0-planning
-  - claim: "mermaid 12.1.0 can be dynamically imported and rendered in a React 19.3 client component under Next 16.4"
     verify_in: phase-p0-planning
 ---
 
@@ -168,7 +167,7 @@ Two **approve bars**: one for the page itself (key = phase id), and one for the 
   - External `https` links get `rel="noreferrer noopener"` and an external-link icon.
   - Links to missing files are styled red with the title "missing (REF-DANGLING)".
 - **Mermaid:** a fenced `mermaid` block renders through a client `<Mermaid>` component:
-  - mermaid is dynamically imported in `useEffect` `UNVERIFIED[phase-p0-planning]`
+  - mermaid is dynamically imported in `useEffect` (works with mermaid 12.1.0 in a React 19.3 client component under Next 16.4: IP-1 spike S2, [IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt))
   - config `securityLevel: 'strict'`, `layout: 'dagre'`, `look: 'classic'`, `theme` = `default` or `dark` following the app theme
   - each diagram keeps a "show source" toggle
   - a render error shows the source and the error message; it never breaks the page

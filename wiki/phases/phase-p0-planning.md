@@ -3,12 +3,13 @@ id: phase-p0-planning
 type: phase
 title: "P0 Planning: LLM wiki, interactive plan app, owner approval"
 status: in-progress
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/llm-wiki-pattern.md
   - raw/research/nextjs-stack.md
+  - raw/owner/2026-10-09-s01-wave0c.md
 related: [schema, phase-p1-foundation, comp-interactive-plan, ip-build-plan, ops-approval-workflow, ops-wiki-maintenance, adr-0001, adr-0002, adr-0003, adr-0014, adr-0016]
 approvable: true
 phase: phase-p0-planning
@@ -87,7 +88,7 @@ tasks:
 test_gate:
   automated:
     - "cd interactive_plan && npm run lint"
-    - "cd interactive_plan && npm run typecheck (tsc --noEmit)"
+    - "cd interactive_plan && npm run typecheck (next typegen && tsc --noEmit)"
     - "cd interactive_plan && npm run test (vitest: loader, hash vectors, approval states, graph builders)"
     - "cd interactive_plan && npm run test:e2e (Playwright against next build + next start bound to 127.0.0.1, temp approvals data dir)"
     - "cd interactive_plan && npm run build"

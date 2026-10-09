@@ -3,11 +3,13 @@ id: ip-data-contract
 type: operations
 title: "Interactive plan app: data contract (wiki loading, zod models, hashes, approval state)"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md
   - raw/research/llm-wiki-pattern.md
   - raw/01-scoping-decisions.md
+  - raw/owner/2026-10-09-s01-wave0c.md
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt
 related: [ip-spec, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-testing, comp-interactive-plan, adr-0016, schema]
 approvable: true
 phase: phase-p0-planning
@@ -15,8 +17,6 @@ audience: both
 trigger: "Read before changing how the plan app reads wiki/, STATUS.md or plan/approvals.json, or computes hashes and approval states; re-check after any SCHEMA.md change"
 tags: [interactive-plan, data-model, approvals, hashing]
 unverified:
-  - claim: "The yaml 2.9.1 package, with the YAML 1.2 core schema, returns unquoted YYYY-MM-DD values as strings, not Date objects"
-    verify_in: phase-p0-planning
   - claim: "Node Buffer latin1 decode/encode round-trips all 256 byte values unchanged, so the JS scope-hash regex matches the Python bytes regex"
     verify_in: phase-p0-planning
 ---
@@ -77,7 +77,7 @@ flowchart LR
 - Parse with `yaml.parseDocument(yamlText, { version: '1.2', schema: 'core', uniqueKeys: true })`. Any `doc.errors` → `FM-MISSING` with the YAML error message.
 - Walk the document AST. Any **anchor, alias, explicit tag**, or more than one document is an error (SCHEMA §5 YAML subset).
 - The volatile keys `status`, `updated` and `last_verified_commit` must be top-level single-line plain or quoted scalars. A block scalar (`|`, `>`) or a multi-line value is an error, because the scope hash depends on it (SCHEMA §5, §10.2).
-- Dates: the core schema should return `2026-10-08` as a string `UNVERIFIED[phase-p0-planning]`. If the parser returns a `Date`, the loader converts it back to `YYYY-MM-DD` (UTC) before zod sees it, and a unit test pins the behaviour.
+- Dates: the core schema returns `2026-10-08` as a string (yaml 2.9.1; pinned by the IP-2 unit test "dates stay strings", [IP-2-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt)). If the parser ever returns a `Date`, the loader converts it back to `YYYY-MM-DD` (UTC) before zod sees it, and a unit test pins the behaviour.
 
 ## 4. Typed model (zod 4, `lib/wiki/schemas.ts`)
 
@@ -87,7 +87,11 @@ All schemas mirror SCHEMA §5–§6 one to one. Enums are defined once as `const
 // Sketch; field names and enums are normative, TS syntax is illustrative.
 const Id        = z.string().regex(/^[a-z0-9][a-z0-9.-]*$/);
 const Date10    = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
-const Source    = z.string().refine(s => s.startsWith('raw/') || s.startsWith('https://'));
+// SCHEMA §5.1 (owner answer 2026-10-09, wave 0c item 1): an https:// URL, or a wiki-relative path
+// (no leading '/', no '..' segment, no '\', no whitespace, no scheme; optional #anchor). Existence of a
+// path entry is checked by REF-DANGLING (lint), not by zod.
+const Source    = z.string().refine(s => /^https:\/\/\S+$/.test(s) || isWikiRelativePath(s));
+// Raw research notes (§6.13; wave 0c item 2): sources is only z.array(z.string()).
 const Unverified = z.object({ claim: z.string(), verify_in: z.string().regex(/^phase-p[0-8]-[a-z0-9-]+$/) });
 
 const Base = z.object({
@@ -131,6 +135,8 @@ Constants (copied from SCHEMA; the sync test in [ip-testing](ip-testing.md) §2 
 | Status enums | per type, §6.1–§6.16 |
 | Id patterns | §8 table, one regex per type |
 | Directory ↔ type | §4.1 (for `FM-TYPE-DIR`) |
+
+**`sources` (SCHEMA §5.1, §6.13):** on every page except raw research notes, each entry must be an `https://` URL or a wiki-relative path (any wiki file, e.g. `SCHEMA.md`, not only `raw/…`). A malformed entry is `FM-MISSING` (zod); a well-formed path to a missing file is `REF-DANGLING` ([ip-wiki-lint](ip-wiki-lint.md) §2). Raw research notes are immutable and may hold free-text entries, so their `sources` is only a list of strings. Owner answer 2026-10-09 ([raw/owner/2026-10-09-s01-wave0c.md](../raw/owner/2026-10-09-s01-wave0c.md), items 1 and 2).
 
 **Per-type cross-field rules** that zod cannot express locally (reciprocity, trust-edge consistency, superseded chains, task-id uniqueness, DAG order) live in lint rules ([ip-wiki-lint](ip-wiki-lint.md)). The UI shows their findings on the affected page.
 

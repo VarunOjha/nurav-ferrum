@@ -3,12 +3,13 @@ id: schema
 type: schema
 title: "Ferrum wiki schema (constitution of the LLM-maintained wiki)"
 status: review
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/research/llm-wiki-pattern.md
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/owner/2026-10-08-s01-wave0b.md
+  - raw/owner/2026-10-09-s01-wave0c.md
 related: [adr-0001, adr-0002, adr-0003, adr-0014, adr-0016, adr-0020, comp-interactive-plan]
 approvable: true
 ---
@@ -17,7 +18,7 @@ approvable: true
 
 This file is the **constitution** of the Ferrum wiki. Every session, human or LLM, follows it. Where a rule says **MUST**, a check (the lint tool, the plan app, or Claude doing a manual lint) can test it mechanically. A rule that says **SHOULD** is guidance.
 
-Status of this document: `review`. The amendment batch of 2026-10-08 is applied, and so is the §11 change of adr-0020 (index lists evidence and bench folders; see `log.md`). The owner has not yet approved it (approval key `schema` in `plan/approvals.json`). Until it is approved, it is the working convention for P0 only.
+Status of this document: `review`. The amendment batch of 2026-10-08 is applied, and so are the §11 change of adr-0020 (index lists evidence and bench folders) and the §5.1/§6.13 `sources` clarification of 2026-10-09 (owner answer wave 0c); see `log.md`. The owner has not yet approved it (approval key `schema` in `plan/approvals.json`). Until it is approved, it is the working convention for P0 only.
 
 ---
 
@@ -161,7 +162,7 @@ Every wiki page (all of §4.1 except `raw/`) MUST start at byte 0 with a YAML fr
 | `title` | string | Human title. Quoted if it contains `:` |
 | `status` | enum | One of the values allowed for the type (§6) |
 | `updated` | date | Date of the last content edit. Not in the future. Not older than the file's last git commit date |
-| `sources` | list of strings | Paths **relative to `wiki/`** (`raw/…`) or absolute `https://` URLs. Use `[]` only when the page is pure planning with no factual claims |
+| `sources` | list of strings | Each entry is either an absolute `https://` URL or a path **relative to `wiki/`** (usually `raw/…`, but any wiki file is allowed, e.g. `SCHEMA.md`; no leading `/`, no `..` segment, no `\`, no whitespace; an optional `#anchor` is allowed). A path entry whose file does not exist is `REF-DANGLING` (§9.3). Use `[]` only when the page is pure planning with no factual claims. Raw research notes are exempt from the format rule (§6.13) |
 | `related` | list of ids | Every entry MUST resolve to an existing id. Order is not significant |
 | `approvable` | bool | `true` means the plan app shows Approve / Request changes, and the page takes part in the gates (§10) |
 
@@ -373,7 +374,7 @@ Resume/handoff protocol, toolchain setup, git workflow, lint procedure, plan-app
 ### 6.13 `research-note` (raw only: `wiki/raw/research/`)
 
 - id: `research-<slug>`
-- REQUIRED: `id, type, title, updated, sources`. No `status` or `approvable`, because raw files are immutable.
+- REQUIRED: `id, type, title, updated, sources`. No `status` or `approvable`, because raw files are immutable. `sources` is only required to be a list of strings: the §5.1 format rule does not apply, because a note can cite things that are neither a URL nor a wiki file (e.g. downloaded crate source) and cannot be edited afterwards (owner answer 2026-10-09, `raw/owner/2026-10-09-s01-wave0c.md`).
 - The body MUST give the access date for every URL and label each claim VERIFIED / UNCERTAIN / PROPOSAL, following `research-llm-wiki-pattern`.
 - Being raw, it is never edited. A newer finding goes in a new note that references the old one.
 
@@ -489,7 +490,7 @@ Run at the end of every session (inside HANDOFF), at every phase gate, and after
 | `FILE-ENCODING` | error | BOM present, or the file does not end in exactly one `\n` |
 | `ID-PATTERN` | error | id does not match its type pattern (§8), or the basename does not start with the id |
 | `ID-DUP` | error | Same id in two files |
-| `REF-DANGLING` | error | An id in `related`, `depends_on`, `risks`, `decisions`, `experiments`, `connects.to`, `rq`, `hypotheses`, `metrics`, `workloads`, `supersedes`, `superseded_by`, `phase`, `owner_phase`, `phase_introduced` does not resolve; or a relative body link points to a missing file |
+| `REF-DANGLING` | error | An id in `related`, `depends_on`, `risks`, `decisions`, `experiments`, `connects.to`, `rq`, `hypotheses`, `metrics`, `workloads`, `supersedes`, `superseded_by`, `phase`, `owner_phase`, `phase_introduced` does not resolve; or a `sources` path entry (§5.1; not on raw research notes) names a missing file; or a relative body link points to a missing file |
 | `REF-RECIPROCAL` | error | rq↔hyp or hyp↔exp lists disagree |
 | `ORPHAN` | warn | A page (other than singletons) has no inbound reference from any other page's frontmatter or body |
 | `INDEX-MISSING` | error | A page or raw file is missing from `index.md`, or the index lists a missing page or folder; raw evidence and bench files are checked per folder (§11, adr-0020) |

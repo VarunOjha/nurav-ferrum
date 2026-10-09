@@ -3,12 +3,14 @@ id: adr-0016
 type: decision
 title: "Interactive plan = local Next.js app reading wiki/ directly; approvals persisted to plan/approvals.json"
 status: accepted
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
   - raw/research/llm-wiki-pattern.md
-related: [adr-0001, adr-0002, adr-0005, adr-0014, schema, phase-p0-planning, comp-interactive-plan]
+  - raw/owner/2026-10-08-s01-wave0.md
+  - raw/owner/2026-10-09-s01-wave0c.md
+related: [adr-0001, adr-0002, adr-0021, adr-0014, schema, phase-p0-planning, comp-interactive-plan]
 approvable: true
 date: 2026-10-08
 decided_by: owner
@@ -20,13 +22,7 @@ options:
 phase: phase-p0-planning
 tags: [interactive-plan, nextjs, approvals, tooling]
 unverified:
-  - claim: "create-next-app@16.4.0 with the recommended flags works on Windows in a path containing a space"
-    verify_in: phase-p0-planning
-  - claim: "Runtime fs reads of ../wiki and atomic writes to ../plan/approvals.json work under next dev and next start (Turbopack)"
-    verify_in: phase-p0-planning
-  - claim: "npm install resolves without ERESOLVE using typescript 5.9.3 and eslint 9.39.x with eslint-config-next 16.4.0"
-    verify_in: phase-p0-planning
-  - claim: "Mermaid 12 renders in a client component under React 19.3 / Next 16.4"
+  - claim: "The atomic temp-file-then-rename write of ../plan/approvals.json works under next dev and next start (plain fs reads and writes outside the root were verified by IP-1 spike S1)"
     verify_in: phase-p0-planning
 ---
 
@@ -38,7 +34,7 @@ The owner directed (directives 2 and 4, Q13, Q14 in [raw/01-scoping-decisions.md
 
 - "Create folder called `interactive_plan`. In this folder set up a Next.js application. Put architecture, plan, project plan + milestones and visualize this whole thing."
 - "First the interactive plan comes together. I then approve everything else."
-- Q13: **"Owner installs Node LTS now"**.
+- Q13: **"Owner installs Node LTS now"**. (Overtaken: on the owner's later authorisation Claude installed Node 24.20.0 ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)), and Claude now runs all toolchain installs ([adr-0021](adr-0021-claude-runs-toolchain-installs.md), which supersedes adr-0005).)
 - Q14: **"Approve in UI, persisted to repo (`plan/approvals.json`, git-tracked, via local Next.js API route)"**.
 
 The LLM-wiki research recommends that the app **read `wiki/` directly** rather than copy its content, so the visualisation cannot drift ([raw/research/llm-wiki-pattern.md](../raw/research/llm-wiki-pattern.md) §6.4).
@@ -72,7 +68,7 @@ As recorded in [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), ow
 > Q13 Node for the plan app: **Owner installs Node LTS now**  
 > Q14 Approvals mechanism in plan app: **Approve in UI, persisted to repo** (`plan/approvals.json`, git-tracked, via local Next.js API route)
 
-This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
+This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)). The quote is kept verbatim; who installs Node is no longer part of this decision (see [adr-0021](adr-0021-claude-runs-toolchain-installs.md); owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 10).
 
 ### Claude elaboration (binding only once this ADR is APPROVED in the plan app)
 
@@ -96,13 +92,13 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
    npx create-next-app@16.4.0 interactive_plan --ts --tailwind --eslint --app --turbopack --import-alias "@/*" --use-npm --disable-git --no-cache-components --no-agent-feedback --no-react-compiler
    ```
 
-   It is UNVERIFIED[phase-p0-planning] that this works on Windows in a path containing a space. Dependency resolution with TypeScript 5.9.3 and ESLint 9.39.x is also UNVERIFIED[phase-p0-planning].
-2. **Reads.** The app reads `wiki/**` and `plan/approvals.json` with `fs` at request time, from server components and route handlers. It never imports them as modules. `turbopack.root` is set explicitly to `interactive_plan/`. That runtime reads outside the root work is UNVERIFIED[phase-p0-planning].
+   It ran unchanged on Windows in the repo path containing a space, and dependency resolution with TypeScript 5.9.3 and ESLint 9.39.5 had no peer-dependency errors (IP-1, [IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)).
+2. **Reads.** The app reads `wiki/**` and `plan/approvals.json` with `fs` at request time, from server components and route handlers. It never imports them as modules. `turbopack.root` is set explicitly to `interactive_plan/`. Runtime reads and writes outside the root work under `next dev` and `next start` (IP-1 spike S1, [IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)).
 3. **Writes.** `app/api/approvals/route.ts` (runtime `nodejs`):
    - validates the request with zod and accepts only ids whose page has `approvable: true`;
    - computes `content_hash` and `scope_hash` exactly as SCHEMA §10.2 specifies, checked against shared test vectors;
    - moves the previous decision into `history`;
-   - writes atomically (temp file, then rename);
+   - writes atomically (temp file, then rename; that the rename works under both servers is UNVERIFIED[phase-p0-planning], checked in IP-4);
    - is served only on `127.0.0.1` (`next start -H 127.0.0.1`) and rejects non-loopback hosts.
 4. **Only the app writes `plan/approvals.json`.** **Claude never writes it** ([SCHEMA §10.1](../SCHEMA.md#101-file-format)).
 5. **Tests.** Unit tests (Vitest) cover the parsers, the hashing and the graph builders. E2E tests (Playwright against `next build && next start`) point at a temporary data folder via an environment variable (for example `PLAN_DATA_DIR`), so tests never mutate the real approvals file.
@@ -118,8 +114,8 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
 ### Negative
 
 - Writing the app is code inside P0. It is planning tooling, not Ferrum, but it still needs tests and evidence. The P0 "no application code" rule applies to Ferrum, not to the plan app.
-- **Node major drift.** If Node is installed after 2026-10-28, `OpenJS.NodeJS.LTS` may resolve to v26 (Q-102). The `engines` range permits it, but this has not been tested. Recommended default for Q-102: stay on Node 24 LTS with `.nvmrc`, and record `node -v` / `npm -v` as evidence.
-- **Mermaid choice.** Mermaid 12 is new. If rendering problems appear, fall back to 11.17.2 (Q-103). Recommended default for Q-103: 12.1.0 pinned exactly, with `layout: dagre`, `theme: default`, `look: classic`, plus E2E rendering tests; a fallback to 11.17.2 is recorded as a `decide` log entry.
+- **Node major drift.** After 2026-10-28, `OpenJS.NodeJS.LTS` may resolve to v26. The `engines` range permits it, but this has not been tested. Q-102 is answered: stay on Node 24 LTS; Node 24.20.0 is installed and pinned in `.nvmrc` ([IP-0-toolchain.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt)); a move to 26 needs its own ADR.
+- **Mermaid choice.** Mermaid 12 is new. Q-103 is answered: 12.x pinned exactly (12.1.0), fallback 11.17.2 recorded as a `decide` log entry if rendering problems appear. Mermaid 12.1.0 rendered in a React 19.3 client component under Next 16.4 with `layout: dagre`, `look: classic`, `securityLevel: strict` (IP-1 spike S2, [IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)); E2E rendering tests follow in IP-6.
 - **Lockfile clash.** The repo will later contain other Node projects (Playwright benchmark scripts). Multiple lockfiles may confuse root inference, which the explicit `turbopack.root` mitigates.
 
 ### Follow-ups

@@ -3,23 +3,18 @@ id: ip-build-plan
 type: operations
 title: "Interactive plan app: build plan (one workflow, gated steps IP-0 to IP-10)"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
-related: [ops-approval-workflow, ov-open-questions, ops-wiki-maintenance, ip-spec, ip-data-contract, ip-routes-and-views, ip-approvals-api, ip-wiki-lint, ip-testing, comp-interactive-plan, phase-p0-planning, adr-0016, adr-0005, adr-0011, adr-0003, schema]
+  - raw/owner/2026-10-08-s01-wave0.md
+  - raw/owner/2026-10-09-s01-wave0c.md
+related: [ops-approval-workflow, ov-open-questions, ops-wiki-maintenance, ip-spec, ip-data-contract, ip-routes-and-views, ip-approvals-api, ip-wiki-lint, ip-testing, comp-interactive-plan, phase-p0-planning, adr-0016, adr-0021, adr-0011, adr-0003, schema]
 approvable: true
 phase: phase-p0-planning
 audience: claude
 trigger: "Execute when the owner has approved the ip-* pages and asked for the plan app to be built; on resume, continue from the first IP step whose gate has no saved evidence"
 tags: [interactive-plan, build-plan, resumability]
-unverified:
-  - claim: "create-next-app@16.4.0 with the chosen flag set scaffolds correctly on Windows in a path containing a space"
-    verify_in: phase-p0-planning
-  - claim: "npm install resolves typescript 5.9.3 + eslint 9.39.x + eslint-config-next 16.4.0 without peer-dependency errors"
-    verify_in: phase-p0-planning
-  - claim: "The winget OpenJS.NodeJS.LTS package installs a Node 24.x release on the build date (Node 26 becomes LTS on 2026-10-28)"
-    verify_in: phase-p0-planning
 ---
 
 # Interactive plan app: build plan
@@ -57,7 +52,7 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
 0. Confirm that p0.7 and p0.8 are done: the SCHEMA amendment batch of 2026-10-08 is applied, the quick lint ([ops-wiki-maintenance §5](../operations/ops-wiki-maintenance.md#5-lint)) reports 0 errors, and `wiki/raw/MANIFEST.sha256` exists. Otherwise IP-9 and IP-10 cannot pass, because they require a clean real wiki.
 1. Confirm that the owner has approved (Approval Wave 0, [ops-approval-workflow §8](../operations/ops-approval-workflow.md#8-approval-waves); in chat, transcribed to `raw/owner/`, since the app that records approvals does not exist yet) `ip-spec`, `ip-data-contract`, `ip-routes-and-views`, `ip-approvals-api`, `ip-wiki-lint`, `ip-testing`, this page and `adr-0016`. This bootstrap exception is needed because approvals can only be clicked once the app exists. **After IP-10, the owner re-approves the same pages in the app**, so `approvals.json` holds them.
 2. Confirm that the owner has answered Q-006, Q-007, Q-103 and Q-210 in [ov-open-questions](../overview/ov-open-questions.md) (the questions of [ip-spec](ip-spec.md) §9), or accepted the stated defaults.
-3. Record the toolchain: `node -v`, `npm -v`, `git --version`. Node was installed by the owner (Q13, `adr-0005`). Whether winget gave 24.x is `UNVERIFIED[phase-p0-planning]` ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §2). If it is not 24.x (for example 26.x), stop and ask the owner (Q-102): `.nvmrc`/`engines` would have to change.
+3. Record the toolchain: `node -v`, `npm -v`, `git --version`. Claude runs toolchain installs on the owner's authorisation ([adr-0021](../decisions/adr-0021-claude-runs-toolchain-installs.md)); Node was installed with `winget install -e --id OpenJS.NodeJS.LTS`, which gave 24.20.0 ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md), [IP-0-toolchain.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt); Node 26 becomes LTS on 2026-10-28, [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §2). If a later reinstall gives another major (for example 26.x), stop and ask the owner (Q-102 says stay on 24): `.nvmrc`/`engines` would have to change.
 
 **Gate:** the Node major is 24 and the version is ≥ 24.15 (the jsdom floor). Any other major is a stop condition. Evidence: `IP-0-toolchain.txt`.
 
@@ -69,10 +64,10 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
    ```text
    npx create-next-app@16.4.0 interactive_plan --ts --tailwind --eslint --app --turbopack --import-alias "@/*" --use-npm --disable-git --no-cache-components --no-agent-feedback --no-react-compiler
    ```
-   The flag set comes from the research note. It has never been run, so it is `UNVERIFIED[phase-p0-planning]`. If a flag is rejected, drop only that flag, log it, and set the equivalent config by hand.
-2. Pin exact versions ([ip-spec](ip-spec.md) §7). Then run `npm install` and commit `package-lock.json`. That this resolves without peer errors is `UNVERIFIED[phase-p0-planning]`. If it fails, record the error, and do **not** use `--force`/`--legacy-peer-deps` without asking the owner.
+   The flag set comes from the research note. It ran unchanged in IP-1, in the repo path containing a space, with no flag rejected ([IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)). If a flag is ever rejected, drop only that flag, log it, and set the equivalent config by hand.
+2. Pin exact versions ([ip-spec](ip-spec.md) §7). Then run `npm install` and commit `package-lock.json`. It resolved without peer errors in IP-1 (eslint 9.39.5; [IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)). If it fails, record the error, and do **not** use `--force`/`--legacy-peer-deps` without asking the owner.
 3. Add `.nvmrc`, `"engines"`, and `next.config.ts` with `turbopack.root` set to the app directory.
-4. Add the npm scripts from [ip-testing](ip-testing.md) §0, plus:
+4. Add the npm scripts from [ip-testing](ip-testing.md) §0 (`typecheck` is `next typegen && tsc --noEmit`, owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 7), plus:
    - `dev:local` = `next dev -H 127.0.0.1 -p 3417`
    - `start:local` = `next build && next start -H 127.0.0.1 -p 3417`
 5. Install test dependencies approved under Q-210: `npm install -D --save-exact @vitest/coverage-v8@<version matching the pinned vitest>` (exact version taken from the registry at this moment and recorded in the evidence) and `npx playwright install chromium` (downloads a browser into the user profile; record the output).
@@ -91,8 +86,9 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
 - `lib/config.ts`.
 - `lib/wiki/frontmatter.ts`, `schemas.ts` (all types), `load.ts` (with the cache), `links.ts`, `status.ts`, `log.ts`, and `openQuestions` parsing ([ip-data-contract](ip-data-contract.md) §3–§5).
 - Fixtures: `tests/fixtures/mini-wiki/` (a clean page of every type, ids in the fixture range) and `tests/fixtures/broken-wiki/`.
+- `vitest.lint.config.mts` with the real-wiki loader test `tests/lint/real-wiki-loader.test.ts` (run by `npm run lint:wiki`, not `npm test`; [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 3). IP-5 adds the wiki lint to the same suite.
 
-**Gate:** the unit tests in [ip-testing](ip-testing.md) §1.1, §1.2 (including **schema-sync** against the real SCHEMA.md) and the links/log parts of §1.6 pass. `npm run typecheck && npm run lint`. Evidence: `IP-2-tests.txt`.
+**Gate:** the unit tests in [ip-testing](ip-testing.md) §1.1, §1.2 (including **schema-sync** against the real SCHEMA.md) and the links/log parts of §1.6 pass (`npm run test`), the real-wiki loader test passes (`npm run lint:wiki`: zero `FM-*` errors on the real wiki, p0.11 verify), and `npm run typecheck && npm run lint`. Evidence: `IP-2-tests.txt`.
 
 ## IP-3: Hashes + effective state + gates
 
@@ -108,7 +104,7 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
 
 ## IP-5: Wiki lint + gate report
 
-**Do:** `lib/lint/` with every rule in [ip-wiki-lint](ip-wiki-lint.md) §2 and §2.1, the git-backed rules (§3), `vitest.lint.config.mts`, and the `lint:wiki`, `lint:wiki:json` and `gate` scripts. Confirm the vitest-as-runner approach (`UNVERIFIED[phase-p0-planning]` in [ip-wiki-lint](ip-wiki-lint.md) §1).
+**Do:** `lib/lint/` with every rule in [ip-wiki-lint](ip-wiki-lint.md) §2 and §2.1, the git-backed rules (§3), `tests/lint/wiki-lint.test.ts` (under the `vitest.lint.config.mts` of IP-2), and the `lint:wiki:json` and `gate` scripts. Confirm the vitest-as-runner approach (`UNVERIFIED[phase-p0-planning]` in [ip-wiki-lint](ip-wiki-lint.md) §1).
 
 **Gate:**
 

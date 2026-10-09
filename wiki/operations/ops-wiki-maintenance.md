@@ -3,11 +3,12 @@ id: ops-wiki-maintenance
 type: operations
 title: "Wiki maintenance: running ingest, query, lint and decide as Claude"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/research/llm-wiki-pattern.md
   - raw/01-scoping-decisions.md
   - raw/owner/2026-10-08-s01-wave0b.md
+  - raw/owner/2026-10-09-s01-wave0c.md
 related: [schema, adr-0002, adr-0003, ops-session-protocol, ops-approval-workflow, ops-multi-agent-workflow, ip-wiki-lint, ov-open-questions, glossary, adr-0020]
 approvable: true
 audience: claude
@@ -115,7 +116,7 @@ The approval checker of
 as `tools/approvals_check.py`. Run from the repo root:
 
 ```bash
-python tools/quick_lint.py | tr -d '\r'                 # all findings
+python tools/quick_lint.py | tr -d '\r'                 # all findings; exit status 1 if any error
 python tools/quick_lint.py REF-DANGLING | tr -d '\r'    # only lines containing this text
 python -m unittest discover -s tools -p "test_*.py"     # the scripts' own tests (stdlib only)
 ```
@@ -296,6 +297,7 @@ for line in errs:
 for w in warns:
     print('WARN ', w)
 print(f'{len(docs)} files checked, {len(errs)} errors, {len(warns)} warnings')
+sys.exit(1 if errs else 0)  # non-zero when any error was found (owner answer 2026-10-09, wave 0c item 6)
 ```
 
 Its YAML handling is deliberately minimal (top-level scalars and lists of scalars, plus `to:` lines inside
@@ -315,6 +317,8 @@ Its YAML handling is deliberately minimal (top-level scalars and lists of scalar
 | INT-NUMBER-NOSRC | read experiment, metric, hypothesis and overview pages for numbers presented as observations |
 | CONTRADICTION | `grep -rn "CONTRADICTION" wiki --include=*.md`, then a reading pass for claims that disagree |
 | APPROVAL-STALE | the approval checker in [ops-approval-workflow §4](ops-approval-workflow.md#4-checking-approval-state-as-claude) |
+
+**Exit status:** the script exits 1 when it finds any error (the summary line's error count is above 0, whatever the filter argument) and 0 otherwise, so `python tools/quick_lint.py && git commit …` cannot commit over lint errors (owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 6). Warnings do not change it.
 
 **Recording:** append `## [date] lint | <scope>` with `- result: N errors, M warnings` and a disposition for
 each warning. A lint is clean when it reports zero errors.
