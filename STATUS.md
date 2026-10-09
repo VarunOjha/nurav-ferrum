@@ -13,8 +13,8 @@ related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-buil
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.12
-next_action: "p0.12 / IP-3 of ip-build-plan: write interactive_plan/lib/approvals/hash.ts, state.ts and lib/wiki/gates.ts (ip-data-contract §6-§8), then run the ip-testing §1.3 tests incl. the Python cross-check (must not be skipped; a failing vector is a stop condition), save IP-3-tests.txt and commit [p0.12]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
+current_task: p0.14
+next_action: "p0.14 / IP-4 of ip-build-plan: write interactive_plan/lib/approvals/store.ts, lock.ts, the guard and app/api/approvals/route.ts (ip-approvals-api), plus the optional log append and the snapshot write (ip-testing §1.4 Snapshots); run ip-testing §1.4 and §1.5 incl. the cross-process test 3 times in a row, save IP-4-tests.txt and commit [p0.14]. Tests must only use temp data dirs; never write plan/approvals.json. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
 blocked_on: []
 last_handoff: null
 ---
@@ -32,7 +32,7 @@ last_handoff: null
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), IP-3 to IP-10 remain; nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2) and its hash/state/gate modules (IP-3), IP-4 to IP-10 remain; nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -78,6 +78,11 @@ yet (every approvable page is PENDING).**
   still go to the owner.
 - p0.11 / IP-2 done: `lib/config.ts`, `lib/wiki/*` loader + zod schemas, fixtures, 477 unit tests + 6 real-wiki tests
   green, typecheck + eslint exit 0 ([IP-2-tests.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt)).
+- p0.12 / IP-3 done: `lib/approvals/{hash,model,state,diff}.ts` and `lib/wiki/gates.ts`; loader fills content/scope/bootstrap
+  hashes; hash vectors v01-v15 (v11-v15 new, computed by the SCHEMA §10.2 Python block) and the Python cross-check (15 vectors +
+  401 generated inputs) agree; 571 unit tests, lint:wiki, typecheck, eslint, quick lint and 29 tool tests green
+  ([IP-3-tests.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt)). Delegated details in the `decide` log entry
+  of 2026-10-09 (bootstrap_hash fail-closed, also in tools/approvals_check.py; entry-gate step 4 added to ip-data-contract §8.3).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -88,7 +93,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: ingest-wave0c and p0.11 / IP-2 verified and committed 2026-10-09)
+(empty: p0.12 / IP-3 verified and committed 2026-10-09)
 
 ## Blockers
 
@@ -118,7 +123,7 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-
 
 ## Next action
 
-1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.12 / IP-3: hashes + effective state + gates) by following
+1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.14 / IP-4: approvals store + API) by following
    [ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-1 to IP-10 (mapping table on
    [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Node: `export PATH="/c/Program Files/nodejs:$PATH"`.
    Wiki lint until IP-5: `python tools/quick_lint.py` (exits 1 on errors) and `cd interactive_plan && npm run lint:wiki`; tool tests: `python -m unittest discover -s tools -p "test_*.py"`.
@@ -135,4 +140,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after wave 0c ingest and p0.11 / IP-2; next p0.12 / IP-3). Last handoff: none yet.
+2026-10-09, session s01 (after p0.12 / IP-3; next p0.14 / IP-4). Last handoff: none yet.
