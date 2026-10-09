@@ -149,7 +149,7 @@ Done 2026-10-09: 0 real-wiki errors, so no stop condition (`IP-5-lint.json` in t
 
 1. Write `interactive_plan/README.md`: how to start the app, how to run lint and gate, and the environment variables. Link back to these pages.
 2. Update the `ip-*` pages:
-   - turn each `UNVERIFIED[phase-p0-planning]` tag settled by evidence into a citation of the evidence file, or keep it with a logged reason
+   - turn each `UNVERIFIED[...]` tag that names phase-p0-planning and is settled by evidence into a citation of the evidence file, or keep it with a logged reason
    - set `status: active` (this is volatile, so approvals stay valid under the scope hash)
 3. Ask the owner (through the integrator or STATUS) to update `comp-interactive-plan` to `implemented` with `last_verified_commit`. That page is outside this area.
 4. Ask the owner to: (a) run the manual checks in [ip-testing](ip-testing.md) §4, and (b) approve the `ip-*` pages, `schema` and the other P0 pages **in the app**. Claude never writes `approvals.json`.
