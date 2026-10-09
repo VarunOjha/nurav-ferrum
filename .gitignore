@@ -12,6 +12,11 @@ next-env.d.ts
 # approvals store temp/lock files (plan app)
 plan/.approvals.lock
 plan/approvals.json.tmp-*
+plan/.approvals.lock.stale-*
+plan/snapshots/**/*.tmp-*
+
+# Python bytecode (tools/ tests)
+__pycache__/
 
 # Rust (later phases)
 target/

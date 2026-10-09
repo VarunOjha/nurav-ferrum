@@ -93,10 +93,10 @@ Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to
 - `seen_content_hash` mismatch → `PAGE_CHANGED` and the file is unchanged.
 - An invalid existing file (bad JSON, wrong `schema_version`) → `APPROVALS_FILE_INVALID`, and the file is unchanged byte for byte.
 - **Parallel writes:** 50 concurrent `submit()` calls on 10 different keys, in one process → all 10 keys present, each key's history length equals its number of submissions − 1, and the file is valid JSON.
-- **Cross-process:** spawn 4 child Node processes, each doing 10 submits against the same dir through the store module → no lost updates and no leftover `.tmp-*` or `.lock` files.
+- **Cross-process:** spawn 4 child Node processes, each doing 10 submits against the same dir through the store module → no lost updates and no leftover `.tmp-*` or `.lock` files. Since IP-4 the children run `lib/approvals/store.ts` under plain `node` (Node 24 strips the types; `tests/unit/children/approvals-child.mjs` registers a resolve hook that adds the `.ts` extension), with `PLAN_APPEND_LOG` on (40 well-formed `approval` log entries expected), and a fifth child reads `approvals.json` in a loop during the writes and must never see a torn file. The reader reads every 20 ms, and all 40 submits must succeed. A second **stress** variant reads about every millisecond; there a submit may be refused with an explicit `WRITE_FAILED`/`LOCK_TIMEOUT` (Windows refuses a rename over an open file, [ip-approvals-api](ip-approvals-api.md) §4.2), so it asserts that no read is torn, that the file holds exactly the submissions reported as successful (each once), that every failure is one of those two codes, and that nothing is left over. Both print the rename retries per writer with their errno codes. The IP-4 gate runs both 3 times in a row.
 - **Crash during write:** inject a failure after the temp file is written and before rename (dependency-injected fs) → the original file is intact, the temp file is cleaned up, and `WRITE_FAILED` is returned.
-- **Rename retry:** an injected `EPERM` on the first two rename attempts → success on the third. Five failures → `WRITE_FAILED`.
-- **Stale lock:** a lock file older than 30 s is broken. A fresh lock held by another holder → `LOCK_TIMEOUT` after the timeout, using fake timers.
+- **Rename retry:** an injected `EPERM` on the first two rename attempts → success on the third. Five failures → success on the sixth attempt; six failures (`EPERM`, `EBUSY` or `EACCES`) → `WRITE_FAILED`; a non-transient error is not retried. (Decided in IP-4: [ip-approvals-api](ip-approvals-api.md) §4.2, "retried up to 5 times with 20 to 320 ms backoff", wins over the earlier "five failures → `WRITE_FAILED`" here; the cross-process stress test showed the longer budget is worth having.)
+- **Stale lock:** a lock file older than 30 s is broken. A fresh lock held by another holder → `LOCK_TIMEOUT` after the timeout, using a fake clock (the lock and the rename backoff take an injectable `{now, sleep}` clock; decided in IP-4 instead of vitest fake timers, which do not drive the fs promises in between). The holder's lock file is left untouched.
 - Serialisation is stable: keys sorted, 2-space indent, trailing `\n`, LF only.
 - **Log append:** an entry is appended in the SCHEMA §12 format, the file still ends with exactly one `\n`, and a missing log returns the `LOG_MISSING` warning without creating the file.
 
@@ -109,9 +109,12 @@ Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to
   - content types: `application/json` OK, `text/plain` → 415, `multipart/form-data` → 415
   - body over 16 KiB → 400
 - Route adapter, with the handler called directly through a `Request` object:
-  - each error code in [ip-approvals-api](ip-approvals-api.md) §2.2 is reachable and has the right HTTP status
+  - each error code in [ip-approvals-api](ip-approvals-api.md) §2.2 is reachable and has the right HTTP status (`UNHASHABLE`, `LOCK_TIMEOUT` and `WRITE_FAILED` through the store's injected hash function, clock and fs)
   - `PLAN_READONLY=1` → 403
   - `pending` and `changes_requested` statuses are rejected with 400
+  - key `schema` without `seen_bootstrap_hash`, or `seen_bootstrap_hash` on another key → 400; a stale `seen_bootstrap_hash` → 409 `PAGE_CHANGED`
+  - GET: every approvable key (plus `#exit` per phase) is listed, PENDING without a file, filters by key/state/phase, orphans, an invalid file gives INVALID everywhere, and no side effects
+  - `app/api/approvals/route.ts` exports only `GET`, `POST`, `runtime` and `dynamic`, and binds the handlers to the environment config (temp dirs)
 
 ### 1.6 Graph and view logic (`graph.test.ts`, `search.test.ts`, `log.test.ts`, `links.test.ts`)
 

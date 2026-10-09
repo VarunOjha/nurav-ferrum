@@ -32,7 +32,10 @@ This page defines **exactly** what the plan app reads and writes, how it validat
 | `wiki/raw/**` (all other files) | stat + read for rendering | No frontmatter required. Exists only to resolve `sources` and body links, and to render raw files read-only in the wiki browser |
 | `STATUS.md` (repo root) | read | Frontmatter `status-live` (SCHEMA §6.16) + body "Next action" |
 | `plan/approvals.json` | read + **atomic write** | Only through `lib/approvals/store.ts` ([ip-approvals-api](ip-approvals-api.md)) |
-| `wiki/log.md` | read; optional **append** | Append only an `approval` entry, only after a successful approvals write, only if `PLAN_APPEND_LOG=1` |
+| `plan/snapshots/<page-id>/<content-hash-hex>.md` | **create** (atomic, never overwritten) | The normalised bytes of an approved page, written by `store.ts` before the approvals file ([ip-approvals-api](ip-approvals-api.md) §2.1 step 8); git-tracked |
+| `plan/.approvals.lock` (+ `*.tmp-*` temp files) | create + delete | Cross-process write lock and atomic-write temp files ([ip-approvals-api](ip-approvals-api.md) §4); git-ignored |
+| `CLAUDE.md` (repo root) | read | `bootstrap_hash` of key `schema` (§6.2) |
+| `wiki/log.md` | read; optional **append** | Append only an `approval` entry, only after a successful approvals write, only if `PLAN_APPEND_LOG` is on (default on; `0` turns it off; Q-006) |
 
 The app writes nothing else. In particular it never writes to `wiki/raw/`, any other wiki page, `STATUS.md` or git.
 

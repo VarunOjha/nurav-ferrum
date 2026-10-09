@@ -100,7 +100,7 @@ On resume, read `STATUS.md` and the last 5 log entries. Then list `wiki/raw/evid
 
 **Do:** `lib/approvals/store.ts`, `lock.ts`, the guard, and `app/api/approvals/route.ts` ([ip-approvals-api](ip-approvals-api.md)), plus the optional log append.
 
-**Gate:** [ip-testing](ip-testing.md) §1.4 and §1.5 pass, including the cross-process test, run 3 times in a row to catch flakiness. Evidence: `IP-4-tests.txt`.
+**Gate:** [ip-testing](ip-testing.md) §1.4 and §1.5 pass, including the cross-process test, run 3 times in a row to catch flakiness, plus `npm run typecheck`, `npm run lint` and `npm run lint:wiki`. Done 2026-10-09 ([IP-4-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-4-tests.txt)). Evidence: `IP-4-tests.txt`.
 
 ## IP-5: Wiki lint + gate report
 
