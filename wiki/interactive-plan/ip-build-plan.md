@@ -119,13 +119,13 @@ Done 2026-10-09: 0 real-wiki errors, so no stop condition (`IP-5-lint.json` in t
 
 **Do:** the layout, theme tokens and toggle, `Markdown` and `Mermaid` components, `/wiki`, `/wiki/[...path]`, `/go/[id]`, `/search` and `/log` ([ip-routes-and-views](ip-routes-and-views.md) §2, §3.7, §3.9, §3.10, §4).
 
-**Gate:** the component tests (§1.7) pass. Then run Playwright `wiki.spec.ts`, `log.spec.ts`, `theme.spec.ts` and the matching rows of `views.spec.ts`. Evidence: `IP-6-tests.txt`.
+**Gate:** the `Markdown` and `Mermaid` component tests (§1.7) pass; the `ApproveBar` tests run in IP-7 with the component (decided 2026-10-09). Then run Playwright `wiki.spec.ts`, `log.spec.ts`, `theme.spec.ts` and the matching rows of `views.spec.ts`. Evidence: `IP-6-tests.txt`. Until IP-7, `/` is an interim home page (STATUS next action, recent log, links).
 
 ## IP-7: Dashboard, approvals inbox, phase detail, approve UI
 
 **Do:** `/`, `/approvals`, `/phases/[id]`, `ApproveBar`, and `/lint` ([ip-routes-and-views](ip-routes-and-views.md) §3.1, §3.4, §3.11, §3.12).
 
-**Gate:** `dashboard.spec.ts`, **`approval-flow.spec.ts`**, `approval-race.spec.ts` and `exit-approval.spec.ts` pass, plus the guard test that the real `plan/approvals.json` was not touched. Evidence: `IP-7-tests.txt`.
+**Gate:** the `ApproveBar` component tests ([ip-testing](ip-testing.md) §1.7), `dashboard.spec.ts`, **`approval-flow.spec.ts`**, `approval-race.spec.ts` and `exit-approval.spec.ts` pass, plus the guard test that the real `plan/approvals.json` was not touched. Evidence: `IP-7-tests.txt`.
 
 ## IP-8: Architecture, roadmap, decisions, risks, research
 

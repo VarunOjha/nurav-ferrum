@@ -9,6 +9,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-testing, comp-interactive-plan, adr-0016, adr-0014, schema]
 approvable: true
 phase: phase-p0-planning
@@ -16,8 +17,6 @@ audience: both
 trigger: "Read before adding or changing any route, view or UI component of interactive_plan/"
 tags: [interactive-plan, ui, routes, accessibility]
 unverified:
-  - claim: "react-markdown 10.1.0 does not render raw HTML from markdown unless a raw-HTML rehype plugin is added"
-    verify_in: phase-p0-planning
   - claim: "@xyflow/react 12.12.0 nodes can be made keyboard-focusable and activatable for click-through"
     verify_in: phase-p0-planning
 ---
@@ -49,6 +48,8 @@ Every view is a **server component** that calls the pure `lib/` functions from [
 
 A missing id or path returns a 404 page that lists close matches (by edit distance on ids).
 
+`/go/[id]` details (decided 2026-10-09, IP-6): besides page ids it accepts an open-question id `Q-NNN` (the question's heading anchor on `ov-open-questions`) and a task id `pN.M` (the phase page that defines the task). `status-live` goes to the dashboard `/`. It redirects to a typed view only once that route exists: the build step that adds `/phases/[id]` (IP-7) or `/decisions/[id]` (IP-8) registers it in `lib/wiki/routes.ts`; until then every page opens in `/wiki/<path>`. `/wiki/[...path]` serves only paths in the loaded file set, so nothing outside `wiki/` can be read.
+
 ```mermaid
 flowchart TB
   dash["/ dashboard"] --> roadmap["/roadmap"]
@@ -69,10 +70,10 @@ flowchart TB
 
 ## 2. Global layout
 
-- **Top bar:** the project name "Ferrum plan", nav links (Dashboard, Roadmap, Architecture, Decisions, Risks, Research, Wiki, Log, Approvals, Lint), a search box (`/` focuses it), the theme toggle, and a **pending-approvals counter** (PENDING + STALE + CHANGES_REQUESTED).
+- **Top bar:** the project name "Ferrum plan", nav links (Dashboard, Roadmap, Architecture, Decisions, Risks, Research, Wiki, Log, Approvals, Lint), a search box (`/` focuses it), the theme toggle, and a **pending-approvals counter** (PENDING + STALE + CHANGES_REQUESTED). A nav entry whose route a later build step adds is shown disabled, with the step in its tooltip, never as a link to a 404 (IP-6). The theme toggle has three states: System (follows `prefers-color-scheme`), Light and Dark.
 - **Global banners:**
   - red if `approvals.json` is invalid
-  - amber if lint reports errors (count, links to `/lint`)
+  - amber if lint reports errors (count, links to `/lint`; until `/lint` exists in IP-7 the banner prints the `npm run lint:wiki` command instead). The layout runs the same lint engine, memoised for 10 s on the file signature because the git-backed rules spawn git
   - grey "read-only mode" when `PLAN_READONLY=1`
 - **Page shell** for every page-backed view:
   - title, id (copy button), type badge, status badge, `updated`, effective-approval badge
@@ -162,10 +163,13 @@ Two **approve bars**: one for the page itself (key = phase id), and one for the 
 
 - **Left pane:** the directory tree of `wiki/` (raw/ collapsed by default, labelled "immutable"). It can be filtered by type and status.
 - **Rendering** uses `react-markdown` + `remark-gfm` + `rehype-slug`:
-  - **No raw HTML** (no `rehype-raw`) `UNVERIFIED[phase-p0-planning]`.
+  - **No raw HTML** (no `rehype-raw`). Raw HTML in the source is shown as literal text, never parsed or executed: a `<script>` block, an `<img onerror>` and an `<iframe>` render as text and run nothing ([IP-6-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt), `markdown.test.tsx` and `wiki.spec.ts`). The app turns raw nodes into text itself instead of relying on react-markdown's default.
+  - Heading levels in the body are shifted down by one, so the page title stays the only `h1`; the rehype-slug anchors depend on the text only and do not change.
+  - Images are not loaded (no external requests, no file route); the alt text is shown in a placeholder.
   - Relative links are rewritten to `/wiki/<resolved path>`. Anchors are kept.
   - External `https` links get `rel="noreferrer noopener"` and an external-link icon.
   - Links to missing files are styled red with the title "missing (REF-DANGLING)".
+  - Links to repo files outside `wiki/` (for example `../CLAUDE.md`) render as text with the repo path as tooltip; `STATUS.md` links to the dashboard. Schemes other than `https`, `http` and `mailto` are not rendered as links.
 - **Mermaid:** a fenced `mermaid` block renders through a client `<Mermaid>` component:
   - mermaid is dynamically imported in `useEffect` (works with mermaid 12.1.0 in a React 19.3 client component under Next 16.4: IP-1 spike S2, [IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt))
   - config `securityLevel: 'strict'`, `layout: 'dagre'`, `look: 'classic'`, `theme` = `default` or `dark` following the app theme

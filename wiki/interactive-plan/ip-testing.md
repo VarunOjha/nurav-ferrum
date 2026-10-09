@@ -8,24 +8,20 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
   - raw/owner/2026-10-09-s01-wave0c.md
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-build-plan, comp-interactive-plan, adr-0016, schema]
 approvable: true
 phase: phase-p0-planning
 audience: both
 trigger: "Read before writing or changing tests for interactive_plan/, and before declaring any build step of the plan app done"
 tags: [interactive-plan, testing, vitest, playwright]
-unverified:
-  - claim: "jsdom 30 runs React component tests under Vitest 5 + Vite 8 + @vitejs/plugin-react 6 on Node 24 (install verified in IP-1, vitest+vite run verified in IP-2; jsdom is first used by the IP-6 component tests)"
-    verify_in: phase-p0-planning
-  - claim: "Playwright 1.64 webServer can run next build and next start against a temp PLAN_DATA_DIR and PLAN_WIKI_DIR on Windows with a path containing a space"
-    verify_in: phase-p0-planning
 ---
 
 # Interactive plan app: test plan
 
 The owner directive is "phase-wise testing and rigorous testing" ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), directive 5). The app holds the project's approval record, so the parts that can lose or misstate an approval (hashing, state, store, guard) get the deepest tests.
 
-Facts used here: Vitest cannot test async Server Components, so logic lives in pure modules. E2E runs against a production build. Next 16 removed `next lint`, so ESLint runs directly. All from [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.2 and §3.6. The whole combination installed without peer errors in IP-1 ([IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)), and Vitest 5 + Vite 8 run the unit suite on Node 24 since IP-2 ([IP-2-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt)). That jsdom 30 runs the component tests with them is still `UNVERIFIED[phase-p0-planning]`, checked by the first component test in IP-6.
+Facts used here: Vitest cannot test async Server Components, so logic lives in pure modules. E2E runs against a production build. Next 16 removed `next lint`, so ESLint runs directly. All from [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.2 and §3.6. The whole combination installed without peer errors in IP-1 ([IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)), and Vitest 5 + Vite 8 run the unit suite on Node 24 since IP-2 ([IP-2-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt)). jsdom 30 runs the React component tests with them since IP-6 ([IP-6-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt)).
 
 ## 0. Commands (the full gate)
 
@@ -126,11 +122,13 @@ Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to
 - `riskMatrix`: placement and score bands.
 - `links`: relative-link resolution (`../decisions/x.md#anchor`), anchor existence using the rehype-slug algorithm, and links inside fenced code ignored.
 - `log`: heading regex, lenient bullet parsing, malformed headings → `LOG-FORMAT`.
-- `search`: ranking order (id > title > alias/tag > heading > body).
+- `search`: ranking order (id > title > alias/tag > heading > body). Since IP-6 `search.test.ts` also covers the other pure view helpers: `/wiki` parameter resolution (only known paths, no `..`), `/go` targets (page id, `Q-NNN`, task id), close matches, markdown link rewriting, the wiki tree, grouped backlinks, the log view model and the status tones.
 
 **Coverage thresholds** (on `lib/**`): 90 % lines and branches for `lib/approvals/**`, 80 % for `lib/wiki/**` and `lib/lint/**`. These are targets set by this plan. Reaching them is checked by the coverage run, not assumed.
 
 ### 1.7 Component tests (jsdom)
+
+Files `tests/unit/components/*.test.tsx`, each with the `// @vitest-environment jsdom` docblock, run by `npm test`. `ApproveBar` is built in IP-7, so its tests run with the component there; IP-6 runs the `Markdown` and `Mermaid` tests (decided 2026-10-09, IP-6).
 
 - `ApproveBar`:
   - comment required for request-changes and reject
@@ -141,7 +139,8 @@ Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to
   - GFM tables render
   - relative links are rewritten
   - raw `<script>` in markdown is rendered as text, not executed (this verifies the react-markdown claim in [ip-routes-and-views](ip-routes-and-views.md) §3.7)
-- `Mermaid`: the error path shows the source (with the mermaid import mocked). Real rendering is E2E.
+- `Mermaid`: the error path shows the source (with the mermaid import mocked). Real rendering is E2E. Since IP-6 also: the configuration (`securityLevel: 'strict'`, dagre, classic, the app theme), re-render on a theme change, the show-source toggle, and wiring of nodes that name a page.
+- `Markdown` (IP-6 additions): anchors, directory links, `javascript:` links, links outside `wiki/`, images as alt text, heading shift, mermaid blocks, integrity-tag chips and CONTRADICTION blockquotes.
 
 ## 2. Wiki lint tests (`tests/lint/`)
 
@@ -152,13 +151,15 @@ Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to
 
 ## 3. E2E (Playwright 1.64; `tests/e2e/`)
 
-**Setup** (`global-setup.ts`):
+**Setup** (`tests/e2e/setup-env.ts`, called from `playwright.config.ts`):
 
-1. Copy `tests/fixtures/mini-wiki/` → `<tmp>/wiki/` and `tests/fixtures/plan/` → `<tmp>/plan/`, and write a fixture `<tmp>/STATUS.md`.
+1. Copy `tests/fixtures/mini-wiki/` → `<tmp>/wiki/`, then copy `tests/fixtures/e2e-overlay/` over it, write the fixture `<tmp>/STATUS.md` (from `tests/fixtures/status/`) and create an empty `<tmp>/plan/` (no `approvals.json`, so every key starts PENDING). `<tmp>` is `<os tmp>/ferrum plan e2e/run-*`.
 2. Set `PLAN_REPO_ROOT=<tmp>`, `PLAN_WIKI_DIR`, `PLAN_DATA_DIR` and `PLAN_STATUS_FILE` for the `webServer`.
-3. Build and start (`next build && next start -H 127.0.0.1 -p 3418`).
+3. Build and start (`npm run build && npx next start -H 127.0.0.1 -p 3418`).
 
-The tests **never touch the real `plan/approvals.json` or `wiki/`**. A guard test asserts that the real file's mtime and hash are unchanged after the run. Running against a temp dir on a Windows path containing a space is `UNVERIFIED[phase-p0-planning]`, so the temp dir is deliberately created under a directory name containing a space.
+Decided 2026-10-09 (IP-6): the setup runs when the config is loaded, not in a `globalSetup` file, because Playwright starts the `webServer` before `globalSetup`; worker processes inherit `PLAN_E2E_ROOT` and skip it. The overlay holds the E2E-only cases (a dangling link, an integrity tag, a CONTRADICTION blockquote, raw HTML, a malformed log heading) that the lint-clean `mini-wiki` must not contain (§2).
+
+The tests **never touch the real `plan/approvals.json` or `wiki/`**. The guard in `tests/e2e/global-teardown.ts` fails the run if the real `plan/approvals.json`, `wiki/log.md` or `STATUS.md` changed (mtime and sha256), then removes the temp copy. The temp dir is deliberately created under a directory name containing a space; `next build` and `next start` run against it on Windows ([IP-6-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt)).
 
 | Spec | Asserts |
 |---|---|

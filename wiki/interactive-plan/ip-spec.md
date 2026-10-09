@@ -184,7 +184,7 @@ interactive_plan/
     ├── unit/                # vitest (node + jsdom)
     ├── lint/                # `npm run lint:wiki`: wiki-lint.test.ts + real-wiki-loader.test.ts (real wiki, read-only)
     ├── e2e/*.spec.ts        # Playwright
-    └── fixtures/            # mini-wiki/, plan/, broken-wiki/
+    └── fixtures/            # mini-wiki/, broken-wiki/, status/, e2e-overlay/ (E2E-only cases, IP-6)
 ```
 
 ## 9. Owner decisions this spec needs (also returned to the integrator for `ov-open-questions`)

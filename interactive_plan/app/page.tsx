@@ -1,69 +1,99 @@
-import Image from "next/image";
+// `/`: interim home until the full dashboard of IP-7 (ip-routes-and-views §3.1): STATUS next action,
+// current phase/task, the last 5 log entries and entry points to the views built so far.
+import Link from "next/link";
+import { StatusBadge } from "@/components/Badges";
+import { getIndex } from "@/lib/server/data";
+import { OP_TONES } from "@/lib/ui/tone";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const idx = await getIndex();
+  const s = idx.status;
+  const last5 = idx.log.slice(-5).reverse();
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <article className="page narrow-wide">
+      <header className="page-header">
+        <p className="eyebrow">Ferrum plan</p>
+        <h1 className="page-title">Overview</h1>
+        <p className="muted">The full dashboard (phase progress, gate checklist, approval counts, blockers) arrives in build step IP-7.</p>
+      </header>
+
+      <div className="cards">
+        <section className="card card-wide" aria-labelledby="next-title">
+          <h2 id="next-title" className="card-title">
+            Next action
+          </h2>
+          {s ? (
+            <>
+              <p className="next-action mono" data-testid="next-action">
+                {s.next_action}
+              </p>
+              <dl className="kv">
+                <div>
+                  <dt>Phase</dt>
+                  <dd>
+                    <a href={`/go/${encodeURIComponent(s.current_phase)}`}>{s.current_phase}</a>
+                  </dd>
+                </div>
+                <div>
+                  <dt>Task</dt>
+                  <dd className="mono">{s.current_task ?? "none"}</dd>
+                </div>
+                <div>
+                  <dt>Session</dt>
+                  <dd className="mono">{s.session}</dd>
+                </div>
+                <div>
+                  <dt>Status</dt>
+                  <dd>
+                    <StatusBadge status={s.status} />
+                  </dd>
+                </div>
+              </dl>
+            </>
+          ) : (
+            <p className="banner banner-amber">STATUS.md is missing or invalid.</p>
+          )}
+        </section>
+
+        <section className="card" aria-labelledby="log-title">
+          <h2 id="log-title" className="card-title">
+            Recent log
+          </h2>
+          <ol className="mini-log">
+            {last5.map((e) => (
+              <li key={e.line}>
+                <span className={`chip chip-xs chip-${OP_TONES[e.op] ?? "neutral"}`}>{e.op}</span> <span className="muted small">{e.date}</span>
+                <div>{e.title}</div>
+              </li>
+            ))}
+          </ol>
+          <Link href="/log" className="card-link">
+            Open the log →
+          </Link>
+        </section>
+
+        <section className="card" aria-labelledby="go-title">
+          <h2 id="go-title" className="card-title">
+            Browse
+          </h2>
+          <ul className="link-list">
+            <li>
+              <Link href="/wiki">Wiki browser</Link> <span className="muted small">tree, index, every page</span>
+            </li>
+            <li>
+              <Link href="/search">Search</Link> <span className="muted small">press / anywhere</span>
+            </li>
+            <li>
+              <Link href="/log">Log timeline</Link>
+            </li>
+            <li>
+              <Link href="/go/schema">SCHEMA</Link>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </article>
   );
 }
