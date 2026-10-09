@@ -13,8 +13,8 @@ related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-buil
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.13
-next_action: "p0.13 / IP-6 of ip-build-plan: app shell (layout, theme tokens + toggle), Markdown and Mermaid components, /wiki, /wiki/[...path], /go/[id], /search, /log (ip-routes-and-views §2, §3.7, §3.9, §3.10, §4); component tests (ip-testing §1.7) and Playwright wiki/log/theme specs + matching views.spec rows; save IP-6-tests.txt and commit [p0.13]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
+current_task: p0.15
+next_action: "p0.15 / IP-7 of ip-build-plan: dashboard /, /approvals inbox, /phases/[id], ApproveBar (with its ip-testing §1.7 component tests), /lint (ip-routes-and-views §3.1, §3.4, §3.11, §3.12); flip the nav flags and TYPED_ROUTES for the new routes; Playwright dashboard, approval-flow, approval-race, exit-approval specs + guard; save IP-7-tests.txt and commit [p0.15]. Node: export PATH=\"/c/Program Files/nodejs:$PATH\"."
 blocked_on: []
 last_handoff: null
 ---
@@ -32,7 +32,7 @@ last_handoff: null
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4) and its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors), IP-6 to IP-10 remain; nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6); IP-7 to IP-10 remain; nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -96,6 +96,13 @@ yet (every approvable page is PENDING).**
   ([IP-5-gate.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-5-gate.txt),
   [IP-5-lint.json](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-5-lint.json)). Delegated details in the IP-5 `decide`
   log entry (tags in inline code count, log.md exempt from UNV-PASTDUE/MIRROR, vitest reporter settings).
+- p0.13 / IP-6 done (commit `ad521cc`): app shell (top bar, banners, three-state theme toggle with pre-paint script, light/dark
+  tokens, system fonts), `Markdown` (raw HTML shown as text) and `Mermaid` (strict, re-themed, page-linked nodes), `/wiki`,
+  `/wiki/[[...path]]`, `/go/[id]`, `/search`, `/log`, 404 with close matches; 773 unit/component tests, Playwright
+  wiki/log/theme/views 44 passed against a temp copy under a path with a space, typecheck, eslint, lint:wiki (0 errors),
+  quick lint, 29 tool tests green ([IP-6-tests.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt)).
+  Delegated details in the IP-6 `decide` log entry (ApproveBar tests move to IP-7, E2E overlay fixture, /go targets).
+  Integrator item: a `;` in a sequence-diagram message on `ov-arch-data-flows` breaks that mermaid diagram (see the entry).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -106,7 +113,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.13 / IP-5 verified and committed 2026-10-09; p0.13 continues with IP-6)
+(empty: p0.13 / IP-6 verified and committed 2026-10-09; next p0.15 / IP-7)
 
 ## Blockers
 
@@ -136,7 +143,7 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-
 
 ## Next action
 
-1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.13 / IP-6: app shell, markdown, wiki browser, search, log) by following
+1. **Build `interactive_plan/`** (p0.12–p0.16, continuing with p0.15 / IP-7: dashboard, approvals inbox, phase detail, approve UI, lint view) by following
    [ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-1 to IP-10 (mapping table on
    [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Node: `export PATH="/c/Program Files/nodejs:$PATH"`.
    Wiki lint (normative since IP-5): `cd interactive_plan && npm run lint:wiki` (`lint:wiki:json` for evidence, `npm run gate`
@@ -155,4 +162,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.13 / IP-5; next p0.13 / IP-6). Last handoff: none yet.
+2026-10-09, session s01 (after p0.13 / IP-6; next p0.15 / IP-7). Last handoff: none yet.
