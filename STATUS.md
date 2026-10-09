@@ -14,7 +14,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: cd interactive_plan, npm run dev:local (Node: export PATH=\"/c/Program Files/nodejs:$PATH\"), open http://127.0.0.1:3417/, run the ip-testing §4 manual checks and approve the Wave 1 items in the app (ip-* pages, adr-0016, schema, the other P0 pages; ops-approval-workflow §8); also update comp-interactive-plan to implemented. Then Claude: RESUME, ingest the approvals, p0.17 [p0.17]."
+next_action: "Owner: cd interactive_plan, npm run dev:local (Node: export PATH=\"/c/Program Files/nodejs:$PATH\"), open http://127.0.0.1:3417/, run the ip-testing §4 manual checks and approve the Wave 1 items in the app (ip-* pages, adr-0016, schema, the other P0 pages; ops-approval-workflow §8). Then Claude: RESUME, ingest the approvals, p0.17 [p0.17]."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -141,6 +141,13 @@ yet (every approvable page is PENDING).**
   logged reason and an IP-9-perf.txt citation; final `npm run lint:wiki` 0 errors, 34 warnings, 2 info
   ([IP-10-final-lint.json](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-10-final-lint.json)); handoff
   [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md). Details: the IP-10 log entries.
+- p0.16 / IP-10 follow-up done (commits `3eaa641`, `62e5936`): `/architecture` edge-label overlap fixed (canvas chips of at most 24
+  characters placed with no chip/chip or chip/node overlap, full text of the active component's edges in a list beside the graph,
+  dagre reserves chip space); new `architecture-real.spec` on a read-only real-wiki server (3420) asserts no overlaps on hover of
+  WebView manager and that the list names all its edges; `npm run verify` exit 0 in one run (873 unit, lint:wiki 0 errors, 144 E2E)
+  ([IP-10-arch-labels-fix.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-10-arch-labels-fix.txt));
+  `comp-interactive-plan` implemented with `last_verified_commit` `3eaa641`; ip-spec §5 cold-request misses accepted as a local-tool
+  limitation; IP-0-toolchain.txt and IP-9-review-fixes.txt working copies restored from git (MANIFEST 33/33 under SCHEMA N).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -151,7 +158,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.16 / IP-10 verified and committed 2026-10-09 (`6118d32`); the app build is complete; next the owner in the app, then p0.17)
+(empty: p0.16 / IP-10 follow-up verified and committed 2026-10-09 (`3eaa641`, `62e5936`); next the owner in the app, then p0.17)
 
 ## Blockers
 
@@ -187,18 +194,15 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-
    ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)): the `ip-*` pages and `adr-0016`
    again (bootstrap approvals were in chat), `schema` (closes Q-004, Q-207), the other P0 pages; answer Q-005 and Q-108.
    Claude never writes `plan/approvals.json`.
-2. **Owner / integrator requests** (outside the IP area, not changed by the app builder): set `comp-interactive-plan` to
-   `implemented` with `last_verified_commit` = `6118d32`; settle the integrity tags the evidence now covers
+2. **Owner / integrator requests** (outside the IP area): `comp-interactive-plan` is now `implemented` (`3eaa641`, done
+   2026-10-09); still open: settle the integrity tags the evidence now covers
    (phase-p0-planning `unverified` x4 by IP-1-scaffold.txt/IP-1-spikes.txt, adr-0016 atomic rename by IP-4-tests.txt,
    Q-210 coverage pin by IP-1-scaffold.txt); risk-r22 (`.gitattributes`) still needs its own check. List in the
    [handoff](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
-3. **Unresolved review issue (medium, open):** `/architecture` full edge labels shown when a component is hovered or focused
-   still overlap each other and nodes (22 labels, 19 overlapping pairs at 1440x900 on "WebView manager"; some run off the pane
-   or hide behind "App shell"). The default view is fixed (zoom 0.7, short TB chips). Fix not done: reserve label space in
-   dagre (edge label width/height, larger nodesep/ranksep) or wrap labels, or list the active edges in the side panel and keep
-   chips on the canvas; add an E2E assertion of no bounding-box overlap. The edge table below the graph has every edge in full.
+3. **Review issue fixed (2026-10-09, `3eaa641`):** `/architecture` hover/focus labels no longer overlap (chips + edge list beside
+   the graph, E2E overlap assertion on the real wiki). The owner's `npm run dev:local` on 3417 may still serve the old CSS: restart it.
 4. **Rejected / unfixed review item:** `npm run verify` exit 1 because port 3419 was held by another session's `next dev`;
-   environmental, not a code defect (ports 3417–3420 free, the full verify then exited 0). Stop servers on 3417–3420 before a gate run.
+   environmental, not a code defect (ports 3417–3420 free, the full verify then exited 0). Stop servers on 3418–3420 before a gate run (3417, the owner's app, can stay up).
 5. After the owner's approvals: Claude RESUMEs, ingests them, then p0.17 (walkthrough revisions), Wave 2, and
    `phase-p0-planning#exit` (p0.18). Before the exit approval, re-run `npm audit` in `interactive_plan/` and record it
    (accepted risk until then, ip-spec §7, wave 0c item 8).
@@ -212,4 +216,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.16 / IP-10; next: the owner approves Wave 1 in the app). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+2026-10-09, session s01 (after p0.16 / IP-10 and its follow-up fix; next: the owner approves Wave 1 in the app). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).

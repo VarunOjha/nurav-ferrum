@@ -468,3 +468,39 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Handoff written (SCHEMA §9.5): lint run (0 errors), handoff page, STATUS (current_task p0.17, next action for the owner in the app, last_handoff), this entry, local commits only (never pushed). Open review issue carried forward: /architecture full edge labels on hover/focus overlap each other and nodes (medium; 22 labels, 19 overlapping pairs at 1440x900); fix and E2E overlap assertion not done. Rejected review item: a verify exit 1 caused by another session's server on port 3419 (environmental).
 - next: owner approves Wave 1 in the app; Claude RESUMEs and ingests the approvals, then p0.17
 - commit: 6118d32
+
+## [2026-10-09] decide | IP-10 follow-up delegated details: architecture edge chips, edge list beside the graph, real-wiki E2E server
+
+- session: s01
+- pages: [ip-routes-and-views, ip-testing, comp-interactive-plan]
+- sources: [raw/owner/2026-10-09-s01-wave0c.md, raw/evidence/phase-p0-planning/interactive-plan/IP-10-arch-labels-fix.txt]
+- result: Decided by Claude under the wave 0c delegation policy (UI layout and test placement; the owner can overturn any of them in the app). (1) The /architecture canvas draws short chips only: the existing TB/TRUST-EDGE/missing markers, and for the hovered, focused or open component its labels cut to 24 characters; each chip sits on its own curve at the first of 21 sample points (t = 0.5 outwards to 0.1/0.9) that hits no node and no placed chip (4 px margin); active edges are placed first; a chip with no free point is not drawn (on WebView manager 3 of its 10 chips), because the full text is in the new list beside the graph (outgoing and incoming edges, aria-live) and in the edge table. Chips are HTML in xyflow's label layer with the reserved width, so edge lines never cross them and the measured box never exceeds the planned one. (2) Architecture spacing reserves a full chip: dagre gets the chip size as edge label size, column gap 219 px (was 110), row gap 45 px (was 28); the graph is wider and is panned (initial zoom floor 0.7 unchanged). The side column (details panel + edge list) is always present on /architecture at 900 px and wider. (3) The overlap assertion needs the real component graph, so architecture-real.spec runs against a third server of the same build on 127.0.0.1:3420 with PLAN_READONLY=1, PLAN_APPEND_LOG=0 and the real repo root (global-teardown still checks approvals.json, log.md, STATUS.md unchanged); the owner's app on 3417 is never touched. (4) wiki.spec "search from the top-bar box" retries the "/" keypress until the box has focus: the first gate run failed once because the key was pressed before hydration (passed 16/16 in isolation); test-only change.
+- stales: [] (no ip-* page text changed by these details; ip-spec changed in the perf entry below)
+- commit: 3eaa641
+
+## [2026-10-09] decide | ip-spec §5 cold-request timing misses accepted as a local-tool limitation
+
+- session: s01
+- pages: [ip-spec]
+- sources: [raw/owner/2026-10-09-s01-wave0c.md, raw/evidence/phase-p0-planning/interactive-plan/IP-9-perf.txt]
+- result: Decided by Claude under the wave 0c delegation policy (the owner can overturn it in the app). The first request after server start (about 2.2 s) and requests after the 10 s lint memo expires (1.0-1.4 s) miss the 500 ms target of ip-spec §5; warm medians (27-178 ms) meet it. Accepted as a limitation of a local, single-user planning tool, not a defect to fix before the P0 exit; recorded in ip-spec §5 and in the interactive_plan README known issues. The UNVERIFIED[phase-p0-planning] tag on the targets stays (300-page case not measured; not re-measured after the IP-9 review removed git from the in-server lint).
+- stales: [ip-spec] (no approvals.json exists, so nothing is actually stale)
+- commit: 3eaa641
+
+## [2026-10-09] decide | raw working copies restored from git; comp-interactive-plan implemented
+
+- session: s01
+- pages: [comp-interactive-plan, index]
+- sources: [raw/evidence/phase-p0-planning/interactive-plan/IP-10-arch-labels-fix.txt]
+- result: Decided by Claude (integrator request, ip-build-plan IP-10 step 3). (1) The working copies of raw/evidence/.../IP-0-toolchain.txt and IP-9-review-fixes.txt (both written by Claude build agents) carried stray CR bytes that git's text=auto eol=lf normalises away, so git showed them clean while plain sha256sum failed; `git checkout --` and `git checkout-index -f` are no-ops in that state, so the committed bytes were written back with `git cat-file blob HEAD:<path>` (no change in git; blob ids identical). Plain `sha256sum -c MANIFEST.sha256` now passes 32 of 33 lines; the remaining line, playwright-report.zip, is a binary hashed over N(bytes) exactly as SCHEMA §3 prescribes, and all 33 lines match under N. No MANIFEST line changed (append-only); whether binaries should be hashed without N is a possible SCHEMA clarification, not changed here. (2) comp-interactive-plan: status implemented, last_verified_commit 3eaa641 (the commit whose `npm run verify` passed in one run), one body paragraph; index status line updated. Separate commit because a commit cannot name its own sha.
+- stales: [comp-interactive-plan] (no approvals.json exists, so nothing is actually stale)
+- commit: 62e5936
+
+## [2026-10-09] code | p0.16 (IP-10 follow-up: architecture edge-label overlap fixed, E2E overlap assertion): gate PASS
+
+- session: s01
+- pages: [ip-spec, comp-interactive-plan, status-live]
+- sources: [raw/evidence/phase-p0-planning/interactive-plan/IP-10-arch-labels-fix.txt]
+- result: Closes the open IP-9 review issue (medium). Before, real wiki at 1440x900, hover on WebView manager: 22 labels, 19 label/label overlapping pairs, 10 label/node overlaps, 5 off the pane edge. After: 19 chips of at most 24 characters, 0 label/label and 0 label/node overlaps; the list beside the graph names all 10 edges of comp-webview-manager in full. Code: lib/views/edgeLabels.ts (new), components/graph/FlowGraph.tsx (chip edge, edge list), lib/views/graphLayout.ts (chip spacing), app/architecture/page.tsx, globals.css, playwright.config.ts (third read-only real-wiki server on 3420), tests/e2e/architecture-real.spec.ts (new), architecture.spec, wiki.spec, 4 new unit tests. Gate (node v24.20.0, npm 11.19.0, Python 3.12.10): IP3_REQUIRE_PYTHON=1 IP_REQUIRE_BIND_PROBE=1 npm run verify exit 0 in one run (typecheck, eslint, unit 25 files 873 passed, lint:wiki 0 errors 34 warnings 2 info over 195 pages, build, Playwright 144 passed incl. architecture-real and the bind probe, guard: real approvals.json absent, log.md and STATUS.md unchanged); standalone npm run lint:wiki 0 errors; tools/quick_lint.py 195 files 0 errors. An earlier verify run failed only on the wiki.spec hydration race (summary in the evidence). MANIFEST.sha256 gained 1 line (33). Screenshots (scratchpad, not evidence): before-hover-webview.png, after-hover-webview.png, after-canvas-hover.png. Note: the owner's next dev on 3417 was still serving the pre-change globals.css when checked (its watcher had not picked up the CSS edit); restart it to see the fix.
+- next: owner approves Wave 1 in the app (unchanged); then p0.17
+- commit: 3eaa641
