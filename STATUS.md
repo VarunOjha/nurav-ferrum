@@ -12,8 +12,8 @@ related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-buil
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.10
-next_action: "Start p0.10 / IP-1 of wiki/interactive-plan/ip-build-plan.md (scaffold interactive_plan/ + spikes; Node via export PATH=\"/c/Program Files/nodejs:$PATH\"). Lint with python tools/quick_lint.py (0 errors at a68667b)."
+current_task: p0.11
+next_action: "Start p0.11 / IP-2 of wiki/interactive-plan/ip-build-plan.md (lib/config.ts, lib/wiki loader + zod schemas, fixtures; cd interactive_plan, Node via export PATH=\"/c/Program Files/nodejs:$PATH\"). Gate so far: npm run typecheck && npm run lint && npm run build (green at 2c997fa)."
 blocked_on: []
 last_handoff: null
 ---
@@ -31,7 +31,7 @@ last_handoff: null
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is not built yet; nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1 done), IP-2 to IP-10 remain; nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -56,6 +56,11 @@ yet (every approvable page is PENDING).**
   Q-006, Q-007, Q-102, Q-103, Q-104, Q-210 answered; new Q-218 (CONTRADICTION on adr-0005, installs).
 - p0.9 / IP-0 done (commit `1cfc2d5`): Node v24.20.0, npm 11.19.0, git 2.52.0.windows.1; gate PASS
   ([IP-0-toolchain.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt)).
+- p0.10 / IP-1 done (commit `2c997fa`): `interactive_plan/` scaffolded with create-next-app 16.4.0, the ip-spec §7
+  stack pinned exactly (no peer errors), coverage-v8 + Playwright Chromium installed (Q-210); spikes S1 (fs outside the
+  root), S2 (mermaid 12.1.0) and S3 (127.0.0.1-only bind) pass under `next start` and `next dev`; gate typecheck + lint +
+  build green ([IP-1-scaffold.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt),
+  [IP-1-spikes.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)).
 - Wave 0b ingested (commit `a68667b`, [raw/owner/2026-10-08-s01-wave0b.md](wiki/raw/owner/2026-10-08-s01-wave0b.md)):
   Q-216 (scripts committed as `tools/quick_lint.py` and `tools/approvals_check.py` with stdlib tests),
   Q-218 ([adr-0021](wiki/decisions/adr-0021-claude-runs-toolchain-installs.md): Claude runs all toolchain
@@ -73,7 +78,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-none (ingest-wave0b verified and committed as `a68667b`)
+none (p0.10 / IP-1 verified and committed as `2c997fa`)
 
 ## Blockers
 
@@ -102,7 +107,7 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219), 3 withdrawn (Q-001–Q-003). A
 
 ## Next action
 
-1. **Build `interactive_plan/`** (p0.10–p0.16, starting with p0.10 / IP-1: scaffold + spikes) by following
+1. **Build `interactive_plan/`** (p0.11–p0.16, continuing with p0.11 / IP-2: wiki loader + zod schemas) by following
    [ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-1 to IP-10 (mapping table on
    [phase-p0-planning](wiki/phases/phase-p0-planning.md)). Node: `export PATH="/c/Program Files/nodejs:$PATH"`.
    Wiki lint until IP-5: `python tools/quick_lint.py`; tool tests: `python -m unittest discover -s tools -p "test_*.py"`.
@@ -118,4 +123,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-08, session s01 (after the wave-0b ingest, commit `a68667b`; next p0.10 / IP-1). Last handoff: none yet.
+2026-10-08, session s01 (after p0.10 / IP-1, commit `2c997fa`; next p0.11 / IP-2). Last handoff: none yet.
