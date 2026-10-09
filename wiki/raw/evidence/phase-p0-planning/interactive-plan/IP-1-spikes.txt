@@ -1,0 +1,329 @@
+RAW EVIDENCE - IP-1 de-risking spikes S1, S2, S3 (p0.10), phase-p0-planning, session s01
+Immutable raw evidence (SCHEMA 3.1). Captured in Git Bash with PATH prefixed by /c/Program Files/nodejs.
+The spike code was temporary and has been deleted after this capture (ip-build-plan IP-1 step 10);
+its full source is reproduced at the end of this file.
+
+RESULTS (from the raw output below)
+- S1 fs outside the project root: PASS under both `next start` and `next dev` (Turbopack).
+  A route handler (runtime nodejs, force-dynamic) read ../wiki/SCHEMA.md at request time (54140 bytes,
+  sha256 equal to sha256sum of the file on disk), created ../plan/ (absent before), wrote, read back and
+  deleted ../plan/.spike-<rand>, then removed the plan/ directory it had created. Two requests per mode,
+  each with a fresh random name. plan/ absent before and after; plan/approvals.json never existed.
+  Settles ip-spec unverified claim "Reading ../wiki and writing ../plan at runtime via node:fs works
+  under Turbopack in next dev and next start".
+- S2 mermaid 12.1.0: PASS under both modes. A client component (dynamic import("mermaid"),
+  initialize {startOnLoad:false, securityLevel:"strict", layout:"dagre", look:"classic"}) rendered one
+  flowchart in headless Chromium (Playwright 1.64.0, Chrome for Testing 156.0.8078.4): 3 nodes with the
+  expected labels, 2 edge paths, the "TB" edge label, 0 page errors, 0 console errors, 0 requests to
+  any host other than 127.0.0.1/localhost. No fallback to 11.17.2 needed (Q-103).
+- S3 bind: PASS under both modes. Started with -H 127.0.0.1 -p 3417, netstat shows the only listener
+  on 127.0.0.1:3417; http://127.0.0.1:3417/ and http://localhost:3417/ answer 200; the LAN IPv4
+  192.168.1.237 (Wi-Fi 2, from ipconfig) and the vEthernet (WSL) address 172.27.64.1 are refused
+  (curl exit 7 = connection refused, http 000).
+- Only the server processes started by the runner were stopped (taskkill /T on the Windows PID of
+  the node process the runner launched); no listener remained on :3417 afterwards.
+
+RAW OUTPUT (scratchpad runner spikes.sh; output verbatim)
+================================================================================
+IP-1 spikes, captured 2026-10-09T04:34:27Z, node v24.20.0, HEAD c9e2a31
+LAN IPv4 from ipconfig:
+Ethernet adapter vEthernet (WSL (Hyper-V firewall)):
+   IPv4 Address. . . . . . . . . . . : 172.27.64.1
+--
+Wireless LAN adapter Wi-Fi 2:
+   IPv4 Address. . . . . . . . . . . : 192.168.1.237
+sha256 of wiki/SCHEMA.md on disk (raw bytes): 76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8
+plan/ before: ls: cannot access '../plan': No such file or directory
+
+################ MODE: next start -H 127.0.0.1 -p 3417 ################
+started: bash pid 305, Windows PID 42340
+--- listeners on :3417 ---
+  TCP    127.0.0.1:3417         0.0.0.0:0              LISTENING       42340
+--- S1 GET /api/spike-fs (request 1) ---
+{"cwd":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-d11ef3b4be45","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
+[http 200]
+--- S1 GET /api/spike-fs (request 2) ---
+{"cwd":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-350be7a67d07","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
+[http 200]
+--- S2 headless Chromium /spike-mermaid ---
+{
+  "url": "http://127.0.0.1:3417/spike-mermaid",
+  "http": 200,
+  "state": "rendered",
+  "svgNodeCount": 3,
+  "edgePathCount": 2,
+  "nodeLabels": [
+    "ip-spec",
+    "ip-build-plan",
+    "SCHEMA"
+  ],
+  "edgeLabels": [
+    "TB"
+  ],
+  "svgAttrs": {
+    "id": "spike-s2",
+    "ariaRoledescription": "flowchart-v2"
+  },
+  "pageErrors": [],
+  "externalRequests": []
+}
+[s2 exit 0]
+--- S3 curl -m 5 http://127.0.0.1:3417/ ---
+[http 200] [curl exit 0]
+--- S3 curl -m 5 http://localhost:3417/ ---
+[http 200] [curl exit 0]
+--- S3 curl -m 5 http://192.168.1.237:3417/ ---
+[http 000] [curl exit 7]
+--- S3 curl -m 5 http://172.27.64.1:3417/ ---
+[http 000] [curl exit 7]
+--- stopping only the processes this script started (taskkill /T on Windows PID 42340) ---
+SUCCESS: The process with PID 42340 (child process of PID 77544) has been terminated.
+--- listeners on :3417 after stop ---
+none
+--- server log (start) ---
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:3417
+- Network:       http://127.0.0.1:3417
+✓ Ready in 164ms
+✓ Running next.config.ts took 38ms
+
+################ MODE: next dev -H 127.0.0.1 -p 3417 ################
+started: bash pid 327, Windows PID 82552
+--- listeners on :3417 ---
+  TCP    127.0.0.1:3417         0.0.0.0:0              LISTENING       83544
+--- S1 GET /api/spike-fs (request 1) ---
+{"cwd":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-b08922a5848b","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
+[http 200]
+--- S1 GET /api/spike-fs (request 2) ---
+{"cwd":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-482d51e13343","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
+[http 200]
+--- S2 headless Chromium /spike-mermaid ---
+{
+  "url": "http://127.0.0.1:3417/spike-mermaid",
+  "http": 200,
+  "state": "rendered",
+  "svgNodeCount": 3,
+  "edgePathCount": 2,
+  "nodeLabels": [
+    "ip-spec",
+    "ip-build-plan",
+    "SCHEMA"
+  ],
+  "edgeLabels": [
+    "TB"
+  ],
+  "svgAttrs": {
+    "id": "spike-s2",
+    "ariaRoledescription": "flowchart-v2"
+  },
+  "pageErrors": [],
+  "externalRequests": []
+}
+[s2 exit 0]
+--- S3 curl -m 5 http://127.0.0.1:3417/ ---
+[http 200] [curl exit 0]
+--- S3 curl -m 5 http://localhost:3417/ ---
+[http 200] [curl exit 0]
+--- S3 curl -m 5 http://192.168.1.237:3417/ ---
+[http 000] [curl exit 7]
+--- S3 curl -m 5 http://172.27.64.1:3417/ ---
+[http 000] [curl exit 7]
+--- stopping only the processes this script started (taskkill /T on Windows PID 82552) ---
+SUCCESS: The process with PID 83544 (child process of PID 82552) has been terminated.
+SUCCESS: The process with PID 82552 (child process of PID 40748) has been terminated.
+--- listeners on :3417 after stop ---
+none
+--- server log (dev) ---
+▲ Next.js 16.4.0 (Turbopack)
+- Local:         http://127.0.0.1:3417
+- Network:       http://127.0.0.1:3417
+✓ Ready in 518ms
+✓ Running next.config.ts took 40ms
+
+ GET / 200 in 342ms (next.js: 196ms, application-code: 146ms)
+ GET /api/spike-fs 200 in 67ms (next.js: 44ms, application-code: 23ms)
+ GET /api/spike-fs 200 in 13ms (next.js: 1.8ms, application-code: 12ms)
+ GET /spike-mermaid 200 in 65ms (next.js: 10ms, application-code: 55ms)
+ GET / 200 in 35ms (next.js: 1.9ms, application-code: 33ms)
+ GET / 200 in 30ms (next.js: 1.7ms, application-code: 28ms)
+
+plan/ after: ls: cannot access '../plan': No such file or directory
+plan/approvals.json exists after: no
+================================================================================
+
+SOURCE: scratchpad spikes.sh (runner)
+--------------------------------------------------------------------------------
+#!/bin/bash
+# IP-1 spike runner: S1 + S2 under next start and next dev, S3 under both. Kills only the processes it started.
+export PATH="/c/Program Files/nodejs:$PATH"
+APP="/c/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan"
+SP="$1"; LAN="$2"; OTHER="$3"
+cd "$APP"
+run_mode() {
+  local mode="$1"
+  echo; echo "################ MODE: next $mode -H 127.0.0.1 -p 3417 ################"
+  node node_modules/next/dist/bin/next $mode -H 127.0.0.1 -p 3417 > "$SP/server-$mode.log" 2>&1 &
+  local BG=$!
+  local WP=$(cat /proc/$BG/winpid 2>/dev/null)
+  for i in $(seq 1 120); do curl -s -o /dev/null -m 2 http://127.0.0.1:3417/ && break; sleep 0.5; done
+  echo "started: bash pid $BG, Windows PID $WP"
+  echo "--- listeners on :3417 ---"; netstat -ano | grep ":3417 " | grep LISTENING
+  echo "--- S1 GET /api/spike-fs (request 1) ---"; curl -s -m 60 -w "\n[http %{http_code}]\n" http://127.0.0.1:3417/api/spike-fs
+  echo "--- S1 GET /api/spike-fs (request 2) ---"; curl -s -m 60 -w "\n[http %{http_code}]\n" http://127.0.0.1:3417/api/spike-fs
+  echo "--- S2 headless Chromium /spike-mermaid ---"; APP_DIR="$APP" node "$SP/s2.cjs" http://127.0.0.1:3417/spike-mermaid; echo "[s2 exit $?]"
+  for h in 127.0.0.1 localhost "$LAN" "$OTHER"; do
+    echo "--- S3 curl -m 5 http://$h:3417/ ---"; curl -s -o /dev/null -m 5 -w "[http %{http_code}]" "http://$h:3417/"; echo " [curl exit $?]"
+  done
+  echo "--- stopping only the processes this script started (taskkill /T on Windows PID $WP) ---"
+  taskkill //PID $WP //T //F 2>&1
+  sleep 2
+  echo "--- listeners on :3417 after stop ---"; (netstat -ano | grep ":3417 " | grep LISTENING) || echo "none"
+  echo "--- server log ($mode) ---"; cat "$SP/server-$mode.log"
+}
+echo "IP-1 spikes, captured $(date -u +%Y-%m-%dT%H:%M:%SZ), node $(node -v), HEAD $(git -C .. rev-parse --short HEAD)"
+echo "LAN IPv4 from ipconfig:"; ipconfig | grep -i -E "adapter|IPv4" | grep -B1 IPv4
+echo "sha256 of wiki/SCHEMA.md on disk (raw bytes): $(sha256sum ../wiki/SCHEMA.md | cut -d' ' -f1)"
+echo "plan/ before: $(ls -A ../plan 2>&1)"
+run_mode start
+run_mode dev
+echo; echo "plan/ after: $(ls -A ../plan 2>&1)"
+echo "plan/approvals.json exists after: $( [ -e ../plan/approvals.json ] && echo yes || echo no )"
+
+SOURCE: scratchpad s2.cjs (headless Chromium driver for S2)
+--------------------------------------------------------------------------------
+// Drive the S2 page in headless Chromium and report the render result.
+const { chromium } = require(process.env.APP_DIR + "/node_modules/@playwright/test");
+(async () => {
+  const url = process.argv[2];
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push("pageerror: " + e.message));
+  page.on("console", (m) => { if (m.type() === "error") errors.push("console.error: " + m.text()); });
+  const external = [];
+  page.on("request", (r) => { const u = new URL(r.url()); if (!["127.0.0.1", "localhost"].includes(u.hostname) && u.protocol.startsWith("http")) external.push(r.url()); });
+  const resp = await page.goto(url, { waitUntil: "networkidle" });
+  await page.waitForFunction(() => document.querySelector('[data-testid="state"]')?.textContent !== "pending", null, { timeout: 30000 });
+  const state = await page.textContent('[data-testid="state"]');
+  const nodes = await page.locator('[data-testid="diagram"] svg g.node').count();
+  const edges = await page.locator('[data-testid="diagram"] svg .edgePaths path, [data-testid="diagram"] svg path.flowchart-link').count();
+  const labels = (await page.locator('[data-testid="diagram"] svg g.node').allTextContents()).map((t) => t.trim());
+  const edgeLabels = (await page.locator('[data-testid="diagram"] svg g.edgeLabel').allTextContents()).map((t) => t.trim()).filter(Boolean);
+  const svgAttrs = await page.locator('[data-testid="diagram"] svg').evaluate((el) => ({ id: el.id, ariaRoledescription: el.getAttribute("aria-roledescription") }));
+  console.log(JSON.stringify({ url, http: resp.status(), state, svgNodeCount: nodes, edgePathCount: edges, nodeLabels: labels, edgeLabels, svgAttrs, pageErrors: errors, externalRequests: external }, null, 2));
+  await browser.close();
+  process.exit(state === "rendered" && nodes === 3 && errors.length === 0 && external.length === 0 ? 0 : 1);
+})().catch((e) => { console.error(e); process.exit(2); });
+
+SOURCE: interactive_plan/app/api/spike-fs/route.ts (S1, deleted after capture)
+--------------------------------------------------------------------------------
+// SPIKE S1 (IP-1, temporary; deleted after the result is recorded).
+// Reads ../wiki/SCHEMA.md and writes + deletes ../plan/.spike-<rand> at request time.
+import { createHash, randomBytes } from "node:crypto";
+import { access, mkdir, readFile, rm, rmdir, stat, writeFile } from "node:fs/promises";
+import path from "node:path";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  const root = path.resolve(process.cwd(), "..");
+  const schemaPath = path.join(root, "wiki", "SCHEMA.md");
+  const planDir = path.join(root, "plan");
+  const approvals = path.join(planDir, "approvals.json");
+  const result: Record<string, unknown> = { cwd: process.cwd(), root };
+  try {
+    const buf = await readFile(schemaPath);
+    result.schemaBytes = buf.length;
+    result.schemaSha256 = createHash("sha256").update(buf).digest("hex");
+    result.schemaFirstLine = buf.toString("utf8").split("\n")[0];
+
+    let createdPlanDir = false;
+    try {
+      await stat(planDir);
+    } catch {
+      await mkdir(planDir);
+      createdPlanDir = true;
+    }
+    const spike = path.join(planDir, `.spike-${randomBytes(6).toString("hex")}`);
+    await writeFile(spike, "spike S1\n");
+    result.spikeWritten = path.basename(spike);
+    result.spikeReadBack = (await readFile(spike, "utf8")).trim();
+    await rm(spike);
+    let stillThere = true;
+    try {
+      await access(spike);
+    } catch {
+      stillThere = false;
+    }
+    result.spikeDeleted = !stillThere;
+    if (createdPlanDir) await rmdir(planDir);
+    result.createdAndRemovedPlanDir = createdPlanDir;
+    let approvalsExists = true;
+    try {
+      await access(approvals);
+    } catch {
+      approvalsExists = false;
+    }
+    result.approvalsJsonExists = approvalsExists;
+    result.ok = true;
+  } catch (e) {
+    result.ok = false;
+    result.error = String(e);
+  }
+  return Response.json(result);
+}
+
+SOURCE: interactive_plan/app/spike-mermaid/MermaidSpike.tsx (S2, deleted after capture)
+--------------------------------------------------------------------------------
+"use client";
+// SPIKE S2 (IP-1, temporary; deleted after the result is recorded).
+import { useEffect, useState } from "react";
+
+const SOURCE = `flowchart LR
+  ip_spec["ip-spec"] --> ip_build_plan["ip-build-plan"]
+  ip_build_plan -.->|TB| schema["SCHEMA"]`;
+
+export default function MermaidSpike() {
+  const [svg, setSvg] = useState("");
+  const [state, setState] = useState("pending");
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const mermaid = (await import("mermaid")).default;
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: "strict",
+          layout: "dagre",
+          look: "classic",
+        });
+        const out = await mermaid.render("spike-s2", SOURCE);
+        if (!cancelled) {
+          setSvg(out.svg);
+          setState("rendered");
+        }
+      } catch (e) {
+        if (!cancelled) setState(`error: ${String(e)}`);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  return (
+    <div>
+      <p data-testid="state">{state}</p>
+      <div data-testid="diagram" dangerouslySetInnerHTML={{ __html: svg }} />
+    </div>
+  );
+}
+
+SOURCE: interactive_plan/app/spike-mermaid/page.tsx (S2, deleted after capture)
+--------------------------------------------------------------------------------
+// SPIKE S2 (IP-1, temporary; deleted after the result is recorded).
+import MermaidSpike from "./MermaidSpike";
+
+export default function Page() {
+  return <MermaidSpike />;
+}
