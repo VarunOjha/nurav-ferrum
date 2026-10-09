@@ -77,7 +77,8 @@ test("an exact id in the search box jumps to the page", async ({ page }) => {
   await box.fill(FX.adr);
   await expect(page.getByRole("option").first()).toContainText(FX.adr);
   await box.press("Enter");
-  await expect(page).toHaveURL(FX.adrPath);
+  // via /go/<id>: an ADR opens in its typed view since IP-8
+  await expect(page).toHaveURL(FX.adrView);
 });
 
 test("search ranks the exact id first and filters by type", async ({ page }) => {

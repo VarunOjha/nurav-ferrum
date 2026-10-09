@@ -18,6 +18,8 @@ export function collectErrors(page: Page): string[] {
 export const FX = {
   adr: "adr-0901",
   adrPath: "/wiki/decisions/adr-0901-fixture-decision.md",
+  /** The typed decision view (IP-8); /go/adr-0901 and the inbox open it. */
+  adrView: "/decisions/adr-0901",
   projectPath: "/wiki/overview/ov-fixture-project.md",
   renderPath: "/wiki/overview/ov-fixture-render.md",
   rawPath: "/wiki/raw/00-fixture-source.md",

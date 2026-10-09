@@ -178,9 +178,9 @@ These frontmatter fields are id references. They feed backlinks, graphs and `REF
 
 | Function | Output | Used by |
 |---|---|---|
-| `componentGraph(idx)` | Nodes = component pages (trust_level, status, shipped). Edges = `connects` (label, kind, crosses_trust_boundary). Unknown `to` → dangling node | `/architecture` |
+| `componentGraph(idx)` | Nodes = component pages (trust_level, status, shipped). Edges = `connects` (label, kind, crosses_trust_boundary, plus `trustEdgeError` by the lint TRUST-EDGE rule, IP-8). Unknown `to` → dangling node | `/architecture` |
 | `phaseDag(idx)` | Nodes = phases by `order`. Edges = `depends_on`. Plus `schedule`: `start = max(end(dep))`, `end = start + est_sessions` (in **sessions, not dates**), and the critical path | `/roadmap`, dashboard |
-| `traceGraph(idx)` | Layered graph rq → hyp → exp → {metric, workload}, plus exp → phase. `gaps[]` (see [ip-routes-and-views](ip-routes-and-views.md) §3.8) | `/research` |
+| `traceGraph(idx, {current, next})` | Layered graph rq → hyp → exp → {metric, workload}, plus exp → phase. `gaps[]` (see [ip-routes-and-views](ip-routes-and-views.md) §3.8; the current and next phase ids decide the unverified-metric gap, IP-8), and the nested `tree` for the text alternative | `/research` |
 | `riskMatrix(idx)` | 5×5 cells (likelihood × impact) → risk ids; score = L×I | `/risks` |
 | `approvables(idx)` | Every page with `approvable: true`, plus `<phase-id>#exit` for each phase whose status ∈ {gate-review, done} or that has a stored `#exit` record | `/approvals`, dashboard |
 | `entryGate(idx, approvals, phaseId)` | The SCHEMA §9.7 entry-gate checklist (§8 below) | `/phases/[id]`, dashboard |

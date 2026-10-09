@@ -10,6 +10,7 @@ sources:
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-7-tests.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-build-plan, comp-interactive-plan, adr-0016, schema]
 approvable: true
 phase: phase-p0-planning
@@ -32,7 +33,7 @@ Facts used here: Vitest cannot test async Server Components, so logic lives in p
 | `lint` | `eslint .` (flat config, eslint-config-next 16.4.0) | 0 errors, 0 warnings |
 | `test` | `vitest run` (unit + component; excludes `tests/lint`, `tests/e2e`; does not load the real wiki pages; the only real files read are `wiki/SCHEMA.md` (schema-sync test, §1.2, and the Python reference of §1.3) and the §7 vector block of `ip-data-contract` (§1.3)) | all pass |
 | `test:coverage` | `vitest run --coverage` for `lib/**` | thresholds in §1.6 (provider `@vitest/coverage-v8`, exact pin at install; owner consent is Q-210) |
-| `lint:wiki` | `vitest run --config vitest.lint.config.mts`: every test under `tests/lint/` except the gate report, i.e. the [ip-wiki-lint](ip-wiki-lint.md) suite `wiki-lint.test.ts` (IP-5) and the real-wiki loader test `real-wiki-loader.test.ts` (IP-2: zero `FM-*` and loader errors, every `sources` path exists), all against the **real** wiki, read-only | 0 errors (warnings listed) |
+| `lint:wiki` | `vitest run --config vitest.lint.config.mts`: every test under `tests/lint/` except the gate report, i.e. the [ip-wiki-lint](ip-wiki-lint.md) suite `wiki-lint.test.ts` (IP-5) the real-wiki loader test `real-wiki-loader.test.ts` (IP-2: zero `FM-*` and loader errors, every `sources` path exists) and the real-wiki graph test `real-wiki-graphs.test.ts` (IP-8: 9 phases P0–P8, acyclic, all scheduled; no dangling or TRUST-EDGE component edge; every risk placed once; the research gaps printed, not failed on), all against the **real** wiki, read-only | 0 errors (warnings listed) |
 | `lint:wiki:json` | `node scripts/with-env.mjs WIKI_LINT_JSON=1 -- vitest run --config vitest.lint.config.mts`: the same, plus the JSON report (`WIKI_LINT_OUT`, default `.lint/wiki-lint.json`) | as `lint:wiki` |
 | `gate` | `vitest run --config vitest.gate.config.mts`: the entry-gate checklist of `GATE_PHASE` or `STATUS.current_phase` ([ip-wiki-lint](ip-wiki-lint.md) §4) | the gate passes |
 | `build` | `next build` | succeeds |
@@ -95,7 +96,10 @@ Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to
 - **Cross-process:** spawn 4 child Node processes, each doing 10 submits against the same dir through the store module → no lost updates and no leftover `.tmp-*` or `.lock` files. Since IP-4 the children run `lib/approvals/store.ts` under plain `node` (Node 24 strips the types; `tests/unit/children/approvals-child.mjs` registers a resolve hook that adds the `.ts` extension), with `PLAN_APPEND_LOG` on (40 well-formed `approval` log entries expected), and a fifth child reads `approvals.json` in a loop during the writes and must never see a torn file. The reader reads every 20 ms, and all 40 submits must succeed. A second **stress** variant reads about every millisecond; there a submit may be refused with an explicit `WRITE_FAILED`/`LOCK_TIMEOUT` (Windows refuses a rename over an open file, [ip-approvals-api](ip-approvals-api.md) §4.2), so it asserts that no read is torn, that the file holds exactly the submissions reported as successful (each once), that every failure is one of those two codes, and that nothing is left over. Both print the rename retries per writer with their errno codes. The IP-4 gate runs both 3 times in a row.
 - **Crash during write:** inject a failure after the temp file is written and before rename (dependency-injected fs) → the original file is intact, the temp file is cleaned up, and `WRITE_FAILED` is returned.
 - **Rename retry:** an injected `EPERM` on the first two rename attempts → success on the third. Five failures → success on the sixth attempt; six failures (`EPERM`, `EBUSY` or `EACCES`) → `WRITE_FAILED`; a non-transient error is not retried. (Decided in IP-4: [ip-approvals-api](ip-approvals-api.md) §4.2, "retried up to 5 times with 20 to 320 ms backoff", wins over the earlier "five failures → `WRITE_FAILED`" here; the cross-process stress test showed the longer budget is worth having.)
-- **Stale lock:** a lock file older than 30 s is broken. A fresh lock held by another holder → `LOCK_TIMEOUT` after the timeout, using a fake clock (the lock and the rename backoff take an injectable `{now, sleep}` clock; decided in IP-4 instead of vitest fake timers, which do not drive the fs promises in between). The holder's lock file is left untouched.
+- **Stale lock:** a lock file older than 30 s is broken. A fresh lock held by another holder → `LOCK_TIMEOUT` after the timeout, using a fake clock (the lock and the rename backoff take an injectable `{now, sleep}` clock; decided in IP-4 instead of vitest fake timers, which do not drive the fs promises in between). The holder's lock file is left untouched. Since IP-8 two more lock tests use an injected `open`:
+
+- `EPERM`, `EACCES` and `EBUSY` on the exclusive create (the Windows delete-pending case) are retried until the submit succeeds.
+- A lock that stays busy gives `LOCK_TIMEOUT` after 3 s, never the raw fs error, and any other open error is rethrown.
 - Serialisation is stable: keys sorted, 2-space indent, trailing `\n`, LF only.
 - **Log append:** an entry is appended in the SCHEMA §12 format, the file still ends with exactly one `\n`, and a missing log returns the `LOG_MISSING` warning without creating the file.
 
@@ -124,6 +128,16 @@ Each test runs against a fresh temp `PLAN_DATA_DIR` and a fixture wiki copied to
 - `links`: relative-link resolution (`../decisions/x.md#anchor`), anchor existence using the rehype-slug algorithm, and links inside fenced code ignored.
 - `log`: heading regex, lenient bullet parsing, malformed headings → `LOG-FORMAT`.
 - `search`: ranking order (id > title > alias/tag > heading > body). Since IP-6 `search.test.ts` also covers the other pure view helpers: `/wiki` parameter resolution (only known paths, no `..`), `/go` targets (page id, `Q-NNN`, task id), close matches, markdown link rewriting, the wiki tree, grouped backlinks, the log view model and the status tones.
+
+Since IP-8 `graph.test.ts` (temp wikis built from small pages, plus the mini-wiki) covers:
+
+- every gap kind, with reciprocity exactly as lint REF-RECIPROCAL reports it
+- the self-dependency cycle and missing dependencies
+- the critical-path tie-break
+- the architecture lanes, reading order and no overlaps
+- the research column wrap
+- the decision register helpers: awaiting-first ordering, filters, the ADR-SECTIONS order rule and the supersession chain (cycle-safe)
+- risk sorting in both directions
 
 **Coverage thresholds** (on `lib/**`): 90 % lines and branches for `lib/approvals/**`, 80 % for `lib/wiki/**` and `lib/lint/**`. These are targets set by this plan. Reaching them is checked by the coverage run, not assumed.
 
@@ -162,6 +176,8 @@ Files `tests/unit/components/*.test.tsx`, each with the `// @vitest-environment 
 
 Since IP-7 the overlay also holds `phases/phase-p2-fixture-review.md` (status `gate-review`, so its `#exit` key is eligible) and one evidence file for it under `raw/evidence/phase-p2-fixture-review/`. The specs that change temp files (`approval-flow`, `approval-race`, `exit-approval`, `dashboard`) save the bytes they touch (page files, `<tmp>/plan/approvals.json`, `<tmp>/wiki/log.md`) in `beforeAll` and restore them in `afterAll`, so every spec sees the fixture as shipped whatever the file order; they also check mid-run that the real guarded files are unchanged. The dashboard spec writes a known `<tmp>/plan/approvals.json` (records computed from the fixture files: one APPROVED, one REJECTED, one STALE, one orphan) so its expected counts are fixed (decided 2026-10-09, IP-7).
 
+Since IP-8 the overlay also holds `research/questions/rq-92-fixture-unanswered.md` (no hypotheses), `research/experiments/exp-fixture-nometrics.md` (no metrics, in no phase's `experiments`) and `risks/risk-r92-fixture-resolved.md` (resolved, L1 I2), for the research and risks specs. All three are `approvable: false`, so the dashboard spec's fixed approval counts do not change (decided 2026-10-09, IP-8).
+
 Decided 2026-10-09 (IP-6): the setup runs when the config is loaded, not in a `globalSetup` file, because Playwright starts the `webServer` before `globalSetup`; worker processes inherit `PLAN_E2E_ROOT` and skip it. The overlay holds the E2E-only cases (a dangling link, an integrity tag, a CONTRADICTION blockquote, raw HTML, a malformed log heading) that the lint-clean `mini-wiki` must not contain (§2).
 
 The tests **never touch the real `plan/approvals.json` or `wiki/`**. The guard in `tests/e2e/global-teardown.ts` fails the run if the real `plan/approvals.json`, `wiki/log.md` or `STATUS.md` changed (mtime and sha256), then removes the temp copy. The temp dir is deliberately created under a directory name containing a space; `next build` and `next start` run against it on Windows ([IP-6-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt)).
@@ -170,10 +186,11 @@ The tests **never touch the real `plan/approvals.json` or `wiki/`**. The guard i
 |---|---|
 | `views.spec.ts` | Each route in [ip-routes-and-views](ip-routes-and-views.md) §1 returns 200, has an `h1`, and logs no console errors. 404 for an unknown id. `/go/<id>` redirects |
 | `dashboard.spec.ts` | `next_action` from the fixture STATUS.md is shown verbatim. Approval counts equal the fixture's expected counts. `blocked_on` links resolve. Since IP-7 also: the top-bar counter, the `?state=` link into the inbox, the phase strip and budget, the gate card, blockers, recent log and the `/lint` report |
-| `architecture.spec.ts` | Node count equals the fixture components. A TB edge has the TB marker. Clicking a node opens the panel with a page link. The edge table alternative exists |
-| `roadmap.spec.ts` | 9 phase nodes. Bar widths are proportional to `est_sessions`. Clicking navigates to the phase |
-| `risks.spec.ts` | Heatmap cell (L, I) contains the fixture risk id. The table is sortable by score |
-| `research.spec.ts` | Fixture gaps (an rq without hypotheses, an exp without metrics) are highlighted and listed |
+| `architecture.spec.ts` | Node count equals the fixture components. A TB edge has the TB marker. Clicking a node opens the panel with a page link. The edge table alternative exists. Since IP-8 also: keyboard only (Tab in reading order, Enter/Space opens the panel, Close returns focus), lanes, the not-shipped marking and the URL filters |
+| `roadmap.spec.ts` | One DAG node per fixture phase. The E2E fixture has 3 phases; the real wiki's 9 phase nodes are asserted by `tests/lint/real-wiki-graphs.test.ts` (decided 2026-10-09, IP-8). Bar widths are proportional to `est_sessions`. Clicking navigates to the phase. Since IP-8 also: bars start at the end of their dependency, the critical path, milestones, keyboard Tab/Enter, and the exit column shows only eligible exit keys |
+| `risks.spec.ts` | Heatmap cell (L, I) contains the fixture risk id. The table is sortable by score (both directions, `aria-sort`). Since IP-8 also: row and column headers, band attributes, and the "open + mitigating only" toggle |
+| `research.spec.ts` | Fixture gaps (an rq without hypotheses, an exp without metrics) are highlighted and listed. Since IP-8 also: the column order, the support and preregistration badges, the nested text alternative, the `?rq=` filter and click-through |
+| `decisions.spec.ts` | Added in IP-8 (not in the original plan): the register lists `adr-0901` as claude-proposed and awaiting approval, and its filters work. The detail view shows the approve bar, all five required sections and the pages listing the ADR. `/go/adr-0901` redirects to `/decisions/adr-0901`. Unknown and non-decision ids give 404 |
 | `wiki.spec.ts` | A page renders GFM tables. A mermaid block renders an SVG (real mermaid, both themes). Backlinks list the expected ids. Search finds a body word. A dangling link is styled as missing. A raw file shows the immutable banner and no approve bar |
 | `log.spec.ts` | Entries newest-first. The op filter works. A malformed heading appears as a finding |
 | **`approval-flow.spec.ts`** | **(1)** inbox shows fixture page `adr-0901` as PENDING → **(2)** open it, Approve → the UI shows APPROVED → **(3)** read `<tmp>/plan/approvals.json` from the test: the record has `status: approved`, both hashes equal the Node-computed hashes of the fixture file, `approved_by: owner`, and a valid timestamp → **(4)** edit only `status:`/`updated:` in the fixture file → reload → APPROVED_VOLATILE_DRIFT → **(5)** edit the body → reload → **STALE**, and the inbox lists it under Stale → **(6)** Request changes with an empty comment is blocked; with a comment → CHANGES_REQUESTED and `history` length 1 → **(7)** `log.md` gained `approval` entries in the SCHEMA §12 format |

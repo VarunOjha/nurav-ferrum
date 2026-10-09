@@ -9,6 +9,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-4-tests.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt
 related: [ip-spec, ip-data-contract, ip-routes-and-views, ip-testing, comp-interactive-plan, adr-0016, adr-0011, schema]
 approvable: true
 phase: phase-p0-planning
@@ -140,6 +141,7 @@ Two writers are realistic: two browser tabs, or a dev server and a production se
 - **Cross-process:** a lock file `plan/.approvals.lock`.
   - It is created with `fs.open(path, 'wx')` (exclusive create) and contains `{pid, started_at, nonce}` (`started_at` in epoch ms; the random `nonce` lets the holder release only its own lock).
   - Acquisition retries every 50 ms for up to 3 s, then returns `503 LOCK_TIMEOUT`.
+  - On Windows the exclusive create can fail with `EPERM` (also `EACCES` or `EBUSY`) while the previous holder's lock file is still pending deletion: it was unlinked while another process had it open to read it. That is a busy lock, not a failure. It is retried like `EEXIST`, bounded by the same 3 s, and gives `LOCK_TIMEOUT` (with `last_error` in the details) if it persists. Any other open error is not retried. Decided 2026-10-09, after a raw `EPERM` escaped a writer in the IP-8 gate run of the IP-4 cross-process test ([IP-8-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt)).
   - A lock older than 30 s is considered stale. It is removed and the event is logged to the server console. Removal renames the lock aside first and checks it is still the file judged stale; if another process replaced it meanwhile, it is linked back (link never overwrites), so a fresh lock is never broken.
   - The lock is released in `finally`.
   - `.approvals.lock`, `.approvals.lock.stale-*`, `approvals.json.tmp-*` and snapshot temp files (`snapshots/**/*.tmp-*`) are in `.gitignore`.

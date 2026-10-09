@@ -96,54 +96,60 @@ const list = (fm: Fm, key: string): string[] =>
   Array.isArray(fm[key]) ? (fm[key] as unknown[]).filter((x): x is string => typeof x === "string") : [];
 
 /** Valid pages of a type, by id. */
-function byType(idx: WikiIndex, type: string): Map<string, Fm> {
+function byType(idx: Pick<WikiIndex, "pages" | "byId">, type: string): Map<string, Fm> {
   const out = new Map<string, Fm>();
   for (const p of idx.pages) if (p.fm?.type === type && idx.byId.get(p.fm.id) === p) out.set(p.fm.id, p.fm as Fm);
+  return out;
+}
+
+/**
+ * REF-RECIPROCAL findings (rq.hypotheses <-> hyp.rq, hyp.experiments <-> exp.hypotheses). Exported so
+ * the /research view lists the same mismatches as the lint (ip-routes-and-views §3.8, IP-8).
+ */
+export function reciprocalFindings(idx: Pick<WikiIndex, "pages" | "byId">): LintFinding[] {
+  const out: LintFinding[] = [];
+  const rqs = byType(idx, "research-question");
+  const hyps = byType(idx, "hypothesis");
+  const exps = byType(idx, "experiment");
+  const at = (id: string) => idx.byId.get(id)!.repoPath;
+  // rq.hypotheses <-> hyp.rq
+  for (const [rq, fm] of rqs) {
+    for (const h of list(fm, "hypotheses")) {
+      const hfm = hyps.get(h);
+      if (hfm && hfm.rq !== rq) {
+        out.push(finding("REF-RECIPROCAL", at(rq), `${rq} lists hypothesis ${h}, but ${h}.rq is ${String(hfm.rq)}`, { id: rq }));
+      }
+    }
+  }
+  for (const [h, fm] of hyps) {
+    const rq = typeof fm.rq === "string" ? fm.rq : null;
+    const rfm = rq ? rqs.get(rq) : undefined;
+    if (rq && rfm && !list(rfm, "hypotheses").includes(h)) {
+      out.push(finding("REF-RECIPROCAL", at(h), `${h}.rq is ${rq}, but ${rq}.hypotheses does not list ${h}`, { id: h }));
+    }
+    // hyp.experiments <-> exp.hypotheses
+    for (const e of list(fm, "experiments")) {
+      const efm = exps.get(e);
+      if (efm && !list(efm, "hypotheses").includes(h)) {
+        out.push(finding("REF-RECIPROCAL", at(h), `${h} lists experiment ${e}, but ${e}.hypotheses does not list ${h}`, { id: h }));
+      }
+    }
+  }
+  for (const [e, fm] of exps) {
+    for (const h of list(fm, "hypotheses")) {
+      const hfm = hyps.get(h);
+      if (hfm && !list(hfm, "experiments").includes(e)) {
+        out.push(finding("REF-RECIPROCAL", at(e), `${e} lists hypothesis ${h}, but ${h}.experiments does not list ${e}`, { id: e }));
+      }
+    }
+  }
   return out;
 }
 
 export const refReciprocal: Rule = {
   code: "REF-RECIPROCAL",
   severity: "error",
-  run({ idx }) {
-    const out: LintFinding[] = [];
-    const rqs = byType(idx, "research-question");
-    const hyps = byType(idx, "hypothesis");
-    const exps = byType(idx, "experiment");
-    const at = (id: string) => idx.byId.get(id)!.repoPath;
-    // rq.hypotheses <-> hyp.rq
-    for (const [rq, fm] of rqs) {
-      for (const h of list(fm, "hypotheses")) {
-        const hfm = hyps.get(h);
-        if (hfm && hfm.rq !== rq) {
-          out.push(finding("REF-RECIPROCAL", at(rq), `${rq} lists hypothesis ${h}, but ${h}.rq is ${String(hfm.rq)}`, { id: rq }));
-        }
-      }
-    }
-    for (const [h, fm] of hyps) {
-      const rq = typeof fm.rq === "string" ? fm.rq : null;
-      const rfm = rq ? rqs.get(rq) : undefined;
-      if (rq && rfm && !list(rfm, "hypotheses").includes(h)) {
-        out.push(finding("REF-RECIPROCAL", at(h), `${h}.rq is ${rq}, but ${rq}.hypotheses does not list ${h}`, { id: h }));
-      }
-      // hyp.experiments <-> exp.hypotheses
-      for (const e of list(fm, "experiments")) {
-        const efm = exps.get(e);
-        if (efm && !list(efm, "hypotheses").includes(h)) {
-          out.push(finding("REF-RECIPROCAL", at(h), `${h} lists experiment ${e}, but ${e}.hypotheses does not list ${h}`, { id: h }));
-        }
-      }
-    }
-    for (const [e, fm] of exps) {
-      for (const h of list(fm, "hypotheses")) {
-        const hfm = hyps.get(h);
-        if (hfm && !list(hfm, "experiments").includes(e)) {
-          out.push(finding("REF-RECIPROCAL", at(e), `${e} lists hypothesis ${h}, but ${h}.experiments does not list ${e}`, { id: e }));
-        }
-      }
-    }
-    return out;
-  },
+  run: ({ idx }) => reciprocalFindings(idx),
 };
 
 /** Ids citing each wiki-relative path in their `sources` (a citation is an inbound reference too). */

@@ -8,6 +8,12 @@
  *   is released in `finally`.
  *
  * The clock is injectable so tests can use a fake clock (ip-testing §1.4 "Stale lock").
+ *
+ * Windows: `open(lock, 'wx')` can fail with EPERM (also EACCES/EBUSY) while the previous holder's
+ * lock file is still pending deletion (it was unlinked while another process had it open to read
+ * it). That is a busy lock, not a failure: it is retried like EEXIST until the timeout (LOCK_TIMEOUT),
+ * never surfaced as a raw fs error (seen in the IP-8 gate run of the IP-4 cross-process test; decided
+ * 2026-10-09). The open function is injectable for that test.
  */
 import { randomBytes } from "node:crypto";
 import * as fsp from "node:fs/promises";
@@ -30,7 +36,12 @@ export interface LockOptions {
   clock?: Clock;
   /** Called when a stale lock is broken (default: console.warn). */
   onStale?: (info: { path: string; ageMs: number; holder: string }) => void;
+  /** The exclusive-create open (default fs/promises open); injectable for tests. */
+  open?: (path: string, flags: string) => Promise<Pick<fsp.FileHandle, "writeFile" | "close">>;
 }
+
+/** Open errors that mean "busy" on Windows (delete-pending lock file), retried like EEXIST. */
+export const TRANSIENT_LOCK_OPEN = new Set(["EPERM", "EACCES", "EBUSY"]);
 
 export const LOCK_DEFAULTS = { retryMs: 50, timeoutMs: 3000, staleMs: 30_000 } as const;
 
@@ -96,11 +107,18 @@ export async function acquire(lockPath: string, opts: LockOptions = {}): Promise
   const onStale =
     opts.onStale ??
     ((i) => console.warn(`[approvals] breaking stale lock ${i.path} (age ${i.ageMs} ms, holder ${i.holder})`));
+  const open = opts.open ?? ((p: string, f: string) => fsp.open(p, f));
   const start = clock.now();
   const nonce = randomBytes(8).toString("hex");
+  let lastBusy: string | undefined;
+  const timeout = () =>
+    new ApprovalError("LOCK_TIMEOUT", `could not acquire ${lockPath} within ${timeoutMs} ms`, {
+      timeout_ms: timeoutMs,
+      ...(lastBusy ? { last_error: lastBusy } : {}),
+    });
   for (;;) {
     try {
-      const fh = await fsp.open(lockPath, "wx");
+      const fh = await open(lockPath, "wx");
       try {
         await fh.writeFile(JSON.stringify({ pid: process.pid, started_at: clock.now(), nonce }));
       } finally {
@@ -108,7 +126,15 @@ export async function acquire(lockPath: string, opts: LockOptions = {}): Promise
       }
       return nonce;
     } catch (e) {
-      if ((e as NodeJS.ErrnoException).code !== "EEXIST") throw e;
+      const code = (e as NodeJS.ErrnoException).code;
+      if (code !== "EEXIST") {
+        if (!code || !TRANSIENT_LOCK_OPEN.has(code)) throw e;
+        // Busy (delete-pending lock file): wait and retry, bounded by the same timeout.
+        lastBusy = code;
+        if (clock.now() - start >= timeoutMs) throw timeout();
+        await clock.sleep(retryMs);
+        continue;
+      }
     }
     const cur = await readBody(lockPath);
     if (cur) {
@@ -121,11 +147,7 @@ export async function acquire(lockPath: string, opts: LockOptions = {}): Promise
     } else {
       continue; // released between our create and our read: retry at once
     }
-    if (clock.now() - start >= timeoutMs) {
-      throw new ApprovalError("LOCK_TIMEOUT", `could not acquire ${lockPath} within ${timeoutMs} ms`, {
-        timeout_ms: timeoutMs,
-      });
-    }
+    if (clock.now() - start >= timeoutMs) throw timeout();
     await clock.sleep(retryMs);
   }
 }

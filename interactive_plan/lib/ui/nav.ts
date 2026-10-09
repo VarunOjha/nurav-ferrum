@@ -13,11 +13,11 @@ export interface NavItem {
 
 export const NAV: readonly NavItem[] = [
   { href: "/", label: "Dashboard", ready: true },
-  { href: "/roadmap", label: "Roadmap", ready: false, step: "IP-8" },
-  { href: "/architecture", label: "Architecture", ready: false, step: "IP-8" },
-  { href: "/decisions", label: "Decisions", ready: false, step: "IP-8" },
-  { href: "/risks", label: "Risks", ready: false, step: "IP-8" },
-  { href: "/research", label: "Research", ready: false, step: "IP-8" },
+  { href: "/roadmap", label: "Roadmap", ready: true },
+  { href: "/architecture", label: "Architecture", ready: true },
+  { href: "/decisions", label: "Decisions", ready: true },
+  { href: "/risks", label: "Risks", ready: true },
+  { href: "/research", label: "Research", ready: true },
   { href: "/wiki", label: "Wiki", ready: true },
   { href: "/log", label: "Log", ready: true },
   { href: "/approvals", label: "Approvals", ready: true },

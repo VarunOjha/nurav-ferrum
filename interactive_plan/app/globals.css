@@ -1890,3 +1890,491 @@ mark {
 .lint-code summary {
   cursor: pointer;
 }
+
+/* ------------------------------------------------------------------------------------------
+ * IP-8: graphs (xyflow), legend, heatmap, timeline (ip-routes-and-views §3.2, §3.3, §3.6, §3.8)
+ * ---------------------------------------------------------------------------------------- */
+.fg-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin: 0.8rem 0 1.2rem;
+}
+.fg-wrap-open {
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+}
+@media (max-width: 899px) {
+  .fg-wrap-open {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.fg-canvas {
+  position: relative;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+.fg-canvas .react-flow {
+  --xy-background-color: var(--surface);
+  --xy-background-pattern-color: var(--border);
+  --xy-edge-stroke: var(--text-muted);
+  --xy-controls-button-background-color: var(--surface-2);
+  --xy-controls-button-color: var(--text);
+  --xy-controls-button-border-color: var(--border);
+  --xy-attribution-background-color: transparent;
+}
+.fg-loading {
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  margin: 0.8rem 0 1.2rem;
+}
+.fg-node {
+  box-sizing: border-box;
+  background: var(--surface);
+  color: var(--text);
+  border: 1.5px solid var(--border-strong);
+  border-left-width: 5px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.fg-hit {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-size: 0.76rem;
+  line-height: 1.25;
+  color: var(--text);
+}
+/* xyflow gives non-selectable, non-draggable nodes pointer-events: none; the node's own control takes clicks */
+.react-flow__node .fg-hit {
+  pointer-events: all;
+}
+.fg-hit:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: -3px;
+  border-radius: 6px;
+}
+.fg-hit:hover .fg-title {
+  text-decoration: underline;
+}
+.fg-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.fg-title {
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fg-sub {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fg-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin: 0;
+}
+.fg-badges .chip {
+  font-size: 0.62rem;
+  padding: 0 0.35rem;
+}
+.fg-handle {
+  opacity: 0;
+  pointer-events: none;
+}
+.fg-tone-neutral {
+  border-left-color: var(--neutral-fg);
+}
+.fg-tone-blue {
+  border-left-color: var(--blue-fg);
+}
+.fg-tone-amber {
+  border-left-color: var(--amber-fg);
+}
+.fg-tone-green {
+  border-left-color: var(--green-fg);
+}
+.fg-tone-red {
+  border-left-color: var(--red-fg);
+}
+.fg-tone-purple {
+  border-left-color: var(--purple-fg);
+}
+.fg-lane-trusted {
+  border-left-color: var(--green-fg);
+}
+.fg-lane-untrusted {
+  border-left-color: var(--amber-fg);
+}
+.fg-lane-external {
+  border-left-color: var(--blue-fg);
+}
+.fg-dotted {
+  border-style: dotted;
+  border-width: 2.5px;
+  border-left-width: 5px;
+}
+.fg-dangling {
+  border: 2px dashed var(--red-fg);
+  background: var(--red-bg);
+}
+.fg-gap {
+  outline: 3px solid var(--red-fg);
+  outline-offset: 2px;
+}
+.fg-crit {
+  border-color: var(--purple-fg);
+  border-width: 2.5px;
+  border-left-width: 5px;
+}
+.fg-lane {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed var(--border-strong);
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+.fg-lane-label {
+  display: inline-block;
+  margin: 6px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.react-flow__edge.fg-edge .react-flow__edge-path {
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+}
+.react-flow__edge.fg-edge-tb .react-flow__edge-path {
+  stroke-dasharray: 9 6;
+  stroke-width: 3.5;
+}
+.react-flow__edge.fg-edge-bad .react-flow__edge-path {
+  stroke: var(--red-fg);
+}
+.react-flow__edge.fg-edge-crit .react-flow__edge-path {
+  stroke: var(--purple-fg);
+  stroke-width: 3.5;
+}
+.react-flow__edge.fg-edge .react-flow__edge-text {
+  font-size: 11px;
+  fill: var(--text);
+}
+.react-flow__edge.fg-edge-bad .react-flow__edge-text {
+  fill: var(--red-fg);
+  font-weight: 600;
+}
+.react-flow__edge.fg-edge .react-flow__edge-textbg {
+  fill: var(--surface);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fg-canvas .react-flow__viewport,
+  .fg-canvas .react-flow__edge-path {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+.fg-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0.9rem 1rem;
+  box-shadow: var(--shadow);
+  align-self: start;
+  min-width: 0;
+}
+.fg-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: start;
+}
+.fg-panel-head h2:focus {
+  outline: none;
+}
+.fg-panel-head h2:focus-visible {
+  outline: 2px solid var(--focus);
+}
+.fg-panel-rows {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.6rem 0;
+}
+.fg-panel-rows dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.fg-panel-rows dd {
+  margin: 0.15rem 0 0;
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.2rem;
+  list-style: none;
+  margin: 0.6rem 0;
+  padding: 0;
+  color: var(--text-muted);
+}
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.legend-line {
+  display: inline-block;
+  width: 30px;
+  border-top: 2px solid var(--text-muted);
+}
+.legend-tb {
+  border-top: 3.5px dashed var(--text-muted);
+}
+.legend-bad {
+  border-top-color: var(--red-fg);
+}
+.legend-box {
+  display: inline-block;
+  width: 16px;
+  height: 14px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 3px;
+}
+.legend-dotted {
+  border-style: dotted;
+  border-width: 2.5px;
+}
+.row-bad td:first-child {
+  box-shadow: inset 4px 0 0 var(--red-fg);
+}
+.row-awaiting td:first-child {
+  box-shadow: inset 4px 0 0 var(--amber-fg);
+}
+.sort-link {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.sort-link:hover {
+  text-decoration: underline;
+}
+
+/* Heatmap: band colour plus a band pattern (never colour alone) */
+.heatmap {
+  border-collapse: separate;
+  border-spacing: 4px;
+  min-width: 640px;
+}
+.heatmap th {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  padding: 0.2rem 0.4rem;
+}
+.heat-corner {
+  font-weight: 600;
+  text-align: left;
+}
+.heat-cell {
+  /* positioned, so the .sr-only band label is clipped by the scrolling .table-wrap (no page scroll) */
+  position: relative;
+  vertical-align: top;
+  min-width: 112px;
+  height: 66px;
+  padding: 0.3rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.heat-low {
+  background-color: var(--green-bg);
+}
+.heat-moderate {
+  background-color: var(--blue-bg);
+  background-image: repeating-linear-gradient(45deg, transparent 0 9px, rgb(128 128 128 / 0.14) 9px 11px);
+}
+.heat-high {
+  background-color: var(--amber-bg);
+  background-image:
+    repeating-linear-gradient(45deg, transparent 0 6px, rgb(128 128 128 / 0.2) 6px 8px),
+    repeating-linear-gradient(-45deg, transparent 0 6px, rgb(128 128 128 / 0.2) 6px 8px);
+}
+.heat-critical {
+  background-color: var(--red-bg);
+  background-image: repeating-linear-gradient(0deg, transparent 0 4px, rgb(128 128 128 / 0.24) 4px 6px);
+}
+.heat-score {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.heat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  list-style: none;
+  margin: 0.2rem 0 0;
+  padding: 0;
+}
+.heat-chip {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+  text-decoration: none;
+}
+.band-chip {
+  text-decoration: none;
+}
+.band-low {
+  background: var(--green-bg);
+  color: var(--green-fg);
+  border-color: var(--green-bd);
+}
+.band-moderate {
+  background: var(--blue-bg);
+  color: var(--blue-fg);
+  border-color: var(--blue-bd);
+}
+.band-high {
+  background: var(--amber-bg);
+  color: var(--amber-fg);
+  border-color: var(--amber-bd);
+}
+.band-critical {
+  background: var(--red-bg);
+  color: var(--red-fg);
+  border-color: var(--red-bd);
+}
+.band-none {
+  background: var(--neutral-bg);
+  color: var(--neutral-fg);
+}
+
+/* Timeline (SVG Gantt in sessions) */
+.timeline-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.timeline-svg {
+  display: block;
+  font-family: var(--font-sans);
+}
+.tl-tick line {
+  stroke: var(--border);
+}
+.tl-tick text {
+  fill: var(--text-muted);
+  font-size: 11px;
+}
+.tl-label {
+  fill: var(--text);
+  font-size: 12.5px;
+}
+.tl-row a:hover .tl-label,
+.tl-row a:focus .tl-label {
+  text-decoration: underline;
+}
+.tl-row a:focus-visible {
+  outline: 2px solid var(--focus);
+}
+.tl-bar {
+  stroke-width: 1.5;
+}
+.tl-neutral {
+  fill: var(--neutral-bg);
+  stroke: var(--neutral-fg);
+}
+.tl-blue {
+  fill: var(--blue-bg);
+  stroke: var(--blue-fg);
+}
+.tl-amber {
+  fill: var(--amber-bg);
+  stroke: var(--amber-fg);
+}
+.tl-green {
+  fill: var(--green-bg);
+  stroke: var(--green-fg);
+}
+.tl-red {
+  fill: var(--red-bg);
+  stroke: var(--red-fg);
+}
+.tl-purple {
+  fill: var(--purple-bg);
+  stroke: var(--purple-fg);
+}
+.tl-bar.tl-crit {
+  stroke: var(--purple-fg);
+  stroke-width: 3;
+}
+.tl-milestone polygon {
+  fill: var(--amber-fg);
+}
+.tl-milestone text {
+  fill: var(--text);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.tl-unscheduled {
+  fill: var(--red-fg);
+  font-size: 12px;
+}
+
+/* a long option (research question titles) must not widen the page at phone widths */
+.filters label {
+  min-width: 0;
+  max-width: 100%;
+}
+.filters select {
+  max-width: 100%;
+}
+
+/* Research tree and decision chain */
+.trace-tree,
+.trace-tree ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.35rem;
+}
+.trace-tree > li {
+  padding: 0.3rem 0;
+}
+.chain {
+  margin: 0;
+  padding-left: 1.3rem;
+  display: grid;
+  gap: 0.3rem;
+}

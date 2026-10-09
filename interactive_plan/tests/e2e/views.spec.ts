@@ -1,7 +1,7 @@
 // views.spec (ip-testing §3): each route returns 200, has exactly one h1 and logs no console errors;
 // 404 for an unknown id (with close matches); /go/<id> redirects. IP-6 rows: /, /wiki, /wiki/[...path],
 // /go/[id], /search, /log. IP-7 rows: /approvals (list, tabs, review mode), /phases/[id], /lint.
-// IP-8 adds the rows of its routes.
+// IP-8 rows: /architecture, /roadmap, /decisions, /decisions/[id], /risks, /research (with filters).
 import { expect, test } from "@playwright/test";
 import { collectErrors, FX } from "./helpers";
 
@@ -26,6 +26,16 @@ const ROUTES = [
   "/phases/phase-p1-fixture-build",
   "/phases/phase-p2-fixture-review",
   "/lint",
+  "/architecture",
+  "/architecture?tb=1&hide=1",
+  "/roadmap",
+  "/decisions",
+  "/decisions?status=proposed&state=PENDING",
+  FX.adrView,
+  "/risks",
+  "/risks?sort=id&dir=asc&active=1",
+  "/research",
+  "/research?rq=rq-92",
 ];
 
 for (const route of ROUTES) {
@@ -63,12 +73,15 @@ test("path traversal does not escape wiki/", async ({ request }) => {
 });
 
 test("/go/<id> redirects to the page view", async ({ page, request }) => {
+  // an ADR has a typed view since IP-8; a page without one opens in the wiki browser
   const res = await request.get(`/go/${FX.adr}`, { maxRedirects: 0 });
   expect(res.status()).toBe(307);
-  expect(res.headers()["location"]).toBe(FX.adrPath);
+  expect(res.headers()["location"]).toBe(FX.adrView);
   await page.goto(`/go/${FX.adr}`);
-  await expect(page).toHaveURL(FX.adrPath);
+  await expect(page).toHaveURL(FX.adrView);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Fixture decision: one shell");
+  const ov = await request.get("/go/ov-fixture-project", { maxRedirects: 0 });
+  expect(ov.headers()["location"]).toBe(FX.projectPath);
 });
 
 test("/go resolves a task id and an open-question id", async ({ page }) => {
@@ -82,6 +95,23 @@ test("/phases/<id> is 404 for a non-phase or unknown id", async ({ page }) => {
   for (const p of ["/phases/adr-0901", "/phases/phase-p9-nope"]) {
     const res = await page.goto(p);
     expect(res?.status(), p).toBe(404);
+  }
+});
+
+test("every nav entry is a link since IP-8", async ({ page }) => {
+  await page.goto("/");
+  const nav = page.getByRole("navigation", { name: "Primary" });
+  await expect(nav.locator(".nav-link-disabled")).toHaveCount(0);
+  for (const [name, url] of [
+    ["Roadmap", "/roadmap"],
+    ["Architecture", "/architecture"],
+    ["Decisions", "/decisions"],
+    ["Risks", "/risks"],
+    ["Research", "/research"],
+  ]) {
+    await nav.getByRole("link", { name }).click();
+    await expect(page).toHaveURL(url);
+    await expect(nav.getByRole("link", { name })).toHaveAttribute("aria-current", "page");
   }
 });
 

@@ -44,7 +44,8 @@ test("(1) the inbox lists adr-0901 as PENDING", async ({ page }) => {
 test("(2) open it and Approve: the UI shows APPROVED; (3) the stored record matches the file", async ({ page }) => {
   await page.goto("/approvals");
   await page.locator(`tr[data-key='${FX.adr}'] a`).first().click();
-  await expect(page).toHaveURL(FX.adrPath);
+  // since IP-8 an ADR opens in its typed view /decisions/<id>, which carries the approve bar
+  await expect(page).toHaveURL(FX.adrView);
   await expect(bar(page)).toHaveAttribute("data-state", "PENDING");
   await bar(page).getByRole("button", { name: "Approve" }).click();
   await expect(bar(page).locator("[aria-live='polite']")).toHaveText(`Page approval for ${FX.adr} recorded: approved`);

@@ -530,6 +530,41 @@ describe("lock", () => {
     await expectCode(submit(body("adr-0901", "approved", await s.hashOf("adr-0901")), s.cfg, { clock, lock: { staleMs: 30_000 } }), "LOCK_TIMEOUT");
   });
 
+  it("Windows delete-pending: EPERM/EACCES/EBUSY on the exclusive create is a busy lock, retried until it succeeds", async () => {
+    const s = store();
+    await fsp.mkdir(s.dataDir, { recursive: true });
+    const clock = fakeClock();
+    const codes = ["EPERM", "EACCES", "EBUSY"];
+    let calls = 0;
+    const open = (p: string, f: string) => {
+      calls++;
+      return calls <= codes.length ? Promise.reject(errno(codes[calls - 1])) : fsp.open(p, f);
+    };
+    const r = await submit(body("adr-0901", "approved", await s.hashOf("adr-0901")), s.cfg, { clock, lock: { open } });
+    expect(r.item.state).toBe("APPROVED");
+    expect(calls).toBe(4);
+    expect(clock.sleeps.filter((ms) => ms === 50)).toHaveLength(3);
+    expect(s.dataFiles().filter((f) => /\.lock/.test(f))).toEqual([]);
+  });
+
+  it("a lock that stays busy (EPERM) -> LOCK_TIMEOUT after 3 s, never the raw fs error; other open errors are rethrown", async () => {
+    const s = store();
+    await fsp.mkdir(s.dataDir, { recursive: true });
+    const clock = fakeClock();
+    const t0 = clock.now();
+    const e = await expectCode(
+      submit(body("adr-0901", "approved", await s.hashOf("adr-0901")), s.cfg, { clock, lock: { open: () => Promise.reject(errno("EPERM")) } }),
+      "LOCK_TIMEOUT",
+    );
+    expect(e.status).toBe(503);
+    expect(clock.now() - t0).toBeGreaterThanOrEqual(3000);
+    expect(clock.now() - t0).toBeLessThan(3100);
+    expect(s.approvalsBytes()).toBeNull();
+    await expect(
+      submit(body("adr-0901", "approved", await s.hashOf("adr-0901")), s.cfg, { clock: fakeClock(), lock: { open: () => Promise.reject(errno("ENOSPC")) } }),
+    ).rejects.toMatchObject({ code: "ENOSPC" });
+  });
+
   it("the lock is released after a refused submit", async () => {
     const s = store();
     await expectCode(submit(body("adr-0901", "approved", "sha256:" + "0".repeat(64)), s.cfg), "PAGE_CHANGED");

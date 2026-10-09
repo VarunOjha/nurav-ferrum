@@ -1,0 +1,1458 @@
+IP-8 gate evidence: /architecture, /roadmap, /decisions, /decisions/[id], /risks, /research
+phase-p0-planning / p0.13 (IP-8 of ip-build-plan), session s01
+date: 2026-10-09 02:47:02 -0500
+node: v24.20.0  npm: 11.19.0  python: Python 3.12.10  git: git version 2.52.0.windows.1
+cwd for npm commands: interactive_plan/ (repo path contains a space)
+Gate (ip-build-plan IP-8): the graph unit tests (ip-testing 1.6, tests/unit/graph.test.ts), architecture.spec.ts, roadmap.spec.ts,
+risks.spec.ts and research.spec.ts. The Playwright run is the full suite (decisions.spec.ts and every earlier spec re-run against
+the new routes; the guard line 'E2E guard: ...' is printed at the end). Also run: the full unit suite, typecheck, eslint, lint:wiki
+(including the new real-wiki graph test tests/lint/real-wiki-graphs.test.ts), tools/quick_lint.py and the tool tests.
+Earlier run: IP-8-tests.20261009-0241-unit-fail.txt (same folder). In it everything passed except one IP-4 test in the full unit suite:
+the cross-process store test saw a raw EPERM from open(.approvals.lock, 'wx') (Windows delete-pending lock file). Fixed in
+lib/approvals/lock.ts (busy -> retry until LOCK_TIMEOUT) with two new lock tests; this file is the complete re-run.
+Output below is verbatim apart from ANSI colour codes, which were stripped.
+
+================================================================
+$ approvals.json before: absent
+----------------------------------------------------------------
+[exit code: 0]
+
+================================================================
+$ npx vitest run tests/unit/graph.test.ts --reporter=verbose   (ip-testing 1.6 graph unit tests)
+----------------------------------------------------------------
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+ ✓ tests/unit/graph.test.ts > componentGraph > passes edges through with label, kind and the TB flag; dangling targets become placeholder nodes 28ms
+ ✓ tests/unit/graph.test.ts > componentGraph > matches the mini-wiki fixture (2 components, one TB edge) 54ms
+ ✓ tests/unit/graph.test.ts > componentGraph > skips invalid pages and duplicate ids 7ms
+ ✓ tests/unit/graph.test.ts > phaseDag > schedules a diamond (start = max of dependency ends) and finds the critical path 11ms
+ ✓ tests/unit/graph.test.ts > phaseDag > breaks critical-path ties by order 10ms
+ ✓ tests/unit/graph.test.ts > phaseDag > detects a cycle: the cycle and everything behind it stay unscheduled; missing dependencies are listed 10ms
+ ✓ tests/unit/graph.test.ts > phaseDag > a self-dependency is a cycle 4ms
+ ✓ tests/unit/graph.test.ts > phaseDag > matches the mini-wiki fixture 5ms
+ ✓ tests/unit/graph.test.ts > riskMatrix > places risks in cell (L, I) and bands the score 10ms
+ ✓ tests/unit/graph.test.ts > riskMatrix > score bands: 1-4 low, 5-9 moderate, 10-14 high, 15-25 critical 0ms
+ ✓ tests/unit/graph.test.ts > riskMatrix > matches the mini-wiki fixture (risk-r91 at L3, I4) 5ms
+ ✓ tests/unit/graph.test.ts > riskMatrix > sortRisks sorts by any column in both directions, ties by score then id 7ms
+ ✓ tests/unit/graph.test.ts > traceGraph > detects every gap kind of ip-routes-and-views §3.8 30ms
+ ✓ tests/unit/graph.test.ts > traceGraph > the unverified-metric gap needs an experiment of the current or next phase 23ms
+ ✓ tests/unit/graph.test.ts > traceGraph > builds nodes per kind, edges in both directions of each relation, and the nested text tree 25ms
+ ✓ tests/unit/graph.test.ts > traceGraph > traceSubgraph keeps one research question and what it reaches 22ms
+ ✓ tests/unit/graph.test.ts > traceGraph > the mini-wiki fixture has a complete chain and no gaps 5ms
+ ✓ tests/unit/graph.test.ts > layouts > architecture: one lane per trust level present, nodes inside their lane, no overlaps, reading order 18ms
+ ✓ tests/unit/graph.test.ts > layouts > roadmap: dependencies sit left of their dependants 11ms
+ ✓ tests/unit/graph.test.ts > layouts > research: fixed columns by kind (rq, hyp, exp, metric/workload/phase), no overlaps 7ms
+ ✓ tests/unit/graph.test.ts > layout wrapping > research: a last column taller than the other columns wraps into sub-columns (no overlaps) 47ms
+ ✓ tests/unit/graph.test.ts > decision register > rows: claude-proposed awaiting approval first, then by id; filters by status and approval state 7ms
+ ✓ tests/unit/graph.test.ts > decision register > section check follows the ADR-SECTIONS rule (presence and order) 6ms
+ ✓ tests/unit/graph.test.ts > decision register > supersession chain: oldest first, cycle-safe, missing ids end the chain 10ms
+
+ Test Files  1 passed (1)
+      Tests  24 passed (24)
+   Start at  02:47:11
+   Duration  903ms (tests 52%, transform 26%, import 22%, worker 1%)
+
+[exit code: 0]
+
+================================================================
+$ IP3_REQUIRE_PYTHON=1 npm run test -- --reporter=verbose   (full unit + component suite)
+----------------------------------------------------------------
+
+> interactive_plan@0.1.0 test
+> vitest run --reporter=verbose
+
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > no key -> adr-0901 3ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > status rejected (hashes match) -> adr-0901 1ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > status changes-requested (hashes match) -> adr-0901 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > approved, content hash equal -> adr-0901 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > approved, content differs, scope equal -> adr-0901 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > approved, content and scope differ -> adr-0901 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > approved, content equal but scope differs (content wins) -> adr-0901 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > page file missing (no key) -> adr-0999 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > page file missing (orphaned record) -> adr-0999 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > approvable: false -> ov-not-approvable 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > frontmatter invalid (fm null) -> adr-0902-nofm 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > unhashable page (no closing fence), approved record -> adr-0903-unhashable 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > unhashable page, no record -> adr-0903-unhashable 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > #exit key on a non-phase page -> adr-0901#exit 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > #exit key on a phase page, no record -> phase-p1-x#exit 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > #exit key on a phase page, approved -> phase-p1-x#exit 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > unknown suffix is not an exit key -> phase-p1-x#entry 0ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > countsAsApproved is true only for APPROVED and APPROVED_VOLATILE_DRIFT 1ms
+ ✓ tests/unit/state.test.ts > effectiveState: SCHEMA §10.3 truth table > stateOf looks the key up in an approvals map (own keys only) 0ms
+ ✓ tests/unit/state.test.ts > describeApproval: moved and orphaned flags > a moved path leaves the state unchanged and sets moved: true 1ms
+ ✓ tests/unit/state.test.ts > describeApproval: moved and orphaned flags > a stored key with no approvable page is orphaned (INVALID); a missing key is not 2ms
+ ✓ tests/unit/state.test.ts > bootstrap_hash (key `schema`, SCHEMA §10.2) > CLAUDE.md unchanged -> APPROVED 0ms
+ ✓ tests/unit/state.test.ts > bootstrap_hash (key `schema`, SCHEMA §10.2) > CLAUDE.md changed -> STALE even when SCHEMA.md content is unchanged 0ms
+ ✓ tests/unit/state.test.ts > bootstrap_hash (key `schema`, SCHEMA §10.2) > scope-hash drift does not rescue a CLAUDE.md change 0ms
+ ✓ tests/unit/state.test.ts > bootstrap_hash (key `schema`, SCHEMA §10.2) > SCHEMA.md volatile drift with CLAUDE.md unchanged -> APPROVED_VOLATILE_DRIFT 0ms
+ ✓ tests/unit/state.test.ts > bootstrap_hash (key `schema`, SCHEMA §10.2) > CLAUDE.md missing while a bootstrap_hash is stored -> STALE (fail closed) 0ms
+ ✓ tests/unit/state.test.ts > bootstrap_hash (key `schema`, SCHEMA §10.2) > a schema record without bootstrap_hash is judged on the page hashes (as tools/approvals_check.py) 0ms
+ ✓ tests/unit/state.test.ts > bootstrap_hash (key `schema`, SCHEMA §10.2) > rejected / changes-requested take precedence over the bootstrap check 0ms
+ ✓ tests/unit/state.test.ts > bootstrap_hash (key `schema`, SCHEMA §10.2) > bootstrap_hash on any other key is ignored 0ms
+ ✓ tests/unit/store.test.ts > the test environment > never points at the real plan/ directory 68ms
+ ✓ tests/unit/diff.test.ts > diffLines > identical texts -> only equal lines 5ms
+ ✓ tests/unit/diff.test.ts > diffLines > reports a replaced line as del + add with line numbers 1ms
+ ✓ tests/unit/diff.test.ts > diffLines > insertions and deletions at the start, middle and end 1ms
+ ✓ tests/unit/diff.test.ts > diffLines > line endings are normalised on both sides (CRLF checkout is not a change) 1ms
+ ✓ tests/unit/diff.test.ts > diffLines > equal lines carry both line numbers and the diff reconstructs both sides 1ms
+ ✓ tests/unit/lint-rules.test.ts > rule registry > every lint code has exactly one rule, and every rule's default severity is the SEVERITY table's 9ms
+ ✓ tests/unit/schemas.test.ts > type overview > has a minimal valid fixture in mini-wiki that passes with no findings 4ms
+ ✓ tests/unit/schemas.test.ts > type overview > the schema's required keys equal SCHEMA §5.1 + §6 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `id` -> FM-MISSING 2ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > orders tiers exactly 19ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > is case-insensitive 1ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > ranks an exact title above a title prefix above a title substring, and more body hits higher 1ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > matches multi-word queries as a phrase, else needs every word in the body 3ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > filters by type, with `raw` selecting raw files 2ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > returns nothing for an empty query and honours the limit 4ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > builds snippets around the first match with ellipses 2ms
+ ✓ tests/unit/diff.test.ts > snapshot diff on a temp-copy page > edit two body lines -> the diff reports exactly those two lines 353ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `status` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `updated` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `sources` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `related` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > removing `approvable` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > an invalid status -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > enum field ["audience"] with an invalid value -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type overview > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 1ms
+ ✓ tests/unit/schemas.test.ts > type component > has a minimal valid fixture in mini-wiki that passes with no findings 1ms
+ ✓ tests/unit/schemas.test.ts > type component > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `status` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `path` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `crate` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `trust_level` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `phase_introduced` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `responsibilities` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > removing `connects` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type component > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type component > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type component > enum field ["trust_level"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type component > enum field ["connects","0","kind"] with an invalid value -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type component > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > has a minimal valid fixture in mini-wiki that passes with no findings 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > the schema's required keys equal SCHEMA §5.1 + §6 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `status` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `updated` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `sources` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `related` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `approvable` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `milestone` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `order` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `depends_on` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `est_sessions` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `entry_criteria` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `deliverables` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `tasks` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `test_gate` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `exit_criteria` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `risks` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `decisions` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > removing `experiments` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > an invalid status -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > every status in the enum is accepted 5ms
+ ✓ tests/unit/schemas.test.ts > type phase > enum field ["milestone"] with an invalid value -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type phase > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > has a minimal valid fixture in mini-wiki that passes with no findings 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `sources` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `related` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `approvable` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `date` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `decided_by` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > removing `supersedes` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > an invalid status -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type decision > enum field ["decided_by"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type decision > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > has a minimal valid fixture in mini-wiki that passes with no findings 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `status` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `approvable` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `likelihood` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `impact` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `mitigation` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `spike` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > removing `owner_phase` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type risk > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type risk > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `question` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > removing `hypotheses` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type research-question > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `rq` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `prediction` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `null_hypothesis` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `metrics` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > removing `experiments` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > an invalid status -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type hypothesis > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `sources` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `related` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `approvable` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `hypotheses` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `workloads` -> FM-MISSING 3ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `configurations` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `metrics` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `trials` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `analysis` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > removing `phase` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type experiment > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > enum field ["trials","order"] with an invalid value -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type experiment > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > has a minimal valid fixture in mini-wiki that passes with no findings 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > loads every page with zero findings (errors and warnings) and zero dangling links 5ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > has one clean page of every type, ids in the fixture range 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > builds byId, byPath, kinds and repo paths 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > parses STATUS.md frontmatter and the Next action section 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > parses the log and the open-questions register 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > computes backlinks from frontmatter refs and body links 0ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > extracts headings, links and integrity tags with file line numbers 1ms
+ ✓ tests/unit/load.test.ts > mini-wiki (clean fixture) > fills content and scope hashes from the raw file bytes (IP-3, ip-data-contract §6) 19ms
+ ✓ tests/unit/views.test.ts > dashboard view model > phase strip in order, progress over 9 phases and the sessions budget 233ms
+ ✓ tests/unit/views.test.ts > dashboard view model > last activity is the newest code entry naming a task id 102ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > indexes the fixture wiki and finds a body word; memoised until a file changes 229ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > suggests ids by prefix, then substring, then title 3ms
+ ✓ tests/unit/schemas.test.ts > type metric > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `status` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `updated` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `sources` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `related` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `approvable` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `unit` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `definition` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `boundary_start` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `boundary_end` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `method` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `tool` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `normalization` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > removing `support` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > an invalid status -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > enum field ["support"] with an invalid value -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type metric > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 1ms
+ ✓ tests/unit/schemas.test.ts > type workload > has a minimal valid fixture in mini-wiki that passes with no findings 1ms
+ ✓ tests/unit/schemas.test.ts > type workload > the schema's required keys equal SCHEMA §5.1 + §6 1ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `id` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `status` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `updated` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `sources` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `related` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `approvable` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `workload_kind` -> FM-MISSING 2ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `master_prompt_ref` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `parameters` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > removing `fixture_path` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type workload > an invalid status -> FM-ENUM 2ms
+ ✓ tests/unit/schemas.test.ts > type workload > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type workload > enum field ["workload_kind"] with an invalid value -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type workload > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 1ms
+ ✓ tests/unit/schemas.test.ts > type quality > has a minimal valid fixture in mini-wiki that passes with no findings 1ms
+ ✓ tests/unit/schemas.test.ts > type quality > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `status` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `approvable` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `scope` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `test_kinds` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > removing `tooling` -> FM-MISSING 6ms
+ ✓ tests/unit/schemas.test.ts > type quality > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type quality > enum field ["test_kinds","0"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type quality > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > the schema's required keys equal SCHEMA §5.1 + §6 1ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `approvable` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `audience` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > removing `trigger` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > enum field ["audience"] with an invalid value -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type operations > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `session` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `phase` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `next_action` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `uncommitted` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type handoff > removing `open_questions` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type handoff > an invalid status -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type handoff > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type handoff > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > has a minimal valid fixture in mini-wiki that passes with no findings 1ms
+ ✓ tests/unit/schemas.test.ts > type glossary > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `title` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `sources` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type glossary > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type index > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type index > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type index > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type index > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type index > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type log > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type log > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type log > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type log > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type log > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `id` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > an invalid status -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > every status in the enum is accepted 0ms
+ ✓ tests/unit/schemas.test.ts > type schema > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type status > has a minimal valid fixture in mini-wiki that passes with no findings 5ms
+ ✓ tests/unit/schemas.test.ts > type status > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `status` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `updated` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `sources` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `related` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `approvable` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `session` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `current_phase` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `current_task` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `next_action` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `blocked_on` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > removing `last_handoff` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type status > an invalid status -> FM-ENUM 1ms
+ ✓ tests/unit/schemas.test.ts > type status > every status in the enum is accepted 1ms
+ ✓ tests/unit/schemas.test.ts > type status > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > has a minimal valid fixture in mini-wiki that passes with no findings 0ms
+ ✓ tests/unit/lint-git.test.ts > isAppendOnly > allows appended lines only (EOL-insensitive) 4ms
+ ✓ tests/unit/lint-git.test.ts > collectGit (fake exec) > parses last commit dates (newest first wins), raw history and working-tree changes 5ms
+ ✓ tests/unit/lint-git.test.ts > collectGit (fake exec) > a working-tree MANIFEST change that is not an append is reported 2ms
+ ✓ tests/unit/lint-git.test.ts > collectGit (fake exec) > unavailable: git fails, or the repo root is not the top level; no-commits: no HEAD 3ms
+ ✓ tests/unit/schemas.test.ts > type research-note > the schema's required keys equal SCHEMA §5.1 + §6 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > removing `id` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type research-note > removing `title` -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > type research-note > removing `updated` -> FM-MISSING 6ms
+ ✓ tests/unit/schemas.test.ts > type research-note > removing `sources` -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > type research-note > an unknown key -> FM-UNKNOWN-KEY (warn) and nothing more 0ms
+ ✓ tests/unit/schemas.test.ts > type field > missing type -> FM-MISSING; unknown type -> FM-ENUM 0ms
+ ✓ tests/unit/schemas.test.ts > type field > a non-object frontmatter is treated as empty 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources: https:// URLs and wiki-relative paths (any wiki file) are accepted 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "http://example.com" on a wiki page -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "https://" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "/abs/raw/a.md" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "../STATUS.md" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "raw/../SCHEMA.md" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "./raw/a.md" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "raw//a.md" on a wiki page -> FM-MISSING 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "raw\\a.md" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "C:/wiki/raw/a.md" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "file:raw/a.md" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "crate source (downloaded from static.crates.io): tauri-2.12.1" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "#only-anchor" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > sources entry "" on a wiki page -> FM-MISSING 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > raw research notes are exempt from the sources format: any list of strings 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > isSourceEntry / sourcePath 0ms
+ ✓ tests/unit/schemas.test.ts > other field rules > updated must be YYYY-MM-DD 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > a malformed id -> ID-PATTERN 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > risk likelihood/impact are integers 1-5; spike is a task id or null 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > phase order is an integer 0-8 and task ids match pN.M 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > STATUS blocked_on accepts ids and Q-NNN; current_task may be null 1ms
+ ✓ tests/unit/schemas.test.ts > other field rules > unverified[].verify_in must be a phase id 1ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > covers every page type 1ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > phase: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > component: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > decision: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > risk: valid and invalid examples 1ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > research-question: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > hypothesis: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > experiment: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > metric: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > workload: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > overview: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > quality: valid and invalid examples 1ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > operations: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > handoff: valid and invalid examples 1ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > research-note: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > glossary: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > index: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > log: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > schema: valid and invalid examples 0ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > status: valid and invalid examples 1ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > basename rule: basename == id or starts with id + '-' 1ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > basename exceptions: SCHEMA.md, STATUS.md, research notes without the research- prefix 1ms
+ ✓ tests/unit/schemas.test.ts > id patterns (SCHEMA §8) > id pattern failure and basename failure are both reported 7ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > overview/ov-project.md allows overview 2ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > overview/glossary.md allows glossary 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > overview/sub/ov-x.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > architecture/ov-architecture.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > architecture/components/comp-x.md allows component 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > phases/phase-p1-x.md allows phase 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > decisions/adr-0001-x.md allows decision 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > risks/risk-r01-x.md allows risk 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > risks/ov-risk-register.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/ov-research-x.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/questions/rq-01.md allows research-question 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/hypotheses/hyp-01.md allows hypothesis 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/experiments/exp-x.md allows experiment 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/metrics/metric-x.md allows metric 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/workloads/wl-x.md allows workload 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > quality/qual-x.md allows quality 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > operations/ops-x.md allows operations 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > operations/handoffs/handoff-2026-10-08-s01.md allows handoff 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > interactive-plan/ip-spec.md allows operations 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > interactive-plan/ov-x.md allows overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > raw/research/note.md allows research-note 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > SCHEMA.md allows schema 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > index.md allows index 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > log.md allows log 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > phases/adr-0001.md rejects decision 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > overview/sub/glossary.md rejects glossary 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/questions/ov-x.md rejects overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > research/hyp-01.md rejects hypothesis 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > operations/handoffs/ops-x.md rejects operations 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > decisions/ov-x.md rejects overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > raw/research/sub/note.md rejects research-note 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > raw/note.md rejects research-note 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > other.md rejects overview 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > phases/status.md rejects status 0ms
+ ✓ tests/unit/schemas.test.ts > directory <-> type (SCHEMA §4.1, FM-TYPE-DIR) > STATUS.md allows only status 0ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > FORBIDDEN_ORIGIN 403 (bad Host, missing Origin) 424ms
+ ✓ tests/unit/views.test.ts > dashboard view model > blockers: STATUS blocked_on, blocked phases, open questions, STALE keys of the current/next dependency set 16ms
+ ✓ tests/unit/views.test.ts > dashboard view model > state counts and the approvals map 1ms
+ ✓ tests/unit/views.test.ts > inbox view model > lists every approvable key; #exit keys only when eligible 23ms
+ ✓ tests/unit/search.test.ts > search ranking (id > title > alias/tag > heading > body) > suggestionList lists pages with an id, sorted 100ms
+ ✓ tests/unit/search.test.ts > routes > wikiHref encodes segments, drops a directory slash and keeps anchors 1ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam accepts only known files and directories 1ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects [".."] 0ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects ["raw",".."] 0ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects ["."] 0ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects [""] 0ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects ["..%2FCLAUDE.md"] 0ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects ["a%5Cb"] 0ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects ["a%00"] 16ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects ["%E0%A4%A"] 0ms
+ ✓ tests/unit/search.test.ts > routes > resolveWikiParam rejects ["missing.md"] 0ms
+ ✓ tests/unit/lint-rules.test.ts > broken-wiki (golden) > each file named --CODE triggers exactly the codes in its name (pages and raw files) 6ms
+ ✓ tests/unit/lint-rules.test.ts > broken-wiki (golden) > index.md, log.md and ov-open-questions.md give exactly their expected findings 1ms
+ ✓ tests/unit/lint-rules.test.ts > broken-wiki (golden) > every other file is clean 1ms
+ ✓ tests/unit/lint-rules.test.ts > broken-wiki (golden) > finding details: counts, lines and messages of the multi-finding rules 2ms
+ ✓ tests/unit/lint-rules.test.ts > broken-wiki (golden) > info lines: manual SCHEMA-SPLIT and semantic-contradiction reminders, git rules skipped 1ms
+ ✓ tests/unit/lint-rules.test.ts > broken-wiki (golden) > summary and report format 2ms
+ ✓ tests/unit/lint-rules.test.ts > broken-wiki (golden) > JSON report 3ms
+ ✓ tests/unit/lint-rules.test.ts > mini-wiki (clean) > zero errors and zero warnings; only the info lines 165ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > has the expected vector set (v01-v15, unique names) 5ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v01-basic: content and scope hash match exactly 2ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v02-crlf: content and scope hash match exactly 1ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v03-volatile-change: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v04-body-change: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v05-no-frontmatter: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v06-status-in-body: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v07-lookalike-keys: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v08-lone-cr: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v09-utf8: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v10-empty-frontmatter: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v11-mixed-eol: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v12-cr-before-crlf: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v13-crlf-volatile-change: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v14-volatile-edge-cases: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > v15-second-fence-in-body: content and scope hash match exactly 0ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > pins the documented properties (LF = CRLF = mixed, volatile-only change keeps scope, body change does not) 1ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > throws HashError('NO_CLOSING_FENCE') for an opening fence without a closing one 1ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > hashes raw bytes: a BOM is not stripped, and contentHash() equals hashes().content 1ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > latin1 decode/encode round-trips all 256 byte values (ip-data-contract §6.1 claim) 0ms
+ ✓ tests/unit/state.test.ts > integration: temp mini-wiki copy, approvals in a temp data dir > APPROVED -> volatile edit -> APPROVED_VOLATILE_DRIFT -> body edit -> STALE 681ms
+ ✓ tests/unit/gates.test.ts > entryGate > dependency set = phase, decisions, components (listed or phase_introduced), experiments, schema 577ms
+ ✓ tests/unit/views.test.ts > inbox view model > tabs filter by state; the wave tab by the next phase's dependency set 129ms
+ ✓ tests/unit/views.test.ts > inbox view model > chooses the tab from ?tab, then ?state, else needs attention (the wave when that list is long) 1ms
+ ✓ tests/unit/views.test.ts > inbox view model > groups by phase in phase order, Cross-cutting last 43ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > each file triggers exactly the codes named in its file name 4ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > log.md: malformed heading, out-of-order entry, unknown bullet key -> 3 LOG-FORMAT 2ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > ov-open-questions: 4 malformed sections -> 4 Q-FORMAT, all treated as open and blocking 1ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > other files are clean; duplicates map lists both paths; a missing STATUS.md is not a crash 2ms
+ ✓ tests/unit/load.test.ts > broken-wiki (golden) > cross-page findings do not accumulate across loads (cache hits) 33ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > READ_ONLY 403 when PLAN_READONLY=1 240ms
+ ✓ tests/unit/search.test.ts > routes > goTarget resolves page ids, Q-NNN anchors and task ids; null otherwise 146ms
+ ✓ tests/unit/gates.test.ts > entryGate > all green 189ms
+ ✓ tests/unit/hash.vectors.test.ts > hash vectors (ip-data-contract §7) > hashFile() hashes the file bytes; the loader leaves an unhashable page with null hashes 343ms
+ ✓ tests/unit/views.test.ts > inbox view model > review cursor and last decision 1ms
+ ✓ tests/unit/views.test.ts > phase view model and lint grouping > exit bar visibility 1ms
+ ✓ tests/unit/views.test.ts > phase view model and lint grouping > evidence paths are checked under raw/evidence/<phase-id>/ 1ms
+ ✓ tests/unit/views.test.ts > phase view model and lint grouping > groups findings by severity, then code 1ms
+ ✓ tests/unit/views.test.ts > snapshot diff and approve-bar props (server, temp copies) > diffs the recorded snapshot against the current file; notes a missing snapshot 92ms
+ ✓ tests/unit/views.test.ts > snapshot diff and approve-bar props (server, temp copies) > barRecord keeps only what the bar shows 1ms
+ ✓ tests/unit/search.test.ts > routes > pageHref uses a typed route once it exists (phase since IP-7, decision since IP-8) and the wiki browser otherwise 107ms
+ ✓ tests/unit/search.test.ts > routes > editDistance and closeMatches 2ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > #x 1ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > b.md#s 1ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > ../c.md 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > ../raw/ 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > /c.md 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > ../gone.md 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > https://x.org 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > http://x.org 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > mailto:a@b.c 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > //x.org/y 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > refuses unsafe schemes and empty links 0ms
+ ✓ tests/unit/search.test.ts > rewriteHref (markdown links) > renders repo files outside wiki/ as text, STATUS.md as the dashboard 1ms
+ ✓ tests/unit/search.test.ts > wiki tree > builds directories first, counts files, and keeps every file 35ms
+ ✓ tests/unit/search.test.ts > wiki tree > filters by type and status, keeping only non-empty directories 16ms
+ ✓ tests/unit/search.test.ts > wiki tree > ancestorDirs 0ms
+ ✓ tests/unit/search.test.ts > backlinks grouped by field > groups frontmatter references and body links 12ms
+ ✓ tests/unit/search.test.ts > backlinks grouped by field > returns nothing for an id nobody references 114ms
+ ✓ tests/unit/search.test.ts > log view > is newest first by default and chronological on request 1ms
+ ✓ tests/unit/search.test.ts > log view > filters by op, session and page (pages or stales) 6ms
+ ✓ tests/unit/search.test.ts > log view > last 5 takes the file tail before ordering 0ms
+ ✓ tests/unit/search.test.ts > log view > groups by date and lists sessions in order 2ms
+ ✓ tests/unit/search.test.ts > status tones > maps the ip-routes-and-views §2 families 1ms
+ ✓ tests/unit/search.test.ts > status tones > labels APPROVED_VOLATILE_DRIFT as bookkeeping changed 0ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > UNSUPPORTED_MEDIA_TYPE 415 206ms
+ ✓ tests/unit/lint-rules.test.ts > approval-dependent rules (temp mini-wiki copy, in-memory approvals) > APPROVAL-STALE: warn for a page of the current or next phase's dependency set, info otherwise 334ms
+ ✓ tests/unit/store.test.ts > first write > creates plan/ and approvals.json, valid under the zod schema 817ms
+ ✓ tests/unit/load.test.ts > cache (mtime + size) > re-parses only changed files 360ms
+ ✓ tests/unit/gates.test.ts > entryGate > dependency not done 265ms
+ ✓ tests/unit/state.test.ts > integration: temp mini-wiki copy, approvals in a temp data dir > bootstrap hash: approve `schema`, change CLAUDE.md in the temp copy -> schema becomes STALE 487ms
+ ✓ tests/unit/load.test.ts > cache (mtime + size) > a page that becomes invalid shows findings instead of failing the load 84ms
+ ✓ tests/unit/load.test.ts > the broken-wiki fixture directory exists next to mini-wiki 0ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > BAD_REQUEST 400: status pending 201ms
+ ✓ tests/unit/gates.test.ts > entryGate > dependency done but its exit not approved 168ms
+ ✓ tests/unit/hash.vectors.test.ts > normalizeEol (SCHEMA §10.2 N) > equals replace(/\r\n/g,'\n').replace(/\r/g,'\n') on 1,000 random arrays over {\r, \n, a, 0xFF} 62ms
+ ✓ tests/unit/hash.vectors.test.ts > normalizeEol (SCHEMA §10.2 N) > handles the edge cases explicitly 2ms
+ ✓ tests/unit/hash.vectors.test.ts > python availability > python on PATH: Python 3.12.10 0ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > extracted the reference implementation verbatim from SCHEMA.md 1ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v01-basic: python reference = TS = expected 323ms
+ ✓ tests/unit/state.test.ts > integration: temp mini-wiki copy, approvals in a temp data dir > a renamed page keeps its state and is flagged moved 105ms
+ ✓ tests/unit/store.test.ts > first write > records bootstrap_hash for key schema (CLAUDE.md content hash) 328ms
+ ✓ tests/unit/lint-rules.test.ts > approval-dependent rules (temp mini-wiki copy, in-memory approvals) > APPROVAL-INVALID: orphaned keys, non-approvable pages, #exit on a non-phase, an invalid file 327ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > BAD_REQUEST 400: status changes_requested (underscore) 209ms
+ ✓ tests/unit/lint-parity.test.ts > parity with tools/quick_lint.py (Python 3.12.10) > mini-wiki: both clean 992ms
+ ✓ tests/unit/graph.test.ts > componentGraph > passes edges through with label, kind and the TB flag; dangling targets become placeholder nodes 69ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > BAD_REQUEST 400: unknown field 177ms
+ ✓ tests/unit/lint-git.test.ts > git-backed rules on a real temporary repository > clean history: no RAW-IMMUTABLE; STALE-UPDATED warns where updated < last commit date 1053ms
+ ✓ tests/unit/graph.test.ts > componentGraph > matches the mini-wiki fixture (2 components, one TB edge) 211ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v02-crlf: python reference = TS = expected 444ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > matches valid headings and captures date, op, title 5ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## [2026-10-8] code | x" 1ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## [2026-10-08] build | x" 0ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## [2026-10-08] code x" 0ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## [2026-10-08] code | " 0ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "## 2026-10-08 code | x" 0ms
+ ✓ tests/unit/log.test.ts > LOG_HEADING (SCHEMA §12) > rejects "### [2026-10-08] code | x" 0ms
+ ✓ tests/unit/log.test.ts > parseLog > splits entries and parses bullets leniently 4ms
+ ✓ tests/unit/log.test.ts > parseLog > malformed `## [` heading -> LOG-FORMAT, and the following bullets belong to no entry 1ms
+ ✓ tests/unit/log.test.ts > parseLog > entries out of date order -> LOG-FORMAT 1ms
+ ✓ tests/unit/log.test.ts > parseLog > a top-level bullet key outside SCHEMA §12 -> LOG-FORMAT 0ms
+ ✓ tests/unit/log.test.ts > parseLog > headings inside fenced code are ignored; other ## headings end an entry 1ms
+ ✓ tests/unit/log.test.ts > parseLog > the real wiki/log.md parses: one entry per `## [` heading 48ms
+ ✓ tests/unit/gates.test.ts > entryGate > a STALE ADR in the dependency set blocks; a volatile-only edit does not 487ms
+ ✓ tests/unit/graph.test.ts > componentGraph > skips invalid pages and duplicate ids 16ms
+ ✓ tests/unit/graph.test.ts > phaseDag > schedules a diamond (start = max of dependency ends) and finds the critical path 33ms
+ ✓ tests/unit/graph.test.ts > phaseDag > breaks critical-path ties by order 27ms
+ ✓ tests/unit/graph.test.ts > phaseDag > detects a cycle: the cycle and everything behind it stay unscheduled; missing dependencies are listed 39ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > BAD_REQUEST 400: bad key 215ms
+ ✓ tests/unit/lint-rules.test.ts > approval-dependent rules (temp mini-wiki copy, in-memory approvals) > STATUS-APPROVED and ADR-CHAIN accepted: an approval of the current content satisfies them 446ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > 127.0.0.1:<port> is accepted 46ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > localhost:<port> is accepted 1ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > [::1]:<port> is accepted 1ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > LOCALHOST:<port> is accepted 0ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > wrong port -> 403 1ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > no port -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > foreign host -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > rebinding name -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > LAN address -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > 0.0.0.0 -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > missing Host -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Host (GET and POST) > GET needs no Origin (same-origin GETs often omit it) 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > missing -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > null -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > different origin -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > https scheme -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > other loopback name -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > other port -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > matching origin but Sec-Fetch-Site cross-site -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > matching origin but Sec-Fetch-Site same-site -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > matching origin but Sec-Fetch-Site none -> 403 0ms
+ ✓ tests/unit/guard.test.ts > Origin and Sec-Fetch-Site (POST) > matching origin with Sec-Fetch-Site same-origin, or without it, is accepted 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > application/json -> ok 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > application/json; charset=utf-8 -> ok 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > Application/JSON -> ok 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > text/plain -> 415 UNSUPPORTED_MEDIA_TYPE 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > text/plain;charset=UTF-8 -> 415 UNSUPPORTED_MEDIA_TYPE 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > multipart/form-data; boundary=x -> 415 UNSUPPORTED_MEDIA_TYPE 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > application/x-www-form-urlencoded -> 415 UNSUPPORTED_MEDIA_TYPE 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > application/json-patch+json -> 415 UNSUPPORTED_MEDIA_TYPE 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > missing Content-Type -> 415 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > Content-Length over 16 KiB -> 400; exactly 16 KiB is accepted 0ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > the body reader stops after 16 KiB even without Content-Length 12ms
+ ✓ tests/unit/guard.test.ts > Content-Type and size (POST) > mediaType strips parameters and lower-cases 0ms
+ ✓ tests/unit/open-questions.test.ts > the real register > parses every `## Q-NNN` section with no Q-FORMAT findings 19ms
+ ✓ tests/unit/open-questions.test.ts > the real register > non-Q `##` headings end a section (the Summary table is not parsed as fields) 2ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > a valid section 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > no status line -> Q-FORMAT, treated as open and blocking every phase 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > repeated status -> Q-FORMAT, treated as open and blocking every phase 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > unknown status -> Q-FORMAT, treated as open and blocking every phase 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > status with trailing text -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > unparsable blocking (scalar) -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > unparsable blocking (bad chars) -> Q-FORMAT, treated as open and blocking every phase 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > no blocking line -> Q-FORMAT, treated as open and blocking every phase 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > repeated blocking -> Q-FORMAT, treated as open and blocking every phase 0ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > a duplicate Q id -> Q-FORMAT on the second section 1ms
+ ✓ tests/unit/open-questions.test.ts > broken variants (fail closed) > sections inside fenced code are ignored 0ms
+ ✓ tests/unit/graph.test.ts > phaseDag > a self-dependency is a cycle 12ms
+ ✓ tests/unit/graph.test.ts > phaseDag > matches the mini-wiki fixture 23ms
+ ✓ tests/unit/graph.test.ts > riskMatrix > places risks in cell (L, I) and bands the score 23ms
+ ✓ tests/unit/graph.test.ts > riskMatrix > score bands: 1-4 low, 5-9 moderate, 10-14 high, 15-25 critical 1ms
+ ✓ tests/unit/graph.test.ts > riskMatrix > matches the mini-wiki fixture (risk-r91 at L3, I4) 12ms
+ ✓ tests/unit/graph.test.ts > riskMatrix > sortRisks sorts by any column in both directions, ties by score then id 17ms
+ ✓ tests/unit/store.test.ts > snapshots > writes plan/snapshots/<id>/<hex>.md with the normalised bytes before approvals.json 569ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > BAD_REQUEST 400: bad hash 207ms
+ ✓ tests/unit/graph.test.ts > traceGraph > detects every gap kind of ip-routes-and-views §3.8 103ms
+ ✓ tests/unit/graph.test.ts > traceGraph > the unverified-metric gap needs an experiment of the current or next phase 70ms
+ ✓ tests/unit/gates.test.ts > entryGate > unapproved members are listed with their states 269ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > valid page -> fm + body, no findings 33ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > CRLF input parses the same as LF 5ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > lone CR is normalised before fence detection 4ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > no opening fence -> FM-MISSING 1ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > opening fence not at byte 0 -> FM-MISSING 1ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > no closing fence -> FM-MISSING 1ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > BOM -> FILE-ENCODING, and the page still parses 9ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > final-newline rule: zero, one and two trailing \n 5ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > empty frontmatter block parses to {} 1ms
+ ✓ tests/unit/frontmatter.test.ts > splitter > raw files (requireFrontmatter false) get no findings 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > anchors and aliases -> FM-YAML-SUBSET 2ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > explicit tags -> FM-YAML-SUBSET 2ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > multi-document stream -> FM-YAML-SUBSET (and no frontmatter object) 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > duplicate keys are rejected 2ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > unquoted `: ` in a string is a YAML error, not a silent mis-parse 1ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > dates stay strings: 2026-10-08 -> "2026-10-08" (yaml 2.9.1, YAML 1.2 core schema) 3ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > datesToStrings converts a Date back to YYYY-MM-DD (UTC), recursively 2ms
+ ✓ tests/unit/frontmatter.test.ts > YAML subset (SCHEMA §5) > booleans and integers keep their types 1ms
+ ✓ tests/unit/frontmatter.test.ts > volatile keys (SCHEMA §5, §10.2) > block scalars for status/updated -> FM-VOLATILE 7ms
+ ✓ tests/unit/frontmatter.test.ts > volatile keys (SCHEMA §5, §10.2) > a multi-line plain scalar -> FM-VOLATILE 5ms
+ ✓ tests/unit/frontmatter.test.ts > volatile keys (SCHEMA §5, §10.2) > a mapping or list value -> FM-VOLATILE 5ms
+ ✓ tests/unit/frontmatter.test.ts > volatile keys (SCHEMA §5, §10.2) > single-line plain, double- and single-quoted values are fine; nested status is not volatile 3ms
+ ✓ tests/unit/frontmatter.test.ts > normalizeEol (SCHEMA §10.2 N) > CRLF -> LF, lone CR -> LF, nothing else 0ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v03-volatile-change: python reference = TS = expected 411ms
+ ✓ tests/unit/graph.test.ts > traceGraph > builds nodes per kind, edges in both directions of each relation, and the nested text tree 83ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > BAD_REQUEST 400: comment too long 176ms
+ ✓ tests/unit/components/mermaid.test.tsx > Mermaid > shows the source and the error message when rendering fails, without throwing 108ms
+ ✓ tests/unit/components/mermaid.test.tsx > Mermaid > also handles a non-Error rejection 33ms
+ ✓ tests/unit/components/mermaid.test.tsx > Mermaid > initialises mermaid with securityLevel strict, dagre, classic and the app theme 28ms
+ ✓ tests/unit/gates.test.ts > entryGate > a blocking open question blocks 213ms
+ ✓ tests/unit/graph.test.ts > traceGraph > traceSubgraph keeps one research question and what it reaches 67ms
+ ✓ tests/unit/graph.test.ts > traceGraph > the mini-wiki fixture has a complete chain and no gaps 24ms
+ ✓ tests/unit/graph.test.ts > layouts > architecture: one lane per trust level present, nodes inside their lane, no overlaps, reading order 46ms
+ ✓ tests/unit/config.test.ts > getConfig > defaults are relative to the app directory's parent 5ms
+ ✓ tests/unit/config.test.ts > getConfig > environment overrides (relative values resolve against cwd) 1ms
+ ✓ tests/unit/config.test.ts > getConfig > PLAN_REPO_ROOT moves the derived defaults; junk values fall back 1ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > BAD_REQUEST 400: seen_bootstrap_hash on a non-schema key 186ms
+ ✓ tests/unit/graph.test.ts > layouts > roadmap: dependencies sit left of their dependants 32ms
+ ✓ tests/unit/graph.test.ts > layouts > research: fixed columns by kind (rq, hyp, exp, metric/workload/phase), no overlaps 22ms
+ ✓ tests/unit/store.test.ts > snapshots > never overwrites a snapshot: a second approval of the same hash leaves it byte-identical 480ms
+ ✓ tests/unit/gates.test.ts > entryGate > an open question blocking only ids outside the set does not block 175ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v04-body-change: python reference = TS = expected 323ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > shows the effective state, the short hashes and 'none yet' without a record 87ms
+ ✓ tests/unit/graph.test.ts > layout wrapping > research: a last column taller than the other columns wraps into sub-columns (no overlaps) 162ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > BAD_REQUEST 400: invalid JSON, body over 16 KiB, schema without seen_bootstrap_hash 185ms
+ ✓ tests/unit/components/mermaid.test.tsx > Mermaid > re-renders with the default theme when the app theme changes to light 46ms
+ ✓ tests/unit/links.test.ts > resolveHref > resolves ../ relative links with an anchor 5ms
+ ✓ tests/unit/links.test.ts > resolveHref > resolves same-directory and nested links 1ms
+ ✓ tests/unit/links.test.ts > resolveHref > links leaving the wiki keep a ../ prefix 1ms
+ ✓ tests/unit/links.test.ts > resolveHref > anchor-only links point at the page itself 0ms
+ ✓ tests/unit/links.test.ts > resolveHref > external links resolve to null 1ms
+ ✓ tests/unit/links.test.ts > resolveHref > folder links keep the trailing slash; percent-encoding is decoded 1ms
+ ✓ tests/unit/links.test.ts > extractLinks > finds inline links, images and reference definitions with line numbers 2ms
+ ✓ tests/unit/links.test.ts > extractLinks > ignores links inside fenced code (``` and ~~~, longer fences) and inline code 1ms
+ ✓ tests/unit/links.test.ts > extractLinks > an unclosed fence hides the rest of the body 1ms
+ ✓ tests/unit/links.test.ts > headings and slugs (rehype-slug = github-slugger) > slugs like GitHub: lowercase, punctuation dropped, spaces to - 16ms
+ ✓ tests/unit/links.test.ts > headings and slugs (rehype-slug = github-slugger) > headings inside fenced code are ignored; closing #s are stripped; line numbers are file lines 1ms
+ ✓ tests/unit/links.test.ts > headings and slugs (rehype-slug = github-slugger) > headingPlainText strips inline markdown 1ms
+ ✓ tests/unit/links.test.ts > checkLinks (REF-DANGLING) > existing file + existing anchor -> no finding 1ms
+ ✓ tests/unit/links.test.ts > checkLinks (REF-DANGLING) > missing file -> REF-DANGLING 1ms
+ ✓ tests/unit/links.test.ts > checkLinks (REF-DANGLING) > missing anchor on a markdown target -> REF-DANGLING 1ms
+ ✓ tests/unit/links.test.ts > checkLinks (REF-DANGLING) > external links are not checked; links in fenced code are ignored 0ms
+ ✓ tests/unit/links.test.ts > frontmatterRefs > collects every ip-data-contract §4.2 field, connects[].to and STATUS fields 1ms
+ ✓ tests/unit/links.test.ts > integrity tags > extracts UNVERIFIED[phase] with file lines outside fenced code; well-formed tags in inline code count (IP-5) 1ms
+ ✓ tests/unit/links.test.ts > integrity tags > blankFencedCode keeps line count; stripInlineCode keeps length 2ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §5.1 `type` enum (+ research-note, raw only) equals PAGE_TYPES 4ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §6.N `- status:` lines and the §6.16 singleton table equal STATUS_ENUMS 3ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §6.2 connects `kind` enum equals EDGE_KINDS 1ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §8 id regexes equal ID_PATTERNS and the non-page patterns 4ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §12 log heading regex, ops and bullet keys equal lib/wiki/log.ts 1ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §7.1 UNVERIFIED regex equals lib/wiki/links.ts 1ms
+ ✓ tests/unit/schema-sync.test.ts > SCHEMA.md <-> lib/wiki/schemas.ts > §9.3 severities equal the lint's default severities, and every §9.3 code is implemented 3ms
+ ✓ tests/unit/lint-rules.test.ts > approval-dependent rules (temp mini-wiki copy, in-memory approvals) > PHASE-DONE-NO-EXIT clears with an approved #exit; UNV-PASTDUE by order of STATUS.current_phase 798ms
+ ✓ tests/unit/components/mermaid.test.tsx > Mermaid > toggles the source view 340ms
+ ✓ tests/unit/components/mermaid.test.tsx > Mermaid > wires nodes that name a page: focusable link with a tooltip 47ms
+ ✓ tests/unit/components/mermaid.test.tsx > Mermaid > nodeIdOf reads data-id, else the flowchart element id 3ms
+ ✓ tests/unit/gates.test.ts > entryGate > a malformed question section fails closed (open, blocking every phase) 174ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > requires a comment for Request changes: nothing is sent while it is empty or blank 444ms
+ ✓ tests/unit/graph.test.ts > decision register > rows: claude-proposed awaiting approval first, then by id; filters by status and approval state 16ms
+ ✓ tests/unit/graph.test.ts > decision register > section check follows the ADR-SECTIONS rule (presence and order) 18ms
+ ✓ tests/unit/graph.test.ts > decision register > supersession chain: oldest first, cycle-safe, missing ids end the chain 23ms
+stdout | tests/unit/lint-parity.test.ts > parity with tools/quick_lint.py (Python 3.12.10) > broken-wiki: the same {code, path} set, apart from the documented known differences
+python: 22 {code,path} pairs; TS: 24; shared: 16
+
+ ✓ tests/unit/lint-parity.test.ts > parity with tools/quick_lint.py (Python 3.12.10) > broken-wiki: the same {code, path} set, apart from the documented known differences 1215ms
+ ✓ tests/unit/lint-rules.test.ts > approval-dependent rules (temp mini-wiki copy, in-memory approvals) > log.md tags are history: no UNV-PASTDUE / UNV-MIRROR there 91ms
+ ✓ tests/unit/store.test.ts > snapshots > writes no snapshot for changes-requested or rejected 328ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > requires a comment for Reject: nothing is sent while it is empty or blank 163ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > does not require a comment for Approve and posts JSON with the rendered content hash 56ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v05-no-frontmatter: python reference = TS = expected 386ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > sends seen_bootstrap_hash for key schema only 48ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > announces the new state through aria-live, shows it and refreshes the route 44ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > mentions log-append warnings in the announcement 51ms
+ ✓ tests/unit/lint-rules.test.ts > gate report (ip-wiki-lint §4) > prints the checklist and the state of every id of the dependency set; blocked without approvals 70ms
+ ✓ tests/unit/lint-rules.test.ts > gate report (ip-wiki-lint §4) > passes when every item holds; an invalid approvals.json fails closed; unknown phase 79ms
+ ✓ tests/unit/store.test.ts > snapshots > uses <phase-id>__exit as the snapshot directory of an exit review 221ms
+ ✓ tests/unit/lint-rules.test.ts > helpers > index line regex, folder labels, raw labels 1ms
+ ✓ tests/unit/lint-rules.test.ts > helpers > number+unit heuristic 1ms
+ ✓ tests/unit/lint-rules.test.ts > helpers > mermaid node counting (flowchart, stateDiagram; null for other kinds) 1ms
+ ✓ tests/unit/lint-rules.test.ts > helpers > paragraphs and local date 2ms
+ ✓ tests/unit/lint-rules.test.ts > helpers > formatFinding / formatSummary 1ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > COMMENT_REQUIRED 400 for changes-requested / rejected with an empty or blank comment 413ms
+ ✓ tests/unit/gates.test.ts > entryGate > an unregistered CONTRADICTION blockquote blocks; one naming a registered Q does not (that Q's blocking decides) 363ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > shows the 409 PAGE_CHANGED message and keeps the old state 65ms
+ ✓ tests/unit/gates.test.ts > entryGate > unknown or non-phase id -> phase-exists fails 122ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > UNKNOWN_KEY 404 135ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v06-status-in-body: python reference = TS = expected 282ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > shows other API errors with their code, and network failures 105ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > is disabled, with an explanation, when the state is INVALID 31ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > is disabled, with an explanation, in read-only mode 25ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > disabledReason covers unhashable pages and schema without CLAUDE.md 1ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > shows the stored decision, the expandable history and the diff since approval for STALE 39ms
+ ✓ tests/unit/components/approve-bar.test.tsx > ApproveBar > shows the no-snapshot note instead of a diff, and no diff control for other states 45ms
+ ✓ tests/unit/store.test.ts > history > three decisions give two history items, in order, earlier items unchanged byte for byte 215ms
+ ✓ tests/unit/gates.test.ts > entryGate > P0 bootstrap exception: ok whatever the items say, items stay informative 105ms
+ ✓ tests/unit/gates.test.ts > entryGate > the gate never writes: the wiki copy is byte-identical after evaluation 109ms
+ ✓ tests/unit/gates.test.ts > contradictions() > collects quote continuation lines and the Q ids they name 60ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > NOT_APPROVABLE 422 (approvable: false; broken frontmatter) 194ms
+ ✓ tests/unit/store.test.ts > history > keeps unknown fields of history items and other records verbatim 195ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v07-lookalike-keys: python reference = TS = expected 271ms
+ ✓ tests/unit/lint-git.test.ts > git-backed rules on a real temporary repository > MANIFEST appends are allowed; edits, renames and deletions of raw files are errors; uncommitted ones too 1785ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > NOT_A_PHASE 422 for #exit on a non-phase page 134ms
+ ✓ tests/unit/store.test.ts > refusals leave the file unchanged > seen_content_hash mismatch -> PAGE_CHANGED with the current hashes 193ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > EXIT_NOT_READY 409 unless the phase is gate-review or done 170ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v08-lone-cr: python reference = TS = expected 241ms
+ ✓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (bad JSON) -> APPROVALS_FILE_INVALID, unchanged byte for byte 107ms
+ ✓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (wrong schema_version) -> APPROVALS_FILE_INVALID, unchanged byte for byte 115ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > UNHASHABLE 422 (hash failure injected; schema with CLAUDE.md missing) 211ms
+ ✓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (bad record) -> APPROVALS_FILE_INVALID, unchanged byte for byte 125ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v09-utf8: python reference = TS = expected 256ms
+ ✓ tests/unit/lint-git.test.ts > git-backed rules on a real temporary repository > future `updated` is an error even with git 467ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: GFM > renders a GFM table inside a scroll container 84ms
+ ✓ tests/unit/lint-git.test.ts > RAW-IMMUTABLE manifest fallback (no git history) > reports changed and missing files and malformed lines; info line names the fallback 5ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: GFM > renders strikethrough and task lists 26ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: links > rewrites a relative link to /wiki/<resolved path> and keeps the anchor 14ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: links > resolves links relative to the page directory, including ./ and directory links 8ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: links > keeps pure anchors 6ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: links > styles a link to a missing file as REF-DANGLING 6ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: links > marks https links external with rel noreferrer noopener and an icon 9ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: links > never renders javascript: links as links 5ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: links > renders repo files outside wiki/ as text, and STATUS.md as the dashboard 6ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: raw HTML is text, never executed > renders a raw <script> block as literal text 6ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: raw HTML is text, never executed > renders inline HTML (img onerror, iframe) as text, creating no elements 6ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: raw HTML is text, never executed > shows markdown images as alt-text placeholders (no requests) 5ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: headings, mermaid, integrity markers > shifts headings down one level and keeps rehype-slug ids 9ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: headings, mermaid, integrity markers > renders fenced mermaid through <Mermaid> with node links for page ids 7ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: headings, mermaid, integrity markers > keeps other fenced code as <pre><code> 5ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: headings, mermaid, integrity markers > mermaidNodeLinks maps only known page ids 1ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > PAGE_CHANGED 409 (page hash; CLAUDE.md hash for schema) with the current hashes 219ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: headings, mermaid, integrity markers > turns integrity tags into amber chips linking to the phase, not inside fenced code 8ms
+ ✓ tests/unit/components/markdown.test.tsx > Markdown: headings, mermaid, integrity markers > gives CONTRADICTION blockquotes the red-border class 7ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v10-empty-frontmatter: python reference = TS = expected 217ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > APPROVALS_FILE_INVALID 500 103ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > LOCK_TIMEOUT 503 (lock held, fake clock) 150ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v11-mixed-eol: python reference = TS = expected 186ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > WRITE_FAILED 500 (rename failure injected) 97ms
+ ✓ tests/unit/route.test.ts > POST: every §2.2 error code is reachable with its HTTP status > covers every code of ip-approvals-api §2.2 1ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v12-cr-before-crlf: python reference = TS = expected 180ms
+ ✓ tests/unit/route.test.ts > POST success > 200 {item} in GET item shape, JSON, no CORS headers 92ms
+ ✓ tests/unit/route.test.ts > POST success > with PLAN_APPEND_LOG: log_appended true; a missing log gives log_appended false + LOG_MISSING warning 151ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v13-crlf-volatile-change: python reference = TS = expected 177ms
+ ✓ tests/unit/route.test.ts > POST success > changes-requested and rejected give CHANGES_REQUESTED and REJECTED 137ms
+ ✓ tests/unit/route.test.ts > GET > lists every approvable key (+ #exit for phases) as PENDING when approvals.json is missing; no side effects 121ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v14-volatile-edge-cases: python reference = TS = expected 246ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > v15-second-fence-in-body: python reference = TS = expected 216ms
+ ✓ tests/unit/route.test.ts > GET > shows stored records, states, orphans and filters (key, state, phase) 270ms
+ ✓ tests/unit/route.test.ts > GET > an invalid approvals.json shows every state as INVALID 74ms
+ ✓ tests/unit/route.test.ts > GET > passes the Host guard (403 for a foreign Host), reports readonly 74ms
+ ✓ tests/unit/route.test.ts > app/api/approvals/route.ts > exports only GET, POST, runtime=nodejs and dynamic=force-dynamic (no PUT/PATCH/DELETE/OPTIONS) 10ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > missing closing fence: python raises ValueError, TS throws HashError 192ms
+ ✓ tests/unit/route.test.ts > app/api/approvals/route.ts > binds the handlers to the environment config (temp dirs only) 148ms
+ ✓ tests/unit/store.test.ts > parallel writes in one process > 50 concurrent submits on 10 keys: no lost update, valid JSON 1475ms
+ ✓ tests/unit/hash.vectors.test.ts > Python cross-check against the SCHEMA §10.2 reference > agrees on 400 generated inputs (CR/LF/CRLF mixes, volatile look-alikes, fences, all byte values) 1540ms
+stdout | tests/unit/store.test.ts > cross-process > 4 child processes x 10 submits on one dir, reader every 20 ms: all 40 recorded, no lost update, no torn read, no leftovers
+[cross-process] writers [{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}}]; reader every 20 ms {"mode":"reader","pid":65844,"reads":37,"missing":15,"torn":0,"readErrors":[]}
+
+ ✓ tests/unit/store.test.ts > cross-process > 4 child processes x 10 submits on one dir, reader every 20 ms: all 40 recorded, no lost update, no torn read, no leftovers 2111ms
+stdout | tests/unit/store.test.ts > cross-process > stress, reader every 1 ms: no torn read; every submission is recorded exactly once or refused explicitly
+[cross-process stress] writers [{"ok":9,"errors":["WRITE_FAILED"],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":9,"errors":["WRITE_FAILED"],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}}]; reader every 1 ms {"mode":"reader","pid":23964,"reads":163,"missing":26,"torn":0,"readErrors":[]}
+
+ ✓ tests/unit/store.test.ts > cross-process > stress, reader every 1 ms: no torn read; every submission is recorded exactly once or refused explicitly 3299ms
+ ✓ tests/unit/store.test.ts > crash during write > a failure after the temp file is written and before rename keeps the original and removes the temp file 174ms
+ ✓ tests/unit/store.test.ts > crash during write > a temp file that fails the zod self-check is deleted -> WRITE_FAILED 68ms
+ ✓ tests/unit/store.test.ts > rename retry > EPERM on the first two attempts -> success on the third (backoff 20, 40 ms) 142ms
+ ✓ tests/unit/store.test.ts > rename retry > EPERM on the first five attempts -> success on the sixth (backoff 20, 40, 80, 160, 320 ms) 109ms
+ ✓ tests/unit/store.test.ts > rename retry > six EPERM failures -> WRITE_FAILED, original intact, temp removed 114ms
+ ✓ tests/unit/store.test.ts > rename retry > six EBUSY failures -> WRITE_FAILED, original intact, temp removed 99ms
+ ✓ tests/unit/store.test.ts > rename retry > six EACCES failures -> WRITE_FAILED, original intact, temp removed 93ms
+ ✓ tests/unit/store.test.ts > rename retry > a non-transient rename error is not retried 81ms
+ ✓ tests/unit/store.test.ts > lock > a lock file older than 30 s is broken and the submit succeeds 86ms
+ ✓ tests/unit/store.test.ts > lock > a fresh lock held by another holder -> LOCK_TIMEOUT after 3 s (fake clock), the holder's lock untouched 117ms
+ ✓ tests/unit/store.test.ts > lock > a lock that stays younger than 30 s while we wait is never broken (26 s old + 3 s timeout) 108ms
+ ✓ tests/unit/store.test.ts > lock > Windows delete-pending: EPERM/EACCES/EBUSY on the exclusive create is a busy lock, retried until it succeeds 71ms
+ ✓ tests/unit/store.test.ts > lock > a lock that stays busy (EPERM) -> LOCK_TIMEOUT after 3 s, never the raw fs error; other open errors are rethrown 91ms
+ ✓ tests/unit/store.test.ts > lock > the lock is released after a refused submit 63ms
+ ✓ tests/unit/store.test.ts > serialisation > sorted keys, 2-space indent, SCHEMA record order, trailing LF, LF only 161ms
+ ✓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > appends one SCHEMA §12 entry; the log keeps ending with exactly one LF and parses cleanly 77ms
+ ✓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > a missing log returns LOG_MISSING without creating the file; the approval stands 78ms
+ ✓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > PLAN_APPEND_LOG=0 leaves the log untouched 72ms
+ ✓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > separator: exactly one blank line before the entry whatever the log ends with 1ms
+ ✓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > comment: first 200 characters, newlines collapsed, quotes escaped; #exit heading 1ms
+
+ Test Files  24 passed (24)
+      Tests  827 passed (827)
+   Start at  02:47:13
+   Duration  13.38s (tests 69%, import 15%, environment 9%, transform 7%)
+
+[exit code: 0]
+
+================================================================
+$ npx vitest run tests/unit/store.test.ts -t cross-process --reporter=verbose   (lock fix: cross-process tests, repeat 1 of 3)
+----------------------------------------------------------------
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+ ↓ tests/unit/store.test.ts > the test environment > never points at the real plan/ directory
+ ↓ tests/unit/store.test.ts > first write > creates plan/ and approvals.json, valid under the zod schema
+ ↓ tests/unit/store.test.ts > first write > records bootstrap_hash for key schema (CLAUDE.md content hash)
+ ↓ tests/unit/store.test.ts > snapshots > writes plan/snapshots/<id>/<hex>.md with the normalised bytes before approvals.json
+ ↓ tests/unit/store.test.ts > snapshots > never overwrites a snapshot: a second approval of the same hash leaves it byte-identical
+ ↓ tests/unit/store.test.ts > snapshots > writes no snapshot for changes-requested or rejected
+ ↓ tests/unit/store.test.ts > snapshots > uses <phase-id>__exit as the snapshot directory of an exit review
+ ↓ tests/unit/store.test.ts > history > three decisions give two history items, in order, earlier items unchanged byte for byte
+ ↓ tests/unit/store.test.ts > history > keeps unknown fields of history items and other records verbatim
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > seen_content_hash mismatch -> PAGE_CHANGED with the current hashes
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (bad JSON) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (wrong schema_version) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (bad record) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > parallel writes in one process > 50 concurrent submits on 10 keys: no lost update, valid JSON
+stdout | tests/unit/store.test.ts > cross-process > 4 child processes x 10 submits on one dir, reader every 20 ms: all 40 recorded, no lost update, no torn read, no leftovers
+[cross-process] writers [{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}}]; reader every 20 ms {"mode":"reader","pid":74412,"reads":36,"missing":13,"torn":0,"readErrors":[]}
+
+ ✓ tests/unit/store.test.ts > cross-process > 4 child processes x 10 submits on one dir, reader every 20 ms: all 40 recorded, no lost update, no torn read, no leftovers 2037ms
+stdout | tests/unit/store.test.ts > cross-process > stress, reader every 1 ms: no torn read; every submission is recorded exactly once or refused explicitly
+[cross-process stress] writers [{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":9,"errors":["WRITE_FAILED"],"renameRetries":0,"maxAttempts":1,"retryCodes":{}}]; reader every 1 ms {"mode":"reader","pid":59184,"reads":118,"missing":31,"torn":0,"readErrors":[]}
+
+ ✓ tests/unit/store.test.ts > cross-process > stress, reader every 1 ms: no torn read; every submission is recorded exactly once or refused explicitly 2713ms
+ ↓ tests/unit/store.test.ts > crash during write > a failure after the temp file is written and before rename keeps the original and removes the temp file
+ ↓ tests/unit/store.test.ts > crash during write > a temp file that fails the zod self-check is deleted -> WRITE_FAILED
+ ↓ tests/unit/store.test.ts > rename retry > EPERM on the first two attempts -> success on the third (backoff 20, 40 ms)
+ ↓ tests/unit/store.test.ts > rename retry > EPERM on the first five attempts -> success on the sixth (backoff 20, 40, 80, 160, 320 ms)
+ ↓ tests/unit/store.test.ts > rename retry > six EPERM failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > six EBUSY failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > six EACCES failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > a non-transient rename error is not retried
+ ↓ tests/unit/store.test.ts > lock > a lock file older than 30 s is broken and the submit succeeds
+ ↓ tests/unit/store.test.ts > lock > a fresh lock held by another holder -> LOCK_TIMEOUT after 3 s (fake clock), the holder's lock untouched
+ ↓ tests/unit/store.test.ts > lock > a lock that stays younger than 30 s while we wait is never broken (26 s old + 3 s timeout)
+ ↓ tests/unit/store.test.ts > lock > Windows delete-pending: EPERM/EACCES/EBUSY on the exclusive create is a busy lock, retried until it succeeds
+ ↓ tests/unit/store.test.ts > lock > a lock that stays busy (EPERM) -> LOCK_TIMEOUT after 3 s, never the raw fs error; other open errors are rethrown
+ ↓ tests/unit/store.test.ts > lock > the lock is released after a refused submit
+ ↓ tests/unit/store.test.ts > serialisation > sorted keys, 2-space indent, SCHEMA record order, trailing LF, LF only
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > appends one SCHEMA §12 entry; the log keeps ending with exactly one LF and parses cleanly
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > a missing log returns LOG_MISSING without creating the file; the approval stands
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > PLAN_APPEND_LOG=0 leaves the log untouched
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > separator: exactly one blank line before the entry whatever the log ends with
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > comment: first 200 characters, newlines collapsed, quotes escaped; #exit heading
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 34 skipped (36)
+   Start at  02:47:28
+   Duration  5.23s (tests 93%, transform 4%, import 3%)
+
+[exit code: 0]
+
+================================================================
+$ npx vitest run tests/unit/store.test.ts -t cross-process --reporter=verbose   (lock fix: cross-process tests, repeat 2 of 3)
+----------------------------------------------------------------
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+ ↓ tests/unit/store.test.ts > the test environment > never points at the real plan/ directory
+ ↓ tests/unit/store.test.ts > first write > creates plan/ and approvals.json, valid under the zod schema
+ ↓ tests/unit/store.test.ts > first write > records bootstrap_hash for key schema (CLAUDE.md content hash)
+ ↓ tests/unit/store.test.ts > snapshots > writes plan/snapshots/<id>/<hex>.md with the normalised bytes before approvals.json
+ ↓ tests/unit/store.test.ts > snapshots > never overwrites a snapshot: a second approval of the same hash leaves it byte-identical
+ ↓ tests/unit/store.test.ts > snapshots > writes no snapshot for changes-requested or rejected
+ ↓ tests/unit/store.test.ts > snapshots > uses <phase-id>__exit as the snapshot directory of an exit review
+ ↓ tests/unit/store.test.ts > history > three decisions give two history items, in order, earlier items unchanged byte for byte
+ ↓ tests/unit/store.test.ts > history > keeps unknown fields of history items and other records verbatim
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > seen_content_hash mismatch -> PAGE_CHANGED with the current hashes
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (bad JSON) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (wrong schema_version) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (bad record) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > parallel writes in one process > 50 concurrent submits on 10 keys: no lost update, valid JSON
+stdout | tests/unit/store.test.ts > cross-process > 4 child processes x 10 submits on one dir, reader every 20 ms: all 40 recorded, no lost update, no torn read, no leftovers
+[cross-process] writers [{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}}]; reader every 20 ms {"mode":"reader","pid":28920,"reads":37,"missing":13,"torn":0,"readErrors":[]}
+
+ ✓ tests/unit/store.test.ts > cross-process > 4 child processes x 10 submits on one dir, reader every 20 ms: all 40 recorded, no lost update, no torn read, no leftovers 2133ms
+stdout | tests/unit/store.test.ts > cross-process > stress, reader every 1 ms: no torn read; every submission is recorded exactly once or refused explicitly
+[cross-process stress] writers [{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}}]; reader every 1 ms {"mode":"reader","pid":84516,"reads":82,"missing":24,"torn":0,"readErrors":[]}
+
+ ✓ tests/unit/store.test.ts > cross-process > stress, reader every 1 ms: no torn read; every submission is recorded exactly once or refused explicitly 2044ms
+ ↓ tests/unit/store.test.ts > crash during write > a failure after the temp file is written and before rename keeps the original and removes the temp file
+ ↓ tests/unit/store.test.ts > crash during write > a temp file that fails the zod self-check is deleted -> WRITE_FAILED
+ ↓ tests/unit/store.test.ts > rename retry > EPERM on the first two attempts -> success on the third (backoff 20, 40 ms)
+ ↓ tests/unit/store.test.ts > rename retry > EPERM on the first five attempts -> success on the sixth (backoff 20, 40, 80, 160, 320 ms)
+ ↓ tests/unit/store.test.ts > rename retry > six EPERM failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > six EBUSY failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > six EACCES failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > a non-transient rename error is not retried
+ ↓ tests/unit/store.test.ts > lock > a lock file older than 30 s is broken and the submit succeeds
+ ↓ tests/unit/store.test.ts > lock > a fresh lock held by another holder -> LOCK_TIMEOUT after 3 s (fake clock), the holder's lock untouched
+ ↓ tests/unit/store.test.ts > lock > a lock that stays younger than 30 s while we wait is never broken (26 s old + 3 s timeout)
+ ↓ tests/unit/store.test.ts > lock > Windows delete-pending: EPERM/EACCES/EBUSY on the exclusive create is a busy lock, retried until it succeeds
+ ↓ tests/unit/store.test.ts > lock > a lock that stays busy (EPERM) -> LOCK_TIMEOUT after 3 s, never the raw fs error; other open errors are rethrown
+ ↓ tests/unit/store.test.ts > lock > the lock is released after a refused submit
+ ↓ tests/unit/store.test.ts > serialisation > sorted keys, 2-space indent, SCHEMA record order, trailing LF, LF only
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > appends one SCHEMA §12 entry; the log keeps ending with exactly one LF and parses cleanly
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > a missing log returns LOG_MISSING without creating the file; the approval stands
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > PLAN_APPEND_LOG=0 leaves the log untouched
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > separator: exactly one blank line before the entry whatever the log ends with
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > comment: first 200 characters, newlines collapsed, quotes escaped; #exit heading
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 34 skipped (36)
+   Start at  02:47:34
+   Duration  4.69s (tests 92%, transform 5%, import 4%)
+
+[exit code: 0]
+
+================================================================
+$ npx vitest run tests/unit/store.test.ts -t cross-process --reporter=verbose   (lock fix: cross-process tests, repeat 3 of 3)
+----------------------------------------------------------------
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+stdout | tests/unit/store.test.ts > cross-process > 4 child processes x 10 submits on one dir, reader every 20 ms: all 40 recorded, no lost update, no torn read, no leftovers
+[cross-process] writers [{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":2,"maxAttempts":3,"retryCodes":{"EPERM":2}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}}]; reader every 20 ms {"mode":"reader","pid":74208,"reads":36,"missing":16,"torn":0,"readErrors":[]}
+
+ ↓ tests/unit/store.test.ts > the test environment > never points at the real plan/ directory
+ ↓ tests/unit/store.test.ts > first write > creates plan/ and approvals.json, valid under the zod schema
+ ↓ tests/unit/store.test.ts > first write > records bootstrap_hash for key schema (CLAUDE.md content hash)
+ ↓ tests/unit/store.test.ts > snapshots > writes plan/snapshots/<id>/<hex>.md with the normalised bytes before approvals.json
+ ↓ tests/unit/store.test.ts > snapshots > never overwrites a snapshot: a second approval of the same hash leaves it byte-identical
+ ↓ tests/unit/store.test.ts > snapshots > writes no snapshot for changes-requested or rejected
+ ↓ tests/unit/store.test.ts > snapshots > uses <phase-id>__exit as the snapshot directory of an exit review
+ ↓ tests/unit/store.test.ts > history > three decisions give two history items, in order, earlier items unchanged byte for byte
+ ↓ tests/unit/store.test.ts > history > keeps unknown fields of history items and other records verbatim
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > seen_content_hash mismatch -> PAGE_CHANGED with the current hashes
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (bad JSON) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (wrong schema_version) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > refusals leave the file unchanged > invalid existing file (bad record) -> APPROVALS_FILE_INVALID, unchanged byte for byte
+ ↓ tests/unit/store.test.ts > parallel writes in one process > 50 concurrent submits on 10 keys: no lost update, valid JSON
+ ✓ tests/unit/store.test.ts > cross-process > 4 child processes x 10 submits on one dir, reader every 20 ms: all 40 recorded, no lost update, no torn read, no leftovers 2107ms
+stdout | tests/unit/store.test.ts > cross-process > stress, reader every 1 ms: no torn read; every submission is recorded exactly once or refused explicitly
+[cross-process stress] writers [{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}},{"ok":10,"errors":[],"renameRetries":0,"maxAttempts":1,"retryCodes":{}}]; reader every 1 ms {"mode":"reader","pid":22440,"reads":66,"missing":26,"torn":0,"readErrors":[]}
+
+ ✓ tests/unit/store.test.ts > cross-process > stress, reader every 1 ms: no torn read; every submission is recorded exactly once or refused explicitly 1763ms
+ ↓ tests/unit/store.test.ts > crash during write > a failure after the temp file is written and before rename keeps the original and removes the temp file
+ ↓ tests/unit/store.test.ts > crash during write > a temp file that fails the zod self-check is deleted -> WRITE_FAILED
+ ↓ tests/unit/store.test.ts > rename retry > EPERM on the first two attempts -> success on the third (backoff 20, 40 ms)
+ ↓ tests/unit/store.test.ts > rename retry > EPERM on the first five attempts -> success on the sixth (backoff 20, 40, 80, 160, 320 ms)
+ ↓ tests/unit/store.test.ts > rename retry > six EPERM failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > six EBUSY failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > six EACCES failures -> WRITE_FAILED, original intact, temp removed
+ ↓ tests/unit/store.test.ts > rename retry > a non-transient rename error is not retried
+ ↓ tests/unit/store.test.ts > lock > a lock file older than 30 s is broken and the submit succeeds
+ ↓ tests/unit/store.test.ts > lock > a fresh lock held by another holder -> LOCK_TIMEOUT after 3 s (fake clock), the holder's lock untouched
+ ↓ tests/unit/store.test.ts > lock > a lock that stays younger than 30 s while we wait is never broken (26 s old + 3 s timeout)
+ ↓ tests/unit/store.test.ts > lock > Windows delete-pending: EPERM/EACCES/EBUSY on the exclusive create is a busy lock, retried until it succeeds
+ ↓ tests/unit/store.test.ts > lock > a lock that stays busy (EPERM) -> LOCK_TIMEOUT after 3 s, never the raw fs error; other open errors are rethrown
+ ↓ tests/unit/store.test.ts > lock > the lock is released after a refused submit
+ ↓ tests/unit/store.test.ts > serialisation > sorted keys, 2-space indent, SCHEMA record order, trailing LF, LF only
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > appends one SCHEMA §12 entry; the log keeps ending with exactly one LF and parses cleanly
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > a missing log returns LOG_MISSING without creating the file; the approval stands
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > PLAN_APPEND_LOG=0 leaves the log untouched
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > separator: exactly one blank line before the entry whatever the log ends with
+ ↓ tests/unit/store.test.ts > log append (PLAN_APPEND_LOG) > comment: first 200 characters, newlines collapsed, quotes escaped; #exit heading
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 34 skipped (36)
+   Start at  02:47:41
+   Duration  4.42s (tests 91%, transform 5%, import 4%)
+
+[exit code: 0]
+
+================================================================
+$ npx playwright test   (full E2E suite: production build on 127.0.0.1:3418, temp fixture copy under a path with a space)
+----------------------------------------------------------------
+
+Running 100 tests using 1 worker
+
+  ✓    1 [chromium] › tests\e2e\approval-flow.spec.ts:34:5 › (1) the inbox lists adr-0901 as PENDING (422ms)
+  ✓    2 [chromium] › tests\e2e\approval-flow.spec.ts:44:5 › (2) open it and Approve: the UI shows APPROVED; (3) the stored record matches the file (1.0s)
+  ✓    3 [chromium] › tests\e2e\approval-flow.spec.ts:75:5 › (4) editing only status:/updated: gives APPROVED_VOLATILE_DRIFT (636ms)
+  ✓    4 [chromium] › tests\e2e\approval-flow.spec.ts:85:5 › (5) editing the body gives STALE; the inbox lists it under Stale with a diff since approval (931ms)
+  ✓    5 [chromium] › tests\e2e\approval-flow.spec.ts:104:5 › (6) Request changes needs a comment; with one it records CHANGES_REQUESTED with history 1 (982ms)
+  ✓    6 [chromium] › tests\e2e\approval-flow.spec.ts:133:5 › (7) log.md gained approval entries in the SCHEMA §12 format (6ms)
+  ✓    7 [chromium] › tests\e2e\approval-flow.spec.ts:152:5 › the server wrote only the temp copy: the real plan/approvals.json, log.md and STATUS.md are unchanged (3ms)
+  ✓    8 [chromium] › tests\e2e\approval-race.spec.ts:27:5 › a file changed after the page was rendered is refused with 409 and nothing is written (861ms)
+  ✓    9 [chromium] › tests\e2e\architecture.spec.ts:10:5 › node count equals the fixture components; TB edge has the TB marker; edge table alternative (959ms)
+  ✓   10 [chromium] › tests\e2e\architecture.spec.ts:39:5 › clicking a node opens the side panel with a link to the full page (747ms)
+  ✓   11 [chromium] › tests\e2e\architecture.spec.ts:56:5 › keyboard: Tab walks the nodes in reading order, Enter opens the panel, Close returns focus (689ms)
+  ✓   12 [chromium] › tests\e2e\architecture.spec.ts:86:5 › filters: only trust-boundary edges, hide not-shipped, edge kind (1.3s)
+  ✓   13 [chromium] › tests\e2e\dashboard.spec.ts:47:5 › next_action is shown verbatim with phase, task, session and status (387ms)
+  ✓   14 [chromium] › tests\e2e\dashboard.spec.ts:58:5 › approval counts equal the fixture's expected counts and link to the inbox (739ms)
+  ✓   15 [chromium] › tests\e2e\dashboard.spec.ts:74:5 › blocked_on links resolve (677ms)
+  ✓   16 [chromium] › tests\e2e\dashboard.spec.ts:91:5 › phase strip, gate card, blockers, recent log and lint card (996ms)
+  ✓   17 [chromium] › tests\e2e\decisions.spec.ts:7:5 › register: adr-0901 listed as claude-proposed and awaiting approval; filters (1.2s)
+  ✓   18 [chromium] › tests\e2e\decisions.spec.ts:26:5 › detail: approve bar, required sections, pages that list the ADR (456ms)
+  ✓   19 [chromium] › tests\e2e\decisions.spec.ts:39:5 › /go/<adr> opens the decision view; unknown and non-decision ids are 404 (373ms)
+  ✓   20 [chromium] › tests\e2e\exit-approval.spec.ts:26:5 › the exit bar is hidden for a planned phase; the page bar is shown (350ms)
+  ✓   21 [chromium] › tests\e2e\exit-approval.spec.ts:43:5 › the phase view shows the entry gate, tasks and the test gate with evidence checks (365ms)
+  ✓   22 [chromium] › tests\e2e\exit-approval.spec.ts:60:5 › a gate-review phase shows the exit bar; approving writes <phase-id>#exit (779ms)
+  ✓   23 [chromium] › tests\e2e\log.spec.ts:7:5 › entries are newest first by default (358ms)
+  ✓   24 [chromium] › tests\e2e\log.spec.ts:14:5 › the chronological toggle reverses the order (429ms)
+  ✓   25 [chromium] › tests\e2e\log.spec.ts:21:5 › the op filter works (515ms)
+  ✓   26 [chromium] › tests\e2e\log.spec.ts:31:5 › clicking an op chip filters by that op; session and page filters work (619ms)
+  ✓   27 [chromium] › tests\e2e\log.spec.ts:41:5 › a malformed heading appears as a LOG-FORMAT finding (347ms)
+  ✓   28 [chromium] › tests\e2e\log.spec.ts:48:5 › the last-5 view matches the RESUME recipe (299ms)
+  ✓   29 [chromium] › tests\e2e\log.spec.ts:54:5 › entry pages link to /go/<id> (294ms)
+  ✓   30 [chromium] › tests\e2e\research.spec.ts:10:5 › gaps are highlighted in the graph and listed in the table (993ms)
+  ✓   31 [chromium] › tests\e2e\research.spec.ts:31:5 › columns RQ → hypothesis → experiment → metric/workload/phase, with badges (642ms)
+  ✓   32 [chromium] › tests\e2e\research.spec.ts:44:5 › text alternative: nested rq → hyp → exp → metrics/workloads (342ms)
+  ✓   33 [chromium] › tests\e2e\research.spec.ts:57:5 › the rq filter shows one question's subgraph; nodes open their page (1.0s)
+  ✓   34 [chromium] › tests\e2e\risks.spec.ts:7:5 › heatmap cell (L3, I4) holds risk-r91; (L1, I2) holds risk-r92; bands are labelled (833ms)
+  ✓   35 [chromium] › tests\e2e\risks.spec.ts:26:5 › the register is sortable by score (both directions) (754ms)
+  ✓   36 [chromium] › tests\e2e\risks.spec.ts:49:5 › the open + mitigating toggle hides the resolved risk (804ms)
+  ✓   37 [chromium] › tests\e2e\roadmap.spec.ts:14:5 › one DAG node per phase, critical path marked, no console errors (935ms)
+  ✓   38 [chromium] › tests\e2e\roadmap.spec.ts:29:5 › timeline bars are proportional to est_sessions and start at the end of their dependencies (365ms)
+  ✓   39 [chromium] › tests\e2e\roadmap.spec.ts:57:5 › clicking a DAG node or a timeline bar opens the phase (893ms)
+  ✓   40 [chromium] › tests\e2e\roadmap.spec.ts:67:5 › keyboard: Tab reaches the phase nodes and Enter opens one (549ms)
+  ✓   41 [chromium] › tests\e2e\theme.spec.ts:11:5 › prefers-color-scheme: dark emulation gives the dark tokens (349ms)
+  ✓   42 [chromium] › tests\e2e\theme.spec.ts:19:5 › prefers-color-scheme: light gives the light tokens (280ms)
+  ✓   43 [chromium] › tests\e2e\theme.spec.ts:25:5 › the toggle overrides the OS preference and persists across reloads (852ms)
+  ✓   44 [chromium] › tests\e2e\theme.spec.ts:51:5 › no flash: the theme script is inline in <head> of the initial HTML (41ms)
+  ✓   45 [chromium] › tests\e2e\theme.spec.ts:58:5 › no flash: data-theme is already set when <body> is first inserted (279ms)
+  ✓   46 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /: 200, one h1, no console errors (841ms)
+  ✓   47 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki: 200, one h1, no console errors (922ms)
+  ✓   48 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/decisions/adr-0901-fixture-decision.md: 200, one h1, no console errors (842ms)
+  ✓   49 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/overview/ov-fixture-project.md: 200, one h1, no console errors (977ms)
+  ✓   50 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/overview/ov-fixture-render.md: 200, one h1, no console errors (856ms)
+  ✓   51 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/raw: 200, one h1, no console errors (809ms)
+  ✓   52 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/raw/00-fixture-source.md: 200, one h1, no console errors (857ms)
+  ✓   53 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /wiki/raw/research/fixture-note.md: 200, one h1, no console errors (833ms)
+  ✓   54 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /search: 200, one h1, no console errors (778ms)
+  ✓   55 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /search?q=shell: 200, one h1, no console errors (838ms)
+  ✓   56 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /log: 200, one h1, no console errors (826ms)
+  ✓   57 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /log?op=code&order=oldest: 200, one h1, no console errors (805ms)
+  ✓   58 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /approvals: 200, one h1, no console errors (859ms)
+  ✓   59 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /approvals?tab=all: 200, one h1, no console errors (947ms)
+  ✓   60 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /approvals?tab=wave: 200, one h1, no console errors (876ms)
+  ✓   61 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /approvals?tab=all&review=1&i=2: 200, one h1, no console errors (909ms)
+  ✓   62 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /phases/phase-p0-fixture-plan: 200, one h1, no console errors (939ms)
+  ✓   63 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /phases/phase-p1-fixture-build: 200, one h1, no console errors (837ms)
+  ✓   64 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /phases/phase-p2-fixture-review: 200, one h1, no console errors (839ms)
+  ✓   65 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /lint: 200, one h1, no console errors (823ms)
+  ✓   66 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /architecture: 200, one h1, no console errors (815ms)
+  ✓   67 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /architecture?tb=1&hide=1: 200, one h1, no console errors (903ms)
+  ✓   68 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /roadmap: 200, one h1, no console errors (956ms)
+  ✓   69 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /decisions: 200, one h1, no console errors (802ms)
+  ✓   70 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /decisions?status=proposed&state=PENDING: 200, one h1, no console errors (933ms)
+  ✓   71 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /decisions/adr-0901: 200, one h1, no console errors (813ms)
+  ✓   72 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /risks: 200, one h1, no console errors (814ms)
+  ✓   73 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /risks?sort=id&dir=asc&active=1: 200, one h1, no console errors (805ms)
+  ✓   74 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /research: 200, one h1, no console errors (969ms)
+  ✓   75 [chromium] › tests\e2e\views.spec.ts:42:7 › GET /research?rq=rq-92: 200, one h1, no console errors (900ms)
+  ✓   76 [chromium] › tests\e2e\views.spec.ts:53:5 › unknown /go id: 404 with close matches (291ms)
+  ✓   77 [chromium] › tests\e2e\views.spec.ts:60:5 › unknown wiki path: 404 (246ms)
+  ✓   78 [chromium] › tests\e2e\views.spec.ts:65:5 › path traversal does not escape wiki/ (77ms)
+  ✓   79 [chromium] › tests\e2e\views.spec.ts:75:5 › /go/<id> redirects to the page view (351ms)
+  ✓   80 [chromium] › tests\e2e\views.spec.ts:87:5 › /go resolves a task id and an open-question id (461ms)
+  ✓   81 [chromium] › tests\e2e\views.spec.ts:94:5 › /phases/<id> is 404 for a non-phase or unknown id (339ms)
+  ✓   82 [chromium] › tests\e2e\views.spec.ts:101:5 › every nav entry is a link since IP-8 (799ms)
+  ✓   83 [chromium] › tests\e2e\views.spec.ts:118:5 › the Approvals and Lint nav entries are links since IP-7 (632ms)
+  ✓   84 [chromium] › tests\e2e\views.spec.ts:128:5 › approvals review mode steps with j/k and shows the page beside its approve bar (489ms)
+  ✓   85 [chromium] › tests\e2e\views.spec.ts:145:5 › the inbox has no bulk approve: one row per key, no approve buttons in the list (339ms)
+  ✓   86 [chromium] › tests\e2e\wiki.spec.ts:7:5 › a page renders a GFM table (457ms)
+  ✓   87 [chromium] › tests\e2e\wiki.spec.ts:16:7 › a mermaid block renders an SVG with real mermaid (light theme) (640ms)
+  ✓   88 [chromium] › tests\e2e\wiki.spec.ts:16:7 › a mermaid block renders an SVG with real mermaid (dark theme) (542ms)
+  ✓   89 [chromium] › tests\e2e\wiki.spec.ts:32:5 › mermaid re-renders when the theme is toggled (634ms)
+  ✓   90 [chromium] › tests\e2e\wiki.spec.ts:43:5 › show source toggles the diagram source (541ms)
+  ✓   91 [chromium] › tests\e2e\wiki.spec.ts:51:5 › backlinks list the expected ids, grouped by field (342ms)
+  ✓   92 [chromium] › tests\e2e\wiki.spec.ts:60:5 › search finds a body word, from the top-bar box (403ms)
+  ✓   93 [chromium] › tests\e2e\wiki.spec.ts:74:5 › an exact id in the search box jumps to the page (460ms)
+  ✓   94 [chromium] › tests\e2e\wiki.spec.ts:84:5 › search ranks the exact id first and filters by type (404ms)
+  ✓   95 [chromium] › tests\e2e\wiki.spec.ts:92:5 › a dangling link is styled as missing; a valid one resolves (355ms)
+  ✓   96 [chromium] › tests\e2e\wiki.spec.ts:102:5 › integrity tags, CONTRADICTION blockquotes and raw HTML (366ms)
+  ✓   97 [chromium] › tests\e2e\wiki.spec.ts:112:5 › a raw file shows the immutable banner and no approve bar (347ms)
+  ✓   98 [chromium] › tests\e2e\wiki.spec.ts:119:5 › the tree shows raw/ collapsed and labelled immutable, the current file marked (366ms)
+  ✓   99 [chromium] › tests\e2e\wiki.spec.ts:127:5 › the tree filters by type (316ms)
+  ✓  100 [chromium] › tests\e2e\wiki.spec.ts:134:5 › frontmatter panel shows fields with id links and the raw YAML (422ms)
+E2E guard: 3 real files unchanged (approvals.json absent, log.md same mtime+sha256, STATUS.md same mtime+sha256)
+
+  100 passed (1.3m)
+[exit code: 0]
+
+================================================================
+$ npm run typecheck
+----------------------------------------------------------------
+
+> interactive_plan@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+[exit code: 0]
+
+================================================================
+$ npm run lint   (eslint .)
+----------------------------------------------------------------
+
+> interactive_plan@0.1.0 lint
+> eslint .
+
+[exit code: 0]
+
+================================================================
+$ npm run lint:wiki   (real wiki, read-only; includes tests/lint/real-wiki-graphs.test.ts)
+----------------------------------------------------------------
+
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors
+real wiki: 199 files loaded (193 ids), 46 log entries, 52 open-question sections; loader findings by code: {}
+
+stdout | tests/lint/real-wiki-graphs.test.ts > real wiki graphs (IP-8, read-only) > roadmap: 9 phases P0-P8, acyclic, every phase scheduled, a critical path from P0
+roadmap: 9 phases, 49 sessions, critical path phase-p0-planning -> phase-p1-foundation -> phase-p2-minimal-container -> phase-p3-tabs-sessions -> phase-p4-security -> phase-p5-telemetry -> phase-p6-benchmark-harness -> phase-p7-lifecycle -> phase-p8-research-paper
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > every `sources` path entry names an existing wiki file (SCHEMA §5.1, REF-DANGLING)
+real wiki: 584 sources path entries checked
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > the slug algorithm agrees with every heading anchor written in the real wiki
+real wiki: 81 body links with a heading anchor into a loaded page checked
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > body links to missing files (informational; the REF-DANGLING rule is enforced by lint:wiki, IP-5)
+real wiki: 0 body links to missing files
+
+ ✓ tests/lint/real-wiki-loader.test.ts (6 tests) 691ms
+stdout | tests/lint/real-wiki-graphs.test.ts > real wiki graphs (IP-8, read-only) > architecture: every edge target is a component, no TRUST-EDGE mismatch, lanes without overlaps
+architecture: 15 components, 42 edges (15 TB), lanes trusted, untrusted, external
+
+stdout | tests/lint/real-wiki-graphs.test.ts > real wiki graphs (IP-8, read-only) > risks: every risk is placed in exactly one heatmap cell
+risks: 25; bands {"low":0,"moderate":3,"high":5,"critical":17}
+
+stdout | tests/lint/real-wiki-graphs.test.ts > real wiki graphs (IP-8, read-only) > research: the traceability graph builds; gaps are listed for the reader (not failed on)
+research: 72 nodes, 150 edges, 1 gaps
+  gap exp-few-trials exp-reliability: experiment with trials.target < 30: target 10
+
+ ✓ tests/lint/real-wiki-graphs.test.ts (4 tests) 790ms
+stdout | tests/lint/wiki-lint.test.ts > wiki lint (real wiki, read-only) > runs every rule and prints the report
+wiki lint: wiki wiki, status STATUS.md, approvals plan/approvals.json (absent), git ok, today 2026-10-09
+WARN UNV-MIRROR wiki/SCHEMA.md  inline tags name phase-p1-foundation but the frontmatter unverified list does not (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/architecture/ov-arch-configuration.md  the frontmatter unverified list names phase-p7-lifecycle but no inline tag does (SCHEMA §7.1)
+WARN CONTRADICTION wiki/decisions/adr-0009-benchmark-hardware-energy.md:42  open CONTRADICTION blockquote (registered as Q-116, Q-122, Q-123)
+WARN CONTRADICTION wiki/decisions/adr-0010-isolation-webview2-profiles.md:46  open CONTRADICTION blockquote (registered as Q-107)
+WARN UNV-MIRROR wiki/phases/phase-p0-planning.md  the frontmatter unverified list names phase-p0-planning but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p3-tabs-sessions.md  the frontmatter unverified list names phase-p3-tabs-sessions but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p5-telemetry.md  the frontmatter unverified list names phase-p5-telemetry but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p6-benchmark-harness.md  the frontmatter unverified list names phase-p6-benchmark-harness but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p7-lifecycle.md  the frontmatter unverified list names phase-p7-lifecycle but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p8-research-paper.md  the frontmatter unverified list names phase-p8-research-paper but no inline tag does (SCHEMA §7.1)
+WARN INT-NUMBER-NOSRC wiki/research/experiments/exp-navigation.md:75  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-01-idle-memory-vs-browsers.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-02-overhead-vs-tauri-baseline.md:35  "20%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-03-background-cpu-without-lifecycle.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-04-startup-window-visible.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-05-navigation-non-inferiority.md:35  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-06-rendering-non-inferiority.md:40  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-07-energy-per-workload.md:36  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-08-adaptive-reduces-memory.md:38  "15%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-10-adaptive-restore-latency.md:35  "20%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-11-lifecycle-safety.md:34  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-12-security-overhead-small.md:39  "1 ms" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-13-profiles-cheaper-than-udfs.md:36  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-14-memory-growth-non-inferior.md:36  "10 MiB" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-15-restore-and-recovery.md:37  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-loaf-blocking.md:51  "50 ms" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-memory-growth-slope.md:45  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-nav-failure-rate.md:40  "30 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-peak-tree-private-commit.md:44  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-recovery-time.md:45  "60 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-tree-private-commit.md:50  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN MERMAID-RULES wiki/research/ov-research-plan.md:41  mermaid block: about 31 nodes (more than 30; split it) (SCHEMA §14)
+WARN INT-NUMBER-NOSRC wiki/research/ov-research-statistical-analysis-plan.md:84  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/ov-research-statistical-analysis-plan.md:112  "80%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+INFO SCHEMA-SPLIT CLAUDE.md  compare CLAUDE.md rules with SCHEMA.md (manual; not mechanically checkable, SCHEMA §9.3, §9.6)
+INFO CONTRADICTION wiki/  reminder: also do the semantic contradiction pass (claims that disagree between pages, with an accepted ADR or a raw source)
+lint: 0 errors, 34 warnings, 2 info (pages: 193)
+
+ ✓ tests/lint/wiki-lint.test.ts (3 tests | 1 skipped) 1695ms
+
+ Test Files  3 passed (3)
+      Tests  12 passed | 1 skipped (13)
+   Start at  02:49:22
+   Duration  2.28s (tests 73%, import 15%, transform 12%)
+
+[exit code: 0]
+
+================================================================
+$ python tools/quick_lint.py   (repo root)
+----------------------------------------------------------------
+193 files checked, 0 errors, 0 warnings
+[exit code: 0]
+
+================================================================
+$ python -m unittest discover -s tools -p "test_*.py"   (repo root)
+----------------------------------------------------------------
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-vrc2xmf3\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-vrc2xmf3\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-vrc2xmf3\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-vrc2xmf3\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pulooxvs\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pulooxvs\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pulooxvs\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pulooxvs\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-_n40jm6_\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-_n40jm6_\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-_n40jm6_\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-_n40jm6_\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-as7wjp46\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-as7wjp46\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-as7wjp46\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-as7wjp46\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hw4w64cp\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hw4w64cp\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hw4w64cp\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hw4w64cp\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-uinds6t0\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-uinds6t0\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-uinds6t0\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-uinds6t0\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-bu0vme39\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-bu0vme39\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-bu0vme39\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-bu0vme39\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hv6a5z77\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hv6a5z77\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hv6a5z77\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hv6a5z77\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-aby19mwo\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-aby19mwo\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-aby19mwo\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-aby19mwo\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-rhg7a7w9\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-rhg7a7w9\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-rhg7a7w9\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-rhg7a7w9\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-gxa3avyx\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-gxa3avyx\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-gxa3avyx\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-gxa3avyx\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-q5yyyvp3\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-q5yyyvp3\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-q5yyyvp3\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-q5yyyvp3\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-3qicluq7\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-3qicluq7\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-3qicluq7\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-3qicluq7\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pddm3gso\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pddm3gso\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pddm3gso\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pddm3gso\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-wlo2sml7\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-wlo2sml7\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-wlo2sml7\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-wlo2sml7\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pmez68k1\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pmez68k1\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pmez68k1\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pmez68k1\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-bw7a21qd\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-bw7a21qd\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-bw7a21qd\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-bw7a21qd\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.............
+----------------------------------------------------------------------
+Ran 29 tests in 3.409s
+
+OK
+[exit code: 0]
+
+================================================================
+$ approvals.json after: absent (before: absent)
+----------------------------------------------------------------
+[exit code: 0]

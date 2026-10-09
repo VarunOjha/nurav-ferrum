@@ -173,16 +173,18 @@ interactive_plan/
 │   ├── architecture/ roadmap/ phases/[id]/ decisions/ decisions/[id]/
 │   ├── risks/ research/ wiki/[[...path]]/ go/[id]/ search/ log/ approvals/ lint/
 │   └── api/approvals/route.ts
-├── components/              # Markdown, Mermaid (client), FlowGraph (client), ApproveBar (client),
-│                            # StatusBadge, ApprovalBadge, Heatmap, Timeline, ThemeToggle, PageShell
+├── components/              # Markdown, Mermaid (client), ApproveBar (client), Badges, ThemeToggle,
+│                            # wiki/PageParts, graph/FlowGraph + LazyFlowGraph (client, IP-8; the heatmap
+│                            # and the timeline are server-rendered table/SVG in their routes)
 ├── lib/
 │   ├── config.ts            # env → absolute paths
 │   ├── wiki/                # frontmatter.ts schemas.ts load.ts links.ts graph.ts search.ts log.ts status.ts gates.ts
 │   ├── approvals/           # hash.ts state.ts store.ts lock.ts
+│   ├── views/               # pure view models: dashboard, inbox, phase (IP-7), graphLayout, registers (IP-8)
 │   └── lint/                # rules/*.ts run.ts format.ts
 └── tests/
     ├── unit/                # vitest (node + jsdom)
-    ├── lint/                # `npm run lint:wiki`: wiki-lint.test.ts + real-wiki-loader.test.ts (real wiki, read-only)
+    ├── lint/                # `npm run lint:wiki`: wiki-lint.test.ts + real-wiki-loader.test.ts + real-wiki-graphs.test.ts (real wiki, read-only)
     ├── e2e/*.spec.ts        # Playwright
     └── fixtures/            # mini-wiki/, broken-wiki/, status/, e2e-overlay/ (E2E-only cases, IP-6)
 ```

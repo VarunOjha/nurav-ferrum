@@ -164,7 +164,8 @@ describe("routes", () => {
 
   it("goTarget resolves page ids, Q-NNN anchors and task ids; null otherwise", async () => {
     const idx = await loadMini();
-    expect(goTarget(idx, "adr-0901")).toBe("/wiki/decisions/adr-0901-fixture-decision.md");
+    expect(goTarget(idx, "adr-0901")).toBe("/decisions/adr-0901");
+    expect(goTarget(idx, "ov-fixture-project")).toBe("/wiki/overview/ov-fixture-project.md");
     expect(goTarget(idx, "status-live")).toBe("/");
     expect(goTarget(idx, "Q-901")).toMatch(/^\/wiki\/overview\/ov-open-questions\.md#q-901-/);
     expect(goTarget(idx, "Q-999")).toBeNull();
@@ -173,12 +174,14 @@ describe("routes", () => {
     expect(goTarget(idx, "nope")).toBeNull();
   });
 
-  it("pageHref uses a typed route once it exists (phase since IP-7) and the wiki browser otherwise", async () => {
+  it("pageHref uses a typed route once it exists (phase since IP-7, decision since IP-8) and the wiki browser otherwise", async () => {
     const idx = await loadMini();
     expect(pageHref(idx.byId.get("phase-p0-fixture-plan")!)).toBe("/phases/phase-p0-fixture-plan");
     expect(pageHref(idx.byId.get("phase-p0-fixture-plan")!, false)).toBe("/wiki/phases/phase-p0-fixture-plan.md");
-    // decision views arrive in IP-8: until then an ADR opens in the wiki browser
-    expect(pageHref(idx.byId.get("adr-0901")!)).toBe("/wiki/decisions/adr-0901-fixture-decision.md");
+    // decision views exist since IP-8
+    expect(pageHref(idx.byId.get("adr-0901")!)).toBe("/decisions/adr-0901");
+    expect(pageHref(idx.byId.get("adr-0901")!, false)).toBe("/wiki/decisions/adr-0901-fixture-decision.md");
+    expect(pageHref(idx.byId.get("risk-r91")!)).toBe("/wiki/risks/risk-r91-fixture-risk.md");
     expect(goTarget(idx, "phase-p1-fixture-build")).toBe("/phases/phase-p1-fixture-build");
   });
 

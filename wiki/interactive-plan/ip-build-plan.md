@@ -133,6 +133,15 @@ Done 2026-10-09: 0 real-wiki errors, so no stop condition (`IP-5-lint.json` in t
 
 **Gate:** the graph unit tests (§1.6) pass, along with `architecture.spec.ts`, `roadmap.spec.ts`, `risks.spec.ts` and `research.spec.ts`. Evidence: `IP-8-tests.txt`.
 
+The IP-8 run (decided 2026-10-09) also covered:
+
+- the full unit suite and the full Playwright suite, so the earlier specs re-ran against the new routes, plus the new `decisions.spec.ts`
+- typecheck and eslint
+- `lint:wiki`, which now includes the real-wiki graph test `real-wiki-graphs.test.ts`: the real 9 phases, because the E2E fixture has only 3
+- the quick lint and the tool tests
+
+Registering `decision → /decisions/[id]` in `TYPED_ROUTES` changed the `/go/adr-0901` expectations of `views.spec.ts`, `wiki.spec.ts`, `approval-flow.spec.ts` and `search.test.ts` by design.
+
 ## IP-9: Accessibility, performance, security, full verify
 
 **Do:**

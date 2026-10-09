@@ -11,15 +11,13 @@ sources:
   - raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-7-tests.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt
 related: [ip-spec, ip-data-contract, ip-approvals-api, ip-testing, comp-interactive-plan, adr-0016, adr-0014, schema]
 approvable: true
 phase: phase-p0-planning
 audience: both
 trigger: "Read before adding or changing any route, view or UI component of interactive_plan/"
 tags: [interactive-plan, ui, routes, accessibility]
-unverified:
-  - claim: "@xyflow/react 12.12.0 nodes can be made keyboard-focusable and activatable for click-through"
-    verify_in: phase-p0-planning
 ---
 
 # Interactive plan app: routes, views and UI rules
@@ -49,7 +47,7 @@ Every view is a **server component** that calls the pure `lib/` functions from [
 
 A missing id or path returns a 404 page that lists close matches (by edit distance on ids).
 
-`/go/[id]` details (decided 2026-10-09, IP-6): besides page ids it accepts an open-question id `Q-NNN` (the question's heading anchor on `ov-open-questions`) and a task id `pN.M` (the phase page that defines the task). `status-live` goes to the dashboard `/`. It redirects to a typed view only once that route exists: the build step that adds `/phases/[id]` (IP-7) or `/decisions/[id]` (IP-8) registers it in `lib/wiki/routes.ts`; until then every page opens in `/wiki/<path>`. Since IP-7 a phase id and a task id go to `/phases/<id>`. `/wiki/[...path]` serves only paths in the loaded file set, so nothing outside `wiki/` can be read.
+`/go/[id]` details (decided 2026-10-09, IP-6): besides page ids it accepts an open-question id `Q-NNN` (the question's heading anchor on `ov-open-questions`) and a task id `pN.M` (the phase page that defines the task). `status-live` goes to the dashboard `/`. It redirects to a typed view only once that route exists: the build step that adds `/phases/[id]` (IP-7) or `/decisions/[id]` (IP-8) registers it in `lib/wiki/routes.ts`; until then every page opens in `/wiki/<path>`. Since IP-7 a phase id and a task id go to `/phases/<id>`; since IP-8 an ADR id goes to `/decisions/<id>`. `/wiki/[...path]` serves only paths in the loaded file set, so nothing outside `wiki/` can be read.
 
 ```mermaid
 flowchart TB
@@ -112,9 +110,19 @@ Decided 2026-10-09 (IP-7): the counts of card 4 and the top-bar counter use the 
 - **Interaction:**
   - Click or Enter on a node opens a side panel with responsibilities, interfaces, phase_introduced and the approval state, plus a link to the full page (`/wiki/...`).
   - Filters: by `kind`, "only trust-boundary edges", "hide not-shipped".
-  - Keyboard: Tab moves through nodes in reading order `UNVERIFIED[phase-p0-planning]`.
+  - Keyboard: Tab moves through nodes in reading order (left to right, then top to bottom) and Enter or Space activates a node. Each node holds one real control (a button here, a link in §3.3 and §3.8) in that DOM order, and xyflow's own node focus is switched off. Verified with @xyflow/react 12.12.0 in `architecture.spec.ts` and `roadmap.spec.ts` ([IP-8-tests.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt)).
   - Below the graph there is a **text alternative**: an always-present table of edges (from, to, label, kind, TB).
 - Dangling `to` ids render as red dashed placeholder nodes.
+
+Decided 2026-10-09 (IP-8):
+
+- **Layout:** computed on the server with dagre (left to right) in the pure `lib/views/graphLayout.ts`. A node keeps its dagre column; the nodes of each trust level are stacked in their own lane in dagre's vertical order. Dangling targets get a "Missing" lane.
+- **Client loading:** the client graph (`components/graph/FlowGraph.tsx`) is loaded with `next/dynamic` and `ssr: false`, so xyflow loads only on the graph routes. The text alternatives are server-rendered.
+- **Pointer events:** xyflow gives non-selectable, non-draggable nodes `pointer-events: none`, so the node's own control re-enables them.
+- **Filters:** the filters are URL parameters (`kind`, `tb=1`, `hide=1`), so the graph and the edge table always show the same edges.
+- **TRUST-EDGE:** red edges use the same rule as lint TRUST-EDGE, computed in `componentGraph`.
+- **Side panel:** it also lists the component's outgoing edges. Focus moves to its heading, and Close returns focus to the node.
+- **Components table:** a table of trust level, status, shipped and approval state follows the edge table.
 
 ### 3.3 Roadmap `/roadmap`
 
@@ -122,6 +130,14 @@ Decided 2026-10-09 (IP-7): the counts of card 4 and the top-bar counter use the 
 - **Timeline:** a custom SVG Gantt with **no calendar dates**. The x axis is cumulative sessions: `start = max(end of dependencies)`, width = `est_sessions`, and milestones M1–M7 are marked at phase ends. A note states: "Session estimates are planning guesses, not measurements".
 - **Per-phase row:** status, milestone, `#exit` approval state, number of tasks, risks (as score chips) and experiments.
 - Clicking a node or bar opens `/phases/[id]`.
+
+Decided 2026-10-09 (IP-8):
+
+- **Critical path:** the longest chain by sessions. It is traced back from the phase with the largest end through the dependency whose end equals the start. Ties go to the lower `order`.
+- **Cycles:** phases on a dependency cycle, and every phase behind one, are not scheduled. They show a red banner and "not scheduled" in the timeline. Missing dependencies are listed in an amber banner.
+- **Exit approval column:** uses the eligibility rule of §3.4, so a planned phase shows "not open".
+- **Timeline labels:** do not repeat a leading `P<order>` that the title already has.
+- **Per-phase table:** it is the text alternative of the DAG and the timeline.
 
 ### 3.4 Phase detail `/phases/[id]`
 
@@ -157,11 +173,26 @@ Two **approve bars**: one for the page itself (key = phase id), and one for the 
 - **List:** a table of id, title, status, `decided_by`, date, effective approval state and supersedes/superseded_by. Filters by status and approval state. `decided_by: owner` rows show "owner-decided (confirm or overturn)". `claude-proposed` rows awaiting approval are sorted first.
 - **Detail:** the rendered ADR body (required sections Context, Options considered, Decision, Consequences, Verification / evidence; a missing section is flagged), the supersession chain, the pages that list this ADR (backlinks from `decisions`/`related`) and the approve bar.
 
+Decided 2026-10-09 (IP-8):
+
+- **Awaiting approval:** a row is "awaiting approval" when it is `claude-proposed` and its state is PENDING, STALE or CHANGES_REQUESTED.
+- **Filters:** they are URL parameters (`status`, `state`).
+- **Section check:** it uses the order rule of lint ADR-SECTIONS (`lib/views/registers.ts`).
+- **Supersession chain:** it follows the first `supersedes` entry backwards and `superseded_by` forwards. It stops on a cycle, and a missing id is shown red.
+- **Backlinks:** the detail view shows only the `decisions` and `related` backlinks; the full list stays on `/wiki/<path>`.
+- **Invalid pages:** a page that fails validation shows its findings and a link to the wiki view, as `/phases/[id]` does.
+
 ### 3.6 Risks `/risks`
 
 - **Heatmap:** a 5×5 grid with x = likelihood 1→5 and y = impact 1→5. Each cell lists its risk ids as chips. The cell background follows score bands, which are a convention of this app, not of SCHEMA: 1–4 low, 5–9 moderate, 10–14 high, 15–25 critical. Each band has a pattern as well as a colour. The grid is a real `<table>` with row and column headers so screen readers can read it.
 - **Register:** a sortable table of id, title, L, I, score, status, owner_phase, spike (linked to its phase task), mitigation, trigger, fallback and approval state.
 - A toggle shows "open + mitigating only".
+
+Decided 2026-10-09 (IP-8):
+
+- **Sorting:** sort and toggle are URL parameters (`sort`, `dir`, `active=1`), so the register works without JavaScript. Each sortable header is a link with `aria-sort`. The default is score, descending; ties fall back to score, then id.
+- **Links:** a heatmap chip links to its register row. A `spike` links to `/phases/<id>#task-<task id>`.
+- **Band labels:** each cell also has its band as screen-reader text and its score as visible text. The cells are positioned so that text never widens the page.
 
 ### 3.7 Wiki browser `/wiki`, `/wiki/[...path]`
 
@@ -203,6 +234,16 @@ Two **approve bars**: one for the page itself (key = phase id), and one for the 
 - **Filter:** pick one rq to show its subgraph only.
 - **Text alternative:** a nested list rq → hyp → exp → metrics/workloads.
 - A sankey diagram is **not** used. A graph shows many-to-many links and gaps more clearly, and it avoids an extra dependency.
+
+Decided 2026-10-09 (IP-8):
+
+- **Phase nodes:** an experiment's phase is a node in the last column, next to the metrics and workloads.
+- **Column wrap:** that column wraps into side-by-side sub-columns no taller than the other columns (at least 12 rows), so the real wiki's 72 nodes stay readable at fit zoom.
+- **Relations:** a hypothesis's experiments are its own list plus the experiments that list it. An rq's hypotheses are its list plus the hypotheses whose `rq` names it. Mismatches are reported as reciprocity gaps by the same helper as lint REF-RECIPROCAL.
+- **"Preregistered":** shown for status `preregistered` or a later state (`testing`, `supported`, `not-supported`, `inconclusive`); "not preregistered" otherwise.
+- **Current and next phase:** taken from `STATUS.current_phase` and the next phase in `order`.
+- **Filter:** `?rq=` keeps the rq and everything reachable from it.
+- **Text alternative:** it also lists hypotheses and experiments that no rq reaches.
 
 ### 3.9 Search `/search?q=`
 
