@@ -14,7 +14,8 @@ sources:
   - raw/owner/2026-10-08-s01-wave0.md
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/owner/2026-10-09-s01-wave0c.md
-related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability]
+  - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability]
 approvable: false
 audience: owner
 tags: [questions, owner]
@@ -43,7 +44,7 @@ Each question has its own section (SCHEMA §6.1) with these fields:
 
 A question that matters only for a phase's **exit** review has `blocking: []`, and its text says so.
 
-**How to answer:** reply in chat, or comment in the plan app. Claude copies your answer word for word
+**How to answer:** reply in Claude Code (the portal is read-only, adr-0023). Claude copies your answer word for word
 into `wiki/raw/owner/YYYY-MM-DD-<slug>.md`, sets the status to `answered`, and updates the affected pages
 (INGEST). Accepting a recommended default counts as an answer. Silence does not.
 
@@ -79,6 +80,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
 | Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-105, Q-108, Q-215, Q-217 |
+| The first push to GitHub (not a phase gate) | Q-221 |
 | Answered | Q-006, Q-007, Q-101, Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
@@ -785,3 +787,19 @@ loader (`interactive_plan/lib/wiki/schemas.ts`). Registered after the fact for t
 first raised on 2026-10-08 in the STATUS Blockers table, when the IP-2 loader reported 4 `FM-MISSING`
 findings on the real wiki (risk-r15, risk-r22 and risk-r24 list `SCHEMA.md`; the immutable research note
 raw/research/tauri-webview2-capabilities.md has a free-text entry). Those pages were not changed.
+
+## Q-221 Rewrite git history before the first push, to remove real machine values
+
+- asked: 2026-10-09
+- blocking: []
+- status: open
+- answer: none yet. Ask when the owner wants the first push to GitHub; the push waits for this answer.
+
+**Where we are:** on 2026-10-09 the committed test logs were masked (real IP addresses and the user-folder path
+replaced by names like `<LAN_IPV4_1>`), per the owner's choice "Mask files now, rewrite history before first push"
+([raw/owner/2026-10-09-s01-portal-v2-decisions.md](../raw/owner/2026-10-09-s01-portal-v2-decisions.md),
+[adr-0027](../decisions/adr-0027-mask-sensitive-values.md)). The older commits still contain the real values.
+
+**Question:** may Claude rewrite the local git history (for example with `git filter-repo --replace-text`, using
+the local map) so no commit contains them, before the first push? This changes every commit id, so it must
+happen before anything is pushed. It holds no phase gate (`blocking: []`); it holds the first push only.

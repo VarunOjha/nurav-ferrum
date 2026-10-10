@@ -9,7 +9,7 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
   - raw/research/llm-wiki-pattern.md
-related: [ov-arch-data-flows, ov-arch-repo-layout, ov-arch-trust-boundaries, ov-arch-system-overview, adr-0001, adr-0002, adr-0016, phase-p0-planning, ip-data-contract]
+related: [ov-arch-data-flows, ov-arch-repo-layout, ov-arch-trust-boundaries, ov-arch-system-overview, adr-0001, adr-0002, adr-0016, phase-p0-planning, ip-data-contract, adr-0023, adr-0024, adr-0026]
 approvable: true
 path: interactive_plan/
 crate: null
@@ -30,6 +30,12 @@ connects: []
 ---
 
 # comp-interactive-plan
+
+> **Changing in task p0.17 (portal v2):** the owner now approves in Claude Code and Claude records approvals
+> ([adr-0023](../../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)); the app becomes a read-only
+> portal that reads only plain-language JSON ([adr-0024](../../decisions/adr-0024-portal-reads-plain-language-json.md))
+> and shows the architecture in four groups ([adr-0026](../../decisions/adr-0026-architecture-four-groups.md)). The
+> responsibilities below describe the v1 code until the rebuild lands.
 
 Planning tooling for owner review (adr-0016; [Next.js note](../../raw/research/nextjs-stack.md)). It is **not part of Ferrum** and has **no runtime edge** to any Ferrum component, so `connects` is empty. Its interaction with the repo is file I/O only: it reads `wiki/**` and writes `plan/approvals.json` ([data flows §6](../ov-arch-data-flows.md)).
 

@@ -4,148 +4,148 @@ HEAD 696943a plus the uncommitted ingest-wave0b working-tree changes (committed 
 Python 3.12.10
 
 $ python -m unittest discover -s tools -p "test_*.py" -v
-test_all_approved_passes (test_approvals_check.ApprovalsFixture.test_all_approved_passes) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-09mced6j\\wiki\\phases\\phase-p1-foundation.md'>
+test_all_approved_passes (test_approvals_check.ApprovalsFixture.test_all_approved_passes) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-09mced6j\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-09mced6j\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-09mced6j\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-09mced6j\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-09mced6j\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-09mced6j\\CLAUDE.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-ok
-test_body_edit_is_stale_and_blocks (test_approvals_check.ApprovalsFixture.test_body_edit_is_stale_and_blocks) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-373j42ok\\wiki\\phases\\phase-p1-foundation.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-373j42ok\\wiki\\decisions\\adr-0001-a.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-373j42ok\\wiki\\SCHEMA.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-373j42ok\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-09mced6j\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_claude_md_change_stales_schema_via_bootstrap_hash (test_approvals_check.ApprovalsFixture.test_claude_md_change_stales_schema_via_bootstrap_hash) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hfkw3013\\wiki\\phases\\phase-p1-foundation.md'>
+test_body_edit_is_stale_and_blocks (test_approvals_check.ApprovalsFixture.test_body_edit_is_stale_and_blocks) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-373j42ok\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hfkw3013\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-373j42ok\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hfkw3013\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-373j42ok\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hfkw3013\\CLAUDE.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-ok
-test_contradiction_naming_unknown_question_is_unregistered (test_approvals_check.ApprovalsFixture.test_contradiction_naming_unknown_question_is_unregistered) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-dpfx41y4\\wiki\\phases\\phase-p1-foundation.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-dpfx41y4\\wiki\\decisions\\adr-0001-a.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-dpfx41y4\\wiki\\SCHEMA.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-dpfx41y4\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-373j42ok\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_missing_approvals_file_means_pending (test_approvals_check.ApprovalsFixture.test_missing_approvals_file_means_pending) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cjdimk4o\\wiki\\phases\\phase-p1-foundation.md'>
+test_claude_md_change_stales_schema_via_bootstrap_hash (test_approvals_check.ApprovalsFixture.test_claude_md_change_stales_schema_via_bootstrap_hash) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-hfkw3013\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cjdimk4o\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-hfkw3013\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cjdimk4o\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-hfkw3013\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cjdimk4o\\CLAUDE.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-ok
-test_open_question_blocking_dependency_blocks (test_approvals_check.ApprovalsFixture.test_open_question_blocking_dependency_blocks) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-_i90fw0i\\wiki\\phases\\phase-p1-foundation.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-_i90fw0i\\wiki\\decisions\\adr-0001-a.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-_i90fw0i\\wiki\\SCHEMA.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-_i90fw0i\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-hfkw3013\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_open_question_elsewhere_does_not_block (test_approvals_check.ApprovalsFixture.test_open_question_elsewhere_does_not_block) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-7x3grszb\\wiki\\phases\\phase-p1-foundation.md'>
+test_contradiction_naming_unknown_question_is_unregistered (test_approvals_check.ApprovalsFixture.test_contradiction_naming_unknown_question_is_unregistered) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-dpfx41y4\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-7x3grszb\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-dpfx41y4\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-7x3grszb\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-dpfx41y4\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-7x3grszb\\CLAUDE.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-ok
-test_p0_bootstrap (test_approvals_check.ApprovalsFixture.test_p0_bootstrap) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-81dg2t_z\\wiki\\phases\\phase-p1-foundation.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-81dg2t_z\\wiki\\decisions\\adr-0001-a.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-81dg2t_z\\wiki\\SCHEMA.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-81dg2t_z\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-dpfx41y4\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_q_format_duplicate_id_fails_closed (test_approvals_check.ApprovalsFixture.test_q_format_duplicate_id_fails_closed) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-ba_k2aev\\wiki\\phases\\phase-p1-foundation.md'>
+test_missing_approvals_file_means_pending (test_approvals_check.ApprovalsFixture.test_missing_approvals_file_means_pending) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cjdimk4o\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-ba_k2aev\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cjdimk4o\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-ba_k2aev\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cjdimk4o\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-ba_k2aev\\CLAUDE.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-ok
-test_q_format_error_sets_exit_code_without_gate (test_approvals_check.ApprovalsFixture.test_q_format_error_sets_exit_code_without_gate) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cotgcdn9\\wiki\\phases\\phase-p1-foundation.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cotgcdn9\\wiki\\decisions\\adr-0001-a.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cotgcdn9\\wiki\\SCHEMA.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cotgcdn9\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cjdimk4o\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_q_format_missing_status_fails_closed (test_approvals_check.ApprovalsFixture.test_q_format_missing_status_fails_closed) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-1aye1_i2\\wiki\\phases\\phase-p1-foundation.md'>
+test_open_question_blocking_dependency_blocks (test_approvals_check.ApprovalsFixture.test_open_question_blocking_dependency_blocks) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-_i90fw0i\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-1aye1_i2\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-_i90fw0i\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-1aye1_i2\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-_i90fw0i\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-1aye1_i2\\CLAUDE.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-ok
-test_q_format_unknown_status_fails_closed (test_approvals_check.ApprovalsFixture.test_q_format_unknown_status_fails_closed) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-l89krdb5\\wiki\\phases\\phase-p1-foundation.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-l89krdb5\\wiki\\decisions\\adr-0001-a.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-l89krdb5\\wiki\\SCHEMA.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-l89krdb5\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-_i90fw0i\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_q_format_unparsable_blocking_fails_closed (test_approvals_check.ApprovalsFixture.test_q_format_unparsable_blocking_fails_closed) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hfv7m2p5\\wiki\\phases\\phase-p1-foundation.md'>
+test_open_question_elsewhere_does_not_block (test_approvals_check.ApprovalsFixture.test_open_question_elsewhere_does_not_block) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-7x3grszb\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hfv7m2p5\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-7x3grszb\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hfv7m2p5\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-7x3grszb\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-hfv7m2p5\\CLAUDE.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-ok
-test_registered_contradiction_follows_its_question (test_approvals_check.ApprovalsFixture.test_registered_contradiction_follows_its_question) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-217kml_z\\wiki\\phases\\phase-p1-foundation.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-217kml_z\\wiki\\decisions\\adr-0001-a.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-217kml_z\\wiki\\SCHEMA.md'>
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-217kml_z\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-7x3grszb\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_unregistered_contradiction_blocks (test_approvals_check.ApprovalsFixture.test_unregistered_contradiction_blocks) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-p1amqv0a\\wiki\\phases\\phase-p1-foundation.md'>
+test_p0_bootstrap (test_approvals_check.ApprovalsFixture.test_p0_bootstrap) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-81dg2t_z\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-p1amqv0a\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-81dg2t_z\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-p1amqv0a\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-81dg2t_z\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-p1amqv0a\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-81dg2t_z\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
-test_volatile_only_edit_keeps_approval (test_approvals_check.ApprovalsFixture.test_volatile_only_edit_keeps_approval) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tyw9v7bf\\wiki\\phases\\phase-p1-foundation.md'>
+test_q_format_duplicate_id_fails_closed (test_approvals_check.ApprovalsFixture.test_q_format_duplicate_id_fails_closed) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-ba_k2aev\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tyw9v7bf\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-ba_k2aev\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tyw9v7bf\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-ba_k2aev\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tyw9v7bf\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-ba_k2aev\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_q_format_error_sets_exit_code_without_gate (test_approvals_check.ApprovalsFixture.test_q_format_error_sets_exit_code_without_gate) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cotgcdn9\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cotgcdn9\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cotgcdn9\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cotgcdn9\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_q_format_missing_status_fails_closed (test_approvals_check.ApprovalsFixture.test_q_format_missing_status_fails_closed) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-1aye1_i2\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-1aye1_i2\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-1aye1_i2\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-1aye1_i2\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_q_format_unknown_status_fails_closed (test_approvals_check.ApprovalsFixture.test_q_format_unknown_status_fails_closed) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-l89krdb5\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-l89krdb5\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-l89krdb5\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-l89krdb5\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_q_format_unparsable_blocking_fails_closed (test_approvals_check.ApprovalsFixture.test_q_format_unparsable_blocking_fails_closed) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-hfv7m2p5\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-hfv7m2p5\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-hfv7m2p5\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-hfv7m2p5\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_registered_contradiction_follows_its_question (test_approvals_check.ApprovalsFixture.test_registered_contradiction_follows_its_question) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-217kml_z\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-217kml_z\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-217kml_z\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-217kml_z\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_unregistered_contradiction_blocks (test_approvals_check.ApprovalsFixture.test_unregistered_contradiction_blocks) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-p1amqv0a\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-p1amqv0a\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-p1amqv0a\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-p1amqv0a\\CLAUDE.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_volatile_only_edit_keeps_approval (test_approvals_check.ApprovalsFixture.test_volatile_only_edit_keeps_approval) ... <string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tyw9v7bf\\wiki\\phases\\phase-p1-foundation.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tyw9v7bf\\wiki\\decisions\\adr-0001-a.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tyw9v7bf\\wiki\\SCHEMA.md'>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tyw9v7bf\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
 test_hash_vectors_from_data_contract (test_approvals_check.ApprovalsRepo.test_hash_vectors_from_data_contract) ... ok

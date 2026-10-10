@@ -68,7 +68,7 @@ npm view vitest@5.0.3 peerDependencies['@types/node'] -> ^22.0.0 || >=24.0.0
 
 ================ 2. Scaffold ================
 $ CI=1 npx --yes create-next-app@16.4.0 interactive_plan --ts --tailwind --eslint --app --turbopack --import-alias "@/*" --use-npm --disable-git --no-cache-components --no-agent-feedback --no-react-compiler
-Creating a new Next.js app in C:\Users\Varun Ojha\Documents\Projects\ferrum-rust-webclient\interactive_plan.
+Creating a new Next.js app in <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\interactive_plan.
 
 Using npm.
 
@@ -113,7 +113,7 @@ Generating route types...
 
 Skipping git initialization.
 
-Success! Created interactive_plan at C:\Users\Varun Ojha\Documents\Projects\ferrum-rust-webclient\interactive_plan
+Success! Created interactive_plan at <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\interactive_plan
 
 [exit 0]
 
@@ -157,7 +157,7 @@ npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install
 [exit 0]
 
 $ npm ls --depth=0
-interactive_plan@0.1.0 C:\Users\Varun Ojha\Documents\Projects\ferrum-rust-webclient\interactive_plan
+interactive_plan@0.1.0 <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\interactive_plan
 +-- @dagrejs/dagre@3.1.1
 +-- @playwright/test@1.64.0
 +-- @tailwindcss/turbopack@4.3.3
@@ -189,7 +189,7 @@ interactive_plan@0.1.0 C:\Users\Varun Ojha\Documents\Projects\ferrum-rust-webcli
 [exit 0]
 
 $ npm ls vite
-interactive_plan@0.1.0 C:\Users\Varun Ojha\Documents\Projects\ferrum-rust-webclient\interactive_plan
+interactive_plan@0.1.0 <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\interactive_plan
 +-- @vitejs/plugin-react@6.1.2
 +-- vite-tsconfig-paths@6.1.1
 `-- vitest@5.0.3
@@ -225,11 +225,11 @@ fix available via `npm audit fix --force`
 ================ 4. Playwright browser (Q-210) ================
 $ npx playwright install chromium
 Downloading Chrome for Testing 156.0.8078.4 (playwright chromium v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/win64/chrome-win64.zip
-Chrome for Testing 156.0.8078.4 (playwright chromium v1248) downloaded to C:\Users\Varun Ojha\AppData\Local\ms-playwright\chromium-1248
+Chrome for Testing 156.0.8078.4 (playwright chromium v1248) downloaded to <USERPROFILE>\AppData\Local\ms-playwright\chromium-1248
 Downloading FFmpeg (playwright ffmpeg v1013) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1013/ffmpeg-win64.zip
-FFmpeg (playwright ffmpeg v1013) downloaded to C:\Users\Varun Ojha\AppData\Local\ms-playwright\ffmpeg-1013
+FFmpeg (playwright ffmpeg v1013) downloaded to <USERPROFILE>\AppData\Local\ms-playwright\ffmpeg-1013
 Downloading Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/win64/chrome-headless-shell-win64.zip
-Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to C:\Users\Varun Ojha\AppData\Local\ms-playwright\chromium_headless_shell-1248
+Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to <USERPROFILE>\AppData\Local\ms-playwright\chromium_headless_shell-1248
 [exit 0]
 $ npx playwright --version
 Version 1.64.0

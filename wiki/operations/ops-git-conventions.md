@@ -3,12 +3,12 @@ id: ops-git-conventions
 type: operations
 title: "Git conventions: checkpoint commits, messages, never push"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
   - raw/owner/2026-10-08-s01-wave0.md
-related: [adr-0011, adr-0003, adr-0014, ops-session-protocol, ops-resume-after-interruption, ov-open-questions]
+related: [adr-0011, adr-0003, adr-0014, adr-0027, ops-session-protocol, ops-resume-after-interruption, ov-open-questions]
 approvable: true
 audience: claude
 trigger: "Every commit, every checkpoint, and any time a git command could change or discard history."
@@ -120,6 +120,17 @@ The `.gitignore` is a P1 deliverable. It must at least exclude `target/`, `node_
 `.env*` files, `.interrupted/` (copy-aside folders from interruption recovery) and OS clutter. Whether large benchmark outputs under `wiki/raw/bench/` are committed in full,
 compressed or kept outside git is a P6 decision `UNVERIFIED[phase-p6-benchmark-harness]` (size of runs
 unknown until then).
+
+## 5a. Real machine values and the first push (adr-0027)
+
+- Committed files never contain real IP or MAC addresses, the computer name or the Windows user-folder path.
+  The real values sit in the gitignored `.env.local-map`; files show masks like `<LAN_IPV4_1>`, `<USERPROFILE>`.
+- Saving evidence: `<command> 2>&1 | pwsh tools/mask.ps1 --stdin > wiki/raw/evidence/<phase-id>/<name>.txt`.
+- Before a commit that adds evidence, and at every gate: `pwsh tools/mask.ps1 --scan` must print 0 unmasked values.
+  If the machine got new addresses, run `pwsh tools/mask.ps1 --refresh-map` first.
+- **Before the first push:** git history still holds the values that were masked on 2026-10-09. Rewriting
+  history is a destructive git action, so Claude asks the owner first ([Q-221](../overview/ov-open-questions.md#q-221-rewrite-git-history-before-the-first-push-to-remove-real-machine-values)).
+  No push until it is answered.
 
 ## 6. CI
 

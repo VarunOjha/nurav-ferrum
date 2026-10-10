@@ -3,7 +3,7 @@ id: adr-0005
 type: decision
 title: "Owner installs the toolchain via winget; Claude supplies exact commands and verifies"
 status: superseded
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -72,9 +72,9 @@ As recorded in [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), sc
 
 This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
 
-### Claude elaboration (binding only once this ADR is APPROVED in the plan app)
+### Claude elaboration (binding only once the owner APPROVES this ADR)
 
-Everything below in this section is Claude's elaboration of the owner's choice. Under SCHEMA §10.4 it binds implementation only after the owner approves this ADR in the plan app; until then it is a proposal.
+Everything below in this section is Claude's elaboration of the owner's choice. Under SCHEMA §10.4 it binds implementation only after the owner approves this ADR (given in Claude Code and recorded in `plan/approvals.json`, adr-0023); until then it is a proposal.
 
 **Option B.** The commands are Claude's proposal, recorded in the raw file. They still need owner approval of this page:
 

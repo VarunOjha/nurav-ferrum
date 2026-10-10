@@ -36,8 +36,9 @@ The master prompt permits these categories. The table records where each is used
   results exist.
 - **It does not invent citations, authors, DOIs, venues, statistical significance or novelty.** Each
   reference must be traced to a fetched source recorded in a research note under `wiki/raw/research/`.
-- **It does not approve anything.** Only the owner approves pages, in the plan app, which writes
-  `plan/approvals.json`. Claude never writes that file.
+- **It does not approve anything.** Only the owner approves pages, in Claude Code. Claude saves the
+  owner's words under `wiki/raw/owner/` and records the decision in `plan/approvals.json` with
+  `tools/approvals_record.py` (adr-0023); it never records a decision the owner did not give.
 - **It does not push code or publish.** Claude makes local commits only; the owner controls the remote
   and any release or submission.
 
@@ -46,7 +47,7 @@ The master prompt permits these categories. The table records where each is used
 1. **Sources and tags.** Every wiki page lists its sources. Any technical claim without a verified
    source is tagged `UNVERIFIED[<phase>]` with the phase that will check it ([wiki/SCHEMA.md](wiki/SCHEMA.md) §7).
    A lint pass flags tags whose phase has passed.
-2. **Owner approval with content hashes.** The owner reviews each approvable page in the plan app.
+2. **Owner approval with content hashes.** The owner reviews each approvable page (in the read-only portal) and approves it in Claude Code.
    The approval stores a hash of the page; any later edit to its content makes the approval stale, so
    the owner must look again before dependent work continues
    ([approval workflow](wiki/operations/ops-approval-workflow.md)).
@@ -60,7 +61,7 @@ The master prompt permits these categories. The table records where each is used
 The planning documents written in phase P0 (the wiki pages, `CLAUDE.md`, `STATUS.md`, this file and
 the other root documents) were **drafted by Claude**, from the owner's requirements and answers and
 from research notes Claude wrote after fetching primary sources. They become binding only when the
-owner approves them in the plan app; the approval record is `plan/approvals.json`. Until then they are
+owner approves them in Claude Code; the approval record is `plan/approvals.json` (adr-0023). Until then they are
 proposals. At the time of writing (2026-10-08) nothing has been approved.
 
 ## Human responsibility

@@ -112,6 +112,7 @@ The git commands are batched (implemented in IP-5 in `lib/lint/git.ts`). git is 
   - One `git log -M --format=%x00%H --name-status --diff-filter=MRD -- wiki/raw` must list nothing: no modification, rename or deletion after the add commit. For M and D this gives the same result as `--follow` per file; a rename shows as R on the new path.
   - Uncommitted modifications to tracked raw files (`git status --porcelain=v1 --untracked-files=no -- wiki/raw`) are also errors.
   - `wiki/raw/MANIFEST.sha256` is append-only (SCHEMA §3.1). A change that only appends lines, in a commit or in the working tree, is allowed; any other change is an error.
+  - **Sanctioned masking edits** (SCHEMA §3.1, adr-0027, added 2026-10-09): `tools/raw-sanctioned-edits.tsv` lists `<sha256 of the LF-normalised new content><TAB><path under wiki/raw/><TAB><authority>`. A modification (M) of a raw file whose resulting content, in that commit or in the working tree, has a listed hash is not reported; nor is a MANIFEST.sha256 change that only replaces the hash on a file's own line with a listed hash for that path (plus appended lines). Everything else is still an error (tests: `tests/unit/lint-git-sanctioned.test.ts`).
   - Without git history (no commit yet, or git unavailable), the rule falls back to `wiki/raw/MANIFEST.sha256` if present (format in SCHEMA §3.1: `<64 hex>  <path relative to wiki/raw/>`, hashed over LF-normalised bytes). A changed or missing file, or a malformed line, is an error.
   - With neither git history nor a manifest: info "RAW-IMMUTABLE not checkable yet".
 

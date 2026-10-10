@@ -3,7 +3,7 @@ id: qual-definition-of-done
 type: quality
 title: "Definition of done (task, component change, experiment, phase, session)"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -71,7 +71,7 @@ In addition to the task list:
 - [ ] Risks owned by this phase are re-scored and their status updated with evidence ([ov-risk-register](../risks/ov-risk-register.md)).
 - [ ] Unverified tags (SCHEMA §7) that targeted this phase are resolved or re-targeted with a logged reason (no `UNV-PASTDUE`).
 - [ ] Root summary files (README, PLAN, ARCHITECTURE, RESEARCH_PLAN, AI_USAGE) reflect the phase result where relevant.
-- [ ] The owner approved `<phase-id>#exit` in the plan app (adr-0014). Only then does the phase status become `done`.
+- [ ] The owner approved `<phase-id>#exit` in Claude Code and Claude recorded it (adr-0014, adr-0023). Only then does the phase status become `done`.
 
 ## 6. Research artefact (paper section, figure, citation)
 

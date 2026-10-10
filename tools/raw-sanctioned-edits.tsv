@@ -1,0 +1,20 @@
+# Sanctioned edits of raw files (SCHEMA §3.1, adr-0027). One line per allowed post-creation content.
+# Format: <sha256 of the LF-normalised content after the edit> TAB <path under wiki/raw/> TAB <authority>.
+# RAW-IMMUTABLE (npm run lint:wiki) accepts a raw-file change only when the new content hash is listed here.
+# Append-only. The only sanctioned kind so far: replacing real machine values with masks (tools/mask.ps1).
+73cc64a7f59742ff980da0f70ae91ba31667a68dc002e0bb304d9fca883c4c43	evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+34a619d698f804c74703378f876e992c494d3694bf11c7f3710f50b833809fa0	evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+2cf875f52723e1bff67bc9f6c857433d44c6eb2d531bc3693b0f2ad9b18116f3	evidence/phase-p0-planning/interactive-plan/IP-10-arch-labels-fix.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+af66048859f8cdecbae4e5096ba23409b4c34521ec4c37ebf1a461e6598eb2cf	evidence/phase-p0-planning/interactive-plan/IP-2-tests.20261008-2358.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+aa414a0b7598a81bdbac75c0e3d125a3089a9f8521fff7c6d0749d614221e688	evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+8ddb5dcb2e9ad9358fd8dd35c5ccf4489d1366d8fb8f7387fe24e229cdfc1595	evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+3528511429c2b15c6a6e0bc67fda5eb78ac0dce7a9a96d501ad3ca54bc7905ff	evidence/phase-p0-planning/interactive-plan/IP-4-tests.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+fe43eee4b2366f53642f3c356bd3fe746ef9a926d4e8ec906fcb817ec2c142ae	evidence/phase-p0-planning/interactive-plan/IP-5-gate.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+465172ff76bb071993d38eec0f1e51b3f329a01fa5b750a6cb21d5002ba9b78d	evidence/phase-p0-planning/interactive-plan/IP-6-tests.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+c369c61402f4ccf33aa5a7a044decc643045cdad0323751ef233a2bf240964dc	evidence/phase-p0-planning/interactive-plan/IP-7-tests.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+8b178a5111bf9bbae51c304a55706acb64ac9b7c22f253ce0f648a47e981cf17	evidence/phase-p0-planning/interactive-plan/IP-8-tests.20261009-0241-unit-fail.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+da6fa3a538b1df0d7bbef904a02218383d51bec36f7de919d9a966981d199c89	evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+0c512a3b0dc6bcf1dc561bd825211138448c879b4f3ed4110c1470e907138596	evidence/phase-p0-planning/interactive-plan/IP-9-review-fixes.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+0bc2030d12beda3dd12f46638f69bfaef470ce11ca57f57aee9401588c2e5c55	evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+77f1134f6f7cd09b965cfb76324e5a4c06be626379fedee7b71b6b3e8abfd75d	evidence/phase-p0-planning/interactive-plan/playwright-report.zip	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)
+c319768c01f60ef7875084b1f1efffb74fd3086fee83eebac9d2931c75eeb6e4	evidence/phase-p0-planning/tools-wave0b-check.txt	raw/owner/2026-10-09-s01-portal-v2-decisions.md (masking, adr-0027)

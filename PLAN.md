@@ -15,7 +15,7 @@ This file summarises the phase plan for people reading the repository on GitHub.
   - The owner completed the manual checks.
   - Wiki lint is clean.
   - The owner approved the milestone review (adr-0014).
-- Approvals are given in the interactive plan app (`interactive_plan/`, adr-0016). Only the app writes `plan/approvals.json`; Claude never does.
+- Approvals are given by the owner in Claude Code. Claude saves the owner's words in `wiki/raw/owner/` and records the decision in `plan/approvals.json` (adr-0023). The plan portal (`interactive_plan/`) is read-only.
 - Editing an approved page after approval makes that approval stale. The page has to be approved again before any work that depends on it.
 
 ## Phase overview

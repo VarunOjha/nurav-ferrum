@@ -3,7 +3,7 @@ id: adr-0021
 type: decision
 title: "Claude runs all toolchain installs, including elevated ones; kernel drivers need separate owner approval"
 status: accepted
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/owner/2026-10-08-s01-wave0.md
@@ -56,7 +56,7 @@ As recorded in [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-
 
 This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
 
-### Claude elaboration (binding only once this ADR is APPROVED in the plan app)
+### Claude elaboration (binding only once the owner APPROVES this ADR)
 
 - The install commands are those of [ops-environment-setup §2](../operations/ops-environment-setup.md#2-install-commands-claude-runs-these-in-powershell)
   (the same commands adr-0005 proposed). Claude runs them in PowerShell. When a command triggers a UAC

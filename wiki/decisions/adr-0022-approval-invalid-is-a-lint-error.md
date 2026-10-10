@@ -54,7 +54,7 @@ now checks it.
 
 ## Decision
 
-### Claude elaboration (binding only once this ADR is APPROVED in the plan app)
+### Claude elaboration (binding only once the owner APPROVES this ADR)
 
 1. `APPROVAL-INVALID` is an **error**. SCHEMA §9.3 gains the row: an `approvals.json` key whose state is
    INVALID (§10.3), or an invalid or unreadable `approvals.json`. ip-wiki-lint moves the code from its

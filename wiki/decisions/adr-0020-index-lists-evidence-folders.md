@@ -3,7 +3,7 @@ id: adr-0020
 type: decision
 title: "index.md lists raw evidence and bench folders, not individual files"
 status: accepted
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt
@@ -52,7 +52,7 @@ As recorded in [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-
 
 This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
 
-### Claude elaboration (binding only once this ADR is APPROVED in the plan app)
+### Claude elaboration (binding only once the owner APPROVES this ADR)
 
 The exact rule written into SCHEMA §11:
 

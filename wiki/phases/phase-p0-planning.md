@@ -120,9 +120,9 @@ exit_criteria:
   - "Manual lint report shows zero errors."
   - "Effective approval APPROVED (or APPROVED_VOLATILE_DRIFT) for Approval Waves 1 and 2 as tabulated in ops-approval-workflow section 8 (schema, the P0 pages and the full P1 dependency set, SCHEMA section 9.7)."
   - "No open Q-NNN blocks any id in the P1 dependency set."
-  - "Owner approved key phase-p0-planning#exit in the plan app."
+  - "Owner approved key phase-p0-planning#exit in Claude Code, recorded by Claude in plan/approvals.json (adr-0023)."
 risks: [risk-r16, risk-r22, risk-r24]
-decisions: [adr-0001, adr-0002, adr-0003, adr-0004, adr-0014, adr-0016]
+decisions: [adr-0001, adr-0002, adr-0003, adr-0004, adr-0014, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027]
 experiments: []
 components: [comp-interactive-plan]
 unverified:
@@ -221,6 +221,6 @@ Only the seed list exists ([raw/research/related-work-seed.md](../raw/research/r
 
 ## Owner review checkpoint (adr-0014)
 
-At the end of P0 the owner reviews the plan in the app. The exact keys are listed wave by wave in [ops-approval-workflow §8](../operations/ops-approval-workflow.md#8-approval-waves): Wave 0 (chat, before the app is built), Wave 1 (`schema`, the P0 pages, `phase-p0-planning#exit`) and Wave 2 (the P1 dependency set: `phase-p1-foundation`, every ADR in its `decisions`, every component it introduces or lists). Pages outside every dependency set do not need approval now.
+At the end of P0 the owner reviews the plan in the read-only portal and gives his approvals in Claude Code ([adr-0023](../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)). The exact keys are listed wave by wave in [ops-approval-workflow §8](../operations/ops-approval-workflow.md#8-approval-waves): Wave 0 (chat, before the app is built), Wave 1 (`schema`, the P0 pages, `phase-p0-planning#exit`) and Wave 2 (the P1 dependency set: `phase-p1-foundation`, every ADR in its `decisions`, every component it introduces or lists). Pages outside every dependency set do not need approval now.
 
-Claude never writes `plan/approvals.json`. If the owner approves in chat, Claude transcribes it to `raw/owner/` and asks the owner to click Approve in the app.
+When the owner approves in Claude Code, Claude saves his words to `raw/owner/` and records the decision with `tools/approvals_record.py` (SCHEMA §10.1). Claude never records a decision the owner did not give.

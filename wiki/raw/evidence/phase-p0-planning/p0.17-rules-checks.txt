@@ -1,0 +1,32 @@
+# p0.17 step 'rules' — check outputs (session s01, 2026-10-09). Saved through: pwsh tools/mask.ps1 --stdin (adr-0027).
+# Tool versions: node v24.20.0, npm 11.19.0, Python 3.12.10, pwsh 7.6.6, git version 2.52.0.windows.1
+
+## python tools/quick_lint.py
+200 files checked, 0 errors, 0 warnings
+exit=0
+
+## python -m unittest discover -s tools -p 'test_*.py' (summary)
+Ran 34 tests in 4.833s
+OK
+
+## pwsh tools/mask.ps1 --scan
+mask scan: 515 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+exit=0
+
+## cd interactive_plan && npm run lint:wiki (summary lines)
+wiki lint: wiki wiki, status STATUS.md, approvals plan/approvals.json (absent), git ok, today 2026-10-09
+lint: 0 errors, 34 warnings, 2 info (pages: 200)
+ Test Files  3 passed (3)
+      Tests  12 passed | 1 skipped (13)
+exit=0
+
+## cd interactive_plan && npm test (summary)
+ Test Files  27 passed (27)
+      Tests  881 passed (881)
+exit=0
+
+## cd interactive_plan && npm run typecheck
+exit=0
+
+## cd interactive_plan && npx eslint .
+exit=0

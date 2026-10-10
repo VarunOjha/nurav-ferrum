@@ -82,9 +82,10 @@ Stop any server on 3418-3420 first (the app on 3417 can keep running). `IP3_REQU
 
 ## Approvals
 
-Approve, request changes or reject in the app only (approve bars on `/approvals`, `/phases/<id>`,
-`/decisions/<id>` and every approvable `/wiki` page). Claude never writes `plan/approvals.json`
-(SCHEMA §10.1). There is no bulk approve and no reset to pending (owner answer Q-007).
+**Superseded 2026-10-09 (adr-0023):** the owner now approves in Claude Code and Claude records the decision in
+`plan/approvals.json` (SCHEMA §10.1). The approve bars below are v1 behaviour; portal v2 (task p0.17) removes them
+and becomes read-only. v1: approve bars on `/approvals`, `/phases/<id>`, `/decisions/<id>` and every approvable
+`/wiki` page; no bulk approve and no reset to pending (owner answer Q-007).
 
 ## Spec pages
 

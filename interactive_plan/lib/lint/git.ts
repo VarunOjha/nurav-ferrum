@@ -8,6 +8,11 @@
  * deletion under wiki/raw/ (equivalent to the per-file `--follow` check for M and D; a rename shows as
  * R on the new path). MANIFEST.sha256 is append-only (SCHEMA §3.1): a change that only adds lines is
  * allowed, anything else is reported.
+ *
+ * Sanctioned masking edits (SCHEMA §3.1, adr-0027): `tools/raw-sanctioned-edits.tsv` lists
+ * `<sha256 of the LF-normalised new content>\t<path under wiki/raw/>\t<authority>`. A modification of a
+ * raw file whose resulting content has a listed hash is not reported, and neither is a MANIFEST.sha256
+ * change that only replaces the hash on that file's line with a listed hash (plus appended lines).
  */
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
@@ -31,8 +36,52 @@ export const execGit: GitExec = (args, cwd) =>
   });
 
 export const MANIFEST_PATH = "wiki/raw/MANIFEST.sha256";
+export const SANCTIONS_PATH = "tools/raw-sanctioned-edits.tsv";
+
+/** Sanctioned post-creation hashes per raw path (relative to wiki/raw/). */
+export type Sanctions = Map<string, Set<string>>;
+
+/** Parses tools/raw-sanctioned-edits.tsv (`#` comments and blank lines ignored; malformed lines skipped). */
+export function parseSanctions(text: string | null): Sanctions {
+  const out: Sanctions = new Map();
+  for (const line of (text ?? "").split(/\r?\n/)) {
+    const m = /^([0-9a-f]{64})\t([^\t]+)\t\S/.exec(line);
+    if (!m) continue;
+    out.set(m[2], (out.get(m[2]) ?? new Set()).add(m[1]));
+  }
+  return out;
+}
+
+/**
+ * Is `now` the manifest `base` with some lines' hashes replaced by sanctioned hashes for the same path,
+ * plus zero or more appended lines? (LF-normalised; every other change is reported.)
+ */
+export function isSanctionedManifestChange(base: string, now: string, sanctions: Sanctions): boolean {
+  const n = (s: string) => normalizeEol(Buffer.from(s, "utf8")).toString("utf8");
+  const a = n(base);
+  const b = n(now);
+  if (a !== "" && !a.endsWith("\n")) return false;
+  const al = a.split("\n").slice(0, -1);
+  const bl = b.split("\n");
+  if (bl[bl.length - 1] === "") bl.pop();
+  if (bl.length < al.length) return false;
+  const re = /^([0-9a-f]{64}) {2}(\S.*)$/;
+  return al.every((line, i) => {
+    if (line === bl[i]) return true;
+    const x = re.exec(line);
+    const y = re.exec(bl[i]);
+    return !!x && !!y && x[2] === y[2] && (sanctions.get(y[2])?.has(y[1]) ?? false);
+  });
+}
+
+const execGitBytes = (spec: string, cwd: string): Promise<Buffer | null> =>
+  new Promise((resolve) => {
+    execFile("git", ["show", spec], { cwd, maxBuffer: 256 * 1024 * 1024, windowsHide: true, encoding: "buffer" }, (err, stdout) =>
+      resolve(err ? null : (stdout as Buffer)),
+    );
+  });
 const posix = (p: string) => p.split(path.sep).join("/");
-/** Same directory? Resolves symlinks and Windows 8.3 short names (os.tmpdir() may return `VARUNO~1`). */
+/** Same directory? Resolves symlinks and Windows 8.3 short names (os.tmpdir() may return an 8.3 short name such as `C:\Users\ABCDEF~1`). */
 function samePath(a: string, b: string): boolean {
   const real = (p: string) => {
     try {
@@ -70,10 +119,20 @@ function commits(stdout: string): { head: string; files: string[] }[] {
  */
 export async function collectGit(
   repoRoot: string,
-  opts: { exec?: GitExec; readFile?: (abs: string) => string | null } = {},
+  opts: {
+    exec?: GitExec;
+    readFile?: (abs: string) => string | null;
+    readBytes?: (abs: string) => Buffer | null;
+    showBytes?: (spec: string, cwd: string) => Promise<Buffer | null>;
+  } = {},
 ): Promise<GitState> {
   const exec = opts.exec ?? execGit;
   const read = opts.readFile ?? ((abs: string) => (existsSync(abs) ? readFileSync(abs, "utf8") : null));
+  const readBytes = opts.readBytes ?? ((abs: string) => (existsSync(abs) ? readFileSync(abs) : null));
+  const showBytes = opts.showBytes ?? execGitBytes;
+  const sanctions = parseSanctions(read(path.join(repoRoot, ...SANCTIONS_PATH.split("/"))));
+  const rawRel = (p: string) => p.replace(/^wiki\/raw\//, "");
+  const sanctioned = (p: string, bytes: Buffer | null) => bytes !== null && (sanctions.get(rawRel(p))?.has(manifestHash(bytes)) ?? false);
   const top = await exec(["rev-parse", "--show-toplevel"], repoRoot);
   if (!top.ok) return { kind: "unavailable", reason: `git rev-parse failed (${top.stderr.trim() || "git missing or not a repository"})` };
   if (!samePath(top.stdout.trim(), repoRoot)) {
@@ -98,10 +157,11 @@ export async function collectGit(
       if (status === "M" && p === MANIFEST_PATH) {
         const before = await exec(["show", `${c.head}^:${MANIFEST_PATH}`], repoRoot);
         const after = await exec(["show", `${c.head}:${MANIFEST_PATH}`], repoRoot);
-        if (before.ok && after.ok && isAppendOnly(before.stdout, after.stdout)) continue;
+        if (before.ok && after.ok && (isAppendOnly(before.stdout, after.stdout) || isSanctionedManifestChange(before.stdout, after.stdout, sanctions))) continue;
         facts.rawHistoryChanges.push({ commit: c.head, status, path: p, detail: "MANIFEST.sha256 changed other than by appending lines" });
         continue;
       }
+      if (status === "M" && sanctions.has(rawRel(p)) && sanctioned(p, await showBytes(`${c.head}:${p}`, repoRoot))) continue;
       facts.rawHistoryChanges.push({ commit: c.head, status, path: p, ...(paths.length > 1 ? { detail: `renamed from ${paths[0]}` } : {}) });
     }
   }
@@ -118,10 +178,11 @@ export async function collectGit(
     if (p === MANIFEST_PATH && status === "M") {
       const base = await exec(["show", `HEAD:${MANIFEST_PATH}`], repoRoot);
       const now = read(path.join(repoRoot, ...MANIFEST_PATH.split("/")));
-      if (base.ok && now !== null && isAppendOnly(base.stdout, now)) continue;
+      if (base.ok && now !== null && (isAppendOnly(base.stdout, now) || isSanctionedManifestChange(base.stdout, now, sanctions))) continue;
       facts.rawWorkingChanges.push({ status, path: p, detail: "MANIFEST.sha256 changed other than by appending lines" });
       continue;
     }
+    if (status === "M" && sanctions.has(rawRel(p)) && sanctioned(p, readBytes(path.join(repoRoot, ...p.split("/"))))) continue;
     facts.rawWorkingChanges.push({ status, path: p, ...(arrow >= 0 ? { detail: `renamed from ${rest.slice(0, arrow)}` } : {}) });
   }
   return { kind: "ok", facts };

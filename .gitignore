@@ -22,6 +22,8 @@ __pycache__/
 target/
 
 # Local / sensitive (never commit browser profiles, tokens, raw browsing data)
+# .env.local-map holds the real machine values behind the masks (adr-0027); also covered by .env*
+.env.local-map
 .env*
 !.env.example
 **/EBWebView/

@@ -3,7 +3,7 @@ id: qual-phase-gate-checklist
 type: quality
 title: "Phase gate checklist and evidence layout"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -90,7 +90,7 @@ Claude reads `plan/approvals.json` for this check and never writes it (SCHEMA §
 - [ ] Wiki lint clean (zero errors), no `UNV-PASTDUE` targeting this phase, and no open `CONTRADICTION` blocks on this phase's pages.
 - [ ] Risks owned by this phase re-scored with status and evidence; new risks added to the register.
 - [ ] Review packet prepared (section 5). Status set to `gate-review` and logged `gate | <phase-id> exit ready for review`.
-- [ ] Owner approves `<phase-id>#exit` in the plan app. Then status `done` and log `gate | <phase-id> exit approved`.
+- [ ] Owner approves `<phase-id>#exit` in Claude Code; Claude records it with `tools/approvals_record.py` (adr-0023). Then status `done` and log `gate | <phase-id> exit approved`.
 
 ## 4. Minimum evidence per phase (recommended; each phase page's `test_gate` is authoritative)
 

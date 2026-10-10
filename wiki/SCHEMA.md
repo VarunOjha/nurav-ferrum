@@ -10,7 +10,9 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/owner/2026-10-09-s01-wave0c.md
-related: [adr-0001, adr-0002, adr-0003, adr-0014, adr-0016, adr-0020, comp-interactive-plan]
+  - raw/owner/2026-10-09-s01-plan-app-feedback.md
+  - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+related: [adr-0001, adr-0002, adr-0003, adr-0014, adr-0016, adr-0020, adr-0023, adr-0024, adr-0025, adr-0027, comp-interactive-plan]
 approvable: true
 ---
 
@@ -18,7 +20,7 @@ approvable: true
 
 This file is the **constitution** of the Ferrum wiki. Every session, human or LLM, follows it. Where a rule says **MUST**, a check (the lint tool, the plan app, or Claude doing a manual lint) can test it mechanically. A rule that says **SHOULD** is guidance.
 
-Status of this document: `review`. The amendment batch of 2026-10-08 is applied, and so are the §11 change of adr-0020 (index lists evidence and bench folders) and the §5.1/§6.13 `sources` clarification of 2026-10-09 (owner answer wave 0c); see `log.md`. The owner has not yet approved it (approval key `schema` in `plan/approvals.json`). Until it is approved, it is the working convention for P0 only.
+Status of this document: `review`. The amendment batch of 2026-10-08 is applied, and so are the §11 change of adr-0020 (index lists evidence and bench folders) the §5.1/§6.13 `sources` clarification of 2026-10-09 (owner answer wave 0c), and the portal-v2 rules of 2026-10-09 (approvals given in Claude Code and recorded by Claude, §10.1, adr-0023; read-only portal on plain-language JSON, adr-0024; masking and the sanctioned raw edit, §3.1, adr-0027); see `log.md`. The owner has not yet approved it (approval key `schema` in `plan/approvals.json`). Until it is approved, it is the working convention for P0 only.
 
 ---
 
@@ -27,7 +29,7 @@ Status of this document: `review`. The amendment batch of 2026-10-08 is applied,
 1. Give a project that spans **many sessions and many days** a persistent memory that builds up over time. Any fresh session with no recall MUST be able to resume correctly from files alone. See [§9 Operations](#9-operations): RESUME and HANDOFF.
 2. Make every plan item, design decision, risk, research claim and test gate **addressable by id**, **owner-approvable**, and **traceable**. The traceability chain runs: research question → hypothesis → experiment → workload/metric → raw data → analysis → conclusion (master prompt §13).
 3. Enforce research integrity mechanically. No fabricated facts, versions, API capabilities, measurements or citations. Every unsourced technical claim carries a parseable `UNVERIFIED[...]` tag (§7).
-4. Feed the interactive plan app (`interactive_plan/`, `comp-interactive-plan`). The app **reads `wiki/` directly** (frontmatter + markdown) and does not copy its content, so the visualisation cannot drift from the wiki.
+4. Feed the plan portal (`interactive_plan/`, `comp-interactive-plan`), the owner's read-only view of the project. The portal reads **only** plain-language JSON that Claude writes in the same edit as the wiki ([adr-0024](decisions/adr-0024-portal-reads-plain-language-json.md)); it never renders the wiki itself. The wiki wins on any disagreement.
 
 ## 2. Origin: Karpathy's LLM Wiki pattern, and what is ours
 
@@ -48,7 +50,7 @@ The gist names `CLAUDE.md` as the schema file for Claude Code. Ferrum splits the
 
 Together they form the schema layer. If the two conflict, this file wins, and the conflict is a lint error.
 
-Divergence to note: in the gist the LLM owns the wiki outright. In Ferrum the LLM still *writes* every wiki page, but **owner approval** (§10) gates which pages are binding for implementation.
+Divergence to note: in the gist the LLM owns the wiki outright. In Ferrum the LLM still *writes* every wiki page, but **owner approval** (§10, given in Claude Code) gates which pages are binding for implementation.
 
 ---
 
@@ -66,12 +68,14 @@ Divergence to note: in the gist the LLM owns the wiki outright. In Ferrum the LL
 - A raw file is the **source of truth** for its content. Wiki pages cite raw files in `sources`.
 - Raw files are exempt from the wiki frontmatter rules (§5), with one exception: research notes carry the reduced frontmatter of the `research-note` type (§6.13).
 - **Benchmark runs (open vs sealed).** A run folder `raw/bench/<run-id>/` is *open* until it contains a file named `SEALED`. While it is open, new files and new `segment-NN/` subfolders MAY be added to it (for example when an interrupted campaign resumes, adr-0003 rule 5). Files already written are never changed, in an open run or a sealed one. Once `SEALED` exists, nothing is added.
-- Lint check `RAW-IMMUTABLE`: a raw file whose git history shows any modification after its first commit is an **error**. Before git history exists, compare against the hash manifest `wiki/raw/MANIFEST.sha256`.
-- **Manifest (`wiki/raw/MANIFEST.sha256`).** Created in task p0.8 (moved forward from P1 so that the P0 raw sources have tamper evidence before the first commit). Format: one line per raw file, `<64 lowercase hex sha256>  <path relative to wiki/raw/, forward slashes>` (two spaces), hash taken over the LF-normalised bytes (§10.2 `N`). The manifest does not list itself. It is **append-only**: a new raw file adds a line in the same edit, and existing lines are never changed. It is the one file under `wiki/raw/` that is appended to rather than immutable. Each lint evidence file records the manifest's own sha256.
+- Lint check `RAW-IMMUTABLE`: a raw file whose git history shows any modification after its first commit is an **error**, except a sanctioned masking edit (next bullets). Before git history exists, compare against the hash manifest `wiki/raw/MANIFEST.sha256`.
+- **Sanctioned masking edit** (the one exception to immutability; owner decision 2026-10-09, [adr-0027](decisions/adr-0027-mask-sensitive-values.md)). Replacing real machine values (IP and MAC addresses, the computer name, the Windows user-folder path) with masks such as `<LAN_IPV4_1>` or `<USERPROFILE>`, using `tools/mask.ps1`; nothing else in the file changes. In the same change: the file's `MANIFEST.sha256` line gets the new hash; the new hash is appended to `tools/raw-sanctioned-edits.tsv` (`<sha256 of the LF-normalised new content><TAB><path under raw/><TAB><authority>`); a `correct` log entry names the file. `RAW-IMMUTABLE` accepts a raw-file change only when its new hash is listed there. Owner raw files (`raw/owner/`) and `raw/00-*`, `raw/01-*` are never masked: the owner's name there is authorship.
+- **No real machine values in committed files (MUST).** Real values live only in the gitignored `.env.local-map` (repo root, `MASK=real` per line). Evidence output is piped through `pwsh tools/mask.ps1 --stdin` before it is saved, and `pwsh tools/mask.ps1 --scan` MUST report 0 unmasked values before a commit that adds evidence and at every gate (adr-0027). This is not a `lint:wiki` code because the map is local to the machine.
+- **Manifest (`wiki/raw/MANIFEST.sha256`).** Created in task p0.8 (moved forward from P1 so that the P0 raw sources have tamper evidence before the first commit). Format: one line per raw file, `<64 lowercase hex sha256>  <path relative to wiki/raw/, forward slashes>` (two spaces), hash taken over the LF-normalised bytes (§10.2 `N`). The manifest does not list itself. It is **append-only**: a new raw file adds a line in the same edit, and existing lines are never changed, except that a sanctioned masking edit replaces the hash on that file's own line. It is the one file under `wiki/raw/` that is appended to rather than immutable. Each lint evidence file records the manifest's own sha256.
 
 ### 3.2 Wiki pages: `wiki/**` except `wiki/raw/` (LLM-maintained)
 
-- Claude writes and maintains these pages. The owner reads them, comments on them and approves them through the plan app. The owner MAY edit them, but every edit, whoever makes it, is logged.
+- Claude writes and maintains these pages. The owner reads them (mostly through the portal's plain-language view, adr-0024), comments on them and approves them in Claude Code (§10). The owner MAY edit them, but every edit, whoever makes it, is logged.
 - A wiki page states facts **only** with a citation to a raw source or another wiki page, or with an `UNVERIFIED[...]` tag (§7).
 
 ### 3.3 Schema: `wiki/SCHEMA.md` + `CLAUDE.md`
@@ -83,9 +87,11 @@ Divergence to note: in the gist the LLM owns the wiki outright. In Ferrum the LL
 
 - **Code** (`apps/`, `crates/`, `benchmarks/`, …) is not a raw source and not a wiki page. It is the thing the wiki describes.
 - **Root summary files** (§4.2) are human-facing views generated from the wiki.
-- **`plan/approvals.json`** is the owner's approval record (§10).
+- **`plan/approvals.json`** is the owner's approval record (§10). Claude writes it, only for decisions the owner gave in Claude Code (adr-0023).
+- **Portal JSON** is the plain-language copy of the wiki that the read-only portal renders (adr-0024). Its location and shape are added here when the pipeline is built (task p0.17).
+- **Check scripts** are PowerShell 7 scripts: one per task and one gate script per phase, kept in the repo (adr-0025).
 
-**Precedence when sources disagree:** raw sources > accepted ADRs > this schema > other wiki pages > root summary files > interactive-plan rendering. Any disagreement found is a lint finding (§9.3).
+**Precedence when sources disagree:** raw sources > accepted ADRs > this schema > other wiki pages > root summary files > portal JSON and the portal. Any disagreement found is a lint finding (§9.3).
 
 ---
 
@@ -133,8 +139,10 @@ A page's type MUST match its directory. The allowed `type` values per directory 
 | `CLAUDE.md` | Session bootstrap: integrity rules, RESUME steps, pointer to this schema. Covered by the `schema` approval through `bootstrap_hash` (§10.2) | none required |
 | `STATUS.md` | **Live state + exact next action**. It is updated after every completed task and at HANDOFF | REQUIRED, see §6.16 |
 | `README.md`, `PLAN.md`, `ARCHITECTURE.md`, `RESEARCH_PLAN.md`, `AI_USAGE.md` | Human-facing summaries. Each MUST link to its canonical wiki pages, and the wiki wins on conflict | none (GitHub renders frontmatter badly) |
-| `plan/approvals.json` | Owner approvals (§10). Written **only** by the plan app on an owner action | n/a (JSON) |
-| `interactive_plan/` | Next.js plan app (`comp-interactive-plan`, not shipped with Ferrum) | n/a |
+| `plan/approvals.json` | Owner approvals (§10). Written by Claude only through `tools/approvals_record.py`, only for a decision the owner gave in Claude Code and transcribed to `raw/owner/` (adr-0023) | n/a (JSON) |
+| `interactive_plan/` | Read-only plan portal, Next.js (`comp-interactive-plan`, not shipped with Ferrum; adr-0023, adr-0024) | n/a |
+| `tools/` | Claude's helper scripts: `quick_lint.py`, `approvals_check.py`, `approvals_record.py`, `mask.ps1`, `raw-sanctioned-edits.tsv` | n/a |
+| `.env.local-map` | Real machine values behind the masks (adr-0027). **Gitignored, never committed, never quoted in the wiki** | n/a |
 
 ---
 
@@ -164,7 +172,7 @@ Every wiki page (all of §4.1 except `raw/`) MUST start at byte 0 with a YAML fr
 | `updated` | date | Date of the last content edit. Not in the future. Not older than the file's last git commit date |
 | `sources` | list of strings | Each entry is either an absolute `https://` URL or a path **relative to `wiki/`** (usually `raw/…`, but any wiki file is allowed, e.g. `SCHEMA.md`; no leading `/`, no `..` segment, no `\`, no whitespace; an optional `#anchor` is allowed). A path entry whose file does not exist is `REF-DANGLING` (§9.3). Use `[]` only when the page is pure planning with no factual claims. Raw research notes are exempt from the format rule (§6.13) |
 | `related` | list of ids | Every entry MUST resolve to an existing id. Order is not significant |
-| `approvable` | bool | `true` means the plan app shows Approve / Request changes, and the page takes part in the gates (§10) |
+| `approvable` | bool | `true` means the owner can approve it (§10) and the page takes part in the gates |
 
 ### 5.2 Fields optional on every page
 
@@ -432,7 +440,7 @@ Resume/handoff protocol, toolchain setup, git workflow, lint procedure, plan-app
 | phase | `^phase-p[0-8]-[a-z0-9-]+$` | Fixed: `phase-p0-planning`, `phase-p1-foundation`, `phase-p2-minimal-container`, `phase-p3-tabs-sessions`, `phase-p4-security`, `phase-p5-telemetry`, `phase-p6-benchmark-harness`, `phase-p7-lifecycle`, `phase-p8-research-paper` |
 | task (inside phase) | `^p[0-8]\.[0-9]+$` | `p1.4` |
 | component | `^comp-[a-z0-9-]+$` | Fixed: `comp-app-shell, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-core, comp-benchmark-harness, comp-research-analysis, comp-baseline-app, comp-webview2-runtime, comp-interactive-plan`. Modelling nodes added by the architecture area (2026-10-08): `comp-tab-content` (untrusted web content), `comp-windows-os` and `comp-competitor-browsers` (external) |
-| decision | `^adr-[0-9]{4}$` | `adr-0001` … `adr-0022` registered; next free `adr-0023` (always confirm with `ls wiki/decisions/adr-*.md`, sorted, last entry) |
+| decision | `^adr-[0-9]{4}$` | `adr-0001` … `adr-0027` registered; next free `adr-0028` (always confirm with `ls wiki/decisions/adr-*.md`, sorted, last entry) |
 | risk | `^risk-r[0-9]{2,}$` | `risk-r01` … `risk-r25` registered; next free `risk-r26` |
 | research-question | `^rq-[0-9]{2,}$` | `rq-01` |
 | hypothesis | `^hyp-[0-9]{2,}$` | `hyp-01` |
@@ -502,7 +510,7 @@ Run at the end of every session (inside HANDOFF), at every phase gate, and after
 | `UNV-PASTDUE` | error | `UNVERIFIED[P]` where P is done or already passed (§7.2) |
 | `INT-NUMBER-NOSRC` | warn | Measured-looking number without a raw link (§7.3) |
 | `HYP-NO-DATA` | error | Hypothesis with a verdict status but no analyzed experiment with `results_ref` |
-| `RAW-IMMUTABLE` | error | Raw file modified after creation (§3.1) |
+| `RAW-IMMUTABLE` | error | Raw file modified after creation (§3.1), unless it is a sanctioned masking edit whose new hash is listed in `tools/raw-sanctioned-edits.tsv` |
 | `APPROVAL-STALE` | info (warn when the page belongs to the current/next phase's dependency set) | Approval whose hash no longer matches (§10.3) |
 | `CONTRADICTION` | warn | Open `> **CONTRADICTION:**` blockquotes. Also, as a semantic pass (LLM review, not regex): claims that disagree between pages, or with an accepted ADR or a raw source |
 | `SCHEMA-SPLIT` | error | `CLAUDE.md` restates a rule differently from this file |
@@ -570,7 +578,7 @@ This is the normative order. `CLAUDE.md` §1 restates it step for step; any diff
 4. No open `> **CONTRADICTION:**` blockquote on a page in the dependency set is *unregistered*. A blockquote that names a `Q-NNN` is registered: that question's `blocking` list alone decides which gates it holds (so a contradiction that a spike in this phase must resolve can deliberately gate a later phase). A blockquote naming no `Q-NNN` blocks this gate (§9.1.1).
 5. If all four hold, set P's `status: ready` (or `in-progress` when starting) and log `gate | <phase-id> entry passed`. If any fails, do not implement. Log `gate | <phase-id> entry BLOCKED: <ids>`, set `STATUS.md` `blocked_on`, and ask the owner.
 
-**P0 bootstrap exception.** `phase-p0-planning` has no approval-based entry gate. Its authority is the owner directives in `raw/01-scoping-decisions.md`. Approvals cannot exist before the plan app does. Building `interactive_plan/` (tasks p0.9–p0.16) requires only the owner's chat approval of the `ip-*` pages and adr-0016 (Approval Wave 0; Q-101 itself is answered by directives 2 and 4), transcribed to `wiki/raw/owner/` (ip-build-plan IP-0). Ferrum application code stays forbidden. (Same rule as `CLAUDE.md` §1 step 10.)
+**P0 bootstrap exception.** `phase-p0-planning` has no approval-based entry gate. Its authority is the owner directives in `raw/01-scoping-decisions.md`. Building `interactive_plan/` (tasks p0.9–p0.16) requires only the owner's chat approval of the `ip-*` pages and adr-0016 (Approval Wave 0; Q-101 itself is answered by directives 2 and 4), transcribed to `wiki/raw/owner/` (ip-build-plan IP-0). Ferrum application code stays forbidden. (Same rule as `CLAUDE.md` §1 step 10.)
 
 **Exit gate (milestone review, adr-0014):**
 
@@ -579,7 +587,7 @@ This is the normative order. `CLAUDE.md` §1 restates it step for step; any diff
 3. `test_gate.manual` items are recorded as performed by the owner (a `raw/owner/` file, or the exit approval comment).
 4. LINT is clean, and no `UNV-PASTDUE` targets P.
 5. Set `status: gate-review` and log `gate | <phase-id> exit ready for review`.
-6. The owner approves key `<phase-id>#exit` in the plan app. Then set `status: done` and log `gate | <phase-id> exit approved`.
+6. The owner approves key `<phase-id>#exit` in Claude Code; Claude records it (§10.1). Then set `status: done` and log `gate | <phase-id> exit approved`.
 
 ### 9.8 CODE *(extension)*
 
@@ -608,6 +616,8 @@ Whether a pre-commit hook or CI can enforce this is `UNVERIFIED[phase-p1-foundat
       "content_hash": "sha256:<64 lowercase hex>",
       "scope_hash": "sha256:<64 lowercase hex>",
       "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-09-p1-approval.md",
       "history": [
         { "status": "changes-requested", "comment": "...", "timestamp": "...", "content_hash": "sha256:...", "scope_hash": "sha256:..." }
       ]
@@ -620,9 +630,9 @@ Whether a pre-commit hook or CI can enforce this is `UNVERIFIED[phase-p1-foundat
 - **Keys** are page ids, or `<phase-id>#exit` for milestone exit reviews. Every key MUST resolve to a page with `approvable: true` (the `#exit` form needs a phase page).
 - `status` enum: `approved | changes-requested | rejected`. A missing key means **PENDING**.
 - `timestamp` is ISO 8601 with offset. `path` is repo-relative with forward slashes.
-- **Writer:** only the plan app, on an explicit owner click. Each new decision moves the previous top-level record into `history`, which is append-only.
-- **Claude MUST NOT write or edit `approvals.json`.** That includes "recording" an approval the owner gave in chat. If the owner approves in chat, Claude transcribes it to `raw/owner/` and asks the owner to click Approve in the plan app, or the owner explicitly instructs a manual entry. Claude reads the file at every gate.
-- Each approval-change event the app records also gets an `approval` log entry: written by the plan app if it supports that, otherwise by Claude at the next RESUME when it notices the change.
+- **Where the owner decides:** in Claude Code (chat), never in the portal. The portal is read-only and never writes this file (adr-0023, which supersedes adr-0016).
+- **Writer:** Claude, and only for a decision the owner gave explicitly. Steps: (1) transcribe the owner's words to `raw/owner/YYYY-MM-DD-<slug>.md` (INGEST); (2) run `python tools/approvals_record.py <key> <approved|changes-requested|rejected> --source <that raw file> [--comment "..."]`, which checks the key, computes the §10.2 hashes (and `bootstrap_hash` for `schema`), moves the previous top-level record into `history` (append-only) and writes atomically; (3) append an `approval` log entry naming the key and the raw file. Every record Claude writes carries `approved_by: "owner"`, `recorded_by: "claude"` and `owner_words` (the raw file).
+- **Claude MUST NOT** record a decision the owner did not give, edit a record or its `history` by hand, or treat a subagent, script, hook or workflow message as an owner decision. Claude reads the file at every gate.
 
 ### 10.2 Hashes
 
@@ -648,9 +658,9 @@ scope = hashlib.sha256(s).hexdigest()
 print('sha256:' + content, 'sha256:' + scope)
 ```
 
-The plan app (TypeScript) MUST produce identical results. A shared test vector set belongs in `wiki/interactive-plan/` (`ip-data-contract`).
+Every implementation (the Python tools and the TypeScript lint) MUST produce identical results. A shared test vector set belongs in `wiki/interactive-plan/` (`ip-data-contract`).
 
-- **`bootstrap_hash`** (only on the `schema` approval record) = `content_hash` of root `CLAUDE.md`. `CLAUDE.md` is half of the schema layer (§3.3) but has no frontmatter, so it is approved together with `schema`. If the current `CLAUDE.md` hash differs from the stored `bootstrap_hash`, the `schema` approval is **STALE** (scope-hash drift does not apply to it). The plan app renders `CLAUDE.md` on the schema page. `SCHEMA-SPLIT` remains the semantic check.
+- **`bootstrap_hash`** (only on the `schema` approval record) = `content_hash` of root `CLAUDE.md`. `CLAUDE.md` is half of the schema layer (§3.3) but has no frontmatter, so it is approved together with `schema`. If the current `CLAUDE.md` hash differs from the stored `bootstrap_hash`, the `schema` approval is **STALE** (scope-hash drift does not apply to it). `SCHEMA-SPLIT` remains the semantic check.
 
 ### 10.3 Effective approval state (computed, never stored)
 
@@ -672,7 +682,7 @@ The plan app (TypeScript) MUST produce identical results. A shared test vector s
    - (a) its approval state is APPROVED or APPROVED_VOLATILE_DRIFT
    - (b) `decided_by: owner` and `sources` cites a raw file recording the owner's choice (e.g. adr-0004…adr-0016 from `raw/01-scoping-decisions.md`)
 
-   Case (b) ADRs are still `approvable: true`, so the owner can confirm or overturn them in the plan app. Case (b) acceptance covers **only the owner's choice as quoted** in the ADR's `### Owner decision (verbatim)` subsection. Every rule Claude elaborated (the `### Claude elaboration` subsection) becomes binding only under case (a), that is once the ADR is APPROVED in the plan app.
+   Case (b) ADRs are still `approvable: true`, so the owner can confirm or overturn them in Claude Code. Case (b) acceptance covers **only the owner's choice as quoted** in the ADR's `### Owner decision (verbatim)` subsection. Every rule Claude elaborated (the `### Claude elaboration` subsection) becomes binding only under case (a), that is once the ADR is APPROVED (recorded per §10.1).
 4. `rejected` on an ADR means: set its status to `rejected`, then DECIDE again. `changes-requested` means: revise the page (which produces a new hash) and ask again.
 5. A page's frontmatter `status: approved` (overview, schema) MUST NOT be set unless the effective state is APPROVED or APPROVED_VOLATILE_DRIFT.
 

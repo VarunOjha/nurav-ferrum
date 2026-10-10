@@ -26,7 +26,7 @@ plan/approvals.json: absent
 
 The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
 
- RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
 
  ✓ tests/unit/config.test.ts > getConfig > defaults are relative to the app directory's parent 5ms
  ✓ tests/unit/config.test.ts > getConfig > environment overrides (relative values resolve against cwd) 1ms
@@ -615,7 +615,7 @@ The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths r
 
 The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
 
- RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
 
 stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors
 real wiki: 199 files loaded (193 ids), 35 log entries, 52 open-question sections; loader findings by code: {}
@@ -668,141 +668,141 @@ Generating route types...
 
 ================ $ python -m unittest discover -s tools -p "test_*.py"
 
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-wkznb2yr\\wiki\\phases\\phase-p1-foundation.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-wkznb2yr\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-wkznb2yr\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-wkznb2yr\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-wkznb2yr\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-wkznb2yr\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-wkznb2yr\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-wkznb2yr\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pl7fn4yy\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-pl7fn4yy\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pl7fn4yy\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-pl7fn4yy\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pl7fn4yy\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-pl7fn4yy\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pl7fn4yy\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-pl7fn4yy\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-58dbd_6i\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-58dbd_6i\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-58dbd_6i\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-58dbd_6i\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-58dbd_6i\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-58dbd_6i\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-58dbd_6i\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-58dbd_6i\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-xrrax5kl\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-xrrax5kl\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-xrrax5kl\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-xrrax5kl\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-xrrax5kl\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-xrrax5kl\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-xrrax5kl\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-xrrax5kl\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-x0hfir1_\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-x0hfir1_\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-x0hfir1_\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-x0hfir1_\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-x0hfir1_\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-x0hfir1_\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-x0hfir1_\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-x0hfir1_\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tlonibeb\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tlonibeb\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tlonibeb\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tlonibeb\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tlonibeb\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tlonibeb\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tlonibeb\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tlonibeb\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-a7muvnv8\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-a7muvnv8\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-a7muvnv8\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-a7muvnv8\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-a7muvnv8\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-a7muvnv8\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-a7muvnv8\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-a7muvnv8\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-f8ny56ss\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-f8ny56ss\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-f8ny56ss\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-f8ny56ss\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-f8ny56ss\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-f8ny56ss\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-f8ny56ss\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-f8ny56ss\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-zwkmfc56\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-zwkmfc56\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-zwkmfc56\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-zwkmfc56\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-zwkmfc56\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-zwkmfc56\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-zwkmfc56\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-zwkmfc56\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-la7m9i9h\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-la7m9i9h\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-la7m9i9h\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-la7m9i9h\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-la7m9i9h\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-la7m9i9h\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-la7m9i9h\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-la7m9i9h\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pjr67dpt\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-pjr67dpt\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pjr67dpt\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-pjr67dpt\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pjr67dpt\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-pjr67dpt\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-pjr67dpt\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-pjr67dpt\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-jkz929ie\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-jkz929ie\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-jkz929ie\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-jkz929ie\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-jkz929ie\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-jkz929ie\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-jkz929ie\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-jkz929ie\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cs03mvsh\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cs03mvsh\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cs03mvsh\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cs03mvsh\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cs03mvsh\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cs03mvsh\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-cs03mvsh\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-cs03mvsh\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tl57nh1r\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tl57nh1r\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tl57nh1r\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tl57nh1r\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tl57nh1r\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tl57nh1r\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-tl57nh1r\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-tl57nh1r\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-04vohxlq\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-04vohxlq\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-04vohxlq\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-04vohxlq\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-04vohxlq\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-04vohxlq\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-04vohxlq\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-04vohxlq\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-xzvup2cc\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-xzvup2cc\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-xzvup2cc\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-xzvup2cc\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-xzvup2cc\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-xzvup2cc\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-xzvup2cc\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-xzvup2cc\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-q8vt8rm6\\wiki\\phases\\phase-p1-foundation.md'>
+.<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-q8vt8rm6\\wiki\\phases\\phase-p1-foundation.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-q8vt8rm6\\wiki\\decisions\\adr-0001-a.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-q8vt8rm6\\wiki\\decisions\\adr-0001-a.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-q8vt8rm6\\wiki\\SCHEMA.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-q8vt8rm6\\wiki\\SCHEMA.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\VARUNO~1\\AppData\\Local\\Temp\\ac-q8vt8rm6\\CLAUDE.md'>
+<string>:6: ResourceWarning: unclosed file <_io.BufferedReader name='<USERPROFILE_SHORT>\\AppData\\Local\\Temp\\ac-q8vt8rm6\\CLAUDE.md'>
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 .............
 ----------------------------------------------------------------------

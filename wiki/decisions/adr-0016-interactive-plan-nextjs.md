@@ -2,7 +2,7 @@
 id: adr-0016
 type: decision
 title: "Interactive plan = local Next.js app reading wiki/ directly; approvals persisted to plan/approvals.json"
-status: accepted
+status: superseded
 updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
@@ -10,11 +10,12 @@ sources:
   - raw/research/llm-wiki-pattern.md
   - raw/owner/2026-10-08-s01-wave0.md
   - raw/owner/2026-10-09-s01-wave0c.md
-related: [adr-0001, adr-0002, adr-0021, adr-0014, schema, phase-p0-planning, comp-interactive-plan]
+related: [adr-0001, adr-0002, adr-0021, adr-0014, adr-0023, adr-0024, schema, phase-p0-planning, comp-interactive-plan]
 approvable: true
 date: 2026-10-08
 decided_by: owner
 supersedes: []
+superseded_by: adr-0023
 options:
   - "Next.js app in interactive_plan/ reading wiki/ at runtime; approvals via local API route to plan/approvals.json"
   - "Static site generated from the wiki; approvals given in chat"
@@ -27,6 +28,12 @@ unverified:
 ---
 
 # ADR-0016: The interactive plan is a local Next.js app that reads wiki/ directly; approvals go to plan/approvals.json
+
+> **Superseded on 2026-10-09 by [ADR-0023](adr-0023-approvals-in-claude-code-portal-read-only.md).** The owner now approves in
+> Claude Code and Claude records the approval; the plan portal is read-only (no approve buttons, no write API) and
+> reads only plain-language JSON ([ADR-0024](adr-0024-portal-reads-plain-language-json.md)), not `wiki/` directly.
+> Still in force through ADR-0023: a local Next.js app in `interactive_plan/`, served on 127.0.0.1 only, with the stack
+> pins below as the starting point. The text below is kept unchanged as the record of the original decision.
 
 ## Context
 

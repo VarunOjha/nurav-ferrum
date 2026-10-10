@@ -3,7 +3,7 @@ id: adr-0014
 type: decision
 title: "Owner review checkpoint after every milestone (phase exit approval)"
 status: accepted
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -57,9 +57,9 @@ As recorded in [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), sc
 
 This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
 
-### Claude elaboration (binding only once this ADR is APPROVED in the plan app)
+### Claude elaboration (binding only once the owner APPROVES this ADR)
 
-Everything below in this section is Claude's elaboration of the owner's choice. Under SCHEMA §10.4 it binds implementation only after the owner approves this ADR in the plan app; until then it is a proposal.
+Everything below in this section is Claude's elaboration of the owner's choice. Under SCHEMA §10.4 it binds implementation only after the owner approves this ADR (given in Claude Code and recorded in `plan/approvals.json`, adr-0023); until then it is a proposal.
 
 **Option B, applied to every phase, including P0 and P1, which have no milestone.** The recommended default is to apply it to those too, which is open question Q-108.
 
@@ -71,7 +71,7 @@ At the end of each phase, Claude:
 4. writes a short milestone report (what was built, the commands run, test results, known limitations, security considerations, next recommended phase), mirroring the master prompt §18 report list;
 5. sets the phase to `gate-review`, logs `gate | <phase-id> exit ready for review` and **stops**.
 
-The owner reviews and approves the key `<phase-id>#exit` in the plan app ([ADR-0016](adr-0016-interactive-plan-nextjs.md)). Only then is the phase `done` and the next phase's entry gate evaluated.
+The owner reviews the evidence and approves the key `<phase-id>#exit` in Claude Code; Claude records it ([ADR-0023](adr-0023-approvals-in-claude-code-portal-read-only.md)). Only then is the phase `done` and the next phase's entry gate evaluated.
 
 ## Consequences
 

@@ -17,7 +17,7 @@ IP-2-tests.20261008-2358.txt. This file was created (header only) before the run
 
 The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
 
- RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
 
  ✓ tests/unit/config.test.ts > getConfig > defaults are relative to the app directory's parent 3ms
  ✓ tests/unit/config.test.ts > getConfig > environment overrides (relative values resolve against cwd) 1ms
@@ -511,7 +511,7 @@ The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths r
 
 The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
 
- RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
 
 stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors
 real wiki: 199 files loaded (193 ids), 32 log entries, 52 open-question sections; loader findings by code: {}

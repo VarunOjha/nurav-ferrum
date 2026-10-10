@@ -31,7 +31,7 @@ Generating route types...
 
 The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
 
- RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
 
 
  Test Files  24 passed (24)
@@ -45,7 +45,7 @@ The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths r
 
 The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
 
- RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
 
 stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors
 real wiki: 199 files loaded (193 ids), 48 log entries, 52 open-question sections; loader findings by code: {}
@@ -235,46 +235,46 @@ Running 131 tests using 1 worker
   ✓   68 [chromium] › tests\e2e\security.spec.ts:148:7 › PLAN_READONLY=1 (port 3419, same build and fixture) › the API reports readonly and refuses a valid POST with 403 READ_ONLY (181ms)
   ✓   69 [chromium] › tests\e2e\security.spec.ts:160:7 › PLAN_READONLY=1 (port 3419, same build and fixture) › the UI shows the read-only banner and every approve button is disabled with the reason (766ms)
   ✓   70 [chromium] › tests\e2e\security.spec.ts:177:7 › PLAN_READONLY=1 (port 3419, same build and fixture) › the writable server shows no read-only banner (control) (342ms)
-bind probe: non-loopback addresses: fe80::1dd0:fad3:d103:5ba6%48, 172.27.64.1, 2605:a601:152d:1900::6, 2605:a601:152d:1900:9d73:a9d1:6dd3:1221, 2605:a601:152d:1900:157c:371c:b3b4:3fd, 2605:a601:152d:1900:3c4c:2c7b:6471:5e75, 2605:a601:152d:1900:7918:6007:4d5d:4492, 2605:a601:152d:1900:7986:7f10:51fc:d027, 2605:a601:152d:1900:98a3:c245:94:ea1d, 2605:a601:152d:1900:d843:76bb:9706:d979, 2605:a601:152d:1900:ddfe:1e78:30d8:7e92, fe80::3ae2:8411:2738:e4f7%9, 192.168.1.237
-bind probe: control listener fe80::1dd0:fad3:d103:5ba6%48 port 61047 -> open
-bind probe: control listener 172.27.64.1 port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900::6 port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900:9d73:a9d1:6dd3:1221 port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900:157c:371c:b3b4:3fd port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900:3c4c:2c7b:6471:5e75 port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900:7918:6007:4d5d:4492 port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900:7986:7f10:51fc:d027 port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900:98a3:c245:94:ea1d port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900:d843:76bb:9706:d979 port 61047 -> open
-bind probe: control listener 2605:a601:152d:1900:ddfe:1e78:30d8:7e92 port 61047 -> open
-bind probe: control listener fe80::3ae2:8411:2738:e4f7%9 port 61047 -> open
-bind probe: control listener 192.168.1.237 port 61047 -> open
-bind probe: fe80::1dd0:fad3:d103:5ba6%48 port 3418 -> ECONNREFUSED
-bind probe: fe80::1dd0:fad3:d103:5ba6%48 port 3419 -> ECONNREFUSED
-bind probe: 172.27.64.1 port 3418 -> ECONNREFUSED
-bind probe: 172.27.64.1 port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900::6 port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900::6 port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:9d73:a9d1:6dd3:1221 port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:9d73:a9d1:6dd3:1221 port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:157c:371c:b3b4:3fd port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:157c:371c:b3b4:3fd port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:3c4c:2c7b:6471:5e75 port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:3c4c:2c7b:6471:5e75 port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:7918:6007:4d5d:4492 port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:7918:6007:4d5d:4492 port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:7986:7f10:51fc:d027 port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:7986:7f10:51fc:d027 port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:98a3:c245:94:ea1d port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:98a3:c245:94:ea1d port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:d843:76bb:9706:d979 port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:d843:76bb:9706:d979 port 3419 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:ddfe:1e78:30d8:7e92 port 3418 -> ECONNREFUSED
-bind probe: 2605:a601:152d:1900:ddfe:1e78:30d8:7e92 port 3419 -> ECONNREFUSED
-bind probe: fe80::3ae2:8411:2738:e4f7%9 port 3418 -> ECONNREFUSED
-bind probe: fe80::3ae2:8411:2738:e4f7%9 port 3419 -> ECONNREFUSED
-bind probe: 192.168.1.237 port 3418 -> ECONNREFUSED
-bind probe: 192.168.1.237 port 3419 -> ECONNREFUSED
+bind probe: non-loopback addresses: <LINK_LOCAL_IPV6_1>%48, <WSL_IPV4_1>, <LAN_IPV6_1>, <LAN_IPV6_2>, <LAN_IPV6_3>, <LAN_IPV6_4>, <LAN_IPV6_5>, <LAN_IPV6_10>, <LAN_IPV6_6>, <LAN_IPV6_7>, <LAN_IPV6_8>, <LINK_LOCAL_IPV6_2>%9, <LAN_IPV4_1>
+bind probe: control listener <LINK_LOCAL_IPV6_1>%48 port 61047 -> open
+bind probe: control listener <WSL_IPV4_1> port 61047 -> open
+bind probe: control listener <LAN_IPV6_1> port 61047 -> open
+bind probe: control listener <LAN_IPV6_2> port 61047 -> open
+bind probe: control listener <LAN_IPV6_3> port 61047 -> open
+bind probe: control listener <LAN_IPV6_4> port 61047 -> open
+bind probe: control listener <LAN_IPV6_5> port 61047 -> open
+bind probe: control listener <LAN_IPV6_10> port 61047 -> open
+bind probe: control listener <LAN_IPV6_6> port 61047 -> open
+bind probe: control listener <LAN_IPV6_7> port 61047 -> open
+bind probe: control listener <LAN_IPV6_8> port 61047 -> open
+bind probe: control listener <LINK_LOCAL_IPV6_2>%9 port 61047 -> open
+bind probe: control listener <LAN_IPV4_1> port 61047 -> open
+bind probe: <LINK_LOCAL_IPV6_1>%48 port 3418 -> ECONNREFUSED
+bind probe: <LINK_LOCAL_IPV6_1>%48 port 3419 -> ECONNREFUSED
+bind probe: <WSL_IPV4_1> port 3418 -> ECONNREFUSED
+bind probe: <WSL_IPV4_1> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_1> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_1> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_2> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_2> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_3> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_3> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_4> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_4> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_5> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_5> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_10> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_10> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_6> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_6> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_7> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_7> port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV6_8> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV6_8> port 3419 -> ECONNREFUSED
+bind probe: <LINK_LOCAL_IPV6_2>%9 port 3418 -> ECONNREFUSED
+bind probe: <LINK_LOCAL_IPV6_2>%9 port 3419 -> ECONNREFUSED
+bind probe: <LAN_IPV4_1> port 3418 -> ECONNREFUSED
+bind probe: <LAN_IPV4_1> port 3419 -> ECONNREFUSED
   ✓   71 [chromium] › tests\e2e\security.spec.ts:212:5 › bind: both servers accept 127.0.0.1 and refuse every non-loopback address of this machine (2.1s)
   ✓   72 [chromium] › tests\e2e\theme.spec.ts:11:5 › prefers-color-scheme: dark emulation gives the dark tokens (318ms)
   ✓   73 [chromium] › tests\e2e\theme.spec.ts:19:5 › prefers-color-scheme: light gives the light tokens (273ms)
@@ -348,7 +348,7 @@ verify exit: 0
 
 The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
 
- RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
       Coverage enabled with v8
 
 

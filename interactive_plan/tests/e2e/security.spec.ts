@@ -16,6 +16,7 @@ import net from "node:net";
 import os from "node:os";
 import { expect, test } from "@playwright/test";
 import { e2eEnv, FX, readOrNull } from "./helpers";
+import { addressLabeler, loadMaskMap } from "./mask-labels";
 
 const PORT = 3418;
 const RO_PORT = 3419;
@@ -300,7 +301,9 @@ test("bind: both servers accept 127.0.0.1 and refuse every non-loopback address 
   expect(await probe("127.0.0.1", PORT)).toBe("open");
   expect(await probe("127.0.0.1", RO_PORT)).toBe("open");
   const addrs = externalAddresses();
-  console.log(`bind probe: non-loopback addresses: ${addrs.join(", ") || "none"}`);
+  // Evidence is committed: print masked labels, never the real addresses (adr-0027).
+  const label = addressLabeler(loadMaskMap());
+  console.log(`bind probe: non-loopback addresses: ${addrs.map(label).join(", ") || "none"}`);
   if (addrs.length === 0) return noProbe("this machine has no non-loopback address to probe from");
 
   // Control: a throwaway listener on every interface (:: dual-stack) must be reachable on each address,
@@ -314,7 +317,7 @@ test("bind: both servers accept 127.0.0.1 and refuse every non-loopback address 
   let reachable: string[];
   try {
     const ctlResults = await Promise.all(addrs.map(async (a) => [a, await probe(a, ctlPort)] as const));
-    for (const [a, r] of ctlResults) console.log(`bind probe: control listener ${a} port ${ctlPort} -> ${r}`);
+    for (const [a, r] of ctlResults) console.log(`bind probe: control listener ${label(a)} port ${ctlPort} -> ${r}`);
     reachable = ctlResults.filter(([, r]) => r === "open").map(([a]) => a);
   } finally {
     await new Promise<void>((resolve) => ctl.close(() => resolve()));
@@ -325,6 +328,6 @@ test("bind: both servers accept 127.0.0.1 and refuse every non-loopback address 
   const results = await Promise.all(
     reachable.flatMap((a) => [PORT, RO_PORT].map(async (port) => [a, port, await probe(a, port)] as const)),
   );
-  for (const [a, port, r] of results) console.log(`bind probe: ${a} port ${port} -> ${r}`);
-  for (const [a, port, r] of results) expect(r, `${a}:${port}`).toBe("ECONNREFUSED");
+  for (const [a, port, r] of results) console.log(`bind probe: ${label(a)} port ${port} -> ${r}`);
+  for (const [a, port, r] of results) expect(r, `${label(a)}:${port}`).toBe("ECONNREFUSED");
 });

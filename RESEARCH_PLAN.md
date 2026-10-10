@@ -42,5 +42,5 @@ Ferrum is a Rust + Tauri 2 + WebView2 web-app container for Windows 11 and also 
 
 ## Next steps
 
-1. The owner reviews and approves the research pages in the plan app and answers the open questions R-Q1 to R-Q15 (registered as Q-ids in [ov-open-questions](wiki/overview/ov-open-questions.md); mapping in [ov-research-plan](wiki/research/ov-research-plan.md)).
+1. The owner reviews the research pages (read-only portal) and approves them in Claude Code and answers the open questions R-Q1 to R-Q15 (registered as Q-ids in [ov-open-questions](wiki/overview/ov-open-questions.md); mapping in [ov-research-plan](wiki/research/ov-research-plan.md)).
 2. P5 implements and validates the metrics. P6 builds the harness, runs A/A and the energy validation, then freezes the pre-registration. P7 runs the lifecycle experiments (campaign C2, plus the proposed C2b re-run that compares configuration E with A–D, owner question R-Q15 = Q-208, task p7.14). Literature batches run P1–P6, P7 closes the review and the owner approves the novelty assessment (p7.12), P8 writes the paper from the closed review.

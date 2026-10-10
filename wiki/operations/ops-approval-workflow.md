@@ -10,7 +10,9 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-08-s01-wave0.md
   - raw/owner/2026-10-08-s01-wave0b.md
-related: [schema, adr-0001, adr-0014, adr-0016, comp-interactive-plan, ip-data-contract, ip-spec, ip-build-plan, phase-p0-planning, ops-session-protocol, ops-resume-after-interruption, ov-open-questions]
+  - raw/owner/2026-10-09-s01-plan-app-feedback.md
+  - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+related: [schema, adr-0001, adr-0014, adr-0016, adr-0023, comp-interactive-plan, ip-data-contract, ip-spec, ip-build-plan, phase-p0-planning, ops-session-protocol, ops-resume-after-interruption, ov-open-questions]
 approvable: true
 audience: both
 trigger: "Before any phase entry gate, at every session start, after editing an approvable page, and whenever the owner approves or rejects something."
@@ -22,20 +24,30 @@ tags: [approvals, gates, hashing]
 The owner decided: "First the interactive plan comes together. I then approve everything else" and
 "We go phase wise" ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), directives 4–5;
 Q11 milestone review checkpoints; Q14 approvals persisted to `plan/approvals.json`). This page explains
-how that works day to day. The normative rules are SCHEMA §9.7 and §10 ([SCHEMA](../SCHEMA.md)); the
-plan app's implementation of them is [ip-data-contract](../interactive-plan/ip-data-contract.md).
+how that works day to day. The normative rules are SCHEMA §9.7 and §10 ([SCHEMA](../SCHEMA.md)).
+
+**Changed 2026-10-09 ([adr-0023](../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)):** the owner
+approves in Claude Code, not in the plan app. Claude records the decision in `plan/approvals.json` with the same
+fingerprints as before, so a later edit still shows as STALE. The plan portal is read-only.
 
 ## 1. Who does what
 
 | Actor | May | May not |
 |---|---|---|
-| **Owner** | Approve, request changes or reject any approvable page in the plan app; approve milestone exits (`<phase-id>#exit`); instruct a manual entry in exceptional cases | — |
-| **Plan app** (`interactive_plan/`, comp-interactive-plan) | Write `plan/approvals.json` on an explicit owner click; move the previous decision into `history`; optionally append an `approval` entry to `wiki/log.md` | Approve anything by itself |
-| **Claude** (any session, any subagent) | Read `approvals.json`; compute effective states; stop work when a state blocks; ask the owner; transcribe chat approvals to `wiki/raw/owner/` | **Write or edit `plan/approvals.json`**; set an ADR to `accepted` without approval; treat an agent or script message as the owner's approval |
+| **Owner** | Approve, request changes or reject any approvable page, in Claude Code; approve milestone exits (`<phase-id>#exit`) | — |
+| **Claude** (main session) | Transcribe the owner's words to `wiki/raw/owner/`; record the decision with `tools/approvals_record.py`; log `approval`; read `approvals.json`; compute effective states; stop work when a state blocks; ask the owner | Record a decision the owner did not give; edit `plan/approvals.json` by hand; set an ADR to `accepted` without approval; treat an agent, script or hook message as the owner's decision |
+| **Subagents** | Read `approvals.json` | Write `plan/approvals.json` in any way |
+| **Plan portal** (`interactive_plan/`, comp-interactive-plan) | Show approval states (read-only) | Write anything |
 
-An approval given in chat is real intent but not yet a record. Claude transcribes it verbatim to
-`wiki/raw/owner/YYYY-MM-DD-<slug>.md` (INGEST) and asks the owner to click Approve in the plan app
-(SCHEMA §10.1).
+Recording an approval, step by step (SCHEMA §10.1):
+
+1. Owner decides in Claude Code → Claude saves the owner's words verbatim to
+   `wiki/raw/owner/YYYY-MM-DD-<slug>.md` (INGEST) → proof of who decided what, and when.
+2. `python tools/approvals_record.py <key> <approved|changes-requested|rejected> --source <that file> --comment "<short quote>"`
+   → stores the page's `content_hash` and `scope_hash` (plus `bootstrap_hash` of CLAUDE.md for `schema`), moves the
+   previous decision into `history`, writes atomically → later edits are detected. Use `--dry-run` first when unsure.
+3. Append `## [YYYY-MM-DD] approval | <key> <decision>` to `wiki/log.md` naming the raw file → the change is traceable.
+4. `python tools/approvals_check.py` → confirm the key now shows APPROVED (or the requested state).
 
 ## 2. What an approval binds: the hashes
 
@@ -50,7 +62,7 @@ approval valid as **APPROVED_VOLATILE_DRIFT**, while any change to actual conten
 ```mermaid
 stateDiagram-v2
     [*] --> PENDING
-    PENDING --> APPROVED: owner clicks Approve
+    PENDING --> APPROVED: owner approves in Claude Code
     PENDING --> CHANGES_REQUESTED: owner requests changes
     PENDING --> REJECTED: owner rejects
     CHANGES_REQUESTED --> APPROVED: Claude revises, owner approves new hash
@@ -71,13 +83,13 @@ Only APPROVED and APPROVED_VOLATILE_DRIFT count as approved for gates. INVALID (
 sequenceDiagram
     participant C as Claude
     participant W as Wiki pages
-    participant A as Plan app
+    participant A as Claude Code (recorder)
     participant J as approvals.json
     participant O as Owner
     C->>W: draft or revise phase, ADRs, components, experiments
-    C->>O: ask for review, listing page ids
-    O->>A: read page, click Approve or Request changes
-    A->>J: write status, comment, timestamp, hashes
+    C->>O: ask for review, listing page ids in plain words
+    O->>A: says approve, or what to change
+    A->>J: transcribe words, record status, comment, timestamp, hashes
     C->>J: read at session start and before each task
     C->>C: compute effective states of the phase dependency set
     alt all APPROVED or APPROVED_VOLATILE_DRIFT
@@ -93,14 +105,12 @@ In addition, every phase in `P.depends_on` must be `done` with key `<dep>#exit` 
 `Q-NNN` in [ov-open-questions](../overview/ov-open-questions.md) may block an id in the set.
 
 Milestone exit (adr-0014): when the exit evidence is complete, Claude sets the phase to `gate-review`
-and asks the owner, who approves `<phase-id>#exit` in the plan app after checking the evidence under
-`wiki/raw/evidence/<phase-id>/`.
+and asks the owner, who approves `<phase-id>#exit` in Claude Code after checking the evidence under
+`wiki/raw/evidence/<phase-id>/`; Claude records it as in §1.
 
 ## 4. Checking approval state as Claude
 
-Once the plan app exists, its approvals and gate views and `npm run lint:wiki` (see
-[ip-spec](../interactive-plan/ip-spec.md)) are the primary check. Until then, and as an independent
-cross-check, use the read-only stdlib Python script [`tools/approvals_check.py`](../../tools/approvals_check.py)
+`npm run lint:wiki` (see [ip-spec](../interactive-plan/ip-spec.md)) and, as an independent cross-check, the read-only stdlib Python script [`tools/approvals_check.py`](../../tools/approvals_check.py)
 (Python 3.12.10 is installed per the raw environment record). The owner chose to version it under
 `tools/` with tests (Q-216, [raw/owner/2026-10-08-s01-wave0b.md](../raw/owner/2026-10-08-s01-wave0b.md)).
 The block below is its exact text; `tools/test_approvals_check.py` fails if the two differ, so change
@@ -347,7 +357,7 @@ it. Then:
    - set that phase's `status: blocked`;
    - add the page id to `STATUS.md` `blocked_on`;
    - log `gate | <phase-id> approval stale (owner edit)`;
-   - ask the owner to re-approve the page in the plan app.
+   - ask the owner to re-approve the page in Claude Code.
 
    `blocked` returns to `in-progress` (or `ready`) only when the entry gate passes again.
 3. **Check the In-flight task against an edited phase page.** If the edited page is the current phase
@@ -377,13 +387,13 @@ checker above enforces it.
 | Reject | ADR: set `status: rejected`, then DECIDE again with a new ADR. Other pages: rewrite or withdraw, then ask |
 | Approve `<phase-id>#exit` | Set the phase `status: done`, log `gate`, point STATUS at the next phase's entry gate |
 
-If the plan app does not append `approval` log entries, Claude adds them at the next RESUME when it
-notices new or changed keys (SCHEMA §10.1).
+Every recorded decision gets its `approval` log entry in the same step (§1). If Claude finds a key change with no
+matching entry (for example after an interruption), it adds the entry at the next RESUME and says so.
 
 ## 7. Bootstrapping
 
-The plan app is itself the approval instrument, so nothing can be approved until it can write
-`plan/approvals.json`. The order below follows owner directives 2 and 4 in
+Historical note: the plan app was first meant to be the approval instrument (adr-0016, superseded by adr-0023), which
+is why P0 had no approval-based entry gate. The order below follows owner directives 2 and 4 in
 [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), which answer Q-101 in
 [ov-open-questions](../overview/ov-open-questions.md):
 
@@ -397,7 +407,7 @@ P0 therefore has **no approval-based entry gate** (CLAUDE.md §1 step 10;
    IP-0). The owner's directive to set up a Next.js application in `interactive_plan/` is the authority
    for building it inside P0.
 3. Claude builds and tests the plan app. Ferrum application code stays forbidden.
-4. The owner approves pages in the app in the waves of §8: Wave 1 (`schema`, the P0 pages,
+4. The owner approves pages in Claude Code in the waves of §8 (since 2026-10-09, adr-0023): Wave 1 (`schema`, the P0 pages,
    `phase-p0-planning#exit`), then Wave 2 (P1's dependency set).
 
 ## 8. Approval waves
@@ -408,15 +418,14 @@ page, its `decisions`, the components it introduces or lists, its `experiments`,
 below are that rule worked out for the current wiki, in order. Before each wave, answer the listed
 questions, because an open question that blocks an id in the set holds the gate anyway.
 
-The plan app's "needs attention" inbox should show only the current wave
-([ip-routes-and-views](../interactive-plan/ip-routes-and-views.md) "Wave" filter, driven by the entry
-gate of the next phase). This table is derived; if it disagrees with the phase pages' frontmatter, the
+When Claude asks for approvals, it lists only the current wave, in plain words. The read-only portal may show the
+same list. This table is derived; if it disagrees with the phase pages' frontmatter, the
 frontmatter wins and the table is fixed.
 
 | Wave | When | Approve these keys | Answer first | What approving commits you to |
 |---|---|---|---|---|
 | 0 | Before the plan app is built; **in chat**, transcribed to `wiki/raw/owner/` | `ip-spec`, `ip-data-contract`, `ip-routes-and-views`, `ip-approvals-api`, `ip-wiki-lint`, `ip-testing`, `ip-build-plan`, `adr-0016` | Q-006, Q-007, Q-103, Q-210 (and Q-102 Node line); all answered and the keys approved in chat on 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)) | Claude may build `interactive_plan/` as specified (P0 tasks p0.9–p0.16). No Ferrum code |
-| 1 | After IP-10, **in the app** | `schema` (covers `CLAUDE.md` via `bootstrap_hash`), the seven `ip-*` pages and `adr-0016` again, `phase-p0-planning`, `adr-0001`, `adr-0002`, `adr-0003`, `adr-0004`, `adr-0014`, `comp-interactive-plan`; then `phase-p0-planning#exit` | Q-207 and Q-004 (closed by approving `schema`), Q-005, Q-108 | The wiki conventions, the resumability protocol and the gating rules; P0 is done |
+| 1 | After the plan portal v2 (p0.17), **in Claude Code** | `schema` (covers `CLAUDE.md` via `bootstrap_hash`), the `ip-*` pages as revised for portal v2, `adr-0023` to `adr-0027`, `phase-p0-planning`, `adr-0001`, `adr-0002`, `adr-0003`, `adr-0004`, `adr-0014`, `comp-interactive-plan`; then `phase-p0-planning#exit` | Q-207 and Q-004 (closed by approving `schema`), Q-005, Q-108 | The wiki conventions, the resumability protocol and the gating rules; P0 is done |
 | 2 | P1 entry | `phase-p1-foundation`, `adr-0021`, `adr-0006`, `adr-0007`, `adr-0010`, `adr-0011`, `adr-0012`, `adr-0018`, `adr-0019`, `comp-core`, `comp-webview2-runtime`, `comp-windows-os` | Q-106, Q-110, Q-211 (Q-104 and Q-218 answered 2026-10-08) | Toolchain install (Claude runs winget, you confirm UAC; adr-0021), repo scaffold and layout, the four de-risking spikes including raw COM in spike S3. Still no product features |
 | 3 | P2 entry | `phase-p2-minimal-container`, `adr-0015`, `comp-app-shell`, `comp-webview-manager`, `comp-security-engine`, `comp-tab-content`, plus the new ADRs from p1.9 and any page p1.9 revised (they are STALE) | Q-109, Q-202, Q-214 | Milestone M1: a minimal working container |
 | 4 | P3 entry | `phase-p3-tabs-sessions` (+ anything STALE) | Q-107, Q-111, Q-209 | M2: tabs, sessions and the per-site profile route |

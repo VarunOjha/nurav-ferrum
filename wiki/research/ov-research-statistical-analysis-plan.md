@@ -3,7 +3,7 @@ id: ov-research-statistical-analysis-plan
 type: overview
 title: "Statistical analysis plan (pre-registration rules)"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/research/measurement-methodology.md
@@ -64,7 +64,7 @@ flowchart LR
 
 - **What is frozen:** the hypotheses (prediction, null, thresholds), the primary metric per hypothesis, the test families, α, the confirmatory configurations and workloads, the trial counts, the exclusion criteria, the primary J weights, the activation-trace seeds, and the analysis-script hashes.
 - **When:** at the end of `phase-p6-benchmark-harness`, before any confirmatory run of the P6 families. For `exp-lifecycle-policies` it happens before confirmatory runs in `phase-p7-lifecycle`.
-- **How:** the owner approves each `hyp-*` page in the plan app. The status changes `draft` → `preregistered` (a volatile key, so the approval stays valid). A `decide` log entry records the git commit sha. Any later change makes the affected analysis **exploratory** and is labelled that way everywhere.
+- **How:** the owner approves each `hyp-*` page in Claude Code and Claude records it (adr-0023). The status changes `draft` → `preregistered` (a volatile key, so the approval stays valid). A `decide` log entry records the git commit sha. Any later change makes the affected analysis **exploratory** and is labelled that way everywhere.
 
 ## 2. Design and the unit of analysis
 

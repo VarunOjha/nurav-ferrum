@@ -3,7 +3,7 @@ id: adr-0011
 type: decision
 title: "git + GitHub Actions (windows-latest), dual MIT OR Apache-2.0 license; Claude never pushes"
 status: accepted
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -55,9 +55,9 @@ As recorded in [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), sc
 
 This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
 
-### Claude elaboration (binding only once this ADR is APPROVED in the plan app)
+### Claude elaboration (binding only once the owner APPROVES this ADR)
 
-Everything below in this section is Claude's elaboration of the owner's choice. Under SCHEMA §10.4 it binds implementation only after the owner approves this ADR in the plan app; until then it is a proposal.
+Everything below in this section is Claude's elaboration of the owner's choice. Under SCHEMA §10.4 it binds implementation only after the owner approves this ADR (given in Claude Code and recorded in `plan/approvals.json`, adr-0023); until then it is a proposal.
 
 **Option A.**
 

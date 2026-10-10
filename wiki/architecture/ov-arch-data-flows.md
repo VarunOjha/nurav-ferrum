@@ -166,4 +166,4 @@ flowchart LR
   approvals --> claude["Claude session reads at every phase gate"]
 ```
 
-The plan app is planning tooling (adr-0016). It has **no connection to Ferrum's runtime**, is never shipped, and is never started by the product. Claude never writes `plan/approvals.json` (wiki SCHEMA §10.1).
+The plan app is planning tooling (adr-0016, superseded by adr-0023). It has **no connection to Ferrum's runtime**, is never shipped, and is never started by the product. From portal v2 (task p0.17) it is read-only: it reads plain-language JSON (adr-0024) and never writes `plan/approvals.json`; Claude records approvals the owner gives in Claude Code (wiki SCHEMA §10.1).

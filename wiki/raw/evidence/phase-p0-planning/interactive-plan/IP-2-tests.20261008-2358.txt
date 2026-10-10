@@ -8,7 +8,7 @@ $ npm run test -- --reporter=verbose
 
 The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
 
- RUN  v5.0.3 C:/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
 
  ✓ tests/unit/config.test.ts > getConfig > defaults are relative to the app directory's parent 4ms
  ✓ tests/unit/config.test.ts > getConfig > environment overrides (relative values resolve against cwd) 1ms

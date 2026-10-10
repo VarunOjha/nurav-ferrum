@@ -3,7 +3,7 @@ id: ops-environment-setup
 type: operations
 title: "Environment setup: toolchain install (winget), verification, PATH"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -120,7 +120,7 @@ then a minimal Tauri app), not these version commands.
 - **Workaround inside an old session (Git Bash).** Claude's Bash tool does not keep environment
   variables between calls, so prefix each command:
   `export PATH="/c/Program Files/nodejs:$HOME/.cargo/bin:$PATH"; node --version`
-  (`$HOME` is `/c/Users/Varun Ojha`; always quote paths containing spaces.)
+  (`$HOME` is the Git Bash spelling of the Windows user folder `<USERPROFILE>`, whose name contains a space; always quote paths containing spaces. Real values are masked in committed files, adr-0027.)
 - **Workaround inside an old session (PowerShell).**
   `$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')`
 - **Linker shadowing.** In Git Bash, `/usr/bin/link` (coreutils) is found before MSVC's `link.exe`; the raw
@@ -129,7 +129,7 @@ then a minimal Tauri app), not these version commands.
 - **Which shell for what.** winget and installers: PowerShell (Claude runs them; owner confirms UAC). `grep`/`sed`/log recipes and the
   wiki scripts: Git Bash. npm/Next.js: either. Cargo/Tauri: PowerShell until the linker question is settled.
 - **Python output in Git Bash** has CRLF line endings; strip `\r` when capturing it.
-- **Paths with spaces.** The repo is under `C:\Users\Varun Ojha\...`. Quote every path. Whether
+- **Paths with spaces.** The repo is under `<USERPROFILE>\Documents\Projects\...` (the user folder name contains a space). Quote every path. Whether
   `create-next-app` handles it is a P0 plan-app check ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §6, item 1).
 
 ## 5. Interactive plan app prerequisites

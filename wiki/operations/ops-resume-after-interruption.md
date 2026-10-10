@@ -3,7 +3,7 @@ id: ops-resume-after-interruption
 type: operations
 title: "Resume after interruption: detect, decide, recover"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/llm-wiki-pattern.md
@@ -38,7 +38,7 @@ paths.
 Run every command in this block on every resume. `git stash list` is mandatory, not optional.
 
 ```bash
-cd "/c/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient"
+cd "$HOME/Documents/Projects/ferrum-rust-webclient"   # $HOME = the user folder <USERPROFILE> in Git Bash
 git rev-parse --verify -q HEAD || echo "NO COMMITS YET"   # P0 before the first commit
 ls .git/index.lock 2>/dev/null && echo "INDEX LOCK PRESENT"
 git status --short                 # uncommitted and untracked changes
@@ -168,7 +168,7 @@ Do not finish the task. This does not apply to P0, which has no approval-based g
 1. **Stale `.git/index.lock`.** Every git command that writes will fail while it exists. First check
    that no git process is running: `tasklist //FI "IMAGENAME eq git.exe"` (Git Bash; prints "No tasks"
    when none). If none is running, **ask the owner** before removing the lock, and give the exact
-   command: `rm "/c/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/.git/index.lock"`. Never
+   command: `rm "$HOME/Documents/Projects/ferrum-rust-webclient/.git/index.lock"`. Never
    remove it on your own: it is a file deletion.
 2. **Half-staged index** (`git diff --cached --name-only` is not empty). Compare the staged set with the
    In-flight touched paths.

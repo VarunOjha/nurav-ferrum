@@ -18,7 +18,7 @@ RESULTS (from the raw output below)
   any host other than 127.0.0.1/localhost. No fallback to 11.17.2 needed (Q-103).
 - S3 bind: PASS under both modes. Started with -H 127.0.0.1 -p 3417, netstat shows the only listener
   on 127.0.0.1:3417; http://127.0.0.1:3417/ and http://localhost:3417/ answer 200; the LAN IPv4
-  192.168.1.237 (Wi-Fi 2, from ipconfig) and the vEthernet (WSL) address 172.27.64.1 are refused
+  <LAN_IPV4_1> (Wi-Fi 2, from ipconfig) and the vEthernet (WSL) address <WSL_IPV4_1> are refused
   (curl exit 7 = connection refused, http 000).
 - Only the server processes started by the runner were stopped (taskkill /T on the Windows PID of
   the node process the runner launched); no listener remained on :3417 afterwards.
@@ -28,10 +28,10 @@ RAW OUTPUT (scratchpad runner spikes.sh; output verbatim)
 IP-1 spikes, captured 2026-10-09T04:34:27Z, node v24.20.0, HEAD c9e2a31
 LAN IPv4 from ipconfig:
 Ethernet adapter vEthernet (WSL (Hyper-V firewall)):
-   IPv4 Address. . . . . . . . . . . : 172.27.64.1
+   IPv4 Address. . . . . . . . . . . : <WSL_IPV4_1>
 --
 Wireless LAN adapter Wi-Fi 2:
-   IPv4 Address. . . . . . . . . . . : 192.168.1.237
+   IPv4 Address. . . . . . . . . . . : <LAN_IPV4_1>
 sha256 of wiki/SCHEMA.md on disk (raw bytes): 76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8
 plan/ before: ls: cannot access '../plan': No such file or directory
 
@@ -40,10 +40,10 @@ started: bash pid 305, Windows PID 42340
 --- listeners on :3417 ---
   TCP    127.0.0.1:3417         0.0.0.0:0              LISTENING       42340
 --- S1 GET /api/spike-fs (request 1) ---
-{"cwd":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-d11ef3b4be45","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
+{"cwd":"<USERPROFILE>\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"<USERPROFILE>\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-d11ef3b4be45","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
 [http 200]
 --- S1 GET /api/spike-fs (request 2) ---
-{"cwd":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-350be7a67d07","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
+{"cwd":"<USERPROFILE>\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"<USERPROFILE>\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-350be7a67d07","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
 [http 200]
 --- S2 headless Chromium /spike-mermaid ---
 {
@@ -72,9 +72,9 @@ started: bash pid 305, Windows PID 42340
 [http 200] [curl exit 0]
 --- S3 curl -m 5 http://localhost:3417/ ---
 [http 200] [curl exit 0]
---- S3 curl -m 5 http://192.168.1.237:3417/ ---
+--- S3 curl -m 5 http://<LAN_IPV4_1>:3417/ ---
 [http 000] [curl exit 7]
---- S3 curl -m 5 http://172.27.64.1:3417/ ---
+--- S3 curl -m 5 http://<WSL_IPV4_1>:3417/ ---
 [http 000] [curl exit 7]
 --- stopping only the processes this script started (taskkill /T on Windows PID 42340) ---
 SUCCESS: The process with PID 42340 (child process of PID 77544) has been terminated.
@@ -92,10 +92,10 @@ started: bash pid 327, Windows PID 82552
 --- listeners on :3417 ---
   TCP    127.0.0.1:3417         0.0.0.0:0              LISTENING       83544
 --- S1 GET /api/spike-fs (request 1) ---
-{"cwd":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-b08922a5848b","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
+{"cwd":"<USERPROFILE>\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"<USERPROFILE>\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-b08922a5848b","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
 [http 200]
 --- S1 GET /api/spike-fs (request 2) ---
-{"cwd":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"C:\\Users\\Varun Ojha\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-482d51e13343","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
+{"cwd":"<USERPROFILE>\\Documents\\Projects\\ferrum-rust-webclient\\interactive_plan","root":"<USERPROFILE>\\Documents\\Projects\\ferrum-rust-webclient","schemaBytes":54140,"schemaSha256":"76e3c979019eec56f4055ecb5dbc18cf4450e10148a5665b035e30c5d6bbe5d8","schemaFirstLine":"---","spikeWritten":".spike-482d51e13343","spikeReadBack":"spike S1","spikeDeleted":true,"createdAndRemovedPlanDir":true,"approvalsJsonExists":false,"ok":true}
 [http 200]
 --- S2 headless Chromium /spike-mermaid ---
 {
@@ -124,9 +124,9 @@ started: bash pid 327, Windows PID 82552
 [http 200] [curl exit 0]
 --- S3 curl -m 5 http://localhost:3417/ ---
 [http 200] [curl exit 0]
---- S3 curl -m 5 http://192.168.1.237:3417/ ---
+--- S3 curl -m 5 http://<LAN_IPV4_1>:3417/ ---
 [http 000] [curl exit 7]
---- S3 curl -m 5 http://172.27.64.1:3417/ ---
+--- S3 curl -m 5 http://<WSL_IPV4_1>:3417/ ---
 [http 000] [curl exit 7]
 --- stopping only the processes this script started (taskkill /T on Windows PID 82552) ---
 SUCCESS: The process with PID 83544 (child process of PID 82552) has been terminated.
@@ -156,7 +156,7 @@ SOURCE: scratchpad spikes.sh (runner)
 #!/bin/bash
 # IP-1 spike runner: S1 + S2 under next start and next dev, S3 under both. Kills only the processes it started.
 export PATH="/c/Program Files/nodejs:$PATH"
-APP="/c/Users/Varun Ojha/Documents/Projects/ferrum-rust-webclient/interactive_plan"
+APP="<USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan"
 SP="$1"; LAN="$2"; OTHER="$3"
 cd "$APP"
 run_mode() {
