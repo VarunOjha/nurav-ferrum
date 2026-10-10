@@ -1,8 +1,8 @@
 ---
 id: ip-approvals-api
 type: operations
-title: "Interactive plan app: approvals API (GET/POST /api/approvals)"
-status: active
+title: "Interactive plan app v1: approvals API (retired, history)"
+status: retired
 updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md
@@ -12,14 +12,21 @@ sources:
   - raw/evidence/phase-p0-planning/interactive-plan/IP-8-tests.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt
 related: [ip-spec, ip-data-contract, ip-routes-and-views, ip-testing, comp-interactive-plan, adr-0016, adr-0011, schema]
-approvable: true
+approvable: false
 phase: phase-p0-planning
 audience: both
-trigger: "Read before changing app/api/approvals/route.ts or lib/approvals/store.ts, or when an approval did not persist"
+trigger: "Read only as history of the v1 approvals API; approvals are now recorded with tools/approvals_record.py (adr-0023)"
 tags: [interactive-plan, api, approvals, security]
 ---
 
-# Interactive plan app: approvals API
+# Interactive plan app v1: approvals API
+
+> **Retired (portal v2, task p0.17, 2026-10-09).** This API no longer exists. The owner decided that approvals are
+> given in Claude Code and recorded by Claude with `tools/approvals_record.py`, and that the portal is read-only
+> ([adr-0023](../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)); every portal route now refuses any
+> method other than GET and HEAD. This page is kept as the record of how v1 worked; its code is in git history (before
+> commit "feat(portal): read-only portal shell ..."). It needs no approval (`approvable: false`). Current pages:
+> [ip-spec](ip-spec.md), [ip-data-contract](ip-data-contract.md).
 
 This route is the **only** write path in the app. It implements owner decision Q14, "Approve in UI, persisted to repo (`plan/approvals.json`, git-tracked, via local Next.js API route)" ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)), with the file format, hashes and states of [SCHEMA.md](../SCHEMA.md) §10. Claude never calls the POST endpoint and never writes `approvals.json` (SCHEMA §10.1). The only caller is the owner's browser click.
 

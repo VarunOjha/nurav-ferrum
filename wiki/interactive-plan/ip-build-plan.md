@@ -1,8 +1,8 @@
 ---
 id: ip-build-plan
 type: operations
-title: "Interactive plan app: build plan (one workflow, gated steps IP-0 to IP-10)"
-status: active
+title: "Interactive plan app v1: build plan, steps IP-0 to IP-10 (finished, history)"
+status: retired
 updated: 2026-10-09
 sources:
   - raw/research/nextjs-stack.md
@@ -10,14 +10,21 @@ sources:
   - raw/owner/2026-10-08-s01-wave0.md
   - raw/owner/2026-10-09-s01-wave0c.md
 related: [ops-approval-workflow, ov-open-questions, ops-wiki-maintenance, ip-spec, ip-data-contract, ip-routes-and-views, ip-approvals-api, ip-wiki-lint, ip-testing, comp-interactive-plan, phase-p0-planning, adr-0016, adr-0021, adr-0011, adr-0003, schema]
-approvable: true
+approvable: false
 phase: phase-p0-planning
 audience: claude
-trigger: "Execute when the owner has approved the ip-* pages and asked for the plan app to be built; on resume, continue from the first IP step whose gate has no saved evidence"
+trigger: "Read only as history: the v1 build steps IP-0 to IP-10 that older log entries and evidence name"
 tags: [interactive-plan, build-plan, resumability]
 ---
 
-# Interactive plan app: build plan
+# Interactive plan app v1: build plan
+
+> **Finished and retired (2026-10-09).** Steps IP-0 to IP-10 built portal v1 (tasks p0.9 to p0.16; evidence under
+> `raw/evidence/phase-p0-planning/interactive-plan/`). The owner then asked for a plain-language, read-only portal, and
+> task p0.17 rebuilt it in six steps (rules, pipeline, portal text, check scripts, portal data and shell, portal views)
+> plus a final review; the plan for that work is the p0.17 row of [phase-p0-planning](../phases/phase-p0-planning.md),
+> and the result is described by [ip-spec](ip-spec.md). This page stays as the record of the v1 build and of the IP
+> step names that older log entries and evidence use. It needs no approval (`approvable: false`).
 
 This plan is sized for **one build workflow** (one or two sessions). Every step ends with a **test gate**. The step is done only when the gate command was run in the current repo state and its output was saved (SCHEMA §9.7 spirit). The plan is **resumable**: after each step, update `STATUS.md` and append a `code` log entry naming the step (SCHEMA §9.5 continuous checkpointing). A session that dies mid-build then loses at most one step.
 

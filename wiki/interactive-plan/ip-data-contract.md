@@ -1,7 +1,7 @@
 ---
 id: ip-data-contract
 type: operations
-title: "Interactive plan app: data contract (wiki loading, zod models, hashes, approval state)"
+title: "Plan portal: data contract (portal JSON, approvals file, wiki check, hashes)"
 status: active
 updated: 2026-10-09
 sources:
@@ -11,7 +11,9 @@ sources:
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-2-tests.txt
   - raw/evidence/phase-p0-planning/interactive-plan/IP-3-tests.txt
-related: [ip-spec, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-testing, comp-interactive-plan, adr-0016, schema]
+  - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+  - raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt
+related: [adr-0023, adr-0024, ops-portal-pipeline, ip-spec, ip-approvals-api, ip-wiki-lint, ip-routes-and-views, ip-testing, comp-interactive-plan, adr-0016, schema]
 approvable: true
 phase: phase-p0-planning
 audience: both
@@ -19,25 +21,42 @@ trigger: "Read before changing how the plan app reads wiki/, STATUS.md or plan/a
 tags: [interactive-plan, data-model, approvals, hashing]
 ---
 
-# Interactive plan app: data contract
+# Plan portal: data contract
 
-This page defines **exactly** what the plan app reads and writes, how it validates the data, and how it computes hashes and approval states. The authoritative rules are in [SCHEMA.md](../SCHEMA.md). This page is their executable reading. If the two disagree, SCHEMA.md wins and the app is fixed (precedence, SCHEMA §3.4). SCHEMA §10.2 names this page (`ip-data-contract`) as the home of the shared **hash test vectors** (§7 below).
+> **Portal v2 (task p0.17, 2026-10-09).** The portal pages read **only** the plain-language JSON in `plan/portal/` and,
+> for approval labels, `plan/approvals.json` ([adr-0024](../decisions/adr-0024-portal-reads-plain-language-json.md)).
+> They write nothing ([adr-0023](../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)). Section 0 and
+> section 1 below describe that. Sections 2 to 8 describe the wiki loader, hashes and approval states, which are still
+> used by the command-line wiki check (`npm run lint:wiki`, `npm run gate`, [ip-wiki-lint](ip-wiki-lint.md)) and mirror
+> `tools/approvals_check.py` and `tools/approvals_record.py`. The v1 write path (approvals store, snapshots, lock, log
+> append) was removed with the approvals API; where a section below mentions it, that text is history
+> ([ip-approvals-api](ip-approvals-api.md), retired).
+
+The authoritative rules are in [SCHEMA.md](../SCHEMA.md); if this page and SCHEMA disagree, SCHEMA wins (SCHEMA §3.4).
+SCHEMA §10.2 names this page as the home of the shared **hash test vectors** (§7 below).
+
+## 0. Portal data (v2)
+
+| Input | Read by | Rule |
+|---|---|---|
+| `plan/portal/*.json`, `plan/portal/phases/*.json` | every tab (`lib/portal/load.ts`) | Validated with zod schemas generated from `plan/portal/schema/*.schema.json` (`npm run schemas:portal`, `lib/portal/schemas.gen.ts`). A missing or misshaped file is listed as a note at the top of the page; the other files still render |
+| `plan/portal/pipeline.json` | id detection (`lib/portal/refs.ts`) | Its `id_patterns` decide which words are ids; every id and every `[words](ref:id)` link becomes a button |
+| `plan/portal/refs.json` | reference popup | One explainer per id; `aliases` map short names (P0 to P8) to their phase |
+| `plan/approvals.json` | approval labels (`lib/approvals/file.ts`) | Missing file = nothing approved. "Approved" only when the stored fingerprint equals the one the portal text was written from (`source.content_hash`); a different one shows "Approved, page edited since"; other labels: "Not approved yet", "Changes requested", "Rejected", "Approvals file unreadable" (`lib/portal/view.ts`) |
+| `scripts/**/*.ps1` | script popup, gate header (`lib/portal/scripts.ts`) | Only scripts that a portal JSON `script` field names, only inside `scripts/`, at most 256 KB, through `GET /api/script` |
+
+Who writes these files: Claude, in the same edit as the wiki change, using the repo skill `wiki-to-portal`; the checker
+`pwsh tools/portal-sync-check.ps1` must print `clean` ([ops-portal-pipeline](../operations/ops-portal-pipeline.md)).
 
 ## 1. Files touched
 
-| File / glob | Access | Notes |
+| File / glob | Access | Used by |
 |---|---|---|
-| `wiki/**/*.md` except `wiki/raw/**` | read | Wiki pages. Full frontmatter validation (§3) |
-| `wiki/raw/research/*.md` | read | `research-note` reduced frontmatter (SCHEMA §6.13). Validated, never written |
-| `wiki/raw/**` (all other files) | stat + read for rendering | No frontmatter required. Exists only to resolve `sources` and body links, and to render raw files read-only in the wiki browser |
-| `STATUS.md` (repo root) | read | Frontmatter `status-live` (SCHEMA §6.16) + body "Next action" |
-| `plan/approvals.json` | read + **atomic write** | Only through `lib/approvals/store.ts` ([ip-approvals-api](ip-approvals-api.md)) |
-| `plan/snapshots/<page-id>/<content-hash-hex>.md` | **create** (atomic, never overwritten) | The normalised bytes of an approved page, written by `store.ts` before the approvals file ([ip-approvals-api](ip-approvals-api.md) §2.1 step 8); git-tracked |
-| `plan/.approvals.lock` (+ `*.tmp-*` temp files) | create + delete | Cross-process write lock and atomic-write temp files ([ip-approvals-api](ip-approvals-api.md) §4); git-ignored |
-| `CLAUDE.md` (repo root) | read | `bootstrap_hash` of key `schema` (§6.2) |
-| `wiki/log.md` | read; optional **append** | Append only an `approval` entry, only after a successful approvals write, only if `PLAN_APPEND_LOG` is on (default on; `0` turns it off; Q-006) |
+| `plan/portal/**/*.json`, `plan/approvals.json`, named `scripts/**/*.ps1` | read | the portal pages (section 0) |
+| `wiki/**/*.md`, `wiki/raw/**` (stat and read), `STATUS.md`, `CLAUDE.md` | read | the command-line wiki check and gate report only, never a page |
 
-The app writes nothing else. In particular it never writes to `wiki/raw/`, any other wiki page, `STATUS.md` or git.
+Nothing writes. The portal and its checks never write to `wiki/`, `plan/`, `STATUS.md` or git; browser tests fail if
+any of the guarded files changes ([ip-testing](ip-testing.md)).
 
 ## 2. Load pipeline (per request, server only)
 

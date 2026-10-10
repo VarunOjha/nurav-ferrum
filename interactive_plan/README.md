@@ -8,17 +8,36 @@ It is planning tooling, not Ferrum itself.
 
 The layout follows the owner-approved mockups (Layout A, 2026-10-09): top tabs Overview, Roadmap,
 Architecture, Decisions, Research, Questions, Log; every id opens a small explainer popup; phases open
-in a popup. Status (p0.17, 2026-10-09): the Overview, the phase popup and the reference popup are
-built; the other tabs show a placeholder until their views are built in the next step.
+in a popup with their tasks, test gate and check scripts. All seven tabs are built (task p0.17).
 
-## Requirements
+## Start the portal (owner)
+
+Open PowerShell 7 in the repo folder and run one script:
+
+```powershell
+pwsh -NoProfile -File scripts/start-portal.ps1
+```
+
+What it does, step by step (each step prints a line, and a red line says what went wrong):
+
+| Step | What happens | Why |
+|---|---|---|
+| 1 | Finds Node.js, also when it is not on PATH (it looks in `C:\Program Files\nodejs`) | the portal runs on Node; nothing permanent is changed |
+| 2 | The first time only: installs the portal's packages (`npm ci`, a few minutes) | exact versions from `package-lock.json`, the same on every machine |
+| 3 | Checks that port 3417 is free; if the portal already runs there, it just opens the page | no second copy |
+| 4 | Builds the portal (about 1 minute) | it always shows the latest plan text |
+| 5 | Starts it on http://127.0.0.1:3417/ and opens your browser | 127.0.0.1 = this computer only |
+
+The portal keeps running while the window is open; **Ctrl+C** stops it. It only reads the plan, so
+it cannot change anything. Options: `-Port 3500` (another port), `-NoBrowser`, `-CheckOnly` (steps
+1 to 3 only, starts nothing). If it stops with a red message, paste that message to Claude.
+
+## Requirements and npm scripts (Claude)
 
 - Node 24 LTS (`>=24.15 <27`, see `package.json` `engines`). On this machine Node is in
   `C:\Program Files\nodejs` and is not on the Git Bash PATH by default:
   `export PATH="/c/Program Files/nodejs:$PATH"`.
-- `npm ci` once after a fresh clone.
-
-## Start
+- `npm ci` once after a fresh clone (the start script does this itself).
 
 ```bash
 cd interactive_plan
@@ -79,6 +98,13 @@ E2E reads the real `plan/` folder (the portal never writes); the teardown fails 
 `plan/approvals.json`, any `plan/portal` JSON file, `wiki/log.md` or `STATUS.md` changed. Stop any
 server on 3418 first (the portal on 3417 can keep running). `IP_REQUIRE_BIND_PROBE=1` makes a machine
 without a probe-able network address fail the bind test (set for gate runs).
+
+## Specification
+
+The `ip-*` pages in `../wiki/interactive-plan/` describe this portal (v2): purpose and rules in
+`ip-spec`, tabs and popups in `ip-routes-and-views`, data in `ip-data-contract`, tests in `ip-testing`,
+the command-line wiki check in `ip-wiki-lint`. `ip-approvals-api` and `ip-build-plan` describe v1 and
+are kept as history.
 
 ## History
 

@@ -76,3 +76,51 @@ export function scriptHeader(text: string): string | null {
   const body = lines.map((l) => l.slice(cut)).join("\n").trim();
   return body === "" ? null : body;
 }
+
+/** One block of a script header, ready to show without the script's hard line breaks. */
+export interface HeaderPart {
+  /** "Why", "How to run", ... for a `Label : text` field; null for free text and list items. */
+  label: string | null;
+  text: string;
+  /** Indentation of the block in the header (list items under a heading are indented). */
+  indent: number;
+}
+
+/** Fields whose continuation lines are separate commands, so their line breaks are kept. */
+const KEEP_LINES = new Set(["How to run"]);
+const FIELD = /^([A-Z][A-Za-z' ]{0,24}?)\s*:\s+(\S.*)$/;
+const LIST = /^(\d+\.|-)\s+/;
+
+/**
+ * Splits a scriptHeader() text into fields ("Why : ...") and paragraphs, and joins the lines the
+ * script wraps at 110 characters, so a narrow popup can reflow them (the hard breaks plus the column
+ * indentation read badly once the browser wraps them again).
+ */
+export function headerParts(header: string): HeaderPart[] {
+  const parts: (HeaderPart & { cont: number })[] = [];
+  let cur: (HeaderPart & { cont: number }) | null = null;
+  for (const line of header.split("\n")) {
+    if (line.trim() === "") {
+      cur = null;
+      continue;
+    }
+    const indent = /^ */.exec(line)![0].length;
+    const body = line.slice(indent);
+    // The first line is the one-line summary (.SYNOPSIS), never a field.
+    const field = indent === 0 && parts.length > 0 ? FIELD.exec(body) : null;
+    if (field) {
+      cur = { label: field[1].trim(), text: field[2].trim(), indent: 0, cont: line.indexOf(field[2]) };
+      parts.push(cur);
+      continue;
+    }
+    if (cur && indent >= cur.cont && !LIST.test(body)) {
+      cur.text += (cur.label && KEEP_LINES.has(cur.label) ? "\n" : " ") + body.trim();
+      continue;
+    }
+    const marker = LIST.exec(body);
+    // A wrapped list item continues under its text; a wrapped paragraph continues at its own indent.
+    cur = { label: null, text: body.trim(), indent, cont: indent + (marker ? marker[0].length : 0) };
+    parts.push(cur);
+  }
+  return parts.map(({ label, text, indent }) => ({ label, text, indent }));
+}

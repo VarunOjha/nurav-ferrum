@@ -72,4 +72,10 @@ test("phone width: the overview and a phase popup fit without sideways scrolling
   const box = await dialog.boundingBox();
   expect(box!.x).toBeGreaterThanOrEqual(0);
   expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+  // The task table becomes one card per task: no sideways scrolling inside the popup either.
+  const table = dialog.locator("table.tasks-table");
+  const inner = await table.evaluate((t) => t.parentElement!.scrollWidth - t.parentElement!.clientWidth);
+  expect(inner).toBeLessThanOrEqual(0);
+  // The column names are visually hidden (each card labels its own values).
+  expect(await table.locator("thead").evaluate((e) => e.getBoundingClientRect().height)).toBeLessThanOrEqual(1);
 });

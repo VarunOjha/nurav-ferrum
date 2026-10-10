@@ -1,7 +1,7 @@
 ---
 id: ip-spec
 type: operations
-title: "Interactive plan app: product specification"
+title: "Plan portal (interactive_plan/): product specification"
 status: active
 updated: 2026-10-09
 sources:
@@ -10,189 +10,195 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/research/llm-wiki-pattern.md
   - raw/owner/2026-10-09-s01-wave0c.md
-related: [comp-interactive-plan, adr-0016, adr-0002, adr-0003, adr-0001, adr-0014, schema, phase-p0-planning, ip-data-contract, ip-routes-and-views, ip-approvals-api, ip-wiki-lint, ip-testing, ip-build-plan]
+  - raw/owner/2026-10-09-s01-plan-app-feedback.md
+  - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+  - raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt
+related: [comp-interactive-plan, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, adr-0016, adr-0002, adr-0003, adr-0001, adr-0014, schema, phase-p0-planning, ops-portal-pipeline, ip-data-contract, ip-routes-and-views, ip-approvals-api, ip-wiki-lint, ip-testing, ip-build-plan]
 approvable: true
 phase: phase-p0-planning
 audience: both
-trigger: "Read before building, changing or running the interactive_plan/ Next.js app; the owner approves this page before the app is built"
-tags: [interactive-plan, nextjs, planning-tooling]
-unverified:
-  - claim: "Performance targets for page render on the owner's machine are achievable"
-    verify_in: phase-p0-planning
+trigger: "Read before building, changing or running the interactive_plan/ portal"
+tags: [interactive-plan, nextjs, planning-tooling, portal]
 ---
 
-# Interactive plan app: product specification
+# Plan portal (`interactive_plan/`): product specification
 
-The `interactive_plan/` folder holds a small Next.js application. It **visualises the Ferrum wiki** (architecture, phases and milestones, decisions, risks, research traceability, log) and lets the owner **approve or request changes** on every approvable page. It is planning tooling for this repository. It is **not part of Ferrum**, is never shipped and is never deployed.
+> **This page describes portal v2** (task p0.17, 2026-10-09). The owner found v1, a wiki browser with
+> an approvals inbox, too technical ([owner feedback](../raw/owner/2026-10-09-s01-plan-app-feedback.md)) and chose a
+> read-only, plain-language portal ([owner decisions](../raw/owner/2026-10-09-s01-portal-v2-decisions.md),
+> [adr-0023](../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md),
+> [adr-0024](../decisions/adr-0024-portal-reads-plain-language-json.md)). The v1 specification is in git history
+> (this page before commit "feat(portal): read-only portal shell ..."); v1's build plan stays readable as
+> [ip-build-plan](ip-build-plan.md) and its approvals API as [ip-approvals-api](ip-approvals-api.md), both retired.
 
-The pages that make up the full specification:
+The `interactive_plan/` folder holds a small Next.js application: a **read-only portal** where the owner follows the
+project in plain words. It is planning tooling for this repository. It is **not part of Ferrum**, is never shipped
+and is never deployed.
 
 | Page | Content |
 |---|---|
-| this page (`ip-spec`) | Purpose, users, scope, non-goals, principles, architecture |
-| [ip-data-contract](ip-data-contract.md) | What the app reads and writes, zod models, hash algorithm + test vectors, effective approval state |
-| [ip-routes-and-views](ip-routes-and-views.md) | Every route, what it shows, interaction and accessibility rules |
-| [ip-approvals-api](ip-approvals-api.md) | `GET/POST /api/approvals`, local-only guards, atomic writes, concurrency |
-| [ip-wiki-lint](ip-wiki-lint.md) | `npm run lint:wiki`: machine implementation of SCHEMA §9.3 |
-| [ip-testing](ip-testing.md) | Unit, lint, E2E, typecheck, eslint, build gates |
-| [ip-build-plan](ip-build-plan.md) | Step-by-step implementation plan for one build workflow, with test gates |
-
-Binding owner inputs: Q13 (Node LTS for the plan app; installed by Claude on the owner's authorisation, [adr-0021](../decisions/adr-0021-claude-runs-toolchain-installs.md), Node 24 kept per Q-102) and Q14 (approve in the UI, persisted to `plan/approvals.json` via a local Next.js API route) in [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md). Owner directives 2, 4 and 9 in the same file ("set up a Next.js application … visualize this whole thing", "First the interactive plan comes together. I then approve everything else."). The governing decision is `adr-0016`. The data rules come from [SCHEMA.md](../SCHEMA.md) §5, §6 and §10.
+| this page (`ip-spec`) | Purpose, users, scope, non-goals, principles, architecture, technology |
+| [ip-routes-and-views](ip-routes-and-views.md) | The seven tabs, the popups, the script route and the UI rules |
+| [ip-data-contract](ip-data-contract.md) | What the portal reads (portal JSON, approvals file) and what the command-line wiki check reads |
+| [ip-wiki-lint](ip-wiki-lint.md) | `npm run lint:wiki` and `npm run gate`: command-line checks of SCHEMA §9.3, kept from v1 |
+| [ip-testing](ip-testing.md) | Type check, ESLint, unit, browser and accessibility tests; `npm run verify` |
+| [ops-portal-pipeline](../operations/ops-portal-pipeline.md) | How Claude writes the portal JSON from the wiki (skill, shapes, checker, end-of-turn hook) |
 
 ## 1. Purpose
 
-1. **Make the plan reviewable.** The owner can see the whole plan (phases M1–M7, architecture, decisions, risks, research design) at a glance and drill into any page.
-2. **Make approval mechanical.** Each `approvable: true` page gets an Approve / Request changes / Reject control. The decision is written to `plan/approvals.json` together with the page's `content_hash` and `scope_hash` (SCHEMA §10). Editing the page afterwards visibly marks the approval **STALE**.
-3. **Give future Claude sessions a fast, trustworthy status view and a linter.** `npm run lint:wiki` validates every wiki page against SCHEMA.md. The approvals inbox and the gate view answer "may I start phase P?" (SCHEMA §9.7) without reading 100+ files by hand.
-4. **Never drift from the wiki.** The app **reads `wiki/` at request time**. It copies, caches to disk and generates no wiki content. This follows the recommendation in [raw/research/llm-wiki-pattern.md](../raw/research/llm-wiki-pattern.md) §"Plan app" and SCHEMA §1.4.
+1. **Let the owner understand the project quickly.** The owner's comprehension sets the pace of the project
+   ([owner feedback](../raw/owner/2026-10-09-s01-plan-app-feedback.md)). The portal shows where the project stands,
+   what happens next, every phase with its tasks and check scripts, the architecture, decisions, risks, research
+   design, open questions and a plain-language log.
+2. **Make every id explain itself.** Any id-shaped word (phase, task, decision, risk, question, commit, ...) is a
+   button that opens a short explainer in a popup, without leaving the page.
+3. **Show, never change.** The owner steers and approves in Claude Code; Claude records approvals with
+   `tools/approvals_record.py` ([adr-0023](../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)). The
+   portal only shows approval state.
+4. **Let the owner read a check script before running it.** Each phase popup shows the PowerShell 7 check script of
+   every task and of the phase gate ([adr-0025](../decisions/adr-0025-check-scripts-powershell-7.md)).
 
 ## 2. Users
 
-| User | Needs | Main views |
+| User | Needs | Where |
 |---|---|---|
-| **Owner** (single human, local machine) | Understand the plan, review pages, approve / request changes with a comment, see what is blocked and what is next | Dashboard, Roadmap, Phase detail, Approvals inbox, Architecture, Risks, Research |
-| **Future Claude sessions** (zero memory) | Validate the wiki after edits; check gate readiness; read effective approval states without writing `approvals.json` | `npm run lint:wiki`, `GET /api/approvals` (or the same library through a vitest test), Approvals inbox, Dashboard |
+| **Owner** (one person, local machine) | Where are we, what is next, what does each phase do, what does an id mean, what did Claude decide | The seven tabs and their popups |
+| **Claude sessions** | Check the wiki after edits; check whether a phase may start | `npm run lint:wiki`, `npm run gate` (command line, [ip-wiki-lint](ip-wiki-lint.md)) |
 
-There is exactly one human user. Multi-user operation, authentication and roles are out of scope.
+There is exactly one human user. Accounts, roles and remote access are out of scope.
 
 ## 3. Scope (in)
 
-- Read-only rendering of every wiki page (frontmatter + GFM markdown + mermaid), with backlinks and full-text search.
-- Typed views built from frontmatter: architecture graph, phase DAG + session-sized timeline, decision register, risk heatmap, research traceability graph, log timeline, dashboard.
-- Approvals: the only write path, to `plan/approvals.json` (plus an optional `approval` entry appended to `wiki/log.md`, see [ip-approvals-api](ip-approvals-api.md) §6).
-- A wiki linter implementing SCHEMA §9.3 as a library, a CLI-style vitest suite and a `/lint` page.
-- Light and dark themes, keyboard accessible, local-only.
+- Seven top tabs from the owner-approved mockups (Layout A): Overview, Roadmap, Architecture, Decisions (with risks),
+  Research, Questions, Log ([ip-routes-and-views](ip-routes-and-views.md)).
+- Popups: phase (tasks, test gate, gate script), reference (any id), detail (decision, risk, research item), script
+  (the text of a check script).
+- Read-only approval labels from `plan/approvals.json`.
+- `GET /api/script`: the text of a check script that the portal JSON names, nothing else.
+- Light, dark and system themes; keyboard and screen-reader accessible; usable at phone width.
+- The command-line wiki check and entry-gate report from v1 ([ip-wiki-lint](ip-wiki-lint.md)).
 
 ## 4. Non-goals
 
-- **No editing of wiki pages in the app.** Claude writes the wiki and the owner comments through approvals. A page edit through the UI would bypass the log discipline (SCHEMA §9).
-- **No writes to `wiki/raw/`**, ever (SCHEMA §3.1).
-- **No deployment, hosting, telemetry, analytics, external fonts or CDN calls.** At runtime the app makes no outbound network requests.
-- **No authentication.** Local-only guards replace it ([ip-approvals-api](ip-approvals-api.md) §3).
-- **No database.** The files in the repo are the database.
-- **No Ferrum code**, no Tauri, and no benchmark results (none exist).
-- **No git operations** (no commit, no push). The owner or Claude commits `plan/approvals.json` under `adr-0011`. Claude never pushes.
-- No `use cache` / Cache Components and no static export. Every view must show the current file state.
-- No mobile-first design. Desktop is primary. Narrow widths must remain usable (single-column, no horizontal page scroll).
+- **No writes of any kind.** No approvals, no edits, no log entries. Every route refuses methods other than GET and HEAD.
+- **No wiki pages in the portal.** The wiki is Claude's working memory; the portal shows only its plain-language
+  translation ([adr-0024](../decisions/adr-0024-portal-reads-plain-language-json.md)).
+- **No deployment, hosting, analytics, external fonts or CDN calls.** At runtime the portal makes no outbound requests.
+- **No authentication.** It listens on 127.0.0.1 only and refuses non-loopback `Host` headers.
+- **No database and no Ferrum code.** The JSON files in `plan/portal/` are the data.
+- **No git operations.** Claude commits; nobody pushes without the owner.
 
 ## 5. Design principles
 
-1. **Wiki is the source of truth.** Every number, status and edge on screen comes from a frontmatter field or a body. When the wiki is wrong, the fix is in the wiki, never in the app.
-2. **Invalid data is visible.** A page that fails validation still renders, with a red "schema errors" banner listing the lint findings. It is never silently dropped. Graph edges to unknown ids render as dashed red "dangling" nodes.
-3. **Pure logic, thin pages.** Parsing, validation, hashing, graph building, gate evaluation and linting live in framework-free TypeScript modules under `lib/`. Vitest can test those modules. Server components only call them. Vitest cannot test async Server Components ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.6).
-4. **Integrity mirrors SCHEMA.** The app never invents a status. Effective approval states are exactly SCHEMA §10.3. It never shows a measured number unless that number is a wiki field value.
-5. **Fast enough to forget.** Targets (goals, not measurements): any route renders server-side in under 500 ms with a wiki of 300 pages on the owner's machine, and the first-load JS of non-graph routes stays small. `UNVERIFIED[phase-p0-planning]` They are checked once in build step IP-9 ([ip-build-plan](ip-build-plan.md)) and recorded as evidence. They are never presented as Ferrum results. IP-9 result ([IP-9-perf.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-9-perf.txt), 198 pages, not 300): warm medians 27-178 ms on all 17 routes (met); first-load JS of non-graph routes at most 184 kB gzip (no number is set); the first request after server start (about 2.2 s) and requests after the 10 s lint memo expires (1.0-1.4 s) miss the target. The tag stays (IP-10, 2026-10-09) because the 300-page case was not measured and the cold-request misses were not re-measured after the in-server lint stopped calling git (IP-9 review). **Accepted limitation (2026-10-09, decided by Claude under the wave 0c delegation policy, see the `decide` log entry of that date):** the cold first request (about 2.2 s) and the requests after the lint memo expires (1.0-1.4 s) are accepted for a local, single-user planning tool; they are not a defect to fix before the P0 exit, and the target stays a goal for warm requests.
+1. **Plain words first.** Text is short, low on jargon and written for a smart non-specialist; tasks use a thought
+   chain (cause → action → why it matters). The rules are in the repo skill `wiki-to-portal`
+   ([ops-portal-pipeline](../operations/ops-portal-pipeline.md)).
+2. **The JSON is the only input for pages.** Pages render `plan/portal/*.json` and `plan/approvals.json`; nothing on
+   screen is invented by the portal. When the text is wrong, Claude fixes the wiki and its JSON in the same edit.
+3. **Bad data is visible, not fatal.** A JSON file that is missing or does not match its shape shows a note at the top
+   of the page; the rest still renders.
+4. **Pure logic, thin pages.** Loading, validation, id detection and view helpers live in `lib/portal/` and are unit
+   tested; pages and components only arrange them.
+5. **Approval state is never guessed.** A label says "Approved" only when `plan/approvals.json` holds an approval whose
+   fingerprint matches the one the portal text was written from; a different fingerprint says "Approved, page edited
+   since", and an unreadable approvals file says so instead of guessing.
+
+v1 had a page-render time target; v2 sets none, because the owner reads a handful of small JSON files and the target
+no longer guards anything (decided by Claude under the wave 0c delegation policy; logged 2026-10-09).
 
 ## 6. Architecture
 
 ```mermaid
 flowchart LR
   owner["Owner (browser, 127.0.0.1)"]
-  claude["Claude session (CLI)"]
+  claude["Claude session (Claude Code)"]
   subgraph app["interactive_plan/ (Next.js 16, node runtime)"]
-    pages["Server components (routes)"]
-    client["Client components: graphs, mermaid, approve bar, search box"]
-    api["Route handler /api/approvals"]
-    lib_wiki["lib/wiki: load, frontmatter, zod schemas, links, graph, search"]
-    lib_appr["lib/approvals: hash, state, store, lock"]
-    lib_lint["lib/lint: SCHEMA 9.3 rules"]
+    pages["Seven tabs + popups (server components)"]
+    client["Small client parts: popups, theme, group switcher, log filter"]
+    api["GET /api/script"]
+    lib_portal["lib/portal: load + validate JSON, find ids, view helpers"]
+    lib_lint["lib/lint + lib/wiki: command-line wiki check"]
   end
-  wiki[("wiki/**/*.md (read-only)")]
-  status[("STATUS.md (read-only)")]
-  approvals[("plan/approvals.json (read + atomic write)")]
-  log[("wiki/log.md (optional append)")]
+  portal[("plan/portal/*.json (read-only)")]
+  approvals[("plan/approvals.json (read-only)")]
+  scripts[("scripts/**/*.ps1 named in the JSON (read-only)")]
+  wiki[("wiki/**, STATUS.md (read-only)")]
   owner --> pages
   owner --> client
   client --> api
-  pages --> lib_wiki
-  pages --> lib_appr
-  api --> lib_appr
-  lib_appr --> lib_wiki
-  lib_lint --> lib_wiki
-  lib_lint --> lib_appr
-  lib_wiki --> wiki
-  lib_wiki --> status
-  lib_appr --> approvals
-  api -->|"optional append"| log
+  pages --> lib_portal
+  api --> lib_portal
+  lib_portal --> portal
+  lib_portal --> approvals
+  lib_portal --> scripts
   claude --> lib_lint
+  lib_lint --> wiki
 ```
 
-- **Runtime:** `next start` (production build) or `next dev`, always started with `-H 127.0.0.1` on a fixed port (default `3417`, override with `PLAN_PORT`; the npm scripts go through `scripts/serve.mjs`, ip-approvals-api §3). Every route sends `X-Frame-Options: DENY` and a same-origin Content-Security-Policy, and `proxy.ts` refuses any non-loopback `Host` ([ip-approvals-api](ip-approvals-api.md) §3). All route handlers declare `export const runtime = 'nodejs'`.
-- **File locations** come from environment variables. The defaults are relative to the app directory:
+- **Start (owner):** `pwsh -NoProfile -File scripts/start-portal.ps1` finds Node, installs packages the first time,
+  checks the port, builds, starts on http://127.0.0.1:3417/ and opens the browser
+  ([interactive_plan/README.md](../../interactive_plan/README.md)).
+- **Runtime:** `next start` or `next dev` through `scripts/serve.mjs`, always `-H 127.0.0.1` on `PLAN_PORT` (default
+  3417). `proxy.ts` refuses a non-loopback `Host` (403) and any method other than GET and HEAD (405). Every response
+  sends `X-Frame-Options: DENY` and a same-origin Content-Security-Policy.
+- **File locations** come from `PLAN_REPO_ROOT`, `PLAN_DATA_DIR` (holds `portal/` and `approvals.json`),
+  `PLAN_WIKI_DIR` and `PLAN_STATUS_FILE` (wiki check only) and `PLAN_PORT` ([ip-data-contract](ip-data-contract.md)).
+- **Module rule:** files outside the app are read with `node:fs` at request time, never imported.
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `PLAN_REPO_ROOT` | `path.resolve(process.cwd(), '..')` | Repo root |
-| `PLAN_WIKI_DIR` | `<root>/wiki` | Wiki directory (read-only) |
-| `PLAN_STATUS_FILE` | `<root>/STATUS.md` | Live status (read-only) |
-| `PLAN_DATA_DIR` | `<root>/plan` | Directory holding `approvals.json` (E2E tests point this at a temp copy) |
-| `PLAN_READONLY` | unset | `1` disables POST (returns 403). Useful when Claude starts the app only to look |
-| `PLAN_APPEND_LOG` | `1` | `0` disables appending `approval` entries to `wiki/log.md` |
-| `PLAN_PORT` | `3417` | Port used by npm scripts |
+## 7. Technology (pinned exactly)
 
-- **Module rule:** wiki files are **never `import`ed**. Turbopack does not resolve files outside the project root ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.5). They are read with `node:fs/promises` at request time. This works under Turbopack in both `next dev` and `next start`: spike S1 of IP-1 read `../wiki/SCHEMA.md` and wrote, read back and deleted `../plan/.spike-*` from a route handler at request time ([IP-1-spikes.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)).
-- `next.config.ts` sets `turbopack.root` explicitly to the `interactive_plan/` directory. This guards against later lockfiles in the repo root ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.5).
-
-## 7. Technology (pinned exactly; versions from the 2026-10-08 registry snapshot)
-
-Source: [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §1 and §5. All versions are pinned **exactly** in `package.json` (no `^`), and `package-lock.json` is committed.
+Source: [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §1 and §5; versions as installed in
+`interactive_plan/package.json` (no `^`), `package-lock.json` committed.
 
 | Concern | Package @ version |
 |---|---|
-| Runtime | Node 24 LTS (`engines.node: ">=24.15 <27"`, `.nvmrc` with the exact installed version recorded at build time) |
-| Framework | next 16.4.0, react 19.3.0, react-dom 19.3.0 (App Router, Turbopack, **no** Cache Components, **no** React Compiler, no agent feedback) |
-| Language | typescript 5.9.3 (**not** 7.x: outside typescript-eslint's peer range, research note §1.1) |
-| Styling | tailwindcss 4.3.3 + @tailwindcss/turbopack 4.3.3 (what create-next-app 16.4 emits, research note §3.1) |
-| Lint | eslint 9.39.x (exact patch recorded at install) + eslint-config-next 16.4.0, flat config |
-| Graphs | @xyflow/react 12.12.0 + @dagrejs/dagre 3.1.1 |
-| Markdown | react-markdown 10.1.0 + remark-gfm 4.0.1 + rehype-slug 6.0.0; github-slugger 2.0.0 as an exact direct dependency (the slug algorithm rehype-slug uses, needed by the loader for heading anchors; owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 4) |
-| Diagrams | mermaid 12.1.0 with `layout: 'dagre'`, `look: 'classic'`, `securityLevel: 'strict'` (fallback 11.17.2, owner decision, see §9) |
-| Frontmatter | yaml 2.9.1 + an in-house frontmatter splitter (not gray-matter, unmaintained since 2021) |
-| Validation | zod 4.6.5 |
-| Unit tests | vitest 5.0.3, @vitejs/plugin-react 6.1.2, vite-tsconfig-paths 6.1.1, jsdom 30.1.2, @testing-library/react 16.3.3, @testing-library/dom 10.4.2 |
-| E2E | @playwright/test 1.64.0 (Chromium) |
+| Runtime | Node 24 LTS (`engines.node: ">=24.15 <27"`) |
+| Framework | next 16.4.0, react 19.3.0, react-dom 19.3.0 (App Router, Turbopack, no Cache Components) |
+| Language | typescript 5.9.3 |
+| Styling | tailwindcss 4.3.3 + @tailwindcss/turbopack 4.3.3, plus plain CSS tokens for light and dark |
+| Fonts | @fontsource/ibm-plex-sans and @fontsource/ibm-plex-mono 5.3.0, self-hosted through `next/font/local` |
+| Validation | zod 4.6.5; the zod schemas are generated from `plan/portal/schema/*.schema.json` (`npm run schemas:portal`) |
+| Wiki check | yaml 2.9.1, github-slugger 2.0.0 (command line only) |
+| Lint | eslint 9.39.5 + eslint-config-next 16.4.0 |
+| Unit tests | vitest 5.0.3, jsdom 30.1.2, @testing-library/react 16.3.3 |
+| Browser tests | @playwright/test 1.64.0 (Chromium), axe-core 4.14.0 |
 
-Scaffold command (research note §3.1; the combined flag set ran unchanged in IP-1 in the repo path containing a space, [IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)):
+The v1 graph and markdown libraries (xyflow, dagre, mermaid, react-markdown and its plugins) were uninstalled in p0.17.
 
-```text
-npx create-next-app@16.4.0 interactive_plan --ts --tailwind --eslint --app --turbopack --import-alias "@/*" --use-npm --disable-git --no-cache-components --no-agent-feedback --no-react-compiler
-```
+**npm audit (accepted risk, owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 8):** the
+remaining findings are 5 high in development tooling (eslint-config-next pulling in braces and micromatch). **Recheck
+`npm audit` at the P0 exit** and record the result in the exit evidence.
 
-The generator's `typescript ^5` and `eslint ^9` ranges are then replaced with the exact pins above. No package is installed with `@latest`.
-
-**npm audit (accepted risk, owner answer 2026-10-09, [wave 0c](../raw/owner/2026-10-09-s01-wave0c.md) item 8):** at IP-1 `npm audit` reported 7 findings, 2 low in production dependencies (katex through mermaid 12.1.0) and 5 high in dev tooling ([IP-1-scaffold.txt](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)). The only offered fix is `npm audit fix --force`, which would downgrade mermaid to 10.8.0. For a local-only planning tool bound to 127.0.0.1 these are accepted: no `npm audit fix --force`. **Recheck `npm audit` at the P0 exit** (before `phase-p0-planning#exit` is approved) and record the result in the exit evidence.
-
-## 8. Directory layout (target)
+## 8. Directory layout
 
 ```text
 interactive_plan/
-├── package.json  package-lock.json  .nvmrc  next.config.ts  tsconfig.json
-├── eslint.config.mjs  vitest.config.mts  vitest.lint.config.mts  playwright.config.ts
-├── app/                     # routes (see ip-routes-and-views)
-│   ├── layout.tsx  page.tsx  globals.css
-│   ├── architecture/ roadmap/ phases/[id]/ decisions/ decisions/[id]/
-│   ├── risks/ research/ wiki/[[...path]]/ go/[id]/ search/ log/ approvals/ lint/
-│   └── api/approvals/route.ts
-├── components/              # Markdown, Mermaid (client), ApproveBar (client), Badges, ThemeToggle,
-│                            # wiki/PageParts, graph/FlowGraph + LazyFlowGraph (client, IP-8; the heatmap
-│                            # and the timeline are server-rendered table/SVG in their routes)
-├── lib/
-│   ├── config.ts            # env → absolute paths
-│   ├── wiki/                # frontmatter.ts schemas.ts load.ts links.ts graph.ts search.ts log.ts status.ts gates.ts
-│   ├── approvals/           # hash.ts state.ts store.ts lock.ts
-│   ├── views/               # pure view models: dashboard, inbox, phase (IP-7), graphLayout, registers (IP-8)
-│   └── lint/                # rules/*.ts run.ts format.ts
-└── tests/
-    ├── unit/                # vitest (node + jsdom)
-    ├── lint/                # `npm run lint:wiki`: wiki-lint.test.ts + real-wiki-loader.test.ts + real-wiki-graphs.test.ts (real wiki, read-only)
-    ├── e2e/*.spec.ts        # Playwright
-    └── fixtures/            # mini-wiki/, broken-wiki/, status/, e2e-overlay/ (E2E-only cases, IP-6)
+├── package.json  package-lock.json  next.config.ts  proxy.ts  tsconfig.json
+├── eslint.config.mjs  vitest.config.mts  vitest.lint.config.mts  vitest.gate.config.mts  playwright.config.ts
+├── app/          layout.tsx (top tabs, phase popups), page.tsx (Overview), roadmap/ architecture/ decisions/
+│                 research/ questions/ log/, api/script/route.ts, not-found.tsx, globals.css, fonts.ts
+├── components/   portal/ (Modal, PhasePopup, DetailPopup, Ref, RefProvider, RichText, ScriptProvider,
+│                 GroupSwitcher, LogFilter, TopNav, ...), ThemeToggle
+├── lib/          portal/ (load, schemas.gen, refs, scripts, view, tabs, dialogs), config.ts, security/,
+│                 wiki/ + lint/ + approvals/ (command-line wiki check and approval-file reader)
+├── scripts/      serve.mjs, gen-portal-schemas.mjs, with-env.mjs
+└── tests/        unit/, lint/, e2e/, fixtures/
 ```
 
-## 9. Owner decisions this spec needs (also returned to the integrator for `ov-open-questions`)
+## 9. Owner decisions behind this page
 
-1. **Mermaid 12.1.0 vs 11.17.2.** The default is 12.1.0 with the classic look. 11.17.2 is the mature fallback (research note §4).
-2. **May the app append `approval` entries to `wiki/log.md`?** The default is yes (`PLAN_APPEND_LOG=1`). SCHEMA §10.1 allows the plan app to do it. The alternative is that Claude writes them at the next RESUME.
-3. **"Reset to pending".** SCHEMA §10.1 allows only `approved | changes-requested | rejected`, and `history` is append-only. The brief for this page also listed `pending` as a POST status. This spec does **not** implement `pending` unless the owner wants it, because it would need a SCHEMA change (for example a `withdrawn` status kept in history).
-4. **When the app is built.** Settled: inside P0, per owner directives 2 and 4 (Q-101, answered). [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §6 calls P1 the "plan-app build phase"; that label predates the answer. The IP-* to `p0.N` mapping is the table on [phase-p0-planning](../phases/phase-p0-planning.md).
-5. **Optional accessibility test dependency** (`@axe-core/playwright`). Its version was not captured in the research note. It would be added only with owner consent and pinned from the registry at build time.
+| Decision | Where recorded |
+|---|---|
+| Approvals are given in Claude Code; Claude records them; the portal is read-only | [adr-0023](../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md) |
+| The portal renders only plain-language JSON that Claude writes from the wiki | [adr-0024](../decisions/adr-0024-portal-reads-plain-language-json.md) |
+| Check scripts are PowerShell 7, one per task and one per phase gate | [adr-0025](../decisions/adr-0025-check-scripts-powershell-7.md) |
+| Architecture in four groups, led by a layered picture of the Rust app | [adr-0026](../decisions/adr-0026-architecture-four-groups.md) |
+| Real machine values are masked everywhere | [adr-0027](../decisions/adr-0027-mask-sensitive-values.md) |
+| Layout A and the Phase, Roadmap, Architecture and Log mockups are the visual spec | [owner decisions](../raw/owner/2026-10-09-s01-portal-v2-decisions.md) |
+
+The v1 owner decisions listed here before (mermaid version, log appends by the app, "reset to pending", build timing,
+accessibility test library) no longer apply: v2 has no mermaid, writes nothing, and uses axe-core 4.14.0, which was
+already in the lockfile (logged 2026-10-09).
+
+Final check of v2 (2026-10-09): `npm run verify` green in one run, screenshots of every tab at 1440 and 390 pixels
+compared with the mockups ([portal-verify.txt](../raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt)).

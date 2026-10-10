@@ -1,15 +1,17 @@
 ---
 id: comp-interactive-plan
 type: component
-title: "Interactive plan app (Next.js, planning tooling, not shipped)"
+title: "Plan portal (Next.js, read-only, planning tooling, not shipped)"
 status: implemented
 updated: 2026-10-09
-last_verified_commit: 3eaa641
+last_verified_commit: 46fb685
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
   - raw/research/llm-wiki-pattern.md
-related: [ov-arch-data-flows, ov-arch-repo-layout, ov-arch-trust-boundaries, ov-arch-system-overview, adr-0001, adr-0002, adr-0016, phase-p0-planning, ip-data-contract, adr-0023, adr-0024, adr-0026]
+  - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+  - raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt
+related: [ov-arch-data-flows, ov-arch-repo-layout, ov-arch-trust-boundaries, ov-arch-system-overview, adr-0001, adr-0002, adr-0016, phase-p0-planning, ip-data-contract, ip-spec, ip-routes-and-views, ip-testing, adr-0023, adr-0024, adr-0026]
 approvable: true
 path: interactive_plan/
 crate: null
@@ -28,6 +30,7 @@ responsibilities:
   - "Run the normative wiki check (npm run lint:wiki) and the phase entry-gate report (npm run gate); these read wiki/ but are command-line tools, not portal pages"
 interfaces:
   - "GET pages: Overview (/), Roadmap, Architecture, Decisions, Research, Questions, Log (server components reading ../plan/portal/*.json)"
+  - "pwsh -NoProfile -File scripts/start-portal.ps1 (owner start: finds Node, installs packages once, checks the port, builds, starts on 127.0.0.1:3417 and opens the browser)"
   - "GET /api/script?path=<repo-relative .ps1> (text/plain, read-only): 200 with the script text only for a script named in a portal JSON script field and inside scripts/, at most 256 KB; 404 with a plain message otherwise"
   - "npm run lint:wiki, npm run gate (wiki check and entry-gate report, command line)"
 connects: []
@@ -35,30 +38,30 @@ connects: []
 
 # comp-interactive-plan
 
-> **Rebuilt in task p0.17 (portal v2):** the owner approves in Claude Code and Claude records approvals
-> ([adr-0023](../../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)); the app is now a read-only
-> portal that reads only plain-language JSON ([adr-0024](../../decisions/adr-0024-portal-reads-plain-language-json.md)).
-> Step "portal-data-shell" (2026-10-09) removed the wiki browser, search, lint view, approvals inbox, approve bar and
-> the `POST /api/approvals` route (their code stays in git history) and built the data layer, the shell of the approved
-> Main mockup, the reference popup, the Overview and the phase popup. Step "portal-views" (2026-10-09) built the other
-> six tabs from the approved mockups: Roadmap, Architecture (four groups,
-> [adr-0026](../../decisions/adr-0026-architecture-four-groups.md)), Decisions with risks, Research, Questions and Log;
-> the phase popups are rendered once in the layout so every tab and every phase id opens them; a script popup shows the
-> real check script through `GET /api/script`. Browser tests cover each tab with axe accessibility checks.
-> The responsibilities and interfaces above describe the new portal; the text below about graphs and the approvals
-> file describes v1 and is kept as history.
+Planning tooling for owner review. It is **not part of Ferrum** and has **no runtime edge** to any Ferrum component,
+so `connects` is empty. It is the **read-only plan portal** (portal v2, task p0.17): it renders only the
+plain-language JSON in `plan/portal/` that Claude writes from the wiki
+([adr-0024](../../decisions/adr-0024-portal-reads-plain-language-json.md)), shows approval labels from
+`plan/approvals.json`, and shows the text of the check scripts the JSON names. It writes nothing; the owner approves
+in Claude Code and Claude records approvals
+([adr-0023](../../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)). The specification is
+[ip-spec](../../interactive-plan/ip-spec.md), with the tabs and popups in
+[ip-routes-and-views](../../interactive-plan/ip-routes-and-views.md), the data in
+[ip-data-contract](../../interactive-plan/ip-data-contract.md) and the tests in
+[ip-testing](../../interactive-plan/ip-testing.md).
 
-Planning tooling for owner review (adr-0016; [Next.js note](../../raw/research/nextjs-stack.md)). It is **not part of Ferrum** and has **no runtime edge** to any Ferrum component, so `connects` is empty. Its interaction with the repo is file I/O only: it reads `wiki/**` and writes `plan/approvals.json` ([data flows §6](../ov-arch-data-flows.md)).
+**Why `connects` stays empty (deliberate isolated node).** What the portal reads (the portal JSON, the approvals file,
+the check scripts) is written by Claude, not produced by any Ferrum component. An edge to a component would claim a
+dependency that does not exist. In the Architecture tab it appears only as the planning-tooling footnote
+([adr-0026](../../decisions/adr-0026-architecture-four-groups.md)).
 
-**Why `connects` stays empty (deliberate isolated node).** The `file-io` edge kind connects two components, but what the plan app reads and writes is not produced by any component: `wiki/**` is written by Claude and the owner, and `plan/approvals.json` is written by the plan app itself. Modelling an edge to, say, comp-research-analysis or comp-core would claim a dependency that does not exist. The app therefore renders as an isolated node in the architecture graph, and its file dependencies are documented here and in [data flows §6](../ov-arch-data-flows.md) instead. Proposed convention (needs a matching line in SCHEMA §6.2, which is outside this page's area): an empty `connects` is allowed only for a component with `shipped: false` that has no component-to-component dependency, and lint should not flag it.
+**History.** v1 (build steps IP-0 to IP-10 of [ip-build-plan](../../interactive-plan/ip-build-plan.md), retired) was a
+wiki browser with search, a lint page, an approvals inbox and an approve API, verified at commit `3eaa641`. After the
+owner's feedback that it was too technical, task p0.17 rebuilt it as this portal (2026-10-09): rules, wiki-to-portal
+pipeline, portal text, check scripts, data layer and shell (`673cbdc`), the six other tabs (`dfe164f`), and a final
+review.
 
-**Graph data contract (for this architecture area).** The architecture graph is built **only** from component frontmatter:
-
-- nodes = component pages: `id`, `title`, `trust_level`, `status`, `phase_introduced`, `shipped`;
-- edges = `connects` entries `{to, label, kind, crosses_trust_boundary}`.
-
-Several edges may join the same pair of nodes with different `kind`s. Trust-boundary edges render dashed. Grouping by `trust_level` gives the trusted / untrusted / external swimlanes.
-
-It is built in phase-p0-planning (tasks p0.10–p0.16), per the owner directive "first the interactive plan comes together". The timing question Q-101 is answered by owner directives 2 and 4 in [raw/01-scoping-decisions.md](../../raw/01-scoping-decisions.md); the build starts after Approval Wave 0 ([ops-approval-workflow §8](../../operations/ops-approval-workflow.md#8-approval-waves)).
-
-**Implemented (2026-10-09).** Build steps IP-0 to IP-10 of [ip-build-plan](../../interactive-plan/ip-build-plan.md) are done; `npm run verify` passed in one run at commit `3eaa641` (the /architecture edge-label fix that closed the last open review issue), evidence [IP-10-arch-labels-fix.txt](../../raw/evidence/phase-p0-planning/interactive-plan/IP-10-arch-labels-fix.txt). Responsibilities, interfaces and `connects` are unchanged by the build.
+**Verified (2026-10-09).** `npm run verify` passed in one run at `46fb685` (all seven tabs). The final review then
+fixed five visual defects found by comparing screenshots with the mockups, added `scripts/start-portal.ps1`, and
+passed `npm run verify`, the portal check, the P0 gate and the wiki checks again
+([portal-verify.txt](../../raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt)).

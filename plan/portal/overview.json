@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "We are finishing the plan (P0). The new read-only portal is built: all seven tabs, with popups for phases, decisions and check scripts. Nothing is approved yet, and no Ferrum code exists yet.",
+  "summary": "We are finishing the plan (P0). The new read-only portal is built and reviewed, and you can start it with one script. Nothing is approved yet, and no Ferrum code exists yet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:2ff9132037adb3efd8de116567cb0885e3db1a6d565191ba4ff218f2d48dd574"
+    "content_hash": "sha256:79143b93e4ee64ddad5bfdafe58d810072624f821eaaba242df2d1efe6f93d02"
   },
   "updated": "2026-10-09",
   "where_we_are": [
@@ -24,7 +24,7 @@
     },
     {
       "item": "Plan portal (the site)",
-      "state": "Rebuilt read-only: all seven tabs, phase popups, clickable ids, and a popup that shows each check script"
+      "state": "Built and reviewed: all seven tabs and popups; start it with one PowerShell script"
     },
     {
       "item": "Approvals",
@@ -45,28 +45,40 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
-        "item": "Portal text and check scripts",
-        "state": "Done; the P0 checks pass"
+        "item": "Portal",
+        "state": "Built and checked; every tab compared with your mockups"
       },
       {
-        "item": "Portal: all seven tabs and popups",
-        "state": "Done; every tab passes its browser and accessibility tests"
+        "item": "Start script",
+        "state": "New: one PowerShell script starts the portal and opens it"
       },
       {
-        "item": "Final review of the portal",
-        "state": "Claude does it next: old design pages marked as history"
+        "item": "Your walkthrough",
+        "state": "Now: read each tab and popup"
       },
       {
-        "item": "Your walkthrough and first approvals",
-        "state": "Right after that review"
+        "item": "First approvals",
+        "state": "Next: Claude asks them in Claude Code, one wave at a time"
       }
     ],
-    "why": "Nothing to run yet. The whole portal is built → Claude does a final review and tidies the old design pages → you walk through the portal and give your first approvals in Claude Code.",
-    "script": null,
-    "tell_claude": "Nothing for now. If a tab reads wrong or unclear, say so in Claude Code; otherwise wait until Claude asks for your walkthrough."
+    "why": "The portal is how you follow the project → you read it once end to end and say what is unclear → Claude fixes the wording, then asks your first approvals in Claude Code.",
+    "script": {
+      "path": "scripts/start-portal.ps1",
+      "parts": [
+        {
+          "code": "pwsh -NoProfile -File scripts/start-portal.ps1",
+          "explains": "Run this in PowerShell 7 from the repo folder. It finds Node, builds the portal (about 1 minute) and opens http://127.0.0.1:3417/ in your browser."
+        },
+        {
+          "code": "Ctrl+C",
+          "explains": "Stops the portal when you are done. It only reads the plan, so nothing can change while it runs."
+        }
+      ]
+    },
+    "tell_claude": "\"The portal reads fine\", or which tab or popup reads wrong or unclear and why."
   },
   "questions_for_you": {
     "open": 39,

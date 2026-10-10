@@ -1,13 +1,13 @@
 // Check scripts shown by the portal (lib/portal/scripts.ts): only scripts the portal text names, only
 // inside <repo>/scripts, never bigger than the limit; the plain explanation at the top of a script;
 // and the real portal text names only scripts that exist and can be read.
-import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { loadPortalUncached } from "@/lib/portal/load";
 import { runCommand } from "@/lib/portal/scriptCommand";
-import { MAX_SCRIPT_BYTES, namedScripts, readNamedScript, scriptHeader } from "@/lib/portal/scripts";
+import { MAX_SCRIPT_BYTES, headerParts, namedScripts, readNamedScript, scriptHeader } from "@/lib/portal/scripts";
 import { REPO_ROOT } from "./helpers";
 
 const temps: string[] = [];
@@ -100,5 +100,44 @@ describe("namedScripts and the real repo", () => {
 
   it("runCommand is the PowerShell 7 command from the repo folder", () => {
     expect(runCommand("scripts/gates/p1-gate.ps1")).toBe("pwsh -NoProfile -File scripts/gates/p1-gate.ps1");
+  });
+});
+
+describe("headerParts", () => {
+  it("joins wrapped lines of fields and list items, keeps commands on their own lines", () => {
+    const header = [
+      "Gate check: everything that must be true.",
+      "",
+      "What it checks, in two parts:",
+      "  1. The wiki check runs once and is",
+      "     shared with the task checks.",
+      "  2. Housekeeping.",
+      "  Your part is listed as YOURS: the walkthrough",
+      "  and the exit approval.",
+      "Why            : the plan becomes the gatekeeper → all checks must pass,",
+      "                 with the output saved.",
+      "How to run     : pwsh -File a.ps1",
+      "                 pwsh -File a.ps1 -SaveEvidence",
+    ].join("\n");
+    expect(headerParts(header)).toEqual([
+      { label: null, text: "Gate check: everything that must be true.", indent: 0 },
+      { label: null, text: "What it checks, in two parts:", indent: 0 },
+      { label: null, text: "1. The wiki check runs once and is shared with the task checks.", indent: 2 },
+      { label: null, text: "2. Housekeeping.", indent: 2 },
+      { label: null, text: "Your part is listed as YOURS: the walkthrough and the exit approval.", indent: 2 },
+      { label: "Why", text: "the plan becomes the gatekeeper → all checks must pass, with the output saved.", indent: 0 },
+      { label: "How to run", text: "pwsh -File a.ps1\npwsh -File a.ps1 -SaveEvidence", indent: 0 },
+    ]);
+  });
+
+  it("loses no words of any real gate script header", () => {
+    for (const n of [0, 1, 2, 3, 4, 5, 6, 7, 8]) {
+      const text = readFileSync(path.join(REPO_ROOT, "scripts", "gates", `p${n}-gate.ps1`), "utf8").replace(/\r\n/g, "\n");
+      const header = scriptHeader(text)!;
+      // Same characters in the same order; only spaces, line breaks and the field colons may move.
+      const words = (s: string) => s.replace(/[\s:]+/g, "");
+      const parts = headerParts(header);
+      expect(words(parts.map((p) => (p.label ? `${p.label} : ${p.text}` : p.text)).join(" ")), `p${n}`).toEqual(words(header));
+    }
   });
 });

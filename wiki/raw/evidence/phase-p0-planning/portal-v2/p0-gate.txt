@@ -1,0 +1,75 @@
+RAW EVIDENCE - P0 gate printout for the p0.17 "portal-verify" final state (scripts/run-all-checks.ps1 -Phase P0), 2026-10-09, session s01.
+Saved through pwsh tools/mask.ps1 --stdin (adr-0027).
+
+Running the P0 gate: scripts/gates/p0-gate.ps1
+Ferrum check P0-gate: Planning: end-of-phase gate
+Why: the plan app and the wiki must be fully checked before any Ferrum code is written.
+Run at 2026-10-09 23:52 on commit 46fb685 (with uncommitted changes)
+------------------------------------------------------------------------
+
+Part 1 - Wiki check (run once, reused below)
+  PASS   Wiki check: zero errors (5 s)
+         202 pages: 0 errors, 34 warnings (each reviewed in the log)
+
+Part 2 - Task checks p0.1 to p0.12
+  PASS   Task p0.1: Save the starting documents
+         scripts/verify/p0.1-starting-documents.ps1: RESULT: PASS - p0.1 (2 PASS; 0 s)
+  PASS   Task p0.2: Write five research notes (1 s)
+         scripts/verify/p0.2-research-notes.ps1: RESULT: PASS - p0.2 (3 PASS; 0 s)
+  PASS   Task p0.3: Write the wiki rules and live status (1 s)
+         scripts/verify/p0.3-wiki-rules.ps1: RESULT: PASS - p0.3 (3 PASS; 1 s)
+  PASS   Task p0.4: Describe the architecture and its parts
+         scripts/verify/p0.4-architecture-pages.ps1: RESULT: PASS - p0.4 (2 PASS; 0 s)
+  PASS   Task p0.5: Write the decisions and the risk register
+         scripts/verify/p0.5-decisions-risks.ps1: RESULT: PASS - p0.5 (3 PASS; 0 s)
+  PASS   Task p0.6: Write the research plan pages
+         scripts/verify/p0.6-research-plan.ps1: RESULT: PASS - p0.6 (2 PASS; 0 s)
+  PASS   Task p0.7: Write phase pages, index and log
+         scripts/verify/p0.7-phases-index-log.ps1: RESULT: PASS - p0.7 (3 PASS; 0 s)
+  PASS   Task p0.8: Check the whole wiki (1 s)
+         scripts/verify/p0.8-wiki-check.ps1: RESULT: PASS - p0.8 (4 PASS; 1 s)
+  PASS   Task p0.9: Install Node and record versions (1 s)
+         scripts/verify/p0.9-node-toolchain.ps1: RESULT: PASS - p0.9 (4 PASS; 0 s)
+  PASS   Task p0.10: Create the plan app skeleton (18 s)
+         scripts/verify/p0.10-plan-app-skeleton.ps1: RESULT: PASS - p0.10 (6 PASS; 18 s)
+  PASS   Task p0.11: Teach the app to read the wiki (2 s)
+         scripts/verify/p0.11-wiki-reader.ps1: RESULT: PASS - p0.11 (2 PASS; 2 s)
+  PASS   Task p0.12: Fingerprint pages exactly like the reference (6 s)
+         scripts/verify/p0.12-fingerprints.ps1: RESULT: PASS - p0.12 (2 PASS; 6 s)
+
+Part 3 - Test gate (covers tasks p0.13 to p0.16)
+  PASS   Style and type checks (11 s)
+         typecheck and code style: exit 0
+  PASS   Unit tests (24 s)
+         Tests  731 passed | 1 skipped (732)
+  PASS   Browser tests (production build, this computer only) (85 s)
+         69 passed (1.4m)
+  PASS   Production build (7 s)
+         npm run build: exit 0
+  PASS   Fingerprint cross-check (7 s)
+         the app, the rulebook program and PowerShell agree (task check p0.12)
+  PASS   Wiki check
+         zero errors (part 1)
+  YOURS  Your walkthrough
+         Open the portal, look at every tab, and tell Claude what does not match the plan or is unclear.
+  YOURS  Open questions
+         Answer or defer each question Claude asks with the approval waves.
+
+Part 4 - Housekeeping
+  PASS   Portal text is in step with the wiki (4 s)
+         portal-sync: clean - 18 files, 252 translated records, 378 refs
+  PASS   No real machine values in committed files (6 s)
+         mask scan: 677 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+  PASS   Tool tests pass (Python tools and the portal checker) (30 s)
+         Ran 34 tests in 5.348s (Python); test-portal-sync-check: 20 passed, 0 failed
+  PASS   Every check script can be read by PowerShell (1 s)
+         157 files parsed (scripts/ and tools/); 150 scripts linked from the portal files
+  YOURS  Your approvals (task p0.17)
+         Approve the P1 pages in Claude Code, wave by wave; Claude records each approval.
+  YOURS  Your exit approval (task p0.18)
+         When everything above passes and you are satisfied, tell Claude "I approve the P0 exit".
+------------------------------------------------------------------------
+RESULT: PASS - P0-gate (23 PASS, 4 YOURS; 216 s)
+All automatic P0 checks passed in one run.
+Still yours to do by hand: Your walkthrough; Open questions; Your approvals (task p0.17); Your exit approval (task p0.18).
+What to tell Claude: nothing is needed. If you ran it for a review, say "P0-gate check passed".

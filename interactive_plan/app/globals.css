@@ -1088,11 +1088,43 @@ section[tabindex="-1"]:focus {
 }
 .gate-header {
   margin: 0;
-  max-height: 320px;
+  max-height: 560px;
   overflow: auto;
+  font-size: 13.5px;
+  line-height: 1.5;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gate-para {
+  margin: 0;
+}
+.gate-field {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  gap: 10px;
+}
+.gate-field-label {
+  font-weight: 600;
+  color: var(--text-2);
+}
+.gate-field-text {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.gate-field-text.mono {
+  font-family: var(--font-mono);
   font-size: 12.5px;
-  line-height: 1.55;
-  white-space: pre-wrap;
+}
+@media (max-width: 520px) {
+  .gate-field {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
 }
 
 /* ---------- detail popups (decisions, risks, research) ---------- */
@@ -1612,4 +1644,78 @@ section[tabindex="-1"]:focus {
 
 .chip-list .ref-chip {
   text-align: left;
+}
+
+/* A chip and the punctuation touching it ("(P0)", "P8?") stay on one line (RichText). */
+.ref-glue {
+  white-space: nowrap;
+}
+
+/* Architecture part cards: a long name wraps left-aligned and the status chip stays top right. */
+.comp-card > .row-between {
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+.comp-card > .row-between > .ref {
+  text-align: left;
+  min-width: 0;
+}
+.comp-card > .row-between > .chip {
+  flex: none;
+  white-space: nowrap;
+}
+/* "The other groups at a glance": the three cards share the full width. */
+.glance-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Phone width: each task of the phase popup becomes a small card instead of a five-column table
+   that needs sideways scrolling. The column names move in front of each value. */
+@media (max-width: 640px) {
+  .tasks-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .tasks-table,
+  .tasks-table tbody,
+  .tasks-table tr,
+  .tasks-table td {
+    display: block;
+    width: 100%;
+  }
+  .tasks-table {
+    min-width: 0;
+  }
+  .tasks-table tr {
+    padding: 12px 14px;
+  }
+  .tasks-table tbody tr:first-child {
+    border-top: none;
+  }
+  .tasks-table td {
+    padding: 2px 0;
+    border: none;
+  }
+  .tasks-table td.cell-id,
+  .tasks-table td.cell-title {
+    display: inline;
+    width: auto;
+  }
+  .tasks-table td.cell-id {
+    margin-right: 8px;
+  }
+  .tasks-table td[data-label] {
+    margin-top: 6px;
+  }
+  .tasks-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+  }
 }

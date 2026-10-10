@@ -118,3 +118,18 @@ describe("every id in the real portal text renders as a working Ref", () => {
     });
   }
 });
+
+describe("TokensView keeps punctuation on the chip's line", () => {
+  it("wraps '(' + chip + ').' in one no-wrap span and loses no text", () => {
+    const tokens = tokenize("the plan (P0). Next (see adr-0023)", PATTERNS);
+    const html = renderToStaticMarkup(<TokensView tokens={tokens} />);
+    expect(html).toContain('<span class="ref-glue">(<button');
+    expect(html).toMatch(/>P0<\/button>\)\.<\/span>/);
+    expect(html.replace(/<[^>]+>/g, "")).toBe("the plan (P0). Next (see adr-0023)");
+  });
+
+  it("does not glue words or linked text", () => {
+    const html = renderToStaticMarkup(<TokensView tokens={tokenize("phase P1 starts; [the rule](ref:adr-0023).", PATTERNS)} />);
+    expect(html).not.toContain("ref-glue");
+  });
+});

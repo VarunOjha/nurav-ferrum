@@ -1,0 +1,161 @@
+RAW EVIDENCE - p0.17 step "portal-verify": final review of portal v2; phase-p0-planning, session s01
+Immutable raw evidence (SCHEMA 3.1). Captured 2026-10-09 by Claude from the repo root, PowerShell 7.6.6, Node v24.20.0, on HEAD 46fb685
+with the step changes in the working tree (interactive_plan/, scripts/start-portal.ps1, ip-* pages, comp-interactive-plan,
+ops-approval-workflow, index, plan/portal/{architecture,refs,overview,log}.json, STATUS, log). Saved through
+pwsh tools/mask.ps1 --stdin (adr-0027). The P0 gate printout of the same state is in p0-gate.txt next to this file.
+
+Contents:
+  1. Baseline: npm run verify at HEAD 46fb685 (before any change of this step)   -> exit 0
+  2. Visual review: screenshots compared with the mockups; defects found and fixed
+  3. scripts/start-portal.ps1                                                       -> -CheckOnly exit 0; full start answered HTTP 200
+  4. npm run verify on the final state (one run)                                    -> exit 0
+  5. npm run test:coverage                                                           -> exit 0, thresholds met
+  6. P0 gate (scripts/run-all-checks.ps1 -Phase P0)                                  -> PASS, 23 PASS, 4 YOURS
+  7. Portal check, quick lint, lint:wiki, check-script test, Python tool tests, mask scan
+  8. Gate runs in this step that failed, and why (fixed before the final run)
+
+===== 1. Baseline npm run verify (HEAD 46fb685, only the STATUS In-flight record changed) =====
+   Test Files  23 passed (23)
+        Tests  727 passed | 1 skipped (728)
+  wiki lint: wiki wiki, status STATUS.md, approvals plan/approvals.json (absent), git ok, today 2026-10-09
+  lint: 0 errors, 34 warnings, 2 info (pages: 202)
+   Test Files  2 passed (2)
+        Tests  8 passed | 1 skipped (9)
+  E2E guard: 22 real files unchanged (approvals.json absent)
+    69 passed (1.5m)
+  exit 0
+
+===== 2. Visual review =====
+Method: production build on 127.0.0.1, Playwright Chromium, light theme. Full-page screenshots of the seven tabs at 1440 and
+390 px wide, the phase popup (P0, scrolled top to bottom) and a reference popup, then read and compared with the approved
+mockups (Main = Layout A, Phase-Modal, Roadmap, Architecture, Log). document.scrollWidth equalled the viewport width on
+every tab at both widths (no sideways page scroll).
+Defects found and fixed:
+  a. Overview "Current phase" row: the phase chip was shown twice (once in the text, once appended). Fix: no extra chip when
+     the row text already shows the same id.
+  b. Punctuation could wrap away from an id chip: "(" alone at a line end, ")." or "?" at the next line start (Overview
+     headline at 390 px). Fix: RichText keeps the touching punctuation and the chip on one line.
+  c. Architecture part cards: a long part name was centred and pushed the "Planned" chip onto its own line. Fix: name
+     left-aligned, chip stays top right.
+  d. "The other groups at a glance": three cards in a four-column grid left an empty column. Fix: the cards share the row.
+  e. Phase popup at 390 px: the five-column tasks table scrolled sideways; the gate script header kept its hard line breaks
+     and column indentation, so it read badly once the browser wrapped it. Fix: one card per task below 640 px; the header
+     is shown as labelled fields (Why, What it changes, How long, How to run, ...) and reflowed paragraphs.
+After the fixes the screenshots were taken again and read: each defect gone, no sideways scroll at 390 px.
+Not changed (judged acceptable): the research experiment rows stack the phase link above the status chip; the step-order
+arrow after the last pill of a wrapped row.
+
+===== 3. scripts/start-portal.ps1 =====
+  Step 1 of 5: looking for Node.js
+    found Node.js v24.20.0
+  Step 2 of 5: checking the portal packages
+    packages already installed
+  Step 3 of 5: checking that port 3430 is free
+    port 3430 is free
+  Ready: Node.js, packages and port are fine. Nothing was started (-CheckOnly).
+  exit 0
+  Full start with -Port 3422 -NoBrowser (build output trimmed):
+  Step 1 of 5: looking for Node.js
+    found Node.js v24.20.0
+  Step 2 of 5: checking the portal packages
+    packages already installed
+  Step 3 of 5: checking that port 3422 is free
+    port 3422 is free
+  Step 4 of 5: building the portal (about 1 minute)
+  ├ ƒ /_not-found
+  Step 5 of 5: starting the portal at http://127.0.0.1:3422/
+  The portal is running at http://127.0.0.1:3422/
+  Leave this window open while you use it. Press Ctrl+C here to stop it.
+  curl http://127.0.0.1:3422/ -> HTTP 200; a second run on the same port printed 'already in use: the portal is probably running already' and exited 0; the server was then stopped.
+
+===== 4. npm run verify (final state, one run) =====
+  > interactive_plan@0.1.0 verify
+  > npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e
+  > interactive_plan@0.1.0 typecheck
+  > next typegen && tsc --noEmit
+  > interactive_plan@0.1.0 lint
+  > eslint .
+  > interactive_plan@0.1.0 test
+  > vitest run
+   Test Files  23 passed (23)
+        Tests  731 passed | 1 skipped (732)
+  > interactive_plan@0.1.0 lint:wiki
+  > vitest run --config vitest.lint.config.mts
+  wiki lint: wiki wiki, status STATUS.md, approvals plan/approvals.json (absent), git ok, today 2026-10-09
+  lint: 0 errors, 34 warnings, 2 info (pages: 202)
+   Test Files  2 passed (2)
+        Tests  8 passed | 1 skipped (9)
+  > interactive_plan@0.1.0 build
+  > next build
+  > interactive_plan@0.1.0 test:e2e
+  > playwright test
+  E2E guard: 22 real files unchanged (approvals.json absent)
+    69 passed (1.4m)
+  exit 0
+
+===== 5. npm run test:coverage =====
+   Test Files  23 passed (23)
+        Tests  731 passed | 1 skipped (732)
+  All files          |   96.09 |    89.51 |   96.02 |   97.83 |                                                  
+   lib/approvals     |   98.88 |    96.55 |     100 |   98.63 |                                                  
+   lib/lint          |   94.69 |    84.23 |   89.28 |   96.11 |                                                  
+   lib/portal        |      97 |    93.51 |      96 |    98.8 |                                                  
+   lib/wiki          |   97.82 |     93.8 |   98.75 |   99.24 |                                                  
+  exit 0
+
+===== 6. P0 gate =====
+    PASS   Wiki check: zero errors (5 s)
+    PASS   Task p0.1: Save the starting documents
+    PASS   Task p0.2: Write five research notes (1 s)
+    PASS   Task p0.3: Write the wiki rules and live status (1 s)
+    PASS   Task p0.4: Describe the architecture and its parts
+    PASS   Task p0.5: Write the decisions and the risk register
+    PASS   Task p0.6: Write the research plan pages
+    PASS   Task p0.7: Write phase pages, index and log
+    PASS   Task p0.8: Check the whole wiki (1 s)
+    PASS   Task p0.9: Install Node and record versions (1 s)
+    PASS   Task p0.10: Create the plan app skeleton (18 s)
+    PASS   Task p0.11: Teach the app to read the wiki (2 s)
+    PASS   Task p0.12: Fingerprint pages exactly like the reference (6 s)
+    PASS   Style and type checks (11 s)
+    PASS   Unit tests (24 s)
+    PASS   Browser tests (production build, this computer only) (85 s)
+    PASS   Production build (7 s)
+    PASS   Fingerprint cross-check (7 s)
+    PASS   Wiki check
+    YOURS  Your walkthrough
+    YOURS  Open questions
+    PASS   Portal text is in step with the wiki (4 s)
+    PASS   No real machine values in committed files (6 s)
+    PASS   Tool tests pass (Python tools and the portal checker) (30 s)
+    PASS   Every check script can be read by PowerShell (1 s)
+    YOURS  Your approvals (task p0.17)
+    YOURS  Your exit approval (task p0.18)
+  RESULT: PASS - P0-gate (23 PASS, 4 YOURS; 216 s)
+
+===== 7. Other checks =====
+--- pwsh tools/portal-sync-check.ps1
+  portal-sync: clean - 18 files, 252 translated records, 378 refs
+--- python tools/quick_lint.py
+  202 files checked, 0 errors, 0 warnings
+--- npm run lint:wiki (inside step 4, same state)
+  lint: 0 errors, 34 warnings, 2 info (pages: 202)
+--- pwsh scripts/test-check-scripts.ps1
+    PASS   Every PowerShell file parses without errors
+    PASS   Every check script follows the house rules
+    PASS   Every task and phase names an existing script with the agreed name
+  RESULT: PASS - scripts (3 PASS; 1 s)
+--- python -m unittest discover -s tools
+  Ran 34 tests in 4.996s
+  OK
+--- pwsh tools/mask.ps1 --scan (start-portal.ps1 added to the index first)
+  mask scan: 678 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+
+===== 8. Failed runs in this step =====
+  - P0 gate, first run: FAIL at "Tool tests pass". Two Python tests (approvals_check embedded block in ops-approval-workflow
+    section 4; hash vectors in ip-data-contract section 7) found no code block: the pages had been rewritten by a Python
+    script with Windows line endings (CRLF), so the regexes looking for "\n```" did not match. Fix: every changed file
+    converted back to LF (the repo rule, .gitattributes eol=lf); the tool tests then passed (34 tests, OK) and the final
+    gate run above passed.
+  - npm run verify was stopped once by Claude before it finished, because this file did not exist yet and the wiki
+    check would have reported its links as dangling; it was then run in full (step 4 above is a complete run).

@@ -41,3 +41,5 @@ cdc505bab3364d3fd8247ace5604d15720c22d7a72efae47683dcfccc761151b  evidence/phase
 7c9a43c8ea8f938811dc5836df28d20b116831d6aabe15b5e414e6c4c5235be3  evidence/phase-p0-planning/p0.17-portal-shell-checks.txt
 b59f75f8fe887be33204588f1bec9449df342f934c3acb92beee2831ed03b0e5  evidence/phase-p0-planning/p0.17-portal-views-checks.txt
 156a50b79c53cab6c0ad973efde1bcf586a56501a6ad301d052b79a8b5c25123  evidence/phase-p0-planning/p0-gate.txt
+c951a518dc465bfe889c2a1406e423d614f5db4b3821a63c7a184f05848b4751  evidence/phase-p0-planning/portal-v2/portal-verify.txt
+7b116084854e472a058bc595685afba357446a97e5212d6124bbfcda40788483  evidence/phase-p0-planning/portal-v2/p0-gate.txt

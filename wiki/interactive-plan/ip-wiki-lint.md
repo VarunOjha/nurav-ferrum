@@ -1,7 +1,7 @@
 ---
 id: ip-wiki-lint
 type: operations
-title: "Interactive plan app: wiki lint (npm run lint:wiki) and gate report"
+title: "Wiki check (npm run lint:wiki) and gate report, command line"
 status: active
 updated: 2026-10-09
 sources:
@@ -9,6 +9,7 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/owner/2026-10-09-s01-wave0c.md
+  - raw/owner/2026-10-09-s01-plan-app-feedback.md
 related: [ip-spec, ip-data-contract, ip-testing, ip-build-plan, ip-routes-and-views, schema, adr-0002, adr-0003, comp-interactive-plan, phase-p1-foundation, adr-0020, adr-0022]
 approvable: true
 phase: phase-p0-planning
@@ -28,7 +29,11 @@ npm run lint:wiki:json       # same, plus JSON report at interactive_plan/.lint/
 npm run gate                 # entry-gate checklist of STATUS.current_phase (or GATE_PHASE), §4
 ```
 
-The same engine powers the `/lint` page ([ip-routes-and-views](ip-routes-and-views.md) §3.12) and the per-page findings banners.
+> **Portal v2 (task p0.17, 2026-10-09):** this check is now **command line only**. The owner said he does not need a
+> lint page ([owner feedback](../raw/owner/2026-10-09-s01-plan-app-feedback.md)), so the v1 `/lint` page and the
+> per-page findings banners were removed with the wiki browser; the engine, the rules and the commands above are
+> unchanged. The P0 gate script runs `npm run lint:wiki` once and shares the result with the task check scripts
+> ([ip-testing](ip-testing.md)).
 
 SCHEMA §9.3 makes `npm run lint:wiki` the normative lint tool once IP-5 has passed. Before that, and as a fallback, `tools/quick_lint.py` runs with the manual checks. IP-5 also implemented the git-backed rules (§3), which SCHEMA §9.3 assigns to P1 task p1.10. p1.10 therefore has nothing left to add for them; it is left to the integrator to narrow p1.10 (noted in the IP-5 log entry).
 

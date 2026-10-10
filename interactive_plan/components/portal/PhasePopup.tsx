@@ -10,6 +10,7 @@ import { phaseDialogId } from "@/lib/portal/dialogs";
 import type { Phase, Roadmap } from "@/lib/portal/schemas.gen";
 import { runCommand } from "@/lib/portal/scriptCommand";
 import { getScriptHeader } from "@/lib/portal/server";
+import { headerParts } from "@/lib/portal/scripts";
 import { approvalLabel, phaseTone } from "@/lib/portal/view";
 import CloseLink from "./CloseLink";
 import Modal, { CloseModalButton } from "./Modal";
@@ -112,19 +113,19 @@ export default async function PhasePopup({
               <tbody>
                 {phase.tasks.map((t) => (
                   <tr key={t.id}>
-                    <td>
+                    <td className="cell-id">
                       <Ref id={t.id} variant="code" />
                     </td>
-                    <td className="strong">
+                    <td className="strong cell-title">
                       <RichText text={t.title} />
                     </td>
-                    <td className="text-2">
+                    <td className="text-2" data-label="What & why">
                       <RichText text={t.chain} />
                     </td>
-                    <td className="text-2">
+                    <td className="text-2" data-label="How we check">
                       <RichText text={t.check} />
                     </td>
-                    <td>
+                    <td data-label="Check script">
                       <ScriptCell script={t.script} />
                     </td>
                   </tr>
@@ -173,9 +174,20 @@ export default async function PhasePopup({
                 <pre className="code-block code-sm">{`# Run from the repo folder in PowerShell 7
 ${runCommand(phase.test_gate.script)}`}</pre>
                 {gateHeader && (
-                  <pre className="code-block gate-header" tabIndex={0} aria-label="What the gate script says about itself" data-testid="gate-header">
-                    {gateHeader}
-                  </pre>
+                  <div className="gate-header" tabIndex={0} role="region" aria-label="What the gate script says about itself" data-testid="gate-header">
+                    {headerParts(gateHeader).map((part, i) =>
+                      part.label ? (
+                        <div key={i} className="gate-field">
+                          <span className="gate-field-label">{part.label}</span>
+                          <span className={part.label === "How to run" ? "gate-field-text mono" : "gate-field-text"}>{part.text}</span>
+                        </div>
+                      ) : (
+                        <p key={i} className={i === 0 ? "gate-para strong" : "gate-para"} style={part.indent ? { paddingLeft: `${part.indent * 6}px` } : undefined}>
+                          {part.text}
+                        </p>
+                      ),
+                    )}
+                  </div>
                 )}
                 <div className="row-between">
                   <span className="small muted">It changes nothing unless you add -SaveEvidence.</span>

@@ -47,7 +47,11 @@ test("the gate explains itself and opens the whole gate script", async ({ page }
   await page.goto("/");
   await page.getByTestId("phase-cards").getByRole("button").first().click();
   const phaseDialog = page.getByRole("dialog", { name: p0.title });
-  await expect(phaseDialog.getByTestId("gate-header")).toContainText("What it checks");
+  const header = phaseDialog.getByTestId("gate-header");
+  await expect(header).toContainText("What it checks");
+  // The header's fields (Why, How to run, ...) are shown as label + text, not as wrapped source lines.
+  await expect(header.locator(".gate-field-label").first()).toBeVisible();
+  await expect(header.locator(".gate-field-label", { hasText: "Why" })).toHaveCount(1);
   await phaseDialog.getByRole("button", { name: "Read the whole gate script" }).click();
   await expect(page.getByTestId("script-text")).toHaveText(fileText(p0.test_gate.script!));
 });

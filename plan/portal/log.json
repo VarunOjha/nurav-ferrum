@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:9012c206e7e9420179d0215ba4be80c42f2cc25be54a25e34c0825c3dc7389ed"
+    "content_hash": "sha256:460daa723cf2f3e4d30b5f36aab02aa1e5f9d7a167540bcda3364b1cf8ddb451"
   },
   "entries": [
     {
@@ -801,6 +801,35 @@
         "## [2026-10-09] lint | p0.17 portal views: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
         "## [2026-10-09] code | p0.17 portal views: Roadmap, Architecture, Decisions, Research, Questions and Log tabs; script popup",
         "## [2026-10-09] plan | p0.17 step \"portal-views\" committed: all seven portal tabs, script popup, phase popups everywhere"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-portal-verify",
+      "date": "2026-10-09",
+      "title": "Portal reviewed against your mockups; one script starts it",
+      "done": "Claude took screenshots of every tab and popup on a wide screen and a phone-sized screen, compared them with your mockups and fixed five layout problems, such as a task table that scrolled sideways on a phone. A new script starts the portal in one step, and the old design pages are marked as history.",
+      "next": "You walk through the portal and tell Claude what reads wrong or unclear. Then Claude asks your first approvals in Claude Code.",
+      "decisions": [
+        {
+          "what": "One PowerShell script starts the portal: it finds Node, builds the portal and opens your browser",
+          "by": "claude"
+        },
+        {
+          "what": "The two old design pages for the approvals screen and the first build are kept as history and need no approval",
+          "by": "claude"
+        },
+        {
+          "what": "The portal has no speed target any more; it only reads a few small files",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-09] decide | portal final review: visual fixes, one start script, ip-* pages describe v2, two v1 pages retired",
+        "## [2026-10-09] code | p0.17 portal final review: five visual fixes, start script, ip-* pages for v2",
+        "## [2026-10-09] lint | p0.17 portal verify: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked"
       ],
       "phase": "phase-p0-planning"
     }

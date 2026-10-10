@@ -7,8 +7,8 @@ import { OpenModalButton } from "@/components/portal/Modal";
 import { phaseDialogId } from "@/lib/portal/dialogs";
 import Ref from "@/components/portal/Ref";
 import RichText from "@/components/portal/RichText";
-import { resolveRef } from "@/lib/portal/refs";
-import { getPortal, getRefData } from "@/lib/portal/server";
+import { resolveRef, tokenize, type RefData } from "@/lib/portal/refs";
+import { getPatterns, getPortal, getRefData } from "@/lib/portal/server";
 import { headline, latestLog, percentDone, phaseTone, shortDate } from "@/lib/portal/view";
 
 export const dynamic = "force-dynamic";
@@ -17,12 +17,18 @@ export const metadata: Metadata = { title: "Overview" };
 /** The id shown as the live example in "Clickable references" (first decision with an explainer). */
 const EXAMPLE_REFS = ["adr-0023", "adr-0024", "adr-0001"];
 
+/** True when `text` already shows a clickable id for the same explainer as `ref` (no second chip then). */
+function mentions(text: string, ref: string, patterns: RegExp[], refData: RefData): boolean {
+  const target = resolveRef(refData, ref)?.id ?? ref;
+  return tokenize(text, patterns).some((t) => t.type === "ref" && (resolveRef(refData, t.id)?.id ?? t.id) === target);
+}
+
 function Missing({ what }: { what: string }) {
   return <p className="muted">{what} could not be read (see the note at the top of the page).</p>;
 }
 
 export default async function OverviewPage() {
-  const [{ files }, refData] = await Promise.all([getPortal(), getRefData()]);
+  const [{ files }, refData, patterns] = await Promise.all([getPortal(), getRefData(), getPatterns()]);
   const { overview, roadmap, phases, log } = files;
   const latest = latestLog(log, 3);
   const example = EXAMPLE_REFS.find((id) => resolveRef(refData, id)) ?? null;
@@ -55,7 +61,7 @@ export default async function OverviewPage() {
                       </th>
                       <td>
                         <RichText text={row.state} />
-                        {row.ref && (
+                        {row.ref && !mentions(row.state, row.ref, patterns, refData) && (
                           <>
                             {" "}
                             <Ref id={row.ref} variant="chip">
