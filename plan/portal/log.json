@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words, newest last.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:deb4c6551b4c64d3ec4e64527f36e2e96a46741b68f4d49494afda98b996219f"
+    "content_hash": "sha256:ab3a2df6054b81bc504674c6a422602efebc6543ecc13fc1e3fd7096043975d0"
   },
   "entries": [
     {
@@ -37,13 +37,14 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "8d89329",
       "phase": "phase-p0-planning",
       "covers": [
         "## [2026-10-09] ingest | Claude Code docs on Stop hooks and project skills",
         "## [2026-10-09] decide | wiki-to-portal pipeline: where the JSON lives, its shapes, the checker, the hook, check-script folders",
         "## [2026-10-09] schema | portal JSON location and the same-edit rule",
-        "## [2026-10-09] lint | p0.17 pipeline step: 20 checker tests pass, quick lint and lint:wiki 0 errors"
+        "## [2026-10-09] lint | p0.17 pipeline step: 20 checker tests pass, quick lint and lint:wiki 0 errors",
+        "## [2026-10-09] plan | p0.17 step \"pipeline\" committed: wiki-to-portal JSON pipeline, hook switched off"
       ]
     }
   ]

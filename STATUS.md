@@ -11,12 +11,12 @@ sources:
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/owner/2026-10-09-s01-plan-app-feedback.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
-related: [adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
+related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Claude: p0.17 next step - build the pipeline that turns each wiki change into plain-language JSON for the portal (repo skill, safety-net hook, PowerShell check script; adr-0024). No owner action needed before that."
+next_action: "Claude: p0.17 next step - write the plain-language portal JSON for every page (plan/portal/, using the wiki-to-portal skill) until pwsh tools/portal-sync-check.ps1 prints clean, then create plan/portal/.hook-enabled to switch the Stop hook on. No owner action needed before that."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -159,6 +159,14 @@ yet (every approvable page is PENDING).**
   ([adr-0027](wiki/decisions/adr-0027-mask-sensitive-values.md), `tools/mask.ps1`, gitignored `.env.local-map`). 16 committed
   evidence files masked as a sanctioned raw edit. Checks: quick lint 0 errors, lint:wiki 0 errors, mask scan 0 unmasked
   ([p0.17-rules-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-rules-checks.txt)).
+- p0.17 step "pipeline" done (commit `8d89329`): wiki changes now have a plain-language JSON copy for the portal, kept in
+  step by three layers ([ops-portal-pipeline](wiki/operations/ops-portal-pipeline.md), adr-0024): the repo skill
+  `.claude/skills/wiki-to-portal/` (how to translate, plain-language style guide), shapes in `plan/portal/schema/` with rules
+  in `plan/portal/pipeline.json`, the checker `pwsh tools/portal-sync-check.ps1` (outdated, missing, badly shaped or
+  unexplained-id text), and a Stop hook in `.claude/settings.json`, **installed switched off** until
+  `plan/portal/.hook-enabled` exists. Check-script folders: `scripts/verify/`, `scripts/gates/`. Checks: 20 checker tests pass,
+  quick lint 0 errors, lint:wiki 0 errors, mask scan 0 unmasked
+  ([p0.17-pipeline-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-pipeline-checks.txt)).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -169,7 +177,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "rules" verified and committed 2026-10-09 (`5d33859`); next the wiki-to-JSON pipeline step)
+(empty: p0.17 step "pipeline" verified and committed 2026-10-09 (`8d89329`); next the portal content JSON step)
 
 ## Blockers
 
@@ -206,12 +214,13 @@ Where we are:
 |---|---|
 | Plan app v1 | Built (IP-0 to IP-10), but the owner found it too technical; being redesigned as portal v2 (task p0.17) |
 | Rules for portal v2 | Done today (`5d33859`): approvals in Claude Code, read-only portal, PowerShell checks, four architecture groups, masking |
+| Wiki-to-portal pipeline | Built today (`8d89329`): skill, file shapes, check script, end-of-turn check (switched off until the text exists) |
 | Approvals | None recorded yet; asked after portal v2, wave by wave |
 | First push | Blocked until the owner answers Q-221 (history rewrite) |
 
-1. **Claude, next step of p0.17:** build the wiki-to-JSON pipeline → each wiki change gets a plain-language JSON copy
-   in the same edit (repo skill + safety-net hook + PowerShell check script) → the portal can show short, readable
-   text ([adr-0024](wiki/decisions/adr-0024-portal-reads-plain-language-json.md)).
+1. **Claude, next step of p0.17:** write the plain-language JSON for every page → `pwsh tools/portal-sync-check.ps1`
+   prints clean → switch the end-of-turn check on (create `plan/portal/.hook-enabled`) → from then on every wiki edit
+   must carry its JSON ([ops-portal-pipeline](wiki/operations/ops-portal-pipeline.md)).
 2. **Then:** rebuild the portal from the approved mockups (Option A layout), read-only, with popups for phases and
    decisions ([adr-0023](wiki/decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)).
 3. **Then the owner, in Claude Code:** review in the portal and give the Wave 1 approvals; Claude records each one
@@ -230,4 +239,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.17 step "rules", `5d33859`; next: the wiki-to-JSON pipeline). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+2026-10-09, session s01 (after p0.17 step "pipeline", `8d89329`; next: the portal content JSON). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).

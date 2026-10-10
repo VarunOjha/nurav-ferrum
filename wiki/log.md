@@ -589,3 +589,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ops-portal-pipeline]
 - sources: [raw/evidence/phase-p0-planning/p0.17-pipeline-checks.txt]
 - result: pwsh tools/test-portal-sync-check.ps1: 20 passed, 0 failed (clean fixture passes; STALE, MISSING, missing phase file, BAD-SHAPE, BAD-JSON, UNKNOWN-REF, UNCOVERED log heading and question, ORPHAN, MISSING-SCRIPT, MISSING-FILE, DUP-ID each caught; ids inside paths and code are not flagged; -Hash equals the SCHEMA §10.2 Python reference on a CRLF file; hook: off → 0, on + stale → 2 with the reason on stderr, stop_hook_active → 0, clean → 0, repo found through CLAUDE_PROJECT_DIR; real repo checked in 0.68 s). Real repo: 158 MISSING, 9 MISSING-FILE, as expected before the content JSON is written (next step). The configured hook command on the real repo exits 0 (switched off). python tools/quick_lint.py 202 files 0 errors; npm run lint:wiki 0 errors, 34 warnings (the same 34 as before, none from the new pages), 2 info.
+
+## [2026-10-09] plan | p0.17 step "pipeline" committed: wiki-to-portal JSON pipeline, hook switched off
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/p0.17-pipeline-checks.txt]
+- result: What was done → the pipeline that turns wiki changes into plain-language portal JSON exists (skill, shapes, rules, checker, tests, Stop hook installed but off), and plan/portal/log.json holds its first entry. After the commit, npm run lint:wiki reported 0 errors (before the commit it reported 2 RAW-IMMUTABLE errors for the two new raw files while they were only staged, as an "uncommitted change (A)"; this clears on commit, same as at the rules step). STATUS: In-flight cleared, next action updated.
+- next: Claude writes the portal content JSON for every page until the checker is clean, then creates plan/portal/.hook-enabled
+- commit: 8d89329
