@@ -167,7 +167,7 @@ yet (every approvable page is PENDING).**
   `plan/portal/.hook-enabled` exists. Check-script folders: `scripts/verify/`, `scripts/gates/`. Checks: 20 checker tests pass,
   quick lint 0 errors, lint:wiki 0 errors, mask scan 0 unmasked
   ([p0.17-pipeline-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-pipeline-checks.txt)).
-- p0.17 step "content" done (commit (this step's commit)): the plain-language portal text exists for every page. One file per portal tab in
+- p0.17 step "content" done (commit `ed8b89c`): the plain-language portal text exists for every page. One file per portal tab in
   `plan/portal/` (overview, roadmap, 9 phase files, decisions, risks, research, architecture, questions, log) plus
   `refs.json` with 374 explainers so every id opens a popup; written by six parallel writers, merged and read through
   once as the owner would. Check-script fields stay empty (`null`) until the scripts exist. Stale approval wording fixed
@@ -185,7 +185,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "content" verified and committed 2026-10-09 ((this step's commit)); next the check scripts)
+(empty: p0.17 step "content" verified and committed 2026-10-09 (`ed8b89c`); next the check scripts)
 
 ## Blockers
 
@@ -223,7 +223,7 @@ Where we are:
 | Plan app v1 | Built (IP-0 to IP-10), but the owner found it too technical; being redesigned as portal v2 (task p0.17) |
 | Rules for portal v2 | Done today (`5d33859`): approvals in Claude Code, read-only portal, PowerShell checks, four architecture groups, masking |
 | Wiki-to-portal pipeline | Built today (`8d89329`): skill, file shapes, check script, end-of-turn check |
-| Portal text | Written today ((this step's commit)) for every page; check clean; end-of-turn check switched on |
+| Portal text | Written today (`ed8b89c`) for every page; check clean; end-of-turn check switched on |
 | Check scripts, new portal site | Not yet: next steps |
 | Approvals | None recorded yet; asked after portal v2, wave by wave |
 | First push | Blocked until the owner answers Q-221 (history rewrite) |
@@ -250,4 +250,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.17 step "content", (this step's commit); next: the check scripts). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+2026-10-09, session s01 (after p0.17 step "content", `ed8b89c`; next: the check scripts). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).

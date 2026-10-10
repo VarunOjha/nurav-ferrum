@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words, oldest first. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:9731cb2e434ec46b3475e79d84b3594b52016c224e21f6c9a5a834233d5e5d63"
+    "content_hash": "sha256:3291e1bd856c12bfc2e01525f90ac0de190fba0a79d4d491b37cde714227c641"
   },
   "entries": [
     {
@@ -690,11 +690,12 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "ed8b89c",
       "covers": [
         "## [2026-10-09] decide | portal content: how the six writers' text was merged, empty script fields, plain-word fixes, check switched on",
         "## [2026-10-09] correct | stale \"approve in the plan app\" wording fixed on two phase pages, risk-r22 and adr-0001",
-        "## [2026-10-09] lint | p0.17 content step: portal check clean, quick lint and lint:wiki 0 errors, mask scan 0 unmasked"
+        "## [2026-10-09] lint | p0.17 content step: portal check clean, quick lint and lint:wiki 0 errors, mask scan 0 unmasked",
+        "## [2026-10-09] plan | p0.17 step \"content\" committed: portal text for every page, end-of-turn check switched on"
       ],
       "phase": "phase-p0-planning"
     }

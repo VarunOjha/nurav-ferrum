@@ -620,3 +620,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [status-live, ops-portal-pipeline]
 - sources: [raw/evidence/phase-p0-planning/p0.17-content-checks.txt]
 - result: pwsh tools/portal-sync-check.ps1: clean (18 files, 252 translated records, 374 refs), exit 0; the full real-repo check now takes 3.72 s inside the test run (0.68 s with almost no JSON; target under 5 s). pwsh tools/test-portal-sync-check.ps1: 20 passed, 0 failed. The configured Stop-hook command, now switched on, exits 0 on the clean repo. python tools/quick_lint.py: 202 files, 0 errors, 0 warnings (before the evidence file existed it reported 1 REF-DANGLING for the STATUS link to that file, as expected). npm run lint:wiki: 0 errors, 34 warnings (the same 34 as before), 2 info. pwsh tools/mask.ps1 --scan: 555 tracked files, 0 unmasked; --file on the new portal JSON: nothing to mask. MANIFEST.sha256 gained 1 line.
+
+## [2026-10-09] plan | p0.17 step "content" committed: portal text for every page, end-of-turn check switched on
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/p0.17-content-checks.txt]
+- result: What was done → every page the portal shows now has plain-language JSON with a fresh fingerprint, every id has an explainer, and the end-of-turn check runs on every Claude turn (it blocks a turn that leaves the portal out of step with the wiki). STATUS: In-flight empty, Rust/MSVC row says installed, next action updated (check scripts, then the new portal site). The evidence file's working copy was converted to LF line endings after the commit, matching the committed bytes.
+- next: Claude writes the PowerShell 7 check scripts (one per task, one per phase gate) and fills their paths in the phase JSON; then rebuilds the portal from the approved mockups
+- commit: ed8b89c

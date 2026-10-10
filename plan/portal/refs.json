@@ -4453,6 +4453,16 @@
       "related": []
     },
     {
+      "id": "ed8b89c",
+      "kind": "commit",
+      "title": "Commit: Portal text written for every page; automatic check switched on",
+      "summary": "Plain-language portal text for every page, the explainer list, and the end-of-turn check switched on.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
       "id": "ov-research-fairness-protocol",
       "kind": "page",
       "title": "Fairness rules for the comparison",
