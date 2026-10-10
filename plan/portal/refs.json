@@ -4201,6 +4201,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "e1b198d",
+      "kind": "commit",
+      "title": "Commit: Ref button for layout feedback",
+      "summary": "The portal's new Ref button outlines every block of the page and its popups and gives each a fixed name you can copy into your feedback.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

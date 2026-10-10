@@ -17,7 +17,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 (it opens http://127.0.0.1:3417/). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\". Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the new Ref button). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,10 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "ref-mode" (owner request in chat, 2026-10-10: a "Ref" button in the portal header that outlines and names every block on the page and in open popups, so the owner can point at them in layout feedback; chosen option "Outline + labels + copy")
-- intent: add a Ref toggle (header), a stable id registry `interactive_plan/lib/portal/uiRefs.ts`, `data-ui-ref` marks on every tab and popup block, copy-to-clipboard chips, a Layout map popup; unit + Playwright tests; document it on the `ip-*` pages; plain log entry
-- planned paths: `interactive_plan/lib/portal/uiRefs.ts`, `interactive_plan/components/portal/RefMode.tsx`, `interactive_plan/app/**/*.tsx`, `interactive_plan/components/portal/*.tsx`, `interactive_plan/app/globals.css`, `interactive_plan/tests/unit/ui-refs.test.ts`, `interactive_plan/tests/e2e/ref-mode.spec.ts`, `interactive_plan/README.md`, `wiki/interactive-plan/ip-routes-and-views.md`, `wiki/interactive-plan/ip-testing.md`, `wiki/log.md`, `plan/portal/log.json`, `plan/portal/overview.json`, `plan/portal/refs.json`
-- rollback: `git checkout -- <the paths above>` and delete the three new files (all created in this step)
+(empty: p0.17 step "ref-mode" (Ref button for layout feedback) verified and committed 2026-10-10 (`e1b198d`); next the owner restarts the portal and continues the walkthrough)
 
 ## Blockers
 
@@ -278,7 +275,7 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-
 
 | Item | State |
 |---|---|
-| Plan portal (portal v2) | Built, reviewed and checked: seven tabs, popups for every id, read-only |
+| Plan portal (portal v2) | Built, reviewed and checked: seven tabs, popups for every id, read-only; new Ref button names every block for your layout feedback (restart the portal to get it) |
 | Check scripts | One per task and per phase; the P0 checks all pass; the P1 scripts are ready for your review |
 | End-of-turn check | On: Claude cannot end a turn while the portal text is out of date |
 | Approvals | None yet; you give them in Claude Code, Claude records them |
@@ -299,13 +296,17 @@ pwsh -NoProfile -File scripts/start-portal.ps1
 - `pwsh -NoProfile` runs PowerShell 7 without your personal settings, so it behaves the same every time.
 - `scripts/start-portal.ps1` finds Node, installs the portal's packages the first time, builds the portal (about a
   minute), starts it on this computer only (127.0.0.1) and opens http://127.0.0.1:3417/ in your browser.
-- Ctrl+C stops it.
+- Ctrl+C stops it. If the portal is already running, stop it with Ctrl+C and run the script again: it rebuilds, so
+  you get the new **Ref** button.
 
 What to read: every tab; on the Roadmap, open P1 and read its tasks, the check script of each task (script button)
 and the gate script that decides when P1 is done.
 
+For layout feedback, click **Ref** in the top bar: every block gets an outline and a name such as
+"OV-3 · What happens next"; click a name to copy it and paste it into your message. Esc turns it off.
+
 **4. What to tell Claude afterwards:** "the portal reads fine", or which tab or popup reads wrong or unclear and
-why.
+why (for layout, with the names Ref mode copied).
 
 Then, in order:
 

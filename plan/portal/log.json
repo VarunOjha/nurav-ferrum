@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:a7e3f0e67a1316e33612381686ddd41cb5ecdee4868ee1408709e0d9fb48f1e5"
+    "content_hash": "sha256:7742ee31735960ad6bf7a794b8aae3c14a2a6eb26f4f8296cdaca903d9b06559"
   },
   "entries": [
     {
@@ -962,11 +962,12 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "e1b198d",
       "covers": [
         "## [2026-10-10] ingest | Owner asks for a \"Ref\" button that outlines and names the portal's blocks for layout feedback",
         "## [2026-10-10] code | p0.17 Ref mode: Ref button, fixed block ids, outlines, copyable labels, Layout map",
-        "## [2026-10-10] lint | p0.17 Ref mode: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px"
+        "## [2026-10-10] lint | p0.17 Ref mode: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px",
+        "## [2026-10-10] plan | p0.17 step \"ref-mode\" committed: Ref button for layout feedback"
       ],
       "phase": "phase-p0-planning"
     }

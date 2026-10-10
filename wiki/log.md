@@ -873,3 +873,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views, ip-testing, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/ref-mode-checks.txt]
 - result: `npm run verify` exit 0 in one run (typecheck, eslint, 754 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 36 warnings, 2 info, build, 89 browser tests passed including the 17 Ref mode tests, E2E guard: real files unchanged). It ran in a scratch git worktree of HEAD with this step's files copied in, because rebuilding `interactive_plan/.next` would have broken the owner's running portal on 3417. Unit tests with coverage in the main tree: thresholds met, `uiRefs.ts` 100 % lines. Visual review: screenshots with Ref mode on of the seven tabs, the phase, script, reference and item popups and the Layout map at 1440 and 390 px, light and dark; fixed labels covering header pieces, headings and the block above, labels cut off at the top of popups, and the top bar wrapping in normal mode. Quick lint and the portal check are run again on the final tree before the commit.
+
+## [2026-10-10] plan | p0.17 step "ref-mode" committed: Ref button for layout feedback
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/owner/2026-10-10-s01-ref-button.md]
+- result: What was done → the owner asked for a way to point at parts of the portal in layout feedback → the Ref button now outlines every block of the tab and of open popups with a fixed, copyable name, and a Layout map lists them all → his walkthrough feedback can name exact blocks. STATUS: In-flight cleared; next action now says to restart the running portal (it is a build, so the button appears only after a rebuild) and to use Ref for layout feedback. A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear or what to change in the layout; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: e1b198d

@@ -5,7 +5,7 @@
   "summary": "We are finishing the plan (P0). The new read-only portal is built, reviewed and handed over to you; Claude cannot end a turn while its text is out of date. Nothing is approved yet, and no Ferrum code exists yet. After your P0 sign-off Claude pauses until you say go for P1.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:55ebda962b49597a055de01547f2e36a5abf226f3701ca09e858c5389f195d96"
+    "content_hash": "sha256:87104add496a7ff9970bc5a25147887f8826e307431e0aaecba52ed1d034f643"
   },
   "updated": "2026-10-10",
   "where_we_are": [
@@ -41,7 +41,7 @@
     "where_we_are": [
       {
         "item": "Portal",
-        "state": "Built, reviewed and handed over"
+        "state": "Built, reviewed and handed over; new Ref button for your layout feedback"
       },
       {
         "item": "Your walkthrough",
@@ -62,11 +62,15 @@
       "parts": [
         {
           "code": "pwsh -NoProfile -File scripts/start-portal.ps1",
-          "explains": "Run this in PowerShell 7 from the repo folder. It finds Node, builds the portal (about 1 minute), starts it on this computer only and opens http://127.0.0.1:3417/ in your browser."
+          "explains": "Run this in PowerShell 7 from the repo folder (if the portal already runs, stop it with Ctrl+C first). It builds the portal (about 1 minute), starts it on this computer only and opens http://127.0.0.1:3417/."
         },
         {
           "code": "Roadmap → P1 → script buttons",
           "explains": "In the portal, open P1 on the Roadmap and use the script buttons to read each task's check script and the gate script that decides when P1 is done."
+        },
+        {
+          "code": "Ref button (top bar)",
+          "explains": "For layout feedback: Ref outlines every block and names it, such as \"OV-3 · What happens next\". Click a name to copy it into your message; Esc turns it off."
         },
         {
           "code": "Ctrl+C",
@@ -74,7 +78,7 @@
         }
       ]
     },
-    "tell_claude": "\"The portal reads fine\", or which tab, popup or script reads wrong or unclear and why."
+    "tell_claude": "\"The portal reads fine\", or which tab, popup or script reads wrong or unclear and why; for layout, paste the names Ref copied."
   },
   "questions_for_you": {
     "open": 38,
