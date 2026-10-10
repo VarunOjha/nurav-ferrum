@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:2fa5356123efb14ac8045273d8a971139c8e47cd7aa3d442edc509595c18e7ae"
+    "content_hash": "sha256:0afb59dc94c3ca87abd2ad8031f263b2b57b5e2cde2b94bb8fd0e72fba91d082"
   },
   "entries": [
     {
@@ -1043,10 +1043,11 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "659f619",
       "covers": [
         "## [2026-10-10] code | p0.17 tasks table review fixes: three-step chains, why and how rewritten, fits 1280 px, short phone cards",
-        "## [2026-10-10] lint | p0.17 tasks table review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read"
+        "## [2026-10-10] lint | p0.17 tasks table review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read",
+        "## [2026-10-10] plan | p0.17 step \"task-columns-fixes\" committed: tasks table fixed after a review"
       ],
       "phase": "phase-p0-planning"
     }

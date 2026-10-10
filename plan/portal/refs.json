@@ -4231,6 +4231,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "659f619",
+      "kind": "commit",
+      "title": "Commit: tasks table fixed after a review",
+      "summary": "Every Why now says what goes wrong without the task and every How says how it is done; every Logic cell has three steps; the table fits a 1280 px screen and phone cards start with id, state and title.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

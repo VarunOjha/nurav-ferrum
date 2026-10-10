@@ -17,7 +17,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,10 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "task-columns-fixes" (review fixes for the eight-column tasks table, owner request 2026-10-10)
-- intent: fix the review findings: p8.4 thought chain cut into 9 steps (data fix + a schema rule of exactly three steps), Why cells that repeat the Logic column, How cells that repeat the check line, sideways scroll at 1280 px, long phone cards, screen-reader labels; then checks in a scratch copy, screenshots, evidence, commit
-- planned paths: plan/portal/phases/*.json, plan/portal/refs.json, plan/portal/schema/phase.schema.json, interactive_plan/lib/portal/schemas.gen.ts, interactive_plan/app/globals.css, interactive_plan/components/portal/PhasePopup.tsx, interactive_plan/tests/**, .claude/skills/wiki-to-portal/SKILL.md, tools/fixtures/portal-sync/clean/**, wiki/interactive-plan/ip-routes-and-views.md, plan/portal/log.json, plan/portal/overview.json, wiki/raw/evidence/phase-p0-planning/portal-v2/task-columns-fixes-checks.txt (new)
-- rollback: git restore --source=HEAD -- <planned paths> (and delete the new evidence file); nothing is committed until all checks pass
+(empty: p0.17 step "task-columns-fixes" (review fixes for the eight-column tasks table) verified and committed 2026-10-10 (`659f619`); next the owner restarts the portal and continues the walkthrough)
 
 ## Blockers
 
