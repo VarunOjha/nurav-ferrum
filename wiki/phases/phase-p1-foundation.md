@@ -3,7 +3,7 @@ id: phase-p1-foundation
 type: phase
 title: "P1 Foundation: toolchain, repo scaffold, CI, de-risking spikes"
 status: planned
-updated: 2026-10-09
+updated: 2026-10-10
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -12,6 +12,7 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/research/related-work-seed.md
   - raw/research/llm-wiki-pattern.md
+  - raw/owner/2026-10-10-s01-q008-and-pause.md
 related: [phase-p0-planning, phase-p2-minimal-container, schema, risk-r01, risk-r02, risk-r03, risk-r04, risk-r05, risk-r06, risk-r15, risk-r18, risk-r20, adr-0019, comp-windows-os, comp-benchmark-harness, ov-research-plan, ops-environment-setup, qual-ci-plan, ov-arch-repo-layout, adr-0005, adr-0021, adr-0007, adr-0010, adr-0011, adr-0012, adr-0018, comp-core, comp-webview2-runtime]
 approvable: true
 phase: phase-p1-foundation
@@ -21,7 +22,7 @@ order: 1
 depends_on: [phase-p0-planning]
 est_sessions: 6
 entry_criteria:
-  - "phase-p0-planning has status done and key phase-p0-planning#exit is APPROVED in plan/approvals.json."
+  - "phase-p0-planning has status done and key phase-p0-planning#exit is APPROVED in plan/approvals.json, and the owner has explicitly said in chat to start P1, transcribed to raw/owner/ (owner directive 2026-10-10: pause after the planning phase; SCHEMA section 9.7 exit-gate step 7)."
   - "Owner approval recorded and not stale in plan/approvals.json (effective state APPROVED or APPROVED_VOLATILE_DRIFT) for the P1 dependency set: schema, phase-p1-foundation, every ADR in decisions, every component in components."
   - "No open Q-NNN in ov-open-questions blocks any id in the dependency set."
   - "Owner is available to confirm the UAC prompts of the toolchain installs Claude runs (adr-0021, superseding adr-0005); no kernel driver is installed in P1 (drivers need separate owner approval)."

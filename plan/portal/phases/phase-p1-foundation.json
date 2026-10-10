@@ -3,7 +3,7 @@
   "short": "P1",
   "title": "Foundation",
   "one_line_goal": "Tools confirmed, empty project builds, riskiest ideas tested",
-  "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed.",
+  "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. It starts only when you explicitly say go after signing off P0.",
   "status": "Not started",
   "progress": {
     "done": 0,
@@ -205,6 +205,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p1-foundation.md",
-    "content_hash": "sha256:2bbdb7134d8db47aa021788ac43625c357502a9146f561f5919e4fa553bb7172"
+    "content_hash": "sha256:7f4f789988dc7e6ca4a43432e93877cca0a005ca10d9e39dbb99fac3d9df7fe8"
   }
 }

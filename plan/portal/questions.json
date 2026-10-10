@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, open ones first, ordered by the phase they hold up. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:88ef2fadfaad299693d9bb04bf48e01a3ec4ebcdb42345967fdb9bf2f4181999"
+    "content_hash": "sha256:4b6a96d4deed7115a0b311723bcecbb548c905451bd502c1e9833784575def1b"
   },
   "items": [
     {
@@ -54,7 +54,7 @@
       "id": "Q-108",
       "asked": "2026-10-08",
       "question": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases?",
-      "why_it_matters": "Decides whether you formally review P0 and P1 before the next phase starts. Asked in the first wave, before P0 ends.",
+      "why_it_matters": "Decides whether you formally review P0 and P1 before the next phase starts. Your 10 Oct rule already makes Claude pause after P0 and wait for your go; this asks about the formal review. Asked in the first wave, before P0 ends.",
       "status": "open",
       "answer": null,
       "answered_on": null,
@@ -429,10 +429,10 @@
       "id": "Q-008",
       "asked": "2026-10-08",
       "question": "Keep the accessibility checker (axe-core) that Claude added to the portal's tests on 9 Oct, or remove it?",
-      "why_it_matters": "This question promised to ask you first, but Claude added the checker before you answered. It checks every tab for problems such as missing labels. Say 'remove it' and Claude takes it out.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "why_it_matters": "This question promised to ask you first, but Claude added the checker before you answered. It checks every tab for problems such as poor contrast, popups you cannot close with Esc, and missing labels.",
+      "status": "answered",
+      "answer": "Keep it. You first asked what it does and why; Claude explained it checks contrast, popups, labels and page structure, only in tests, at small cost, but cannot judge wording. You said: \"Okay, lets add.\"",
+      "answered_on": "2026-10-10",
       "blocks": []
     },
     {

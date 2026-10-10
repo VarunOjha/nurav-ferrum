@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:0e3497563cc82387fe67d6ebf49efe207a252f9af4e3ae1291ea53360c1534dc"
+    "content_hash": "sha256:cd30d4acc1d36c226948f835f3c3d4988928aedfc7ca487469b7a442b446fcf9"
   },
   "entries": [
     {
@@ -901,6 +901,38 @@
         "## [2026-10-10] handoff | s01: portal v2 handed over; the owner walks through it, then approvals in chat, then P0 sign-off",
         "## [2026-10-10] lint | p0.17 handoff: P0 gate passes, the end-of-turn hook passes clean and blocks stale, portal check clean, mask scan 0 unmasked",
         "## [2026-10-10] plan | p0.17 step \"handoff\" committed: portal v2 handed over to the owner"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-10-q008-and-pause",
+      "date": "2026-10-10",
+      "title": "You kept the accessibility checker and asked Claude to pause between phases",
+      "done": "Claude saved your words. The accessibility checker stays in the portal's tests: you asked why it is worth having, then said \"Okay, lets add.\" Your new standing rule, \"pause when completing the planning phase and before building the next phase\", is now written into Claude's session rules, the wiki rule book, the review decision and the P0 and P1 plans: when a phase passes its checks, Claude stops, reports, and starts nothing of the next phase until you sign off and explicitly say go.",
+      "next": "You walk through the portal and tell Claude what reads unclear. Then your first approvals in chat and your P0 sign-off; then Claude pauses until you say go for P1.",
+      "decisions": [
+        {
+          "what": "Keep the accessibility checker in the portal's tests",
+          "by": "you"
+        },
+        {
+          "what": "Claude pauses after each phase, P0 included, and starts the next one only on your explicit go",
+          "by": "you"
+        },
+        {
+          "what": "A sign-off alone is not a go; while paused Claude only finishes up the closed phase",
+          "by": "claude"
+        },
+        {
+          "what": "The question about a formal end review for P0 and P1 stays open; your rule covers the pause, not the review",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] ingest | Owner answers Q-008 (keep the accessibility checker) and directs Claude to pause between phases",
+        "## [2026-10-10] schema | Pause between phases: CLAUDE.md §1 and SCHEMA §9.7 exit-gate step 7"
       ],
       "phase": "phase-p0-planning"
     }

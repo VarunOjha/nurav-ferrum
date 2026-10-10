@@ -45,7 +45,7 @@
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p0-planning.md",
-        "content_hash": "sha256:25fb17417769bb828836033533a471be1ce424e5f5f1da54b2fc12191792bca8"
+        "content_hash": "sha256:b7a97811eb0d2dbea91b22e2363a824fe335ce701093bb58af0c9f00734e93d3"
       }
     },
     {
@@ -58,7 +58,7 @@
       "tasks_total": 17,
       "source": {
         "wiki_path": "wiki/phases/phase-p1-foundation.md",
-        "content_hash": "sha256:2bbdb7134d8db47aa021788ac43625c357502a9146f561f5919e4fa553bb7172"
+        "content_hash": "sha256:7f4f789988dc7e6ca4a43432e93877cca0a005ca10d9e39dbb99fac3d9df7fe8"
       }
     },
     {
@@ -172,7 +172,7 @@
     {
       "id": "every-phase-review",
       "title": "Your review at the end",
-      "summary": "Each phase ends with you reviewing the evidence and approving in Claude Code. The next phase waits for that."
+      "summary": "Each phase ends with you reviewing the evidence and approving in Claude Code. Then Claude pauses: the next phase starts only when you explicitly say go."
     },
     {
       "id": "every-phase-sync",

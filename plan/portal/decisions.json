@@ -338,8 +338,8 @@
       "id": "adr-0014",
       "number": 14,
       "title": "You review the result of every phase",
-      "summary": "At the end of each phase Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve.",
-      "why": "You asked to stop after each milestone for your review.",
+      "summary": "At the end of each phase Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve the phase and then explicitly say go.",
+      "why": "You asked to stop after each milestone for your review, and on 10 Oct to pause after the planning phase and before building the next phase.",
       "catch": "Progress waits on your review time.",
       "status": "Accepted",
       "decided_by": "you",
@@ -356,7 +356,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0014-milestone-review-checkpoints.md",
-        "content_hash": "sha256:711d4d0eb3f6d5c4120d65ccc81c333ca1f2215171fe0534b2699245261d0585"
+        "content_hash": "sha256:c981d024dd53e99968474093f9e84004cc4a922ba259e6e4fee8ac427143624a"
       }
     },
     {

@@ -60,6 +60,18 @@ is for a smart non-specialist:
     by directives 2 and 4), transcribed to `wiki/raw/owner/`
     ([ip-build-plan](wiki/interactive-plan/ip-build-plan.md) IP-0). Ferrum application code stays forbidden.
 
+**PAUSE between phases (owner's standing directive of 2026-10-10, SCHEMA §9.7 step 7).** The owner said:
+"Make sure to pause when completing the planning phase and before building the next phase"
+([raw/owner/2026-10-10-s01-q008-and-pause.md](wiki/raw/owner/2026-10-10-s01-q008-and-pause.md)). So when a
+phase's exit gate passes, **STOP**: report to the owner in plain words (what was built, the checks and their
+results, what is still open) and wait. Start no work of the next phase (no task, no install, no scaffold, no
+spike) until the owner has, in chat, (a) signed off the finished phase (`<phase-id>#exit` recorded, §8) **and**
+(b) said explicitly to go ahead with the next phase. Both are transcribed to `wiki/raw/owner/`; a sign-off alone
+is not a go-ahead, and no agent, script or earlier message counts as one. While paused, only finish-up work on
+the closed phase is allowed (fix wording, lint, record answers). **Immediate case: P0.** After the owner's
+review of portal v2, his approvals in chat and his P0 sign-off, Claude pauses; P1 does not start without his
+explicit go.
+
 **After context compaction within a session** (the transcript was summarised, the session did not end):
 keep the same session id, re-read STATUS.md In-flight and the last log entries before the next action.
 
@@ -173,6 +185,7 @@ finding, fix the JSON instead). Details: [ops-portal-pipeline](wiki/operations/o
   re-approved. Say "stales approval of …" in the log entry. Details:
   [ops-approval-workflow](wiki/operations/ops-approval-workflow.md).
 - Milestone exit: owner approves key `<phase-id>#exit` after reviewing evidence (adr-0014), recorded the same way.
+  Then Claude still pauses until the owner explicitly says to start the next phase (§1, "PAUSE between phases").
 
 ## 9. Ask the owner
 
@@ -195,7 +208,7 @@ Details: [ops-multi-agent-workflow](wiki/operations/ops-multi-agent-workflow.md)
 Windows 11, repo path contains a space — always quote paths. Git Bash for POSIX commands; PowerShell for
 winget (Claude runs installs, adr-0021). Toolchain status and commands: [ops-environment-setup](wiki/operations/ops-environment-setup.md).
 Current phase: **P0 planning — no Ferrum application code** (no Rust, no Tauri project) until the
-owner approves P1 entry. The only code in P0 is the planning tooling the owner asked for: the read-only
+owner signs off P0 **and** explicitly says to start P1 (§1, "PAUSE between phases"). The only code in P0 is the planning tooling the owner asked for: the read-only
 portal `interactive_plan/`, the PowerShell 7 check scripts in `scripts/` and the helpers in `tools/`.
 Node is not on the Bash PATH: `export PATH="/c/Program Files/nodejs:$PATH:$LOCALAPPDATA/Microsoft/WindowsApps"`
 (the last part adds `pwsh`).

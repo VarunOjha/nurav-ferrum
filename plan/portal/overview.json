@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "We are finishing the plan (P0). The new read-only portal is built, reviewed and handed over to you; Claude cannot end a turn while its text is out of date. Nothing is approved yet, and no Ferrum code exists yet.",
+  "summary": "We are finishing the plan (P0). The new read-only portal is built, reviewed and handed over to you; Claude cannot end a turn while its text is out of date. Nothing is approved yet, and no Ferrum code exists yet. After your P0 sign-off Claude pauses until you say go for P1.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:4b0e2339d0c2f63fdd55e5492f249045ceb8fb52749b7243832a4e03edb40592"
+    "content_hash": "sha256:2a2c5e5561c61d20035015e31a825f6e12d0605f25c5d827326eba992224a169"
   },
   "updated": "2026-10-10",
   "where_we_are": [
@@ -44,19 +44,19 @@
         "state": "Built, reviewed and handed over"
       },
       {
-        "item": "Safety check",
-        "state": "On: Claude cannot end a turn while the portal text is out of date"
-      },
-      {
         "item": "Your walkthrough",
         "state": "Now: read each tab and popup, including the P1 scripts"
       },
       {
         "item": "First approvals",
-        "state": "Next: Claude asks them in Claude Code; your P0 sign-off comes last"
+        "state": "Next: Claude asks them in Claude Code, then your P0 sign-off"
+      },
+      {
+        "item": "After your P0 sign-off",
+        "state": "Claude pauses; P1 starts only when you explicitly say go"
       }
     ],
-    "why": "The portal is how you follow the project → you read it once end to end, including the P1 task and gate scripts → Claude fixes what reads unclear and asks your first approvals in chat → your P0 sign-off lets P1 start. The script only starts the portal; it changes nothing in the plan.",
+    "why": "The portal is how you follow the project → you read it once end to end, including the P1 task and gate scripts → Claude fixes what reads unclear, asks your first approvals in chat, then your P0 sign-off → Claude pauses, and P1 starts only when you explicitly say go (your rule of 10 Oct). The script only starts the portal; it changes nothing in the plan.",
     "script": {
       "path": "scripts/start-portal.ps1",
       "parts": [
@@ -77,7 +77,7 @@
     "tell_claude": "\"The portal reads fine\", or which tab, popup or script reads wrong or unclear and why."
   },
   "questions_for_you": {
-    "open": 39,
+    "open": 38,
     "items": [
       {
         "id": "Q-207",

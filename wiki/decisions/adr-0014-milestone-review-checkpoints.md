@@ -3,10 +3,11 @@ id: adr-0014
 type: decision
 title: "Owner review checkpoint after every milestone (phase exit approval)"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-10
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
+  - raw/owner/2026-10-10-s01-q008-and-pause.md
 related: [adr-0001, adr-0003, adr-0016, schema, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p8-research-paper, comp-interactive-plan]
 approvable: true
 date: 2026-10-08
@@ -55,7 +56,14 @@ As recorded in [raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), sc
 
 > Q11 Review checkpoints: **Stop after each milestone** for owner review/approval
 
-This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
+On 2026-10-10 the owner added a standing directive in chat
+([raw/owner/2026-10-10-s01-q008-and-pause.md](../raw/owner/2026-10-10-s01-q008-and-pause.md)):
+
+> Make sure to pause when completing the planning phase and before building the next phase
+
+These quoted choices are what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)). The
+2026-10-10 directive is owner words, so it binds now: Claude pauses when P0 (the planning phase) is complete
+and before building any next phase, whatever the answer to Q-108.
 
 ### Claude elaboration (binding only once the owner APPROVES this ADR)
 
@@ -71,7 +79,13 @@ At the end of each phase, Claude:
 4. writes a short milestone report (what was built, the commands run, test results, known limitations, security considerations, next recommended phase), mirroring the master prompt §18 report list;
 5. sets the phase to `gate-review`, logs `gate | <phase-id> exit ready for review` and **stops**.
 
-The owner reviews the evidence and approves the key `<phase-id>#exit` in Claude Code; Claude records it ([ADR-0023](adr-0023-approvals-in-claude-code-portal-read-only.md)). Only then is the phase `done` and the next phase's entry gate evaluated.
+The owner reviews the evidence and approves the key `<phase-id>#exit` in Claude Code; Claude records it ([ADR-0023](adr-0023-approvals-in-claude-code-portal-read-only.md)). Only then is the phase `done`.
+
+**Pause before the next phase (owner directive 2026-10-10, SCHEMA §9.7 exit-gate step 7).** The exit approval
+is not a go-ahead. Claude stays paused until the owner explicitly says in chat to start the next phase; Claude
+transcribes it to `wiki/raw/owner/`, logs `gate | <next-phase-id> go-ahead given`, and only then evaluates the
+next phase's entry gate. For P0 this means: portal review, approvals in chat, P0 sign-off, then a pause; P1
+does not start without the owner's explicit go.
 
 ## Consequences
 
@@ -82,7 +96,7 @@ The owner reviews the evidence and approves the key `<phase-id>#exit` in Claude 
 
 ### Negative
 
-- Throughput depends on owner availability. Claude may do non-implementation work while waiting (lint, research notes, planning the next phase), but it must not start the next phase's implementation.
+- Throughput depends on owner availability. While waiting, Claude may only finish up the closed phase (lint, wording fixes, recording answers); it starts no work of the next phase (no task, install, scaffold or spike) until the owner's explicit go-ahead (2026-10-10 directive).
 - A milestone report on a phase with failing tests is still delivered, as `gate-review` with known failures. The owner decides whether to accept or request changes.
 
 ### Follow-ups

@@ -19,7 +19,7 @@
       "id": "phase-p1-foundation",
       "kind": "phase",
       "title": "P1 Foundation",
-      "summary": "Goal: Tools confirmed, empty project builds, riskiest ideas tested. Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed.",
+      "summary": "Goal: Tools confirmed, empty project builds, riskiest ideas tested. Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. It starts only when you explicitly say go after signing off P0.",
       "status": "Not started",
       "related": [],
       "aliases": [
@@ -209,7 +209,7 @@
       "id": "p0.18",
       "kind": "task",
       "title": "P0 task: Close P0",
-      "summary": "All checks pass and the pages are approved → you approve the phase exit in Claude Code → P1 may start.",
+      "summary": "All checks pass and the pages are approved → you approve the phase exit in Claude Code → Claude pauses; P1 starts only when you explicitly say go.",
       "status": "Not started",
       "related": [
         "phase-p0-planning"
@@ -1721,7 +1721,7 @@
       "id": "adr-0014",
       "kind": "decision",
       "title": "Decision 14: You review the result of every phase",
-      "summary": "At the end of each phase Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve. You decided.",
+      "summary": "At the end of each phase Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve the phase and then explicitly say go. You decided.",
       "status": "Accepted",
       "related": [
         "adr-0001",
@@ -3485,8 +3485,8 @@
       "id": "Q-008",
       "kind": "question",
       "title": "Extra accessibility test library?",
-      "summary": "Keep the accessibility checker (axe-core) that Claude added to the portal's tests on 9 Oct, or remove it? This question promised to ask you first, but Claude added the checker before you answered. It checks every tab for problems such as missing labels. Say 'remove it' and Claude takes it out.",
-      "status": "Open",
+      "summary": "Keep the accessibility checker (axe-core) that Claude added to the portal's tests on 9 Oct, or remove it? Answered 10 Oct: keep it.",
+      "status": "Answered",
       "related": []
     },
     {
@@ -3557,7 +3557,7 @@
       "id": "Q-108",
       "kind": "question",
       "title": "End review for P0 and P1 too?",
-      "summary": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases? Decides whether you formally review P0 and P1 before the next phase starts. Asked in the first wave, before P0 ends.",
+      "summary": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases? Decides whether you formally review P0 and P1 before the next phase starts. Your 10 Oct rule already makes Claude pause after P0 and wait for your go; this asks about the formal review. Asked in the first wave, before P0 ends.",
       "status": "Open",
       "related": []
     },

@@ -3,7 +3,7 @@ id: schema
 type: schema
 title: "Ferrum wiki schema (constitution of the LLM-maintained wiki)"
 status: review
-updated: 2026-10-09
+updated: 2026-10-10
 sources:
   - raw/research/llm-wiki-pattern.md
   - raw/00-master-prompt.md
@@ -12,6 +12,7 @@ sources:
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/owner/2026-10-09-s01-plan-app-feedback.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+  - raw/owner/2026-10-10-s01-q008-and-pause.md
 related: [adr-0001, adr-0002, adr-0003, adr-0014, adr-0016, adr-0020, adr-0023, adr-0024, adr-0025, adr-0027, comp-interactive-plan]
 approvable: true
 ---
@@ -570,7 +571,7 @@ This is the normative order. `CLAUDE.md` §1 restates it step for step; any diff
 
 **Entry gate.** This check runs before *any* implementation task of phase P, and again at the start of every session that continues P.
 
-1. Every phase in `P.depends_on` has `status: done`, and its exit approval is APPROVED (§10.3).
+1. Every phase in `P.depends_on` has `status: done`, and its exit approval is APPROVED (§10.3), and the owner has explicitly said in chat to start P (exit-gate step 7).
 2. The **dependency set** of P has an effective approval of APPROVED (§10.3: content-hash match, or scope-hash match). The set is:
    - P's own page
    - each ADR in `P.decisions`
@@ -591,6 +592,7 @@ This is the normative order. `CLAUDE.md` §1 restates it step for step; any diff
 4. LINT is clean, and no `UNV-PASTDUE` targets P.
 5. Set `status: gate-review` and log `gate | <phase-id> exit ready for review`.
 6. The owner approves key `<phase-id>#exit` in Claude Code; Claude records it (§10.1). Then set `status: done` and log `gate | <phase-id> exit approved`.
+7. **Pause (owner's standing directive of 2026-10-10, `raw/owner/2026-10-10-s01-q008-and-pause.md`: "Make sure to pause when completing the planning phase and before building the next phase").** From step 5 on, Claude stops: it reports to the owner and waits. It starts no work of the next phase (no task, install, scaffold or spike) until the owner has both signed off this phase (step 6) **and** explicitly said in chat to go ahead with the next phase, transcribed to `raw/owner/` and logged as `gate | <next-phase-id> go-ahead given`. A sign-off alone is not a go-ahead. While paused, only finish-up work on the closed phase is allowed (wording fixes, lint, recording answers). This applies to P0 too: the P0 bootstrap exception covers how P0 starts, not this pause.
 
 ### 9.8 CODE *(extension)*
 

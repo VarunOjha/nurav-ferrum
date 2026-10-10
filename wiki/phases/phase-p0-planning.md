@@ -3,13 +3,14 @@ id: phase-p0-planning
 type: phase
 title: "P0 Planning: LLM wiki, interactive plan app, owner approval"
 status: in-progress
-updated: 2026-10-09
+updated: 2026-10-10
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/llm-wiki-pattern.md
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-09-s01-wave0c.md
+  - raw/owner/2026-10-10-s01-q008-and-pause.md
 related: [schema, phase-p1-foundation, comp-interactive-plan, ip-build-plan, ops-approval-workflow, ops-wiki-maintenance, adr-0001, adr-0002, adr-0003, adr-0014, adr-0016]
 approvable: true
 phase: phase-p0-planning
@@ -83,8 +84,8 @@ tasks:
     title: "Portal v2 and owner walkthrough: Claude rebuilds the plan app as a read-only portal fed by plain-language JSON (owner feedback 2026-10-09; adr-0023 to adr-0027); owner reviews it, answers open questions and approves or requests changes in Claude Code; Claude revises until the P1 dependency set is APPROVED"
     verify: "pwsh tools/portal-sync-check.ps1 prints clean; plan/approvals.json (written by Claude with tools/approvals_record.py from the owner's words in Claude Code, adr-0023) shows APPROVED or APPROVED_VOLATILE_DRIFT for schema, phase-p1-foundation, every ADR in its decisions list, its components and experiments; owner answers transcribed to raw/owner/."
   - id: p0.18
-    title: "Exit: set status gate-review, owner approves phase-p0-planning#exit, first local commit if authorised (Claude never pushes)"
-    verify: "approvals.json has key phase-p0-planning#exit with status approved; 'gate' log entry exists; 'git log -1' shows the commit or the handoff lists uncommitted paths."
+    title: "Exit: set status gate-review, owner approves phase-p0-planning#exit, first local commit if authorised (Claude never pushes); then PAUSE: P1 starts only on the owner's explicit go (owner directive 2026-10-10, SCHEMA section 9.7 exit-gate step 7)"
+    verify: "approvals.json has key phase-p0-planning#exit with status approved; 'gate' log entry exists; 'git log -1' shows the commit or the handoff lists uncommitted paths; no P1 work started before the owner's go-ahead is transcribed to raw/owner/ and logged."
 test_gate:
   automated:
     - "cd interactive_plan && npm run lint"
@@ -143,7 +144,7 @@ P0 creates the project's memory and its approval mechanism before any Ferrum cod
 
 1. **Wiki (p0.1 to p0.8).** Raw sources, research notes, schema, every planning page, index, log, root summaries, manual lint.
 2. **Plan app (p0.9 to p0.16).** A local-only Next.js app (`comp-interactive-plan`, adr-0016) that reads `wiki/` at runtime and writes approvals to `plan/approvals.json`. Stack recommendation and its open checks come from [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) sections 5 and 6. That note labels its open checks "P1 (plan-app build phase)"; in this plan the plan app is built in P0, so those checks are verified here (see `unverified` above).
-3. **Portal v2 and owner approval (p0.17, p0.18).** After the owner found v1 too technical, Claude rebuilt the app as a read-only portal in plain language (adr-0023 to adr-0027). State on 2026-10-09: the portal is built, reviewed and fixed after a review pass; it waits for the owner's walkthrough. The owner then approves in Claude Code; Claude revises; P0 exits when the P1 dependency set is approved.
+3. **Portal v2 and owner approval (p0.17, p0.18).** After the owner found v1 too technical, Claude rebuilt the app as a read-only portal in plain language (adr-0023 to adr-0027). State on 2026-10-09: the portal is built, reviewed and fixed after a review pass; it waits for the owner's walkthrough. The owner then approves in Claude Code; Claude revises; P0 exits when the P1 dependency set is approved. Then Claude pauses: P1 starts only when the owner explicitly says so (owner directive 2026-10-10, [raw/owner/2026-10-10-s01-q008-and-pause.md](../raw/owner/2026-10-10-s01-q008-and-pause.md)).
 
 ## Out of scope
 

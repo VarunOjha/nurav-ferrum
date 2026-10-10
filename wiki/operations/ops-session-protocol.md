@@ -3,12 +3,13 @@ id: ops-session-protocol
 type: operations
 title: "Session protocol: start, work units, checkpoints, end"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-10
 sources:
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
   - raw/research/llm-wiki-pattern.md
   - raw/owner/2026-10-08-s01-wave0.md
+  - raw/owner/2026-10-10-s01-q008-and-pause.md
 related: [schema, adr-0001, adr-0003, adr-0011, adr-0014, ops-resume-after-interruption, ops-handoff-template, ops-approval-workflow, ops-git-conventions, ops-wiki-maintenance, ops-multi-agent-workflow, ops-environment-setup, ov-open-questions, ip-build-plan, phase-p0-planning]
 approvable: true
 audience: claude
@@ -92,6 +93,21 @@ p0.9–p0.16) requires only the owner's chat approval of the `ip-*` pages and ad
 Q-101 itself is answered by directives 2 and 4), transcribed to
 `wiki/raw/owner/` ([ip-build-plan](../interactive-plan/ip-build-plan.md) IP-0). Ferrum application code
 (Rust, Tauri) stays forbidden. The checker prints `BOOTSTRAP` instead of a gate verdict for P0.
+
+**Pause between phases (owner's standing directive, 2026-10-10).** The owner said: "Make sure to pause when
+completing the planning phase and before building the next phase"
+([raw/owner/2026-10-10-s01-q008-and-pause.md](../raw/owner/2026-10-10-s01-q008-and-pause.md); SCHEMA §9.7
+exit-gate step 7). When a phase's exit gate passes, Claude **stops**: it reports to the owner (what was built,
+the checks and their observed results, what is still open) and waits. No work of the next phase starts (no
+task, install, scaffold or spike) until the owner has, in chat, both signed off the finished phase
+(`<phase-id>#exit`, [adr-0014](../decisions/adr-0014-milestone-review-checkpoints.md)) **and** explicitly
+said to go ahead with the next phase. Claude transcribes both to `wiki/raw/owner/` and logs
+`gate | <next-phase-id> go-ahead given`. A sign-off alone is not a go-ahead; an agent, script, hook or
+earlier message never is. While paused, only finish-up work on the closed phase is allowed (wording fixes,
+lint, recording answers). The rule applies to P0 too (the bootstrap exception covers how P0 starts, not this
+pause): after the owner's portal review, his approvals and his P0 sign-off, P1 waits for his explicit go.
+A session that finds the current phase `done` (or `gate-review`) and no go-ahead in `wiki/raw/owner/` and the
+log reports this to the owner and does not run the next phase's entry gate as a reason to start.
 
 **Context compaction.** If the transcript is summarised within one session (the session did not end),
 keep the same session id. Re-read STATUS.md In-flight and the last log entries before the next action.

@@ -3,7 +3,7 @@ id: ov-open-questions
 type: overview
 title: "Open questions for the owner (canonical register)"
 status: draft
-updated: 2026-10-09
+updated: 2026-10-10
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -15,6 +15,7 @@ sources:
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+  - raw/owner/2026-10-10-s01-q008-and-pause.md
 related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability]
 approvable: false
 audience: owner
@@ -79,9 +80,9 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P6 entry (incl. exp-energy, exp-reliability) | Q-116, Q-117, Q-118, Q-119, Q-120, Q-121, Q-122, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
-| Exit reviews only, or not blocking | Q-004, Q-005, Q-008, Q-105, Q-108, Q-215, Q-217 |
+| Exit reviews only, or not blocking | Q-004, Q-005, Q-105, Q-108, Q-215, Q-217 |
 | The first push to GitHub (not a phase gate) | Q-221 |
-| Answered | Q-006, Q-007, Q-101, Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220 |
+| Answered | Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -167,8 +168,8 @@ action. Adding one would need a SCHEMA change.
 
 - asked: 2026-10-08
 - blocking: []
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-10-s01-q008-and-pause.md](../raw/owner/2026-10-10-s01-q008-and-pause.md), owner answer on 2026-10-10, after asking what the checker does and why: "**Okay, lets add.**" — KEEP the accessibility checker (`@axe-core/playwright`, installed as its engine `axe-core` 4.14.0), a test-only dev dependency of `interactive_plan/`.
 
 Raised in [ip-spec](../interactive-plan/ip-spec.md) §9 item 5. Should the plan app's tests use
 `@axe-core/playwright`? Its version was not captured in the research note. It would be added only with
@@ -183,6 +184,11 @@ tooling choice under the delegation policy ([raw/owner/2026-10-09-s01-wave0c.md]
 but this question had promised to ask first, so the register said something untrue until this correction.
 The question stays open in a new form: **keep the checker, or remove it?** If the owner says remove,
 Claude uninstalls it and drops the accessibility browser tests; nothing else depends on it.
+
+**Answered (2026-10-10):** the owner first asked for the rationale. Claude explained that the checker tests
+every portal tab for colour contrast, popup behaviour (focus moves in, Esc closes, focus returns), labels and
+page structure; that it is test-only and small; and that it cannot judge the wording, which stays a human
+review. The owner then said "Okay, lets add." The checker stays as it is; nothing changes in the code.
 
 ## Q-101 When is the plan app built?
 
@@ -299,6 +305,12 @@ adr-0010 is in P1's dependency set and the spike must be able to run first.
 
 Raised in adr-0014. Should the milestone-exit review apply to every phase, including P0 and P1, which
 have no milestone? It holds only the P0 exit review.
+
+**Note (2026-10-10):** the owner's standing directive "Make sure to pause when completing the planning phase
+and before building the next phase" ([raw/owner/2026-10-10-s01-q008-and-pause.md](../raw/owner/2026-10-10-s01-q008-and-pause.md))
+already makes Claude stop after P0 and before every next phase ([adr-0014](../decisions/adr-0014-milestone-review-checkpoints.md),
+SCHEMA §9.7). It does not by itself say whether P0 and P1 get the same formal exit review as the milestone
+phases, so this question stays open and is still asked in the first wave.
 
 ## Q-109 Google sign-in hand-off UX
 
