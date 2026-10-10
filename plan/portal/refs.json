@@ -4527,6 +4527,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "dfe164f",
+      "kind": "commit",
+      "title": "Commit: All seven portal tabs and the script popup",
+      "summary": "Roadmap, Architecture, Decisions, Research, Questions and Log tabs built from your mockups. Phase popups open from every tab, and each check script opens in a popup showing the real file.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

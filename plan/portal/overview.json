@@ -5,7 +5,7 @@
   "summary": "We are finishing the plan (P0). The new read-only portal is built: all seven tabs, with popups for phases, decisions and check scripts. Nothing is approved yet, and no Ferrum code exists yet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:3d301193c9aee324842455ce22d5cc0c57e1fe5647b71e310eb70f31dd354383"
+    "content_hash": "sha256:2ff9132037adb3efd8de116567cb0885e3db1a6d565191ba4ff218f2d48dd574"
   },
   "updated": "2026-10-09",
   "where_we_are": [

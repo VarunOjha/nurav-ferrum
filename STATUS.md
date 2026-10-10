@@ -191,7 +191,7 @@ yet (every approvable page is PENDING).**
   six other tabs show a placeholder until the next step. Every route refuses non-loopback Hosts and any method other than
   GET and HEAD. Checks: `npm run verify` exit 0 (708 unit, 28 browser tests), P0 gate PASS, portal check clean, mask scan
   0 unmasked ([p0.17-portal-shell-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-portal-shell-checks.txt)).
-- p0.17 step "portal-views" done: the six remaining tabs of the read-only portal follow the approved mockups. Roadmap
+- p0.17 step "portal-views" done (commit `dfe164f`): the six remaining tabs of the read-only portal follow the approved mockups. Roadmap
   (three stages, one compact row per phase, "Same in every phase"), Architecture (layered diagram of the Rust app built
   from plain boxes, four-group switcher, part cards with what each talks to), Decisions (popup per decision, replaced ones
   muted, plus the risks highest first), Research (short sections, popup per item), Questions (open first) and Log (done,
@@ -210,18 +210,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "portal-views" (session s01, 2026-10-09)
-- intent: build the six remaining portal tabs from the approved mockups (Roadmap, Architecture with the layered Rust-app
-  diagram and four-group switcher, Decisions with popups, Research, Questions, Log), make the phase popup reachable from
-  every tab and from phase ids, add a read-only script popup that shows the real check script (GET /api/script, only for
-  scripts the portal JSON names), browser tests per tab with axe accessibility checks; update comp-interactive-plan and
-  its portal text.
-- planned paths: `interactive_plan/**`, `wiki/architecture/components/comp-interactive-plan.md`,
-  `wiki/decisions/adr-0024-portal-reads-plain-language-json.md`, `plan/portal/architecture.json`,
-  `plan/portal/decisions.json`, `plan/portal/refs.json`, `plan/portal/overview.json`, `plan/portal/log.json`,
-  `scripts/verify/p0.17-*.ps1`, evidence `wiki/raw/evidence/phase-p0-planning/p0.17-portal-views-checks.txt`
-- rollback: `git restore --staged --worktree -- interactive_plan wiki plan scripts` (nothing committed yet); new files
-  under `interactive_plan/` are Claude-created and may be removed
+(empty: p0.17 step "portal-views" verified and committed 2026-10-09 (`dfe164f`); next the final review of portal v2)
 
 ## Blockers
 
@@ -261,7 +250,7 @@ Where we are:
 | Wiki-to-portal pipeline | Built today (`8d89329`): skill, file shapes, check script, end-of-turn check |
 | Portal text | Written today (`ed8b89c`) for every page; check clean; end-of-turn check switched on |
 | Check scripts | Written today (`adc3651`): one per task and per phase; P0 gate passes; run `pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P0` |
-| New portal site | Built: all seven tabs, phase and script popups, clickable ids; read-only |
+| New portal site | Built (`dfe164f`): all seven tabs, phase and script popups, clickable ids; read-only |
 | Approvals | None recorded yet; asked after portal v2, wave by wave |
 | First push | Blocked until the owner answers Q-221 (history rewrite) |
 

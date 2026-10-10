@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8d4de6ef6e4ff784755f0117e3bdd0a6311b87f440b04f62496db24a6908561a"
+    "content_hash": "sha256:9012c206e7e9420179d0215ba4be80c42f2cc25be54a25e34c0825c3dc7389ed"
   },
   "entries": [
     {
@@ -795,11 +795,12 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "dfe164f",
       "covers": [
         "## [2026-10-09] decide | portal views: script popup reads named check scripts, phase popups in the layout, risks on the Decisions tab, axe checks",
         "## [2026-10-09] lint | p0.17 portal views: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
-        "## [2026-10-09] code | p0.17 portal views: Roadmap, Architecture, Decisions, Research, Questions and Log tabs; script popup"
+        "## [2026-10-09] code | p0.17 portal views: Roadmap, Architecture, Decisions, Research, Questions and Log tabs; script popup",
+        "## [2026-10-09] plan | p0.17 step \"portal-views\" committed: all seven portal tabs, script popup, phase popups everywhere"
       ],
       "phase": "phase-p0-planning"
     }
