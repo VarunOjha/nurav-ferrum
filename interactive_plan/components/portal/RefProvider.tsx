@@ -4,9 +4,12 @@
  * refs.json explainer (kind, title, status, summary) and buttons for the related ids, which open in
  * the same dialog (a Back button returns). Native <dialog> + showModal(): focus moves into the dialog,
  * the rest of the page is inert, Esc closes it; on close, focus returns to the button that opened it.
+ * For a phase id, a button opens the full phase popup (rendered once in the layout) in its place.
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { phaseDialogId } from "@/lib/portal/dialogs";
 import { KIND_LABEL, resolveRef, type RefData, type RefInfo } from "@/lib/portal/refs";
+import { openModal } from "./Modal";
 
 interface RefContextValue {
   data: RefData;
@@ -20,7 +23,16 @@ export function useRefs(): RefContextValue {
   return useContext(RefContext);
 }
 
-export default function RefProvider({ data, children }: { data: RefData; children: React.ReactNode }) {
+export default function RefProvider({
+  data,
+  phaseIds,
+  children,
+}: {
+  data: RefData;
+  /** Phases that have a phase popup on every page. */
+  phaseIds: readonly string[];
+  children: React.ReactNode;
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
@@ -69,6 +81,15 @@ export default function RefProvider({ data, children }: { data: RefData; childre
 
   const value = useMemo(() => ({ data, open }), [data, open]);
   const info: RefInfo | null = current === undefined ? null : resolveRef(data, current);
+  const phasePopup = info && info.kind === "phase" && phaseIds.includes(info.id) ? info.id : null;
+
+  // Swap the small explainer for the full phase popup; focus later returns to the original opener.
+  const openPhase = useCallback((id: string) => {
+    const opener = openerRef.current;
+    openerRef.current = null;
+    dialogRef.current?.close();
+    openModal(phaseDialogId(id), opener);
+  }, []);
 
   return (
     <RefContext.Provider value={value}>
@@ -96,6 +117,11 @@ export default function RefProvider({ data, children }: { data: RefData; childre
                 <p className="ref-dialog-status">
                   <span className="muted">Status:</span> {info.status}
                 </p>
+              )}
+              {phasePopup && (
+                <button type="button" className="primary-btn" data-open-phase={phasePopup} onClick={() => openPhase(phasePopup)}>
+                  Open the whole phase: tasks, checks and gate →
+                </button>
               )}
               {info.related.length > 0 && (
                 <div className="ref-dialog-related">

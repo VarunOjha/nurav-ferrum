@@ -2,10 +2,10 @@
   "$schema": "schema/log.schema.json",
   "id": "log",
   "title": "Log",
-  "summary": "What happened in the project, in plain words, oldest first. Each entry says what was done, what comes next, who decided what, and the saved commit.",
+  "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:6ed9d6f36ceecccb5c974eed6a9ed6a1ac7b93e95e17ef3b8829103178ab976c"
+    "content_hash": "sha256:8d4de6ef6e4ff784755f0117e3bdd0a6311b87f440b04f62496db24a6908561a"
   },
   "entries": [
     {
@@ -767,6 +767,39 @@
         "## [2026-10-09] lint | p0.17 portal shell: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
         "## [2026-10-09] code | p0.17 portal shell: read-only data layer, Layout-A shell, reference popup, Overview and phase popup",
         "## [2026-10-09] plan | p0.17 step \"portal-data-shell\" committed: read-only portal with Overview, phase popup and reference popup"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-portal-views",
+      "date": "2026-10-09",
+      "title": "Portal finished: all seven tabs, and you can read each check script",
+      "done": "Claude built the Roadmap, Architecture, Decisions, Research, Questions and Log tabs from your mockups. Every phase opens in a popup from any tab, and each check script opens in a popup showing the real file, so you can read it before running it. Every tab passed its browser tests and an automatic accessibility check, and the P0 checks pass.",
+      "next": "Claude does a final review of the portal and tidies the old design pages, then asks you to walk through it and give your first approvals.",
+      "decisions": [
+        {
+          "what": "The portal shows a check script's text, but only scripts the portal text names, and never edits them",
+          "by": "claude"
+        },
+        {
+          "what": "Phase popups open from every tab and from any phase id",
+          "by": "claude"
+        },
+        {
+          "what": "Risks are listed on the Decisions tab, highest first",
+          "by": "claude"
+        },
+        {
+          "what": "Every tab is checked automatically for accessibility, in light and dark themes",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-09] decide | portal views: script popup reads named check scripts, phase popups in the layout, risks on the Decisions tab, axe checks",
+        "## [2026-10-09] lint | p0.17 portal views: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
+        "## [2026-10-09] code | p0.17 portal views: Roadmap, Architecture, Decisions, Research, Questions and Log tabs; script popup"
       ],
       "phase": "phase-p0-planning"
     }

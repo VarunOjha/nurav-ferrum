@@ -2,31 +2,29 @@
  * The phase popup (owner-approved Phase-Modal mockup): header with status and approvals, step order,
  * tasks table (id, title, what & why as a thought chain, how we check, check script), the test gate
  * in plain words with its table and gate script, and what is the same in every phase. Server
- * component; Modal (client) only opens and closes it.
+ * component, rendered once per phase in the layout so every tab (and every phase id) can open it;
+ * Modal (client) only opens and closes it. Script buttons open the script popup with the real file.
  */
-import Link from "next/link";
 import type { ApprovalsRead } from "@/lib/approvals/file";
+import { phaseDialogId } from "@/lib/portal/dialogs";
 import type { Phase, Roadmap } from "@/lib/portal/schemas.gen";
+import { runCommand } from "@/lib/portal/scriptCommand";
+import { getScriptHeader } from "@/lib/portal/server";
 import { approvalLabel, phaseTone } from "@/lib/portal/view";
+import CloseLink from "./CloseLink";
 import Modal, { CloseModalButton } from "./Modal";
 import Ref from "./Ref";
 import RichText from "./RichText";
+import { ScriptButton } from "./ScriptProvider";
 
-export const phaseDialogId = (id: string) => `phase-dialog-${id}`;
-
-const runCommand = (script: string) => `pwsh -NoProfile -File ${script}`;
+export { phaseDialogId };
 
 function ScriptCell({ script }: { script: string | null }) {
   if (!script) return <span className="muted">Not written yet</span>;
-  const name = script.split("/").pop() ?? script;
-  return (
-    <code className="script-chip" title={`Run in PowerShell 7 from the repo folder: ${runCommand(script)}`}>
-      {name}
-    </code>
-  );
+  return <ScriptButton path={script} />;
 }
 
-export default function PhasePopup({
+export default async function PhasePopup({
   phase,
   sameInEveryPhase,
   approvals,
@@ -39,6 +37,7 @@ export default function PhasePopup({
   const tone = phaseTone(phase.status);
   const planApproval = approvalLabel(approvals, phase.id, phase.source.content_hash);
   const exitApproval = approvalLabel(approvals, `${phase.id}#exit`, phase.source.content_hash);
+  const gateHeader = phase.test_gate.script ? await getScriptHeader(phase.test_gate.script) : null;
   return (
     <Modal id={phaseDialogId(phase.id)} labelledBy={titleId} className="phase-modal">
       <div className="phase-head">
@@ -171,10 +170,19 @@ export default function PhasePopup({
             </div>
             {phase.test_gate.script ? (
               <>
-                <pre className="code-block">
-                  {`# Run from the repo folder in PowerShell 7\n${runCommand(phase.test_gate.script)}\n\n# Ends with PASS (exit 0), FAIL (exit 1)\n# or NOT READY (exit 2: waiting on you or on earlier work)`}
-                </pre>
-                <p className="small muted">The script explains each step at its top. It changes nothing unless you add -SaveEvidence.</p>
+                <pre className="code-block code-sm">{`# Run from the repo folder in PowerShell 7
+${runCommand(phase.test_gate.script)}`}</pre>
+                {gateHeader && (
+                  <pre className="code-block gate-header" tabIndex={0} aria-label="What the gate script says about itself" data-testid="gate-header">
+                    {gateHeader}
+                  </pre>
+                )}
+                <div className="row-between">
+                  <span className="small muted">It changes nothing unless you add -SaveEvidence.</span>
+                  <ScriptButton path={phase.test_gate.script} className="secondary-btn">
+                    Read the whole gate script
+                  </ScriptButton>
+                </div>
               </>
             ) : (
               <p className="muted">Not written yet.</p>
@@ -195,9 +203,9 @@ export default function PhasePopup({
                 <span title={s.summary}>{s.title}</span>
               </span>
             ))}
-            <Link href="/roadmap" className="push-right">
+            <CloseLink href="/roadmap#every-phase" className="push-right">
               How every phase works →
-            </Link>
+            </CloseLink>
           </section>
         )}
       </div>

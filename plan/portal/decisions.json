@@ -575,7 +575,7 @@
       "id": "adr-0024",
       "number": 24,
       "title": "The portal shows only plain-language JSON",
-      "summary": "Whenever Claude edits the wiki, it rewrites the matching plain-language JSON in the same step. The portal reads only that JSON, never the wiki.",
+      "summary": "Whenever Claude edits the wiki, it rewrites the matching plain-language JSON in the same step. The portal reads only that JSON, never the wiki; it also shows, read-only, the check scripts that JSON names.",
       "why": "You want plain words, not a wiki rendered in a web page.",
       "catch": "Every wiki edit needs a second write; a check script and a hook catch misses.",
       "status": "Accepted",
@@ -589,7 +589,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0024-portal-reads-plain-language-json.md",
-        "content_hash": "sha256:c7ef44ab785c704969c55a913ae541770d3bcf60fa3ae2168d4d591bb151ba96"
+        "content_hash": "sha256:f3e5541908e5753cea730815d8e7c960b31ce32866dc2c4d193b941b12f60501"
       }
     },
     {

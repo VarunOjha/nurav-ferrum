@@ -2,7 +2,7 @@
  * Small pure helpers the portal pages share (formatting and plain-word labels). No file access.
  */
 import type { ApprovalsRead } from "../approvals/file";
-import type { Log, Phase, Roadmap } from "./schemas.gen";
+import type { Architecture, Decisions, Log, Phase, Questions, Risks, Roadmap } from "./schemas.gen";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -85,4 +85,117 @@ export function approvalLabel(read: ApprovalsRead, key: string, currentHash: str
   if (rec.status !== "approved") return "Approvals file unreadable";
   if (currentHash !== null && rec.content_hash !== currentHash) return "Approved, page edited since";
   return "Approved";
+}
+
+/** "P0 → P5" for a stage, from the short names of its first and last phase ("P8" for one phase). */
+export function stageRange(roadmap: Roadmap, stage: Roadmap["stages"][number]): string {
+  const shorts = stage.phases.map((id) => roadmapRow(roadmap, id)?.short ?? id);
+  if (shorts.length === 0) return "";
+  if (shorts.length === 1) return shorts[0];
+  return `${shorts[0]} → ${shorts[shorts.length - 1]}`;
+}
+
+/** "16 / 18", or "0 / —" while the phase has no task list yet. */
+export function tasksLabel(done: number, total: number | null): string {
+  return `${done} / ${total === null ? "—" : total}`;
+}
+
+/** Every log entry, newest first (same order rule as latestLog). */
+export function newestFirst(log: Log | null): Log["entries"] {
+  return latestLog(log, Number.POSITIVE_INFINITY);
+}
+
+export type QuestionStatus = Questions["items"][number]["status"];
+
+/** Question groups in the order the Questions tab shows them: open first. File order is kept inside a group. */
+export const QUESTION_GROUPS: readonly { status: QuestionStatus; label: string }[] = [
+  { status: "open", label: "Open" },
+  { status: "answered", label: "Answered" },
+  { status: "withdrawn", label: "Withdrawn" },
+];
+
+export function questionsByStatus(q: Questions | null): { status: QuestionStatus; label: string; items: Questions["items"] }[] {
+  return QUESTION_GROUPS.map((g) => ({ ...g, items: (q?.items ?? []).filter((i) => i.status === g.status) }));
+}
+
+/** "You" or "Claude" for a `who` value. */
+export function whoLabel(who: "you" | "claude"): string {
+  return who === "you" ? "You" : "Claude";
+}
+
+/** Colour family of a decision status chip; replaced and rejected decisions are shown muted. */
+export function decisionTone(status: Decisions["items"][number]["status"]): Tone {
+  switch (status) {
+    case "Accepted":
+      return "done";
+    case "Proposed":
+      return "now";
+    default:
+      return "later";
+  }
+}
+
+/** Colour family of a risk status chip. */
+export function riskTone(status: Risks["items"][number]["status"]): Tone {
+  switch (status) {
+    case "Resolved":
+    case "Accepted":
+      return "done";
+    case "Being reduced":
+      return "now";
+    case "Happened":
+      return "blocked";
+    default:
+      return "later";
+  }
+}
+
+/** Likelihood × impact (1-25), the order the Risks list uses (highest first, then file order). */
+export function riskScore(r: Pick<Risks["items"][number], "likelihood" | "impact">): number {
+  return r.likelihood * r.impact;
+}
+
+export function risksByScore(risks: Risks | null): Risks["items"] {
+  return [...(risks?.items ?? [])].map((r, i) => ({ r, i })).sort((a, b) => riskScore(b.r) - riskScore(a.r) || a.i - b.i).map((x) => x.r);
+}
+
+/** The first sentence of a text (the whole text when it has one sentence). */
+export function firstSentence(text: string): string {
+  return headline(text).head;
+}
+
+export type Layer = Architecture["layers"][number];
+
+/** One row of the layered diagram: a label and the layers drawn side by side in it. */
+export interface LayerRow {
+  label: string;
+  layers: Layer[];
+}
+
+/**
+ * Rows of the layered diagram, top to bottom. Neighbouring layers whose names share the part before
+ * ": " ("What you see: browser controls", "What you see: websites in tabs") share one row, as in the
+ * Architecture mockup; a row label carries the language when every layer in it names the same one.
+ */
+export function layerRows(layers: readonly Layer[]): LayerRow[] {
+  const rows: { prefix: string | null; layers: Layer[] }[] = [];
+  for (const l of layers) {
+    const i = l.name.indexOf(": ");
+    const prefix = i > 0 ? l.name.slice(0, i) : null;
+    const last = rows[rows.length - 1];
+    if (prefix !== null && last && last.prefix === prefix) last.layers.push(l);
+    else rows.push({ prefix, layers: [l] });
+  }
+  return rows.map((r) => {
+    const base = r.prefix ?? r.layers[0].name;
+    const langs = [...new Set(r.layers.map((l) => l.language ?? ""))];
+    const lang = langs.length === 1 && langs[0] !== "" && r.prefix === null ? ` (${langs[0]})` : "";
+    return { label: base + lang, layers: r.layers };
+  });
+}
+
+/** The part of a layer name after "What you see: ", or the whole name. */
+export function layerShortName(l: Layer): string {
+  const i = l.name.indexOf(": ");
+  return i > 0 ? l.name.slice(i + 2) : l.name;
 }

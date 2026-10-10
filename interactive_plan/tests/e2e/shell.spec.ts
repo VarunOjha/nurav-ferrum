@@ -23,7 +23,6 @@ for (const [route, label] of TABS) {
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
     await expect(page.getByRole("navigation", { name: "Sections" }).getByRole("link", { name: new RegExp(`^${label}`) })).toHaveAttribute("aria-current", "page");
     await expect(page.getByTestId("readonly-badge")).toBeVisible();
-    if (route !== "/") await expect(page.getByTestId("tab-coming")).toBeVisible();
     expect(errors).toEqual([]);
   });
 }

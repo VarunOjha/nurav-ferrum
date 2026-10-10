@@ -499,16 +499,16 @@
     {
       "id": "comp-interactive-plan",
       "title": "Plan portal (this site)",
-      "summary": "The site you are reading. A planning tool, not part of Ferrum. Now a read-only portal that shows Claude's plain-language text: the Overview is rebuilt, the other tabs follow next. You approve things in Claude Code.",
+      "summary": "The site you are reading. A planning tool, not part of Ferrum. A read-only portal with seven tabs that shows Claude's plain-language text and lets you read each check script before you run it. You approve things in Claude Code.",
       "group": "planning",
       "layer": null,
-      "status": "Overview rebuilt; other tabs next",
+      "status": "Rebuilt; read-only",
       "phase": "phase-p0-planning",
       "connects": [],
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-interactive-plan.md",
-        "content_hash": "sha256:da04a94a52d663edf0339f6928002638b4b0c866a63d04924c811b94a0c28912"
+        "content_hash": "sha256:97a70f8e56a911653f8302ade5f45f0519646911c3edc21c5f2aba0b990b94e5"
       }
     }
   ]

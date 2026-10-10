@@ -4,7 +4,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { OpenModalButton } from "@/components/portal/Modal";
-import PhasePopup, { phaseDialogId } from "@/components/portal/PhasePopup";
+import { phaseDialogId } from "@/lib/portal/dialogs";
 import Ref from "@/components/portal/Ref";
 import RichText from "@/components/portal/RichText";
 import { resolveRef } from "@/lib/portal/refs";
@@ -22,7 +22,7 @@ function Missing({ what }: { what: string }) {
 }
 
 export default async function OverviewPage() {
-  const [{ files, approvals }, refData] = await Promise.all([getPortal(), getRefData()]);
+  const [{ files }, refData] = await Promise.all([getPortal(), getRefData()]);
   const { overview, roadmap, phases, log } = files;
   const latest = latestLog(log, 3);
   const example = EXAMPLE_REFS.find((id) => resolveRef(refData, id)) ?? null;
@@ -218,7 +218,7 @@ export default async function OverviewPage() {
               return (
                 <li key={p.id}>
                   {hasPopup ? (
-                    <OpenModalButton target={phaseDialogId(p.id)} className="phase-card" label={`${p.short} ${p.name}: ${p.status}. Open the phase popup`}>
+                    <OpenModalButton target={phaseDialogId(p.id)} className="phase-card">
                       {body}
                     </OpenModalButton>
                   ) : (
@@ -275,9 +275,6 @@ export default async function OverviewPage() {
         </div>
       </section>
 
-      {phases.map((ph) => (
-        <PhasePopup key={ph.id} phase={ph} sameInEveryPhase={roadmap?.same_in_every_phase ?? []} approvals={approvals} />
-      ))}
     </div>
   );
 }

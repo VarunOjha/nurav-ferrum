@@ -2235,7 +2235,7 @@
       "id": "adr-0024",
       "kind": "decision",
       "title": "Decision 24: The portal shows only plain-language JSON",
-      "summary": "Whenever Claude edits the wiki, it rewrites the matching plain-language JSON in the same step. The portal reads only that JSON, never the wiki. You decided.",
+      "summary": "Whenever Claude edits the wiki, it rewrites the matching plain-language JSON in the same step. The portal reads only that JSON, never the wiki; it also shows, read-only, the check scripts that JSON names. You decided.",
       "status": "Accepted",
       "related": [
         "adr-0016",
@@ -3582,8 +3582,8 @@
       "id": "comp-interactive-plan",
       "kind": "component",
       "title": "Plan portal (this site)",
-      "summary": "The site you are reading. A planning tool, not part of Ferrum. Now a read-only portal that shows Claude's plain-language text: the Overview is rebuilt, the other tabs follow next. You approve things in Claude Code.",
-      "status": "Overview rebuilt; other tabs next",
+      "summary": "The site you are reading. A planning tool, not part of Ferrum. A read-only portal with seven tabs that shows Claude's plain-language text and lets you read each check script before you run it. You approve things in Claude Code.",
+      "status": "Rebuilt; read-only",
       "related": []
     },
     {

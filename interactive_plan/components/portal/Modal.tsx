@@ -9,6 +9,20 @@ import { useEffect, useRef } from "react";
 
 const openers = new WeakMap<HTMLDialogElement, HTMLElement>();
 
+/**
+ * Opens the server-rendered popup with element id `target` (a <Modal>). Focus returns to `opener`
+ * when it closes. Opening a popup that is already open does nothing. Returns false when there is no
+ * such popup on the page.
+ */
+export function openModal(target: string, opener: HTMLElement | null): boolean {
+  const d = document.getElementById(target);
+  if (!(d instanceof HTMLDialogElement)) return false;
+  if (d.open) return true;
+  if (opener) openers.set(d, opener);
+  d.showModal();
+  return true;
+}
+
 export function OpenModalButton({
   target,
   className,
@@ -28,10 +42,7 @@ export function OpenModalButton({
       aria-label={label}
       data-opens={target}
       onClick={(e) => {
-        const d = document.getElementById(target);
-        if (!(d instanceof HTMLDialogElement) || d.open) return;
-        openers.set(d, e.currentTarget);
-        d.showModal();
+        openModal(target, e.currentTarget);
       }}
     >
       {children}

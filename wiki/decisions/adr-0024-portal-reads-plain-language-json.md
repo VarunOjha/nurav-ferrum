@@ -63,6 +63,10 @@ This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCH
   portal never shows stale or jargon-heavy text.
 - The portal reads **only** that JSON (and may read `plan/approvals.json` for display). It never parses
   `wiki/**/*.md`.
+- Owner asked to review each check script ("I will review the script, PS script") → the portal may also
+  show, read-only, the text of a PowerShell check script that this JSON names in a `script` field (and
+  nothing else under `scripts/`) → the owner reads the script before running it. Added 2026-10-09 (p0.17,
+  step "portal-views"), decided by Claude under the delegation policy.
 - Enforcement has three layers: a repo skill that says how to translate; a Claude Code hook that stops the
   end of a turn when a wiki page changed without its JSON; a PowerShell check script that validates shape and
   completeness ([ADR-0025](adr-0025-check-scripts-powershell-7.md)).

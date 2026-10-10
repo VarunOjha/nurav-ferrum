@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "We are finishing the plan (P0). The new read-only portal has its Overview, phase popups and clickable ids; the other tabs come next. Nothing is approved yet, and no Ferrum code exists yet.",
+  "summary": "We are finishing the plan (P0). The new read-only portal is built: all seven tabs, with popups for phases, decisions and check scripts. Nothing is approved yet, and no Ferrum code exists yet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:5d2851cf36e276637331710c276a9191c3dc43e22aa9f12cd9ff081234c4c961"
+    "content_hash": "sha256:3d301193c9aee324842455ce22d5cc0c57e1fe5647b71e310eb70f31dd354383"
   },
   "updated": "2026-10-09",
   "where_we_are": [
@@ -24,7 +24,7 @@
     },
     {
       "item": "Plan portal (the site)",
-      "state": "Rebuilt read-only: this Overview, phase popups and clickable ids are done; the other tabs come next"
+      "state": "Rebuilt read-only: all seven tabs, phase popups, clickable ids, and a popup that shows each check script"
     },
     {
       "item": "Approvals",
@@ -52,21 +52,21 @@
         "state": "Done; the P0 checks pass"
       },
       {
-        "item": "Portal: Overview, phase popups, clickable ids",
-        "state": "Done (this page)"
+        "item": "Portal: all seven tabs and popups",
+        "state": "Done; every tab passes its browser and accessibility tests"
       },
       {
-        "item": "Portal: the other six tabs",
-        "state": "Claude builds them next, from your mockups"
+        "item": "Final review of the portal",
+        "state": "Claude does it next: old design pages marked as history"
       },
       {
-        "item": "Your first approvals",
-        "state": "After you have seen the whole portal"
+        "item": "Your walkthrough and first approvals",
+        "state": "Right after that review"
       }
     ],
-    "why": "Nothing to run yet. The Overview, phase popups and clickable ids are built → Claude builds the other tabs from your mockups → you review the whole portal and give your first approvals in Claude Code.",
+    "why": "Nothing to run yet. The whole portal is built → Claude does a final review and tidies the old design pages → you walk through the portal and give your first approvals in Claude Code.",
     "script": null,
-    "tell_claude": "Nothing for now. If something on this page reads wrong or unclear, say so in Claude Code; otherwise wait until Claude says the whole portal is ready."
+    "tell_claude": "Nothing for now. If a tab reads wrong or unclear, say so in Claude Code; otherwise wait until Claude asks for your walkthrough."
   },
   "questions_for_you": {
     "open": 39,

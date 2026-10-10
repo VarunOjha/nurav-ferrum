@@ -1,10 +1,13 @@
 // Portal shell (Layout A of the owner-approved Main mockup, 2026-10-09): brand, top tabs, the
-// "Read-only · steer in Claude Code" badge, the theme toggle, a data-problem banner, and the global
-// reference popup. The portal reads only plan/portal/*.json and plan/approvals.json (adr-0023,
+// "Read-only · steer in Claude Code" badge, the theme toggle, a data-problem banner, the global
+// reference popup and script popup, and one phase popup per phase (so every tab and every phase id
+// can open it). The portal reads only plan/portal/*.json and plan/approvals.json (adr-0023,
 // adr-0024); nothing in it writes. Fonts are self-hosted (app/fonts.ts): no external requests.
 import type { Metadata } from "next";
 import Link from "next/link";
+import PhasePopup from "@/components/portal/PhasePopup";
 import RefProvider from "@/components/portal/RefProvider";
+import ScriptProvider from "@/components/portal/ScriptProvider";
 import TopNav from "@/components/portal/TopNav";
 import ThemeInitScript from "@/components/ThemeInitScript";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -31,7 +34,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <RefProvider data={refData}>
+        <RefProvider data={refData} phaseIds={portal.files.phases.map((p) => p.id)}>
+          <ScriptProvider>
           <header className="topbar">
             <div className="topbar-inner">
               <Link href="/" className="brand" aria-label="Ferrum Plan Portal, overview">
@@ -70,6 +74,15 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <main id="main" className="main" tabIndex={-1}>
             {children}
           </main>
+          {portal.files.phases.map((ph) => (
+            <PhasePopup
+              key={ph.id}
+              phase={ph}
+              sameInEveryPhase={portal.files.roadmap?.same_in_every_phase ?? []}
+              approvals={portal.approvals}
+            />
+          ))}
+          </ScriptProvider>
         </RefProvider>
       </body>
     </html>

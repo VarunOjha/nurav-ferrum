@@ -39,3 +39,5 @@ fc0942771e73b976ba6ca11da4fa54f76fd99aeb8ed7e3ea2837f246aa8199d7  evidence/phase
 d8f6a3cf1038da8e5e2c368fe73a96b1a6cfa0e1fc2a7c99f3769b3465ba63b4  evidence/phase-p0-planning/p0.17-content-checks.txt
 cdc505bab3364d3fd8247ace5604d15720c22d7a72efae47683dcfccc761151b  evidence/phase-p0-planning/p0.17-scripts-checks.txt
 7c9a43c8ea8f938811dc5836df28d20b116831d6aabe15b5e414e6c4c5235be3  evidence/phase-p0-planning/p0.17-portal-shell-checks.txt
+b59f75f8fe887be33204588f1bec9449df342f934c3acb92beee2831ed03b0e5  evidence/phase-p0-planning/p0.17-portal-views-checks.txt
+156a50b79c53cab6c0ad973efde1bcf586a56501a6ad301d052b79a8b5c25123  evidence/phase-p0-planning/p0-gate.txt

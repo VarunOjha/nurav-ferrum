@@ -1,0 +1,67 @@
+RAW EVIDENCE - p0.17 step "portal-views": Roadmap, Architecture, Decisions, Research, Questions, Log tabs; script popup; phase-p0-planning, session s01
+Immutable raw evidence (SCHEMA 3.1). Captured 2026-10-09 by Claude from the repo root, PowerShell 7.6.6, Node v24.20.0, on HEAD eb70eb7
+with the step changes in the working tree (interactive_plan/, comp-interactive-plan, adr-0024, plan/portal/{architecture,decisions,refs,overview}.json,
+STATUS). Saved through pwsh tools/mask.ps1 --stdin (adr-0027). The P0 gate output is saved separately by the gate itself
+(scripts/run-all-checks.ps1 -Phase P0 -SaveEvidence), after this file and its fingerprint line exist.
+
+Contents:
+  1. npm run verify in interactive_plan                  -> exit 0 (run earlier in this step on the same code: 69 browser tests passed)
+  2. npm run test:coverage (summary and lib/portal)      -> exit 0, thresholds met
+  3. npm run lint:wiki                                   -> 0 errors
+  4. Task script p0.17                                   -> exit 2 (NOT READY: waits for your approvals, as expected)
+  5. Portal check, quick lint, mask scan, npm audit summary
+  6. Earlier P0 gate runs in this step and why they failed (both fixed before this file was written)
+
+===== 1. npm run verify =====
+typecheck and eslint: exit 0; vitest: 23 files, 727 passed, 1 skipped (link test needs Windows Developer Mode);
+lint:wiki 0 errors; next build: exit 0; playwright: "69 passed (1.4m)"; E2E guard: 22 real files unchanged.
+
+===== 2. npm run test:coverage =====
+ Test Files  23 passed (23)
+      Tests  727 passed | 1 skipped (728)
+All files          |   95.95 |    89.37 |   95.46 |    97.8 |                                                  
+ lib/portal        |    96.2 |    92.77 |    94.3 |   98.68 |                                                  
+
+===== 3. npm run lint:wiki =====
+lint: 0 errors, 34 warnings, 2 info (pages: 202)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+
+===== 4. pwsh -NoProfile -File scripts/verify/p0.17-portal-v2.ps1 (exit 2) =====
+Ferrum check p0.17: Portal v2, then your review
+Why: you read the plan in plain words and approve it in Claude Code.
+Run at 2026-10-09 23:13 on commit eb70eb7 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Portal text is complete and up to date with the wiki (4 s)
+         portal-sync: clean - 18 files, 252 translated records, 377 refs
+  PASS   Every task and phase has a check script that PowerShell can read (1 s)
+         156 files parsed (scripts/ and tools/); 150 scripts linked from the portal files
+  PASS   The portal reads the text correctly (shapes and clickable ids) (21 s)
+         portal tests: Tests  65 passed (65)
+  WAIT   Your approvals of the pages P1 depends on are recorded
+         Waiting for your approval of the P1 pages in Claude Code. Not approved yet: schema (PENDING), phase-p1-foundation (PENDING), adr-0021 (PENDING), adr-0006 (PENDING), adr-0007 (PENDING), adr-0010 (PENDING), adr-0011 (PENDING), adr-0012 (PENDING), adr-0014 (PENDING), adr-0018 (PENDING), adr-0019 (PENDING), comp-core (PENDING), comp-webview2-runtime (PENDING), comp-windows-os (PENDING).
+------------------------------------------------------------------------
+RESULT: NOT READY - p0.17 (3 PASS, 1 WAIT; 26 s)
+Not finished yet, and nothing is broken. Waiting on: Your approvals of the pages P1 depends on are recorded.
+What to tell Claude: nothing, unless you expected this to be finished.
+
+===== 5a. pwsh tools/portal-sync-check.ps1 =====
+portal-sync: clean - 18 files, 252 translated records, 377 refs
+exit 0
+===== 5b. python tools/quick_lint.py =====
+202 files checked, 0 errors, 0 warnings
+exit 0
+===== 5c. pwsh tools/mask.ps1 --scan =====
+mask scan: 653 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+exit 0
+===== 5d. npm audit (tail) =====
+5 high severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+(the same 5 high findings in development tooling as before, accepted until the P0 exit recheck)
+
+===== 6. Earlier P0 gate runs in this step =====
+Run 1: 22 PASS, 1 FAIL: portal check STALE for overview.json, because STATUS.md In-flight was edited; overview.json was then re-translated.
+Run 2: FAIL: STATUS.md linked this evidence file before it existed (REF-DANGLING); run 3: 22 PASS, 1 FAIL: this file had no
+fingerprint line yet (task p0.8). Both are fixed by writing this file and its MANIFEST line before the final gate run.
