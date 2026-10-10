@@ -15,8 +15,7 @@ describe("getConfig", () => {
       statusFile: path.join(root, "STATUS.md"),
       dataDir: path.join(root, "plan"),
       approvalsFile: path.join(root, "plan", "approvals.json"),
-      readonly: false,
-      appendLog: true,
+      portalDir: path.join(root, "plan", "portal"),
       port: 3417,
     });
   });
@@ -28,8 +27,6 @@ describe("getConfig", () => {
         PLAN_WIKI_DIR: "fixtures/wiki",
         PLAN_STATUS_FILE: "/s/STATUS.md",
         PLAN_DATA_DIR: "/d",
-        PLAN_READONLY: "1",
-        PLAN_APPEND_LOG: "0",
         PLAN_PORT: "3418",
       },
       cwd,
@@ -38,15 +35,13 @@ describe("getConfig", () => {
     expect(c.wikiDir).toBe(path.resolve(cwd, "fixtures/wiki"));
     expect(c.statusFile).toBe(path.resolve("/s/STATUS.md"));
     expect(c.approvalsFile).toBe(path.join(path.resolve("/d"), "approvals.json"));
-    expect(c.readonly).toBe(true);
-    expect(c.appendLog).toBe(false);
+    expect(c.portalDir).toBe(path.join(path.resolve("/d"), "portal"));
     expect(c.port).toBe(3418);
   });
 
   it("PLAN_REPO_ROOT moves the derived defaults; junk values fall back", () => {
-    const c = getConfig({ PLAN_REPO_ROOT: "/r", PLAN_READONLY: "yes", PLAN_PORT: "80a", PLAN_WIKI_DIR: "  " }, cwd);
+    const c = getConfig({ PLAN_REPO_ROOT: "/r", PLAN_PORT: "80a", PLAN_WIKI_DIR: "  " }, cwd);
     expect(c.wikiDir).toBe(path.join(path.resolve("/r"), "wiki"));
-    expect(c.readonly).toBe(false);
     expect(c.port).toBe(3417);
   });
 });

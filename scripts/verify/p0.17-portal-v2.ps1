@@ -6,12 +6,14 @@
 .DESCRIPTION
   What it checks : (1) the portal's plain-language text (plan/portal/) is complete and up to date with the
                    wiki (tools/portal-sync-check.ps1 says "clean"); (2) every task and phase has its check
-                   script and every script can be read by PowerShell; (3) your approvals of the pages P1
+                   script and every script can be read by PowerShell; (3) the portal reads that text
+                   correctly: its file shapes match the JSON Schemas (PowerShell's Test-Json agrees), and
+                   every id in the text opens its explainer (portal unit tests); (4) your approvals of the pages P1
                    depends on are recorded (the rulebook, the P1 phase page, its decisions and its parts).
   Why            : you found the first plan app too technical → the portal shows plain text written from the
                    wiki → you review it and approve in Claude Code, and Claude records each approval.
   What it changes: nothing. It only reads files.
-  How long       : about 10 seconds.
+  How long       : about 40 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.17-portal-v2.ps1
   Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
                    Until you have approved the P1 pages it ends NOT READY (exit 2): that is expected.
@@ -39,6 +41,12 @@ Invoke-Step 'Every task and phase has a check script that PowerShell can read' {
     $r = Invoke-Native -FilePath $pwsh -ArgumentList @('-NoProfile', '-NonInteractive', '-File', (Get-RepoPath 'scripts/test-check-scripts.ps1'))
     if ($r.ExitCode -ne 0) { Stop-Fail "The script test found problems:`n$(Get-Tail $r.Output 10)" }
     ($r.Output -split "`r?`n" | Where-Object { $_ -match '^\s+\d+ (files parsed|scripts linked)' } | ForEach-Object Trim) -join '; '
+}
+
+Invoke-Step 'The portal reads the text correctly (shapes and clickable ids)' {
+    $r = Assert-NpmScript 'test' -Extra @('tests/unit/portal-schemas.test.ts', 'tests/unit/portal-refs.test.tsx', 'tests/unit/portal-load.test.ts')
+    $line = ($r.Output -split "`r?`n" | Where-Object { $_ -match '^\s+Tests\s' } | Select-Object -Last 1)
+    "portal tests: $("$line".Trim())"
 }
 
 Invoke-Step 'Your approvals of the pages P1 depends on are recorded' {

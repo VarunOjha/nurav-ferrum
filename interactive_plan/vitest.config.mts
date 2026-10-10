@@ -20,6 +20,7 @@ export default defineConfig({
         "lib/approvals/**": { lines: 90, branches: 90 },
         "lib/wiki/**": { lines: 80, branches: 80 },
         "lib/lint/**": { lines: 80, branches: 80 },
+        "lib/portal/**": { lines: 90, branches: 80 },
       },
     },
   },

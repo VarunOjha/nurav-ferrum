@@ -1,29 +1,35 @@
 /**
- * Host allowlist for every route (ip-approvals-api §3, IP-9 review fixes). proxy.ts calls this for
- * each request (pages, /_next assets and /api alike), so a DNS-rebinding page whose Host header is
- * not `127.0.0.1:<port>`, `localhost:<port>` or `[::1]:<port>` cannot read the wiki through the
- * app. Returns the 403 response, or null when the request may continue. Pure apart from building
- * a Response, so unit tests call it directly.
+ * Request gate for every route (adr-0023: the portal is read-only and local-only). proxy.ts calls this
+ * for each request (pages and /_next assets alike):
+ * - Host allowlist: a DNS-rebinding page whose Host header is not `127.0.0.1:<port>`,
+ *   `localhost:<port>` or `[::1]:<port>` cannot read the plan through the portal (403).
+ * - Reads only: any method other than GET and HEAD is refused with 405. The portal has no write route
+ *   (the approvals POST API of v1 was removed in p0.17) and no server actions.
+ * Returns the refusal, or null when the request may continue. Pure apart from building a Response,
+ * so unit tests call it directly.
  */
-import { envelope, ApprovalError } from "../approvals/errors";
-import { checkHost } from "../approvals/guard";
 import { securityHeaders } from "./policy";
 
-export function hostGate(req: Pick<Request, "url" | "headers">, port: number, isDev = false): Response | null {
-  const g = checkHost(req.headers, port);
-  if (g.ok) return null;
-  const headers = new Headers({ "Cache-Control": "no-store" });
+export const allowedHosts = (port: number): string[] => [`127.0.0.1:${port}`, `localhost:${port}`, `[::1]:${port}`];
+export const ALLOWED_METHODS = ["GET", "HEAD"] as const;
+
+/** True when the Host header names this machine's loopback interface on the portal's port. */
+export function isAllowedHost(host: string | null, port: number): boolean {
+  return host !== null && allowedHosts(port).includes(host.toLowerCase());
+}
+
+function refuse(status: number, code: string, message: string, isDev: boolean, extra: Record<string, string> = {}): Response {
+  const headers = new Headers({ "Cache-Control": "no-store", "Content-Type": "text/plain; charset=utf-8", ...extra });
   for (const h of securityHeaders(isDev)) headers.set(h.key, h.value);
-  let pathname = "/";
-  try {
-    pathname = new URL(req.url).pathname;
-  } catch {
-    // keep "/"
+  return new Response(`${status} ${code}: ${message}\n`, { status, headers });
+}
+
+export function hostGate(req: Pick<Request, "url" | "headers"> & { method?: string }, port: number, isDev = false): Response | null {
+  const host = req.headers.get("host");
+  if (!isAllowedHost(host, port)) return refuse(403, "FORBIDDEN_ORIGIN", `Host ${JSON.stringify(host)} is not a loopback host on port ${port}`, isDev);
+  const method = (req.method ?? "GET").toUpperCase();
+  if (!(ALLOWED_METHODS as readonly string[]).includes(method)) {
+    return refuse(405, "READ_ONLY", `the portal only reads; ${method} is not accepted`, isDev, { Allow: ALLOWED_METHODS.join(", ") });
   }
-  if (pathname.startsWith("/api/")) {
-    headers.set("Content-Type", "application/json; charset=utf-8");
-    return new Response(JSON.stringify(envelope(new ApprovalError(g.code, g.message))), { status: g.status, headers });
-  }
-  headers.set("Content-Type", "text/plain; charset=utf-8");
-  return new Response(`403 ${g.code}: ${g.message}\n`, { status: g.status, headers });
+  return null;
 }

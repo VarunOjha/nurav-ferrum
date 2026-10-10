@@ -1,1 +1,0 @@
-E2E-only evidence file for phase-p2-fixture-review (exists: shown with a check mark).

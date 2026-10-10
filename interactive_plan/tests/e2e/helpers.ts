@@ -1,74 +1,59 @@
-// Shared E2E helpers: collect console errors and page errors for the "no console errors" checks.
-import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import os from "node:os";
+// Shared E2E helpers. The browser tests run the production build against the REAL plan/ folder: the
+// portal only reads (adr-0023), and global-teardown.ts fails the run if any guarded real file changed.
+// Tests read the same JSON the portal reads to know what to expect, so they do not break when Claude
+// rewrites the portal text.
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import http from "node:http";
 import path from "node:path";
-import type { Page } from "@playwright/test";
-import { envFromRoot, fingerprint, GUARDED } from "./setup-env";
 
-export function collectErrors(page: Page): string[] {
-  const errors: string[] = [];
-  page.on("console", (m) => {
-    if (m.type() === "error") errors.push(`console: ${m.text()}`);
+export const PORT = 3418;
+export const APP_DIR = path.resolve(__dirname, "..", "..");
+export const REPO_ROOT = path.resolve(APP_DIR, "..");
+export const PORTAL_DIR = path.join(REPO_ROOT, "plan", "portal");
+
+/** Real files that must be byte-identical (and keep their mtime) after the run. */
+export function guardedFiles(): string[] {
+  const out = [path.join(REPO_ROOT, "plan", "approvals.json"), path.join(REPO_ROOT, "wiki", "log.md"), path.join(REPO_ROOT, "STATUS.md")];
+  for (const f of readdirSync(PORTAL_DIR)) if (f.endsWith(".json")) out.push(path.join(PORTAL_DIR, f));
+  for (const f of readdirSync(path.join(PORTAL_DIR, "phases"))) if (f.endsWith(".json")) out.push(path.join(PORTAL_DIR, "phases", f));
+  return out;
+}
+
+export function fingerprint(p: string): string {
+  if (!existsSync(p)) return "absent";
+  return `${statSync(p).mtimeMs}:${createHash("sha256").update(readFileSync(p)).digest("hex")}`;
+}
+
+/** Records the guard fingerprints once, in the Playwright main process (workers inherit the env). */
+export function recordGuard(): void {
+  if (process.env.PLAN_E2E_GUARD) return;
+  process.env.PLAN_E2E_GUARD = JSON.stringify(guardedFiles().map((p) => [p, fingerprint(p)]));
+}
+
+/** One portal JSON file, parsed (relative to plan/portal/). */
+export function portalJson<T = Record<string, unknown>>(rel: string): T {
+  return JSON.parse(readFileSync(path.join(PORTAL_DIR, rel), "utf8").replace(/^﻿/, "")) as T;
+}
+
+export interface RawResponse {
+  status: number;
+  headers: http.IncomingHttpHeaders;
+  body: string;
+}
+
+/** One HTTP request to 127.0.0.1:<port> with exactly these headers (Host included). */
+export function raw(port: number, method: string, urlPath: string, headers: Record<string, string>, body?: string): Promise<RawResponse> {
+  return new Promise((resolve, reject) => {
+    const h: Record<string, string> = { ...headers };
+    if (body !== undefined) h["Content-Length"] = String(Buffer.byteLength(body));
+    const req = http.request({ host: "127.0.0.1", port, method, path: urlPath, headers: h, setHost: false }, (res) => {
+      const chunks: Buffer[] = [];
+      res.on("data", (c: Buffer) => chunks.push(c));
+      res.on("end", () => resolve({ status: res.statusCode ?? 0, headers: res.headers, body: Buffer.concat(chunks).toString("utf8") }));
+    });
+    req.on("error", reject);
+    if (body !== undefined) req.write(body);
+    req.end();
   });
-  page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
-  return errors;
 }
-
-/** Fixture ids and paths (tests/fixtures/mini-wiki + e2e-overlay). */
-export const FX = {
-  adr: "adr-0901",
-  adrPath: "/wiki/decisions/adr-0901-fixture-decision.md",
-  /** The typed decision view (IP-8); /go/adr-0901 and the inbox open it. */
-  adrView: "/decisions/adr-0901",
-  projectPath: "/wiki/overview/ov-fixture-project.md",
-  renderPath: "/wiki/overview/ov-fixture-render.md",
-  rawPath: "/wiki/raw/00-fixture-source.md",
-  bodyWord: "zanzibarquill",
-};
-
-// ------------------------------------------------------------------------------------------
-// IP-7: access to the temp fixture copy (never the real repo files). Workers inherit
-// PLAN_E2E_ROOT from the main process (playwright.config.ts -> setup-env.ts).
-// ------------------------------------------------------------------------------------------
-
-export function e2eEnv() {
-  const root = process.env.PLAN_E2E_ROOT;
-  if (!root) throw new Error("PLAN_E2E_ROOT is not set: run through playwright.config.ts");
-  const resolved = path.resolve(root);
-  // Safety: every write below must land in the temp copy, never in the repository.
-  if (!resolved.startsWith(path.join(os.tmpdir(), "ferrum plan e2e"))) throw new Error(`unexpected E2E root ${resolved}`);
-  const env = envFromRoot(resolved);
-  return { ...env, approvalsFile: path.join(env.dataDir, "approvals.json"), logFile: path.join(env.wikiDir, "log.md") };
-}
-
-/** Absolute path of a wiki-relative file in the temp copy. */
-export const tmpWikiFile = (rel: string) => path.join(e2eEnv().wikiDir, ...rel.split("/"));
-
-/** Bytes of a temp-copy file, or null when absent. */
-export const readOrNull = (p: string): Buffer | null => (existsSync(p) ? readFileSync(p) : null);
-
-/** Restores a temp-copy file to saved bytes (null = remove it). */
-export function restore(p: string, saved: Buffer | null): void {
-  if (saved === null) rmSync(p, { force: true });
-  else writeFileSync(p, saved);
-}
-
-/** Replaces exactly one occurrence in a temp-copy wiki file. */
-export function editOnce(rel: string, from: string, to: string): void {
-  const p = tmpWikiFile(rel);
-  const s = readFileSync(p, "utf8");
-  if (s.split(from).length !== 2) throw new Error(`expected exactly one ${JSON.stringify(from)} in ${rel}`);
-  writeFileSync(p, s.replace(from, to));
-}
-
-/** The real files guarded by global-teardown.ts are still unchanged (checked mid-run too). */
-export function realFilesUnchanged(): { path: string; same: boolean }[] {
-  const recorded = new Map(JSON.parse(process.env.PLAN_E2E_GUARD ?? "[]") as [string, string][]);
-  return GUARDED.map((p) => ({ path: p, same: recorded.has(p) && recorded.get(p) === fingerprint(p) }));
-}
-
-export const PAGE_CHANGED_TEXT = "This page changed since you loaded it – reload to review the new version";
-
-/** SCHEMA §12 heading regex (verbatim, as lib/wiki/log.ts). */
-export const LOG_HEADING =
-  /^## \[(\d{4}-\d{2}-\d{2})\] (ingest|query|lint|decide|handoff|resume|gate|code|approval|schema|correct|plan) \| (.+)$/;

@@ -12,7 +12,7 @@
   What it changes: nothing in the repo. Browser tests use a temporary sample wiki; ignored folders are written.
   How long       : about 3 to 4 minutes.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.16-plan-app-gate.ps1
-                   (close any plan app you started yourself first: the tests use ports 3418-3420)
+                   (close any plan app you started yourself first: the tests use port 3418)
   Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.16 check failed".
 #>

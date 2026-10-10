@@ -23,7 +23,7 @@
                    wiki/raw/evidence/phase-p0-planning/p0-gate.txt (a time stamp is added if it exists).
   How long       : about 5 minutes (the browser tests take about 2).
   How to run     : pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P0
-                   (close any plan app you started yourself first: the browser tests use ports 3418-3420)
+                   (close any plan app you started yourself first: the browser tests use port 3418)
   Result         : PASS = exit 0 (your YOURS items may still be open), FAIL = exit 1, NOT READY = exit 2.
   Tell Claude    : if it says PASS: "P0 gate passed" (and, when you are ready, your approvals).
                    If it says FAIL: "P0 gate failed", and paste the FAIL lines.

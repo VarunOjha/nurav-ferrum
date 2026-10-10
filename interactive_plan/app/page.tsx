@@ -1,257 +1,283 @@
-// Dashboard `/` (ip-routes-and-views §3.1): next action from STATUS.md, phase progress strip with the
-// sessions budget and last activity, the current phase's entry gate, approval counts, blockers, the
-// last 5 log entries (the RESUME recipe) and the lint summary.
+// Overview (owner-approved Main mockup, Layout A): where we are, questions for you, what happens next
+// in the owner's four-part format, phase progress (each card opens the phase popup), how references
+// work, and the latest log. Reads overview.json, roadmap.json, phases/*.json, log.json and refs.json.
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ApprovalBadge, StatusBadge } from "@/components/Badges";
-import Markdown from "@/components/Markdown";
-import { EFFECTIVE_STATES } from "@/lib/approvals/state";
-import { CHECK_TEXT } from "@/lib/lint/gateReport";
-import { getApprovals, getApprovalsFile, getIndex, getLint } from "@/lib/server/data";
-import { OP_TONES } from "@/lib/ui/tone";
-import { approvalsMap, blockers, lastActivity, phaseStrip, progress, stateCounts } from "@/lib/views/dashboard";
-import { eligibleItems } from "@/lib/views/inbox";
-import { entryGate } from "@/lib/wiki/gates";
-import { linkTargetInfo } from "@/lib/wiki/load";
-import { rebaseRootLinks } from "@/lib/wiki/mdlinks";
+import { OpenModalButton } from "@/components/portal/Modal";
+import PhasePopup, { phaseDialogId } from "@/components/portal/PhasePopup";
+import Ref from "@/components/portal/Ref";
+import RichText from "@/components/portal/RichText";
+import { resolveRef } from "@/lib/portal/refs";
+import { getPortal, getRefData } from "@/lib/portal/server";
+import { headline, latestLog, percentDone, phaseTone, shortDate } from "@/lib/portal/view";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "Overview" };
 
-const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 100) : 0);
+/** The id shown as the live example in "Clickable references" (first decision with an explainer). */
+const EXAMPLE_REFS = ["adr-0023", "adr-0024", "adr-0001"];
 
-function IdOrQ({ id, known }: { id: string; known: boolean }) {
-  return (
-    <a href={`/go/${encodeURIComponent(id)}`} className={known ? "id-link" : "id-link link-missing"} title={known ? undefined : "missing (REF-DANGLING)"}>
-      {id}
-    </a>
-  );
+function Missing({ what }: { what: string }) {
+  return <p className="muted">{what} could not be read (see the note at the top of the page).</p>;
 }
 
-export default async function Dashboard() {
-  const idx = await getIndex();
-  const [view, file, lint] = await Promise.all([getApprovals(), getApprovalsFile(), getLint().catch(() => null)]);
-  const s = idx.status;
-  const known = (id: string) => idx.byId.has(id) || idx.openQuestions.some((q) => q.id === id);
-  const cells = phaseStrip(idx);
-  const prog = progress(cells);
-  const activity = lastActivity(idx.log);
-  const items = eligibleItems(view.items);
-  const counts = stateCounts(items);
-  const blocks = blockers(idx, items);
-  const gate = s ? entryGate(idx, approvalsMap(file), s.current_phase) : null;
-  const last5 = idx.log.slice(-5).reverse();
+export default async function OverviewPage() {
+  const [{ files, approvals }, refData] = await Promise.all([getPortal(), getRefData()]);
+  const { overview, roadmap, phases, log } = files;
+  const latest = latestLog(log, 3);
+  const example = EXAMPLE_REFS.find((id) => resolveRef(refData, id)) ?? null;
+  const { head, rest } = headline(overview?.summary ?? "");
+  const next = overview?.next_action;
 
   return (
-    <article className="page page-wide">
-      <header className="page-header">
-        <p className="eyebrow">Ferrum plan</p>
-        <h1 className="page-title">Dashboard</h1>
-      </header>
-
-      <div className="cards">
-        <section className="card card-wide" aria-labelledby="next-title">
-          <h2 id="next-title" className="card-title">
-            Next action
-          </h2>
-          {s ? (
+    <div className="page">
+      <section className="row-wrap">
+        <div className="card card-main stack-18" aria-labelledby="where-title">
+          <div className="eyebrow" id="where-title">
+            Where we are
+          </div>
+          {overview ? (
             <>
-              <p className="next-action mono" data-testid="next-action">
-                {s.next_action}
-              </p>
-              <dl className="kv">
-                <div>
-                  <dt>Phase</dt>
-                  <dd>
-                    <a href={`/go/${encodeURIComponent(s.current_phase)}`}>{s.current_phase}</a>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Task</dt>
-                  <dd className="mono">{s.current_task ?? "none"}</dd>
-                </div>
-                <div>
-                  <dt>Session</dt>
-                  <dd className="mono">{s.session}</dd>
-                </div>
-                <div>
-                  <dt>Status</dt>
-                  <dd>
-                    <StatusBadge status={s.status} />
-                  </dd>
-                </div>
-              </dl>
-              {idx.statusNextAction && (
-                <details className="next-action-section" data-testid="next-action-section" open>
-                  <summary className="small">
-                    STATUS.md <q>Next action</q> section
-                  </summary>
-                  <div className="page-body">
-                    <Markdown source={rebaseRootLinks(idx.statusNextAction)} path="STATUS.md" exists={linkTargetInfo(idx).exists} knownIds={new Set(idx.byId.keys())} />
-                  </div>
-                </details>
+              <h1 className="hero">
+                <RichText text={head} />
+              </h1>
+              {rest && (
+                <p className="lead">
+                  <RichText text={rest} />
+                </p>
               )}
-              {s.blocked_on.length > 0 && (
-                <div className="blocked-on banner banner-amber" data-testid="blocked-on">
-                  <strong>Blocked on:</strong>{" "}
-                  <ul className="inline-list">
-                    {s.blocked_on.map((b) => (
-                      <li key={b}>
-                        <IdOrQ id={b} known={known(b)} />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <table className="kv" data-testid="where-we-are">
+                <tbody>
+                  {overview.where_we_are.map((row, i) => (
+                    <tr key={i}>
+                      <th scope="row">
+                        <RichText text={row.item} />
+                      </th>
+                      <td>
+                        <RichText text={row.state} />
+                        {row.ref && (
+                          <>
+                            {" "}
+                            <Ref id={row.ref} variant="chip">
+                              {resolveRef(refData, row.ref)?.title ?? row.ref}
+                            </Ref>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  {latest[0] && (
+                    <tr>
+                      <th scope="row">Last update</th>
+                      <td>
+                        {shortDate(latest[0].date)} · <RichText text={latest[0].title} />
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </>
           ) : (
-            <p className="banner banner-amber">STATUS.md is missing or invalid.</p>
+            <>
+              <h1 className="hero">Ferrum plan portal</h1>
+              <Missing what="The overview text" />
+            </>
           )}
-        </section>
+        </div>
 
-        <section className="card card-wide" aria-labelledby="phases-title">
-          <h2 id="phases-title" className="card-title">
-            Phase progress
+        <aside className="card card-side stack-14" aria-labelledby="questions-title" data-testid="questions-for-you">
+          <h2 className="eyebrow" id="questions-title">
+            Questions for you
           </h2>
-          <ol className="phase-strip" data-testid="phase-strip">
-            {cells.map((c) => (
-              <li key={c.id} className={`phase-cell${c.id === s?.current_phase ? " phase-current" : ""}`} data-status={c.status}>
-                <a href={`/phases/${encodeURIComponent(c.id)}`} className="phase-cell-link">
-                  <span className="phase-order mono">P{c.order}</span>
-                  <span className="phase-name">{c.title}</span>
-                </a>
-                <StatusBadge status={c.status} />
-                <span className="muted small">
-                  {c.milestone ?? "no milestone"} · {c.est_sessions} session{c.est_sessions === 1 ? "" : "s"}
-                </span>
-                {c.id === s?.current_phase && <span className="sr-only">(current phase)</span>}
-              </li>
-            ))}
-          </ol>
-          <div className="meters">
-            <div className="meter-row">
-              <span className="small">
-                Phases done: <strong data-testid="phases-done">{prog.done}</strong> of {prog.total}
-              </span>
-              <meter min={0} max={prog.total} value={prog.done} aria-label={`Phases done: ${prog.done} of ${prog.total}`} />
-              <span className="muted small">{pct(prog.done, prog.total)} %</span>
-            </div>
-            <div className="meter-row">
-              <span className="small">
-                Sessions budget (planning estimate): {prog.sessionsDone} of {prog.sessionsTotal}
-              </span>
-              <meter
-                min={0}
-                max={Math.max(1, prog.sessionsTotal)}
-                value={prog.sessionsDone}
-                aria-label={`Estimated sessions of done phases: ${prog.sessionsDone} of ${prog.sessionsTotal}`}
-              />
-              <span className="muted small">{pct(prog.sessionsDone, prog.sessionsTotal)} %</span>
-            </div>
-          </div>
-          <p className="small">
-            Last activity:{" "}
-            {activity ? (
+          {overview ? (
+            overview.questions_for_you.items.length === 0 ? (
+              <p className="muted">Nothing waiting for you right now.</p>
+            ) : (
+              overview.questions_for_you.items.map((q) => (
+                <div key={q.id} className="question-card">
+                  <div className="strong">
+                    <RichText text={q.question} />
+                  </div>
+                  <div className="small muted">
+                    <Ref id={q.id} variant="code" /> · Asked in Claude Code · {shortDate(q.asked)}
+                  </div>
+                </div>
+              ))
+            )
+          ) : (
+            <Missing what="The questions" />
+          )}
+          {overview && (
+            <p className="small muted">
+              {overview.questions_for_you.open} questions are open in total; the rest are asked later, with the phase they belong to.
+            </p>
+          )}
+          <Link href="/questions" className="more">
+            See all questions →
+          </Link>
+        </aside>
+      </section>
+
+      <section className="card stack-18" aria-labelledby="next-title" data-testid="what-next">
+        <div className="row-between">
+          <h2 className="h2" id="next-title">
+            What happens next
+          </h2>
+          <span className="small muted">
+            {next?.who === "you" ? (
               <>
-                <span className="mono">{activity.task}</span> · {activity.date} · {activity.title}
+                <span className="chip chip-you">You</span> run something, then tell Claude
               </>
             ) : (
-              <span className="muted">no code log entry names a task yet</span>
+              "Only when you need to run something — otherwise Claude just continues"
             )}
-          </p>
-          <p className="muted small">Task progress is not shown as a percentage: task status is not stored on phase pages (SCHEMA §6.3).</p>
-        </section>
-
-        {gate && s && (
-          <section className="card" aria-labelledby="gate-title">
-            <h2 id="gate-title" className="card-title">
-              Entry gate: <a href={`/phases/${encodeURIComponent(s.current_phase)}`}>{s.current_phase}</a>
-            </h2>
-            <ul className="gate-list" data-testid="dashboard-gate">
-              {gate.items.map((it) => (
-                <li key={it.check} data-ok={it.ok}>
-                  <span className={`chip chip-xs chip-${it.ok ? "green" : "amber"}`}>{it.ok ? "✓ ok" : "✗ open"}</span> {CHECK_TEXT[it.check] ?? it.check}
-                  {!it.ok && <span className="muted small"> ({it.ids.length})</span>}
-                </li>
-              ))}
-            </ul>
-            <p className="small">
-              {gate.bootstrapException ? "Bootstrap exception (SCHEMA §9.7): informative only." : gate.ok && file.valid ? "The gate passes." : "The gate is blocked."}
-            </p>
-          </section>
+          </span>
+        </div>
+        {next ? (
+          <ol className="next-grid">
+            <li className="next-part">
+              <div className="next-part-title">1 · Where we are</div>
+              <table className="mini">
+                <tbody>
+                  {next.where_we_are.map((r, i) => (
+                    <tr key={i}>
+                      <th scope="row">
+                        <RichText text={r.item} />
+                      </th>
+                      <td>
+                        <RichText text={r.state} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </li>
+            <li className="next-part">
+              <div className="next-part-title">2 · Why run something</div>
+              <p className="lh">
+                <RichText text={next.why} />
+              </p>
+            </li>
+            <li className="next-part">
+              <div className="next-part-title">3 · The script</div>
+              {next.script ? (
+                <div className="stack-8">
+                  <div className="mono small">{next.script.path}</div>
+                  {next.script.parts.map((p, i) => (
+                    <div key={i} className="stack-4">
+                      <pre className="code-block code-sm">{p.code}</pre>
+                      <div className="small">
+                        <RichText text={p.explains} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="code-block code-sm">— none needed —</div>
+              )}
+            </li>
+            <li className="next-part">
+              <div className="next-part-title">4 · Then tell Claude</div>
+              <p className="lh">{next.tell_claude ? <RichText text={next.tell_claude} /> : "Nothing. Claude continues on its own."}</p>
+            </li>
+          </ol>
+        ) : (
+          <Missing what="The next step" />
         )}
+      </section>
 
-        <section className="card" aria-labelledby="counts-title">
-          <h2 id="counts-title" className="card-title">
-            Approvals
+      <section className="card stack-18" aria-labelledby="phases-title">
+        <div className="row-between">
+          <h2 className="h2" id="phases-title">
+            Phase progress
           </h2>
-          <ul className="count-list" data-testid="approval-counts">
-            {EFFECTIVE_STATES.map((st) => (
-              <li key={st} data-state={st}>
-                <Link href={`/approvals?state=${st}`} className="count-link">
-                  <span className="count-num" data-testid={`count-${st}`}>
-                    {counts[st]}
-                  </span>{" "}
-                  <ApprovalBadge state={st} />
-                </Link>
-              </li>
-            ))}
+          <span className="small muted">Click a phase to open it in a popup</span>
+        </div>
+        {roadmap ? (
+          <ul className="phase-grid" data-testid="phase-cards">
+            {roadmap.phases.map((p) => {
+              const tone = phaseTone(p.status);
+              const pct = percentDone(p.tasks_done, p.tasks_total);
+              const hasPopup = phases.some((ph) => ph.id === p.id);
+              const body = (
+                <>
+                  <span className="phase-card-top">
+                    <span className="mono small muted">{p.short}</span>
+                    <span className={`chip chip-${tone}`}>{p.status}</span>
+                  </span>
+                  <span className="phase-card-name">{p.name}</span>
+                  <span className="phase-card-goal">{p.one_line_goal}</span>
+                  <span className="bar" aria-hidden="true">
+                    <span className={`bar-fill bar-${tone}`} style={{ width: `${pct}%` }} />
+                  </span>
+                  <span className="small muted">
+                    {p.tasks_total === null ? "Tasks not counted yet" : `${p.tasks_done} of ${p.tasks_total} tasks done`}
+                  </span>
+                </>
+              );
+              return (
+                <li key={p.id}>
+                  {hasPopup ? (
+                    <OpenModalButton target={phaseDialogId(p.id)} className="phase-card" label={`${p.short} ${p.name}: ${p.status}. Open the phase popup`}>
+                      {body}
+                    </OpenModalButton>
+                  ) : (
+                    <div className="phase-card">{body}</div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
-          <p className="muted small">
-            Over {items.length} approvable keys. <Link href="/approvals">Open the inbox →</Link>
-          </p>
-        </section>
+        ) : (
+          <Missing what="The roadmap" />
+        )}
+      </section>
 
-        <section className="card" aria-labelledby="blockers-title">
-          <h2 id="blockers-title" className="card-title">
-            Blockers
+      <section className="row-wrap">
+        <div className="card card-main stack-14" aria-labelledby="refs-title">
+          <h2 className="h2" id="refs-title">
+            Clickable references
           </h2>
-          {blocks.length === 0 ? (
-            <p className="muted small">None.</p>
+          <p className="lead">
+            Every id is a link.{" "}
+            {example ? (
+              <>
+                Clicking{" "}
+                <Ref id={example} variant="chip">
+                  {resolveRef(refData, example)?.title ?? example}
+                </Ref>{" "}
+                opens a small explainer right here, with no page change.
+              </>
+            ) : (
+              "Clicking one opens a small explainer right here, with no page change."
+            )}{" "}
+            Inside it, related ids open in the same popup; Esc closes it.
+          </p>
+        </div>
+        <div className="card card-side stack-12" aria-labelledby="log-title" data-testid="latest-log">
+          <h2 className="h2" id="log-title">
+            Latest log
+          </h2>
+          {latest.length === 0 ? (
+            <p className="muted">No log entries yet.</p>
           ) : (
-            <ul className="plain-list" data-testid="blockers">
-              {blocks.map((b) => (
-                <li key={`${b.kind}:${b.id}`} data-kind={b.kind}>
-                  <span className="chip chip-xs chip-amber">{b.kind}</span> <IdOrQ id={b.id.replace(/#exit$/, "")} known={known(b.id.replace(/#exit$/, ""))} />{" "}
-                  <span className="small">{b.text}</span>
+            <ul className="plain-list stack-12">
+              {latest.map((e) => (
+                <li key={e.id} className="lh">
+                  <strong>{shortDate(e.date)}</strong> — <RichText text={e.title} />
                 </li>
               ))}
             </ul>
           )}
-        </section>
-
-        <section className="card" aria-labelledby="log-title">
-          <h2 id="log-title" className="card-title">
-            Recent log
-          </h2>
-          <ol className="mini-log" data-testid="recent-log">
-            {last5.map((e) => (
-              <li key={e.line}>
-                <span className={`chip chip-xs chip-${OP_TONES[e.op] ?? "neutral"}`}>{e.op}</span> <span className="muted small">{e.date}</span>
-                <div>{e.title}</div>
-              </li>
-            ))}
-          </ol>
-          <Link href="/log?view=last5" className="card-link">
+          <Link href="/log" className="more">
             Open the log →
           </Link>
-        </section>
+        </div>
+      </section>
 
-        <section className="card" aria-labelledby="lint-title">
-          <h2 id="lint-title" className="card-title">
-            Wiki lint
-          </h2>
-          {lint ? (
-            <p data-testid="lint-counts">
-              <span className="chip chip-red chip-strong">{lint.summary.errors} errors</span>{" "}
-              <span className="chip chip-amber chip-strong">{lint.summary.warnings} warnings</span>
-            </p>
-          ) : (
-            <p className="muted small">The lint run failed; open the report for details.</p>
-          )}
-          <Link href="/lint" className="card-link">
-            Open the lint report →
-          </Link>
-        </section>
-      </div>
-    </article>
+      {phases.map((ph) => (
+        <PhasePopup key={ph.id} phase={ph} sameInEveryPhase={roadmap?.same_in_every_phase ?? []} approvals={approvals} />
+      ))}
+    </div>
   );
 }

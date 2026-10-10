@@ -4,15 +4,16 @@
   Check for task p0.13 (P0 Planning): Build the app's views and wiki check.
 
 .DESCRIPTION
-  What it checks : the browser tests open every view of the plan app (dashboard, roadmap, architecture,
-                   decisions, risks, research, wiki pages) on a production build and find the expected parts
-                   and no page errors; the wiki check itself runs and reports zero errors.
+  What it checks : the browser tests open the portal on a production build: every tab, the Overview with
+                   its phase popups, and the reference popups, with no page errors; the wiki check itself
+                   runs and reports zero errors. The first app's wiki-browser views were replaced by the
+                   read-only portal in task p0.17 (2026-10-09), so this check now covers the portal views.
   Why            : you need to see the plan, not raw files → readable views plus an automatic wiki check.
-  What it changes: nothing in the repo. The browser tests work on a temporary copy of a small sample wiki
-                   and only write ignored folders (interactive_plan/.next, test-results, playwright-report).
+  What it changes: nothing in the repo. The browser tests only read plan/ (they fail if any file there
+                   changes) and write ignored folders only (interactive_plan/.next, test-results, playwright-report).
   How long       : about 1 minute.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.13-plan-app-views.ps1
-                   (close any plan app you started yourself first: the tests use ports 3418-3420)
+                   (close any plan app you started yourself first: the tests use port 3418)
   Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.13 check failed".
 #>
@@ -26,7 +27,7 @@ Start-Check -Id 'p0.13' -Title "Build the app's views and wiki check" -Phase 'ph
     -Why 'the plan must be readable in views, and checked automatically.'
 
 Invoke-Step 'Browser tests open every view without errors' {
-    $specs = 'views.spec', 'dashboard.spec', 'roadmap.spec', 'architecture.spec', 'decisions.spec', 'risks.spec', 'research.spec', 'wiki.spec'
+    $specs = 'shell.spec', 'overview.spec', 'refs.spec'
     $r = Assert-NpmScript 'test:e2e' -Extra $specs
     $line = ($r.Output -split "`r?`n" | Where-Object { $_ -match '^\s+\d+ passed' } | Select-Object -Last 1)
     "browser tests: $($line.Trim())"

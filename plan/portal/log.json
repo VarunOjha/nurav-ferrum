@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words, oldest first. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:439776dae6aef666419699463d0881010915522cc709feabb814e97bd216681d"
+    "content_hash": "sha256:2fa31be3d5b44986943ee6ba84279be387f79b100528b2ceb388daa4bb77e7da"
   },
   "entries": [
     {
@@ -729,6 +729,43 @@
         "## [2026-10-09] decide | check scripts: names, result words and exit codes, owner steps in gates, drafts for P2-P8, report formats P1 needs",
         "## [2026-10-09] lint | p0.17 scripts step: P0 gate PASS, P1 gate FAIL as expected, script test PASS, portal check clean",
         "## [2026-10-09] plan | p0.17 step \"scripts\" committed: check scripts for every task and phase, P0 gate passes"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-portal-shell",
+      "date": "2026-10-09",
+      "title": "New portal: Overview, phase popups and clickable ids built",
+      "done": "Claude rebuilt the portal as read-only. The old wiki browser, search, lint page, approval screens and approval API are gone. The portal now reads only the plain-language files, checks each against its fixed shape, and shows this Overview as in your chosen mockup. Each phase opens in a popup, and every id opens a short explainer.",
+      "next": "Claude builds the other six tabs (Roadmap, Architecture, Decisions, Research, Questions, Log) from your mockups.",
+      "decisions": [
+        {
+          "what": "The wiki check stays as a command-line tool; only its page was removed",
+          "by": "claude"
+        },
+        {
+          "what": "The portal checks every file against the same shapes the end-of-turn check uses",
+          "by": "claude"
+        },
+        {
+          "what": "Phase popups show each check script's name and how to run it, not its contents",
+          "by": "claude"
+        },
+        {
+          "what": "Fonts are stored with the portal, so nothing is fetched from the internet",
+          "by": "claude"
+        },
+        {
+          "what": "The portal refuses every request that is not a plain read",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-09] decide | portal shell: what was removed, what stays, data layer, fonts, read-only gate, test setup",
+        "## [2026-10-09] lint | p0.17 portal shell: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
+        "## [2026-10-09] code | p0.17 portal shell: read-only data layer, Layout-A shell, reference popup, Overview and phase popup"
       ],
       "phase": "phase-p0-planning"
     }

@@ -183,6 +183,14 @@ yet (every approvable page is PENDING).**
   Checks: P0 gate PASS in one run (262 s); P1 gate FAIL as expected before P1 (p1.1 passes every installed tool and
   fails only on cargo-deny and the unsaved toolchain record); script test PASS; portal check clean; lint:wiki 0 errors;
   mask scan 0 unmasked ([p0.17-scripts-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-scripts-checks.txt)).
+- p0.17 step "portal-data-shell" done: `interactive_plan/` is now the **read-only portal**. The wiki browser, search,
+  lint view, approvals inbox, approve bar and `POST /api/approvals` are removed (git history keeps them); the wiki check
+  (`npm run lint:wiki`, `npm run gate`) stays as a command-line tool. New: zod schemas generated from
+  `plan/portal/schema/` (a test keeps them in step; PowerShell Test-Json agrees on every case), the Layout-A shell of the
+  Main mockup with self-hosted IBM Plex fonts, one reference popup for every id, the Overview and the phase popup; the
+  six other tabs show a placeholder until the next step. Every route refuses non-loopback Hosts and any method other than
+  GET and HEAD. Checks: `npm run verify` exit 0 (708 unit, 28 browser tests), P0 gate PASS, portal check clean, mask scan
+  0 unmasked ([p0.17-portal-shell-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-portal-shell-checks.txt)).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -193,7 +201,16 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "scripts" verified and committed 2026-10-09 (`adc3651`); next the new portal site)
+- task: p0.17 step "portal-data-shell" (session s01, 2026-10-09)
+- intent: rebuild `interactive_plan/` as the read-only portal: remove the wiki browser, search, lint view, approvals
+  inbox, approve bar and approvals POST API with their tests; add a zod data layer over `plan/portal/*.json` (in sync
+  with `plan/portal/schema/`), the Layout-A shell (Main mockup), the reference popup and the Overview page with the
+  phase popup; unit and browser tests. The wiki lint engine (`lib/lint`, `lib/wiki`, `npm run lint:wiki`) stays.
+- planned paths: `interactive_plan/**`, `scripts/verify/p0.13-*.ps1`, `p0.14-*.ps1`, `p0.15-*.ps1`, `p0.17-*.ps1`,
+  `wiki/architecture/components/comp-interactive-plan.md`, `plan/portal/architecture.json`, `plan/portal/refs.json`,
+  `plan/portal/overview.json`, `plan/portal/log.json`, evidence `wiki/raw/evidence/phase-p0-planning/p0.17-portal-shell-checks.txt`
+- rollback: `git restore --staged --worktree -- interactive_plan scripts wiki plan` and `git clean` of new files under
+  `interactive_plan/` only after the owner agrees (nothing committed yet)
 
 ## Blockers
 

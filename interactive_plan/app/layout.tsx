@@ -1,52 +1,29 @@
-// Global layout (ip-routes-and-views §2): top bar (name, nav, search, theme toggle, pending-approvals
-// counter), global banners (invalid approvals.json, lint errors, read-only mode) and the theme
-// script that runs before first paint (§4). System fonts only; no external requests.
+// Portal shell (Layout A of the owner-approved Main mockup, 2026-10-09): brand, top tabs, the
+// "Read-only · steer in Claude Code" badge, the theme toggle, a data-problem banner, and the global
+// reference popup. The portal reads only plan/portal/*.json and plan/approvals.json (adr-0023,
+// adr-0024); nothing in it writes. Fonts are self-hosted (app/fonts.ts): no external requests.
 import type { Metadata } from "next";
 import Link from "next/link";
-import NavLinks from "@/components/NavLinks";
-import SearchBox from "@/components/SearchBox";
-import ThemeToggle from "@/components/ThemeToggle";
+import RefProvider from "@/components/portal/RefProvider";
+import TopNav from "@/components/portal/TopNav";
 import ThemeInitScript from "@/components/ThemeInitScript";
-import { config, getApprovals, getIndex, getLint } from "@/lib/server/data";
-import { needsAttentionCount } from "@/lib/views/inbox";
-import { suggestionList, type Suggestion } from "@/lib/wiki/search";
+import ThemeToggle from "@/components/ThemeToggle";
+import { getPortal, getRefData } from "@/lib/portal/server";
+import { plexMono, plexSans } from "./fonts";
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
-  title: { default: "Ferrum plan", template: "%s · Ferrum plan" },
-  description: "Local planning tool for the Ferrum wiki: browse, search, review and approve.",
+  title: { default: "Ferrum · Plan Portal", template: "%s · Ferrum Plan Portal" },
+  description: "Read-only portal: where the Ferrum project stands, in plain words. Steer it in Claude Code.",
 };
 
-async function shellData() {
-  const cfg = config();
-  const out = {
-    readonly: cfg.readonly,
-    pending: null as number | null,
-    approvalsInvalid: null as string | null,
-    lintErrors: null as number | null,
-    loadError: null as string | null,
-    suggestions: [] as Suggestion[],
-  };
-  try {
-    const [idx, view] = await Promise.all([getIndex(), getApprovals()]);
-    out.suggestions = suggestionList(idx);
-    out.pending = needsAttentionCount(view.items);
-    if (view.file.exists && !view.file.valid) out.approvalsInvalid = view.file.error ?? "invalid file";
-  } catch (e) {
-    out.loadError = e instanceof Error ? e.message : String(e);
-  }
-  try {
-    out.lintErrors = (await getLint()).summary.errors;
-  } catch {
-    out.lintErrors = null;
-  }
-  return out;
-}
-
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const d = await shellData();
+  const [portal, refData] = await Promise.all([getPortal(), getRefData()]);
+  const waiting = portal.files.overview?.questions_for_you.items.length ?? 0;
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${plexSans.variable} ${plexMono.variable}`}>
       <head>
         <ThemeInitScript />
       </head>
@@ -54,67 +31,46 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <header className="topbar">
-          <div className="topbar-inner">
-            <div className="topbar-row">
-              <Link href="/" className="brand" aria-label="Ferrum plan, dashboard">
-                <span className="brand-mark" aria-hidden="true">
-                  Fe
-                </span>
-                <span className="brand-name">Ferrum plan</span>
+        <RefProvider data={refData}>
+          <header className="topbar">
+            <div className="topbar-inner">
+              <Link href="/" className="brand" aria-label="Ferrum Plan Portal, overview">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" className="brand-mark">
+                  <path d="M4 20 L12 4 L20 20 Z" />
+                  <path d="M8 14 H16" />
+                </svg>
+                Ferrum <span className="brand-sub">· Plan Portal</span>
               </Link>
+              <TopNav waiting={waiting} />
               <div className="topbar-tools">
-                <SearchBox items={d.suggestions} />
-                {d.pending !== null && (
-                  <Link
-                    href="/approvals"
-                    className="pending-counter"
-                    title="Approvals needing attention: pending + stale + changes requested"
-                    data-testid="pending-counter"
-                  >
-                    <span className="pending-count">{d.pending}</span>
-                    <span className="pending-label">to review</span>
-                  </Link>
-                )}
+                <div className="readonly-badge" data-testid="readonly-badge">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <rect x="5" y="11" width="14" height="10" rx="2" />
+                    <path d="M8 11 V7 a4 4 0 0 1 8 0 V11" />
+                  </svg>
+                  Read-only · steer in Claude Code
+                </div>
                 <ThemeToggle />
               </div>
             </div>
-            <NavLinks />
-          </div>
-        </header>
-        <div className="banners">
-          {d.loadError && (
-            <div className="banner banner-red" role="alert">
-              <strong>Wiki could not be loaded.</strong> {d.loadError}
+          </header>
+          {portal.problems.length > 0 && (
+            <div className="banner" role="alert" data-testid="data-problems">
+              <strong>Part of the portal text could not be read.</strong> The pages show what they can. Tell Claude: “the portal shows a data
+              error”.
+              <ul>
+                {portal.problems.map((p) => (
+                  <li key={p.file}>
+                    <code>plan/portal/{p.file}</code>: {p.message}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
-          {d.approvalsInvalid && (
-            <div className="banner banner-red" role="alert">
-              <strong>plan/approvals.json is invalid.</strong> Every approval shows as INVALID until it is fixed: {d.approvalsInvalid}
-            </div>
-          )}
-          {d.lintErrors !== null && d.lintErrors > 0 && (
-            <div className="banner banner-amber">
-              <strong>
-                Wiki lint: {d.lintErrors} error{d.lintErrors === 1 ? "" : "s"}.
-              </strong>{" "}
-              <Link href="/lint">Open the lint report</Link> (same engine as <code>cd interactive_plan &amp;&amp; npm run lint:wiki</code>).
-            </div>
-          )}
-          {d.readonly && (
-            <div className="banner banner-grey">
-              <strong>Read-only mode</strong> (PLAN_READONLY=1): approvals are disabled.
-            </div>
-          )}
-        </div>
-        <main id="main" className="main" tabIndex={-1}>
-          {children}
-        </main>
-        <footer className="footer">
-          <p>
-            Local planning tool. Reads <code>wiki/</code> at request time; the wiki is the source of truth.
-          </p>
-        </footer>
+          <main id="main" className="main" tabIndex={-1}>
+            {children}
+          </main>
+        </RefProvider>
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
-// IP-9 review fixes (ip-approvals-api §3): the Host allowlist on every route (proxy.ts ->
-// hostGate), the response security headers (no framing, same-origin subresources) and the loopback
+// The Host allowlist on every route (proxy.ts ->
+// hostGate; kept from IP-9 for the read-only portal of p0.17), the response security headers (no framing, same-origin subresources) and the loopback
 // launcher used by every server npm script (scripts/serve.mjs follows PLAN_PORT like lib/config.ts).
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -39,11 +39,27 @@ describe("hostGate (every route)", () => {
     expect(hostGate(req("http://127.0.0.1:3417/", null), 3417)!.status).toBe(403);
   });
 
-  it("answers /api/ paths with the JSON error envelope", async () => {
+  it("answers former /api/ paths with the same plain 403 (the portal has no API)", async () => {
     const r = hostGate(req("http://127.0.0.1:3417/api/approvals", "evil.example:3417"), 3417)!;
     expect(r.status).toBe(403);
-    expect(r.headers.get("content-type")).toMatch(/^application\/json/);
-    expect((await r.json()).error.code).toBe("FORBIDDEN_ORIGIN");
+    expect(r.headers.get("content-type")).toMatch(/^text\/plain/);
+    expect(await r.text()).toMatch(/^403 FORBIDDEN_ORIGIN/);
+  });
+
+  it.each(["POST", "PUT", "PATCH", "DELETE", "OPTIONS", "post"])("refuses %s from a loopback Host with 405 (the portal only reads)", async (method) => {
+    const r = hostGate({ ...req("http://127.0.0.1:3417/", "127.0.0.1:3417"), method }, 3417)!;
+    expect(r.status).toBe(405);
+    expect(r.headers.get("allow")).toBe("GET, HEAD");
+    expect(r.headers.get("x-frame-options")).toBe("DENY");
+    expect(await r.text()).toMatch(/^405 READ_ONLY/);
+  });
+
+  it.each(["GET", "HEAD", "get"])("lets %s through", (method) => {
+    expect(hostGate({ ...req("http://127.0.0.1:3417/", "127.0.0.1:3417"), method }, 3417)).toBeNull();
+  });
+
+  it("checks the Host before the method", () => {
+    expect(hostGate({ ...req("http://127.0.0.1:3417/", "evil.example:3417"), method: "POST" }, 3417)!.status).toBe(403);
   });
 
   it("tolerates an unparsable URL", () => {

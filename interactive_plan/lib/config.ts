@@ -1,6 +1,7 @@
 /**
  * Environment -> absolute paths (ip-spec §6). Pure apart from reading the env object it is given,
- * so tests can pass their own env and cwd.
+ * so tests can pass their own env and cwd. The portal only reads (adr-0023): plan/portal/*.json and
+ * plan/approvals.json for the pages, wiki/ and STATUS.md for the wiki check (npm run lint:wiki).
  */
 import path from "node:path";
 
@@ -11,14 +12,12 @@ export interface PlanConfig {
   wikiDir: string;
   /** Root STATUS.md (absolute, read-only). */
   statusFile: string;
-  /** Directory holding approvals.json (absolute). */
+  /** The plan/ directory (absolute): approvals.json and portal/. */
   dataDir: string;
-  /** dataDir/approvals.json (absolute). */
+  /** dataDir/approvals.json (absolute, read-only for the portal; Claude records approvals). */
   approvalsFile: string;
-  /** PLAN_READONLY=1 disables every write (POST -> 403). */
-  readonly: boolean;
-  /** PLAN_APPEND_LOG (default 1): append `approval` log entries after a successful write. */
-  appendLog: boolean;
+  /** dataDir/portal (absolute): the plain-language JSON the portal renders (adr-0024). */
+  portalDir: string;
   /** PLAN_PORT (default 3417). */
   port: number;
 }
@@ -43,8 +42,7 @@ export function getConfig(env: Env = process.env, cwd: string = process.cwd()): 
     statusFile,
     dataDir,
     approvalsFile: path.join(dataDir, "approvals.json"),
-    readonly: env.PLAN_READONLY?.trim() === "1",
-    appendLog: env.PLAN_APPEND_LOG?.trim() !== "0",
+    portalDir: path.join(dataDir, "portal"),
     port,
   };
 }

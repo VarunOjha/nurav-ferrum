@@ -18,24 +18,29 @@ phase_introduced: phase-p0-planning
 shipped: false
 unsafe_code: false
 responsibilities:
-  - "Visualise the plan: architecture graph from component connects edges, phase dependency graph, milestones, risks, decisions, traceability (owner directive 2)"
-  - "Read wiki/ frontmatter and markdown directly at runtime with fs; never copy wiki content (llm-wiki note recommendation)"
-  - "Let the owner approve, request changes or reject approvable pages; persist to plan/approvals.json with content_hash and scope_hash (scoping Q14, adr-0016)"
-  - "Compute effective approval states (PENDING, APPROVED, APPROVED_VOLATILE_DRIFT, STALE, CHANGES_REQUESTED, REJECTED, INVALID) per wiki SCHEMA section 10"
-  - "Serve on 127.0.0.1 only; validate request bodies; write approvals atomically"
+  - "Show the plan to the owner in plain language: a read-only portal that renders only the portal JSON in plan/portal/ (adr-0024), never the wiki pages themselves"
+  - "Validate every portal file against plan/portal/schema/ with zod schemas generated from those JSON Schemas (scripts/gen-portal-schemas.mjs; a test keeps them in step and PowerShell Test-Json referees)"
+  - "Make every id clickable: a reference popup shows its refs.json explainer, related ids open in the same popup"
+  - "Show approval state read-only from plan/approvals.json; never write it (the owner approves in Claude Code and Claude records, adr-0023)"
+  - "Serve on 127.0.0.1 only; refuse non-loopback Host headers and every method other than GET and HEAD; no external requests (fonts self-hosted)"
+  - "Run the normative wiki check (npm run lint:wiki) and the phase entry-gate report (npm run gate); these read wiki/ but are command-line tools, not portal pages"
 interfaces:
-  - "GET pages and graphs (server components reading ../wiki)"
-  - "POST /api/approvals (zod-validated, loopback only)"
+  - "GET pages: Overview (/), Roadmap, Architecture, Decisions, Research, Questions, Log (server components reading ../plan/portal/*.json)"
+  - "npm run lint:wiki, npm run gate (wiki check and entry-gate report, command line)"
 connects: []
 ---
 
 # comp-interactive-plan
 
-> **Changing in task p0.17 (portal v2):** the owner now approves in Claude Code and Claude records approvals
-> ([adr-0023](../../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)); the app becomes a read-only
-> portal that reads only plain-language JSON ([adr-0024](../../decisions/adr-0024-portal-reads-plain-language-json.md))
-> and shows the architecture in four groups ([adr-0026](../../decisions/adr-0026-architecture-four-groups.md)). The
-> responsibilities below describe the v1 code until the rebuild lands.
+> **Rebuilt in task p0.17 (portal v2), in progress:** the owner approves in Claude Code and Claude records approvals
+> ([adr-0023](../../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)); the app is now a read-only
+> portal that reads only plain-language JSON ([adr-0024](../../decisions/adr-0024-portal-reads-plain-language-json.md)).
+> Done (2026-10-09, step "portal-data-shell"): the wiki browser, search, lint view, approvals inbox, approve bar and
+> the `POST /api/approvals` route were removed (their code stays in git history); the data layer, the shell of the
+> approved Main mockup, the reference popup, the Overview and the phase popup exist. Next: the Roadmap, Architecture
+> (four groups, [adr-0026](../../decisions/adr-0026-architecture-four-groups.md)), Decisions, Research, Questions and
+> Log views, which show a placeholder until then. The responsibilities and interfaces above describe the new portal;
+> the text below about graphs and the approvals file describes v1 and is kept as history.
 
 Planning tooling for owner review (adr-0016; [Next.js note](../../raw/research/nextjs-stack.md)). It is **not part of Ferrum** and has **no runtime edge** to any Ferrum component, so `connects` is empty. Its interaction with the repo is file I/O only: it reads `wiki/**` and writes `plan/approvals.json` ([data flows §6](../ov-arch-data-flows.md)).
 

@@ -3582,8 +3582,8 @@
       "id": "comp-interactive-plan",
       "kind": "component",
       "title": "Plan portal (this site)",
-      "summary": "The site you are reading. A planning tool, not part of Ferrum. Being rebuilt as a read-only portal that shows Claude's plain-language summaries; you approve things in Claude Code.",
-      "status": "Built; being rebuilt",
+      "summary": "The site you are reading. A planning tool, not part of Ferrum. Now a read-only portal that shows Claude's plain-language text: the Overview is rebuilt, the other tabs follow next. You approve things in Claude Code.",
+      "status": "Overview rebuilt; other tabs next",
       "related": []
     },
     {

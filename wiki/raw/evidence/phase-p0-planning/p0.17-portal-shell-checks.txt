@@ -1,0 +1,228 @@
+RAW EVIDENCE - p0.17 step "portal-data-shell": read-only portal shell, data layer, Overview, popups; phase-p0-planning, session s01
+Immutable raw evidence (SCHEMA 3.1). Captured 2026-10-09 by Claude from the repo root, PowerShell 7.6.6, Node v24.20.0, on HEAD 517e3c9
+with the step changes in the working tree (interactive_plan/, scripts/verify/p0.13-p0.17, scripts/gates/p0-gate.ps1 wording,
+comp-interactive-plan, plan/portal/{architecture,refs,overview,log}.json, STATUS, wiki/log.md). Saved through pwsh tools/mask.ps1 --stdin (adr-0027).
+
+Contents:
+  1. npm run verify in interactive_plan (IP_REQUIRE_BIND_PROBE=1): summary lines   -> exit 0
+  2. P0 gate (pwsh scripts/run-all-checks.ps1 -Phase P0)                        -> exit 0
+  3. Task scripts p0.13, p0.14, p0.15 (changed) and p0.17 (changed)              -> 0, 0, 0, 2 (NOT READY: waits for approvals)
+  4. Script test, quick lint, mask scan, portal check, npm audit summary
+
+===== 1. npm run verify (summary lines) =====
+> interactive_plan@0.1.0 verify
+> npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e
+> interactive_plan@0.1.0 typecheck
+> next typegen && tsc --noEmit
+> interactive_plan@0.1.0 lint
+> eslint .
+> interactive_plan@0.1.0 test
+> vitest run
+ Test Files  21 passed (21)
+      Tests  708 passed (708)
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+wiki lint: wiki wiki, status STATUS.md, approvals plan/approvals.json (absent), git ok, today 2026-10-09
+lint: 0 errors, 34 warnings, 2 info (pages: 202)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+> interactive_plan@0.1.0 build
+> next build
+✓ Compiled successfully in 773ms
+Route (app)
+> interactive_plan@0.1.0 test:e2e
+> playwright test
+E2E guard: 22 real files unchanged (approvals.json absent)
+  28 passed (30.4s)
+
+Wiki check test files (vitest, lint:wiki):
+ ✓ tests/lint/real-wiki-loader.test.ts (6 tests) 746ms
+ ✓ tests/lint/wiki-lint.test.ts (3 tests | 1 skipped) 3156ms
+
+Browser tests (Playwright):
+  ✓   1 [chromium] › tests\e2e\overview.spec.ts:31:5 › the overview shows where we are, questions, the next step, phases and the latest log
+  ✓   2 [chromium] › tests\e2e\overview.spec.ts:85:5 › each phase card opens its popup; Esc and the close button close it and focus returns to the card
+  ✓   3 [chromium] › tests\e2e\overview.spec.ts:110:5 › a phase popup opens from the keyboard
+  ✓   4 [chromium] › tests\e2e\refs.spec.ts:16:5 › every id on the overview resolves to an explainer
+  ✓   5 [chromium] › tests\e2e\refs.spec.ts:24:5 › keyboard: Enter opens the explainer, Esc closes it, focus returns to the id
+  ✓   6 [chromium] › tests\e2e\refs.spec.ts:43:5 › Space opens it too, and the close button closes it
+  ✓   7 [chromium] › tests\e2e\refs.spec.ts:55:5 › related ids open in the same dialog, and Back returns
+  ✓   8 [chromium] › tests\e2e\refs.spec.ts:78:5 › an id inside a phase popup opens on top; Esc closes only the explainer, then the popup
+  ✓   9 [chromium] › tests\e2e\refs.spec.ts:98:5 › a click on the backdrop closes the explainer
+  ✓  10 [chromium] › tests\e2e\security.spec.ts:23:7 › every route: Host allowlist and security headers › a spoofed Host (DNS rebinding) gets 403 on every route and leaks no portal text
+  ✓  11 [chromium] › tests\e2e\security.spec.ts:35:7 › every route: Host allowlist and security headers › a static asset with a spoofed Host gets 403 as well
+  ✓  12 [chromium] › tests\e2e\security.spec.ts:44:7 › every route: Host allowlist and security headers › loopback Hosts are served, with X-Frame-Options DENY and a same-origin CSP (control)
+  ✓  13 [chromium] › tests\e2e\security.spec.ts:58:7 › read-only › the approvals API of v1 is gone and every method except GET and HEAD is refused
+  ✓  14 [chromium] › tests\e2e\security.spec.ts:73:7 › read-only › the page says it is read-only and offers no approve button
+  ✓  15 [chromium] › tests\e2e\security.spec.ts:81:5 › no request leaves this computer (fonts and scripts are served by the portal itself)
+  ✓  16 [chromium] › tests\e2e\security.spec.ts:100:5 › clickjacking: another origin cannot frame the portal
+  ✓  17 [chromium] › tests\e2e\security.spec.ts:163:5 › bind: the server accepts 127.0.0.1 and refuses every non-loopback address of this machine
+  ✓  18 [chromium] › tests\e2e\shell.spec.ts:16:7 › Overview tab: landmarks, one h1, current tab marked, no errors
+  ✓  19 [chromium] › tests\e2e\shell.spec.ts:16:7 › Roadmap tab: landmarks, one h1, current tab marked, no errors
+  ✓  20 [chromium] › tests\e2e\shell.spec.ts:16:7 › Architecture tab: landmarks, one h1, current tab marked, no errors
+  ✓  21 [chromium] › tests\e2e\shell.spec.ts:16:7 › Decisions tab: landmarks, one h1, current tab marked, no errors
+  ✓  22 [chromium] › tests\e2e\shell.spec.ts:16:7 › Research tab: landmarks, one h1, current tab marked, no errors
+  ✓  23 [chromium] › tests\e2e\shell.spec.ts:16:7 › Questions tab: landmarks, one h1, current tab marked, no errors
+  ✓  24 [chromium] › tests\e2e\shell.spec.ts:16:7 › Log tab: landmarks, one h1, current tab marked, no errors
+  ✓  25 [chromium] › tests\e2e\shell.spec.ts:31:5 › the skip link is the first stop and jumps to the content
+  ✓  26 [chromium] › tests\e2e\shell.spec.ts:40:5 › theme toggle: dark and light apply, persist across a reload, and System clears the choice
+  ✓  27 [chromium] › tests\e2e\shell.spec.ts:58:5 › an unknown address shows the 404 page inside the portal frame
+  ✓  28 [chromium] › tests\e2e\shell.spec.ts:65:5 › phone width: the overview and a phase popup fit without sideways scrolling
+
+===== 2. P0 gate =====
+Running the P0 gate: scripts/gates/p0-gate.ps1
+Ferrum check P0-gate: Planning: end-of-phase gate
+Why: the plan app and the wiki must be fully checked before any Ferrum code is written.
+Run at 2026-10-09 22:35 on commit 517e3c9 (with uncommitted changes)
+------------------------------------------------------------------------
+
+Part 1 - Wiki check (run once, reused below)
+  PASS   Wiki check: zero errors (4 s)
+         202 pages: 0 errors, 34 warnings (each reviewed in the log)
+
+Part 2 - Task checks p0.1 to p0.12
+  PASS   Task p0.1: Save the starting documents
+         scripts/verify/p0.1-starting-documents.ps1: RESULT: PASS - p0.1 (2 PASS; 0 s)
+  PASS   Task p0.2: Write five research notes
+         scripts/verify/p0.2-research-notes.ps1: RESULT: PASS - p0.2 (3 PASS; 0 s)
+  PASS   Task p0.3: Write the wiki rules and live status (1 s)
+         scripts/verify/p0.3-wiki-rules.ps1: RESULT: PASS - p0.3 (3 PASS; 1 s)
+  PASS   Task p0.4: Describe the architecture and its parts
+         scripts/verify/p0.4-architecture-pages.ps1: RESULT: PASS - p0.4 (2 PASS; 0 s)
+  PASS   Task p0.5: Write the decisions and the risk register
+         scripts/verify/p0.5-decisions-risks.ps1: RESULT: PASS - p0.5 (3 PASS; 0 s)
+  PASS   Task p0.6: Write the research plan pages (1 s)
+         scripts/verify/p0.6-research-plan.ps1: RESULT: PASS - p0.6 (2 PASS; 0 s)
+  PASS   Task p0.7: Write phase pages, index and log
+         scripts/verify/p0.7-phases-index-log.ps1: RESULT: PASS - p0.7 (3 PASS; 0 s)
+  PASS   Task p0.8: Check the whole wiki (1 s)
+         scripts/verify/p0.8-wiki-check.ps1: RESULT: PASS - p0.8 (4 PASS; 1 s)
+  PASS   Task p0.9: Install Node and record versions
+         scripts/verify/p0.9-node-toolchain.ps1: RESULT: PASS - p0.9 (4 PASS; 0 s)
+  PASS   Task p0.10: Create the plan app skeleton (17 s)
+         scripts/verify/p0.10-plan-app-skeleton.ps1: RESULT: PASS - p0.10 (6 PASS; 17 s)
+  PASS   Task p0.11: Teach the app to read the wiki (2 s)
+         scripts/verify/p0.11-wiki-reader.ps1: RESULT: PASS - p0.11 (2 PASS; 2 s)
+  PASS   Task p0.12: Fingerprint pages exactly like the reference (6 s)
+         scripts/verify/p0.12-fingerprints.ps1: RESULT: PASS - p0.12 (2 PASS; 6 s)
+
+Part 3 - Test gate (covers tasks p0.13 to p0.16)
+  PASS   Style and type checks (9 s)
+         typecheck and code style: exit 0
+  PASS   Unit tests (23 s)
+         Tests  708 passed (708)
+  PASS   Browser tests (production build, this computer only) (31 s)
+         28 passed (30.5s)
+  PASS   Production build (7 s)
+         npm run build: exit 0
+  PASS   Fingerprint cross-check (6 s)
+         the app, the rulebook program and PowerShell agree (task check p0.12)
+  PASS   Wiki check
+         zero errors (part 1)
+  YOURS  Your walkthrough
+         Open the portal, look at every tab, and tell Claude what does not match the plan or is unclear.
+  YOURS  Open questions
+         Answer or defer each question Claude asks with the approval waves.
+
+Part 4 - Housekeeping
+  PASS   Portal text is in step with the wiki (4 s)
+         portal-sync: clean - 18 files, 252 translated records, 376 refs
+  PASS   No real machine values in committed files (6 s)
+         mask scan: 622 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+  PASS   Tool tests pass (Python tools and the portal checker) (31 s)
+         Ran 34 tests in 5.208s (Python); test-portal-sync-check: 20 passed, 0 failed
+  PASS   Every check script can be read by PowerShell
+         156 files parsed (scripts/ and tools/); 150 scripts linked from the portal files
+  YOURS  Your approvals (task p0.17)
+         Approve the P1 pages in Claude Code, wave by wave; Claude records each approval.
+  YOURS  Your exit approval (task p0.18)
+         When everything above passes and you are satisfied, tell Claude "I approve the P0 exit".
+------------------------------------------------------------------------
+RESULT: PASS - P0-gate (23 PASS, 4 YOURS; 157 s)
+All automatic P0 checks passed in one run.
+Still yours to do by hand: Your walkthrough; Open questions; Your approvals (task p0.17); Your exit approval (task p0.18).
+What to tell Claude: nothing is needed. If you ran it for a review, say "P0-gate check passed".
+
+===== 3. Task scripts =====
+Ferrum check p0.13: Build the app's views and wiki check
+Why: the plan must be readable in views, and checked automatically.
+Run at 2026-10-09 22:38 on commit 517e3c9 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Browser tests open every view without errors (25 s)
+         browser tests: 20 passed (24.4s)
+  PASS   The wiki check runs and reports zero errors (5 s)
+         39 rules over 202 pages: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p0.13 (2 PASS; 30 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.13 check passed".
+=> p0.13-plan-app-views exit 0
+Ferrum check p0.14: Build the approvals store
+Why: approvals must not be lost or forged.
+Run at 2026-10-09 22:39 on commit 517e3c9 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Approval state, approvals-file and request-gate tests pass (2 s)
+         unit tests: Tests  66 passed (66)
+  PASS   Claude's approval recorder and checker pass their tests (4 s)
+         Ran 25 tests in 4.189s
+  PASS   Requests from other computers and websites are refused (17 s)
+         browser security tests: 8 passed (15.6s)
+------------------------------------------------------------------------
+RESULT: PASS - p0.14 (3 PASS; 23 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.14 check passed".
+=> p0.14-approvals-store exit 0
+Ferrum check p0.15: Build the approval screens
+Why: an approval must go out of date the moment its page changes.
+Run at 2026-10-09 22:39 on commit 517e3c9 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Editing an approved page makes its approval outdated (2 s)
+         approval state and label tests: Tests  43 passed (43)
+------------------------------------------------------------------------
+RESULT: PASS - p0.15 (1 PASS; 2 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.15 check passed".
+=> p0.15-approval-screens exit 0
+Ferrum check p0.17: Portal v2, then your review
+Why: you read the plan in plain words and approve it in Claude Code.
+Run at 2026-10-09 22:39 on commit 517e3c9 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Portal text is complete and up to date with the wiki (4 s)
+         portal-sync: clean - 18 files, 252 translated records, 376 refs
+  PASS   Every task and phase has a check script that PowerShell can read (1 s)
+         156 files parsed (scripts/ and tools/); 150 scripts linked from the portal files
+  PASS   The portal reads the text correctly (shapes and clickable ids) (20 s)
+         portal tests: Tests  65 passed (65)
+  WAIT   Your approvals of the pages P1 depends on are recorded
+         Waiting for your approval of the P1 pages in Claude Code. Not approved yet: schema (PENDING), phase-p1-foundation (PENDING), adr-0021 (PENDING), adr-0006 (PENDING), adr-0007 (PENDING), adr-0010 (PENDING), adr-0011 (PENDING), adr-0012 (PENDING), adr-0014 (PENDING), adr-0018 (PENDING), adr-0019 (PENDING), comp-core (PENDING), comp-webview2-runtime (PENDING), comp-windows-os (PENDING).
+------------------------------------------------------------------------
+RESULT: NOT READY - p0.17 (3 PASS, 1 WAIT; 26 s)
+Not finished yet, and nothing is broken. Waiting on: Your approvals of the pages P1 depends on are recorded.
+What to tell Claude: nothing, unless you expected this to be finished.
+=> p0.17-portal-v2 exit 2
+
+===== 4. Housekeeping =====
+--- pwsh scripts/test-check-scripts.ps1
+Ferrum check scripts: The check scripts themselves
+Why: a broken check script must be caught before the day it is needed.
+Run at 2026-10-09 22:39 on commit 517e3c9 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Every PowerShell file parses without errors
+         156 files parsed (scripts/ and tools/)
+  PASS   Every check script follows the house rules
+         150 task and gate scripts
+  PASS   Every task and phase names an existing script with the agreed name
+         150 scripts linked from the portal files
+------------------------------------------------------------------------
+RESULT: PASS - scripts (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "scripts check passed".
+--- python tools/quick_lint.py
+202 files checked, 0 errors, 0 warnings
+--- pwsh tools/mask.ps1 --scan
+mask scan: 622 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+--- pwsh tools/portal-sync-check.ps1
+portal-sync: clean - 18 files, 252 translated records, 376 refs
+--- npm audit (interactive_plan), last lines
+braces  *
+5 high severity vulnerabilities
