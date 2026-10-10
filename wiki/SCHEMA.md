@@ -88,7 +88,7 @@ Divergence to note: in the gist the LLM owns the wiki outright. In Ferrum the LL
 - **Code** (`apps/`, `crates/`, `benchmarks/`, …) is not a raw source and not a wiki page. It is the thing the wiki describes.
 - **Root summary files** (§4.2) are human-facing views generated from the wiki.
 - **`plan/approvals.json`** is the owner's approval record (§10). Claude writes it, only for decisions the owner gave in Claude Code (adr-0023).
-- **Portal JSON** is the plain-language copy of the wiki that the read-only portal renders (adr-0024). Its location and shape are added here when the pipeline is built (task p0.17).
+- **Portal JSON** is the plain-language copy of the wiki that the read-only portal renders (adr-0024). It lives in `plan/portal/` (one schema per file in `plan/portal/schema/`, rules in `plan/portal/pipeline.json`). Each translated record carries `source: {wiki_path, content_hash}`, the §10.2 `content_hash` of the page it was written from. Claude MUST update the matching JSON in the **same edit** as the wiki page or `STATUS.md` (repo skill `.claude/skills/wiki-to-portal/`), and `pwsh tools/portal-sync-check.ps1` MUST report clean before a commit that changes wiki pages once the portal JSON exists (a Claude Code Stop hook runs it; [ops-portal-pipeline](operations/ops-portal-pipeline.md)). This is not a `lint:wiki` code: it checks the JSON, not the wiki.
 - **Check scripts** are PowerShell 7 scripts: one per task and one gate script per phase, kept in the repo (adr-0025).
 
 **Precedence when sources disagree:** raw sources > accepted ADRs > this schema > other wiki pages > root summary files > portal JSON and the portal. Any disagreement found is a lint finding (§9.3).
@@ -141,7 +141,10 @@ A page's type MUST match its directory. The allowed `type` values per directory 
 | `README.md`, `PLAN.md`, `ARCHITECTURE.md`, `RESEARCH_PLAN.md`, `AI_USAGE.md` | Human-facing summaries. Each MUST link to its canonical wiki pages, and the wiki wins on conflict | none (GitHub renders frontmatter badly) |
 | `plan/approvals.json` | Owner approvals (§10). Written by Claude only through `tools/approvals_record.py`, only for a decision the owner gave in Claude Code and transcribed to `raw/owner/` (adr-0023) | n/a (JSON) |
 | `interactive_plan/` | Read-only plan portal, Next.js (`comp-interactive-plan`, not shipped with Ferrum; adr-0023, adr-0024) | n/a |
-| `tools/` | Claude's helper scripts: `quick_lint.py`, `approvals_check.py`, `approvals_record.py`, `mask.ps1`, `raw-sanctioned-edits.tsv` | n/a |
+| `tools/` | Claude's helper scripts: `quick_lint.py`, `approvals_check.py`, `approvals_record.py`, `mask.ps1`, `raw-sanctioned-edits.tsv`, `portal-sync-check.ps1` (+ its test and fixture) | n/a |
+| `plan/portal/` | Plain-language portal JSON, its schemas and pipeline rules (§3.4, adr-0024, [ops-portal-pipeline](operations/ops-portal-pipeline.md)) | n/a (JSON) |
+| `.claude/` | Claude Code project settings (the portal-sync Stop hook) and repo skills (`skills/wiki-to-portal/`) | n/a |
+| `scripts/verify/`, `scripts/gates/` | PowerShell 7 check scripts: one per task (`<task-id>-<slug>.ps1`), one gate script per phase (`<pN>-gate.ps1`) (adr-0025) | n/a |
 | `.env.local-map` | Real machine values behind the masks (adr-0027). **Gitignored, never committed, never quoted in the wiki** | n/a |
 
 ---
@@ -537,7 +540,7 @@ A lint run is **clean** when it reports zero errors. Warnings are listed in the 
 The project assumes sessions **will** be interrupted without warning.
 
 - **Continuous checkpointing (MUST):** after every completed task (`pN.M`), update `STATUS.md` (frontmatter + "Next action") and append a `code` or relevant log entry. A session cut off abruptly then loses at most one task.
-- **Bookkeeping commit** (once local commits are authorised, adr-0011): after the task commit, make a second commit `docs(status): checkpoint pN.M [pN.M]` containing **only** `STATUS.md`, `wiki/log.md` and (if changed) `wiki/index.md`. No amend.
+- **Bookkeeping commit** (once local commits are authorised, adr-0011): after the task commit, make a second commit `docs(status): checkpoint pN.M [pN.M]` containing **only** `STATUS.md`, `wiki/log.md`, (if changed) `wiki/index.md`, and their portal JSON (`plan/portal/overview.json`, `plan/portal/log.json`, once they exist; §3.4). No amend.
 - **Full handoff:** run it when work stops, when the owner asks, or when the context is judged near its limit. Write it early rather than late.
   1. Run LINT (or the quickest subset if the context is short: FM-*, ID-*, REF-DANGLING, INDEX-MISSING).
   2. Write `operations/handoffs/handoff-YYYY-MM-DD-sNN.md` (§6.15).

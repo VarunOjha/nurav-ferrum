@@ -1,0 +1,23 @@
+{
+  "id": "research",
+  "title": "Research",
+  "summary": "The questions the measurements must answer.",
+  "questions": [
+    {
+      "id": "rq-01",
+      "title": "Memory footprint",
+      "summary": "Does Ferrum use less memory than a browser for the same sites?",
+      "status": "Open",
+      "related": [],
+      "question": "Does Ferrum use less memory than Chrome or Edge for the same work?",
+      "source": {
+        "wiki_path": "wiki/research/questions/rq-01-footprint.md",
+        "content_hash": "sha256:a3dbc138359fc0b2b74971411f148cdb7375e7cb93bd1f855b64ec40b71ff30b"
+      }
+    }
+  ],
+  "hypotheses": [],
+  "experiments": [],
+  "metrics": [],
+  "workloads": []
+}

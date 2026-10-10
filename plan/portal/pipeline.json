@@ -1,0 +1,57 @@
+{
+  "$comment": "Wiki -> portal JSON pipeline config (adr-0024; design note wiki/operations/ops-portal-pipeline.md). Read by tools/portal-sync-check.ps1. 'files': every portal file and the schema it must match (paths relative to plan/portal/). 'translate': every wiki page matched by 'pages' needs a record with source.wiki_path = that page inside 'into' ({stem} = file name without .md). 'sections': every heading matched in 'page' needs a record whose 'field' holds the captured text. 'id_patterns': text that looks like an id and must resolve in refs.json. 'skip_keys': JSON keys whose values are not portal text (paths, code, hashes, log headings).",
+  "version": 1,
+  "hook_flag": ".hook-enabled",
+  "refs_file": "refs.json",
+  "files": [
+    { "path": "overview.json", "schema": "overview.schema.json" },
+    { "path": "roadmap.json", "schema": "roadmap.schema.json" },
+    { "path": "phases/*.json", "schema": "phase.schema.json" },
+    { "path": "decisions.json", "schema": "decisions.schema.json" },
+    { "path": "risks.json", "schema": "risks.schema.json" },
+    { "path": "research.json", "schema": "research.schema.json" },
+    { "path": "architecture.json", "schema": "architecture.schema.json" },
+    { "path": "questions.json", "schema": "questions.schema.json" },
+    { "path": "log.json", "schema": "log.schema.json" },
+    { "path": "refs.json", "schema": "refs.schema.json" }
+  ],
+  "translate": [
+    { "pages": "STATUS.md", "into": "overview.json" },
+    { "pages": "wiki/phases/phase-*.md", "into": "phases/{stem}.json" },
+    { "pages": "wiki/phases/phase-*.md", "into": "roadmap.json" },
+    { "pages": "wiki/decisions/adr-*.md", "into": "decisions.json" },
+    { "pages": "wiki/risks/risk-*.md", "into": "risks.json" },
+    { "pages": "wiki/research/questions/rq-*.md", "into": "research.json" },
+    { "pages": "wiki/research/hypotheses/hyp-*.md", "into": "research.json" },
+    { "pages": "wiki/research/experiments/exp-*.md", "into": "research.json" },
+    { "pages": "wiki/research/metrics/metric-*.md", "into": "research.json" },
+    { "pages": "wiki/research/workloads/wl-*.md", "into": "research.json" },
+    { "pages": "wiki/architecture/components/comp-*.md", "into": "architecture.json" },
+    { "pages": "wiki/overview/ov-open-questions.md", "into": "questions.json" },
+    { "pages": "wiki/log.md", "into": "log.json" }
+  ],
+  "sections": [
+    { "page": "wiki/overview/ov-open-questions.md", "heading": "^## (Q-[0-9]{3})\\b", "into": "questions.json", "field": "id" },
+    { "page": "wiki/log.md", "heading": "^(## \\[[0-9]{4}-[0-9]{2}-[0-9]{2}\\] .+?)\\s*$", "into": "log.json", "field": "covers" }
+  ],
+  "skip_keys": ["$schema", "$comment", "source", "script", "path", "code", "covers", "aliases"],
+  "id_patterns": [
+    { "kind": "phase", "regex": "\\bphase-p[0-8](?:-[a-z0-9]+)+\\b" },
+    { "kind": "phase (short)", "regex": "\\bP[0-8]\\b" },
+    { "kind": "task", "regex": "\\bp[0-8]\\.[0-9]+\\b" },
+    { "kind": "decision", "regex": "\\badr-[0-9]{4}\\b" },
+    { "kind": "risk", "regex": "\\brisk-r[0-9]{2,}\\b" },
+    { "kind": "research question", "regex": "\\brq-[0-9]{2,}\\b" },
+    { "kind": "hypothesis", "regex": "\\bhyp-[0-9]{2,}\\b" },
+    { "kind": "experiment", "regex": "\\bexp-[a-z0-9]+(?:-[a-z0-9]+)*\\b" },
+    { "kind": "metric", "regex": "\\bmetric-[a-z0-9]+(?:-[a-z0-9]+)*\\b" },
+    { "kind": "workload", "regex": "\\bwl-[a-z0-9]+(?:-[a-z0-9]+)*\\b" },
+    { "kind": "configuration", "regex": "\\bcfg-[a-z0-9]+(?:-[a-z0-9]+)*\\b" },
+    { "kind": "component", "regex": "\\bcomp-[a-z0-9]+(?:-[a-z0-9]+)*\\b" },
+    { "kind": "page", "regex": "\\b(?:ov|qual|ops|ip)-[a-z0-9]+(?:-[a-z0-9]+)*\\b" },
+    { "kind": "handoff", "regex": "\\bhandoff-[0-9]{4}-[0-9]{2}-[0-9]{2}-s[0-9]{2,}\\b" },
+    { "kind": "question", "regex": "\\bQ-[0-9]{3}\\b" },
+    { "kind": "plan-app build step", "regex": "\\bIP-[0-9]+\\b" },
+    { "kind": "commit", "regex": "\\b(?=[0-9a-f]*[0-9])(?=[0-9a-f]*[a-f])[0-9a-f]{7,40}\\b" }
+  ]
+}

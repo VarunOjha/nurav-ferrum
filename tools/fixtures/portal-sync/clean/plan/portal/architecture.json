@@ -1,0 +1,66 @@
+{
+  "id": "architecture",
+  "title": "Architecture",
+  "summary": "Four groups; the application is what people use.",
+  "layers": [
+    {
+      "id": "layer-base",
+      "name": "Shared base",
+      "summary": "Settings, URL checks and shared types.",
+      "trust": "trusted",
+      "components": [
+        "comp-core"
+      ],
+      "language": "Rust"
+    }
+  ],
+  "groups": [
+    {
+      "id": "application",
+      "name": "Application",
+      "purpose": "What people use.",
+      "flow": "click → engine → website",
+      "components": [
+        "comp-core"
+      ]
+    },
+    {
+      "id": "benchmark",
+      "name": "Benchmark",
+      "purpose": "Fair, repeated tests.",
+      "flow": "harness → browser → numbers",
+      "components": []
+    },
+    {
+      "id": "testing",
+      "name": "Testing & quality",
+      "purpose": "Proves each feature works.",
+      "flow": "change → tests → commit",
+      "components": []
+    },
+    {
+      "id": "research",
+      "name": "Research & analysis",
+      "purpose": "Turns numbers into the paper.",
+      "flow": "raw results → statistics → paper",
+      "components": []
+    }
+  ],
+  "components": [
+    {
+      "id": "comp-core",
+      "title": "Core library",
+      "summary": "Settings, URL checks and shared types used by every engine part.",
+      "group": "application",
+      "layer": "layer-base",
+      "status": "Planned",
+      "phase": "phase-p1-foundation",
+      "connects": [],
+      "related": [],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-core.md",
+        "content_hash": "sha256:3d84ed08a65a0ce1fa912e888da058c0e756f689ecf084a1d8fac743583aaaad"
+      }
+    }
+  ]
+}

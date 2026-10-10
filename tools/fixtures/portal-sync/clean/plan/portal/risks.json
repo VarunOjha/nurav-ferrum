@@ -1,0 +1,24 @@
+{
+  "id": "risks",
+  "title": "Risks",
+  "summary": "What could go wrong, and what we do about it.",
+  "items": [
+    {
+      "id": "risk-r02",
+      "title": "Multi-view feature may be unstable",
+      "summary": "The feature that puts many web views in one window is experimental and could break.",
+      "likelihood": 3,
+      "impact": 4,
+      "mitigation": "Test it in a throwaway app during P1, before building on it.",
+      "phase": "phase-p1-foundation",
+      "status": "Open",
+      "related": [
+        "adr-0007"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r02-tauri-multiwebview-unstable.md",
+        "content_hash": "sha256:2aece7308cf7818ebec0eb5178dd30723e3cd253fbd355eb1accd188fe014740"
+      }
+    }
+  ]
+}

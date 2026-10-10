@@ -1,0 +1,47 @@
+{
+  "id": "overview",
+  "title": "Where we are",
+  "summary": "A tiny made-up project used to test the checker.",
+  "source": {
+    "wiki_path": "STATUS.md",
+    "content_hash": "sha256:1ec50377337b170e4015e57c8d454bf38d502427e9e4537ba61f854f393e738b"
+  },
+  "updated": "2026-10-09",
+  "where_we_are": [
+    {
+      "item": "Current phase",
+      "state": "P1 Foundation, not started",
+      "ref": "phase-p1-foundation"
+    }
+  ],
+  "next_action": {
+    "who": "you",
+    "where_we_are": [
+      {
+        "item": "Checker",
+        "state": "Built, waiting for a test run"
+      }
+    ],
+    "why": "The gate script proves the empty project builds → you see a green line → P1 can start.",
+    "script": {
+      "path": "scripts/gates/p1-gate.ps1",
+      "parts": [
+        {
+          "code": "pwsh scripts/gates/p1-gate.ps1",
+          "explains": "Runs every P1 check in order and stops at the first failure."
+        }
+      ]
+    },
+    "tell_claude": "“Gate passed”, or paste the red line."
+  },
+  "questions_for_you": {
+    "open": 1,
+    "items": [
+      {
+        "id": "Q-001",
+        "question": "Should test scripts also run automatically on every change?",
+        "asked": "2026-10-08"
+      }
+    ]
+  }
+}

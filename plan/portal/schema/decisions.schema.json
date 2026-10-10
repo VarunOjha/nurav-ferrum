@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "decisions.schema.json",
+  "title": "decisions.json - every decision record (ADR) in plain words",
+  "description": "One item per wiki/decisions/adr-*.md.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "items"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "number",
+          "title",
+          "summary",
+          "why",
+          "catch",
+          "status",
+          "decided_by",
+          "date",
+          "replaced_by",
+          "related",
+          "source"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^adr-[0-9]{4}$"
+          },
+          "number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "$ref": "#/$defs/title"
+          },
+          "summary": {
+            "$ref": "#/$defs/summary"
+          },
+          "why": {
+            "$ref": "#/$defs/short_text"
+          },
+          "catch": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 240,
+            "pattern": "^[^\\n]+$"
+          },
+          "status": {
+            "enum": [
+              "Proposed",
+              "Accepted",
+              "Replaced",
+              "Rejected"
+            ]
+          },
+          "decided_by": {
+            "$ref": "#/$defs/who"
+          },
+          "date": {
+            "$ref": "#/$defs/date"
+          },
+          "replaced_by": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^adr-[0-9]{4}$"
+          },
+          "related": {
+            "$ref": "#/$defs/id_list"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 0
+    }
+  },
+  "additionalProperties": false
+}

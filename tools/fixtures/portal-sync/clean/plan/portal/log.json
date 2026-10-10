@@ -1,0 +1,31 @@
+{
+  "id": "log",
+  "title": "Log",
+  "summary": "What happened, in plain words.",
+  "source": {
+    "wiki_path": "wiki/log.md",
+    "content_hash": "sha256:3321c4ae9d99903fc9f3ac7ebf409c3493a9534fdb910761ab1b29556f13a78c"
+  },
+  "entries": [
+    {
+      "id": "log-2026-10-09-1",
+      "date": "2026-10-09",
+      "title": "Fixture work done",
+      "done": "Wrote the fixture pages and saved them.",
+      "next": "Run the checker.",
+      "decisions": [
+        {
+          "what": "Keep the fixture tiny",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "ab12cd3",
+      "phase": "phase-p1-foundation",
+      "covers": [
+        "## [2026-10-08] plan | fixture first entry",
+        "## [2026-10-09] code | fixture second entry"
+      ]
+    }
+  ]
+}

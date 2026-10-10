@@ -559,3 +559,33 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: What was done → the owner's portal-v2 decisions are written rules (adr-0023 to adr-0027, SCHEMA, CLAUDE.md, ops-approval-workflow), committed evidence is masked, approvals can be recorded with tools/approvals_record.py, and the lint accepts only the listed masking edits. After the commit, npm run lint:wiki again reported 0 errors (the history check sees the masking commit as sanctioned). STATUS: In-flight cleared; new blocker "first push" (Q-221).
 - next: Claude builds the wiki-to-JSON pipeline for the portal (p0.17, adr-0024)
 - commit: 5d33859
+
+## [2026-10-09] ingest | Claude Code docs on Stop hooks and project skills
+
+- session: s01
+- pages: [index, ops-portal-pipeline]
+- sources: [raw/research/claude-code-hooks-skills.md]
+- result: New research note (official docs read 2026-10-09) → it backs the hook and skill design. Stop hooks get stop_hook_active in their input; exit 2 keeps the turn open and shows stderr to Claude; any other non-zero exit is a non-blocking error; exec form with args is recommended for ${CLAUDE_PROJECT_DIR}; SKILL.md lives in .claude/skills/<name>/ with optional frontmatter (description is what triggers it). Also observed: PowerShell Test-Json cannot follow a $ref into another schema file. MANIFEST.sha256 gained 1 line.
+
+## [2026-10-09] decide | wiki-to-portal pipeline: where the JSON lives, its shapes, the checker, the hook, check-script folders
+
+- session: s01
+- pages: [ops-portal-pipeline, schema, ops-git-conventions]
+- sources: [raw/owner/2026-10-09-s01-portal-v2-decisions.md, raw/owner/2026-10-09-s01-wave0c.md, raw/research/claude-code-hooks-skills.md]
+- result: Decided by Claude under the delegation policy (tooling and schema; the owner can overturn any of them). (1) Portal JSON in plan/portal/ (overview, roadmap, phases/<phase-id>, decisions, risks, research, architecture, questions, log, refs), one JSON Schema each in plan/portal/schema/, shared pieces in common.schema.json; the checker merges those in because Test-Json cannot follow a cross-file $ref. (2) Every translated record carries source {wiki_path, content_hash} → a later page edit shows as STALE. (3) Rules are data in plan/portal/pipeline.json: which pages map to which file, that every Q-NNN question and every log heading needs an entry, which words count as ids. (4) Shapes enforce "short and crisp": title up to 80 characters, summary up to 360, every thought chain must contain an arrow. (5) Ids in prose are written as [words](ref:id); every id-looking word must have an explainer in refs.json, including P0-P8 aliases and commit shas. (6) Nullable fields use type lists, not anyOf, so errors stay readable. (7) Check-script folders (left open by adr-0025): scripts/verify/<task-id>-<slug>.ps1 and scripts/gates/<pN>-gate.ps1, as in the approved phase-popup mockup; a script field is null until the file exists. (8) Stop hook in .claude/settings.json, exec form pwsh ... -Hook; it does nothing unless plan/portal/.hook-enabled exists, never blocks when stop_hook_active is true, and exits 1 (not 2) if the checker crashes so it can never trap a session. (9) The bookkeeping commit also carries plan/portal/log.json and overview.json once they exist (same-edit rule).
+- stales: [ops-git-conventions] (no approvals exist yet)
+
+## [2026-10-09] schema | portal JSON location and the same-edit rule
+
+- session: s01
+- pages: [schema, ops-git-conventions]
+- sources: [raw/owner/2026-10-09-s01-portal-v2-decisions.md]
+- result: SCHEMA §3.4 now names plan/portal/, the source hash on each record, the same-edit MUST and the clean check before commits (not a lint:wiki code: it checks JSON, not the wiki); §4.2 gains rows for plan/portal/, .claude/ and scripts/verify + scripts/gates, and tools/ lists the checker; §9.5 bookkeeping commit includes the portal log and overview JSON. CLAUDE.md §2 and §7 say the same (checked by reading both, SCHEMA-SPLIT). ops-git-conventions step 5 matches.
+- stales: [schema] (CLAUDE.md changed too; no approval exists yet)
+
+## [2026-10-09] lint | p0.17 pipeline step: 20 checker tests pass, quick lint and lint:wiki 0 errors
+
+- session: s01
+- pages: [ops-portal-pipeline]
+- sources: [raw/evidence/phase-p0-planning/p0.17-pipeline-checks.txt]
+- result: pwsh tools/test-portal-sync-check.ps1: 20 passed, 0 failed (clean fixture passes; STALE, MISSING, missing phase file, BAD-SHAPE, BAD-JSON, UNKNOWN-REF, UNCOVERED log heading and question, ORPHAN, MISSING-SCRIPT, MISSING-FILE, DUP-ID each caught; ids inside paths and code are not flagged; -Hash equals the SCHEMA §10.2 Python reference on a CRLF file; hook: off → 0, on + stale → 2 with the reason on stderr, stop_hook_active → 0, clean → 0, repo found through CLAUDE_PROJECT_DIR; real repo checked in 0.68 s). Real repo: 158 MISSING, 9 MISSING-FILE, as expected before the content JSON is written (next step). The configured hook command on the real repo exits 0 (switched off). python tools/quick_lint.py 202 files 0 errors; npm run lint:wiki 0 errors, 34 warnings (the same 34 as before, none from the new pages), 2 info.

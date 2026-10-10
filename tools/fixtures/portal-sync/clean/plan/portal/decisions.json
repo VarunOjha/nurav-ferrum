@@ -1,0 +1,26 @@
+{
+  "id": "decisions",
+  "title": "Decisions",
+  "summary": "Every decision in plain words.",
+  "items": [
+    {
+      "id": "adr-0007",
+      "number": 7,
+      "title": "One window, many web views",
+      "summary": "Ferrum draws its own buttons in a trusted panel; each website lives in its own sandboxed view.",
+      "why": "Keeps websites away from privileged code.",
+      "catch": "The Tauri feature is still marked experimental.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "risk-r02"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0007-child-webviews.md",
+        "content_hash": "sha256:478f12ab908750e05d83e8658a19a6284195afa17a72e23a832cb77f44e1e921"
+      }
+    }
+  ]
+}

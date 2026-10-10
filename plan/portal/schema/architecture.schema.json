@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "architecture.schema.json",
+  "title": "architecture.json - layered view of the Rust app, the four groups, every component",
+  "description": "Layers and groups follow adr-0026 and the owner-approved Architecture mockup. Components are translated from wiki/architecture/components/comp-*.md.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "layers",
+    "groups",
+    "components"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "summary",
+          "trust",
+          "components"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "name": {
+            "$ref": "#/$defs/title"
+          },
+          "summary": {
+            "$ref": "#/$defs/summary"
+          },
+          "trust": {
+            "enum": [
+              "trusted",
+              "untrusted",
+              "not ours"
+            ]
+          },
+          "components": {
+            "$ref": "#/$defs/id_list"
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30,
+            "pattern": "^[^\\n]+$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "purpose",
+          "flow",
+          "components"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "application",
+              "benchmark",
+              "testing",
+              "research",
+              "planning"
+            ]
+          },
+          "name": {
+            "$ref": "#/$defs/title"
+          },
+          "purpose": {
+            "$ref": "#/$defs/summary"
+          },
+          "flow": {
+            "$ref": "#/$defs/chain"
+          },
+          "components": {
+            "$ref": "#/$defs/id_list"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "footnote": {
+      "type": "object",
+      "required": [
+        "text",
+        "components"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "#/$defs/short_text"
+        },
+        "components": {
+          "$ref": "#/$defs/id_list"
+        }
+      },
+      "additionalProperties": false
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "group",
+          "layer",
+          "status",
+          "phase",
+          "connects",
+          "related",
+          "source"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^comp-[a-z0-9-]+$"
+          },
+          "title": {
+            "$ref": "#/$defs/title"
+          },
+          "summary": {
+            "$ref": "#/$defs/summary"
+          },
+          "group": {
+            "enum": [
+              "application",
+              "benchmark",
+              "testing",
+              "research",
+              "planning"
+            ]
+          },
+          "layer": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._#:-]*$",
+            "maxLength": 80,
+            "description": "An id that refs.json can explain (page id, task id, Q-NNN, commit, or an alias such as P1)."
+          },
+          "status": {
+            "$ref": "#/$defs/status_label"
+          },
+          "phase": {
+            "$ref": "#/$defs/phase_id"
+          },
+          "connects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "to",
+                "what"
+              ],
+              "properties": {
+                "to": {
+                  "type": "string",
+                  "pattern": "^comp-[a-z0-9-]+$"
+                },
+                "what": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80,
+                  "pattern": "^[^\\n]+$"
+                }
+              },
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "related": {
+            "$ref": "#/$defs/id_list"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 0
+    }
+  },
+  "additionalProperties": false
+}

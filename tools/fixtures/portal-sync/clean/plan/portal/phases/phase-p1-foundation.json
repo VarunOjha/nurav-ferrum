@@ -1,0 +1,44 @@
+{
+  "id": "phase-p1-foundation",
+  "short": "P1",
+  "title": "Foundation",
+  "one_line_goal": "Repo ready; riskiest ideas tested",
+  "summary": "Get the tools and repo ready, then test the riskiest assumptions with small throwaway experiments.",
+  "status": "Not started",
+  "progress": {
+    "done": 0,
+    "total": 1
+  },
+  "step_order": [
+    "Tools",
+    "Gate",
+    "Your review"
+  ],
+  "tasks": [
+    {
+      "id": "p1.1",
+      "title": "Confirm the toolchain",
+      "chain": "Tools installed → record exact versions → every later result names the tools it was built with.",
+      "check": "Each tool prints a version; versions saved as evidence.",
+      "script": null
+    }
+  ],
+  "test_gate": {
+    "explanation": "Tools work → gate script passes → you review → only then does the next phase start.",
+    "rows": [
+      {
+        "check": "Tools",
+        "proves": "All required tools installed, versions recorded"
+      }
+    ],
+    "script": "scripts/gates/p1-gate.ps1"
+  },
+  "related": [
+    "adr-0007",
+    "risk-r02"
+  ],
+  "source": {
+    "wiki_path": "wiki/phases/phase-p1-foundation.md",
+    "content_hash": "sha256:bd90a3a77745a3a3cbd8b7a6f2f4c0ead0cedb3f0729164a96e052de5b6469d7"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "refs.schema.json",
+  "title": "refs.json - an explainer for every id the portal can show",
+  "description": "Every id that appears anywhere in portal text (bare, or as [words](ref:id)) must be an id or an alias here (UNKNOWN-REF otherwise). The portal shows the title and summary in a popup.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "refs"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "summary",
+          "status",
+          "related"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "kind": {
+            "enum": [
+              "phase",
+              "task",
+              "decision",
+              "risk",
+              "research-question",
+              "hypothesis",
+              "experiment",
+              "metric",
+              "workload",
+              "configuration",
+              "component",
+              "question",
+              "commit",
+              "page",
+              "step",
+              "term",
+              "group",
+              "layer"
+            ]
+          },
+          "title": {
+            "$ref": "#/$defs/title"
+          },
+          "summary": {
+            "$ref": "#/$defs/summary"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 40,
+            "pattern": "^[^\\n]+$",
+            "description": "Plain status words, e.g. 'Open', 'Done', 'Waiting for you'."
+          },
+          "related": {
+            "$ref": "#/$defs/id_list"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/id"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

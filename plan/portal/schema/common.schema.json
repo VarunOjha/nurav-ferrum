@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.schema.json",
+  "title": "Shared definitions for the plan portal JSON",
+  "description": "Every file schema refers to these as #/$defs/<name>. They are not repeated in each file: tools/portal-sync-check.ps1 merges them into each file schema before validating (Test-Json cannot follow a reference to another file). Any other validator (the portal) must do the same.",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._#:-]*$",
+      "maxLength": 80,
+      "description": "An id that refs.json can explain (page id, task id, Q-NNN, commit, or an alias such as P1)."
+    },
+    "id_list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/id"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[^\\n]+$",
+      "description": "Plain, short title. One line."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 360,
+      "pattern": "^[^\\n]+$",
+      "description": "One to three plain sentences for a smart non-specialist."
+    },
+    "chain": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400,
+      "pattern": "→",
+      "description": "Thought chain: cause → action → why it matters. Must contain at least one →."
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400,
+      "pattern": "^[^\\n]+$",
+      "description": "Plain text, one paragraph."
+    },
+    "short_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "pattern": "^[^\\n]+$"
+    },
+    "status_label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "pattern": "^[^\\n]+$",
+      "description": "Plain status words, e.g. 'Open', 'Done', 'Waiting for you'."
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,40}$"
+    },
+    "phase_id": {
+      "type": "string",
+      "pattern": "^phase-p[0-8]-[a-z0-9-]+$"
+    },
+    "who": {
+      "enum": [
+        "you",
+        "claude"
+      ],
+      "description": "'you' = the owner, 'claude' = Claude."
+    },
+    "script_path": {
+      "type": "string",
+      "pattern": "^(?!.*\\.\\.)[A-Za-z0-9._/-]+\\.ps1$",
+      "description": "Repo-relative path of a PowerShell 7 script, forward slashes. The file must exist (the checker reports MISSING-SCRIPT otherwise); use null until the script is written."
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "wiki_path",
+        "content_hash"
+      ],
+      "properties": {
+        "wiki_path": {
+          "type": "string",
+          "pattern": "^(?!.*\\.\\.)[A-Za-z0-9._/-]+\\.md$",
+          "description": "Repo-relative path of the page this record was translated from (wiki/... or STATUS.md)."
+        },
+        "content_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "SCHEMA §10.2 content_hash of that page at the moment of translation. A different current hash = STALE."
+        }
+      },
+      "additionalProperties": false
+    },
+    "schema_ref": {
+      "type": "string",
+      "description": "Optional pointer to this file's schema, for editors."
+    },
+    "phase_status": {
+      "enum": [
+        "Not started",
+        "Ready to start",
+        "In progress",
+        "Waiting for your review",
+        "Done",
+        "Blocked"
+      ],
+      "description": "Phase page status in plain words: planned, ready, in-progress, gate-review, done, blocked."
+    }
+  }
+}

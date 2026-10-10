@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "roadmap.schema.json",
+  "title": "roadmap.json - stages, one row per phase, and what every phase has in common",
+  "description": "Rows are translated from the phase pages (one source per row). 'same_in_every_phase' is written once here and not repeated in the phase files.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "stages",
+    "phases",
+    "same_in_every_phase"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "summary",
+          "phases"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "name": {
+            "$ref": "#/$defs/title"
+          },
+          "summary": {
+            "$ref": "#/$defs/summary"
+          },
+          "phases": {
+            "$ref": "#/$defs/id_list"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 5
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "short",
+          "name",
+          "one_line_goal",
+          "status",
+          "tasks_done",
+          "tasks_total",
+          "source"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/phase_id"
+          },
+          "short": {
+            "type": "string",
+            "pattern": "^P[0-8]$"
+          },
+          "name": {
+            "$ref": "#/$defs/title"
+          },
+          "one_line_goal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 90,
+            "pattern": "^[^\\n]+$"
+          },
+          "status": {
+            "$ref": "#/$defs/phase_status"
+          },
+          "tasks_done": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "tasks_total": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 9
+    },
+    "same_in_every_phase": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "summary"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "title": {
+            "$ref": "#/$defs/title"
+          },
+          "summary": {
+            "$ref": "#/$defs/summary"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

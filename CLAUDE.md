@@ -56,7 +56,7 @@ finding (SCHEMA-SPLIT). CLAUDE.md is approved together with `schema` (its hash i
 - Verify with the task's `verify` field. Then commit the task (local only), update STATUS, append a
   `code`/`plan` log entry with the task commit's sha, then make a second **bookkeeping commit**
   `docs(status): checkpoint pN.M [pN.M]` with only `STATUS.md`, `wiki/log.md` (and `wiki/index.md` if it
-  changed). No amend. The tree is then clean. A session cut off abruptly loses at most one task.
+  changed, plus their portal JSON `plan/portal/overview.json` and `plan/portal/log.json` once they exist). No amend. The tree is then clean. A session cut off abruptly loses at most one task.
 - Commits: Conventional Commits, `<type>(<scope>): <summary> [pN.M]`, body states what was run and the
   observed result, ending with the attribution trailer the Claude Code harness specifies
   (currently `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`).
@@ -129,6 +129,12 @@ schema (`wiki/SCHEMA.md` + this file). Operations and when to run them:
 
 Every op appends `## [YYYY-MM-DD] <op> | <title>` to `wiki/log.md` (append-only). New pages go in
 `wiki/index.md` in the same edit. Step-by-step: [ops-wiki-maintenance](wiki/operations/ops-wiki-maintenance.md).
+
+**Portal JSON (adr-0024):** every wiki or `STATUS.md` change also updates its plain-language JSON in
+`plan/portal/` in the **same edit**, using the repo skill `wiki-to-portal`
+(`.claude/skills/wiki-to-portal/SKILL.md`); then `pwsh tools/portal-sync-check.ps1` must print `clean`.
+A Stop hook runs that check once `plan/portal/.hook-enabled` exists. Details:
+[ops-portal-pipeline](wiki/operations/ops-portal-pipeline.md).
 
 ## 8. Approvals
 

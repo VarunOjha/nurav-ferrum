@@ -60,7 +60,9 @@ One verified task = one **task commit**, followed by one **bookkeeping commit** 
 3. Commit with the message format below.
 4. Record the short sha (`git rev-parse --short HEAD`) in the log entry `- commit:` line, clear
    In-flight and set `next_action` in STATUS.md.
-5. Bookkeeping commit: `git add -- STATUS.md wiki/log.md` (plus `wiki/index.md` if changed) and
+5. Bookkeeping commit: `git add -- STATUS.md wiki/log.md` (plus `wiki/index.md` if changed, and the
+   portal JSON `plan/portal/overview.json` and `plan/portal/log.json` once they exist; same-edit rule,
+   [ops-portal-pipeline](ops-portal-pipeline.md)) and
    `git commit -m "docs(status): checkpoint pN.M [pN.M]"` (with the trailer). Never `--amend` the
    task commit to fold these in: the sha in the log must stay valid. After this the tree is clean.
 

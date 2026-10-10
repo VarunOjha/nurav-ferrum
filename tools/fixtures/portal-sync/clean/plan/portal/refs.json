@@ -1,0 +1,80 @@
+{
+  "id": "refs",
+  "title": "References",
+  "summary": "A short explainer for every id the portal shows.",
+  "refs": [
+    {
+      "id": "phase-p1-foundation",
+      "kind": "phase",
+      "title": "P1 Foundation",
+      "summary": "Tools and repo ready; riskiest ideas tested.",
+      "status": "Not started",
+      "related": [],
+      "aliases": [
+        "P1"
+      ]
+    },
+    {
+      "id": "p1.1",
+      "kind": "task",
+      "title": "Confirm the toolchain",
+      "summary": "Record the exact tool versions.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "adr-0007",
+      "kind": "decision",
+      "title": "Decision 7: one window, many web views",
+      "summary": "Each website lives in its own sandboxed view.",
+      "status": "Accepted",
+      "related": [
+        "risk-r02"
+      ]
+    },
+    {
+      "id": "risk-r02",
+      "kind": "risk",
+      "title": "Multi-view feature may be unstable",
+      "summary": "Tested early in P1.",
+      "status": "Open",
+      "related": [
+        "adr-0007"
+      ]
+    },
+    {
+      "id": "rq-01",
+      "kind": "research-question",
+      "title": "Memory footprint",
+      "summary": "Does Ferrum use less memory?",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "comp-core",
+      "kind": "component",
+      "title": "Core library",
+      "summary": "Shared settings and types.",
+      "status": "Planned",
+      "related": []
+    },
+    {
+      "id": "Q-001",
+      "kind": "question",
+      "title": "Run tests on every change?",
+      "summary": "Asked in Claude Code on 8 Oct.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "ab12cd3",
+      "kind": "commit",
+      "title": "Fixture commit",
+      "summary": "Saved the fixture pages.",
+      "status": null,
+      "related": []
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "questions.schema.json",
+  "title": "questions.json - the questions log (questions are asked in Claude Code)",
+  "description": "Translated from wiki/overview/ov-open-questions.md. Every '## Q-NNN' section there needs an item here (the checker reports UNCOVERED otherwise).",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "source",
+    "items"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "asked",
+          "question",
+          "why_it_matters",
+          "status",
+          "answer",
+          "answered_on",
+          "blocks"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^Q-[0-9]{3}$"
+          },
+          "asked": {
+            "$ref": "#/$defs/date"
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[^\\n]+$"
+          },
+          "why_it_matters": {
+            "$ref": "#/$defs/short_text"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "answered",
+              "withdrawn"
+            ]
+          },
+          "answer": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 400,
+            "pattern": "^[^\\n]+$",
+            "description": "Plain text, one paragraph."
+          },
+          "answered_on": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          },
+          "blocks": {
+            "$ref": "#/$defs/id_list"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 0
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "risks.schema.json",
+  "title": "risks.json - every risk in plain words",
+  "description": "One item per wiki/risks/risk-*.md. Score = likelihood x impact is computed by the portal, not stored.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "items"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "likelihood",
+          "impact",
+          "mitigation",
+          "phase",
+          "status",
+          "related",
+          "source"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^risk-r[0-9]{2,}$"
+          },
+          "title": {
+            "$ref": "#/$defs/title"
+          },
+          "summary": {
+            "$ref": "#/$defs/summary"
+          },
+          "likelihood": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "impact": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "mitigation": {
+            "$ref": "#/$defs/short_text"
+          },
+          "phase": {
+            "$ref": "#/$defs/phase_id"
+          },
+          "status": {
+            "enum": [
+              "Open",
+              "Being reduced",
+              "Resolved",
+              "Happened",
+              "Accepted"
+            ]
+          },
+          "related": {
+            "$ref": "#/$defs/id_list"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 0
+    }
+  },
+  "additionalProperties": false
+}

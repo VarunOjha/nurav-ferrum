@@ -1,0 +1,37 @@
+{
+  "id": "roadmap",
+  "title": "Roadmap",
+  "summary": "Build the app first, then measure it, then write it up.",
+  "stages": [
+    {
+      "id": "stage-build",
+      "name": "Build",
+      "summary": "A working app that measures itself.",
+      "phases": [
+        "phase-p1-foundation"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "phase-p1-foundation",
+      "short": "P1",
+      "name": "Foundation",
+      "one_line_goal": "Repo ready; riskiest ideas tested",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 1,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:bd90a3a77745a3a3cbd8b7a6f2f4c0ead0cedb3f0729164a96e052de5b6469d7"
+      }
+    }
+  ],
+  "same_in_every_phase": [
+    {
+      "id": "every-phase-commit",
+      "title": "One commit per task",
+      "summary": "Each finished task is saved on its own, so an interruption loses at most one task."
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "schema/log.schema.json",
+  "id": "log",
+  "title": "Log",
+  "summary": "What happened in the project, in plain words, newest last.",
+  "source": {
+    "wiki_path": "wiki/log.md",
+    "content_hash": "sha256:deb4c6551b4c64d3ec4e64527f36e2e96a46741b68f4d49494afda98b996219f"
+  },
+  "entries": [
+    {
+      "id": "log-2026-10-09-pipeline",
+      "date": "2026-10-09",
+      "title": "The wiki-to-portal pipeline is built (switched off for now)",
+      "done": "Built the machinery that keeps the portal's plain-language text in step with the wiki: a rule book for Claude on how to write it, a shape for every portal file, a check script that spots outdated or missing text, and an automatic check at the end of each Claude turn. 20 tests pass. The automatic check stays off until the portal text exists.",
+      "next": "Claude writes the plain-language text for every page, then switches the automatic check on.",
+      "decisions": [
+        {
+          "what": "Portal text lives in plan/portal/, one file per portal tab, each with a fixed shape",
+          "by": "claude"
+        },
+        {
+          "what": "Each record remembers the fingerprint of its wiki page, so outdated text is caught",
+          "by": "claude"
+        },
+        {
+          "what": "Every id shown in the portal must have a short explainer popup",
+          "by": "claude"
+        },
+        {
+          "what": "Check scripts go in scripts/verify (one per task) and scripts/gates (one per phase)",
+          "by": "claude"
+        },
+        {
+          "what": "The end-of-turn check never blocks twice in a row and never traps a session if it breaks",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "phase": "phase-p0-planning",
+      "covers": [
+        "## [2026-10-09] ingest | Claude Code docs on Stop hooks and project skills",
+        "## [2026-10-09] decide | wiki-to-portal pipeline: where the JSON lives, its shapes, the checker, the hook, check-script folders",
+        "## [2026-10-09] schema | portal JSON location and the same-edit rule",
+        "## [2026-10-09] lint | p0.17 pipeline step: 20 checker tests pass, quick lint and lint:wiki 0 errors"
+      ]
+    }
+  ]
+}

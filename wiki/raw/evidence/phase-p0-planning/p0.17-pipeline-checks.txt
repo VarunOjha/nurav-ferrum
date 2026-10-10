@@ -1,0 +1,50 @@
+# p0.17 step 'pipeline' checks - 2026-10-09, session s01
+# pwsh 7.6.6, Python 3.12.10
+
+## 1. pwsh tools/test-portal-sync-check.ps1
+PASS  clean fixture passes (exit 0)
+PASS  STALE: a translated wiki page changed after its JSON was written
+PASS  MISSING: a new decision page has no record
+PASS  MISSING: a new phase page has no phase file
+PASS  BAD-SHAPE: a decision without a title, a task chain without an arrow
+PASS  BAD-JSON: a file that is not JSON
+PASS  UNKNOWN-REF: a bare id and a ref link with no explainer
+PASS  ids inside paths, code and log headings are not portal text (no false alarm)
+PASS  UNCOVERED: a new wiki log entry has no plain-language log entry
+PASS  UNCOVERED: a new open question has no item
+PASS  ORPHAN: the page a record was translated from was removed
+PASS  MISSING-SCRIPT: a gate script path that does not exist
+PASS  MISSING-FILE and DUP-ID
+PASS  -Hash equals the SCHEMA 10.2 Python reference (CRLF file)
+PASS  hook: switched off (no flag file) -> exit 0 even when stale
+PASS  hook: on, stale, stop_hook_active=false -> exit 2 (block) with a plain message
+PASS  hook: on, stale, stop_hook_active=true -> exit 0 (never loops)
+PASS  hook: on, clean -> exit 0
+PASS  hook: finds the repo through CLAUDE_PROJECT_DIR (as configured in .claude/settings.json)
+      real repo: 0.68 s, exit 1, portal-sync: 167 problem(s) - 158 MISSING, 9 MISSING-FILE
+PASS  speed: a full check of the real repo takes under 5 seconds
+
+test-portal-sync-check: 20 passed, 0 failed
+exit=0
+
+## 2. pwsh tools/portal-sync-check.ps1 (real repo; content JSON not written yet, so MISSING is expected)
+portal-sync: 167 problem(s) - 158 MISSING, 9 MISSING-FILE
+exit=1 wall_ms=830 (includes pwsh start-up)
+
+## 3. Hook as configured in .claude/settings.json, real repo, flag file absent
+exit=0 (expected 0: hook installed but switched off)
+plan/portal/.hook-enabled exists: no
+
+## 4. python tools/quick_lint.py
+202 files checked, 0 errors, 0 warnings
+exit=0
+
+## 5. npm run lint:wiki (interactive_plan)
+      Tests  12 passed | 1 skipped (13)
+ Test Files  3 passed (3)
+lint: 0 errors, 34 warnings, 2 info (pages: 202)
+exit=0
+(34 warnings: the same 34 as at the p0.17 rules step; none from the new pages)
+
+## 6. pwsh tools/mask.ps1 --scan (after staging this step's files)
+mask scan: 555 tracked files, 0 unmasked value group(s), 0 file(s) not checkable

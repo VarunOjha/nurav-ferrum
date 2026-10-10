@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "overview.schema.json",
+  "title": "overview.json - the briefing page",
+  "description": "Translated from STATUS.md. Holds the 'where we are' table, the next action in the owner's four-part format, and the questions waiting for the owner.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "source",
+    "updated",
+    "where_we_are",
+    "next_action",
+    "questions_for_you"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "updated": {
+      "$ref": "#/$defs/date"
+    },
+    "where_we_are": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item",
+          "state"
+        ],
+        "properties": {
+          "item": {
+            "$ref": "#/$defs/title"
+          },
+          "state": {
+            "$ref": "#/$defs/short_text"
+          },
+          "ref": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "next_action": {
+      "type": "object",
+      "required": [
+        "who",
+        "where_we_are",
+        "why",
+        "script",
+        "tell_claude"
+      ],
+      "properties": {
+        "who": {
+          "$ref": "#/$defs/who"
+        },
+        "where_we_are": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "item",
+              "state"
+            ],
+            "properties": {
+              "item": {
+                "$ref": "#/$defs/title"
+              },
+              "state": {
+                "$ref": "#/$defs/short_text"
+              }
+            },
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 6
+        },
+        "why": {
+          "$ref": "#/$defs/text"
+        },
+        "script": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "path",
+            "parts"
+          ],
+          "properties": {
+            "path": {
+              "$ref": "#/$defs/script_path"
+            },
+            "parts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "code",
+                  "explains"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 600
+                  },
+                  "explains": {
+                    "$ref": "#/$defs/short_text"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "tell_claude": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 240,
+          "pattern": "^[^\\n]+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "questions_for_you": {
+      "type": "object",
+      "required": [
+        "open",
+        "items"
+      ],
+      "properties": {
+        "open": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "question",
+              "asked"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^Q-[0-9]{3}$"
+              },
+              "question": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "pattern": "^[^\\n]+$"
+              },
+              "asked": {
+                "$ref": "#/$defs/date"
+              }
+            },
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 5
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
