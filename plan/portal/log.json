@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:cd30d4acc1d36c226948f835f3c3d4988928aedfc7ca487469b7a442b446fcf9"
+    "content_hash": "sha256:723691cc3af5056a1378a35d7178c0e8bf510fa88c19c67de9abac29da6d532f"
   },
   "entries": [
     {
@@ -929,10 +929,11 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "bc72c17",
       "covers": [
         "## [2026-10-10] ingest | Owner answers Q-008 (keep the accessibility checker) and directs Claude to pause between phases",
-        "## [2026-10-10] schema | Pause between phases: CLAUDE.md §1 and SCHEMA §9.7 exit-gate step 7"
+        "## [2026-10-10] schema | Pause between phases: CLAUDE.md §1 and SCHEMA §9.7 exit-gate step 7",
+        "## [2026-10-10] plan | p0.17 step \"q008-pause\" committed: Q-008 answered, pause between phases recorded"
       ],
       "phase": "phase-p0-planning"
     }

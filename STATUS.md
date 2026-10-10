@@ -224,7 +224,7 @@ yet (every approvable page is PENDING).**
   [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) rewritten for portal v2. Checks: P0 gate PASS,
   portal check clean, quick lint and lint:wiki 0 errors, mask scan 0 unmasked
   ([handoff-checks.txt](wiki/raw/evidence/phase-p0-planning/portal-v2/handoff-checks.txt)).
-- p0.17 step "q008-pause" (2026-10-10): the owner's chat words are ingested
+- p0.17 step "q008-pause" done (commit `bc72c17`, 2026-10-10): the owner's chat words are ingested
   ([raw/owner/2026-10-10-s01-q008-and-pause.md](wiki/raw/owner/2026-10-10-s01-q008-and-pause.md)). Q-008 answered: keep
   the accessibility checker (after asking why: "Okay, lets add."). Standing directive: "Make sure to pause when completing
   the planning phase and before building the next phase". The pause rule is now in CLAUDE.md §1, SCHEMA §9.7 (exit-gate
@@ -240,14 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "q008-pause" (ingest of the owner's chat words of 2026-10-10)
-- intent: record Q-008 answered (keep the accessibility checker) and the owner's standing directive to pause after
-  the planning phase and before building any next phase; make the pause rule explicit in CLAUDE.md, SCHEMA §9.7,
-  ops-session-protocol, adr-0014, the P0 exit task and STATUS; portal JSON in the same edit
-- paths: wiki/raw/owner/2026-10-10-s01-q008-and-pause.md (new), wiki/raw/MANIFEST.sha256, wiki/index.md,
-  wiki/overview/ov-open-questions.md, CLAUDE.md, wiki/SCHEMA.md, wiki/operations/ops-session-protocol.md,
-  wiki/decisions/adr-0014-milestone-review-checkpoints.md, wiki/phases/phase-p0-planning.md, wiki/log.md, plan/portal/*.json
-- rollback: `git restore` the edited paths and delete the new raw file (it is not committed yet)
+(empty: p0.17 step "q008-pause" (Q-008 answered, pause between phases recorded) verified and committed 2026-10-10 (`bc72c17`); next the owner walkthrough of the portal)
 
 ## Blockers
 

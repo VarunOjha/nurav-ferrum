@@ -842,3 +842,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-10-s01-q008-and-pause.md]
 - result: Owner's standing directive of 2026-10-10 written into the schema layer (SCHEMA §15: both files edited consistently). SCHEMA §9.7: new exit-gate step 7 "Pause": from the exit-ready point Claude stops, reports and waits; no work of the next phase (task, install, scaffold, spike) until the owner has signed off the phase and explicitly said in chat to start the next one, transcribed to raw/owner/ and logged `gate | <next-phase-id> go-ahead given`; a sign-off alone is not a go-ahead; the rule applies to P0 too. Entry-gate step 1 now also requires that go-ahead. CLAUDE.md §1 gains a "PAUSE between phases" paragraph after step 10 (with P0 as the immediate case: portal review, approvals in chat, P0 sign-off, then pause; P1 waits for the owner's explicit go), §8 says the exit approval is followed by the pause, §11 says no Ferrum code until P0 sign-off and the explicit go for P1. The §1 start order (steps 0-10) is unchanged, so SCHEMA §9.6 still matches it (SCHEMA-SPLIT checked by reading both).
 - stales: [schema] (SCHEMA.md content and CLAUDE.md, which is hashed into the schema approval as bootstrap_hash; no approvals exist yet)
+
+## [2026-10-10] plan | p0.17 step "q008-pause" committed: Q-008 answered, pause between phases recorded
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/owner/2026-10-10-s01-q008-and-pause.md]
+- result: What was done → the owner's answer to Q-008 (keep the accessibility checker) and his standing rule to pause after the planning phase and before building any next phase are saved and written into the session rules, the schema, the review decision and the P0 and P1 plans. STATUS: In-flight cleared; next action unchanged in substance (portal walkthrough, approvals in chat, P0 sign-off) and now ends with the pause: P1 does not start without the owner's explicit go. A refs.json explainer was added for the new commit.
+- next: the owner walks through the portal and says what reads unclear; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: bc72c17

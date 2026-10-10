@@ -4191,6 +4191,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "bc72c17",
+      "kind": "commit",
+      "title": "Commit: Accessibility checker kept; pause between phases",
+      "summary": "Your answer to keep the accessibility checker and your rule to pause after the planning phase and before building the next phase are saved in the plan and in Claude's session rules.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }
