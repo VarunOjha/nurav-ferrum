@@ -4221,6 +4221,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "97d3f22",
+      "kind": "commit",
+      "title": "Commit: tasks table in eight columns",
+      "summary": "Each phase's tasks table now has separate columns for id, title, what, why, how, logic, check script and state, and every task has a short what, why and how.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

@@ -240,10 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "task-columns" (owner request 2026-10-10, raw/owner/2026-10-10-s01-task-table-columns.md)
-- intent: phase popup tasks table gets separate columns id, title, what, why, how, logic, check script, state; task JSON gains what/why/how
-- planned paths: interactive_plan/** (PhasePopup, tests), plan/portal/schema/*, plan/portal/phases/*.json, plan/portal/log.json, plan/portal/overview.json, .claude/skills/wiki-to-portal/SKILL.md, tools/portal-sync-check.ps1, tools/fixtures/portal-sync/**, wiki/interactive-plan/ip-*.md, wiki/operations/ops-portal-pipeline.md, wiki/raw/owner/2026-10-10-s01-task-table-columns.md, wiki/raw/evidence/phase-p0-planning/portal-v2/
-- rollback: git restore the planned paths (raw transcript is new and kept)
+(empty: p0.17 step "task-columns" (eight separate columns in the phase popup's tasks table) verified and committed 2026-10-10 (`97d3f22`); next the owner restarts the portal and continues the walkthrough)
 
 ## Blockers
 

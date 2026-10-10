@@ -927,3 +927,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views, ip-testing, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/task-columns-checks.txt]
 - result: `npm run verify` exit 0 in one run (typecheck, eslint, 770 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 36 warnings, 2 info, build, 101 browser tests passed, E2E guard: real files unchanged), in a scratch git worktree of HEAD with this step's files copied in (byte-identical), so the owner's portal on 3417 kept running; the worktree was deleted afterwards. Screenshots of the P1 phase popup's tasks table at 1440 and 390 px in both themes read: all eight columns fit at 1440 px with no sideways scrolling, phone cards show the eight labelled rows; no defect. Quick lint 0 errors, portal check clean, portal-sync tests 27 passed, mask scan 0 unmasked on the final tree.
+
+## [2026-10-10] plan | p0.17 step "task-columns" committed: tasks table in eight columns
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/owner/2026-10-10-s01-task-table-columns.md, raw/evidence/phase-p0-planning/portal-v2/task-columns-checks.txt]
+- result: What was done → the owner asked for separate columns in the tasks table → every phase's tasks table now shows Id, Title, What, Why, How, Logic, Check script and State, and every task has a short what, why and how from its phase page → he can read each task at a glance. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause). A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear or what to change in the layout; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: 97d3f22

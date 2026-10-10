@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:4a158797d183929b8b027d14c05964b720ba12bbfb9591aa300d527335d83ff4"
+    "content_hash": "sha256:34af2e92c49aa511a826d8fb4a6bebacc20a3b23b59624bb5531c4500b1c69d1"
   },
   "entries": [
     {
@@ -1017,11 +1017,12 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "97d3f22",
       "covers": [
         "## [2026-10-10] ingest | Owner asks for separate columns in the phase popup's tasks table",
         "## [2026-10-10] code | p0.17 tasks table: eight columns, task JSON gains what, why and how",
-        "## [2026-10-10] lint | p0.17 tasks table: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px"
+        "## [2026-10-10] lint | p0.17 tasks table: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px",
+        "## [2026-10-10] plan | p0.17 step \"task-columns\" committed: tasks table in eight columns"
       ],
       "phase": "phase-p0-planning"
     }
