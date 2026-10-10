@@ -896,3 +896,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views, ip-testing, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/ref-mode-fixes-checks.txt]
 - result: `npm run verify` exit 0 in one run (typecheck, eslint, 757 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 36 warnings, 2 info, build, 96 browser tests passed including the 24 Ref mode tests, E2E guard: real files unchanged), in a scratch git worktree of HEAD with this step's files copied in (byte-identical), so the owner's portal on 3417 kept running. A probe on all seven tabs, both themes, 1440 and 390 px: top bar height and every block's position the same with Ref on and off; the last content ends above the bar. Screenshots of the header, phase, script and reference popups and the Layout map reviewed. Quick lint 0 errors, portal check clean, mask scan 0 unmasked on the final tree.
+
+## [2026-10-10] plan | p0.17 step "ref-mode-fixes" committed: Ref mode shows the real layout
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/ref-mode-fixes-checks.txt]
+- result: What was done → a review showed Ref mode changed the layout it names and hid page ends on a phone → it now moves nothing, leaves room for its bar, names repeated items with fixed numbers and words and has a jump list → the owner's layout feedback is about the real layout. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause). A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear or what to change in the layout; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: 89b45cf

@@ -17,7 +17,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the new Ref button). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button and its fixes). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,10 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "ref-mode-fixes" (review fixes for the Ref button)
-- intent: Ref mode must not change the layout it names (no extra space above blocks, header stays on one line), leave room for its bar at phone width, label the first visible log entry under any filter, give repeated items fixed ids and words from a registry (no list-position numbers), add jump links to the Layout map, clear the "Copied" message when a popup opens or closes, and keep keyboard focus in place.
-- paths: interactive_plan/lib/portal/uiRefs.ts, interactive_plan/components/portal/RefMode.tsx, interactive_plan/app/globals.css, interactive_plan/app/page.tsx, interactive_plan/app/roadmap/page.tsx, interactive_plan/app/architecture/page.tsx, interactive_plan/app/log/page.tsx, interactive_plan/app/layout.tsx, interactive_plan/components/portal/*.tsx, interactive_plan/tests/unit/ui-refs.test.ts, interactive_plan/tests/e2e/ref-mode.spec.ts, interactive_plan/README.md, wiki/interactive-plan/ip-routes-and-views.md, wiki/interactive-plan/ip-testing.md, wiki/raw/evidence/phase-p0-planning/portal-v2/ref-mode-fixes-checks.txt, plan/portal/*.json
-- rollback: git checkout -- <paths> (all tracked except the new evidence file)
+(empty: p0.17 step "ref-mode-fixes" (review fixes for the Ref button) verified and committed 2026-10-10 (`89b45cf`); next the owner restarts the portal and continues the walkthrough)
 
 ## Blockers
 

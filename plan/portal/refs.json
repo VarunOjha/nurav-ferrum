@@ -4211,6 +4211,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "89b45cf",
+      "kind": "commit",
+      "title": "Commit: Ref button shows the real layout",
+      "summary": "Ref mode no longer moves anything on the page, leaves room for its bar on a phone, gives repeated items fixed names and adds jump links to its list of names.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }
