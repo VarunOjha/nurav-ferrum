@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words, oldest first. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:2fa31be3d5b44986943ee6ba84279be387f79b100528b2ceb388daa4bb77e7da"
+    "content_hash": "sha256:6ed9d6f36ceecccb5c974eed6a9ed6a1ac7b93e95e17ef3b8829103178ab976c"
   },
   "entries": [
     {
@@ -761,11 +761,12 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "673cbdc",
       "covers": [
         "## [2026-10-09] decide | portal shell: what was removed, what stays, data layer, fonts, read-only gate, test setup",
         "## [2026-10-09] lint | p0.17 portal shell: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
-        "## [2026-10-09] code | p0.17 portal shell: read-only data layer, Layout-A shell, reference popup, Overview and phase popup"
+        "## [2026-10-09] code | p0.17 portal shell: read-only data layer, Layout-A shell, reference popup, Overview and phase popup",
+        "## [2026-10-09] plan | p0.17 step \"portal-data-shell\" committed: read-only portal with Overview, phase popup and reference popup"
       ],
       "phase": "phase-p0-planning"
     }

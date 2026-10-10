@@ -675,3 +675,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-09-s01-plan-app-feedback.md, raw/owner/2026-10-09-s01-portal-v2-decisions.md, raw/evidence/phase-p0-planning/p0.17-portal-shell-checks.txt]
 - result: interactive_plan/ is now the read-only portal (task p0.17, step "portal-data-shell"). New: lib/portal (generated zod schemas, loader with plain problems and a size/mtime memo, reference tokenizer and lookup, view helpers, tabs), scripts/gen-portal-schemas.mjs, components/portal (RefProvider with the one reference dialog, Ref, RichText, Modal, PhasePopup, TopNav, TabPlaceholder), the Overview page per the Main mockup, placeholder pages for the six other tabs, self-hosted IBM Plex fonts, new CSS tokens from the mockups with a dark theme; proxy refuses non-loopback Hosts (403) and every method other than GET and HEAD (405). Removed: the v1 pages, components, approvals write path and their tests (see the decide entry). Tests: portal-schemas, portal-refs, portal-load, approvals-file (unit); overview, refs, shell, security (browser). comp-interactive-plan responsibilities and interfaces updated in the same commit (stales its approval; none exists). Check scripts p0.13, p0.14, p0.15 and p0.17 updated.
 - next: Claude builds the Roadmap, Architecture, Decisions, Research, Questions and Log views from the approved mockups
+
+## [2026-10-09] plan | p0.17 step "portal-data-shell" committed: read-only portal with Overview, phase popup and reference popup
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/p0.17-portal-shell-checks.txt]
+- result: What was done → the portal is read-only and reads only plan/portal and plan/approvals.json; its Overview, phase popup and reference popup follow the approved mockups, and the v1 wiki browser and approval screens are gone. STATUS: In-flight cleared, next action updated (the six remaining tabs); a refs.json explainer was added for the new commit.
+- next: Claude builds the Roadmap, Architecture, Decisions, Research, Questions and Log tabs from the approved mockups
+- commit: 673cbdc

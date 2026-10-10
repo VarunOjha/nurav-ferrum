@@ -4517,6 +4517,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "673cbdc",
+      "kind": "commit",
+      "title": "Commit: Read-only portal with Overview and popups",
+      "summary": "The portal became read-only and reads only the plain-language files. Old wiki browser and approval screens removed; new Overview, phase popup and an explainer popup for every id.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

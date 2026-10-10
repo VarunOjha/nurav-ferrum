@@ -5,7 +5,7 @@
   "summary": "We are finishing the plan (P0). The new read-only portal has its Overview, phase popups and clickable ids; the other tabs come next. Nothing is approved yet, and no Ferrum code exists yet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:61f78cdff33640ce230a9b8e6730a1d58cf1e30fdf48e4cf51f36be6af76c9c8"
+    "content_hash": "sha256:5d2851cf36e276637331710c276a9191c3dc43e22aa9f12cd9ff081234c4c961"
   },
   "updated": "2026-10-09",
   "where_we_are": [

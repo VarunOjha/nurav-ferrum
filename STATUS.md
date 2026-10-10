@@ -16,7 +16,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Claude: p0.17 next step - rebuild the portal from the approved mockups (Option A layout; read-only; reads plan/portal/, including each task's script link). Check scripts exist (pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P0 passes). No owner action needed before that."
+next_action: "Claude: p0.17 next step - build the six remaining portal tabs (Roadmap, Architecture, Decisions, Research, Questions, Log) from the approved mockups in interactive_plan/, reading plan/portal/ only; the Overview, phase popup and reference popup exist (673cbdc). No owner action needed before that."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -34,7 +34,7 @@ last_handoff: handoff-2026-10-09-s01
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) its architecture, roadmap, decisions, risks and research views (IP-8) and its accessibility, security and timing checks with a green `npm run verify` and coverage thresholds (IP-9) and its README, final lint and handoff (IP-10, the app build is complete); p0.17 (portal v2, after the owner found v1 too technical) has its rules, its wiki-to-portal pipeline, the plain-language portal text for every page and a PowerShell 7 check script for every task and phase (the P0 gate passes), with the new portal site next; nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) its architecture, roadmap, decisions, risks and research views (IP-8) and its accessibility, security and timing checks with a green `npm run verify` and coverage thresholds (IP-9) and its README, final lint and handoff (IP-10, the app build is complete); p0.17 (portal v2, after the owner found v1 too technical) has its rules, its wiki-to-portal pipeline, the plain-language portal text for every page and a PowerShell 7 check script for every task and phase (the P0 gate passes), and the new read-only portal has its data layer, Overview, phase popup and reference popup, with the other six tabs next; nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -183,7 +183,7 @@ yet (every approvable page is PENDING).**
   Checks: P0 gate PASS in one run (262 s); P1 gate FAIL as expected before P1 (p1.1 passes every installed tool and
   fails only on cargo-deny and the unsaved toolchain record); script test PASS; portal check clean; lint:wiki 0 errors;
   mask scan 0 unmasked ([p0.17-scripts-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-scripts-checks.txt)).
-- p0.17 step "portal-data-shell" done: `interactive_plan/` is now the **read-only portal**. The wiki browser, search,
+- p0.17 step "portal-data-shell" done (commit `673cbdc`): `interactive_plan/` is now the **read-only portal**. The wiki browser, search,
   lint view, approvals inbox, approve bar and `POST /api/approvals` are removed (git history keeps them); the wiki check
   (`npm run lint:wiki`, `npm run gate`) stays as a command-line tool. New: zod schemas generated from
   `plan/portal/schema/` (a test keeps them in step; PowerShell Test-Json agrees on every case), the Layout-A shell of the
@@ -201,16 +201,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "portal-data-shell" (session s01, 2026-10-09)
-- intent: rebuild `interactive_plan/` as the read-only portal: remove the wiki browser, search, lint view, approvals
-  inbox, approve bar and approvals POST API with their tests; add a zod data layer over `plan/portal/*.json` (in sync
-  with `plan/portal/schema/`), the Layout-A shell (Main mockup), the reference popup and the Overview page with the
-  phase popup; unit and browser tests. The wiki lint engine (`lib/lint`, `lib/wiki`, `npm run lint:wiki`) stays.
-- planned paths: `interactive_plan/**`, `scripts/verify/p0.13-*.ps1`, `p0.14-*.ps1`, `p0.15-*.ps1`, `p0.17-*.ps1`,
-  `wiki/architecture/components/comp-interactive-plan.md`, `plan/portal/architecture.json`, `plan/portal/refs.json`,
-  `plan/portal/overview.json`, `plan/portal/log.json`, evidence `wiki/raw/evidence/phase-p0-planning/p0.17-portal-shell-checks.txt`
-- rollback: `git restore --staged --worktree -- interactive_plan scripts wiki plan` and `git clean` of new files under
-  `interactive_plan/` only after the owner agrees (nothing committed yet)
+(empty: p0.17 step "portal-data-shell" verified and committed 2026-10-09 (`673cbdc`); next the six remaining portal tabs)
 
 ## Blockers
 
@@ -250,12 +241,13 @@ Where we are:
 | Wiki-to-portal pipeline | Built today (`8d89329`): skill, file shapes, check script, end-of-turn check |
 | Portal text | Written today (`ed8b89c`) for every page; check clean; end-of-turn check switched on |
 | Check scripts | Written today (`adc3651`): one per task and per phase; P0 gate passes; run `pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P0` |
-| New portal site | Not yet: next step |
+| New portal site | Read-only portal started (`673cbdc`): Overview, phase popups and clickable ids done; the six other tabs are next |
 | Approvals | None recorded yet; asked after portal v2, wave by wave |
 | First push | Blocked until the owner answers Q-221 (history rewrite) |
 
-1. **Claude, next step of p0.17:** rebuild the portal from the approved mockups (Option A layout), read-only, with popups
-   for phases and decisions; it reads `plan/portal/`, and each task row links its check script
+1. **Claude, next step of p0.17:** build the six remaining tabs of the read-only portal (Roadmap, Architecture,
+   Decisions, Research, Questions, Log) from the approved mockups; the Overview, phase popup and reference popup exist
+   (`673cbdc`); it reads `plan/portal/` only
    ([adr-0023](wiki/decisions/adr-0023-approvals-in-claude-code-portal-read-only.md),
    [ops-portal-pipeline](wiki/operations/ops-portal-pipeline.md)). Every wiki edit carries its JSON in the same edit.
 2. **Any time (optional, owner):** re-run the P0 checks yourself: `pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P0`
@@ -276,4 +268,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.17 step "scripts", `adc3651`; next: the new portal site). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+2026-10-09, session s01 (after p0.17 step "portal-data-shell", `673cbdc`; next: the six remaining portal tabs). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
