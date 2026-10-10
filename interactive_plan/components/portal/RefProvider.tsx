@@ -115,7 +115,7 @@ export default function RefProvider({
               </svg>
             </button>
           </div>
-          <div className="ref-dialog-main" {...ui("RF-2")}>
+          <div className="ref-dialog-main" {...ui("RF-2", { pos: "right" })}>
             <h2 id="ref-dialog-title" ref={headingRef} tabIndex={-1} className="ref-dialog-title">
               {info ? info.title : current !== undefined ? `No explainer for ${current}` : ""}
             </h2>
@@ -135,14 +135,14 @@ export default function RefProvider({
           {info && (
             <>
               {phasePopup && (
-                <div className="ref-dialog-action" {...ui("RF-3")}>
+                <div className="ref-dialog-action" {...ui("RF-3", { pos: "right" })}>
                   <button type="button" className="primary-btn" data-open-phase={phasePopup} onClick={() => openPhase(phasePopup)}>
                     Open the whole phase: tasks, checks and gate →
                   </button>
                 </div>
               )}
               {info.related.length > 0 && (
-                <div className="ref-dialog-related" {...ui("RF-4")}>
+                <div className="ref-dialog-related" {...ui("RF-4", { pos: "right" })}>
                   <div className="eyebrow">Related</div>
                   <ul>
                     {info.related.map((rid) => {
@@ -164,7 +164,7 @@ export default function RefProvider({
             </>
           )}
           {stack.length > 1 && (
-            <div className="ref-dialog-back" {...ui("RF-5")}>
+            <div className="ref-dialog-back" {...ui("RF-5", { pos: "right" })}>
               <button type="button" className="text-btn" onClick={() => setStack((s) => s.slice(0, -1))}>
                 ← Back to {resolveRef(data, stack[stack.length - 2])?.title ?? stack[stack.length - 2]}
               </button>

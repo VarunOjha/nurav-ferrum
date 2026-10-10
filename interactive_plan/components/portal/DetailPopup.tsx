@@ -46,7 +46,7 @@ export default async function DetailPopup({
   const titleId = `${dialogId}-title`;
   return (
     <Modal id={dialogId} labelledBy={titleId} className="detail-modal" uiContext={popupContext("IT", friendlyId(id) ?? title)}>
-      <div className="phase-head" {...ui("IT-1", { pos: "inside" })}>
+      <div className="phase-head" {...ui("IT-1", { pos: "edge" })}>
         <div className="phase-head-text">
           <div className="phase-head-meta">
             {/* The owner's short name ("Decision 19") when there is one, never the internal slug (review 2026-10-09). */}

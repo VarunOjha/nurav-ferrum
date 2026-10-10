@@ -5,7 +5,7 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 import { expectAccessible } from "./axe";
 import { portalJson } from "./helpers";
-import { UI_REFS } from "../../lib/portal/uiRefs";
+import { UI_REFS, uiItem } from "../../lib/portal/uiRefs";
 
 interface Roadmap {
   phases: { id: string; short: string }[];
@@ -17,7 +17,7 @@ interface Architecture {
   footnote: unknown;
 }
 interface Log {
-  entries: { decisions: unknown[]; approvals: unknown[] }[];
+  entries: { id: string; decisions: unknown[]; approvals: unknown[] }[];
 }
 interface Phase {
   short: string;
@@ -38,7 +38,7 @@ const TABS: { route: string; ids: string[] }[] = [
     route: "/",
     ids: ["OV-1", "OV-2", "OV-3", "OV-3.1", "OV-3.2", "OV-3.3", "OV-3.4", "OV-4", "OV-5", "OV-6", ...roadmap.phases.map((p) => `OV-4.${p.short.slice(1)}`)],
   },
-  { route: "/roadmap", ids: ["RM-1", "RM-2", "RM-3", "RM-4", ...roadmap.stages.map((_, i) => `RM-2.${i + 1}`)] },
+  { route: "/roadmap", ids: ["RM-1", "RM-2", "RM-3", "RM-4", ...roadmap.stages.map((s) => `RM-2.${uiItem("RM-2", s.id)?.n ?? s.id}`)] },
   { route: "/architecture", ids: ["AR-1", "AR-2", "AR-3", "AR-3.1", "AR-4", "AR-7", ...(arch.footnote ? ["AR-8"] : [])] },
   { route: "/decisions", ids: ["DE-1", "DE-2", "DE-3"] },
   { route: "/research", ids: ["RE-1", "RE-2", "RE-3", "RE-4", "RE-5", "RE-6", "RE-7"] },
@@ -192,7 +192,7 @@ test.describe("Ref mode", () => {
     const p1 = roadmap.phases[1] ?? roadmap.phases[0];
     const n = p1.short.slice(1);
     await chip(page, `OV-4.${n}`).click();
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(`Overview › OV-4.${n} Phase card ${p1.short}`);
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(`Overview › OV-4.${n} Phase card: ${p1.short}`);
 
     await chip(page, "HD-4").click();
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(`Header › HD-4 ${name("HD-4")}`);
@@ -284,4 +284,173 @@ test.describe("Ref mode", () => {
       await expectAccessible(page, `#phase-dialog-${roadmap.phases[0].id}`);
     });
   }
+
+  test("repeated items say which item they are", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/");
+    await turnOn(page);
+    await expect(chip(page, "OV-3.3")).toHaveText("OV-3.3 · Step: The script");
+    await page.goto("/roadmap");
+    const it = uiItem("RM-2", roadmap.stages[0].id)!;
+    await chip(page, `RM-2.${it.n}`).click();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(`Roadmap › RM-2.${it.n} Stage card: ${it.name}`);
+    await page.goto("/architecture");
+    await expect(chip(page, "AR-3.2")).toHaveText(/^AR-3\.2 · Layer row: \S/);
+  });
+
+  test("Ref mode moves nothing: blocks and the header keep their place and size", async ({ page }) => {
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const tab of TABS) {
+        await page.goto(tab.route);
+        await expect(toggle(page)).toBeVisible();
+        if ((await toggle(page).getAttribute("aria-pressed")) === "true") await toggle(page).click();
+        const boxes = () =>
+          page.evaluate(() =>
+            [...document.querySelectorAll("[data-ui-ref]")].map((el) => {
+              const r = el.getBoundingClientRect();
+              const key = `${el.getAttribute("data-ui-ref")}.${el.getAttribute("data-ui-index") ?? ""}`;
+              return `${key} ${Math.round(r.left)},${Math.round(r.top + window.scrollY)} ${Math.round(r.width)}x${Math.round(r.height)}`;
+            }),
+          );
+        const topbar = () => page.locator(".topbar").evaluate((e) => e.getBoundingClientRect().height);
+        const off = await boxes();
+        const topOff = await topbar();
+        await turnOn(page);
+        expect(await boxes(), `${tab.route} at ${width}`).toEqual(off);
+        expect(await topbar(), `${tab.route} at ${width}`).toBe(topOff);
+        await toggle(page).click();
+      }
+    }
+  });
+
+  test("at phone width the end of the page, the phase popup and the Layout map scroll clear of the bar", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    // Scrolls `scroller` (or the page) to its end; returns the bottom of the last visible block (or Layout
+    // map row) in `root` and the top of the visible bar.
+    const clear = (root: string, scroller: string | null) =>
+      page.evaluate(
+        ([root, scroller]) => {
+          const s = scroller ? document.querySelector(scroller)! : document.scrollingElement!;
+          s.scrollTop = s.scrollHeight;
+          const bar = [...document.querySelectorAll(".ui-ref-bar")].map((b) => b.getBoundingClientRect()).find((r) => r.height > 0);
+          // The marked blocks (their inner parts may be clipped by their own scroll boxes).
+          const els = [...document.querySelector(root)!.querySelectorAll("[data-ui-ref]:not([data-ui-dup]), [data-map-id], [data-map-item]")].filter(
+            (e) => e.getClientRects().length > 0,
+          );
+          return { last: Math.max(...els.map((e) => e.getBoundingClientRect().bottom)), barTop: bar ? bar.top : Infinity };
+        },
+        [root, scroller] as const,
+      );
+    for (const tab of TABS) {
+      await page.goto(tab.route);
+      if ((await toggle(page).getAttribute("aria-pressed")) !== "true") await turnOn(page);
+      const r = await clear("main", null);
+      expect(r.last, tab.route).toBeLessThanOrEqual(r.barTop);
+    }
+    await page.goto("/");
+    await page.getByTestId("phase-cards").locator("button.phase-card").first().click();
+    const sel = `#phase-dialog-${roadmap.phases[0].id}`;
+    await expect(page.locator(sel).getByTestId("ref-bar")).toBeVisible();
+    const p = await clear(sel, sel);
+    expect(p.last).toBeLessThanOrEqual(p.barTop);
+    await page.keyboard.press("Escape");
+    await page.getByTestId("ref-bar").getByRole("button", { name: "List all" }).click();
+    await expect(page.getByTestId("layout-map")).toBeVisible();
+    // The bar stays behind the Layout map (it is not moved into it): the map's last row, scrolled to the
+    // end, is fully on screen and nothing covers it.
+    const m = await page.evaluate(() => {
+      const d = document.getElementById("layout-map")!;
+      d.scrollTop = d.scrollHeight;
+      const rows = d.querySelectorAll("[data-map-id], [data-map-item]");
+      const last = rows[rows.length - 1].getBoundingClientRect();
+      const hit = document.elementFromPoint(last.left + 10, last.top + last.height / 2);
+      return { bottom: last.bottom, height: window.innerHeight, covered: !hit || !d.contains(hit), barInMap: Boolean(d.querySelector(".ui-ref-bar")) };
+    });
+    expect(m.barInMap).toBe(false);
+    expect(m.covered).toBe(false);
+    expect(m.bottom).toBeLessThanOrEqual(m.height);
+  });
+
+  test("the log labels the first entry the filter leaves visible", async ({ page }) => {
+    await page.goto("/log");
+    await turnOn(page);
+    type Entry = Log["entries"][number];
+    const filters: { name: string; has: (e: Entry) => boolean }[] = [
+      { name: "All", has: () => true },
+      { name: "Has decisions", has: (e) => e.decisions.length > 0 },
+      { name: "Has approvals", has: (e) => e.approvals.length > 0 },
+    ];
+    for (const f of filters) {
+      await page.getByRole("group", { name: "Filter" }).getByRole("button", { name: f.name }).click();
+      if (!log.entries.some(f.has)) continue;
+      await expect(chip(page, "LO-3").locator("visible=true")).toHaveCount(1);
+      const ids = await visibleIds(page);
+      for (const id of ["LO-3", "LO-4", "LO-6"]) expect(ids.filter((x) => x === id), `${f.name} ${id}`).toHaveLength(1);
+      if (f.name !== "All") expect(ids, f.name).toContain("LO-5");
+      const labelled = await page.locator('article[data-ui-ref="LO-3"]:not([data-ui-dup])').getAttribute("data-entry");
+      const firstVisible = await page.locator("article.log-entry:visible").first().getAttribute("data-entry");
+      expect(labelled, f.name).toBe(firstVisible);
+    }
+  });
+
+  test("an old Copied message does not follow the bar into a new popup", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/");
+    await turnOn(page);
+    await chip(page, "OV-6").click();
+    await expect(page.getByTestId("ref-status")).toHaveText(/^Copied: Overview/);
+    await page.getByTestId("phase-cards").locator("button.phase-card").first().click();
+    const phase = page.getByRole("dialog", { name: p0.title });
+    await expect(phase.getByTestId("ref-bar")).toBeVisible();
+    await expect(phase.getByTestId("ref-status")).toHaveText("");
+    await chip(phase, "PH-6").click();
+    await expect(phase.getByTestId("ref-status")).toHaveText(/^Copied: Phase popup/);
+    await page.keyboard.press("Escape");
+    await expect(phase).toBeHidden();
+    await expect(page.getByTestId("ref-status")).toHaveText("");
+  });
+
+  test("keyboard focus stays in place: closing the Layout map and Turn off inside a popup", async ({ page }) => {
+    await page.goto("/");
+    await turnOn(page);
+    const listAll = page.getByTestId("ref-bar").getByRole("button", { name: "List all" });
+    await listAll.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByTestId("layout-map")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByTestId("layout-map")).toBeHidden();
+    await expect(listAll).toBeFocused();
+
+    await page.getByTestId("phase-cards").locator("button.phase-card").first().click();
+    const phase = page.getByRole("dialog", { name: p0.title });
+    await phase.getByTestId("ref-bar").getByRole("button", { name: "Turn off" }).click();
+    await expect(toggle(page)).toHaveAttribute("aria-pressed", "false");
+    await expect(phase).toBeVisible();
+    const sel = `#phase-dialog-${roadmap.phases[0].id}`;
+    expect(await page.evaluate((s) => Boolean(document.activeElement?.closest(s)), sel)).toBe(true);
+  });
+
+  test("the Layout map opens at the current tab or popup and has jump links", async ({ page }) => {
+    await page.goto("/decisions");
+    await turnOn(page);
+    await page.getByTestId("ref-bar").getByRole("button", { name: "List all" }).click();
+    const map = page.getByTestId("layout-map");
+    await expect(map.locator('[data-map-group="DE"]')).toHaveClass(/is-current/);
+    await expect(map.locator("#layout-map-DE")).toBeInViewport();
+    const jump = map.getByRole("navigation", { name: "Jump to" });
+    await expect(jump.getByRole("link")).toHaveCount(12);
+    await expect(jump.getByRole("link", { name: "Decisions" })).toHaveAttribute("aria-current", "true");
+    await jump.getByRole("link", { name: "Script popup" }).click();
+    await expect(map.locator('[data-map-id="SC-3"]')).toBeInViewport();
+    await expect(page).toHaveURL(/\/decisions$/);
+    await page.keyboard.press("Escape");
+
+    await page.goto("/");
+    await page.getByTestId("phase-cards").locator("button.phase-card").first().click();
+    const phase = page.getByRole("dialog", { name: p0.title });
+    await phase.getByTestId("ref-bar").getByRole("button", { name: "List all" }).click();
+    await expect(map.locator('[data-map-group="PH"]')).toHaveClass(/is-current/);
+    await expect(map.locator('[data-map-item="OV-3.3"]')).toContainText("Step: The script");
+  });
 });

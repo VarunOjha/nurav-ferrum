@@ -25,7 +25,7 @@ export default async function RoadmapPage() {
         <>
           <section aria-label="Stages" className="stage-grid" data-testid="stages" {...ui("RM-2")}>
             {roadmap.stages.map((st, i) => (
-              <div key={st.id} className={`card stage-card stage-${(i % 3) + 1}`} {...ui("RM-2", { index: i + 1, pos: "inside" })}>
+              <div key={st.id} className={`card stage-card stage-${(i % 3) + 1}`} {...ui("RM-2", { key: st.id, pos: "inside" })}>
                 <div className="stage-label">
                   Stage {i + 1} · {st.name}
                 </div>

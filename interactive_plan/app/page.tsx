@@ -148,7 +148,7 @@ export default async function OverviewPage() {
         </div>
         {next ? (
           <ol className="next-grid">
-            <li className="next-part" {...ui("OV-3", { index: 1 })}>
+            <li className="next-part" {...ui("OV-3", { key: "where" })}>
               <div className="next-part-title">1 · Where we are</div>
               <table className="mini">
                 <tbody>
@@ -165,13 +165,13 @@ export default async function OverviewPage() {
                 </tbody>
               </table>
             </li>
-            <li className="next-part" {...ui("OV-3", { index: 2 })}>
+            <li className="next-part" {...ui("OV-3", { key: "why" })}>
               <div className="next-part-title">2 · Why run something</div>
               <p className="lh">
                 <RichText text={next.why} />
               </p>
             </li>
-            <li className="next-part" {...ui("OV-3", { index: 3 })}>
+            <li className="next-part" {...ui("OV-3", { key: "script" })}>
               <div className="next-part-title">3 · The script</div>
               {next.script ? (
                 <div className="stack-8">
@@ -195,7 +195,7 @@ export default async function OverviewPage() {
                 <div className="code-block code-sm">— none needed —</div>
               )}
             </li>
-            <li className="next-part" {...ui("OV-3", { index: 4 })}>
+            <li className="next-part" {...ui("OV-3", { key: "tell" })}>
               <div className="next-part-title">4 · Then tell Claude</div>
               <p className="lh">{next.tell_claude ? <RichText text={next.tell_claude} /> : "Nothing. Claude continues on its own."}</p>
             </li>

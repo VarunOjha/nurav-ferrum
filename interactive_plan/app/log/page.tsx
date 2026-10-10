@@ -23,10 +23,8 @@ export default async function LogPage() {
     decisions: entries.filter((e) => e.decisions.length > 0).length,
     approvals: entries.filter((e) => e.approvals.length > 0).length,
   };
-  // Ref mode labels the parts of one entry only (they all look the same): the newest entry, and the
-  // tables in the newest entry that has any.
-  const firstId = entries[0]?.id ?? null;
-  const firstTablesId = entries.find((e) => e.decisions.length > 0 || e.approvals.length > 0)?.id ?? null;
+  // Every entry is marked for Ref mode; the mode labels only the first entry (and the first tables)
+  // that the current filter leaves visible, since they all look the same (components/portal/RefMode.tsx).
 
   return (
     <div className="page page-narrow">
@@ -44,7 +42,7 @@ export default async function LogPage() {
               data-entry={e.id}
               data-has-decisions={e.decisions.length > 0 ? "" : undefined}
               data-has-approvals={e.approvals.length > 0 ? "" : undefined}
-              {...(e.id === firstId ? ui("LO-3") : {})}
+              {...ui("LO-3")}
             >
               <header className="entry-head">
                 <h2 id={titleId} className="entry-title entry-title-lg">
@@ -55,7 +53,7 @@ export default async function LogPage() {
                   {phase && <> · {phase.name}</>}
                 </span>
               </header>
-              <div className="done-next" {...(e.id === firstId ? ui("LO-4") : {})}>
+              <div className="done-next" {...ui("LO-4")}>
                 <div className="stack-4">
                   <div className="eyebrow eyebrow-done">What was done</div>
                   <p className="lh">
@@ -68,7 +66,7 @@ export default async function LogPage() {
                 </div>
               </div>
               {(e.decisions.length > 0 || e.approvals.length > 0) && (
-                <div className="row-wrap log-tables" {...(e.id === firstTablesId ? ui("LO-5") : {})}>
+                <div className="row-wrap log-tables" {...ui("LO-5")}>
                   <div className="stack-8 log-decisions">
                     <div className="eyebrow">Decisions</div>
                     {e.decisions.length === 0 ? (
@@ -121,7 +119,7 @@ export default async function LogPage() {
                   </div>
                 </div>
               )}
-              <footer className="small muted log-foot" {...(e.id === firstId ? ui("LO-6") : {})}>
+              <footer className="small muted log-foot" {...ui("LO-6")}>
                 {e.decisions.length === 0 && e.approvals.length === 0 && <span>No decisions · no approvals · </span>}
                 {e.commit ? (
                   <span>

@@ -11,8 +11,12 @@
  *   takes the next free number of its prefix. Never renumber.
  * - The prefix says where the block lives (UI_SCOPES). Every id here is used in the portal code, and
  *   every id the code uses is listed here.
- * - A repeated item (one of the phase cards) shows its group id plus a fixed suffix taken from the
- *   item itself, e.g. "OV-4.1" for the card of P1.
+ * - A repeated item shows its group id plus a fixed suffix and a short word that say which item it is.
+ *   Both come from the item itself, never from its place in a list: either from this registry's
+ *   `items` table, keyed by the item's own id in the plan data ("OV-3.3 Step: The script",
+ *   "RM-2.1 Stage card: Build"), or from the item's own number ("OV-4.1 Phase card: P1"). A new item
+ *   in the plan data takes the next free number in `items`; an item missing from `items` shows its
+ *   data id as the suffix instead, so it is still fixed (a unit test lists the missing ones).
  * - A marked element must be able to hold a button: never a <ul>, <ol>, <table>, <tr>, <button> or
  *   <a> (wrap those in a <div> instead).
  * No file access: safe to import from client code.
@@ -40,6 +44,10 @@ export interface UiRefEntry {
   name: string;
   /** For a group of repeated items: the name of one item ("Phase card"). */
   item?: string;
+  /** Fixed items of the group, keyed by the item's own id: the suffix number and a short word. */
+  items?: Record<string, { n: number; name: string }>;
+  /** For a group numbered by the items themselves (no `items`): how, in words, for the Layout map. */
+  numbering?: string;
 }
 
 export const UI_REFS = {
@@ -54,21 +62,50 @@ export const UI_REFS = {
   // Overview
   "OV-1": { name: "Where we are" },
   "OV-2": { name: "Questions for you" },
-  "OV-3": { name: "What happens next", item: "Step" },
-  "OV-4": { name: "Phase progress", item: "Phase card" },
+  "OV-3": {
+    name: "What happens next",
+    item: "Step",
+    items: {
+      where: { n: 1, name: "Where we are" },
+      why: { n: 2, name: "Why run something" },
+      script: { n: 3, name: "The script" },
+      tell: { n: 4, name: "Then tell Claude" },
+    },
+  },
+  "OV-4": { name: "Phase progress", item: "Phase card", numbering: "numbered by its phase: OV-4.1 is the card of P1" },
   "OV-5": { name: "Clickable references" },
   "OV-6": { name: "Latest log" },
 
   // Roadmap
   "RM-1": { name: "Page heading" },
-  "RM-2": { name: "Stages", item: "Stage card" },
+  "RM-2": {
+    name: "Stages",
+    item: "Stage card",
+    // Keyed by the stage id in plan/portal/roadmap.json.
+    items: {
+      "stage-build": { n: 1, name: "Build" },
+      "stage-measure": { n: 2, name: "Measure" },
+      "stage-publish": { n: 3, name: "Publish" },
+    },
+  },
   "RM-3": { name: "Phases table" },
   "RM-4": { name: "Same in every phase" },
 
   // Architecture
   "AR-1": { name: "Page heading" },
   "AR-2": { name: "Group switcher" },
-  "AR-3": { name: "Layer diagram", item: "Layer row" },
+  "AR-3": {
+    name: "Layer diagram",
+    item: "Layer row",
+    // Keyed by the id of the first layer in the row (plan/portal/architecture.json).
+    items: {
+      "layer-controls": { n: 1, name: "What you see" },
+      "layer-engine": { n: 2, name: "Ferrum engine" },
+      "layer-base": { n: 3, name: "Shared base" },
+      "layer-webview2": { n: 4, name: "Microsoft WebView2" },
+      "layer-windows": { n: 5, name: "Windows 11" },
+    },
+  },
   "AR-4": { name: "How to read this" },
   "AR-5": { name: "What the group is for" },
   "AR-6": { name: "Parts list" },
@@ -151,12 +188,37 @@ export function scopeLabel(id: UiRefId): string {
 }
 
 /**
- * Attributes that mark a block. For one item of a repeated group pass `index` (a fixed key from the
- * item itself, such as the phase number) and, optionally, a short `item` label ("P1"). `pos` moves
- * the label below the block or just inside its corner, where the default spot would collide or clip.
+ * Where the label sits (app/globals.css): default just above the block's top-left corner, in the gap
+ * before it. "below": under the block (the small header pieces). "inside": just inside the top-left
+ * corner, in the block's own top padding (cards). "edge": on the block's bottom border, at the right
+ * (popup headers: half in their bottom padding, half in the body's top padding, never over text).
+ * "right": just above the block like the default, but at the right end (tight stacks in small popups,
+ * where the left end of the line above has text).
  */
-export function ui(id: UiRefId, opts?: { index?: string | number; item?: string; pos?: "below" | "inside" }): Record<string, string> {
+export type UiPos = "below" | "inside" | "edge" | "right";
+
+/** The registered item of a group for a data key, or null (unknown key or a group without `items`). */
+export function uiItem(id: UiRefId, key: string): { n: number; name: string } | null {
+  const items = (UI_REFS[id] as UiRefEntry).items;
+  return items && Object.prototype.hasOwnProperty.call(items, key) ? items[key] : null;
+}
+
+/**
+ * Attributes that mark a block. For one item of a repeated group pass either `key` (the item's own id
+ * in the plan data, looked up in the group's `items`) or `index` (a fixed number from the item itself,
+ * such as the phase number) with a short `item` word ("P1"). Never a position in a list.
+ * `pos` moves the label below the block or just inside its corner, where the default spot would clip.
+ */
+export function ui(
+  id: UiRefId,
+  opts?: { key?: string; index?: string | number; item?: string; pos?: UiPos },
+): Record<string, string> {
   const attrs: Record<string, string> = { "data-ui-ref": id };
+  if (opts?.key !== undefined) {
+    const it = uiItem(id, opts.key);
+    attrs["data-ui-index"] = it ? String(it.n) : opts.key;
+    if (it) attrs["data-ui-item"] = it.name;
+  }
   if (opts?.index !== undefined) attrs["data-ui-index"] = String(opts.index);
   if (opts?.item) attrs["data-ui-item"] = opts.item;
   // Where the label sits (app/globals.css): default just above the block; "below" it or just "inside" it.
@@ -167,7 +229,7 @@ export function ui(id: UiRefId, opts?: { index?: string | number; item?: string;
 export interface UiLabel {
   /** "OV-4" or "OV-4.1" */
   id: string;
-  /** "Phase progress" or "Phase card P1" */
+  /** "Phase progress" or "Phase card: P1" */
   name: string;
 }
 
@@ -177,7 +239,7 @@ export function uiLabel(ref: string, index?: string | null, item?: string | null
   const e: UiRefEntry = UI_REFS[ref];
   if (index === undefined || index === null || index === "") return { id: ref, name: e.name };
   const base = e.item ?? e.name;
-  return { id: `${ref}.${index}`, name: item ? `${base} ${item}` : base };
+  return { id: `${ref}.${index}`, name: item ? `${base}: ${item}` : base };
 }
 
 /** What the chip shows: "OV-3 · What happens next". */
@@ -199,7 +261,7 @@ export function popupContext(prefix: "PH" | "IT" | "RF" | "SC", detail?: string 
 export interface LayoutMapGroup {
   prefix: UiPrefix;
   label: string;
-  rows: { id: UiRefId; name: string; item: string | null }[];
+  rows: { id: UiRefId; name: string; item: string | null; numbering: string | null; items: { id: string; name: string }[] }[];
 }
 
 /** Every id with its name, grouped by header, tab and popup, in registry order (the Layout map). */
@@ -207,7 +269,10 @@ export function layoutMap(): LayoutMapGroup[] {
   const groups = new Map<UiPrefix, LayoutMapGroup>();
   for (const p of Object.keys(UI_SCOPES) as UiPrefix[]) groups.set(p, { prefix: p, label: UI_SCOPES[p].label, rows: [] });
   for (const [id, e] of Object.entries(UI_REFS) as [UiRefId, UiRefEntry][]) {
-    groups.get(prefixOf(id))!.rows.push({ id, name: e.name, item: e.item ?? null });
+    const items = Object.values(e.items ?? {})
+      .sort((a, b) => a.n - b.n)
+      .map((it) => ({ id: `${id}.${it.n}`, name: `${e.item}: ${it.name}` }));
+    groups.get(prefixOf(id))!.rows.push({ id, name: e.name, item: e.item ?? null, numbering: e.numbering ?? null, items });
   }
   return [...groups.values()].filter((g) => g.rows.length > 0);
 }

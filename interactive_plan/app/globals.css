@@ -1758,11 +1758,15 @@ section[tabindex="-1"]:focus {
 
 /* ---------- Ref mode (owner request 2026-10-10) ----------
    The Ref button in the header outlines every block marked with data-ui-ref and adds a small label
-   button at its top-left corner (components/portal/RefMode.tsx, ids in lib/portal/uiRefs.ts). The
-   label sits just above the block, in the gap between blocks, so it never covers the block's text.
-   data-ui-pos="below" puts it under the block (the small header pieces), "inside" just inside the
-   corner (padded cards in a grid, and blocks at the top of a scrolling popup, where "above" would be
-   cut off). Nothing here applies when the mode is off. */
+   button at its top-left corner (components/portal/RefMode.tsx, ids in lib/portal/uiRefs.ts).
+   Ref mode must not change the layout it names (review 2026-10-10): the outlines and labels take no
+   space, nothing here changes a margin, padding or gap of a block, and the header keeps its one-row
+   arrangement. The label sits just above the block, in the gap between blocks; data-ui-pos="below" puts
+   it under the block (the small header pieces, whose labels show only the id), "inside" just inside the
+   corner, in the block's own top padding (cards, and blocks at the top of a scrolling popup, where
+   "above" would be cut off). The one thing Ref mode adds is room at the very end of the page and of
+   each popup for its bar (--ref-bar-h, measured by RefMode), so the bar never hides the last lines.
+   Nothing here applies when the mode is off. */
 .brand-wrap,
 .theme-wrap,
 .ref-toggle-wrap {
@@ -1806,36 +1810,29 @@ html[data-ref-mode] [data-ui-ref] {
   outline: 1.5px dashed var(--refmode-line);
   outline-offset: 2px;
 }
-/* Room above each block for its label, so the label never covers the text of the block before it. */
-html[data-ref-mode] [data-ui-ref]:not([data-ui-pos]) {
-  margin-top: 16px;
+/* Repeated blocks that all look the same (log entries): only the first visible one is labelled. */
+html[data-ref-mode] [data-ui-ref][data-ui-dup] {
+  outline: none;
 }
-/* A popup header keeps its label inside (above would be cut off): make room for it there. */
-html[data-ref-mode] .phase-head[data-ui-pos="inside"] {
-  padding-top: 30px;
+[data-ui-dup] > .ui-ref-chip {
+  display: none;
 }
-/* Room for the labels of the small header pieces (they sit below each piece). */
-html[data-ref-mode] .topbar-inner {
-  padding-bottom: 26px;
-  row-gap: 30px;
+/* Room at the end of the page and of each open popup for the Ref bar (it floats over the bottom). */
+html[data-ref-mode] body {
+  padding-bottom: calc(var(--ref-bar-h, 0px) + 24px);
 }
-html[data-ref-mode] .topbar-tools {
-  column-gap: 48px;
+html[data-ref-mode] dialog.modal[open]:not(.layout-map) {
+  padding-bottom: calc(var(--ref-bar-h, 0px) + 24px);
 }
-/* Room for the labels inside the small popups, whose blocks sit close together. */
-html[data-ref-mode] .ref-dialog-panel {
-  gap: 28px;
-  padding-top: 30px;
-}
-html[data-ref-mode] .ref-dialog-main {
-  gap: 10px;
-}
-html[data-ref-mode] .detail-body {
-  gap: 30px;
+/* The small reference popup reaches the bar only on a phone. */
+@media (max-width: 640px) {
+  html[data-ref-mode] dialog.ref-dialog[open] {
+    padding-bottom: calc(var(--ref-bar-h, 0px) + 24px);
+  }
 }
 .ui-ref-chip {
   position: absolute;
-  bottom: calc(100% + 3px);
+  bottom: calc(100% + 2px);
   left: -2px;
   z-index: 30;
   margin: 0;
@@ -1847,11 +1844,11 @@ html[data-ref-mode] .detail-body {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 14px;
   letter-spacing: 0;
   text-transform: none;
   text-align: left;
-  padding: 1px 6px;
+  padding: 0 5px;
   border: 1px solid var(--refmode-chip-bg);
   border-radius: 4px;
   background: var(--refmode-chip-bg);
@@ -1868,12 +1865,30 @@ html[data-ref-mode] .detail-body {
 }
 [data-ui-pos="below"] > .ui-ref-chip {
   bottom: auto;
-  top: calc(100% + 4px);
+  top: calc(100% + 3px);
+}
+/* The header labels (id only) are a little smaller, so they fit the gaps between the header rows. */
+.ui-ref-chip[data-ui-prefix="HD"] {
+  font-size: 10px;
+  line-height: 12px;
+}
+[data-ui-pos="below"] > .ui-ref-chip[data-ui-prefix="HD"] {
+  top: calc(100% + 1px);
 }
 [data-ui-pos="inside"] > .ui-ref-chip {
   bottom: auto;
   top: 3px;
   left: 3px;
+}
+[data-ui-pos="edge"] > .ui-ref-chip {
+  bottom: auto;
+  top: calc(100% - 8px);
+  left: auto;
+  right: 12px;
+}
+[data-ui-pos="right"] > .ui-ref-chip {
+  left: auto;
+  right: -2px;
 }
 .ui-ref-bar {
   position: fixed;
@@ -1923,6 +1938,32 @@ html[data-ref-mode] .detail-body {
 .ui-ref-status:empty {
   display: none;
 }
+.layout-map-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.layout-map-jump a {
+  font-size: 13px;
+  color: var(--link);
+}
+.layout-map-jump a[aria-current="true"] {
+  font-weight: 700;
+}
+.layout-map-group.is-current {
+  outline: 2px solid var(--refmode-line);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+.layout-map-items td:first-child {
+  padding-left: 24px;
+}
+.layout-map-table td.mono {
+  white-space: nowrap;
+}
 .layout-map {
   width: min(760px, calc(100vw - 32px));
 }
@@ -1943,6 +1984,12 @@ html[data-ref-mode] .detail-body {
     right: 16px;
     bottom: 12px;
     max-width: none;
+    padding: 6px 10px;
+    gap: 4px 10px;
+  }
+  /* One short line on a phone: the buttons say the rest. */
+  .ui-ref-bar-hint {
+    display: none;
   }
   .layout-map {
     width: calc(100vw - 16px);

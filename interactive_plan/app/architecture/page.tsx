@@ -44,8 +44,8 @@ function LayerDiagram({ arch, byId }: { arch: Architecture; byId: Map<string, Co
   return (
     <div className="card layers" data-testid="layer-diagram" {...ui("AR-3")}>
       <h2 className="h3">The Ferrum app, layer by layer</h2>
-      {layerRows(arch.layers).map((row, i) => (
-        <div key={row.label} className="layer-row" {...ui("AR-3", { index: i + 1 })}>
+      {layerRows(arch.layers).map((row) => (
+        <div key={row.label} className="layer-row" {...ui("AR-3", { key: row.layers[0].id })}>
           <div className="layer-label">{row.label}</div>
           <div className="layer-boxes">
             {row.layers.flatMap((l) =>

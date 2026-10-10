@@ -42,7 +42,7 @@ export default async function PhasePopup({
   const gateHeader = phase.test_gate.script ? await getScriptHeader(phase.test_gate.script) : null;
   return (
     <Modal id={phaseDialogId(phase.id)} labelledBy={titleId} className="phase-modal" uiContext={popupContext("PH", phase.short)}>
-      <div className="phase-head" {...ui("PH-1", { pos: "inside" })}>
+      <div className="phase-head" {...ui("PH-1", { pos: "edge" })}>
         <div className="phase-head-text">
           <div className="phase-head-meta">
             <span className="mono muted">{phase.short}</span>

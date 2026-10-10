@@ -882,3 +882,17 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: What was done → the owner asked for a way to point at parts of the portal in layout feedback → the Ref button now outlines every block of the tab and of open popups with a fixed, copyable name, and a Layout map lists them all → his walkthrough feedback can name exact blocks. STATUS: In-flight cleared; next action now says to restart the running portal (it is a build, so the button appears only after a rebuild) and to use Ref for layout feedback. A refs.json explainer was added for the new commit.
 - next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear or what to change in the layout; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
 - commit: e1b198d
+
+## [2026-10-10] code | p0.17 Ref mode review fixes: moves nothing, room for the bar, fixed item names, Layout map jumps
+
+- session: s01
+- pages: [ip-routes-and-views, ip-testing]
+- sources: [raw/owner/2026-10-10-s01-ref-button.md, raw/evidence/phase-p0-planning/portal-v2/ref-mode-fixes-checks.txt]
+- result: A review of the Ref button raised 11 issues; each was confirmed in the code and fixed, none rejected. Ref mode no longer changes the layout it names: the extra space above blocks, the larger popup gaps and the wider top-bar gaps are gone (the top bar stays one row at 1440 px; its labels show only the id, with the name in the tooltip), and labels sit in gaps, card padding, popup header borders or at the right end in the small popups. The bar is measured and the page and popups leave room for it at the end, so nothing hides under it at 390 px; it no longer moves into the Layout map. Log entries are all marked and the first visible one under the current filter is labelled. Repeated items take a fixed number and word from the registry, keyed by the item's own data id (`OV-3.3 Step: The script`, `RM-2.1 Stage card: Build`, `AR-3.2 Layer row: Ferrum engine`, `OV-4.1 Phase card: P1`), never a list position. The Layout map has jump links, opens at the current tab or popup and lists the numbered items. An old "Copied" message is cleared when the bar moves to another popup. Focus returns to List all when the map closes and stays in a popup after Turn off. Tests: `ui-refs.test.ts` 15, `ref-mode.spec.ts` 24.
+
+## [2026-10-10] lint | p0.17 Ref mode review fixes: npm run verify green, positions unchanged in Ref mode
+
+- session: s01
+- pages: [ip-routes-and-views, ip-testing, status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/ref-mode-fixes-checks.txt]
+- result: `npm run verify` exit 0 in one run (typecheck, eslint, 757 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 36 warnings, 2 info, build, 96 browser tests passed including the 24 Ref mode tests, E2E guard: real files unchanged), in a scratch git worktree of HEAD with this step's files copied in (byte-identical), so the owner's portal on 3417 kept running. A probe on all seven tabs, both themes, 1440 and 390 px: top bar height and every block's position the same with Ref on and off; the last content ends above the bar. Screenshots of the header, phase, script and reference popups and the Layout map reviewed. Quick lint 0 errors, portal check clean, mask scan 0 unmasked on the final tree.

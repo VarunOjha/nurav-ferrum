@@ -1,0 +1,53 @@
+# Ref mode review fixes (p0.17 step ref-mode-fixes, session s01, 2026-10-10)
+# Builds, browser probes and npm run verify ran in a scratch git worktree of HEAD 0989278 with this step's changed and
+# new files copied in (byte-identical working tree), on ports 3418 (E2E) and 3431 (probes), so the owner's running
+# portal (interactive_plan/.next, port 3417) was not rebuilt or stopped.
+
+## Review issues: confirmed on HEAD 0989278 by reading the code, then fixed
+
+1. Bar hides the end of pages and popups at 390 px: confirmed (.ui-ref-bar position:fixed, nothing reserved room).
+   Fix: RefMode measures the bar (ResizeObserver) into --ref-bar-h; Ref mode adds that much + 24 px at the end of the
+   page and of the big popups (and of the small reference popup on phones); the bar is one short line on phones; the
+   bar no longer moves into the Layout map.
+2. and 7. Header becomes two rows in Ref mode at 1440 / Ref button moves away: confirmed (globals.css row-gap 30px,
+   padding-bottom 26px, column-gap 48px under html[data-ref-mode]). Fix: overrides removed; header labels show only the
+   id (full name in tooltip and accessible name), 10 px, under each piece.
+3. and 10. Log labels only on the newest entry: confirmed (app/log/page.tsx firstId / firstTablesId). Fix: every entry
+   is marked; RefMode labels the first visible one per id and marks the rest data-ui-dup (no outline, no label);
+   re-scanned when data-filter changes.
+4. Item labels without a name: confirmed (OV-3, AR-3 ui() calls had no item). Fix: registry items with a fixed word.
+5. Layout map has no jump links and always opens at the top: confirmed. Fix: jump links row; opens scrolled to the
+   current tab's or open popup's group, highlighted ("this tab" / "the open popup"); indexed items listed under groups.
+6. "Copied" follows the bar into a new popup: confirmed (status cleared only by its 8 s timer). Fix: cleared whenever
+   the bar moves to another host.
+8. Every tab shifts down 117-228 px: confirmed (margin-top 16px on every block, padding/gap overrides). Fix: removed;
+   labels take no space (above in the gap, inside card padding, on popup header bottom borders, right-aligned in the
+   small popups).
+9. RM-2.N and AR-3.N numbered by list position: confirmed (index: i + 1). Fix: ui(id, { key }) looks up the item's own
+   data id (stage id, first layer id of the row) in the registry's items table; unit tests check every stage and layer
+   row in plan/portal is registered and that no ui() call uses a map index.
+11. Focus lost after closing the Layout map / Turn off inside a popup: confirmed (bar host moved into the map; turn(false)
+   focused the inert Ref button). Fix: bar not moved into the map and the opener refocused on close; Turn off inside a
+   popup focuses the popup's first remaining button.
+None rejected.
+
+## Probe (Playwright, production build, port 3431, all 7 tabs, light and dark)
+# topbar height off -> on, blocks that moved, last content bottom vs bar top after scrolling to the end
+1440 px: topbar 65 -> 65 on every tab; 0 blocks moved on every tab; last content bottom 824.7-825.5 < bar top 833.8
+390 px:  topbar 214 -> 214 on every tab; 0 blocks moved on every tab; last content bottom 776.6-777.3 < bar top 789.8
+Screenshots reviewed (1440 light, 390 dark): Overview, header, phase popup, script popup, reference popup,
+Architecture, Layout map. Moved the reference and script popup labels that covered text (RF-2..RF-5, SC-3 to the right
+end; PH-1, IT-1, SC-1 onto the header's bottom border); Layout map ids no longer wrap.
+
+## npm run verify (one run, exit 0): typecheck, eslint, unit tests, lint:wiki, build, E2E
+   Test Files  24 passed (24)
+        Tests  757 passed | 1 skipped (758)
+  lint: 0 errors, 36 warnings, 2 info (pages: 202)
+   Test Files  2 passed (2)
+        Tests  8 passed | 1 skipped (9)
+  E2E guard: 22 real files unchanged (approvals.json absent)
+    96 passed (3.6m)
+  exit 0
+  Ref mode E2E: 24 tests (17 before + 7 new: item names, nothing moves at 1440/390, bar room at 390, log filters, Copied cleared, focus, Layout map jump links)
+  Unit ui-refs.test.ts: 15 tests (12 before + 3 new)
+  Note: the probe numbers above came from an intermediate build of this step; the final tree is covered by the E2E tests "Ref mode moves nothing" and "bar room at 390" in this run.

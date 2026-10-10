@@ -99,7 +99,7 @@ export default function ScriptProvider({ children }: { children: React.ReactNode
         data-ui-context={popupContext("SC", name)}
       >
         <div className="modal-panel">
-          <div className="phase-head" {...ui("SC-1", { pos: "inside" })}>
+          <div className="phase-head" {...ui("SC-1", { pos: "edge" })}>
             <div className="phase-head-text">
               <div className="eyebrow">{path && isCheckScript(path) ? "Check script" : "Script"} · read-only copy from the repo</div>
               <h2 id="script-dialog-title" ref={headingRef} tabIndex={-1} className="script-title">
@@ -130,7 +130,7 @@ export default function ScriptProvider({ children }: { children: React.ReactNode
                 )}
               </div>
             )}
-            <div {...ui("SC-3")}>
+            <div {...ui("SC-3", { pos: "right" })}>
               <div aria-live="polite" aria-busy={load.state === "loading"}>
                 {load.state === "loading" && <p className="muted">Loading the script…</p>}
                 {load.state === "error" && (

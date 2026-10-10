@@ -95,19 +95,31 @@ he wants to point at parts of the portal when he gives feedback on its layout.
   "Show the names of the blocks on this page so you can refer to them in feedback". The choice is kept per viewer in
   browser storage, so it stays on while switching tabs, opening popups and reloading.
 - **When on**, every layout block of the current tab, the top bar and every open popup gets a dashed outline and a small
-  label "id · name" at its top-left corner, for example `OV-3 · What happens next`. Repeated items carry their group id
-  plus a fixed suffix from the item itself: the phase cards are `OV-4.0` to `OV-4.8` (the phase number), the stage cards
-  `RM-2.1` to `RM-2.3`, the four next-step parts `OV-3.1` to `OV-3.4`, the layer rows `AR-3.1` and on. Cards that all look
-  the same (questions, log entries) are labelled once, on the first one.
+  label "id · name" at its top-left corner, for example `OV-3 · What happens next`. The top bar's labels show only the id
+  (`HD-4`); the full name is in their tooltip and accessible name. Repeated items carry their group id plus a fixed suffix
+  and a short word that say which item it is, both taken from the item itself, never from its place in a list: the phase
+  cards are `OV-4.0` to `OV-4.8` (the phase number, "Phase card: P1"); the four next-step parts (`OV-3.1` "Step: Where we
+  are" to `OV-3.4` "Step: Then tell Claude"), the stage cards (`RM-2.1` "Stage card: Build" to `RM-2.3`) and the layer rows
+  (`AR-3.1` "Layer row: What you see" to `AR-3.5` "Layer row: Windows 11") are listed in the registry under the item's own id
+  in the plan data. Cards that all look the same (questions, log entries) are labelled once: the log labels the first entry
+  that the current filter leaves visible.
 - **A click on a label** (or Enter, since every label is a button reachable with Tab only while the mode is on) copies
   "where › id name", e.g. `Overview › OV-3 What happens next` or `Phase popup (P1) › PH-3 Tasks table`, and a polite
   live message says "Copied: …".
-- **A small bar** (bottom right; inside the top popup when one is open, because a popup makes the page behind inert)
-  offers **List all**, which opens the **Layout map** popup with every id and name by header, tab and popup, and
-  **Turn off**. Esc turns the mode off when no popup is open; with a popup open, Esc closes the popup first.
-- **Spacing.** To keep labels off the text, Ref mode adds a little space above each block, in the top bar and in the small
-  popups; the Layout map says so. Normal mode is unchanged (adding the button narrowed the top bar's gaps and the tabs'
-  side padding slightly so it still fits on one line at 1440 px).
+- **A small bar** (bottom right, one short line on a phone; inside the top popup when one is open, because a popup makes
+  the page behind inert) offers **List all**, which opens the **Layout map** popup, and **Turn off**. A "Copied" message
+  is cleared when the bar moves to another popup. Esc turns the mode off when no popup is open; with a popup open, Esc
+  closes the popup first. Turning it off inside a popup leaves keyboard focus in that popup; closing the Layout map gives
+  focus back to List all.
+- **The Layout map** lists every id and name by header, tab and popup, with the numbered items under their group. It
+  opens at the group of the current tab or open popup (highlighted) and has a row of jump links to every group.
+- **Ref mode moves nothing** (review 2026-10-10). The outlines and labels take no space: no block, gap or the top bar
+  changes place or size when the mode is switched on (a browser test checks this at 1440 and 390 px). Labels sit in the
+  gap just above each block; cards hold theirs just inside their top padding; popup headers carry theirs on their bottom
+  border at the right; in the small reference and script popups some labels sit at the right end, where the line above
+  is empty. The only addition is room at the very end of the page and of the popups for the bar, so the bar never hides
+  the last lines. Normal mode is unchanged (adding the button narrowed the top bar's gaps and the tabs' side padding
+  slightly so it still fits on one line at 1440 px).
 
 **The id registry** is `interactive_plan/lib/portal/uiRefs.ts`: one entry per block, `id → plain name`, with the prefix
 saying where it lives:
@@ -121,8 +133,10 @@ saying where it lives:
 | `DE` | Decisions tab | `SC` | script popup |
 | `RE` | Research tab | `QU` | Questions tab |
 
-Components mark a block with `{...ui("OV-3")}` (a `data-ui-ref` attribute); ids are written by hand and never counted
-from the page order, so they stay the same when the plan text changes. A removed block retires its number; a new block
+Components mark a block with `{...ui("OV-3")}` (a `data-ui-ref` attribute), and one item of a group with
+`{...ui("RM-2", { key: st.id })}` (looked up in the entry's `items` table) or a number of its own; ids are written by hand
+and never counted from the page order, so they stay the same when the plan text changes. A new item in the plan data
+takes the next free number in `items` (until then it shows its data id as the suffix, and the unit test names it). A removed block retires its number; a new block
 takes the next free number of its prefix; ids are never renumbered. A marked element must be able to hold the label
 button (never a list, table, row, link or button: wrap those in a `<div>`). The unit test `ui-refs.test.ts` checks the
 registry and its use ([ip-testing](ip-testing.md)).

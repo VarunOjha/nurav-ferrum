@@ -4,6 +4,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { layerRows } from "@/lib/portal/view";
 import {
   chipText,
   copyText,
@@ -13,6 +14,7 @@ import {
   prefixOf,
   scopeLabel,
   ui,
+  uiItem,
   uiLabel,
   UI_REF_ID,
   UI_REFS,
@@ -118,12 +120,55 @@ describe("ui ref labels", () => {
     expect(ui("OV-4", { index: 1, item: "P1" })).toEqual({ "data-ui-ref": "OV-4", "data-ui-index": "1", "data-ui-item": "P1" });
     expect(ui("PH-1", { pos: "inside" })).toEqual({ "data-ui-ref": "PH-1", "data-ui-pos": "inside" });
     expect(ui("RM-2", { index: 0 })).toEqual({ "data-ui-ref": "RM-2", "data-ui-index": "0" });
+    // A registered item: its fixed number and word, never its place in the list.
+    expect(ui("RM-2", { key: "stage-build", pos: "inside" })).toEqual({
+      "data-ui-ref": "RM-2",
+      "data-ui-index": "1",
+      "data-ui-item": "Build",
+      "data-ui-pos": "inside",
+    });
+    expect(ui("OV-3", { key: "script" })).toEqual({ "data-ui-ref": "OV-3", "data-ui-index": "3", "data-ui-item": "The script" });
+    // An item not (yet) in the registry keeps its own data id as the suffix: still fixed.
+    expect(ui("RM-2", { key: "stage-new" })).toEqual({ "data-ui-ref": "RM-2", "data-ui-index": "stage-new" });
+    expect(uiItem("OV-1", "where")).toBeNull();
+    expect(uiItem("OV-3", "toString")).toBeNull();
+  });
+
+  it("repeated items get words that say which item they are", () => {
+    expect(copyText(scopeLabel("OV-3"), uiLabel("OV-3", "3", "The script")!)).toBe("Overview › OV-3.3 Step: The script");
+    expect(copyText(scopeLabel("AR-3"), uiLabel("AR-3", "2", "Ferrum engine")!)).toBe("Architecture › AR-3.2 Layer row: Ferrum engine");
+    expect(copyText(scopeLabel("RM-2"), uiLabel("RM-2", "1", "Build")!)).toBe("Roadmap › RM-2.1 Stage card: Build");
+  });
+
+  it("every item numbers its group's items uniquely, and the plan data has no unregistered item", () => {
+    for (const [id, e] of Object.entries(UI_REFS) as [string, { item?: string; items?: Record<string, { n: number; name: string }> }][]) {
+      if (!e.items) continue;
+      expect(e.item, id).toBeTruthy();
+      const ns = Object.values(e.items).map((it) => it.n);
+      expect(new Set(ns).size, id).toBe(ns.length);
+      for (const n of ns) expect(Number.isInteger(n) && n >= 1, id).toBe(true);
+    }
+    const portal = path.resolve(APP, "..", "plan", "portal");
+    const read = (f: string) => JSON.parse(readFileSync(path.join(portal, f), "utf8").replace(/^\uFEFF/, ""));
+    const stages: { id: string }[] = read("roadmap.json").stages;
+    expect(stages.filter((s) => !uiItem("RM-2", s.id)).map((s) => s.id)).toEqual([]);
+    const rows = layerRows(read("architecture.json").layers);
+    expect(rows.filter((r) => !uiItem("AR-3", r.layers[0].id)).map((r) => r.layers[0].id)).toEqual([]);
+  });
+
+  it("never numbers an item by its place in a list", () => {
+    // ui(..., { index: i }) or { index: i + 1 } with a map index would renumber items when the data changes.
+    const bad: string[] = [];
+    for (const f of files) {
+      for (const m of readFileSync(f, "utf8").matchAll(/ui\([^)]*index:\s*(?:i|idx|index|n)\b/g)) bad.push(`${path.relative(APP, f)}: ${m[0]}`);
+    }
+    expect(bad).toEqual([]);
   });
 
   it("labels a block, an item, and refuses unknown ids", () => {
     expect(uiLabel("OV-3")).toEqual({ id: "OV-3", name: "What happens next" });
     expect(uiLabel("OV-3", "")).toEqual({ id: "OV-3", name: "What happens next" });
-    expect(uiLabel("OV-4", "1", "P1")).toEqual({ id: "OV-4.1", name: "Phase card P1" });
+    expect(uiLabel("OV-4", "1", "P1")).toEqual({ id: "OV-4.1", name: "Phase card: P1" });
     expect(uiLabel("RM-2", "2", null)).toEqual({ id: "RM-2.2", name: "Stage card" });
     expect(uiLabel("DE-2", "3")).toEqual({ id: "DE-2.3", name: "Decision list" });
     expect(uiLabel("ZZ-1")).toBeNull();
@@ -137,7 +182,7 @@ describe("ui ref labels", () => {
     expect(copyText(scopeLabel("OV-3"), l)).toBe("Overview › OV-3 What happens next");
     expect(copyText(popupContext("PH", "P1"), uiLabel("PH-3")!)).toBe("Phase popup (P1) › PH-3 Tasks table");
     expect(copyText(scopeLabel("HD-4"), uiLabel("HD-4")!)).toBe("Header › HD-4 Ref button");
-    expect(copyText(scopeLabel("OV-4"), uiLabel("OV-4", "1", "P1")!)).toBe("Overview › OV-4.1 Phase card P1");
+    expect(copyText(scopeLabel("OV-4"), uiLabel("OV-4", "1", "P1")!)).toBe("Overview › OV-4.1 Phase card: P1");
   });
 
   it("names popups with or without a detail", () => {
@@ -154,5 +199,13 @@ describe("ui ref labels", () => {
     expect(map.map((g) => g.label)).toEqual(Object.values(UI_SCOPES).map((s) => s.label));
     expect(map.find((g) => g.prefix === "OV")!.rows.find((r) => r.id === "OV-4")!.item).toBe("Phase card");
     expect(map.find((g) => g.prefix === "OV")!.rows.find((r) => r.id === "OV-1")!.item).toBeNull();
+    // Registered items are listed under their group, in number order.
+    expect(map.find((g) => g.prefix === "OV")!.rows.find((r) => r.id === "OV-3")!.items).toEqual([
+      { id: "OV-3.1", name: "Step: Where we are" },
+      { id: "OV-3.2", name: "Step: Why run something" },
+      { id: "OV-3.3", name: "Step: The script" },
+      { id: "OV-3.4", name: "Step: Then tell Claude" },
+    ]);
+    expect(map.find((g) => g.prefix === "OV")!.rows.find((r) => r.id === "OV-4")!.numbering).toMatch(/phase/);
   });
 });

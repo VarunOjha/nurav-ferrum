@@ -240,7 +240,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "ref-mode" (Ref button for layout feedback) verified and committed 2026-10-10 (`e1b198d`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 step "ref-mode-fixes" (review fixes for the Ref button)
+- intent: Ref mode must not change the layout it names (no extra space above blocks, header stays on one line), leave room for its bar at phone width, label the first visible log entry under any filter, give repeated items fixed ids and words from a registry (no list-position numbers), add jump links to the Layout map, clear the "Copied" message when a popup opens or closes, and keep keyboard focus in place.
+- paths: interactive_plan/lib/portal/uiRefs.ts, interactive_plan/components/portal/RefMode.tsx, interactive_plan/app/globals.css, interactive_plan/app/page.tsx, interactive_plan/app/roadmap/page.tsx, interactive_plan/app/architecture/page.tsx, interactive_plan/app/log/page.tsx, interactive_plan/app/layout.tsx, interactive_plan/components/portal/*.tsx, interactive_plan/tests/unit/ui-refs.test.ts, interactive_plan/tests/e2e/ref-mode.spec.ts, interactive_plan/README.md, wiki/interactive-plan/ip-routes-and-views.md, wiki/interactive-plan/ip-testing.md, wiki/raw/evidence/phase-p0-planning/portal-v2/ref-mode-fixes-checks.txt, plan/portal/*.json
+- rollback: git checkout -- <paths> (all tracked except the new evidence file)
 
 ## Blockers
 

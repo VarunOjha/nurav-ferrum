@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7742ee31735960ad6bf7a794b8aae3c14a2a6eb26f4f8296cdaca903d9b06559"
+    "content_hash": "sha256:64d2fe41d9df7dcc724c1a207911760b2526ba48d843ff73b7f1b3c202784933"
   },
   "entries": [
     {
@@ -968,6 +968,34 @@
         "## [2026-10-10] code | p0.17 Ref mode: Ref button, fixed block ids, outlines, copyable labels, Layout map",
         "## [2026-10-10] lint | p0.17 Ref mode: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px",
         "## [2026-10-10] plan | p0.17 step \"ref-mode\" committed: Ref button for layout feedback"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-10-ref-fixes",
+      "date": "2026-10-10",
+      "title": "Ref button fixed: it now shows the real layout",
+      "done": "A review found that Ref mode changed the layout it names: extra space above every block and a two-row top bar. Now nothing moves when you turn it on, so the spacing you see is real. On a phone the bottom bar no longer hides the end of a page. Repeated items say which one they are (\"Roadmap › RM-2.1 Stage card: Build\") with fixed numbers. The log names the first entry your filter shows. \"List all\" opens at your tab and has jump links. All checks pass.",
+      "next": "Restart the portal to get the fixes, turn Ref on and tell Claude your layout feedback using the copied names. Then your first approvals in chat and your P0 sign-off.",
+      "decisions": [
+        {
+          "what": "Ref mode must not move anything on the page",
+          "by": "claude"
+        },
+        {
+          "what": "The top bar's names show only the id; point at one to see its full name",
+          "by": "claude"
+        },
+        {
+          "what": "Repeated items get a fixed number and a short name, kept in one list",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] code | p0.17 Ref mode review fixes: moves nothing, room for the bar, fixed item names, Layout map jumps",
+        "## [2026-10-10] lint | p0.17 Ref mode review fixes: npm run verify green, positions unchanged in Ref mode"
       ],
       "phase": "phase-p0-planning"
     }
