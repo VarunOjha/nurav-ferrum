@@ -135,6 +135,14 @@ try {
         Assert-Result (Invoke-Checker $d) 1 @('BAD-JSON', 'risks.json')
     }
 
+    Test-Case 'BAD-SHAPE and UNKNOWN-REF: a task without "why", a task "how" naming an unexplained id' {
+        $d = New-Fixture 'task what why how'
+        Edit-Json (Join-Path $d 'plan/portal/phases/phase-p1-foundation.json') {
+            param($j) $j['tasks'][0].Remove('why'); $j['tasks'][0]['how'] = 'Follow adr-0098 step by step.'
+        }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-SHAPE', 'phase-p1-foundation.json', '"why"', 'UNKNOWN-REF', "'adr-0098'", '/tasks/0/how')
+    }
+
     Test-Case 'UNKNOWN-REF: a bare id and a ref link with no explainer' {
         $d = New-Fixture 'unknown ref'
         Edit-Json (Join-Path $d 'plan/portal/decisions.json') {

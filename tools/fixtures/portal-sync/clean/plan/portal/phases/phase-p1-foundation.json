@@ -19,6 +19,9 @@
       "id": "p1.1",
       "title": "Confirm the toolchain",
       "status": "Not started",
+      "what": "Checks that every build tool is installed and writes down its exact version.",
+      "why": "Results can only be repeated when we know which tools made them.",
+      "how": "Run each tool's version command and save the output as evidence.",
       "chain": "Tools installed → record exact versions → every later result names the tools it was built with.",
       "check": "Each tool prints a version; versions saved as evidence.",
       "script": null

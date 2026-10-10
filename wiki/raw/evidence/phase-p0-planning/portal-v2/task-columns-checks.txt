@@ -1,0 +1,59 @@
+# Tasks table with eight columns (p0.17 step task-columns, session s01, 2026-10-10)
+# Owner request: raw/owner/2026-10-10-s01-task-table-columns.md. npm run verify and the screenshots ran in a scratch git
+# worktree of HEAD 38bd4ff with this step's changed and new files copied in (byte-identical), core.longpaths on for
+# that worktree's git calls, E2E on port 3418 and screenshots on 3423, so the owner's running portal (port 3417) was
+# not rebuilt or stopped. The worktree was deleted afterwards.
+
+## Checks on the real repo
+$ pwsh tools/portal-sync-check.ps1
+portal-sync: clean - 18 files, 168 translated records, 384 refs
+$ pwsh tools/test-portal-sync-check.ps1 (last line)
+test-portal-sync-check: 27 passed, 0 failed
+$ python tools/quick_lint.py (last line)
+202 files checked, 0 errors, 0 warnings
+
+## npm run verify (scratch worktree), summary lines
+> interactive_plan@0.1.0 verify
+> npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e
+> interactive_plan@0.1.0 typecheck
+> interactive_plan@0.1.0 lint
+> eslint .
+> interactive_plan@0.1.0 test
+> vitest run
+ Test Files  25 passed (25)
+      Tests  770 passed | 1 skipped (771)
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+lint: 0 errors, 36 warnings, 2 info (pages: 202)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+> interactive_plan@0.1.0 build
+✓ Compiled successfully in 7.4s
+> interactive_plan@0.1.0 test:e2e
+> playwright test
+E2E guard: 22 real files unchanged (approvals.json absent)
+  101 passed (3.8m)
+rc=0
+New or changed browser tests in that run (all passed):
+✓   16 [chromium] › tests\e2e\a11y.spec.ts:29:9 › the open phase popup has no accessibility violations (light theme, 1440 wide) (1.3s)
+✓   17 [chromium] › tests\e2e\a11y.spec.ts:29:9 › the open phase popup has no accessibility violations (light theme, 390 wide) (1.2s)
+✓   18 [chromium] › tests\e2e\a11y.spec.ts:29:9 › the open phase popup has no accessibility violations (dark theme, 1440 wide) (1.3s)
+✓   19 [chromium] › tests\e2e\a11y.spec.ts:29:9 › the open phase popup has no accessibility violations (dark theme, 390 wide) (1.4s)
+✓   36 [chromium] › tests\e2e\overview.spec.ts:143:5 › the tasks table has the eight columns in order, and every task row shows what, why, how, logic, check and state (11.2s)
+✓  101 [chromium] › tests\e2e\shell.spec.ts:64:5 › phone width: the overview and a phase popup fit without sideways scrolling (1.1s)
+
+## Screenshots of the P1 phase popup tasks table (Claude read them)
+Probe: page width, popup width, table area visible width vs scroll width, header widths
+light 1440: page 1440 (= viewport), popup 1392, table area 1334 visible / 1334 scroll; Id 80, Title 157, What 184, Why 184, How 184, Logic 220, Check script 199, State 126
+dark 1440: same numbers as light 1440
+light 390 and dark 390: page 390 (= viewport), popup 374, table area 340 / 340; each task is a card with eight labelled rows
+Read: at 1440 all eight columns fit with no sideways scroll, every thought-chain step starts on its own line with an arrow,
+script buttons and check lines sit in Check script, the state chip in State, ids and phase names are reference chips.
+At 390 the cards show Id, Title, What, Why, How, Logic, Check script, State in that order. Both themes readable.
+No defect found; no code change after the review.
+
+## Spot check: what/why/how of 10 random tasks (seed 1010) against their wiki phase page
+p3.14, p8.8, p1.4, p6.7, p6.13, p2.8, p2.2, p2.18, p1.9, p8.2: every statement is in the task's title, verify line,
+test gate, unverified list or body of its phase page (e.g. p2.18 manual gate rows: five sites, mailto, restart, offline;
+p2.8 and p6.7 open checks are in the page's unverified list; p1.9 four spikes and the P2/P3 revision are in the body).
+No added facts found; no text changed.

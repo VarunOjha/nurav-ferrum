@@ -1,6 +1,7 @@
 /**
  * The phase popup (owner-approved Phase-Modal mockup): header with status and approvals, step order,
- * tasks table (id and state, title, what & why as a thought chain, how we check, check script), the test gate
+ * tasks table (Id, Title, What, Why, How, Logic = the thought chain one step per line, Check script with the
+ * plain "how we check" line, State; owner request 2026-10-10), the test gate
  * in plain words with its table and gate script, and what is the same in every phase. Server
  * component, rendered once per phase in the layout so every tab (and every phase id) can open it;
  * Modal (client) only opens and closes it. Script buttons open the script popup with the real file.
@@ -11,7 +12,7 @@ import type { Phase, Roadmap } from "@/lib/portal/schemas.gen";
 import { runCommand } from "@/lib/portal/scriptCommand";
 import { getScriptHeader } from "@/lib/portal/server";
 import { ownerHeaderParts } from "@/lib/portal/scripts";
-import { approvalLabel, phaseTone, taskTone } from "@/lib/portal/view";
+import { approvalLabel, chainSteps, phaseTone, TASK_COLUMNS, taskTone } from "@/lib/portal/view";
 import { popupContext, ui } from "@/lib/portal/uiRefs";
 import CloseLink from "./CloseLink";
 import Modal, { CloseModalButton } from "./Modal";
@@ -92,43 +93,57 @@ export default async function PhasePopup({
             </h3>
             <span className="small muted">Each check script is kept in the repo so it can be re-run any time</span>
           </div>
-          <div className="table-wrap">
-            <table className="table tasks-table">
+          <div className="table-wrap tasks-wrap" tabIndex={0} role="region" aria-label="Tasks table, scrolls sideways">
+            <table className="table tasks-table" data-testid="tasks-table">
               <thead>
                 <tr>
-                  <th scope="col" className="col-id">
-                    Id · state
-                  </th>
-                  <th scope="col" className="col-title">
-                    Title
-                  </th>
-                  <th scope="col">What &amp; why</th>
-                  <th scope="col" className="col-check">
-                    How we check
-                  </th>
-                  <th scope="col" className="col-script">
-                    Check script
-                  </th>
+                  {TASK_COLUMNS.map((c) => (
+                    <th key={c} scope="col" className={`col-${c.toLowerCase().replace(" ", "-")}`}>
+                      {c}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {phase.tasks.map((t) => (
                   <tr key={t.id} data-task={t.id} data-task-status={t.status}>
-                    <td className="cell-id">
+                    <td className="cell-id" data-label="Id">
                       <Ref id={t.id} variant="code" />
-                      <span className={`chip chip-sm chip-${taskTone(t.status)} task-status`}>{t.status}</span>
                     </td>
-                    <td className="strong cell-title">
+                    <td className="strong cell-title" data-label="Title">
                       <RichText text={t.title} />
                     </td>
-                    <td className="text-2" data-label="What & why">
-                      <RichText text={t.chain} />
+                    <td className="text-2" data-label="What" data-field="what">
+                      <RichText text={t.what} />
                     </td>
-                    <td className="text-2" data-label="How we check">
-                      <RichText text={t.check} />
+                    <td className="text-2" data-label="Why" data-field="why">
+                      <RichText text={t.why} />
                     </td>
-                    <td data-label="Check script">
+                    <td className="text-2" data-label="How" data-field="how">
+                      <RichText text={t.how} />
+                    </td>
+                    <td className="text-2" data-label="Logic" data-field="logic">
+                      <ol className="chain-steps">
+                        {chainSteps(t.chain).map((step, i) => (
+                          <li key={i} className="chain-step">
+                            {i > 0 && (
+                              <span className="chain-arrow" aria-hidden="true">
+                                →{" "}
+                              </span>
+                            )}
+                            <RichText text={step} />
+                          </li>
+                        ))}
+                      </ol>
+                    </td>
+                    <td data-label="Check script" data-field="script">
                       <ScriptCell script={t.script} />
+                      <p className="small muted task-check">
+                        <RichText text={t.check} />
+                      </p>
+                    </td>
+                    <td data-label="State" data-field="state">
+                      <span className={`chip chip-sm chip-${taskTone(t.status)} task-status`}>{t.status}</span>
                     </td>
                   </tr>
                 ))}

@@ -23,6 +23,9 @@
     {
       "id": "p7.1",
       "title": "Tab state machine",
+      "what": "The rules for each tab's state: active, background, idle, close candidate, closed, restoring, and which moves between them are allowed.",
+      "why": "Each tab must always be in one clear state, and the tab you are using must never be closed by mistake.",
+      "how": "Write the allowed moves as a fixed table in plain Rust code, with tests for every allowed and forbidden move and for random event sequences.",
       "status": "Not started",
       "chain": "Each tab must always be in one clear state (active, background, idle, close candidate, closed, restoring) → write the allowed moves as a fixed table with tests → the tab you are using can never be closed by mistake.",
       "check": "Tests cover every allowed and forbidden move, plus random sequences that never break the rules.",
@@ -31,6 +34,9 @@
     {
       "id": "p7.2",
       "title": "Signals for sleep decisions",
+      "what": "Inputs for sleep decisions: last use, memory pressure, tab activity, cost to restore, media playing, downloads, your exclusions and unsaved forms.",
+      "why": "Each strategy needs real signals with known limits to decide well.",
+      "how": "Build one provider per signal, tested on fake inputs and test pages; per-tab cost can only be estimated, and some Windows and WebView2 signals are not yet confirmed.",
       "status": "Not started",
       "chain": "Good decisions need inputs → measure last use, memory pressure, tab activity, cost to restore, media playing, downloads, your exclusions and unsaved forms → each strategy decides on real signals with known limits.",
       "check": "Each signal has tests with fake inputs and with a test page; its limits are written down.",
@@ -39,6 +45,9 @@
     {
       "id": "p7.3",
       "title": "Sleep actions: hide, suspend, close, restore",
+      "what": "The sleep actions: hide, suspend, low-memory mode, close while remembering address, history and scroll position, and restore.",
+      "why": "Sleeping has levels, so each strategy can pick the right one for a tab.",
+      "how": "Use WebView2's suspend and low-memory settings (never both together), close the web view to discard, and test each action and that restore returns to the same page.",
       "status": "Not started",
       "chain": "Sleeping has levels → build hide, suspend, low-memory mode and close-but-remember (address, history, scroll position), plus restore → each strategy can pick the right level.",
       "check": "Tests confirm the web view's state after each action and that restore returns to the same page.",
@@ -47,6 +56,9 @@
     {
       "id": "p7.4",
       "title": "Safety guards",
+      "what": "Guards that stop a tab from being closed while media plays, a download runs, a form is unsaved, the page asks before leaving, or you excluded the site.",
+      "why": "Closing a tab in the middle of a task can lose your work; sleeping must never cost you data.",
+      "how": "Check each guard before any close, test that guarded pages are never closed under any strategy or memory pressure, and log each refusal with its reason.",
       "status": "Not started",
       "chain": "Closing a tab mid-task can lose your work → never close a tab while media plays, a download runs, a form is unsaved, the page asks before leaving, or you excluded the site → sleeping never costs you data.",
       "check": "Guarded test pages are never closed under any strategy, even under memory pressure; each refusal is logged.",
@@ -55,6 +67,9 @@
     {
       "id": "p7.5",
       "title": "Three simple strategies",
+      "what": "Three simple strategies: never sleep, sleep after a fixed idle time, and sleep under memory pressure, chosen by a setting.",
+      "why": "They are the baselines the smarter strategy is compared against, and one app runs them all so only the strategy differs.",
+      "how": "Build each strategy behind a run-time setting in the same app, and test each on scripted signal timelines.",
       "status": "Not started",
       "chain": "We need baselines to compare against → build never sleep, sleep after a fixed idle time, and sleep under memory pressure, switchable by a setting → one app runs every strategy, so only the strategy differs.",
       "check": "Tests per strategy on scripted timelines pass; one build switches strategy by setting.",
@@ -63,6 +78,9 @@
     {
       "id": "p7.6",
       "title": "Cost-aware strategy",
+      "what": "A smarter, cost-aware strategy that weighs memory saved, energy and restore delay in one weighted score.",
+      "why": "Fixing the weights on separate calibration workloads means the strategy is not tuned to the test it is judged on.",
+      "how": "Compute the score from documented measurements, set the energy weight to zero if energy cannot be measured, and commit the weights before the campaign.",
       "status": "Not started",
       "chain": "Smarter choices weigh memory saved, energy and restore delay → combine them in one weighted score (energy weight zero if energy cannot be measured) and fix the weights on separate calibration workloads → the strategy is not tuned to the test it is judged on.",
       "check": "Score tests pass; weights and calibration method saved before the campaign; calibration and test workloads do not overlap.",
@@ -71,6 +89,9 @@
     {
       "id": "p7.7",
       "title": "Log every sleep decision",
+      "what": "A log of every tab state change and every refusal, plus the time from starting a restore to the restored page showing its first content.",
+      "why": "We must see what each strategy did, and how long restores take, to compare them.",
+      "how": "Record each change in the record format from the telemetry phase, and test it on a scripted close and restore.",
       "status": "Not started",
       "chain": "We must see what each strategy did → record every state change and refusal, and the time from restore to first content → behaviour and restore delay become measurable.",
       "check": "A scripted close and restore produce the expected records and a restore-time record.",
@@ -79,6 +100,9 @@
     {
       "id": "p7.8",
       "title": "Long-running test",
+      "what": "A long-running test with many background tabs under each strategy, watching memory growth, crashes and restore success.",
+      "why": "Some problems only show up after hours of use.",
+      "how": "Run the many-background-tabs workload for a long session per strategy, save the raw output, and turn each crash or failed restore into a fixed bug with a test before the campaign.",
       "status": "Not started",
       "chain": "Some problems only show up over hours → run many background tabs for a long session under each strategy, watching memory growth, crashes and restores → every bug found is fixed, with a test, before the campaign.",
       "check": "Raw output saved; every crash or failed restore has a fix and a test.",
@@ -87,6 +111,9 @@
     {
       "id": "p7.9",
       "title": "Bench settings for each strategy",
+      "what": "Test-bench settings for each Ferrum strategy: fixed idle time, memory pressure and cost-aware.",
+      "why": "The only difference between Ferrum runs must be the strategy switch.",
+      "how": "Add one settings file per strategy, check their format, and confirm with a diff report that only the strategy setting differs.",
       "status": "Not started",
       "chain": "The test bench needs a setup per strategy → add one settings file for each Ferrum strategy → the only difference between Ferrum runs is the strategy switch.",
       "check": "Settings files pass the format check; the diff shows only the strategy switch differs.",
@@ -95,6 +122,9 @@
     {
       "id": "p7.10",
       "title": "Write predictions before testing",
+      "what": "Predictions for the strategy comparison written down in advance, with the size of difference that would really matter.",
+      "why": "Deciding what counts as success after seeing the data is biased; writing it first means results cannot be bent to fit.",
+      "how": "Mark every linked prediction as preregistered (written in advance) and get your approval before the campaign starts.",
       "status": "Not started",
       "chain": "Deciding what counts as success after seeing data is biased → write each prediction and its meaningful-difference threshold first, and you approve them → results cannot be bent to fit.",
       "check": "Every prediction is recorded and approved by you before the campaign starts.",
@@ -103,6 +133,9 @@
     {
       "id": "p7.11",
       "title": "Strategy campaign",
+      "what": "The strategy campaign: the four strategies run on identical workloads, with Chrome and Edge as shipped for reference.",
+      "why": "It produces the raw data on tab sleeping that the paper analyses.",
+      "how": "Run it with the test runner under the same rules as the first campaign, saving the run record, every trial and checksums; nothing is interpreted yet.",
       "status": "Not started",
       "chain": "Bench and predictions are ready → run the four strategies on identical workloads, with Chrome and Edge as shipped for reference → raw data for P8.",
       "check": "A complete raw-data folder with every trial and checksums; no results stated yet.",
@@ -111,6 +144,9 @@
     {
       "id": "p7.12",
       "title": "Literature check: what is really new",
+      "what": "A closing literature check comparing our approach with similar ideas: Chrome and Edge tab sleeping, Android app standby, cost-aware caching and earlier reading.",
+      "why": "The paper may claim only what is truly new, and similar ideas already exist.",
+      "how": "List each close earlier idea with a verified source, say what (if anything) differs, and get your approval of the assessment.",
       "status": "Not started",
       "chain": "Similar ideas exist (Chrome and Edge tab sleeping, Android app standby, cost-aware caching) → compare our approach with each, using verified sources, and you approve the assessment → the paper claims only what is truly new.",
       "check": "Every close earlier work is listed with a verified source and what differs; your approval recorded.",
@@ -119,6 +155,9 @@
     {
       "id": "p7.14",
       "title": "Optional rerun with smart sleeping",
+      "what": "An optional rerun of the footprint, page-load, smoothness, energy and reliability experiments with smart sleeping switched on.",
+      "why": "The first campaign tested Ferrum without sleeping; this rerun fills that gap, or the gap is recorded as a known limitation.",
+      "how": "Only if you pick option (a) in [this open question](ref:Q-208): same rules as the first campaign, new shuffled blocks never mixed with the first data, sealed when done.",
       "status": "Not started",
       "chain": "The first campaign tested Ferrum without sleeping → if you pick option (a) in [this open question](ref:Q-208), rerun footprint, page-load, smoothness, energy and reliability with smart sleeping, same rules, kept separate → otherwise the gap is recorded as a known limitation.",
       "check": "A sealed raw-data folder with every trial, or a written deviation note that cites your answer.",
@@ -127,6 +166,9 @@
     {
       "id": "p7.13",
       "title": "Gate and your review",
+      "what": "The end-of-phase check and your review of the tab-sleeping work.",
+      "why": "The paper phase starts only after every check passes and you have approved this phase.",
+      "how": "The gate script runs every check and saves the evidence; you review it and approve the end of this phase.",
       "status": "Not started",
       "chain": "All tasks done → the gate script runs every check and saves the evidence → you review and approve; only then does P8 start.",
       "check": "All evidence files exist, the wiki check is clean, and you approve the end of P7.",

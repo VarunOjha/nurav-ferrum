@@ -21,3 +21,18 @@ test("the open reference popup has no accessibility violations", async ({ page }
   await expect(page.getByTestId("ref-dialog")).toBeVisible();
   await expectAccessible(page, "[data-testid=ref-dialog]");
 });
+
+// The phase popup with its eight-column tasks table (owner request 2026-10-10): wide table and phone
+// cards, light and dark.
+for (const scheme of ["light", "dark"] as const) {
+  for (const width of [1440, 390]) {
+    test(`the open phase popup has no accessibility violations (${scheme} theme, ${width} wide)`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.goto("/");
+      await page.getByTestId("phase-cards").getByRole("button").first().click();
+      await expect(page.locator("dialog.phase-modal[open]")).toBeVisible();
+      await expectAccessible(page, "dialog.phase-modal[open]");
+    });
+  }
+}

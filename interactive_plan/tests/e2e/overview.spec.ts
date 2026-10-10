@@ -16,7 +16,7 @@ interface Roadmap {
 interface Phase {
   id: string;
   title: string;
-  tasks: { id: string; status: string; script: string | null }[];
+  tasks: { id: string; title: string; status: string; script: string | null; what: string; why: string; how: string; chain: string; check: string }[];
   progress: { done: number; total: number };
   test_gate: { rows: unknown[]; script: string | null };
   step_order: string[];
@@ -130,6 +130,56 @@ test("each phase card opens its popup; Esc and the close button close it and foc
     await expect(dialog).toBeHidden();
     await expect(card).toBeFocused();
   }
+});
+
+// Owner request 2026-10-10: the tasks table has separate columns, in this order.
+const TASK_HEADERS = ["Id", "Title", "What", "Why", "How", "Logic", "Check script", "State"];
+/** The first two words of a text when they are plain words (no id that could become a chip). */
+const plainStart = (text: string): string | null => {
+  const words = text.split(/\s+/).slice(0, 2);
+  return words.every((w) => /^[A-Za-z,']+$/.test(w)) ? words.join(" ") : null;
+};
+
+test("the tasks table has the eight columns in order, and every task row shows what, why, how, logic, check and state", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const phase = portalJson<Phase>(`phases/${roadmap.phases[0].id}.json`);
+  await page.getByTestId("phase-cards").getByRole("button").first().click();
+  const dialog = page.getByRole("dialog", { name: phase.title });
+  await expect(dialog).toBeVisible();
+  const table = dialog.getByTestId("tasks-table");
+  const headers = table.locator("thead th");
+  await expect(headers).toHaveText(TASK_HEADERS);
+  for (const h of TASK_HEADERS) {
+    await expect(table.getByRole("columnheader", { name: h, exact: true })).toHaveAttribute("scope", "col");
+  }
+  for (const t of phase.tasks) {
+    const row = table.locator(`tbody tr[data-task="${t.id}"]`);
+    await expect(row.locator("td")).toHaveCount(TASK_HEADERS.length);
+    await expect(row.locator("td").first()).toContainText(t.id);
+    for (const field of ["what", "why", "how"] as const) {
+      const cell = row.locator(`td[data-field="${field}"]`);
+      await expect(cell).not.toBeEmpty();
+      const start = plainStart(t[field]);
+      if (start) await expect(cell).toContainText(start);
+    }
+    // Logic: the thought chain, one step per line.
+    const steps = row.locator('td[data-field="logic"] .chain-step');
+    expect(await steps.count()).toBeGreaterThanOrEqual(1);
+    if (!t.chain.includes("](ref:")) expect(await steps.count()).toBe(t.chain.split("→").filter((x) => x.trim()).length);
+    // Check script: the script (or "Not written yet") with the plain check line under it.
+    const scriptCell = row.locator('td[data-field="script"]');
+    if (t.script) await expect(scriptCell.locator(`button[data-script="${t.script}"]`)).toBeVisible();
+    else await expect(scriptCell).toContainText("Not written yet");
+    await expect(scriptCell.locator(".task-check")).not.toBeEmpty();
+    await expect(row.locator('td[data-field="state"]')).toHaveText(t.status);
+  }
+  // Wide screen: the popup fits the window; a too-narrow table scrolls inside the popup, not the page.
+  const box = (await dialog.boundingBox())!;
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(1440);
+  const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(pageOverflow).toBeLessThanOrEqual(0);
 });
 
 test("a phase popup opens from the keyboard", async ({ page }) => {

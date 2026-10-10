@@ -78,4 +78,10 @@ test("phone width: the overview and a phase popup fit without sideways scrolling
   expect(inner).toBeLessThanOrEqual(0);
   // The column names are visually hidden (each card labels its own values).
   expect(await table.locator("thead").evaluate((e) => e.getBoundingClientRect().height)).toBeLessThanOrEqual(1);
+  // Each task card has the same eight labelled rows as the wide table (owner request 2026-10-10).
+  const firstRow = table.locator("tbody tr").first();
+  const labels = await firstRow.locator("td").evaluateAll((tds) => tds.map((td) => td.getAttribute("data-label")));
+  expect(labels).toEqual(["Id", "Title", "What", "Why", "How", "Logic", "Check script", "State"]);
+  const label = await firstRow.locator('td[data-label="What"]').evaluate((td) => getComputedStyle(td, "::before").content);
+  expect(label).toBe('"What"');
 });

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:bf0692862c8a9696d3beba7d2651e1a160b59066a566434a5250d59174f538b4"
+    "content_hash": "sha256:4a158797d183929b8b027d14c05964b720ba12bbfb9591aa300d527335d83ff4"
   },
   "entries": [
     {
@@ -997,6 +997,31 @@
         "## [2026-10-10] code | p0.17 Ref mode review fixes: moves nothing, room for the bar, fixed item names, Layout map jumps",
         "## [2026-10-10] lint | p0.17 Ref mode review fixes: npm run verify green, positions unchanged in Ref mode",
         "## [2026-10-10] plan | p0.17 step \"ref-mode-fixes\" committed: Ref mode shows the real layout"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-10-task-columns",
+      "date": "2026-10-10",
+      "title": "Tasks table now has separate columns, as you asked",
+      "done": "Each phase's tasks table now has eight columns: Id, Title, What, Why, How, Logic, Check script and State. Every task got a short what, why and how, taken from its phase page with nothing added. Logic shows the thought chain one step per line. On a phone each task is a card with the same eight rows. All checks pass.",
+      "next": "Restart the portal to see the new table, then go on with your walkthrough using Ref. Then your first approvals in chat and your P0 sign-off.",
+      "decisions": [
+        {
+          "what": "Separate columns for id, title, what, why, how, logic, check script and state",
+          "by": "you"
+        },
+        {
+          "what": "Logic is the existing thought chain; the plain check line sits under the check script",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] ingest | Owner asks for separate columns in the phase popup's tasks table",
+        "## [2026-10-10] code | p0.17 tasks table: eight columns, task JSON gains what, why and how",
+        "## [2026-10-10] lint | p0.17 tasks table: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px"
       ],
       "phase": "phase-p0-planning"
     }

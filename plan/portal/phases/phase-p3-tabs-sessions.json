@@ -23,6 +23,9 @@
     {
       "id": "p3.1",
       "title": "Tab rules as plain code",
+      "what": "The rules for tabs (open, close, switch, reorder, reopen a closed tab), written as plain code with no window attached.",
+      "why": "Tab logic has many edge cases. Testing it without a window catches mistakes early: always one active tab, ids never reused.",
+      "how": "Write the rules in the app's core code. Run normal tests plus tests that try random sequences of actions and check every rule still holds.",
       "status": "Not started",
       "chain": "Tab logic has many edge cases → write it without the window and test random sequences of actions → exactly one active tab, ids never reused.",
       "check": "Unit and random-sequence tests keep every rule.",
@@ -31,6 +34,9 @@
     {
       "id": "p3.2",
       "title": "One web view per tab",
+      "what": "Each tab gets its own website view: hidden or shown when you switch, resized with the window, fully closed with the tab.",
+      "why": "Tabs must not freeze the app or leave processes running after they close.",
+      "how": "Create views only from non-blocking code (blocking code freezes on Windows), hide and show them on switch, release everything on close. A test opens and closes 20 tabs.",
       "status": "Not started",
       "chain": "Each tab needs its own view → create views only from non-blocking code, hide and show on switch, release fully on close → no freezes or leftover processes.",
       "check": "Open 20 tabs, switch, close all: view count back to zero, no leftover processes.",
@@ -39,6 +45,9 @@
     {
       "id": "p3.3",
       "title": "Tab strip and shortcuts",
+      "what": "A tab strip plus keyboard shortcuts for new tab, close tab, next and previous tab, address bar, back, forward and reload.",
+      "why": "Shortcuts must work even while you are inside a website, without giving websites any access to the app.",
+      "how": "Handle the shortcuts in the trusted shell. The exact way to catch keys while a website has focus is not checked yet; this phase checks it.",
       "status": "Not started",
       "chain": "Shortcuts must work even while typing in a website → handle them in the shell without giving websites access → fast and still safe.",
       "check": "Each shortcut works from the shell and from a tab; the bridge lockdown test still passes.",
@@ -47,6 +56,9 @@
     {
       "id": "p3.4",
       "title": "Saved settings and startup sites",
+      "what": "A saved settings file, including the websites that open at startup.",
+      "why": "Settings must survive crashes and app upgrades, so they are never lost or half-written.",
+      "how": "A versioned file in the app's config folder, written to a temporary file and then swapped in, with an upgrade path. A damaged file falls back to defaults and keeps a backup.",
       "status": "Not started",
       "chain": "Settings must survive crashes and upgrades → a versioned file, written safely, with migration → never lost or half-written.",
       "check": "Round trip works; a future version is refused clearly; a corrupt file falls back with a backup; startup sites open in order.",
@@ -55,6 +67,9 @@
     {
       "id": "p3.5",
       "title": "Restore tabs after restart or crash",
+      "what": "Your tabs (address, order, active tab, profile, place in history) come back after a restart or a crash.",
+      "why": "Crashes happen. After a forced kill you should still get your tabs back.",
+      "how": "Save the tab list regularly and on exit, writing a temporary file and then renaming it, so a crash never leaves a half-written file. Restore it on start.",
       "status": "Not started",
       "chain": "Crashes happen → save the tab list regularly and on exit, safely → after a forced kill you get your tabs back.",
       "check": "Normal exit, forced kill and unreachable-site restores all behave.",
@@ -63,6 +78,9 @@
     {
       "id": "p3.6",
       "title": "Separate profile per site",
+      "what": "Per-site settings, including which separate profile (data store) each site uses.",
+      "why": "Sites should not see each other's cookies and stored data.",
+      "how": "Assign profiles through the route chosen in P1. Decide and write down what counts as one site: the exact web address origin or the wider domain.",
       "status": "Not started",
       "chain": "Sites should not see each other's data → assign profiles using the route chosen in P1 → cookies stay apart.",
       "check": "Two sites in different profiles cannot see each other's cookies; one site in two tabs shares one profile; survives restart.",
@@ -71,6 +89,9 @@
     {
       "id": "p3.7",
       "title": "History",
+      "what": "Back and forward for each tab, plus a list of the pages you visited.",
+      "why": "History is useful but private: it stays on this PC, can be cleared, and never goes into the project files.",
+      "how": "Keep back and forward per tab in the shell and the visit list in a local file. A test checks that clearing empties both the list and the file.",
       "status": "Not started",
       "chain": "You need back/forward per tab and a list of visited pages → kept locally, clearable, never in the repo → useful without leaking.",
       "check": "History tests pass; clearing empties the list and the file.",
@@ -79,6 +100,9 @@
     {
       "id": "p3.8",
       "title": "Basic downloads",
+      "what": "Basic downloads: save to the Downloads folder or ask where, and show progress, completion and errors.",
+      "why": "Files must land somewhere sensible, and you must see what happened to them.",
+      "how": "Use the app framework's download hook. Stricter download safety rules come later, in P4.",
       "status": "Not started",
       "chain": "Files must land somewhere sensible → default folder or a prompt, with progress and errors → downloads are visible.",
       "check": "A test file arrives with the right size and fingerprint; a failing one shows an error.",
@@ -87,6 +111,9 @@
     {
       "id": "p3.9",
       "title": "Shell stays responsive",
+      "what": "A check that the browser stays usable while one tab is very busy.",
+      "why": "A busy website must not freeze the whole browser.",
+      "how": "A test page keeps one tab busy; switching tabs and typing must finish within a time limit. That busy tabs run apart from the shell is not checked yet; this checks it.",
       "status": "Not started",
       "chain": "A busy tab must not freeze the browser → switch tabs and type while another tab burns CPU → the shell stays usable.",
       "check": "Switching and typing finish within the test's time limit (a requirement, not a measurement).",
@@ -95,6 +122,9 @@
     {
       "id": "p3.10",
       "title": "Guard against the freeze bug",
+      "what": "A guard that stops the known Windows freeze bug from coming back.",
+      "why": "Creating tab views from blocking code freezes the app on Windows.",
+      "how": "A code review checklist item, plus a test that creates tabs from the shell's command path in a loop and must finish without hanging.",
       "status": "Not started",
       "chain": "Creating views from blocking code freezes on Windows → make that path impossible and test it in a loop → the bug cannot come back.",
       "check": "A review checklist item plus a loop test that never hangs.",
@@ -103,6 +133,9 @@
     {
       "id": "p3.14",
       "title": "Settings screen",
+      "what": "A settings screen in the trusted shell for startup sites, per-site settings with profiles, and the download folder.",
+      "why": "You can change these without editing files, while websites still cannot touch your settings.",
+      "how": "The screen reads and changes settings only through app commands that check the input and save safely. Bad input, like a missing folder, is refused.",
       "status": "Not started",
       "chain": "You need to change startup sites, profiles and the download folder → a settings screen in the trusted shell, checked by the app → websites still cannot touch settings.",
       "check": "Changes persist and apply after restart; bad input is refused; websites cannot call these commands.",
@@ -111,6 +144,9 @@
     {
       "id": "p3.15",
       "title": "Sidebar of tabs and history",
+      "what": "A sidebar you can open and close, listing open tabs and your history.",
+      "why": "Website views are always drawn on top of the shell, so anything placed over them would be hidden.",
+      "how": "Place the sidebar beside the website area and shrink the tab view when it opens, so the two never overlap. A keyboard shortcut toggles it.",
       "status": "Not started",
       "chain": "Website views are always drawn over the shell → place the sidebar beside them, never on top → nothing is hidden or overlapped.",
       "check": "Toggling the sidebar resizes the tab view with no overlap; choosing an entry opens it.",
@@ -119,6 +155,9 @@
     {
       "id": "p3.11",
       "title": "One integration suite",
+      "what": "One test suite combining the tests for tabs, restore, profiles, history, downloads, settings screen and sidebar.",
+      "why": "One clean run is clear proof that the milestone works.",
+      "how": "A single command runs the whole suite. It must finish with no failures, and its output is saved.",
       "status": "Not started",
       "chain": "Many features → one command runs every P3 test → a single green run proves the milestone.",
       "check": "The suite passes; output saved.",
@@ -127,6 +166,9 @@
     {
       "id": "p3.12",
       "title": "Literature batch 3",
+      "what": "A batch of reading: studies of how people use tabs, Chrome and Edge rules for sleeping tabs, and similar ideas on phones.",
+      "why": "Tab lifecycle is the core research idea; this is the closest earlier work for P7.",
+      "how": "Write dated research notes. Check the uncertain entries on the starting reading list, or keep them flagged.",
       "status": "Not started",
       "chain": "Tab lifecycle is the core research idea → read tab-usage studies and Chrome and Edge lifecycle policies → prior art for P7.",
       "check": "New dated notes; uncertain seed entries checked or still flagged.",
@@ -135,6 +177,9 @@
     {
       "id": "p3.13",
       "title": "Docs, gate, your review",
+      "what": "Update the docs, run the phase gate and hand over for your review.",
+      "why": "You decide when P3 is done, after using Ferrum for a real working session with many tabs.",
+      "how": "Update part pages, the README features and known limits, save all evidence. Then you do the hand checks: eight or more tabs, shortcuts, kill and restore, a real download.",
       "status": "Not started",
       "chain": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
       "check": "All evidence saved; wiki clean; you approved the P3 exit.",

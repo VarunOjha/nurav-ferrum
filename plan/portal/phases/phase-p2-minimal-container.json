@@ -23,6 +23,9 @@
     {
       "id": "p2.1",
       "title": "Build local test pages",
+      "what": "A local test server with fixed pages: redirects, a redirect loop, new-window and mail links, a cookie page, slow and error pages.",
+      "why": "Real websites change; fixed pages make navigation tests give the same answer every run.",
+      "how": "A small Rust server in the tests folder, its library version pinned when P2 starts; tests check that each page returns its documented status.",
       "status": "Not started",
       "chain": "Real websites change → a local server with fixed pages (redirects, pop-ups, cookies, slow and error pages) → navigation tests give the same answer every run.",
       "check": "Server tests pass; each test page returns its documented status.",
@@ -31,6 +34,9 @@
     {
       "id": "p2.2",
       "title": "Create the desktop app",
+      "what": "The desktop app itself, with the shell window built in plain TypeScript and Vite.",
+      "why": "Everything else in P2 needs a running app, built the way P1 decided.",
+      "how": "Create the app with the Tauri version and window layout chosen in P1, make a release build and save a screenshot of the shell window.",
       "status": "Not started",
       "chain": "The design was fixed in P1 → create the app with the chosen Tauri version and hosting route → the shell window opens.",
       "check": "Release build succeeds; the window shows the shell (screenshot saved).",
@@ -39,6 +45,9 @@
     {
       "id": "p2.3",
       "title": "Lock the bridge to the app",
+      "what": "Permissions to the app's command channel for the shell only, none for websites.",
+      "why": "Every web view can reach the command channel, so a website must never be able to control Ferrum.",
+      "how": "No permission for remote pages and the shell's permission tied to its name; a test page tries app, plugin and event calls, and every call must be refused and logged.",
       "status": "Not started",
       "chain": "Every web view can reach the app's command channel → grant permissions to the shell only, none to websites → a website cannot control Ferrum.",
       "check": "A test page tries app, plugin and event calls; every one is refused and logged.",
@@ -47,6 +56,9 @@
     {
       "id": "p2.4",
       "title": "Settings model",
+      "what": "A typed settings model: start page, navigation rules and data folder, with safe defaults.",
+      "why": "Bad settings must never crash or weaken the app.",
+      "how": "The core library reads, checks and fills in the settings; tests cover a valid file, a missing file, a bad address and a non-HTTPS start page.",
       "status": "Not started",
       "chain": "Start page, navigation rules and data folder must be valid → typed settings with safe defaults → bad settings never crash or weaken the app.",
       "check": "Tests: valid file, missing file, bad address, non-HTTPS start page.",
@@ -55,6 +67,9 @@
     {
       "id": "p2.5",
       "title": "Clean up address-bar input",
+      "what": "One function that turns address-bar text into a safe address or refuses it.",
+      "why": "People type anything, and malformed input must never navigate.",
+      "how": "A pure function in the core library with a table of tests, at least one per input type: no scheme, http, foreign letters, IPv6, script, data and file links, junk.",
       "status": "Not started",
       "chain": "People type anything → one tested function turns input into a safe address or refuses it → malformed input never navigates.",
       "check": "One test per input type (no scheme, http, foreign letters, IPv6, script, data and file links, junk) passes.",
@@ -63,6 +78,9 @@
     {
       "id": "p2.6",
       "title": "Show a website and track it",
+      "what": "The website view, plus reporting of its address and loading state to the shell.",
+      "why": "The address bar and the spinner must always be right.",
+      "how": "The view manager creates the view and uses Tauri's navigation and page-load hooks; a test visits two local pages and checks the events arrive in order.",
       "status": "Not started",
       "chain": "The shell must know where the page is → create the website view and report address and loading state → the address bar and spinner are always right.",
       "check": "A test visits two pages; the shell receives address and load events in order.",
@@ -71,6 +89,9 @@
     {
       "id": "p2.7",
       "title": "Back, forward, refresh",
+      "what": "Back, forward and refresh buttons, greyed out when they cannot work.",
+      "why": "This is basic browsing, and it must behave like a normal browser.",
+      "how": "Use the method chosen in P1; a test goes from page A to B, then back, forward and refresh, and the test server counts the requests.",
       "status": "Not started",
       "chain": "Basic browsing → use the method chosen in P1 and grey out buttons that cannot work → behaves like a normal browser.",
       "check": "A then B: back shows A, forward shows B, refresh reloads B; buttons match history.",
@@ -79,6 +100,9 @@
     {
       "id": "p2.8",
       "title": "Loading and error screens",
+      "what": "A spinner while loading and an error panel for failed pages.",
+      "why": "Pages are slow or fail, and you need clear feedback without weakening security.",
+      "how": "The shell draws both itself and never loads the app's own pages into the website view. Whether Tauri reports enough to show HTTP errors is not checked yet.",
       "status": "Not started",
       "chain": "Pages are slow or fail → spinner and error panel drawn by the shell, never by loading the app's own pages into the website view → clear feedback without weakening security.",
       "check": "Slow, 404, 500 and unreachable tests each show the right state.",
@@ -87,6 +111,9 @@
     {
       "id": "p2.9",
       "title": "Follow redirects correctly",
+      "what": "Correct handling of redirects: the final address shown, loops stopped with an error.",
+      "why": "The address bar must never show the wrong address.",
+      "how": "Tests open each redirect page on the local server and check the final address; the loop page must end in the error state.",
       "status": "Not started",
       "chain": "Sites redirect → show the final address and stop loops with an error → the address bar never lies.",
       "check": "Each redirect test shows the final address; the loop test ends in an error.",
@@ -95,6 +122,9 @@
     {
       "id": "p2.10",
       "title": "New windows and outside links",
+      "what": "Handling of links that open new windows or other apps, such as mail.",
+      "why": "Nothing should launch outside Ferrum without your consent.",
+      "how": "New windows follow the setting (same view or system browser); mail and other app links ask in the shell first. Tests use a fake launcher.",
       "status": "Not started",
       "chain": "Links open new windows or other apps such as mail → follow the setting, and ask before handing off to another app → nothing launches without your consent.",
       "check": "The new-window test follows the setting; the mail-link test asks and launches nothing without consent.",
@@ -103,6 +133,9 @@
     {
       "id": "p2.11",
       "title": "Keep cookies across restarts",
+      "what": "Cookies and site data kept in a fixed folder in your local app data.",
+      "why": "You stay signed in after restarting the app.",
+      "how": "A test page sets a lasting cookie, the app restarts, and the page echoes the cookie back.",
       "status": "Not started",
       "chain": "Logins should survive a restart → keep site data in a fixed local folder → you stay signed in.",
       "check": "A test sets a cookie, restarts the app, and the cookie comes back.",
@@ -111,6 +144,9 @@
     {
       "id": "p2.12",
       "title": "Developer tools only in test builds",
+      "what": "Developer tools available in debug builds only.",
+      "why": "They expose page internals, so the release app must stay locked.",
+      "how": "Turn them on only in debug builds, then check by test or script that the release build cannot open them and the debug build can.",
       "status": "Not started",
       "chain": "Developer tools expose page internals → enable them only in debug builds → the release app stays locked.",
       "check": "The release build cannot open them; the debug build can.",
@@ -119,6 +155,9 @@
     {
       "id": "p2.13",
       "title": "Google sign-in: offer the normal browser",
+      "what": "Detection of Google's sign-in page, with an offer to open it in your normal browser.",
+      "why": "Google may refuse sign-in inside embedded views, and we respect its rules instead of disguising the app.",
+      "how": "A tested address checker on recorded sign-in addresses shows a banner. No live Google login and no faking of the browser's identity.",
       "status": "Not started",
       "chain": "Google may refuse sign-in inside embedded views → detect its sign-in page and offer the system browser, never disguise the app → we respect Google's rules.",
       "check": "Test on recorded addresses; a test link shows the banner. No live Google login.",
@@ -127,6 +166,9 @@
     {
       "id": "p2.14",
       "title": "Structured logs, no crashes",
+      "what": "Machine-readable log lines in the app's log folder, clear error types and no crashes on bad navigation.",
+      "why": "Problems need evidence, so failures can be diagnosed.",
+      "how": "Use Rust's tracing library to write one machine-readable record per line; a test run checks that every line can be read and no crash entry appears.",
       "status": "Not started",
       "chain": "Problems need evidence → Machine-readable log lines and clear errors, no crashing on bad navigation → failures can be diagnosed.",
       "check": "Every log line can be read by a program; no crash entries.",
@@ -135,6 +177,9 @@
     {
       "id": "p2.15",
       "title": "Quick whole-app tests",
+      "what": "One quick test suite that drives the shell and the website view together.",
+      "why": "Features interact, and one command should show the first milestone works.",
+      "how": "Playwright over the debugging channel if experiment 4 in P1 passed; otherwise Rust integration tests plus a manual checklist.",
       "status": "Not started",
       "chain": "Features interact → one suite drives shell and website view (Playwright if experiment 4 passed, otherwise Rust tests plus a manual list) → one command shows the first milestone works.",
       "check": "The suite command passes; output saved.",
@@ -143,6 +188,9 @@
     {
       "id": "p2.16",
       "title": "Update docs and part pages",
+      "what": "Updated README, security notes, known limits and part pages.",
+      "why": "Docs must match what was actually built.",
+      "how": "Update the run instructions and limits, mark the shell, web-view manager and core pages as built with the verified commit, and run the wiki check.",
       "status": "Not started",
       "chain": "Code changed → README, security notes, known limits and part pages updated with the verified commit → docs match reality.",
       "check": "Wiki check clean; shell, web-view manager and core pages marked built.",
@@ -151,6 +199,9 @@
     {
       "id": "p2.17",
       "title": "Literature batch 2",
+      "what": "Reading notes on WebView2 and Chromium processes, page lifecycle and studies of embedded-view resource use.",
+      "why": "Research runs alongside the code and gives evidence for later experiments.",
+      "how": "Follow the review method from P1: dated notes, the reading log updated, and no citation without a checked source.",
       "status": "Not started",
       "chain": "Research runs alongside code → read on WebView2 and Chromium processes, page lifecycle and embedded-view resource studies → evidence for later experiments.",
       "check": "New dated notes; the reading log is updated; no unchecked citation.",
@@ -159,6 +210,9 @@
     {
       "id": "p2.18",
       "title": "Run the gate; your review",
+      "what": "One run of every P2 check, with the output saved, then your review of the release build.",
+      "why": "You try the first milestone yourself before it counts as done.",
+      "how": "Run all automated checks; you visit five sites and test a mail link, a restart and going offline; then you approve the exit in Claude Code.",
       "status": "Not started",
       "chain": "All tasks done → run every check and save the output → you try the release build and approve the first milestone.",
       "check": "All evidence saved; wiki clean; you approved the P2 exit.",

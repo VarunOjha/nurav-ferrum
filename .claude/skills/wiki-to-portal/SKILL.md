@@ -94,9 +94,17 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   STATUS.md and the log (the phase page does not store progress); `progress.done` must equal the number
   of tasks whose `status` is `Done`. `step_order` = 3-8 short labels in the
   order the work happens. `tasks[]` = one per page task: `title` (short, crisp), `status`
-  ("Done", "In progress", "Waiting for you" or "Not started", from STATUS.md and the log), `chain`
+  ("Done", "In progress", "Waiting for you" or "Not started", from STATUS.md and the log), `what`
+  (what the task does or produces), `why` (why it matters), `how` (how it is done: the approach), `chain`
   (cause → action → why it matters), `check` (how we know it is done, plain), `script`
-  (`scripts/verify/<task-id>-<slug>.ps1`, or `null` until that script exists). `test_gate.explanation` =
+  (`scripts/verify/<task-id>-<slug>.ps1`, or `null` until that script exists). `what`, `why` and `how`
+  are required, one line each, 1-2 short sentences, at most 240 characters, translated from the phase
+  page (no new facts); any id in them needs a `refs.json` entry like every other portal text. The
+  popup's tasks table (owner request 2026-10-10) shows these columns, in this order: **Id** (`id`),
+  **Title** (`title`), **What** (`what`), **Why** (`why`), **How** (`how`), **Logic** (`chain`, one
+  step per line), **Check script** (`script`, clickable, "Not written yet" when `null`, with the
+  `check` line under it), **State** (`status`). On a phone each task becomes a card with the same eight
+  labelled rows. `test_gate.explanation` =
   a thought chain of the whole gate; `rows[]` = `{check, proves}`; `script` =
   `scripts/gates/<short-lowercase>-gate.ps1` (e.g. `scripts/gates/p1-gate.ps1`) or `null` until it exists.
   Things every phase shares (one commit per task, plain log entry, owner review at the end) go **once**

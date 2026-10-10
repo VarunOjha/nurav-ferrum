@@ -81,6 +81,9 @@
           "id",
           "title",
           "status",
+          "what",
+          "why",
+          "how",
           "chain",
           "check",
           "script"
@@ -105,8 +108,21 @@
             ],
             "description": "Where this task stands, in plain words. The number of 'Done' tasks must equal progress.done (the checker reports MISMATCH otherwise)."
           },
+          "what": {
+            "$ref": "#/$defs/short_text",
+            "description": "What the task does or produces, in plain words (1-2 short sentences). Shown in the tasks table's 'What' column."
+          },
+          "why": {
+            "$ref": "#/$defs/short_text",
+            "description": "Why the task matters, in plain words (1-2 short sentences). Shown in the 'Why' column."
+          },
+          "how": {
+            "$ref": "#/$defs/short_text",
+            "description": "How the task is done (the approach), in plain words (1-2 short sentences). Shown in the 'How' column."
+          },
           "chain": {
-            "$ref": "#/$defs/chain"
+            "$ref": "#/$defs/chain",
+            "description": "The thought chain cause → action → why it matters. Shown in the 'Logic' column."
           },
           "check": {
             "$ref": "#/$defs/short_text"

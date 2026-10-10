@@ -23,6 +23,9 @@
     {
       "id": "p1.1",
       "title": "Confirm and record the toolchain",
+      "what": "Confirms the installed tools (Rust, C++ build tools, Node, PowerShell 7), records their versions and adds the licence checker.",
+      "why": "Every later result must name the exact tools it was built with.",
+      "how": "Save each tool's version to a file, install only what is missing (you click the Windows prompts) and build a tiny Rust project to prove linking works.",
       "status": "Not started",
       "chain": "Rust 1.99, the C++ build tools, Node 24 and PowerShell 7 are already installed → confirm each works, record exact versions, add the licence checker → every later result names the tools it was built with.",
       "check": "Each tool prints its version; a tiny Rust test project builds and links; versions saved.",
@@ -31,6 +34,9 @@
     {
       "id": "p1.2",
       "title": "Record this computer's hardware",
+      "what": "A record of this computer: CPU, memory, graphics, power plan, Windows build, and browser and web view versions.",
+      "why": "Benchmark numbers depend on the machine, so results must be comparable and repeatable.",
+      "how": "Run the PowerShell inventory commands listed on the phase page and save their output; you answer the CPU, memory and power-meter questions.",
       "status": "Not started",
       "chain": "Benchmark numbers depend on the machine → record CPU, memory, graphics, power plan and browser versions → results can be compared and repeated.",
       "check": "The inventory file holds every listed item; the web view version is re-read and compared with the one from 8 Oct.",
@@ -39,6 +45,9 @@
     {
       "id": "p1.3",
       "title": "Set ignore rules and licences",
+      "what": "Ignore rules for build output and local data, line-ending rules, and the MIT and Apache licence files.",
+      "why": "Build output and local data must not reach git, and the repo must be legally clear.",
+      "how": "Write the ignore and attribute files, copy both licences from their official texts, add a licence section to the README and commit locally.",
       "status": "Not started",
       "chain": "Build output and local data must not reach git → ignore rules plus MIT and Apache licence files → a clean, legally clear repo.",
       "check": "Each build folder is ignored and plan snapshots are not; both licence files exist.",
@@ -47,6 +56,9 @@
     {
       "id": "p1.4",
       "title": "Create the empty Rust workspace",
+      "what": "The empty Rust workspace: placeholder libraries in the planned folders and a pinned Rust version.",
+      "why": "Every later code task needs a home with a fixed layout.",
+      "how": "Create the workspace and its empty libraries in the agreed layout, keep the experiments outside it, then run build, tests, formatting and warning checks.",
       "status": "Not started",
       "chain": "Code needs a home → empty Rust libraries in the planned folders, with a pinned Rust version → every later task has a place to go.",
       "check": "Build, tests, formatting and code-warning checks all pass with no warnings.",
@@ -55,6 +67,9 @@
     {
       "id": "p1.17",
       "title": "Pin the Tauri and web-tool versions",
+      "what": "Exact versions for Tauri's command-line tool, Vite and TypeScript.",
+      "why": "Generated templates change under us; exact versions let the experiments be rerun identically.",
+      "how": "Use Tauri's npm package, write the experiment apps by hand instead of from a template, and re-check the versions online when the task starts.",
       "status": "Not started",
       "chain": "Generated templates change under us → pin Tauri's command-line tool, Vite and TypeScript exactly, and write the experiments by hand → experiments can be rerun identically.",
       "check": "Experiment 1's package file has exact versions; Tauri's version is saved; versions re-checked online first.",
@@ -63,6 +78,9 @@
     {
       "id": "p1.5",
       "title": "Experiment 1: several web views in one window",
+      "what": "A throwaway app with one window and three tab views, to test Tauri's experimental multi-view feature.",
+      "why": "If the feature is unstable, the design changes before P2, not after.",
+      "how": "Create the views from a background command, switch tabs by hiding and showing, and record pass or fail for resize, focus, overlap, blank pages, freezes, shortcuts and helper processes.",
       "status": "Not started",
       "chain": "Tauri's multi-view feature is experimental → build a throwaway app with three tab views and test resize, focus, overlap, blank pages and freezes → if it is unstable, the design changes before P2, not after.",
       "check": "Report has a pass/fail row per check, including which helper processes belong to the app; the experiment builds.",
@@ -71,6 +89,9 @@
     {
       "id": "p1.6",
       "title": "Experiment 2: a separate profile per site",
+      "what": "A test of four ways to give each site its own browser profile.",
+      "why": "Per-site isolation needs a profile chosen when a view is created, and Tauri does not offer that directly.",
+      "how": "Try the routes, at least two for real; for each, check that site A's cookie is absent in site B and note the cost of keeping the route working.",
       "status": "Not started",
       "chain": "Per-site isolation needs a profile chosen when a view is created, and Tauri does not offer that → try four routes → pick one that keeps cookies apart, before tabs are built.",
       "check": "A route-by-criterion table; site A's cookie is absent in site B; at least two routes actually run.",
@@ -79,6 +100,9 @@
     {
       "id": "p1.7",
       "title": "Experiment 3: low-level WebView2 calls",
+      "what": "A test of low-level WebView2 calls: suspend and resume, memory limits, crash and network events, process lists.",
+      "why": "These calls sit below Tauri, and we need to know which lifecycle and security features are possible.",
+      "how": "Reach each call through Tauri's escape hatch, log each result, make sure only one version of each Windows library is used, and draft safety rules per call.",
       "status": "Not started",
       "chain": "Suspend, memory limits and crash events are only reachable below Tauri → call each one through Tauri's escape hatch → we know which lifecycle and security features are possible.",
       "check": "Each call's result is logged; only one version of each Windows library; safety rules drafted for each call.",
@@ -87,6 +111,9 @@
     {
       "id": "p1.8",
       "title": "Experiment 4: test robot drives the app",
+      "what": "A test of whether the Playwright test robot can drive the experiment app, Chrome and Edge the same way.",
+      "why": "One fair benchmark harness must work for all of them.",
+      "how": "Start each one, not as admin, with a debugging port; connect the same script, list every view, read paint timing on a local page and list what fails.",
       "status": "Not started",
       "chain": "Benchmarks drive browsers with Playwright through a debugging channel → connect to the experiment app, Chrome and Edge the same way → one fair harness for all.",
       "check": "The script exits cleanly, lists every view, reads paint timing on a local page, and lists what did not work.",
@@ -95,6 +122,9 @@
     {
       "id": "p1.9",
       "title": "Decide the design from the experiments",
+      "what": "Updated risks and proposed decisions on profiles, back and forward, and the benchmark path.",
+      "why": "The experiment results fix the first milestone's design before any P2 code starts.",
+      "how": "Write the four results into the risk and part pages and propose new decision pages; you decide in Claude Code, then the P2 and P3 pages are revised.",
       "status": "Not started",
       "chain": "Four experiment verdicts → update the risks and propose decisions on profiles, back/forward and the benchmark path → you decide, then P2 and P3 are revised to match.",
       "check": "New decision pages proposed; each tested risk cites its report; you approved them in Claude Code.",
@@ -103,6 +133,9 @@
     {
       "id": "p1.10",
       "title": "Re-confirm the history-based wiki checks",
+      "what": "A re-run of the wiki checks that use git history: raw files unchanged, page dates not stale.",
+      "why": "Tampering with raw files or stale dates must still be caught; these checks were already built in P0.",
+      "how": "Re-run the existing wiki check on the P1 history and its tests on sample repos; adjust the rules only if needed. No second checker is written.",
       "status": "Not started",
       "chain": "These checks were already built during P0 → P1 re-runs them on the new history and adjusts them only if needed → tampering with raw files or stale dates are still caught; P1 has one less real build task.",
       "check": "Sample repos trigger both rules; the real wiki has zero errors; raw-file fingerprints all match.",
@@ -111,6 +144,9 @@
     {
       "id": "p1.11",
       "title": "Turn on automatic checks on GitHub",
+      "what": "One automatic GitHub check workflow and one local script that runs the same steps.",
+      "why": "Mistakes are cheaper when caught at once, and every change is tested the same way.",
+      "how": "Write the workflow for a Windows build machine and the matching local script. Claude runs the script; you push and report the GitHub result.",
       "status": "Not started",
       "chain": "Mistakes are cheaper caught at once → one GitHub workflow and one local script running the same checks → every change is tested the same way.",
       "check": "The local script passes; after you push, you report the GitHub result (Claude never pushes).",
@@ -119,6 +155,9 @@
     {
       "id": "p1.12",
       "title": "Check dependency licences and alerts",
+      "what": "A licence allowlist and a known-security-problem check for third-party code, with lock files committed.",
+      "why": "We must only use code we may use and that has no known holes.",
+      "how": "Set up the dependency checker with licences that fit MIT or Apache, run it, and save a plan-app audit with each finding explained.",
       "status": "Not started",
       "chain": "Third-party code can carry unsuitable licences or known holes → a licence allowlist and a security-alert check, lock files committed → we only use what we may and should.",
       "check": "The licence and alert check passes; the plan-app audit is saved with each finding explained.",
@@ -127,6 +166,9 @@
     {
       "id": "p1.13",
       "title": "Start the public docs",
+      "what": "Starter files for security, benchmarking and reproducibility notes, a docs index and an updated AI-use note.",
+      "why": "Readers need these notes, and the docs should grow with the code.",
+      "how": "Write short outlines that link to their wiki pages, then run the wiki check for broken links.",
       "status": "Not started",
       "chain": "Readers need security, benchmark and reproducibility notes → short starter files linking to the wiki → documentation grows with the code.",
       "check": "Files exist and link to their wiki pages; no broken links.",
@@ -135,6 +177,9 @@
     {
       "id": "p1.14",
       "title": "Start the literature review",
+      "what": "The method for the literature review and the first batch of reading notes.",
+      "why": "A research claim needs prior work, and no novelty is claimed without evidence.",
+      "how": "Write the questions, sources, search terms and rules, then read the gaps the seed list names, using dated and checked sources only.",
       "status": "Not started",
       "chain": "A research claim needs prior work → write the search method and read the first batch, with checked sources → no novelty is claimed without evidence.",
       "check": "Method and reading-log pages exist; at least one new dated note; no unchecked citation.",
@@ -143,6 +188,9 @@
     {
       "id": "p1.15",
       "title": "Warn when code changes without its page",
+      "what": "A check before each commit that warns when code changes without its wiki page.",
+      "why": "Code and its page must change together, so the plan never drifts from the code.",
+      "how": "A git hook runs the quick wiki check before each commit. Whether a hook can do this is not checked yet; it is tried in a temporary copy first.",
       "status": "Not started",
       "chain": "Code and its wiki page must change together → a check that runs before each commit warns when they don't → the plan never drifts from the code.",
       "check": "In a test copy, a code-only commit warns and a code-plus-page commit passes.",
@@ -151,6 +199,9 @@
     {
       "id": "p1.16",
       "title": "Run the gate; your review",
+      "what": "One run of every P1 check on a single commit, with the output saved, then your review.",
+      "why": "You see the experiment evidence and confirm or change the design before any real app code.",
+      "how": "Run all automated checks, save each output, run the wiki check and mark the phase for review; you approve the exit in Claude Code.",
       "status": "Not started",
       "chain": "All tasks done → run every check on one commit and save the output → you review the experiment evidence and approve the exit.",
       "check": "All evidence files exist; you approved the P1 exit.",

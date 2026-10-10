@@ -148,6 +148,9 @@ test.describe("Ref mode", () => {
     const phaseIds = await visibleIds(phase);
     expect(phaseIds).toEqual(expect.arrayContaining(["PH-1", "PH-2", "PH-3", "PH-4", "PH-5", ...(roadmap.same_in_every_phase.length ? ["PH-6"] : [])]));
     expect(phaseIds.every((id) => id.startsWith("PH-"))).toBe(true);
+    // PH-3 still names the whole tasks table, with all eight columns (owner request 2026-10-10).
+    const tasksBlock = phase.locator('[data-ui-ref="PH-3"]');
+    await expect(tasksBlock.getByTestId("tasks-table").locator("thead th")).toHaveText(["Id", "Title", "What", "Why", "How", "Logic", "Check script", "State"]);
     // The bar moved into the popup (the page behind is inert).
     await expect(phase.getByTestId("ref-bar")).toBeVisible();
 

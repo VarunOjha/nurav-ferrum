@@ -530,9 +530,8 @@ pre,
 }
 /* the state of each task in the phase popup, under its id */
 .tasks-table .task-status {
-  display: block;
+  display: inline-block;
   width: max-content;
-  margin-top: 4px;
 }
 
 /* what happens next */
@@ -927,20 +926,54 @@ dialog::backdrop {
 .table tbody tr {
   border-top: 1px solid var(--line);
 }
+/* The phase popup is wider than other popups: its tasks table has eight columns (owner request
+   2026-10-10). Below its minimum width the table scrolls sideways inside the popup; text wraps. */
+.phase-modal {
+  width: min(1400px, calc(100vw - 48px));
+}
 .tasks-table {
-  min-width: 960px;
+  min-width: 1240px;
+  table-layout: fixed;
+}
+.tasks-table td {
+  overflow-wrap: anywhere;
 }
 .col-id {
-  width: 70px;
+  width: 76px;
 }
 .col-title {
-  width: 200px;
+  width: 150px;
 }
-.col-check {
-  width: 230px;
+.col-what,
+.col-why,
+.col-how {
+  width: 175px;
 }
-.col-script {
+.col-logic {
+  width: 210px;
+}
+.col-check-script {
   width: 190px;
+}
+.col-state {
+  width: 120px;
+}
+/* Logic: the thought chain, one step per line, each later step starting with its arrow. */
+.chain-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.chain-arrow {
+  color: var(--muted);
+  font-weight: 600;
+}
+.task-check {
+  margin: 6px 0 0;
+  line-height: 1.45;
 }
 .script-chip {
   display: inline-block;
@@ -1701,8 +1734,8 @@ section[tabindex="-1"]:focus {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-/* Phone width: each task of the phase popup becomes a small card instead of a five-column table
-   that needs sideways scrolling. The column names move in front of each value. */
+/* Phone width: each task of the phase popup becomes a small card instead of an eight-column table
+   that needs sideways scrolling. Every value gets its column name as a small label above it. */
 @media (max-width: 640px) {
   .tasks-table thead {
     position: absolute;
@@ -1721,6 +1754,7 @@ section[tabindex="-1"]:focus {
   }
   .tasks-table {
     min-width: 0;
+    table-layout: auto;
   }
   .tasks-table tr {
     padding: 12px 14px;
@@ -1732,20 +1766,11 @@ section[tabindex="-1"]:focus {
     padding: 2px 0;
     border: none;
   }
-  .tasks-table td.cell-id,
-  .tasks-table td.cell-title {
-    display: inline;
-    width: auto;
-  }
-  .tasks-table td.cell-id {
-    margin-right: 8px;
-  }
-  .tasks-table td.cell-id .task-status {
-    display: inline-block;
-    margin: 0 0 0 6px;
-  }
   .tasks-table td[data-label] {
     margin-top: 6px;
+  }
+  .tasks-table td[data-label]:first-child {
+    margin-top: 0;
   }
   .tasks-table td[data-label]::before {
     content: attr(data-label);

@@ -17,7 +17,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button and its fixes). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,7 +240,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "ref-mode-fixes" (review fixes for the Ref button) verified and committed 2026-10-10 (`89b45cf`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 step "task-columns" (owner request 2026-10-10, raw/owner/2026-10-10-s01-task-table-columns.md)
+- intent: phase popup tasks table gets separate columns id, title, what, why, how, logic, check script, state; task JSON gains what/why/how
+- planned paths: interactive_plan/** (PhasePopup, tests), plan/portal/schema/*, plan/portal/phases/*.json, plan/portal/log.json, plan/portal/overview.json, .claude/skills/wiki-to-portal/SKILL.md, tools/portal-sync-check.ps1, tools/fixtures/portal-sync/**, wiki/interactive-plan/ip-*.md, wiki/operations/ops-portal-pipeline.md, wiki/raw/owner/2026-10-10-s01-task-table-columns.md, wiki/raw/evidence/phase-p0-planning/portal-v2/
+- rollback: git restore the planned paths (raw transcript is new and kept)
 
 ## Blockers
 

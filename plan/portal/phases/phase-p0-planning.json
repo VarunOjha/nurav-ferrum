@@ -23,6 +23,9 @@
     {
       "id": "p0.1",
       "title": "Save the starting documents",
+      "what": "Saves your original brief and your scoping answers as two files that are never edited.",
+      "why": "Every later page can point back to your own words, so nothing drifts from what you asked for.",
+      "how": "Copy both texts word for word into the raw-sources folder, mark them unchangeable and record their fingerprints in the wiki check report.",
       "status": "Done",
       "chain": "Your brief and scoping answers are the ground truth → store them word for word, never edited → every later page can cite them.",
       "check": "Both files exist, are marked unchangeable, and their fingerprints are recorded.",
@@ -31,6 +34,9 @@
     {
       "id": "p0.2",
       "title": "Write five research notes",
+      "what": "Five research notes: the wiki method, Tauri and WebView2, how to measure fairly, the plan-app tools and related work.",
+      "why": "Decisions rest on checked, dated facts instead of memory, which may be out of date.",
+      "how": "Read the sources, give every web address an access date and label each claim as checked or uncertain.",
       "status": "Done",
       "chain": "Plans built from memory go stale → research the wiki method, Tauri and WebView2, measurement, the plan-app stack and related work, with dated sources → decisions rest on checked facts.",
       "check": "Five notes exist; every source has an access date and a checked or uncertain label.",
@@ -39,6 +45,9 @@
     {
       "id": "p0.3",
       "title": "Write the wiki rules and live status",
+      "what": "The wiki rulebook, Claude's start-up instructions and a live status file.",
+      "why": "Many sessions and helpers edit the wiki; shared rules and a status file let any session pick up where the last one stopped.",
+      "how": "Write the rulebook with page shapes and a fingerprint method, a short instruction file that links to it, and a status file with fixed fields.",
       "status": "Done",
       "chain": "Many sessions and helpers edit the wiki → one rulebook (page shapes, fingerprints) plus a live status file → any session can pick up where the last one stopped.",
       "check": "The fingerprint script runs on the rulebook; Claude's instructions link to it; the status file has its required fields.",
@@ -47,6 +56,9 @@
     {
       "id": "p0.4",
       "title": "Describe the architecture and its parts",
+      "what": "Overview and architecture pages, with one page per planned part of the app and what it talks to.",
+      "why": "The parts have different trust levels, so security boundaries must be visible before any code exists.",
+      "how": "Write one page per part, list its connections, and mark every connection between parts of different trust as crossing a boundary.",
       "status": "Done",
       "chain": "The app has many parts with different trust levels → one page per part, saying what it talks to → security boundaries are visible before any code.",
       "check": "Every planned part has exactly one page; every link that crosses a trust level is marked.",
@@ -55,6 +67,9 @@
     {
       "id": "p0.5",
       "title": "Write the decisions and the risk register",
+      "what": "One page per design decision (19 at the time; more came later) and a register of risks.",
+      "why": "We can always see why a choice was made and what could go wrong.",
+      "how": "Each decision page gets the five required sections; each risk gets likelihood, impact, response, a test and the phase that owns it.",
       "status": "Done",
       "chain": "Choices and risks get forgotten → one page per decision (19 at the time; more were added later) and per risk, with likelihood, impact and response → we can always see why, and what could go wrong.",
       "check": "19 decision pages at the time, each with all required sections (later decisions came after); every risk has likelihood, impact, response and an owning phase.",
@@ -63,6 +78,9 @@
     {
       "id": "p0.6",
       "title": "Write the research plan pages",
+      "what": "The research plan: questions, predictions, experiments, metrics and test workloads.",
+      "why": "Ferrum is also a research project, so nothing should be measured without a reason.",
+      "how": "Write one page per item and link them in both directions; no page states a measured number, because none exist yet.",
       "status": "Done",
       "chain": "Ferrum is also a research project → questions, predictions, experiments, metrics and test workloads, linked to each other → nothing is measured without a reason.",
       "check": "Links agree in both directions; no page states a measured number.",
@@ -71,6 +89,9 @@
     {
       "id": "p0.7",
       "title": "Write phase pages, index and log",
+      "what": "A page per phase from P0 to P8, quality and how-to pages, root summaries, the page index and the work log.",
+      "why": "Work spans many sessions, so you and Claude must be able to find anything.",
+      "how": "Write the pages, list every page exactly once in the index and give the log headings the agreed format.",
       "status": "Done",
       "chain": "Work spans nine phases and many sessions → a page per phase, an index of every page and a running log → you and Claude can find anything.",
       "check": "The index lists every page once; log headings follow the agreed format.",
@@ -79,6 +100,9 @@
     {
       "id": "p0.8",
       "title": "Check the whole wiki",
+      "what": "A full check of the whole wiki and a fingerprint list of all raw source files.",
+      "why": "Hundreds of linked pages drift; this gives a clean start and shows if a raw file is ever changed.",
+      "how": "Run every rule that can be checked by hand or by a text search, write a report with each result, and record one fingerprint per raw file.",
       "status": "Done",
       "chain": "Hundreds of linked pages drift → run every rule by hand or script and fingerprint the raw files → work starts from a clean, tamper-evident base.",
       "check": "The check report shows zero errors; every raw file has a recorded fingerprint.",
@@ -87,6 +111,9 @@
     {
       "id": "p0.9",
       "title": "Install Node and record versions",
+      "what": "Node 24 installed, with the exact Node, npm and git versions recorded.",
+      "why": "The plan app needs Node, and recorded versions let builds be repeated.",
+      "how": "Install Node with the Windows package tool and save the version output. Any Node version other than 24 means stop and ask you.",
       "status": "Done",
       "chain": "The plan app needs Node 24 → install it and record exact versions → builds can be repeated.",
       "check": "Node, npm and git versions saved; Node's major version is 24.",
@@ -95,6 +122,9 @@
     {
       "id": "p0.10",
       "title": "Create the plan app skeleton",
+      "what": "The empty plan app, created with exact tool versions, plus three small feasibility tests.",
+      "why": "Loose versions break things later; a pinned skeleton is a stable base for the rest.",
+      "how": "Create the Next.js app with the researched settings, pin every version exactly, then run install, type check, style check and build.",
       "status": "Done",
       "chain": "Loose versions break things later → create the web app with exact versions and three small feasibility tests → a stable base for the rest.",
       "check": "Install shows no version conflicts; type check, style check and build succeed; the feasibility tests pass.",
@@ -103,6 +133,9 @@
     {
       "id": "p0.11",
       "title": "Teach the app to read the wiki",
+      "what": "A reader inside the app that loads the wiki pages and checks each page's header against the rules.",
+      "why": "Bad pages are flagged instead of being shown wrongly.",
+      "how": "A small module reads the wiki folder while the app runs, splits off each header and checks it; tests use sample good and bad pages.",
       "status": "Done",
       "chain": "The app shows wiki pages → a reader that checks each page's header against the rules → bad pages are flagged, not shown wrongly.",
       "check": "Tests on sample pages pass; the real wiki loads with zero header errors.",
@@ -111,6 +144,9 @@
     {
       "id": "p0.12",
       "title": "Fingerprint pages exactly like the reference",
+      "what": "Page fingerprints computed in the app exactly as the reference script computes them.",
+      "why": "Approvals are tied to fingerprints, so a changed page must never keep an old approval.",
+      "how": "Write the same method in the app's language and compare its results with the reference script on shared test cases.",
       "status": "Done",
       "chain": "Approvals are tied to page fingerprints → compute them in the app exactly like the reference script → a changed page can never keep an old approval.",
       "check": "The app and the reference script give identical fingerprints on every test case.",
@@ -119,6 +155,9 @@
     {
       "id": "p0.13",
       "title": "Build the app's views and wiki check",
+      "what": "The app's views (dashboard, roadmap, architecture, decisions, risks, research links) and an automatic wiki check.",
+      "why": "You need to see the plan, not raw files, and the wiki must be checked automatically.",
+      "how": "Build each view and the wiki check, then let browser tests open every view on a production build and look for errors.",
       "status": "Done",
       "chain": "You need to see the plan, not raw files → dashboard, roadmap, architecture, decisions, risks and research views, plus an automatic wiki check → the plan is readable and checked.",
       "check": "Browser tests open every view on a production build with no errors.",
@@ -127,6 +166,9 @@
     {
       "id": "p0.14",
       "title": "Build the approvals store",
+      "what": "A local-only store for approvals, with safe file writes.",
+      "why": "Approvals must not be lost or forged, so every approval state has to be right.",
+      "how": "One local entry point that accepts requests from this computer only and writes the approvals file safely; unit tests cover every approval state.",
       "status": "Done",
       "chain": "Approvals must not be lost or forged → a local-only store with safe writes, every approval state tested → no approval is silently wrong.",
       "check": "Tests cover every approval state; requests from other computers are refused.",
@@ -135,6 +177,9 @@
     {
       "id": "p0.15",
       "title": "Build the approval screens",
+      "what": "Approve, change and reject buttons in the app, with a badge when an approved page has changed.",
+      "why": "This was the first plan for approvals; it was later replaced, and you now approve in Claude Code.",
+      "how": "Built in the first version and removed with it. Its check now runs the unit tests of the approval states instead.",
       "status": "Done",
       "chain": "Approvals were first planned inside the app → approve, change and reject buttons with an outdated-page badge → later replaced: you now approve in Claude Code.",
       "check": "Unit tests: when an approved page changes, its approval shows as 'Approved, page edited since'. The old screens and their browser test were removed with v1.",
@@ -143,6 +188,9 @@
     {
       "id": "p0.16",
       "title": "Run the full plan-app test gate",
+      "what": "One full run of every plan-app check, with the output saved.",
+      "why": "Each piece passed on its own; one run together proves the whole app works.",
+      "how": "Run style, type, unit and browser tests and the build in one command, then the wiki check, and save all outputs as evidence.",
       "status": "Done",
       "chain": "Each piece passed on its own → run every check together and save the output → proof the whole app works.",
       "check": "All checks pass in one run with zero wiki errors; output saved.",
@@ -151,6 +199,9 @@
     {
       "id": "p0.17",
       "title": "Portal v2, then your review",
+      "what": "The read-only portal in plain words, then your walkthrough and your approvals.",
+      "why": "You found the first version too technical, and you must understand the plan before approving it.",
+      "how": "Claude writes plain-language text from the wiki for the portal. You read it and answer in Claude Code; Claude records each approval and revises.",
       "status": "Waiting for you",
       "chain": "You found v1 too technical → rebuild it as a read-only portal in plain words, fed by text Claude writes from the wiki → you review it and approve in Claude Code; Claude records each approval.",
       "check": "The portal check reports clean; your approvals for the P1 pages are recorded.",
@@ -159,6 +210,9 @@
     {
       "id": "p0.18",
       "title": "Close P0",
+      "what": "The close of P0: your exit approval and the first local commit.",
+      "why": "Finishing the plan is a stopping point; P1 starts only when you say so.",
+      "how": "Mark the phase for review, record your exit approval and a gate log entry, commit locally (never push), then pause until your explicit go.",
       "status": "Not started",
       "chain": "All checks pass and the pages are approved → you approve the phase exit in Claude Code → Claude pauses; P1 starts only when you explicitly say go.",
       "check": "Exit approval recorded; a gate entry in the log; work committed locally; no P1 work before your go.",

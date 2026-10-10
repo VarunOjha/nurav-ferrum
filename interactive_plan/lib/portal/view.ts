@@ -149,6 +149,28 @@ export function taskTone(status: Phase["tasks"][number]["status"]): Tone | "you"
   }
 }
 
+/**
+ * The columns of the phase popup's tasks table, in order (owner request 2026-10-10,
+ * wiki/raw/owner/2026-10-10-s01-task-table-columns.md). On a phone each name labels its row of the task card.
+ */
+export const TASK_COLUMNS = ["Id", "Title", "What", "Why", "How", "Logic", "Check script", "State"] as const;
+export type TaskColumn = (typeof TASK_COLUMNS)[number];
+
+/**
+ * The steps of a thought chain ("cause → action → why it matters"), one per line in the Logic column.
+ * A step keeps its own text; the arrows are dropped (the view draws them). A "[words](ref:id)" link
+ * that contains an arrow is never cut: if splitting would break one, the whole chain stays one step.
+ */
+export function chainSteps(chain: string): string[] {
+  const steps = chain
+    .split("→")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  const balanced = (s: string) => (s.match(/\[/g)?.length ?? 0) === (s.match(/\]/g)?.length ?? 0) && (s.match(/\(/g)?.length ?? 0) === (s.match(/\)/g)?.length ?? 0);
+  if (steps.length < 2 || !steps.every(balanced)) return [chain.trim()];
+  return steps;
+}
+
 /** "P0 → P5" for a stage, from the short names of its first and last phase ("P8" for one phase). */
 export function stageRange(roadmap: Roadmap, stage: Roadmap["stages"][number]): string {
   const shorts = stage.phases.map((id) => roadmapRow(roadmap, id)?.short ?? id);
