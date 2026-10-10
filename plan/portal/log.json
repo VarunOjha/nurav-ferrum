@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:681efdba4103999982aaffa20037ed96df274fd1b9f57b572b135422dc698399"
+    "content_hash": "sha256:0e3497563cc82387fe67d6ebf49efe207a252f9af4e3ae1291ea53360c1534dc"
   },
   "entries": [
     {
@@ -894,12 +894,13 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "3991339",
       "covers": [
         "## [2026-10-10] schema | CLAUDE.md for portal v2: working with the owner, wiki edit means portal edit, approvals given in chat",
         "## [2026-10-10] decide | p0.17 handoff: the session handoff is updated in place, pages edited after midnight carry 2026-10-10",
         "## [2026-10-10] handoff | s01: portal v2 handed over; the owner walks through it, then approvals in chat, then P0 sign-off",
-        "## [2026-10-10] lint | p0.17 handoff: P0 gate passes, the end-of-turn hook passes clean and blocks stale, portal check clean, mask scan 0 unmasked"
+        "## [2026-10-10] lint | p0.17 handoff: P0 gate passes, the end-of-turn hook passes clean and blocks stale, portal check clean, mask scan 0 unmasked",
+        "## [2026-10-10] plan | p0.17 step \"handoff\" committed: portal v2 handed over to the owner"
       ],
       "phase": "phase-p0-planning"
     }

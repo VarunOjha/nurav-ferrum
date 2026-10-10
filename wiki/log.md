@@ -817,3 +817,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [status-live, handoff-2026-10-09-s01, schema]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/handoff-checks.txt]
 - result: End-of-turn hook (the Stop hook command run by hand with a simulated Stop input): on the clean repo at HEAD 0150224 exit 0 in 2.2 s, also exit 0 with stop_hook_active true; after STATUS.md was edited and before overview.json was re-translated, exit 2 with "1 STALE plan/portal/overview.json" on stderr; on the final state exit 0. P0 gate (scripts/gates/p0-gate.ps1): PASS, 24 PASS and 4 YOURS in 223 s (742 unit tests passed, 1 skipped; 72 browser tests passed; build exit 0; tool tests 34 OK and portal checker 26 passed). Portal check clean (18 files, 168 records, 380 explainers). Quick lint 202 files, 0 errors. `npm run lint:wiki`: 0 errors, 40 warnings (the 34 known ones plus 6 date warnings on pages last committed after midnight; the log's date warning is cleared), 2 info, with the evidence file present and unstaged; after staging, the only error is RAW-IMMUTABLE "uncommitted change (A)" on the new evidence file itself, which clears with the commit (re-checked after it). Mask scan after staging: 682 tracked files, 0 unmasked. npm run verify and npm run test:coverage were not run separately in this step (no portal code changed; the gate runs the unit, browser and build parts).
+
+## [2026-10-10] plan | p0.17 step "handoff" committed: portal v2 handed over to the owner
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/handoff-checks.txt]
+- result: What was done → the end-of-turn check is proven on, the session rules in CLAUDE.md say how to write for the owner and how the portal and approvals work, the handoff and STATUS tell the owner what to do next in plain words. STATUS: In-flight cleared; a refs.json explainer was added for the new commit. After the commit, `npm run lint:wiki` reports 0 errors (the RAW-IMMUTABLE error on the staged evidence file cleared with the commit).
+- next: the owner starts the portal with scripts/start-portal.ps1, reads every tab and popup including the P1 scripts, and tells Claude what reads unclear; then Claude asks Approval Wave 1 in chat
+- commit: 3991339

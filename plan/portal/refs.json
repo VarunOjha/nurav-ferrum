@@ -4181,6 +4181,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "3991339",
+      "kind": "commit",
+      "title": "Commit: Portal v2 handed over to you",
+      "summary": "Claude's session rules now say how to write for you and how the portal and approvals work; the session notes and the next steps for you are written; the end-of-turn safety check is proven on.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

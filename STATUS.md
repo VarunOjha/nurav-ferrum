@@ -216,7 +216,7 @@ yet (every approvable page is PENDING).**
   script ends its header with a "For Claude" field and uses plain words before it. Q-008 corrected (the accessibility
   checker was added before the owner answered). Checks: `npm run verify` exit 0, P0 gate PASS, portal check clean, mask scan 0
   unmasked ([review-fixes.txt](wiki/raw/evidence/phase-p0-planning/portal-v2/review-fixes.txt)). Details: the log entries of this step.
-- p0.17 step "handoff" done: the end-of-turn check (Stop hook) is on and proven: it passes on the clean repo and blocks (exit 2)
+- p0.17 step "handoff" done (commit `3991339`): the end-of-turn check (Stop hook) is on and proven: it passes on the clean repo and blocks (exit 2)
   when STATUS changes without its portal text. CLAUDE.md now opens with §0 "Working with the owner" (plain words, thought
   chains, the four-part format for anything he runs, he works in Claude Code only, how to start the portal), and §7/§8 say
   wiki edit ⇒ portal edit and approvals given in chat are recorded by Claude. Handoff
@@ -233,10 +233,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17, step "handoff" (final handoff for portal v2), session s01, started 2026-10-10
-- intent: switch-on check for the end-of-turn hook, CLAUDE.md session rules for portal v2, handoff page, plain log entry, STATUS next action for the owner, final checks
-- planned paths: CLAUDE.md, wiki/operations/handoffs/handoff-2026-10-09-s01.md, wiki/index.md, wiki/log.md, STATUS.md, plan/portal/{log,overview,refs}.json, wiki/raw/evidence/phase-p0-planning/portal-v2/handoff-checks.txt, wiki/raw/MANIFEST.sha256
-- rollback: git checkout -- <planned paths>; delete the new evidence file
+(empty: p0.17 step "handoff" (final handoff for portal v2) verified and committed 2026-10-10 (`3991339`); next the owner walkthrough of the portal)
 
 ## Blockers
 
