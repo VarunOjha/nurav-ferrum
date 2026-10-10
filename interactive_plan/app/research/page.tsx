@@ -12,6 +12,7 @@ import { detailDialogId } from "@/lib/portal/dialogs";
 import type { Research } from "@/lib/portal/schemas.gen";
 import { getPortal } from "@/lib/portal/server";
 import { roadmapRow } from "@/lib/portal/view";
+import { ui, type UiRefId } from "@/lib/portal/uiRefs";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Research" };
@@ -26,6 +27,8 @@ interface Item {
 
 interface Section<T extends Item> {
   key: string;
+  /** Its Ref-mode id (lib/portal/uiRefs.ts). */
+  uiRef: UiRefId;
   title: string;
   intro: string;
   kind: string;
@@ -49,7 +52,7 @@ function ItemTitle({ item, kind }: { item: Item; kind: string }) {
 
 function SectionView<T extends Item>({ s }: { s: Section<T> }) {
   return (
-    <section id={s.key} aria-labelledby={`${s.key}-title`} className="stack-12 research-section" data-section={s.key} tabIndex={-1}>
+    <section id={s.key} aria-labelledby={`${s.key}-title`} className="stack-12 research-section" data-section={s.key} tabIndex={-1} {...ui(s.uiRef)}>
       <div className="stack-4">
         <h2 id={`${s.key}-title`} className="h2">
           {s.title} ({s.items.length})
@@ -112,6 +115,7 @@ export default async function ResearchPage() {
 
   const questions: Section<Research["questions"][number]> = {
     key: "questions",
+    uiRef: "RE-3",
     title: "Questions we want to answer",
     intro: "The research questions. Each one is answered by the experiments below, once there is data.",
     kind: "Research question",
@@ -124,6 +128,7 @@ export default async function ResearchPage() {
   };
   const hypotheses: Section<Research["hypotheses"][number]> = {
     key: "predictions",
+    uiRef: "RE-4",
     title: "What we expect to find",
     intro: "Our predictions, written down before any test runs.",
     kind: "Prediction",
@@ -135,6 +140,7 @@ export default async function ResearchPage() {
   };
   const experiments: Section<Research["experiments"][number]> = {
     key: "experiments",
+    uiRef: "RE-5",
     title: "Experiments",
     intro: "The tests that will produce the data. None has run yet.",
     kind: "Experiment",
@@ -149,6 +155,7 @@ export default async function ResearchPage() {
   };
   const metrics: Section<Research["metrics"][number]> = {
     key: "measurements",
+    uiRef: "RE-6",
     title: "Measurements",
     intro: "What we record in each test. Click one to see exactly what it means.",
     kind: "Measurement",
@@ -160,6 +167,7 @@ export default async function ResearchPage() {
   };
   const workloads: Section<Research["workloads"][number]> = {
     key: "test-pages",
+    uiRef: "RE-7",
     title: "Test pages and tasks",
     intro: "The same pages and tasks run on every browser, so the comparison is fair.",
     kind: "Test workload",
@@ -171,8 +179,8 @@ export default async function ResearchPage() {
 
   return (
     <div className="page">
-      <PageHead title="Research" summary={r?.summary ?? null}>
-        <nav aria-label="Research sections" className="pill-row">
+      <PageHead title="Research" summary={r?.summary ?? null} uiRef="RE-1">
+        <nav aria-label="Research sections" className="pill-row" {...ui("RE-2")}>
           {nav.map((s) => (
             <a key={s.key} href={`#${s.key}`} className="pill">
               {s.title} ({s.count})

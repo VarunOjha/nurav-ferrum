@@ -10,6 +10,13 @@ The layout follows the owner-approved mockups (Layout A, 2026-10-09): top tabs O
 Architecture, Decisions, Research, Questions, Log; every id opens a small explainer popup; phases open
 in a popup with their tasks, test gate and check scripts. All seven tabs are built (task p0.17).
 
+## Ref mode: names for layout feedback
+
+The **Ref** button in the top bar outlines every block of the page (and of any open popup) and shows a small
+label such as `OV-3 · What happens next`. Click a label to copy "Overview › OV-3 What happens next" and paste it
+into your feedback in Claude Code. **List all** (in the small bar at the bottom) shows every id; **Esc** or the
+button turns it off. The ids are fixed in `lib/portal/uiRefs.ts` and do not change when the plan text changes.
+
 ## Start the portal (owner)
 
 Open PowerShell 7 in the repo folder and run one script:

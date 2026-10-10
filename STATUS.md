@@ -240,7 +240,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "q008-pause" (Q-008 answered, pause between phases recorded) verified and committed 2026-10-10 (`bc72c17`); next the owner walkthrough of the portal)
+- task: p0.17 step "ref-mode" (owner request in chat, 2026-10-10: a "Ref" button in the portal header that outlines and names every block on the page and in open popups, so the owner can point at them in layout feedback; chosen option "Outline + labels + copy")
+- intent: add a Ref toggle (header), a stable id registry `interactive_plan/lib/portal/uiRefs.ts`, `data-ui-ref` marks on every tab and popup block, copy-to-clipboard chips, a Layout map popup; unit + Playwright tests; document it on the `ip-*` pages; plain log entry
+- planned paths: `interactive_plan/lib/portal/uiRefs.ts`, `interactive_plan/components/portal/RefMode.tsx`, `interactive_plan/app/**/*.tsx`, `interactive_plan/components/portal/*.tsx`, `interactive_plan/app/globals.css`, `interactive_plan/tests/unit/ui-refs.test.ts`, `interactive_plan/tests/e2e/ref-mode.spec.ts`, `interactive_plan/README.md`, `wiki/interactive-plan/ip-routes-and-views.md`, `wiki/interactive-plan/ip-testing.md`, `wiki/log.md`, `plan/portal/log.json`, `plan/portal/overview.json`, `plan/portal/refs.json`
+- rollback: `git checkout -- <the paths above>` and delete the three new files (all created in this step)
 
 ## Blockers
 

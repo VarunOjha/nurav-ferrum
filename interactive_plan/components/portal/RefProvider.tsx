@@ -9,6 +9,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { phaseDialogId } from "@/lib/portal/dialogs";
 import { friendlyId, popupKind, resolveRef, type RefData, type RefInfo } from "@/lib/portal/refs";
+import { popupContext, ui } from "@/lib/portal/uiRefs";
 import { openModal } from "./Modal";
 
 interface RefContextValue {
@@ -94,9 +95,15 @@ export default function RefProvider({
   return (
     <RefContext.Provider value={value}>
       {children}
-      <dialog ref={dialogRef} className="ref-dialog" aria-labelledby="ref-dialog-title" data-testid="ref-dialog">
+      <dialog
+        ref={dialogRef}
+        className="ref-dialog"
+        aria-labelledby="ref-dialog-title"
+        data-testid="ref-dialog"
+        data-ui-context={popupContext("RF", info ? (friendlyId(info.id, info.kind) ?? info.id) : current)}
+      >
         <div className="ref-dialog-panel">
-          <div className="ref-dialog-head">
+          <div className="ref-dialog-head" {...ui("RF-1")}>
             <div className="ref-dialog-kind">
               {/* Kind in words plus the short name the owner knows ("Decision 19", "P1"), never the internal slug. */}
               {info ? popupKind(info).head : "Reference"}
@@ -108,24 +115,34 @@ export default function RefProvider({
               </svg>
             </button>
           </div>
-          <h2 id="ref-dialog-title" ref={headingRef} tabIndex={-1} className="ref-dialog-title">
-            {info ? info.title : current !== undefined ? `No explainer for ${current}` : ""}
-          </h2>
-          {info ? (
+          <div className="ref-dialog-main" {...ui("RF-2")}>
+            <h2 id="ref-dialog-title" ref={headingRef} tabIndex={-1} className="ref-dialog-title">
+              {info ? info.title : current !== undefined ? `No explainer for ${current}` : ""}
+            </h2>
+            {info ? (
+              <>
+                <p className="ref-dialog-summary">{info.summary}</p>
+                {info.status && (
+                  <p className="ref-dialog-status">
+                    <span className="muted">Status:</span> {info.status}
+                  </p>
+                )}
+              </>
+            ) : (
+              current !== undefined && <p className="ref-dialog-summary">The portal text has no explainer for this id yet. Tell Claude: “{current} has no explainer”.</p>
+            )}
+          </div>
+          {info && (
             <>
-              <p className="ref-dialog-summary">{info.summary}</p>
-              {info.status && (
-                <p className="ref-dialog-status">
-                  <span className="muted">Status:</span> {info.status}
-                </p>
-              )}
               {phasePopup && (
-                <button type="button" className="primary-btn" data-open-phase={phasePopup} onClick={() => openPhase(phasePopup)}>
-                  Open the whole phase: tasks, checks and gate →
-                </button>
+                <div className="ref-dialog-action" {...ui("RF-3")}>
+                  <button type="button" className="primary-btn" data-open-phase={phasePopup} onClick={() => openPhase(phasePopup)}>
+                    Open the whole phase: tasks, checks and gate →
+                  </button>
+                </div>
               )}
               {info.related.length > 0 && (
-                <div className="ref-dialog-related">
+                <div className="ref-dialog-related" {...ui("RF-4")}>
                   <div className="eyebrow">Related</div>
                   <ul>
                     {info.related.map((rid) => {
@@ -145,13 +162,13 @@ export default function RefProvider({
                 </div>
               )}
             </>
-          ) : (
-            current !== undefined && <p className="ref-dialog-summary">The portal text has no explainer for this id yet. Tell Claude: “{current} has no explainer”.</p>
           )}
           {stack.length > 1 && (
-            <button type="button" className="text-btn" onClick={() => setStack((s) => s.slice(0, -1))}>
-              ← Back to {resolveRef(data, stack[stack.length - 2])?.title ?? stack[stack.length - 2]}
-            </button>
+            <div className="ref-dialog-back" {...ui("RF-5")}>
+              <button type="button" className="text-btn" onClick={() => setStack((s) => s.slice(0, -1))}>
+                ← Back to {resolveRef(data, stack[stack.length - 2])?.title ?? stack[stack.length - 2]}
+              </button>
+            </div>
           )}
         </div>
       </dialog>

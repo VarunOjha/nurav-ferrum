@@ -3,7 +3,7 @@ id: ip-routes-and-views
 type: operations
 title: "Plan portal: tabs, popups and UI rules"
 status: active
-updated: 2026-10-09
+updated: 2026-10-10
 sources:
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
@@ -11,6 +11,7 @@ sources:
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
   - raw/evidence/phase-p0-planning/p0.17-portal-views-checks.txt
   - raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt
+  - raw/owner/2026-10-10-s01-ref-button.md
 related: [ip-spec, ip-data-contract, ip-testing, comp-interactive-plan, adr-0023, adr-0024, adr-0025, adr-0026, ops-portal-pipeline, adr-0014, schema]
 approvable: true
 phase: phase-p0-planning
@@ -27,7 +28,7 @@ tags: [interactive-plan, ui, routes, accessibility, portal]
 > approvals inbox, lint page, phase pages) is in git history.
 
 Every tab is a **server component** that reads the portal JSON through `lib/portal/` ([ip-data-contract](ip-data-contract.md));
-small **client components** handle only interaction (popups, theme, group switcher, log filter). Every route is dynamic,
+small **client components** handle only interaction (popups, theme, group switcher, log filter, Ref mode). Every route is dynamic,
 so a page always shows the current files.
 
 ## 1. Route map
@@ -47,8 +48,8 @@ so a page always shows the current files.
 ## 2. Global layout
 
 - **Top bar:** brand, the seven tabs (current one marked with `aria-current="page"`; Questions shows the number of
-  questions asked now), the badge "Read-only · steer in Claude Code", and a three-state theme toggle (system, light,
-  dark; the choice is kept in browser storage and applied before the first paint).
+  questions asked now), the badge "Read-only · steer in Claude Code", the **Ref** button (§5), and a three-state theme
+  toggle (system, light, dark; the choice is kept in browser storage and applied before the first paint).
 - **Data note:** a file that is missing or does not match its shape is listed at the top of every page; the rest renders.
 - **Skip link** as the first focus stop; one `h1` per page.
 - **Popups rendered once in the layout:** one phase popup per phase, the reference popup and the script popup, so every
@@ -79,6 +80,49 @@ popup opens its explainer on top).
 5. **No external requests:** fonts are self-hosted; the Content-Security-Policy allows only the portal's own origin.
 6. **Read-only:** no button writes anything; approvals are labels only ([adr-0023](../decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)).
 
+7. **Ref mode changes nothing in normal mode.** With the Ref button off, no label, outline or extra spacing is shown (§5).
+
 The final visual review (2026-10-09) compared full-page screenshots of every tab and popup at 1440 and 390 pixels in
 the light theme with the mockups and fixed five defects
 ([portal-verify.txt](../raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt)).
+
+## 5. Ref mode (names for layout feedback)
+
+Added 2026-10-10 at the owner's request ([raw/owner/2026-10-10-s01-ref-button.md](../raw/owner/2026-10-10-s01-ref-button.md)):
+he wants to point at parts of the portal when he gives feedback on its layout.
+
+- **The button.** "Ref" in the top bar, next to the read-only badge: a real toggle button (`aria-pressed`) described as
+  "Show the names of the blocks on this page so you can refer to them in feedback". The choice is kept per viewer in
+  browser storage, so it stays on while switching tabs, opening popups and reloading.
+- **When on**, every layout block of the current tab, the top bar and every open popup gets a dashed outline and a small
+  label "id · name" at its top-left corner, for example `OV-3 · What happens next`. Repeated items carry their group id
+  plus a fixed suffix from the item itself: the phase cards are `OV-4.0` to `OV-4.8` (the phase number), the stage cards
+  `RM-2.1` to `RM-2.3`, the four next-step parts `OV-3.1` to `OV-3.4`, the layer rows `AR-3.1` and on. Cards that all look
+  the same (questions, log entries) are labelled once, on the first one.
+- **A click on a label** (or Enter, since every label is a button reachable with Tab only while the mode is on) copies
+  "where › id name", e.g. `Overview › OV-3 What happens next` or `Phase popup (P1) › PH-3 Tasks table`, and a polite
+  live message says "Copied: …".
+- **A small bar** (bottom right; inside the top popup when one is open, because a popup makes the page behind inert)
+  offers **List all**, which opens the **Layout map** popup with every id and name by header, tab and popup, and
+  **Turn off**. Esc turns the mode off when no popup is open; with a popup open, Esc closes the popup first.
+- **Spacing.** To keep labels off the text, Ref mode adds a little space above each block, in the top bar and in the small
+  popups; the Layout map says so. Normal mode is unchanged (adding the button narrowed the top bar's gaps and the tabs'
+  side padding slightly so it still fits on one line at 1440 px).
+
+**The id registry** is `interactive_plan/lib/portal/uiRefs.ts`: one entry per block, `id → plain name`, with the prefix
+saying where it lives:
+
+| Prefix | Where | Prefix | Where |
+|---|---|---|---|
+| `HD` | top bar (every tab) | `LO` | Log tab |
+| `OV` | Overview tab | `PH` | phase popup |
+| `RM` | Roadmap tab | `IT` | item popup (a decision, risk, research item or part) |
+| `AR` | Architecture tab | `RF` | reference popup |
+| `DE` | Decisions tab | `SC` | script popup |
+| `RE` | Research tab | `QU` | Questions tab |
+
+Components mark a block with `{...ui("OV-3")}` (a `data-ui-ref` attribute); ids are written by hand and never counted
+from the page order, so they stay the same when the plan text changes. A removed block retires its number; a new block
+takes the next free number of its prefix; ids are never renumbered. A marked element must be able to hold the label
+button (never a list, table, row, link or button: wrap those in a `<div>`). The unit test `ui-refs.test.ts` checks the
+registry and its use ([ip-testing](ip-testing.md)).

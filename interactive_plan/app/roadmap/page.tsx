@@ -7,6 +7,7 @@ import PageHead from "@/components/portal/PageHead";
 import RichText from "@/components/portal/RichText";
 import { phaseDialogId } from "@/lib/portal/dialogs";
 import { getPortal } from "@/lib/portal/server";
+import { ui } from "@/lib/portal/uiRefs";
 import { phaseTone, stageRange, tasksLabel } from "@/lib/portal/view";
 
 export const dynamic = "force-dynamic";
@@ -19,12 +20,12 @@ export default async function RoadmapPage() {
 
   return (
     <div className="page">
-      <PageHead title="Roadmap" summary={roadmap?.summary ?? null} />
+      <PageHead title="Roadmap" summary={roadmap?.summary ?? null} uiRef="RM-1" />
       {roadmap && (
         <>
-          <section aria-label="Stages" className="stage-grid" data-testid="stages">
+          <section aria-label="Stages" className="stage-grid" data-testid="stages" {...ui("RM-2")}>
             {roadmap.stages.map((st, i) => (
-              <div key={st.id} className={`card stage-card stage-${(i % 3) + 1}`}>
+              <div key={st.id} className={`card stage-card stage-${(i % 3) + 1}`} {...ui("RM-2", { index: i + 1, pos: "inside" })}>
                 <div className="stage-label">
                   Stage {i + 1} · {st.name}
                 </div>
@@ -36,7 +37,7 @@ export default async function RoadmapPage() {
             ))}
           </section>
 
-          <section aria-labelledby="phases-title" className="stack-12">
+          <section aria-labelledby="phases-title" className="stack-12" {...ui("RM-3")}>
             <div className="row-between">
               <h2 id="phases-title" className="h2">
                 Phases
@@ -96,7 +97,7 @@ export default async function RoadmapPage() {
             </div>
           </section>
 
-          <section id="every-phase" aria-labelledby="every-title" className="card stack-14" tabIndex={-1}>
+          <section id="every-phase" aria-labelledby="every-title" className="card stack-14" tabIndex={-1} {...ui("RM-4")}>
             <h2 id="every-title" className="h2">
               Same in every phase
             </h2>

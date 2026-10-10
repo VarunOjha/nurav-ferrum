@@ -6,6 +6,7 @@
  * a reload keeps it.
  */
 import { useEffect, useState } from "react";
+import { ui } from "@/lib/portal/uiRefs";
 
 export interface GroupTab {
   id: string;
@@ -34,7 +35,7 @@ export default function GroupSwitcher({ groups, panels, glances }: { groups: Gro
 
   return (
     <>
-      <div role="group" aria-label="Architecture groups" className="pill-row" data-testid="group-switcher">
+      <div role="group" aria-label="Architecture groups" className="pill-row" data-testid="group-switcher" {...ui("AR-2")}>
         {groups.map((g, i) => (
           <button key={g.id} type="button" className="pill pill-lg" aria-pressed={i === current} aria-controls={`panel-${g.id}`} onClick={() => choose(i)}>
             {i + 1} · {g.label}
@@ -46,7 +47,7 @@ export default function GroupSwitcher({ groups, panels, glances }: { groups: Gro
           {panels[i]}
         </section>
       ))}
-      <section aria-labelledby="glance-title" className="stack-12">
+      <section aria-labelledby="glance-title" className="stack-12" {...ui("AR-7")}>
         <h2 id="glance-title" className="h3">
           The other groups at a glance
         </h2>

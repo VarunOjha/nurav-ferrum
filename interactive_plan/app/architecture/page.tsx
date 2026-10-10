@@ -16,6 +16,7 @@ import RichText from "@/components/portal/RichText";
 import { detailDialogId } from "@/lib/portal/dialogs";
 import type { Architecture } from "@/lib/portal/schemas.gen";
 import { getPortal } from "@/lib/portal/server";
+import { ui } from "@/lib/portal/uiRefs";
 import { firstSentence, layerRows, layerShortName, partWhen, roadmapRow, type Layer } from "@/lib/portal/view";
 
 export const dynamic = "force-dynamic";
@@ -41,10 +42,10 @@ function Flow({ text }: { text: string }) {
 
 function LayerDiagram({ arch, byId }: { arch: Architecture; byId: Map<string, Component> }) {
   return (
-    <div className="card layers" data-testid="layer-diagram">
+    <div className="card layers" data-testid="layer-diagram" {...ui("AR-3")}>
       <h2 className="h3">The Ferrum app, layer by layer</h2>
-      {layerRows(arch.layers).map((row) => (
-        <div key={row.label} className="layer-row">
+      {layerRows(arch.layers).map((row, i) => (
+        <div key={row.label} className="layer-row" {...ui("AR-3", { index: i + 1 })}>
           <div className="layer-label">{row.label}</div>
           <div className="layer-boxes">
             {row.layers.flatMap((l) =>
@@ -72,7 +73,7 @@ function LayerDiagram({ arch, byId }: { arch: Architecture; byId: Map<string, Co
 
 function HowToRead({ purpose, flow }: { purpose: string; flow: string }) {
   return (
-    <aside className="card arch-side stack-12" aria-labelledby="how-to-read" data-testid="how-to-read">
+    <aside className="card arch-side stack-12" aria-labelledby="how-to-read" data-testid="how-to-read" {...ui("AR-4")}>
       <h2 id="how-to-read" className="h3">
         How to read this
       </h2>
@@ -129,7 +130,7 @@ export default async function ArchitecturePage() {
   if (!arch) {
     return (
       <div className="page">
-        <PageHead title="Architecture" summary={null} />
+        <PageHead title="Architecture" summary={null} uiRef="AR-1" />
       </div>
     );
   }
@@ -152,14 +153,14 @@ export default async function ArchitecturePage() {
     }
     return (
       <div key={g.id} className="stack-18">
-        <div className="stack-8">
+        <div className="stack-8" {...ui("AR-5")}>
           <h2 className="h3">{g.name}: what it is for</h2>
           <p className="lead">
             <RichText text={g.purpose} />
           </p>
           <Flow text={g.flow} />
         </div>
-        <div className="stack-12">
+        <div className="stack-12" {...ui("AR-6")}>
           <h3 className="h3">Its parts</h3>
           <PartList items={items} />
         </div>
@@ -177,10 +178,10 @@ export default async function ArchitecturePage() {
 
   return (
     <div className="page">
-      <PageHead title="Architecture" summary={arch.summary} />
+      <PageHead title="Architecture" summary={arch.summary} uiRef="AR-1" />
       <GroupSwitcher groups={groups} panels={panels} glances={glances} />
       {arch.footnote && (
-        <p className="small muted" data-testid="arch-footnote">
+        <p className="small muted" data-testid="arch-footnote" {...ui("AR-8")}>
           <RichText text={arch.footnote.text} />{" "}
           {arch.footnote.components.map((id) => (
             <Ref key={id} id={id} variant="chip">

@@ -7,6 +7,7 @@
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { isCheckScript, runCommand } from "@/lib/portal/scriptCommand";
+import { popupContext, ui } from "@/lib/portal/uiRefs";
 
 type Load = { state: "loading" } | { state: "ok"; text: string } | { state: "error"; message: string };
 
@@ -90,9 +91,15 @@ export default function ScriptProvider({ children }: { children: React.ReactNode
   return (
     <ScriptContext.Provider value={value}>
       {children}
-      <dialog ref={dialogRef} className="modal script-dialog" aria-labelledby="script-dialog-title" data-testid="script-dialog">
+      <dialog
+        ref={dialogRef}
+        className="modal script-dialog"
+        aria-labelledby="script-dialog-title"
+        data-testid="script-dialog"
+        data-ui-context={popupContext("SC", name)}
+      >
         <div className="modal-panel">
-          <div className="phase-head">
+          <div className="phase-head" {...ui("SC-1", { pos: "inside" })}>
             <div className="phase-head-text">
               <div className="eyebrow">{path && isCheckScript(path) ? "Check script" : "Script"} · read-only copy from the repo</div>
               <h2 id="script-dialog-title" ref={headingRef} tabIndex={-1} className="script-title">
@@ -108,7 +115,7 @@ export default function ScriptProvider({ children }: { children: React.ReactNode
           </div>
           <div className="phase-body script-body">
             {path && (
-              <div className="stack-8">
+              <div className="stack-8" {...ui("SC-2")}>
                 <div className="small strong">To run it, open PowerShell 7 in the repo folder and type:</div>
                 <pre className="code-block code-sm">{runCommand(path)}</pre>
                 {isCheckScript(path) ? (
@@ -123,18 +130,20 @@ export default function ScriptProvider({ children }: { children: React.ReactNode
                 )}
               </div>
             )}
-            <div aria-live="polite" aria-busy={load.state === "loading"}>
-              {load.state === "loading" && <p className="muted">Loading the script…</p>}
-              {load.state === "error" && (
-                <p className="note" role="alert">
-                  {load.message}
-                </p>
-              )}
-              {load.state === "ok" && (
-                <pre className="code-block script-code" tabIndex={0} aria-label={`Contents of ${name}`} data-testid="script-text">
-                  {load.text}
-                </pre>
-              )}
+            <div {...ui("SC-3")}>
+              <div aria-live="polite" aria-busy={load.state === "loading"}>
+                {load.state === "loading" && <p className="muted">Loading the script…</p>}
+                {load.state === "error" && (
+                  <p className="note" role="alert">
+                    {load.message}
+                  </p>
+                )}
+                {load.state === "ok" && (
+                  <pre className="code-block script-code" tabIndex={0} aria-label={`Contents of ${name}`} data-testid="script-text">
+                    {load.text}
+                  </pre>
+                )}
+              </div>
             </div>
           </div>
         </div>

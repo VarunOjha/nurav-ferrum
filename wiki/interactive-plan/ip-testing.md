@@ -3,7 +3,7 @@ id: ip-testing
 type: operations
 title: "Plan portal: test plan and quality gates"
 status: active
-updated: 2026-10-09
+updated: 2026-10-10
 sources:
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
@@ -12,6 +12,7 @@ sources:
   - raw/evidence/phase-p0-planning/p0.17-portal-shell-checks.txt
   - raw/evidence/phase-p0-planning/p0.17-portal-views-checks.txt
   - raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt
+  - raw/owner/2026-10-10-s01-ref-button.md
 related: [ip-spec, ip-data-contract, ip-wiki-lint, ip-routes-and-views, comp-interactive-plan, adr-0023, adr-0024, adr-0025, ops-portal-pipeline, schema]
 approvable: true
 phase: phase-p0-planning
@@ -55,6 +56,7 @@ npm run test:coverage   # unit tests with coverage thresholds
 | `approvals-file.test.ts`, `state.test.ts`, `hash.vectors.test.ts` | Reading `plan/approvals.json` and the approval states and fingerprints the labels rely on (shared vectors with the Python reference) |
 | `security.test.ts`, `config.test.ts` | Loopback `Host` allowlist and GET/HEAD only on every route, security headers, every server script binds 127.0.0.1 on `PLAN_PORT`, configuration from environment variables |
 | `mask-labels.test.ts` | Machine addresses printed by tests are always masked |
+| `ui-refs.test.ts` | Ref mode's id registry: ids unique and well formed; every id used in the portal code is in the registry and every registry id is used; no id sits on an element that cannot hold the label; popup ids only in their popup; label, copy text and Layout map format |
 | the other files | The command-line wiki check ([ip-wiki-lint](ip-wiki-lint.md)): loader, frontmatter, links, rules, git checks, Python parity, SCHEMA sync |
 
 Coverage thresholds (`vitest.config.mts`): `lib/portal/**` 90 % lines and 80 % branches; `lib/approvals/**` 90/90;
@@ -77,6 +79,7 @@ One production server on 127.0.0.1:3418 reads the real `plan/` folder. A teardow
 | `security` | Spoofed `Host` gets 403 on pages and assets; the v1 approvals API is gone; no request leaves the computer; no framing; the server refuses every non-loopback address of the machine |
 | `shell` | Landmarks, one `h1`, skip link, theme toggle, 404 page; at 390 px the overview and the phase popup (tasks as cards) fit |
 | `a11y` | axe-core 4.14.0 (WCAG 2.1 A and AA rules) finds no violation on any tab in the light and the dark theme, nor in an open reference popup |
+| `ref-mode` | The Ref button turns Ref mode on and off (click and Esc); each tab shows its expected labels and none in normal mode; the phase, script, reference and item popups show theirs; a label copies the right text (clipboard permission granted) and says "Copied"; labels are reachable with Tab only in Ref mode; the mode lasts across tabs and reloads; List all shows every id; no sideways scrolling at 390 px; axe finds nothing in Ref mode in either theme |
 
 ## 4. Visual review (Claude, after a layout change)
 
@@ -86,6 +89,11 @@ read and compared with the owner-approved mockups; defects are fixed before the 
 names on architecture cards, an unfilled column under "The other groups at a glance", the phase popup's tasks table
 scrolling sideways at phone width, and the gate header's hard-wrapped lines
 ([portal-verify.txt](../raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt)).
+
+The Ref mode review (2026-10-10) read screenshots with Ref mode on of every tab and the phase, script, reference and
+item popups and the Layout map, at 1440 and 390 pixels in both themes, and fixed: header labels covering the header
+pieces, labels covering headings and the last line of the block above, labels cut off at the top of popups, and the top
+bar wrapping to two lines in normal mode once the button was added.
 
 ## 5. Owner walkthrough
 

@@ -10,6 +10,7 @@ import Ref from "@/components/portal/Ref";
 import RichText from "@/components/portal/RichText";
 import { detailDialogId } from "@/lib/portal/dialogs";
 import { getPortal } from "@/lib/portal/server";
+import { ui } from "@/lib/portal/uiRefs";
 import { approvalLabel, decisionStanding, decisionTone, firstSentence, riskTone, risksByScore, roadmapRow } from "@/lib/portal/view";
 
 export const dynamic = "force-dynamic";
@@ -27,9 +28,9 @@ export default async function DecisionsPage() {
 
   return (
     <div className="page">
-      <PageHead title="Decisions" summary={decisions?.summary ?? null} />
+      <PageHead title="Decisions" summary={decisions?.summary ?? null} uiRef="DE-1" />
 
-      <section aria-labelledby="dec-title" className="stack-12">
+      <section aria-labelledby="dec-title" className="stack-12" {...ui("DE-2")}>
         <div className="row-between">
           <h2 id="dec-title" className="h2">
             Decisions ({items.length})
@@ -68,7 +69,7 @@ export default async function DecisionsPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="risk-title" className="stack-12">
+      <section aria-labelledby="risk-title" className="stack-12" {...ui("DE-3")}>
         <h2 id="risk-title" className="h2">
           Risks we watch ({riskList.length})
         </h2>

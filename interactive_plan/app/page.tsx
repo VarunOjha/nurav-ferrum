@@ -11,6 +11,7 @@ import { resolveRef, tokenize, type RefData } from "@/lib/portal/refs";
 import { getPatterns, getPortal, getRefData } from "@/lib/portal/server";
 import { headline, latestLog, percentDone, phaseTone, questionsRow, shortDate } from "@/lib/portal/view";
 import { ScriptButton } from "@/components/portal/ScriptProvider";
+import { ui } from "@/lib/portal/uiRefs";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Overview" };
@@ -39,7 +40,7 @@ export default async function OverviewPage() {
   return (
     <div className="page">
       <section className="row-wrap">
-        <div className="card card-main stack-18" aria-labelledby="where-title">
+        <div className="card card-main stack-18" aria-labelledby="where-title" {...ui("OV-1")}>
           <div className="eyebrow" id="where-title">
             Where we are
           </div>
@@ -97,7 +98,7 @@ export default async function OverviewPage() {
           )}
         </div>
 
-        <aside className="card card-side stack-14" aria-labelledby="questions-title" data-testid="questions-for-you">
+        <aside className="card card-side stack-14" aria-labelledby="questions-title" data-testid="questions-for-you" {...ui("OV-2")}>
           <h2 className="eyebrow" id="questions-title">
             Questions for you
           </h2>
@@ -130,7 +131,7 @@ export default async function OverviewPage() {
         </aside>
       </section>
 
-      <section className="card stack-18" aria-labelledby="next-title" data-testid="what-next">
+      <section className="card stack-18" aria-labelledby="next-title" data-testid="what-next" {...ui("OV-3")}>
         <div className="row-between">
           <h2 className="h2" id="next-title">
             What happens next
@@ -147,7 +148,7 @@ export default async function OverviewPage() {
         </div>
         {next ? (
           <ol className="next-grid">
-            <li className="next-part">
+            <li className="next-part" {...ui("OV-3", { index: 1 })}>
               <div className="next-part-title">1 · Where we are</div>
               <table className="mini">
                 <tbody>
@@ -164,13 +165,13 @@ export default async function OverviewPage() {
                 </tbody>
               </table>
             </li>
-            <li className="next-part">
+            <li className="next-part" {...ui("OV-3", { index: 2 })}>
               <div className="next-part-title">2 · Why run something</div>
               <p className="lh">
                 <RichText text={next.why} />
               </p>
             </li>
-            <li className="next-part">
+            <li className="next-part" {...ui("OV-3", { index: 3 })}>
               <div className="next-part-title">3 · The script</div>
               {next.script ? (
                 <div className="stack-8">
@@ -194,7 +195,7 @@ export default async function OverviewPage() {
                 <div className="code-block code-sm">— none needed —</div>
               )}
             </li>
-            <li className="next-part">
+            <li className="next-part" {...ui("OV-3", { index: 4 })}>
               <div className="next-part-title">4 · Then tell Claude</div>
               <p className="lh">{next.tell_claude ? <RichText text={next.tell_claude} /> : "Nothing. Claude continues on its own."}</p>
             </li>
@@ -204,7 +205,7 @@ export default async function OverviewPage() {
         )}
       </section>
 
-      <section className="card stack-18" aria-labelledby="phases-title">
+      <section className="card stack-18" aria-labelledby="phases-title" {...ui("OV-4")}>
         <div className="row-between">
           <h2 className="h2" id="phases-title">
             Phase progress
@@ -234,7 +235,8 @@ export default async function OverviewPage() {
                 </>
               );
               return (
-                <li key={p.id}>
+                // The item suffix is the phase number (P1 -> OV-4.1), so it never shifts.
+                <li key={p.id} {...ui("OV-4", { index: p.short.replace(/^P/, ""), item: p.short })}>
                   {hasPopup ? (
                     <OpenModalButton target={phaseDialogId(p.id)} className="phase-card">
                       {body}
@@ -252,7 +254,7 @@ export default async function OverviewPage() {
       </section>
 
       <section className="row-wrap">
-        <div className="card card-main stack-14" aria-labelledby="refs-title">
+        <div className="card card-main stack-14" aria-labelledby="refs-title" {...ui("OV-5")}>
           <h2 className="h2" id="refs-title">
             Clickable references
           </h2>
@@ -272,7 +274,7 @@ export default async function OverviewPage() {
             Inside it, related ids open in the same popup; Esc closes it.
           </p>
         </div>
-        <div className="card card-side stack-12" aria-labelledby="log-title" data-testid="latest-log">
+        <div className="card card-side stack-12" aria-labelledby="log-title" data-testid="latest-log" {...ui("OV-6")}>
           <h2 className="h2" id="log-title">
             Latest log
           </h2>

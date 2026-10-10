@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:723691cc3af5056a1378a35d7178c0e8bf510fa88c19c67de9abac29da6d532f"
+    "content_hash": "sha256:a7e3f0e67a1316e33612381686ddd41cb5ecdee4868ee1408709e0d9fb48f1e5"
   },
   "entries": [
     {
@@ -934,6 +934,39 @@
         "## [2026-10-10] ingest | Owner answers Q-008 (keep the accessibility checker) and directs Claude to pause between phases",
         "## [2026-10-10] schema | Pause between phases: CLAUDE.md §1 and SCHEMA §9.7 exit-gate step 7",
         "## [2026-10-10] plan | p0.17 step \"q008-pause\" committed: Q-008 answered, pause between phases recorded"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-10-ref-button",
+      "date": "2026-10-10",
+      "title": "You asked for a Ref button; the portal can now name every block",
+      "done": "The new Ref button in the top bar outlines every block of the page and of any open popup and gives it a small name, such as \"OV-3 · What happens next\". Click a name to copy \"Overview › OV-3 What happens next\" and paste it into your feedback. \"List all\" shows every name; Esc turns it off. The names are fixed, so they stay the same when the plan text changes. All automatic checks pass, and Claude checked screenshots of every tab and popup. Your running portal was not touched.",
+      "next": "Restart the portal to get the button, turn Ref on and tell Claude your layout feedback using the copied names. Then your first approvals in chat and your P0 sign-off.",
+      "decisions": [
+        {
+          "what": "Add the Ref button with outlines, names and copy",
+          "by": "you"
+        },
+        {
+          "what": "The popups for one decision, risk, research item or part get names too",
+          "by": "claude"
+        },
+        {
+          "what": "Cards that all look the same (questions, log entries) are named once, on the first card",
+          "by": "claude"
+        },
+        {
+          "what": "Ref mode adds a little space so names never cover text; normal mode keeps its spacing",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] ingest | Owner asks for a \"Ref\" button that outlines and names the portal's blocks for layout feedback",
+        "## [2026-10-10] code | p0.17 Ref mode: Ref button, fixed block ids, outlines, copyable labels, Layout map",
+        "## [2026-10-10] lint | p0.17 Ref mode: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px"
       ],
       "phase": "phase-p0-planning"
     }

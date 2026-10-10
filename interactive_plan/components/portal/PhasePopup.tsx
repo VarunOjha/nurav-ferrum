@@ -12,6 +12,7 @@ import { runCommand } from "@/lib/portal/scriptCommand";
 import { getScriptHeader } from "@/lib/portal/server";
 import { ownerHeaderParts } from "@/lib/portal/scripts";
 import { approvalLabel, phaseTone, taskTone } from "@/lib/portal/view";
+import { popupContext, ui } from "@/lib/portal/uiRefs";
 import CloseLink from "./CloseLink";
 import Modal, { CloseModalButton } from "./Modal";
 import Ref from "./Ref";
@@ -40,8 +41,8 @@ export default async function PhasePopup({
   const exitApproval = approvalLabel(approvals, `${phase.id}#exit`, phase.source.content_hash);
   const gateHeader = phase.test_gate.script ? await getScriptHeader(phase.test_gate.script) : null;
   return (
-    <Modal id={phaseDialogId(phase.id)} labelledBy={titleId} className="phase-modal">
-      <div className="phase-head">
+    <Modal id={phaseDialogId(phase.id)} labelledBy={titleId} className="phase-modal" uiContext={popupContext("PH", phase.short)}>
+      <div className="phase-head" {...ui("PH-1", { pos: "inside" })}>
         <div className="phase-head-text">
           <div className="phase-head-meta">
             <span className="mono muted">{phase.short}</span>
@@ -64,7 +65,7 @@ export default async function PhasePopup({
       </div>
 
       <div className="phase-body">
-        <section className="stack-12" aria-labelledby={`${titleId}-steps`}>
+        <section className="stack-12" aria-labelledby={`${titleId}-steps`} {...ui("PH-2")}>
           <h3 id={`${titleId}-steps`} className="h3">
             Step order
           </h3>
@@ -84,7 +85,7 @@ export default async function PhasePopup({
           </ol>
         </section>
 
-        <section className="stack-12" aria-labelledby={`${titleId}-tasks`}>
+        <section className="stack-12" aria-labelledby={`${titleId}-tasks`} {...ui("PH-3")}>
           <div className="row-between">
             <h3 id={`${titleId}-tasks`} className="h3">
               Tasks
@@ -137,7 +138,7 @@ export default async function PhasePopup({
         </section>
 
         <section className="split">
-          <div className="split-main stack-12">
+          <div className="split-main stack-12" {...ui("PH-4")}>
             <h3 className="h3">Test gate: when is {phase.short} finished?</h3>
             <p className="text-2 lh">
               <RichText text={phase.test_gate.explanation} />
@@ -165,7 +166,7 @@ export default async function PhasePopup({
               </table>
             </div>
           </div>
-          <div className="split-main stack-12">
+          <div className="split-main stack-12" {...ui("PH-5")}>
             <div className="row-between">
               <h3 className="h3">Gate script</h3>
               {phase.test_gate.script && <span className="mono small muted">{phase.test_gate.script}</span>}
@@ -205,7 +206,7 @@ ${runCommand(phase.test_gate.script)}`}</pre>
         </section>
 
         {sameInEveryPhase.length > 0 && (
-          <section className="same-strip" aria-label="Same in every phase">
+          <section className="same-strip" aria-label="Same in every phase" {...ui("PH-6")}>
             <span className="strong">Same in every phase:</span>
             {sameInEveryPhase.map((s, i) => (
               <span key={s.id} className="same-item">

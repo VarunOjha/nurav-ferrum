@@ -5,6 +5,7 @@
  * entries that do not match. The count is announced politely.
  */
 import { useState } from "react";
+import { ui } from "@/lib/portal/uiRefs";
 
 type Filter = "all" | "decisions" | "approvals";
 
@@ -18,7 +19,7 @@ export default function LogFilter({ counts, children }: { counts: Record<Filter,
   const [filter, setFilter] = useState<Filter>("all");
   return (
     <>
-      <div className="row-between">
+      <div className="row-between" {...ui("LO-2")}>
         <p className="small muted" aria-live="polite" data-testid="log-count">
           Showing {counts[filter]} of {counts.all} entries, newest first
         </p>

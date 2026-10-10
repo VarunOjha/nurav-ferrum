@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { isActiveTab, TABS } from "@/lib/portal/tabs";
+import { ui } from "@/lib/portal/uiRefs";
 
 export default function TopNav({ waiting }: { waiting: number }) {
   const pathname = usePathname() ?? "/";
   return (
-    <nav aria-label="Sections" className="tabs">
+    <nav aria-label="Sections" className="tabs" {...ui("HD-2", { pos: "below" })}>
       <ul className="tabs-list">
         {TABS.map((t) => (
           <li key={t.href}>

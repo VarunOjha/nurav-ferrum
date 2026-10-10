@@ -851,3 +851,25 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: What was done → the owner's answer to Q-008 (keep the accessibility checker) and his standing rule to pause after the planning phase and before building any next phase are saved and written into the session rules, the schema, the review decision and the P0 and P1 plans. STATUS: In-flight cleared; next action unchanged in substance (portal walkthrough, approvals in chat, P0 sign-off) and now ends with the pause: P1 does not start without the owner's explicit go. A refs.json explainer was added for the new commit.
 - next: the owner walks through the portal and says what reads unclear; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
 - commit: bc72c17
+
+## [2026-10-10] ingest | Owner asks for a "Ref" button that outlines and names the portal's blocks for layout feedback
+
+- session: s01
+- pages: [ip-routes-and-views, ip-testing, index, status-live]
+- sources: [raw/owner/2026-10-10-s01-ref-button.md]
+- result: Raw file appended to MANIFEST.sha256 and listed in index.md. During his portal walkthrough the owner asked, before anything else proceeds, for a Ref button that outlines how the UI components sit on the portal so he can give layout feedback; the design option relayed with the request is "Outline + labels + copy". It is planning tooling of the read-only portal (task p0.17): no plan content, approval or Ferrum code changes. Specified in ip-routes-and-views §5 (button, labels, copy text, bar, Layout map, id registry and its rules) and ip-testing (unit and browser tests, visual review).
+- stales: [ip-routes-and-views, ip-testing] (no approvals exist yet, so nothing is actually stale)
+
+## [2026-10-10] code | p0.17 Ref mode: Ref button, fixed block ids, outlines, copyable labels, Layout map
+
+- session: s01
+- pages: [ip-routes-and-views, ip-testing]
+- sources: [raw/owner/2026-10-10-s01-ref-button.md]
+- result: New `interactive_plan/lib/portal/uiRefs.ts` (the registry: 64 block ids with plain names, prefixes HD top bar, OV, RM, AR, DE, RE, QU, LO tabs, PH phase popup, IT item popup, RF reference popup, SC script popup; `ui()` marks a block with `data-ui-ref`; label and copy-text helpers; Layout map groups) and `components/portal/RefMode.tsx` (the toggle with `aria-pressed` and a description, label buttons added to marked blocks while on and removed when off, a MutationObserver for blocks that appear later, copy with a fallback and a polite "Copied" message, a bar that moves into the top open popup, the Layout map dialog, Esc ends the mode when no popup is open, choice kept in localStorage with try/catch). Blocks marked on all seven tabs and in the phase, item, reference and script popups; repeated items get fixed suffixes (phase number for phase cards). Delegated details (Claude): the item popups (decision, risk, research item, part) get ids too (prefix IT), since the owner reviews them as well; question cards and log entries are labelled once, on the first card, to avoid clutter; labels sit just above each block and Ref mode adds 16 px above each block, room in the top bar and in small popups so no label covers text; to keep the top bar on one line at 1440 px in normal mode with the new button, its gaps went from 24 to 16 px, the tool gap from 16 to 10 px and the tab side padding from 12 to 10 px. Tests: `tests/unit/ui-refs.test.ts` (12) and `tests/e2e/ref-mode.spec.ts` (17). Builds, screenshots and browser runs used a scratch git worktree and ports 3421 and 3422, so the owner's portal on 3417 kept running untouched.
+
+## [2026-10-10] lint | p0.17 Ref mode: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px
+
+- session: s01
+- pages: [ip-routes-and-views, ip-testing, status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/ref-mode-checks.txt]
+- result: `npm run verify` exit 0 in one run (typecheck, eslint, 754 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 36 warnings, 2 info, build, 89 browser tests passed including the 17 Ref mode tests, E2E guard: real files unchanged). It ran in a scratch git worktree of HEAD with this step's files copied in, because rebuilding `interactive_plan/.next` would have broken the owner's running portal on 3417. Unit tests with coverage in the main tree: thresholds met, `uiRefs.ts` 100 % lines. Visual review: screenshots with Ref mode on of the seven tabs, the phase, script, reference and item popups and the Layout map at 1440 and 390 px, light and dark; fixed labels covering header pieces, headings and the block above, labels cut off at the top of popups, and the top bar wrapping in normal mode. Quick lint and the portal check are run again on the final tree before the commit.

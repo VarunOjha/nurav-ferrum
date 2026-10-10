@@ -54,11 +54,14 @@ export default function Modal({
   id,
   labelledBy,
   className,
+  uiContext,
   children,
 }: {
   id: string;
   labelledBy: string;
   className?: string;
+  /** Ref mode: the popup's name in copied labels ("Phase popup (P1)"). */
+  uiContext?: string;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -81,7 +84,7 @@ export default function Modal({
     };
   }, []);
   return (
-    <dialog ref={ref} id={id} aria-labelledby={labelledBy} className={`modal ${className ?? ""}`}>
+    <dialog ref={ref} id={id} aria-labelledby={labelledBy} className={`modal ${className ?? ""}`} data-ui-context={uiContext}>
       <div className="modal-panel">{children}</div>
     </dialog>
   );

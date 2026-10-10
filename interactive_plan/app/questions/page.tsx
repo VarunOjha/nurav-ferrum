@@ -8,11 +8,13 @@ import Ref from "@/components/portal/Ref";
 import RichText from "@/components/portal/RichText";
 import { getPortal } from "@/lib/portal/server";
 import { questionsByStatus, roadmapRow, shortDate } from "@/lib/portal/view";
+import { ui } from "@/lib/portal/uiRefs";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Questions" };
 
 const TONE = { open: "you", answered: "done", withdrawn: "later" } as const;
+const GROUP_REF = { open: "QU-3", answered: "QU-4", withdrawn: "QU-5" } as const;
 
 export default async function QuestionsPage() {
   const { files } = await getPortal();
@@ -20,11 +22,13 @@ export default async function QuestionsPage() {
   const groups = questionsByStatus(questions);
   const askedNow = new Set(overview?.questions_for_you.items.map((q) => q.id) ?? []);
   const phaseShort = (id: string) => roadmapRow(roadmap, id)?.short ?? id;
+  // Ref mode labels the parts of one question card only (they all look the same).
+  const firstCard = groups.find((g) => g.items.length > 0)?.items[0]?.id ?? null;
 
   return (
     <div className="page page-narrow">
-      <PageHead title="Questions" summary={questions?.summary ?? null}>
-        <nav aria-label="Question groups" className="pill-row">
+      <PageHead title="Questions" summary={questions?.summary ?? null} uiRef="QU-1">
+        <nav aria-label="Question groups" className="pill-row" {...ui("QU-2")}>
           {groups.map((g) => (
             <a key={g.status} href={`#q-${g.status}`} className="pill">
               {g.label} ({g.items.length})
@@ -33,7 +37,7 @@ export default async function QuestionsPage() {
         </nav>
       </PageHead>
       {groups.map((g) => (
-        <section key={g.status} id={`q-${g.status}`} aria-labelledby={`q-${g.status}-title`} className="stack-12" tabIndex={-1} data-group={g.status}>
+        <section key={g.status} id={`q-${g.status}`} aria-labelledby={`q-${g.status}-title`} className="stack-12" tabIndex={-1} data-group={g.status} {...ui(GROUP_REF[g.status])}>
           <h2 id={`q-${g.status}-title`} className="h2">
             {g.label} ({g.items.length})
           </h2>
@@ -43,7 +47,7 @@ export default async function QuestionsPage() {
             <ul className="plain-list stack-12">
               {g.items.map((q) => (
                 <li key={q.id}>
-                  <article className={`card entry${g.status === "withdrawn" ? " is-muted" : ""}`} data-question={q.id} aria-labelledby={`${q.id}-q`}>
+                  <article className={`card entry${g.status === "withdrawn" ? " is-muted" : ""}`} data-question={q.id} aria-labelledby={`${q.id}-q`} {...(q.id === firstCard ? ui("QU-6") : {})}>
                     <header className="entry-head">
                       <h3 id={`${q.id}-q`} className="entry-title">
                         <RichText text={q.question} />

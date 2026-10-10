@@ -8,6 +8,7 @@ import { detailDialogId } from "@/lib/portal/dialogs";
 import { friendlyId, resolveRef } from "@/lib/portal/refs";
 import { getRefData } from "@/lib/portal/server";
 import type { Tone } from "@/lib/portal/view";
+import { popupContext, ui } from "@/lib/portal/uiRefs";
 import Modal, { CloseModalButton } from "./Modal";
 import Ref from "./Ref";
 import RichText from "./RichText";
@@ -44,8 +45,8 @@ export default async function DetailPopup({
   const dialogId = detailDialogId(id);
   const titleId = `${dialogId}-title`;
   return (
-    <Modal id={dialogId} labelledBy={titleId} className="detail-modal">
-      <div className="phase-head">
+    <Modal id={dialogId} labelledBy={titleId} className="detail-modal" uiContext={popupContext("IT", friendlyId(id) ?? title)}>
+      <div className="phase-head" {...ui("IT-1", { pos: "inside" })}>
         <div className="phase-head-text">
           <div className="phase-head-meta">
             {/* The owner's short name ("Decision 19") when there is one, never the internal slug (review 2026-10-09). */}
@@ -60,19 +61,21 @@ export default async function DetailPopup({
         <CloseModalButton />
       </div>
       <div className="phase-body detail-body">
-        <dl className="detail-fields">
-          {fields.map((f) => (
-            <div key={f.label} className="detail-field">
-              <dt>{f.label}</dt>
-              <dd>
-                <RichText text={f.text} />
-              </dd>
-            </div>
-          ))}
-        </dl>
-        {extra}
+        <div {...ui("IT-2")}>
+          <dl className="detail-fields">
+            {fields.map((f) => (
+              <div key={f.label} className="detail-field">
+                <dt>{f.label}</dt>
+                <dd>
+                  <RichText text={f.text} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        {extra && <div {...ui("IT-3")}>{extra}</div>}
         {related.length > 0 && (
-          <div className="stack-8">
+          <div className="stack-8" {...ui("IT-4")}>
             <div className="eyebrow">Related</div>
             <ul className="chip-list">
               {related.map((r) => (
