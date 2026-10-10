@@ -2,19 +2,21 @@
 id: status-live
 type: status
 title: "Ferrum live status and next action"
-status: awaiting-owner
+status: active
 updated: 2026-10-09
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/owner/2026-10-09-s01-wave0c.md
-related: [phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
+  - raw/owner/2026-10-09-s01-plan-app-feedback.md
+  - raw/owner/2026-10-09-s01-portal-v2-decisions.md
+related: [adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: cd interactive_plan, npm run dev:local (Node: export PATH=\"/c/Program Files/nodejs:$PATH\"), open http://127.0.0.1:3417/, run the ip-testing §4 manual checks and approve the Wave 1 items in the app (ip-* pages, adr-0016, schema, the other P0 pages; ops-approval-workflow §8). Then Claude: RESUME, ingest the approvals, p0.17 [p0.17]."
+next_action: "Claude: p0.17 next step - build the pipeline that turns each wiki change into plain-language JSON for the portal (repo skill, safety-net hook, PowerShell check script; adr-0024). No owner action needed before that."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -148,6 +150,15 @@ yet (every approvable page is PENDING).**
   ([IP-10-arch-labels-fix.txt](wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-10-arch-labels-fix.txt));
   `comp-interactive-plan` implemented with `last_verified_commit` `3eaa641`; ip-spec §5 cold-request misses accepted as a local-tool
   limitation; IP-0-toolchain.txt and IP-9-review-fixes.txt working copies restored from git (MANIFEST 33/33 under SCHEMA N).
+- p0.17 step "rules" done (commit `5d33859`): the owner's portal-v2 decisions are now written rules. Approvals are given in
+  Claude Code and recorded by Claude with fingerprints ([adr-0023](wiki/decisions/adr-0023-approvals-in-claude-code-portal-read-only.md),
+  supersedes adr-0016; `tools/approvals_record.py`); the portal is read-only and will read plain-language JSON
+  ([adr-0024](wiki/decisions/adr-0024-portal-reads-plain-language-json.md)); check scripts are PowerShell 7
+  ([adr-0025](wiki/decisions/adr-0025-check-scripts-powershell-7.md)); architecture in four groups
+  ([adr-0026](wiki/decisions/adr-0026-architecture-four-groups.md)); real machine values masked
+  ([adr-0027](wiki/decisions/adr-0027-mask-sensitive-values.md), `tools/mask.ps1`, gitignored `.env.local-map`). 16 committed
+  evidence files masked as a sanctioned raw edit. Checks: quick lint 0 errors, lint:wiki 0 errors, mask scan 0 unmasked
+  ([p0.17-rules-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-rules-checks.txt)).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -158,7 +169,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.16 / IP-10 follow-up verified and committed 2026-10-09 (`3eaa641`, `62e5936`); next the owner in the app, then p0.17)
+(empty: p0.17 step "rules" verified and committed 2026-10-09 (`5d33859`); next the wiki-to-JSON pipeline step)
 
 ## Blockers
 
@@ -171,14 +182,15 @@ yet (every approvable page is PENDING).**
 | Index ids for upper-case evidence names (Q-219) | Quick lint reported 1 INDEX-MISSING error (IP-0-toolchain); paused the build before IP-1 | Owner | **Resolved 2026-10-08**: index lists evidence folders (adr-0020); quick lint 0 errors |
 | `sources` format on the real wiki (found by the IP-2 loader) | Holds p0.11 / IP-2: the real-wiki loader test reports 4 FM-MISSING errors | Owner / integrator | **Resolved 2026-10-09** (wave 0c items 1-3, Q-220): any wiki-relative path or https URL; raw research notes exempt; IP-2 gate passed |
 | Rust (rustup/cargo), MSVC Build Tools | Block P1 toolchain tasks; do not block P0 | Claude runs winget, owner clicks UAC (adr-0021) | Not installed |
-| Owner approvals | Every phase entry gate; `plan/approvals.json` does not exist | Owner (plan app) | Pending — the plan app is built (IP-10, 2026-10-09); the owner approves in the app (`npm run dev:local`, http://127.0.0.1:3417/) |
+| Owner approvals | Every phase entry gate; `plan/approvals.json` does not exist | Owner (in Claude Code), recorded by Claude (adr-0023) | Pending — asked after portal v2 is built (p0.17), wave by wave |
+| **First push to GitHub** | Old commits still contain the real IP addresses and user-folder path that were masked on 2026-10-09 | Owner ([Q-221](wiki/overview/ov-open-questions.md#q-221-rewrite-git-history-before-the-first-push-to-remove-real-machine-values)) | Open — **blocks the first push**: Claude asks the owner to approve a history rewrite before anything is pushed (adr-0027) |
 
 Exact install and verification commands: [wiki/operations/ops-environment-setup.md](wiki/operations/ops-environment-setup.md).
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **38 open**, 11 answered (Q-006, Q-007, Q-101,
-Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003). Answer them by wave, not all at once
+[ov-open-questions](wiki/overview/ov-open-questions.md): **39 open** (new: Q-221, history rewrite before the first push), 11 answered (Q-006, Q-007, Q-101,
+Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003). Answer them by wave, not all at once, in Claude Code
 ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
 - **Wave 0 (before the plan app):** done 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](wiki/raw/owner/2026-10-08-s01-wave0.md)).
@@ -188,32 +200,34 @@ Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-
 
 ## Next action
 
-1. **Owner, in the app** (the build p0.9–p0.16 / IP-0–IP-10 is complete): `cd interactive_plan`, then
-   `export PATH="/c/Program Files/nodejs:$PATH"` and `npm run dev:local`, open <http://127.0.0.1:3417/>.
-   Run the [ip-testing](wiki/interactive-plan/ip-testing.md) §4 manual checks, then **approve the Wave 1 items in the app**
-   ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)): the `ip-*` pages and `adr-0016`
-   again (bootstrap approvals were in chat), `schema` (closes Q-004, Q-207), the other P0 pages; answer Q-005 and Q-108.
-   Claude never writes `plan/approvals.json`.
-2. **Owner / integrator requests** (outside the IP area): `comp-interactive-plan` is now `implemented` (`3eaa641`, done
-   2026-10-09); still open: settle the integrity tags the evidence now covers
-   (phase-p0-planning `unverified` x4 by IP-1-scaffold.txt/IP-1-spikes.txt, adr-0016 atomic rename by IP-4-tests.txt,
-   Q-210 coverage pin by IP-1-scaffold.txt); risk-r22 (`.gitattributes`) still needs its own check. List in the
-   [handoff](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
-3. **Review issue fixed (2026-10-09, `3eaa641`):** `/architecture` hover/focus labels no longer overlap (chips + edge list beside
-   the graph, E2E overlap assertion on the real wiki). The owner's `npm run dev:local` on 3417 may still serve the old CSS: restart it.
-4. **Rejected / unfixed review item:** `npm run verify` exit 1 because port 3419 was held by another session's `next dev`;
-   environmental, not a code defect (ports 3417–3420 free, the full verify then exited 0). Stop servers on 3418–3420 before a gate run (3417, the owner's app, can stay up).
-5. After the owner's approvals: Claude RESUMEs, ingests them, then p0.17 (walkthrough revisions), Wave 2, and
-   `phase-p0-planning#exit` (p0.18). Before the exit approval, re-run `npm audit` in `interactive_plan/` and record it
-   (accepted risk until then, ip-spec §7, wave 0c item 8).
+Where we are:
+
+| Item | State |
+|---|---|
+| Plan app v1 | Built (IP-0 to IP-10), but the owner found it too technical; being redesigned as portal v2 (task p0.17) |
+| Rules for portal v2 | Done today (`5d33859`): approvals in Claude Code, read-only portal, PowerShell checks, four architecture groups, masking |
+| Approvals | None recorded yet; asked after portal v2, wave by wave |
+| First push | Blocked until the owner answers Q-221 (history rewrite) |
+
+1. **Claude, next step of p0.17:** build the wiki-to-JSON pipeline → each wiki change gets a plain-language JSON copy
+   in the same edit (repo skill + safety-net hook + PowerShell check script) → the portal can show short, readable
+   text ([adr-0024](wiki/decisions/adr-0024-portal-reads-plain-language-json.md)).
+2. **Then:** rebuild the portal from the approved mockups (Option A layout), read-only, with popups for phases and
+   decisions ([adr-0023](wiki/decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)).
+3. **Then the owner, in Claude Code:** review in the portal and give the Wave 1 approvals; Claude records each one
+   with `tools/approvals_record.py` ([ops-approval-workflow](wiki/operations/ops-approval-workflow.md)).
+4. **Before the P0 exit approval:** re-run `npm audit` in `interactive_plan/` and record it (accepted risk until then,
+   wave 0c item 8). Still open from the handoff: settle the integrity tags the evidence now covers; risk-r22 check.
+5. **Before the first push (any time later):** ask the owner Q-221 (history rewrite); no push until answered.
 
 ## Pending owner approvals
 
-Nothing is approved yet. Every approvable page is **PENDING**. The keys to approve, wave by wave, are in
+Nothing is approved yet. Every approvable page is **PENDING**. Approvals are given in Claude Code and recorded by
+Claude (adr-0023). The keys to approve, wave by wave, are in
 [ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves). Pages outside every
 phase dependency set (risks, metrics, workloads, hypotheses, research questions, narrative pages) never
 gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.16 / IP-10 and its follow-up fix; next: the owner approves Wave 1 in the app). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+2026-10-09, session s01 (after p0.17 step "rules", `5d33859`; next: the wiki-to-JSON pipeline). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
