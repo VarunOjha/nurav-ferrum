@@ -1,0 +1,555 @@
+{
+  "$schema": "schema/risks.schema.json",
+  "id": "risks",
+  "title": "Risks",
+  "summary": "What could go wrong, how likely and how bad (1 = low, 5 = high), what we do about it, and which phase checks it.",
+  "items": [
+    {
+      "id": "risk-r01",
+      "title": "Tauri cannot yet give each site its own profile",
+      "summary": "Sites are to be kept apart by separate WebView2 profiles, but a profile can only be set when a web view is created, and Tauri does not pass it through yet.",
+      "likelihood": 4,
+      "impact": 4,
+      "mitigation": "Test two workarounds in P1 (a patched Tauri, or low-level code) with a cookie-leak test; you settle the route before P3 starts.",
+      "phase": "phase-p1-foundation",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p3-tabs-sessions",
+        "phase-p4-security",
+        "adr-0010",
+        "adr-0007",
+        "risk-r02",
+        "risk-r09"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r01-webview2-profile-at-creation.md",
+        "content_hash": "sha256:56b08d77929ad167b02a583f3e66e531253856e89523d1f379e6b2631bb15e32"
+      }
+    },
+    {
+      "id": "risk-r02",
+      "title": "Multi-view feature may be unstable",
+      "summary": "Many web views in one window needs a Tauri feature marked experimental. Known bugs: hangs, blank views, lost keyboard focus.",
+      "likelihood": 4,
+      "impact": 4,
+      "mitigation": "Pin the exact Tauri version, create tabs off the main thread, keep controls off the page area, and keep a test per known bug. Tested first in P1.",
+      "phase": "phase-p1-foundation",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "adr-0007",
+        "adr-0006",
+        "risk-r01",
+        "risk-r20"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r02-tauri-multiwebview-unstable.md",
+        "content_hash": "sha256:af0ddd918b00ea48f734dc3430b3c9e44383b6bb37351e1608b273d8988d222b"
+      }
+    },
+    {
+      "id": "risk-r03",
+      "title": "Tab sleep and memory saving need unsafe low-level code",
+      "summary": "The WebView2 calls that put a tab to sleep or ask it to use less memory are not in Tauri, so we must reach them through unsafe code. Sleep can also simply fail.",
+      "likelihood": 5,
+      "impact": 3,
+      "mitigation": "One small documented module with a safe interface; treat 'sleep failed' as normal; keep sleep and discard as separate states. Tried in P1.",
+      "phase": "phase-p7-lifecycle",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p7-lifecycle",
+        "risk-r18",
+        "risk-r23",
+        "risk-r20"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r03-raw-com-lifecycle-apis.md",
+        "content_hash": "sha256:9a069edf521782ba2c0a414fdddf97b3aa5178ced74a1ac1893ab11baed838d1"
+      }
+    },
+    {
+      "id": "risk-r04",
+      "title": "AMD energy readings may be estimates",
+      "summary": "Research suggests AMD's energy counters are modelled rather than measured, cover only the CPU chip, and need admin rights plus a kernel driver.",
+      "likelihood": 5,
+      "impact": 4,
+      "mitigation": "Label every reading as a CPU-chip estimate; system energy only with a wall meter; never the unsafe WinRing0 driver; any driver only with your approval.",
+      "phase": "phase-p6-benchmark-harness",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p5-telemetry",
+        "adr-0009",
+        "risk-r14",
+        "risk-r21"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r04-amd-energy-measurement.md",
+        "content_hash": "sha256:8a74de704b606b416704f6abf48bc43e62f5c6ba0775735d052e3af52167f16f"
+      }
+    },
+    {
+      "id": "risk-r05",
+      "title": "Counting each browser's memory fairly is hard",
+      "summary": "Browsers run many helper processes, some shared. Counting the wrong ones, or double-counting shared memory, would make the main comparison wrong.",
+      "likelihood": 4,
+      "impact": 5,
+      "mitigation": "Start each browser in its own tracked process group; count private memory only; cross-check the process list two ways; fail any trial with a stray process.",
+      "phase": "phase-p5-telemetry",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry",
+        "phase-p6-benchmark-harness",
+        "adr-0010",
+        "risk-r01",
+        "risk-r14"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r05-process-tree-attribution.md",
+        "content_hash": "sha256:b2f1f647aba2aa16f73540d7e95467aeec7f949c7afc7e3629c36fb9ca2ac43f"
+      }
+    },
+    {
+      "id": "risk-r06",
+      "title": "The test robot sees WebView2 less clearly",
+      "summary": "Playwright reaches WebView2 only through a debugging channel it calls lower fidelity, and an open channel may itself change behaviour.",
+      "likelihood": 4,
+      "impact": 3,
+      "mitigation": "Drive every browser the same way; measure resources from Rust, not Playwright; measure the channel's own effect; enable it only in benchmark builds.",
+      "phase": "phase-p6-benchmark-harness",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry",
+        "phase-p6-benchmark-harness",
+        "adr-0012",
+        "risk-r09",
+        "risk-r14",
+        "risk-r19"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r06-playwright-cdp-webview2.md",
+        "content_hash": "sha256:da0e75799f496e42a35901cb15244de329212bed24c1389ff3fd85755bbd202f"
+      }
+    },
+    {
+      "id": "risk-r07",
+      "title": "Navigation filter could let blocked pages through",
+      "summary": "Tauri's navigation check allows any address it cannot read, and never sees pages loaded inside frames, so a blocked site could slip in.",
+      "likelihood": 4,
+      "impact": 4,
+      "mitigation": "Ferrum's own filter refuses unreadable addresses, watches frames through low-level hooks, always handles pop-ups and downloads, and is tested with bad addresses.",
+      "phase": "phase-p4-security",
+      "status": "Open",
+      "related": [
+        "phase-p4-security",
+        "phase-p2-minimal-container",
+        "adr-0015",
+        "risk-r19"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r07-navigation-filter-fail-open.md",
+        "content_hash": "sha256:2e1de638bc4a1259ee4ce89dccd05b8c16f591dd1830ad30efee6fb9591f5a05"
+      }
+    },
+    {
+      "id": "risk-r08",
+      "title": "Network log needs low-level code",
+      "summary": "Tauri has no hook that sees normal web traffic, so the network log must use unsafe WebView2 calls, or the debugging channel as a fallback.",
+      "likelihood": 5,
+      "impact": 3,
+      "mitigation": "Build it on WebView2's response event; keep the metadata-only format with tests; never log content; keep logs out of git; measure its cost first.",
+      "phase": "phase-p5-telemetry",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry",
+        "adr-0008",
+        "risk-r18",
+        "risk-r14"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r08-network-log-needs-raw-com.md",
+        "content_hash": "sha256:621bb06bc16163cd428a3e5a77d3d9bd07c74e8d2010d0e30f3f18fff48065bb"
+      }
+    },
+    {
+      "id": "risk-r09",
+      "title": "All web views must share identical start-up settings",
+      "summary": "Web views sharing one data folder must use exactly the same settings (flags, proxy, language) or creation fails, so no per-tab differences.",
+      "likelihood": 3,
+      "impact": 3,
+      "mitigation": "Build one settings set at start-up and reuse it everywhere; apply benchmark flags to the whole app; test that a mismatch is rejected early.",
+      "phase": "phase-p3-tabs-sessions",
+      "status": "Open",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "phase-p6-benchmark-harness",
+        "adr-0010",
+        "adr-0007",
+        "risk-r01",
+        "risk-r06"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r09-shared-udf-identical-options.md",
+        "content_hash": "sha256:fc88a71b655a2adbfcfff332b3a8c67df3d539d6c02f10ff92e2aed9c4471d65"
+      }
+    },
+    {
+      "id": "risk-r10",
+      "title": "Google sign-in will refuse Ferrum tabs",
+      "summary": "Google's rules block sign-in from embedded web views like Ferrum's tabs, so Google login is expected to fail.",
+      "likelihood": 4,
+      "impact": 3,
+      "mitigation": "Never disguise Ferrum to get around it; offer 'open in your normal browser'; document it; pick benchmark sites that need no Google login.",
+      "phase": "phase-p2-minimal-container",
+      "status": "Open",
+      "related": [
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "phase-p6-benchmark-harness",
+        "adr-0015",
+        "adr-0004"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r10-google-oauth-embedded.md",
+        "content_hash": "sha256:2378403adb1a6c9c3462011e236c8622cc44c786c860f9a0170546061f863deb"
+      }
+    },
+    {
+      "id": "risk-r11",
+      "title": "Browsers update themselves mid-study",
+      "summary": "Chrome, Edge and WebView2 update automatically. A version change during a measurement run makes the results incomparable.",
+      "likelihood": 4,
+      "impact": 4,
+      "mitigation": "Record exact versions in every trial; stop a run if one changes; run in short windows with updates paused; keep the exact installers used.",
+      "phase": "phase-p6-benchmark-harness",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle",
+        "phase-p8-research-paper",
+        "adr-0009",
+        "risk-r12",
+        "risk-r21"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r11-evergreen-version-drift.md",
+        "content_hash": "sha256:90a36bd6d90523ac5a7fb57e8abb86c041f98662a21ee1c06fe6407ec494b306"
+      }
+    },
+    {
+      "id": "risk-r12",
+      "title": "Windows background work and heat add noise",
+      "summary": "Updates, antivirus, indexing, CPU temperature and even window visibility change the numbers, adding noise or bias.",
+      "likelihood": 4,
+      "impact": 4,
+      "mitigation": "A recorded checklist before each run; fixed window state; cool-down between trials; products in random order; same-vs-same tests to measure the noise.",
+      "phase": "phase-p6-benchmark-harness",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p5-telemetry",
+        "risk-r11",
+        "risk-r14",
+        "risk-r25"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r12-os-noise-thermal.md",
+        "content_hash": "sha256:876a19af5e8fe2d317e086e7d6067fbff8003f41eb22ece87bf0f5c275796683"
+      }
+    },
+    {
+      "id": "risk-r13",
+      "title": "Rivals' power-saving features can skew comparisons",
+      "summary": "Edge and Chrome ship sleeping tabs, Startup Boost and Memory Saver. On or off changes who wins, and switching them off just to help Ferrum is not allowed.",
+      "likelihood": 4,
+      "impact": 5,
+      "mitigation": "If you agree, measure as-shipped and a matched setup; set and record every such setting per trial; justify and report anything switched off.",
+      "phase": "phase-p6-benchmark-harness",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p8-research-paper",
+        "risk-r14",
+        "risk-r17"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r13-competitor-feature-fairness.md",
+        "content_hash": "sha256:05dc2245a906dd60fa45db7ee0cb2e727325c676b2cd7ba0e47c577b4e958f47"
+      }
+    },
+    {
+      "id": "risk-r14",
+      "title": "Our own tools could bias the results",
+      "summary": "The team building Ferrum also builds the benchmark, so bias can creep in through tooling or through choices made after seeing data.",
+      "likelihood": 3,
+      "impact": 5,
+      "mitigation": "Fix the main measures and analysis before collecting data; validate tools with same-vs-same tests; instrument every browser alike; analyse every run.",
+      "phase": "phase-p6-benchmark-harness",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p5-telemetry",
+        "phase-p8-research-paper",
+        "adr-0012",
+        "adr-0013",
+        "risk-r05",
+        "risk-r06",
+        "risk-r12",
+        "risk-r13",
+        "risk-r25"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r14-harness-instrumentation-bias.md",
+        "content_hash": "sha256:de7631ecf579264ecd25d48e63abea2de64fd4d91888c409b5a5b8b606256c00"
+      }
+    },
+    {
+      "id": "risk-r15",
+      "title": "A session can stop mid-change and lose state",
+      "summary": "Sessions run out of tokens. A stop in the middle of a multi-file change can leave broken work or a wrong status page.",
+      "likelihood": 5,
+      "impact": 3,
+      "mitigation": "After every task: update the status page and log, commit locally. Keep tasks small, write handoff notes early, check status against git on restart.",
+      "phase": "phase-p1-foundation",
+      "status": "Being reduced",
+      "related": [
+        "phase-p0-planning",
+        "phase-p1-foundation",
+        "adr-0003",
+        "adr-0002",
+        "adr-0011",
+        "risk-r22"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r15-session-interruption.md",
+        "content_hash": "sha256:5d63b50f19828df2ca410bf1cf49f8d47cc1cb299d8790dd4df0e0b42df70279"
+      }
+    },
+    {
+      "id": "risk-r16",
+      "title": "Scope creep: two equal goals, no tie-breaker",
+      "summary": "The app and the research weigh the same and both wish lists are long, so work can grow without anyone deciding it should.",
+      "likelihood": 4,
+      "impact": 4,
+      "mitigation": "Freeze each phase's work list when you approve it; new ideas go to a backlog or a decision you approve; compare effort to the estimate at each review.",
+      "phase": "phase-p0-planning",
+      "status": "Open",
+      "related": [
+        "phase-p0-planning",
+        "adr-0004",
+        "adr-0001",
+        "adr-0014",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "phase-p8-research-paper",
+        "risk-r24"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r16-scope-creep.md",
+        "content_hash": "sha256:50d3a70b958fce4a9bfff8ac79799f28183ed2677495852660c937437da94642"
+      }
+    },
+    {
+      "id": "risk-r17",
+      "title": "Our tab-sleep policy may not be new",
+      "summary": "Chrome, Edge, ChromeOS and Android already freeze, sleep or discard tabs. Claiming novelty without a proper literature review would be wrong.",
+      "likelihood": 4,
+      "impact": 4,
+      "mitigation": "A systematic literature review in P8 before any novelty claim; claim only what it supports; report null results honestly.",
+      "phase": "phase-p8-research-paper",
+      "status": "Open",
+      "related": [
+        "phase-p8-research-paper",
+        "phase-p7-lifecycle",
+        "adr-0017",
+        "risk-r13",
+        "risk-r21"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r17-novelty-not-established.md",
+        "content_hash": "sha256:8886415b19de84c50cd4e0ed8cd5f4a3475bcdeaaa029c5956591e44cd9fa414"
+      }
+    },
+    {
+      "id": "risk-r18",
+      "title": "Bugs in unsafe low-level code",
+      "summary": "Several features need unsafe Windows code. Mistakes there can crash Ferrum, leak memory, or keep closed tabs alive.",
+      "likelihood": 3,
+      "impact": 4,
+      "mitigation": "One module behind a safe interface; every unsafe block documented; handlers that remove themselves; leak and crash tests; checklist review of each change.",
+      "phase": "phase-p1-foundation",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p4-security",
+        "phase-p5-telemetry",
+        "phase-p7-lifecycle",
+        "risk-r03",
+        "risk-r07",
+        "risk-r08"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r18-unsafe-com-bugs.md",
+        "content_hash": "sha256:d134bc519f887b7246ef57f75c48198ce450ea2ca822ee5d319593a9eb0df61e"
+      }
+    },
+    {
+      "id": "risk-r19",
+      "title": "A change could expose Ferrum's internals to websites",
+      "summary": "Every web view can technically message Ferrum's Rust code. A configuration slip could let a website run privileged commands or weaken isolation.",
+      "likelihood": 3,
+      "impact": 5,
+      "mitigation": "Commands only for the trusted controls, never for websites; tabs blocked from Ferrum's own pages; security tests from P2, fully in P4, and on every upgrade.",
+      "phase": "phase-p4-security",
+      "status": "Open",
+      "related": [
+        "phase-p4-security",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "adr-0015",
+        "adr-0007",
+        "risk-r07",
+        "risk-r06"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r19-security-regression-ipc.md",
+        "content_hash": "sha256:61b3e52c2ba0cc51b8ca927ea1acebea588a430b84332698a6851e652e55a22d"
+      }
+    },
+    {
+      "id": "risk-r20",
+      "title": "Tools and libraries change under us",
+      "summary": "Over months, Tauri, Node, TypeScript, ESLint and Mermaid release new major versions that can break the build.",
+      "likelihood": 4,
+      "impact": 3,
+      "mitigation": "Pin exact versions and commit lock files; record installed versions in P1; upgrade only as a planned task that re-runs all tests; audit dependencies.",
+      "phase": "phase-p1-foundation",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p0-planning",
+        "adr-0005",
+        "adr-0021",
+        "adr-0011",
+        "adr-0016",
+        "risk-r02",
+        "risk-r03"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r20-dependency-toolchain-churn.md",
+        "content_hash": "sha256:16c7959599c3cc88e1da4067a236ef728b7c225ae7a9fdec1af76c38818c56b3"
+      }
+    },
+    {
+      "id": "risk-r21",
+      "title": "One machine may not speak for all",
+      "summary": "All results come from one AMD desktop. Memory and process behaviour depend on the machine, so results may not hold elsewhere.",
+      "likelihood": 5,
+      "impact": 3,
+      "mitigation": "State the one-machine scope in every result; record full hardware details; publish tools and raw data; add a second machine only if you have one.",
+      "phase": "phase-p8-research-paper",
+      "status": "Open",
+      "related": [
+        "phase-p8-research-paper",
+        "phase-p6-benchmark-harness",
+        "adr-0009",
+        "risk-r04",
+        "risk-r11",
+        "risk-r17"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r21-single-machine-validity.md",
+        "content_hash": "sha256:7641917e6a2d6e705cce0ee1cf702ce5f30b935b893293a4aa23edddb37a0fc5"
+      }
+    },
+    {
+      "id": "risk-r22",
+      "title": "Approval records could be wrong",
+      "summary": "Phases start only when approvals match the current pages. A fingerprint bug, a corrupt file, or an approval you never gave would start or block work wrongly.",
+      "likelihood": 2,
+      "impact": 4,
+      "mitigation": "Claude records an approval only after saving your words, through one tested script that stores page fingerprints and writes safely; all logged and in git.",
+      "phase": "phase-p0-planning",
+      "status": "Open",
+      "related": [
+        "phase-p0-planning",
+        "adr-0023",
+        "adr-0016",
+        "adr-0001",
+        "adr-0014",
+        "risk-r15",
+        "risk-r24"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r22-approval-integrity.md",
+        "content_hash": "sha256:0c91f6bd6e622008b87dd257d286220f912d538e13ca4f722c22fec3a0ae38af"
+      }
+    },
+    {
+      "id": "risk-r23",
+      "title": "Sleeping or closing a tab could lose your work",
+      "summary": "If Ferrum sleeps or discards a tab during a download, a call, or while you are typing, data could be lost.",
+      "likelihood": 3,
+      "impact": 5,
+      "mitigation": "Exempt tabs with media, downloads, camera or mic, unsaved input, or your exclusions; prefer sleep over discard; adaptive policy off by default; safety tests in P7.",
+      "phase": "phase-p7-lifecycle",
+      "status": "Open",
+      "related": [
+        "phase-p7-lifecycle",
+        "risk-r03",
+        "risk-r17"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r23-lifecycle-data-loss.md",
+        "content_hash": "sha256:5d678af509bc578735fe3b6124e39a3f38ba8eb796d9ca2695e022bbb1d4d02e"
+      }
+    },
+    {
+      "id": "risk-r24",
+      "title": "Your reviews can become a bottleneck",
+      "summary": "Every phase waits for your approval, and any edit to an approved page needs re-approval. Reviews piling up can stall work.",
+      "likelihood": 3,
+      "impact": 2,
+      "mitigation": "One review packet per gate showing what changed; batch edits so pages go stale once per round; keep doing independent work; ask questions early.",
+      "phase": "phase-p0-planning",
+      "status": "Open",
+      "related": [
+        "phase-p0-planning",
+        "adr-0014",
+        "adr-0001",
+        "risk-r16",
+        "risk-r22"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r24-owner-review-bottleneck.md",
+        "content_hash": "sha256:0a72086e60ec034f26826ce9a38c63bec925f738e49bf59b08e25369f541ffa6"
+      }
+    },
+    {
+      "id": "risk-r25",
+      "title": "Too few trials to see real differences",
+      "summary": "With about 30 trials per setup only fairly large differences are detectable; small but meaningful ones could be missed.",
+      "likelihood": 4,
+      "impact": 3,
+      "mitigation": "Size runs from the measured noise; fix main measures and thresholds in advance; correct for many comparisons; report confidence ranges and effect sizes.",
+      "phase": "phase-p6-benchmark-harness",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle",
+        "phase-p8-research-paper",
+        "adr-0013",
+        "risk-r12",
+        "risk-r14"
+      ],
+      "source": {
+        "wiki_path": "wiki/risks/risk-r25-statistical-power.md",
+        "content_hash": "sha256:4e064db2718487b7db13ec2b073b8d7e5c8dd47e770a9cab6a5926cc37ce7d89"
+      }
+    }
+  ]
+}

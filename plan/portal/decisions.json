@@ -1,0 +1,659 @@
+{
+  "$schema": "schema/decisions.schema.json",
+  "id": "decisions",
+  "title": "Decisions",
+  "summary": "Every decision so far: what we chose, why, and the catch. Replaced decisions stay listed and point to what replaced them.",
+  "items": [
+    {
+      "id": "adr-0001",
+      "number": 1,
+      "title": "Plan first, then build phase by phase with your sign-off",
+      "summary": "Nine phases, P0 to P8. P0 is planning only, with no app code. A phase starts when you approve its plan and ends when its tests pass and you approve the result.",
+      "why": "You asked to plan well before building, and to test rigorously, phase by phase.",
+      "catch": "The first working app arrives later, and editing an approved page needs your re-approval.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0002",
+        "adr-0003",
+        "adr-0014",
+        "adr-0016",
+        "adr-0023",
+        "phase-p0-planning",
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0001-planning-first-phase-gating.md",
+        "content_hash": "sha256:9f31f5a1fb525c3107182f8e4e19a796725a6d1e0cdaa62af2b4c27d67eea973"
+      }
+    },
+    {
+      "id": "adr-0002",
+      "number": 2,
+      "title": "The wiki is Claude's working memory",
+      "summary": "Claude keeps plans, decisions and research as linked pages in the wiki (Karpathy's 'LLM wiki' pattern). Your raw notes are never edited; Claude maintains everything else.",
+      "why": "You chose this pattern for documentation and decision making.",
+      "catch": "Bookkeeping on every change, and the wiki can drift from the code unless it is checked.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0001",
+        "adr-0003",
+        "adr-0016",
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0002-llm-wiki-documentation-system.md",
+        "content_hash": "sha256:ce62c03d78c712d210d2fa4980b5571cd3ceb538e1ef96cc8ef25c45f3e38e4b"
+      }
+    },
+    {
+      "id": "adr-0003",
+      "number": 3,
+      "title": "Work survives interrupted sessions",
+      "summary": "After every task Claude updates the status page and the log. When a session ends it writes a handoff note, and the next session reads them and carries on.",
+      "why": "You expect many sessions over many days, and sessions run out of tokens.",
+      "catch": "Costs some time and tokens on every task.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0001",
+        "adr-0002",
+        "adr-0011",
+        "adr-0012",
+        "phase-p0-planning",
+        "phase-p6-benchmark-harness"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0003-multi-session-resumability.md",
+        "content_hash": "sha256:cbc049a687562d0e5929df76465295c0813f0c4175037ef1cb7742e20d8c0d2d"
+      }
+    },
+    {
+      "id": "adr-0004",
+      "number": 4,
+      "title": "A usable app and solid research, equally",
+      "summary": "Each phase delivers something usable plus the measurement hooks the research needs. The app is never tuned just to win a benchmark.",
+      "why": "You chose both goals with equal weight, built in lock-step.",
+      "catch": "Convenience features with no research value (sidebar, split view) come late.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0001",
+        "adr-0012",
+        "adr-0013",
+        "adr-0014",
+        "phase-p2-minimal-container",
+        "phase-p5-telemetry",
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle",
+        "phase-p8-research-paper"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0004-goal-app-and-research-equally.md",
+        "content_hash": "sha256:c4268fc0429e96d97e4faa86ef7e7771a634d72d39246d9705be06e53cd6295b"
+      }
+    },
+    {
+      "id": "adr-0005",
+      "number": 5,
+      "title": "You install the developer tools (replaced)",
+      "summary": "You would run the install commands Claude supplied; Claude would only check the versions afterwards.",
+      "why": "Your first answer on how the tools get installed.",
+      "catch": "Replaced: Claude now runs the installs and you click through the Windows prompts ([decision 21](ref:adr-0021)).",
+      "status": "Replaced",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": "adr-0021",
+      "related": [
+        "adr-0021",
+        "adr-0006",
+        "adr-0011",
+        "adr-0016",
+        "phase-p0-planning",
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0005-owner-installs-toolchain-winget.md",
+        "content_hash": "sha256:3d35002d9b9c80af3fd24a9a6d899ec711d78e95fb3cd7df7452f1017f5f551e"
+      }
+    },
+    {
+      "id": "adr-0006",
+      "number": 6,
+      "title": "Browser controls in plain TypeScript, no UI framework",
+      "summary": "Tab bar and address bar are plain TypeScript bundled by Vite. The controls never draw over the web page area.",
+      "why": "Your choice: a small control panel with few dependencies.",
+      "catch": "UI work is slower: shortcuts, tab dragging and accessibility are written by hand.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0007",
+        "adr-0005",
+        "adr-0021",
+        "adr-0015",
+        "phase-p1-foundation",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0006-shell-ui-vanilla-ts-vite.md",
+        "content_hash": "sha256:7918e1b6e25fc19b61590e31027f1afb822cb04ca64df5a8dbc2874cfe8f6555"
+      }
+    },
+    {
+      "id": "adr-0007",
+      "number": 7,
+      "title": "One window, many web views",
+      "summary": "A trusted panel draws Ferrum's controls; each website tab is its own untrusted web view in the same window.",
+      "why": "Your choice: it keeps websites apart from Ferrum's own trusted code.",
+      "catch": "The Tauri feature for this is marked experimental and has open bugs (focus, resize, blank views).",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0006",
+        "adr-0010",
+        "adr-0015",
+        "adr-0019",
+        "risk-r02",
+        "risk-r01",
+        "phase-p1-foundation",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0007-child-webviews.md",
+        "content_hash": "sha256:6b103f7be25fea68a96fa597f12e2e3dd770e8c482e8a596c36d5db5ff8a2767"
+      }
+    },
+    {
+      "id": "adr-0008",
+      "number": 8,
+      "title": "Network log records what was fetched, never the content",
+      "summary": "For each request Ferrum logs address, method, status, type, timing, size, tab and block decision, one line per request in a file. No headers, no page content.",
+      "why": "Your choice: metadata only.",
+      "catch": "Needs unsafe low-level WebView2 code, and full addresses can contain login tokens (whether to hide them is an open question to you).",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0015",
+        "adr-0019",
+        "adr-0012",
+        "phase-p5-telemetry",
+        "phase-p4-security",
+        "risk-r03",
+        "risk-r06"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0008-network-logging-metadata-jsonl.md",
+        "content_hash": "sha256:01e73590843115deab108146c5ad3cfedf8371d6a12912da62c80bc719fe69db"
+      }
+    },
+    {
+      "id": "adr-0009",
+      "number": 9,
+      "title": "Benchmarks run on your AMD desktop",
+      "summary": "All measurements run on this machine. Energy is reported only as the CPU chip's own estimate, clearly labelled; whole-system energy only with a wall meter; per-program energy never.",
+      "why": "Your choice of machine; research showed AMD's counters are estimates, so every claim must say so.",
+      "catch": "Energy results are weaker than hoped without a wall meter, and reading the counters needs a driver you must approve.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0012",
+        "adr-0013",
+        "adr-0005",
+        "adr-0021",
+        "risk-r04",
+        "risk-r05",
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle",
+        "phase-p8-research-paper"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0009-benchmark-hardware-energy.md",
+        "content_hash": "sha256:12317046903e453352db0810e489347083b0069869254de0065786187fa6b905"
+      }
+    },
+    {
+      "id": "adr-0010",
+      "number": 10,
+      "title": "Sites kept apart by profiles in one shared browser process",
+      "summary": "Each site gets its own WebView2 profile (own cookies and storage) while all share one browser process. How to build it is still open and must be settled before P3.",
+      "why": "Your choice: separate data per site without one browser process per site.",
+      "catch": "Tauri cannot set a profile yet, so P3 depends on an unreleased fix, a patch, or low-level code.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0007",
+        "adr-0019",
+        "adr-0015",
+        "risk-r01",
+        "risk-r03",
+        "risk-r05",
+        "phase-p1-foundation",
+        "phase-p3-tabs-sessions",
+        "phase-p4-security",
+        "phase-p6-benchmark-harness"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0010-isolation-webview2-profiles.md",
+        "content_hash": "sha256:3d5b7eb82295fa312065db2af124db84cdb82fa93c21a40df47f3b711f9b0a32"
+      }
+    },
+    {
+      "id": "adr-0011",
+      "number": 11,
+      "title": "Git, GitHub checks, open licence; only you upload",
+      "summary": "Code lives in git. Automatic checks run on GitHub's Windows machines. Licence: MIT or Apache 2.0. Claude never pushes; you create the GitHub repo and push.",
+      "why": "Your choice: you stay in control of what gets published.",
+      "catch": "The automatic checks cannot run until you create the GitHub repo.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0003",
+        "adr-0005",
+        "adr-0021",
+        "adr-0018",
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0011-git-ci-license.md",
+        "content_hash": "sha256:d798dd041915c1c860991cf20961c110ae82afc63685d2176fbfab44befdca76"
+      }
+    },
+    {
+      "id": "adr-0012",
+      "number": 12,
+      "title": "Benchmark robot: Rust controller plus Playwright scripts",
+      "summary": "A Rust program schedules trials and measures memory and CPU through Windows. Playwright scripts in TypeScript drive the pages. Every browser is driven the same way.",
+      "why": "Your choice; one shared route for all browsers keeps the comparison fair.",
+      "catch": "Every browser runs with a debugging connection attached, which may change results; a pilot measures its effect.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0009",
+        "adr-0013",
+        "adr-0007",
+        "adr-0008",
+        "risk-r05",
+        "risk-r06",
+        "risk-r04",
+        "phase-p5-telemetry",
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0012-benchmark-harness-rust-playwright.md",
+        "content_hash": "sha256:55cc17c91e977f96a0e8ea52fc6e8253e70b6851fc90409439a16d176f3b1af6"
+      }
+    },
+    {
+      "id": "adr-0013",
+      "number": 13,
+      "title": "Statistics in Python scripts",
+      "summary": "Analysis runs as repeatable Python scripts, not notebooks. Each comparison reports averages, spread, confidence ranges and effect sizes, with recorded random seeds.",
+      "why": "Your choice when you picked the benchmark languages.",
+      "catch": "A third language to keep pinned, and 30 trials per setup may be too few to see small differences.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0012",
+        "adr-0009",
+        "adr-0004",
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle",
+        "phase-p8-research-paper"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0013-statistics-python.md",
+        "content_hash": "sha256:22524707d283d1e2b08e35959e1a3cf6fac671e65142ed7fd4df4fbe831144af"
+      }
+    },
+    {
+      "id": "adr-0014",
+      "number": 14,
+      "title": "You review the result of every phase",
+      "summary": "At the end of each phase Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve.",
+      "why": "You asked to stop after each milestone for your review.",
+      "catch": "Progress waits on your review time.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0001",
+        "adr-0003",
+        "adr-0016",
+        "phase-p0-planning",
+        "phase-p1-foundation",
+        "phase-p2-minimal-container",
+        "phase-p8-research-paper"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0014-milestone-review-checkpoints.md",
+        "content_hash": "sha256:711d4d0eb3f6d5c4120d65ccc81c333ca1f2215171fe0534b2699245261d0585"
+      }
+    },
+    {
+      "id": "adr-0015",
+      "number": 15,
+      "title": "Open browsing with a blocklist",
+      "summary": "Any secure (HTTPS) site opens unless blocked. Plain HTTP is upgraded or warned about. Other link types (mail, apps) ask first. Local files and address-bar scripts are refused in tabs.",
+      "why": "Your choice: normal browsing, with guard rails where they matter.",
+      "catch": "A blocklist is advice, not a sandbox, so security tests must be thorough; Google sign-in will likely fail in tabs.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0007",
+        "adr-0008",
+        "adr-0010",
+        "adr-0019",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0015-navigation-posture-open-blocklist.md",
+        "content_hash": "sha256:68231288aa22aad78cdff52b8ba5a9eda4400d3cc07601c7d1d21eab0c88fd72"
+      }
+    },
+    {
+      "id": "adr-0016",
+      "number": 16,
+      "title": "Plan app reads the wiki and takes approvals (replaced)",
+      "summary": "A local Next.js app would show the wiki pages, and you would click Approve there.",
+      "why": "Your first request for an interactive plan.",
+      "catch": "Replaced: you approve in Claude Code, and the portal is read-only ([decision 23](ref:adr-0023)).",
+      "status": "Replaced",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": "adr-0023",
+      "related": [
+        "adr-0001",
+        "adr-0002",
+        "adr-0021",
+        "adr-0014",
+        "adr-0023",
+        "adr-0024",
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0016-interactive-plan-nextjs.md",
+        "content_hash": "sha256:d5c7105a28b5cb3c1d38c5816c6b4e535fc0453f5a8cd873f0d45d1cc6db0a94"
+      }
+    },
+    {
+      "id": "adr-0017",
+      "number": 17,
+      "title": "Research paper in the ACM LaTeX template, for now",
+      "summary": "The paper uses ACM's acmart template until a venue is chosen. Text stays portable, and no results section is written until experiments are done.",
+      "why": "One template covers many ACM formats; the venue is not chosen yet.",
+      "catch": "If the venue is IEEE or USENIX, the paper has to be moved to another template.",
+      "status": "Proposed",
+      "decided_by": "claude",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0004",
+        "adr-0013",
+        "adr-0018",
+        "phase-p8-research-paper"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0017-acmart-latex-template.md",
+        "content_hash": "sha256:be9d1954a71381bd6b6fa1f74ad770eac73e9c549c62c4284fe7fb47d6fd0b4b"
+      }
+    },
+    {
+      "id": "adr-0018",
+      "number": 18,
+      "title": "Repo folder is the project folder; Rust code in one workspace",
+      "summary": "The planned folder layout (app, libraries, benchmarks, analysis, paper) sits directly at the repo root, plus folders for the baseline app and the benchmark robot.",
+      "why": "Shorter Windows paths, and the wiki and plan sit beside the code.",
+      "catch": "Slightly differs from the original drawing; that the tools build this layout is not checked yet (P1).",
+      "status": "Proposed",
+      "decided_by": "claude",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0011",
+        "adr-0006",
+        "adr-0012",
+        "adr-0013",
+        "adr-0016",
+        "adr-0017",
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0018-repo-root-cargo-workspace.md",
+        "content_hash": "sha256:a2449a7bbaad2acec8dd7c5facd18a23903f242f9e72bc1547e9b1ccac0a8743"
+      }
+    },
+    {
+      "id": "adr-0019",
+      "number": 19,
+      "title": "Unsafe WebView2 code lives in one audited module",
+      "summary": "Features Tauri lacks (sleep, memory target, network events, crash detection) use raw WebView2 calls, all in one module behind a safe Rust interface, each added only when its phase needs it.",
+      "why": "Unsafe code must be documented and contained, and Tauri does not offer these features.",
+      "catch": "More design work in P2; whether it coexists with Tauri's own handlers is not checked yet.",
+      "status": "Proposed",
+      "decided_by": "claude",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0007",
+        "adr-0008",
+        "adr-0010",
+        "adr-0015",
+        "adr-0018",
+        "risk-r03",
+        "risk-r01",
+        "phase-p2-minimal-container",
+        "phase-p4-security",
+        "phase-p5-telemetry",
+        "phase-p7-lifecycle"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0019-raw-webview2-com-boundary.md",
+        "content_hash": "sha256:5ccf68965d835b810e6d9dd16ce67fd6a011c83b1e90eab3a327dbb1805a80ca"
+      }
+    },
+    {
+      "id": "adr-0020",
+      "number": 20,
+      "title": "Wiki index lists evidence folders, not every file",
+      "summary": "The wiki index names each evidence folder once instead of every file in it.",
+      "why": "Your choice; it scales to the many files benchmark runs will create.",
+      "catch": "The index no longer names each evidence file; phase pages and the log still do.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "phase-p0-planning",
+        "adr-0002"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0020-index-lists-evidence-folders.md",
+        "content_hash": "sha256:82cbf602a59c87c7a62b5240a962879f3119a0a18f0cb758cb2086f2fb8bde09"
+      }
+    },
+    {
+      "id": "adr-0021",
+      "number": 21,
+      "title": "Claude runs all tool installs",
+      "summary": "Claude runs the install commands, including ones that need admin rights (you click through the Windows prompts), and records exact versions. Kernel drivers still need your separate approval.",
+      "why": "Your choice: it saves you the manual steps.",
+      "catch": "Claude's installs change the machine; the saved version records are the audit trail.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-08",
+      "replaced_by": null,
+      "related": [
+        "adr-0005",
+        "adr-0009",
+        "adr-0011",
+        "adr-0016",
+        "phase-p0-planning",
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0021-claude-runs-toolchain-installs.md",
+        "content_hash": "sha256:cc5ae072989e0e7f78de1aea81b54aeb54bf55bea04121506663b7cc096922ae"
+      }
+    },
+    {
+      "id": "adr-0022",
+      "number": 22,
+      "title": "A broken approvals file stops the wiki check",
+      "summary": "If the approvals file is unreadable or approves a missing page, the wiki check now fails instead of only warning. A decision you rejected is also flagged.",
+      "why": "Two rules contradicted each other, and a corrupt approvals file passed the check.",
+      "catch": "Claude decided this under your delegation; you can overturn it.",
+      "status": "Proposed",
+      "decided_by": "claude",
+      "date": "2026-10-09",
+      "replaced_by": null,
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0022-approval-invalid-is-a-lint-error.md",
+        "content_hash": "sha256:35ef2cdb72218367726be35fcf58194f1bf6ebba570e2079836872449783bf31"
+      }
+    },
+    {
+      "id": "adr-0023",
+      "number": 23,
+      "title": "You approve in Claude Code; the portal is read-only",
+      "summary": "You say what you approve in Claude Code. Claude saves your words, then records the approval with a fingerprint of the page. If the page changes later, Claude asks again.",
+      "why": "You want to steer through Claude Code only; the portal is just for tracking.",
+      "catch": "Claude now writes the approvals file, so only one tested script may do it, and every change is logged.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-09",
+      "replaced_by": null,
+      "related": [
+        "adr-0016",
+        "adr-0024",
+        "adr-0014",
+        "adr-0022",
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0023-approvals-in-claude-code-portal-read-only.md",
+        "content_hash": "sha256:e8aeb3dd81acd24e836b522b72ccff53041b77094c43acaeac5d5b12f38edd4b"
+      }
+    },
+    {
+      "id": "adr-0024",
+      "number": 24,
+      "title": "The portal shows only plain-language JSON",
+      "summary": "Whenever Claude edits the wiki, it rewrites the matching plain-language JSON in the same step. The portal reads only that JSON, never the wiki.",
+      "why": "You want plain words, not a wiki rendered in a web page.",
+      "catch": "Every wiki edit needs a second write; a check script and a hook catch misses.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-09",
+      "replaced_by": null,
+      "related": [
+        "adr-0016",
+        "adr-0023",
+        "adr-0002"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0024-portal-reads-plain-language-json.md",
+        "content_hash": "sha256:c7ef44ab785c704969c55a913ae541770d3bcf60fa3ae2168d4d591bb151ba96"
+      }
+    },
+    {
+      "id": "adr-0025",
+      "number": 25,
+      "title": "Check scripts in PowerShell 7",
+      "summary": "Every task gets one script that proves it is done, and every phase one gate script that runs all its checks. Each part is commented in plain words.",
+      "why": "You asked for scripts you can read and re-run.",
+      "catch": "More files to maintain; a script can drift from its task, but the gate script runs them all.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-09",
+      "replaced_by": null,
+      "related": [
+        "adr-0014",
+        "adr-0021",
+        "adr-0024",
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0025-check-scripts-powershell-7.md",
+        "content_hash": "sha256:23e1a1d03d7d47a36e52985e66bb690fbc7fccda5c30242a1e242c0ac41e21c3"
+      }
+    },
+    {
+      "id": "adr-0026",
+      "number": 26,
+      "title": "Architecture in four groups",
+      "summary": "Components are shown as Application, Benchmark, Testing and quality, and Research and analysis, led by a layered picture of the Rust app.",
+      "why": "You found the component graph incomprehensible and asked for a clear split.",
+      "catch": "The grouping lives in this decision and the portal, not on each component page.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-09",
+      "replaced_by": null,
+      "related": [
+        "adr-0004",
+        "adr-0024"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0026-architecture-four-groups.md",
+        "content_hash": "sha256:268ab24b49163b53eca53a09d9b45245504a79a73fd44dcd07aa459899a7b734"
+      }
+    },
+    {
+      "id": "adr-0027",
+      "number": 27,
+      "title": "Mask private network and machine details",
+      "summary": "Real IP addresses, machine names, network card ids and your user-folder path are replaced by placeholders. Real values stay in one local file that git ignores.",
+      "why": "You asked that such details never sit in the repo.",
+      "catch": "Masked evidence is no longer byte-for-byte original, and old values stay in local history until a rewrite you approve.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-09",
+      "replaced_by": null,
+      "related": [
+        "adr-0011",
+        "adr-0025",
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0027-mask-sensitive-values.md",
+        "content_hash": "sha256:447e6ef18379016376ffbe41d81811716d63004285e102d9ed0a3d00ac358a5b"
+      }
+    }
+  ]
+}

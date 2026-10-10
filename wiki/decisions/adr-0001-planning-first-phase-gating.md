@@ -7,7 +7,7 @@ updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
-related: [adr-0002, adr-0003, adr-0014, adr-0016, schema, phase-p0-planning, phase-p1-foundation, comp-interactive-plan]
+related: [adr-0002, adr-0003, adr-0014, adr-0016, adr-0023, schema, phase-p0-planning, phase-p1-foundation, comp-interactive-plan]
 approvable: true
 date: 2026-10-08
 decided_by: owner
@@ -66,7 +66,7 @@ Each phase has:
 2. a **test gate**: automated commands, manual owner checks and evidence files under `wiki/raw/evidence/<phase-id>/`, all declared on the phase page;
 3. an **exit gate**: tests were observed passing in the current repo state, lint is clean, and the owner approves `<phase-id>#exit` ([ADR-0014](adr-0014-milestone-review-checkpoints.md)).
 
-Approvals are recorded only by the plan app in `plan/approvals.json`. Claude never writes that file ([SCHEMA §10](../SCHEMA.md#10-approvals-planapprovalsjson)).
+Approvals are given by the owner in Claude Code and recorded by Claude in `plan/approvals.json`, only through `tools/approvals_record.py` and only after the owner's words are saved under `wiki/raw/owner/` ([ADR-0023](adr-0023-approvals-in-claude-code-portal-read-only.md), which replaced the earlier rule that only the plan app writes that file; [SCHEMA §10](../SCHEMA.md#10-approvals-planapprovalsjson)).
 
 ## Consequences
 
@@ -80,17 +80,17 @@ Approvals are recorded only by the plan app in `plan/approvals.json`. Claude nev
 
 - Calendar time to the first running Ferrum binary is longer than under option A.
 - Editing an approved page after approval makes it STALE, which can block work until it is re-approved. This is intended, but it costs owner time.
-- The interactive plan app becomes a prerequisite for approvals, so its own build is on the critical path of P0. Building it inside P0 is settled by owner directives 2 and 4 ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)); Q-101 in [ov-open-questions](../overview/ov-open-questions.md) is answered by those directives and blocks nothing.
+- The interactive plan app (since [ADR-0023](adr-0023-approvals-in-claude-code-portal-read-only.md) a read-only portal; approvals are given in Claude Code) is on the critical path of P0. Building it inside P0 is settled by owner directives 2 and 4 ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md)); Q-101 in [ov-open-questions](../overview/ov-open-questions.md) is answered by those directives and blocks nothing.
 
 ### Follow-ups
 
-- The owner approves `schema`, the P0 pages and the P1 dependency set in the plan app before P1 starts.
-- Claude transcribes any approval the owner gives in chat into `wiki/raw/owner/` and asks the owner to click Approve. It never edits `plan/approvals.json`.
+- The owner approves `schema`, the P0 pages and the P1 dependency set in Claude Code before P1 starts.
+- Claude saves the owner's words into `wiki/raw/owner/` and records each approval with `tools/approvals_record.py` ([ADR-0023](adr-0023-approvals-in-claude-code-portal-read-only.md)). It never writes `plan/approvals.json` any other way.
 
 ### Related risks and phases
 
 - Phases: `phase-p0-planning` (this decision is its core), and every later phase through its entry and exit gates.
-- Components: `comp-interactive-plan` (the approval UI).
+- Components: `comp-interactive-plan` (the read-only plan portal).
 
 ## Verification / evidence
 

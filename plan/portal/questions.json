@@ -1,0 +1,621 @@
+{
+  "$schema": "schema/questions.schema.json",
+  "id": "questions",
+  "title": "Questions for you",
+  "summary": "Every question Claude has asked you, open ones first, ordered by the phase they hold up. You answer in Claude Code; Claude saves your words and updates the plan.",
+  "source": {
+    "wiki_path": "wiki/overview/ov-open-questions.md",
+    "content_hash": "sha256:8dcc52b0b5093b90966e42bf77fcad352cc678b7cd77db65852b7720e12b753c"
+  },
+  "items": [
+    {
+      "id": "Q-221",
+      "asked": "2026-10-09",
+      "question": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path?",
+      "why_it_matters": "Old commits still hold the values masked on 9 Oct. A rewrite changes every commit id, so it must happen before any upload. It holds the first upload only.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-207",
+      "asked": "2026-10-08",
+      "question": "May the rule book allow overview pages inside the research and risks folders (fix already applied), instead of moving those pages?",
+      "why_it_matters": "Every phase start needs the rule book approved. Approving it accepts this fix and closes the question; rejecting it means the pages move.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "Q-004",
+      "asked": "2026-10-08",
+      "question": "Do you accept the handoff file naming fix already made in the rule book?",
+      "why_it_matters": "A small naming mismatch was fixed. Approving the rule book in the first wave closes this; nothing else waits on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-005",
+      "asked": "2026-10-08",
+      "question": "Do you confirm the proposed non-goals (no extensions, no sync or accounts, Windows 11 only, not a full browser) and moving split view to after P8?",
+      "why_it_matters": "These are not in your brief, so they need your word. They fix the scope; asked in the first wave, before P0 ends.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-108",
+      "asked": "2026-10-08",
+      "question": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases?",
+      "why_it_matters": "Decides whether you formally review P0 and P1 before the next phase starts. Asked in the first wave, before P0 ends.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-106",
+      "asked": "2026-10-08",
+      "question": "Do you approve the repository layout: the repo root is the project root, one Rust workspace, plus the extra folders other areas proposed?",
+      "why_it_matters": "P1 creates the project skeleton from this layout, so P1 cannot start without it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "Q-110",
+      "asked": "2026-10-08",
+      "question": "Do you approve one deliberate, audited module that talks to WebView2 directly using unsafe Rust code?",
+      "why_it_matters": "Several needed features are reachable only this way. The decision is part of P1 and P2, so both wait on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p1-foundation",
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "Q-211",
+      "asked": "2026-10-08",
+      "question": "May unsafe code also live in two Windows helper modules for process measurement, each with its own safety notes, or should it all go in one Windows module?",
+      "why_it_matters": "Measurement needs low-level Windows calls. This extends the unsafe-code decision that P1 and P2 wait on. Recommended: two extra modules.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p1-foundation",
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "Q-109",
+      "asked": "2026-10-08",
+      "question": "How should Ferrum hand Google sign-in over to your normal browser, since Google blocks sign-in inside embedded web views?",
+      "why_it_matters": "A P2 task builds the sign-in detection, so P2 needs the expected behaviour.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "Q-202",
+      "asked": "2026-10-08",
+      "question": "For local test pages: install a local development certificate (HTTPS), allow plain HTTP on this PC for tests only, or use public HTTPS sites?",
+      "why_it_matters": "Every option touches security. The P2 test server needs it, and P4 sets the final web address rules around it. Recommended: local certificate plus a few public HTTPS sites.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p2-minimal-container",
+        "phase-p4-security"
+      ]
+    },
+    {
+      "id": "Q-214",
+      "asked": "2026-10-08",
+      "question": "Should Ferrum's settings file use the TOML or the JSON format (two common text formats for settings)?",
+      "why_it_matters": "P2 creates the settings file. Recommended: TOML.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "Q-107",
+      "asked": "2026-10-08",
+      "question": "How should Ferrum give each website its own WebView2 profile, given that Tauri cannot pass a profile name through yet?",
+      "why_it_matters": "Per-site profiles are central to isolation. Recommended: wait for Tauri, else patch it; direct WebView2 calls only as a last resort. A P1 test informs it; P3 waits on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "Q-111",
+      "asked": "2026-10-08",
+      "question": "Should a 'site' mean the registrable domain, the exact origin, or containers you define?",
+      "why_it_matters": "Sets how finely websites are kept apart. P3 builds per-site settings on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "Q-209",
+      "asked": "2026-10-08",
+      "question": "When a tab moves to another site, should Ferrum move it to that site's profile (losing back/forward history), keep the old profile, or block it?",
+      "why_it_matters": "A trade-off between isolation and convenience; it matters only if per-site profiles are used. Recommended: move it and tell the user.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "Q-112",
+      "asked": "2026-10-08",
+      "question": "What exactly should happen with http: addresses: upgrade to HTTPS, and what if the upgrade fails?",
+      "why_it_matters": "P4 sets the final web address rules; P2 ships a simple interim version.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p4-security"
+      ]
+    },
+    {
+      "id": "Q-113",
+      "asked": "2026-10-08",
+      "question": "What should the default blocklist contain, and where should it come from?",
+      "why_it_matters": "P4 builds the security policy engine that uses it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p4-security"
+      ]
+    },
+    {
+      "id": "Q-212",
+      "asked": "2026-10-08",
+      "question": "Is it OK to switch security, isolation and tab-sleeping options at run time on one identical program, with two build-time exceptions?",
+      "why_it_matters": "Your brief asks for 'feature flags'; this is Claude's reading of it. It shapes how P4 and P7 are built and benchmarked.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p4-security",
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "Q-114",
+      "asked": "2026-10-08",
+      "question": "Where should the network log live, how long is it kept, and should the query part of web addresses (which can hold tokens) be removed by default?",
+      "why_it_matters": "Privacy of the local network log. P5 builds it. Recommended: remove query strings by default.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "Q-115",
+      "asked": "2026-10-08",
+      "question": "May 'time to interactive' be replaced by first-paint and largest-paint timings plus long-frame data, since that measure is retired?",
+      "why_it_matters": "Your brief asks for it, but it is now considered unreliable. P5 builds the startup timing.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "Q-203",
+      "asked": "2026-10-08",
+      "question": "Where should raw benchmark data be stored, and how should very large files be handled?",
+      "why_it_matters": "P5 is the first phase that can produce run data. Large files may need to live outside git, with only their fingerprints kept.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "Q-116",
+      "asked": "2026-10-08",
+      "question": "What is the exact CPU model and RAM of the benchmark machine?",
+      "why_it_matters": "The CPU generation decides which energy counters work. The energy experiment in P6 waits on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-117",
+      "asked": "2026-10-08",
+      "question": "Should benchmarks compare the browsers as shipped, with matched settings, or both?",
+      "why_it_matters": "Chrome and Edge have power-saving features on by default. The framing must be fixed before any data. Recommended: both, with as-shipped as the headline.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-118",
+      "asked": "2026-10-08",
+      "question": "Should benchmarks use normal Chrome (updates paused) or the special Chrome for Testing build?",
+      "why_it_matters": "Normal Chrome is what people use; the test build is easier to repeat. Recommended: normal Chrome and Edge, versions recorded.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-119",
+      "asked": "2026-10-08",
+      "question": "Should benchmarks use the self-updating WebView2 runtime, a fixed version, or both?",
+      "why_it_matters": "Affects how repeatable results are. Recommended: self-updating for the headline results, fixed version as a separate setup.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-120",
+      "asked": "2026-10-08",
+      "question": "Which public websites should the extra real-world tests use?",
+      "why_it_matters": "Recommended: Claude proposes a shortlist in P6 and you pick 5 to 8, no logins. Their results stay separate from local test pages.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-121",
+      "asked": "2026-10-08",
+      "question": "Which Python environment tool should the analysis use?",
+      "why_it_matters": "Fixes how others can rerun the analysis. Proposed: a standard virtual environment with exact versions.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-122",
+      "asked": "2026-10-08",
+      "question": "Do you have a wall-power meter?",
+      "why_it_matters": "Without one, energy is only estimated from CPU counters or marked unsupported. The energy experiment waits on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-123",
+      "asked": "2026-10-08",
+      "question": "Do you approve installing the PawnIO kernel driver and running an energy sampler with admin rights?",
+      "why_it_matters": "Needed for CPU energy readings. No kernel driver is installed without your approval.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-201",
+      "asked": "2026-10-08",
+      "question": "Do you approve the proposed 'meaningful difference' thresholds and the weights of the combined score?",
+      "why_it_matters": "Both must be fixed before data is collected in P6 and before the tab-sleeping settings are frozen in P7.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "Q-204",
+      "asked": "2026-10-08",
+      "question": "Should all main experiments run in one campaign with fixed versions, or each in the phase that builds it?",
+      "why_it_matters": "Affects how comparable the results are, and the schedule.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-205",
+      "asked": "2026-10-08",
+      "question": "Will you accept 10 trials per setup for the long reliability test instead of 30?",
+      "why_it_matters": "Each run is planned at about 2 hours (an estimate, not measured). Fewer trials would be a recorded change from your brief.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-213",
+      "asked": "2026-10-08",
+      "question": "Should there be an extra baseline app with a shell plus one web view?",
+      "why_it_matters": "It separates the cost of Ferrum's shell from the cost of Ferrum's own logic. Recommended: yes, as a labelled extra setup.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-208",
+      "asked": "2026-10-08",
+      "question": "Should Ferrum with smart tab sleeping be re-run through the other main experiments in P7, or reported only in its own experiment?",
+      "why_it_matters": "Your brief compares it with every other setup. Recommended: re-run, if time allows.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "Q-124",
+      "asked": "2026-10-08",
+      "question": "Which venue should the paper target?",
+      "why_it_matters": "Not needed until results exist. The paper phase waits on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "Q-206",
+      "asked": "2026-10-08",
+      "question": "Should the two related-work sections in your paper outline be merged into one?",
+      "why_it_matters": "Your brief lists both. Settles the paper outline.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "Q-008",
+      "asked": "2026-10-08",
+      "question": "Should the plan app's tests also use the axe-core accessibility library?",
+      "why_it_matters": "Optional; it would be added only with your consent. Nothing waits on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-105",
+      "asked": "2026-10-08",
+      "question": "What name, visibility and timing do you want for the GitHub repository?",
+      "why_it_matters": "Automatic checks on GitHub cannot run until it exists. Needed only for the P1 review.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-215",
+      "asked": "2026-10-08",
+      "question": "Is a second machine available for a repeat run?",
+      "why_it_matters": "Without one, the paper states the single-machine limit. Nothing waits on it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-217",
+      "asked": "2026-10-08",
+      "question": "Do you accept the research ids written as 'hyp' and 'metric' instead of your brief's 'h' and 'm'?",
+      "why_it_matters": "Follows the wiki's id rules. Only matters for the P8 review.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-220",
+      "asked": "2026-10-08",
+      "question": "May a page's sources be any wiki file or web link?",
+      "why_it_matters": "Four pages failed the new wiki reader's check, which stopped the build.",
+      "status": "answered",
+      "answer": "Yes: you accepted all proposed fixes. Any wiki file or https link is allowed; missing targets are flagged; raw research notes are exempt.",
+      "answered_on": "2026-10-09",
+      "blocks": []
+    },
+    {
+      "id": "Q-216",
+      "asked": "2026-10-08",
+      "question": "Should the backup wiki check scripts be committed in the tools folder?",
+      "why_it_matters": "They are the backup check when the app cannot run.",
+      "status": "answered",
+      "answer": "Yes, commit them under tools. The app's checker stays the main one; the Python scripts are a backup that needs no Node.",
+      "answered_on": "2026-10-08",
+      "blocks": []
+    },
+    {
+      "id": "Q-218",
+      "asked": "2026-10-08",
+      "question": "Who runs tool installs, now that you said 'feel free to run install'?",
+      "why_it_matters": "It contradicted an older rule that you run installs. P1 installs Rust and the C++ build tools.",
+      "status": "answered",
+      "answer": "Claude runs all tool installs, including the C++ build tools; you click the admin prompts. Kernel drivers still need your separate approval.",
+      "answered_on": "2026-10-08",
+      "blocks": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "Q-219",
+      "asked": "2026-10-08",
+      "question": "How should the index list evidence files whose names have capital letters?",
+      "why_it_matters": "The index rule rejected those names, so the wiki check failed and the build paused.",
+      "status": "answered",
+      "answer": "List folders, not files. This also scales to benchmark results later.",
+      "answered_on": "2026-10-08",
+      "blocks": []
+    },
+    {
+      "id": "Q-104",
+      "asked": "2026-10-08",
+      "question": "May Claude make local git commits, starting in P0?",
+      "why_it_matters": "Without commits, recovering from an interruption cannot rely on git history.",
+      "status": "answered",
+      "answer": "Yes, from P0: one local commit per checked task; never upload (push).",
+      "answered_on": "2026-10-08",
+      "blocks": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "Q-102",
+      "asked": "2026-10-08",
+      "question": "Which Node.js version should the plan app use?",
+      "why_it_matters": "The plan app needs Node; changing the main version later can break it.",
+      "status": "answered",
+      "answer": "Stay on Node 24 for now; consider 26 later through its own decision. Node 24.20.0 is installed.",
+      "answered_on": "2026-10-08",
+      "blocks": []
+    },
+    {
+      "id": "Q-103",
+      "asked": "2026-10-08",
+      "question": "Should the plan app use diagram library Mermaid 12 or the older 11.17.2?",
+      "why_it_matters": "Version 12 was a brand-new, breaking release; 11 was the mature one.",
+      "status": "answered",
+      "answer": "Mermaid 12, pinned exactly; fall back to 11.17.2 if drawing breaks.",
+      "answered_on": "2026-10-08",
+      "blocks": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-210",
+      "asked": "2026-10-08",
+      "question": "May the plan app's tests use a coverage tool and download a test browser?",
+      "why_it_matters": "The full test gate needs both.",
+      "status": "answered",
+      "answer": "Yes to both.",
+      "answered_on": "2026-10-08",
+      "blocks": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-006",
+      "asked": "2026-10-08",
+      "question": "May the plan app write approval entries into the wiki log?",
+      "why_it_matters": "Decides who keeps the log of approvals.",
+      "status": "answered",
+      "answer": "Yes. Later replaced: approvals are now given in Claude Code and recorded by Claude.",
+      "answered_on": "2026-10-08",
+      "blocks": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-007",
+      "asked": "2026-10-08",
+      "question": "Should the plan app offer a 'reset to pending' button for approvals?",
+      "why_it_matters": "It would need a rule-book change, because approval history only grows.",
+      "status": "answered",
+      "answer": "No. Approval history only grows.",
+      "answered_on": "2026-10-08",
+      "blocks": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-101",
+      "asked": "2026-10-08",
+      "question": "When is the plan app built?",
+      "why_it_matters": "Everything else waits for your approval in it.",
+      "status": "answered",
+      "answer": "First, in P0. Your words: 'First the interactive plan comes together. I then approve everything else.'",
+      "answered_on": "2026-10-08",
+      "blocks": []
+    },
+    {
+      "id": "Q-001",
+      "asked": "2026-10-08",
+      "question": "Benchmark settings: vendor defaults, matched settings, or both?",
+      "why_it_matters": "A duplicate: please answer [the question on browser settings](ref:Q-117) instead.",
+      "status": "withdrawn",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-002",
+      "asked": "2026-10-08",
+      "question": "Chrome build for benchmarks: normal Chrome with updates blocked, or Chrome for Testing?",
+      "why_it_matters": "A duplicate: please answer [the question on which Chrome to use](ref:Q-118) instead.",
+      "status": "withdrawn",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    },
+    {
+      "id": "Q-003",
+      "asked": "2026-10-08",
+      "question": "WebView2 runtime for benchmarks: self-updating, fixed version, or both?",
+      "why_it_matters": "A duplicate: please answer [the question on which WebView2 version to use](ref:Q-119) instead.",
+      "status": "withdrawn",
+      "answer": null,
+      "answered_on": null,
+      "blocks": []
+    }
+  ]
+}

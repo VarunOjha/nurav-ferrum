@@ -1,0 +1,41 @@
+# p0.17 step 'content' checks - 2026-10-09, session s01
+# pwsh 7.6.6, Python 3.12.10, node v24.20.0
+
+## 1. pwsh tools/portal-sync-check.ps1
+portal-sync: clean - 18 files, 252 translated records, 374 refs
+exit=0
+
+## 2. pwsh tools/test-portal-sync-check.ps1
+      real repo: 3.72 s, exit 0, portal-sync: clean - 18 files, 252 translated records, 374 refs
+PASS  speed: a full check of the real repo takes under 5 seconds
+
+test-portal-sync-check: 20 passed, 0 failed
+exit=0
+
+## 3. hook command as configured (switched on, stop_hook_active=false)
+exit=0
+
+## 4. python tools/quick_lint.py
+ERROR REF-DANGLING     STATUS.md: body link wiki/raw/evidence/phase-p0-planning/p0.17-content-checks.txt
+202 files checked, 1 errors, 0 warnings
+exit=1
+
+## 5. pwsh tools/mask.ps1 --scan
+mask scan: 555 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+exit=0
+
+## 6. pwsh tools/mask.ps1 --file (new untracked portal files)
+masked plan/portal/phases/phase-p6-benchmark-harness.json: nothing to mask
+masked plan/portal/phases/phase-p7-lifecycle.json: nothing to mask
+masked plan/portal/phases/phase-p8-research-paper.json: nothing to mask
+exit=0
+
+## 7. after this file and its MANIFEST line exist: python tools/quick_lint.py
+202 files checked, 0 errors, 0 warnings
+exit=0
+
+## 8. npm run lint:wiki (interactive_plan)
+lint: 0 errors, 34 warnings, 2 info (pages: 202)
+ Test Files  3 passed (3)
+      Tests  12 passed | 1 skipped (13)
+

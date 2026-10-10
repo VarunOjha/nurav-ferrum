@@ -1,0 +1,4502 @@
+{
+  "$schema": "schema/refs.schema.json",
+  "id": "refs",
+  "title": "Explainers for every id in the portal",
+  "summary": "Each id the portal shows opens a popup with these words: what it is, its status and what it links to.",
+  "refs": [
+    {
+      "id": "phase-p0-planning",
+      "kind": "phase",
+      "title": "P0 Planning",
+      "summary": "Goal: Plan written, checked and approved by you; no app code yet. Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. Most of it is done; Claude is now rebuilding the portal in plain language.",
+      "status": "In progress",
+      "related": [],
+      "aliases": [
+        "P0"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "phase-p1-foundation",
+      "kind": "phase",
+      "title": "P1 Foundation",
+      "summary": "Goal: Tools confirmed, empty project builds, riskiest ideas tested. Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed.",
+      "status": "Not started",
+      "related": [],
+      "aliases": [
+        "P1"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "phase-p2-minimal-container",
+      "kind": "phase",
+      "title": "P2 First working app",
+      "summary": "Goal: One window browses websites safely: address bar, back, forward, refresh. Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
+      "status": "Not started",
+      "related": [],
+      "aliases": [
+        "P2"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "phase-p3-tabs-sessions",
+      "kind": "phase",
+      "title": "P3 Tabs and sessions",
+      "summary": "Goal: Many tabs, restored after a restart, with separate data per site. Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
+      "status": "Not started",
+      "related": [],
+      "aliases": [
+        "P3"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "phase-p4-security",
+      "kind": "phase",
+      "title": "P4 Security",
+      "summary": "Goal: Blocking, permissions and isolation proven by tests; threat model written. Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
+      "status": "Not started",
+      "related": [],
+      "aliases": [
+        "P4"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "phase-p5-telemetry",
+      "kind": "phase",
+      "title": "P5 Measurement",
+      "summary": "Ferrum measures its own memory, CPU, timing and network calls, and each meter is proven accurate before benchmarks start.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security",
+        "phase-p6-benchmark-harness"
+      ],
+      "aliases": [
+        "P5"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p5-telemetry.md",
+        "content_hash": "sha256:aed00b9ffd0cd55f52692f53144181b0b88ec2430e56a1952fab403d6ff08eda"
+      }
+    },
+    {
+      "id": "phase-p6-benchmark-harness",
+      "kind": "phase",
+      "title": "P6 Benchmarks",
+      "summary": "A fair, repeatable test bench comparing Ferrum with Chrome, Edge and a bare Tauri app, plus the first test campaign.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry",
+        "phase-p7-lifecycle"
+      ],
+      "aliases": [
+        "P6"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p6-benchmark-harness.md",
+        "content_hash": "sha256:1a8fa8a0ca00947a00fcc58f60f9ccecdffbc32195b6940270863915fa06236c"
+      }
+    },
+    {
+      "id": "phase-p7-lifecycle",
+      "kind": "phase",
+      "title": "P7 Smart tab sleeping",
+      "summary": "Ferrum puts unused tabs to sleep without losing your work; four strategies are compared on the test bench.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p8-research-paper"
+      ],
+      "aliases": [
+        "P7"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p7-lifecycle.md",
+        "content_hash": "sha256:85e05bc1aa21fc3ce757150b661887aa1cbef96743300652be58a3f5d56ae892"
+      }
+    },
+    {
+      "id": "phase-p8-research-paper",
+      "kind": "phase",
+      "title": "P8 Research paper",
+      "summary": "The campaign data is analysed and written up as a draft paper in which every claim is checked.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle"
+      ],
+      "aliases": [
+        "P8"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p8-research-paper.md",
+        "content_hash": "sha256:6df0f3f598cd14de01897d78b360efe9a54d2aebeb0573cfe2393041277442e9"
+      }
+    },
+    {
+      "id": "p0.1",
+      "kind": "task",
+      "title": "P0 task: Save the starting documents",
+      "summary": "Your brief and scoping answers are the ground truth → store them word for word, never edited → every later page can cite them.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.10",
+      "kind": "task",
+      "title": "P0 task: Create the plan app skeleton",
+      "summary": "Loose versions break things later → create the web app with exact versions and three small feasibility tests → a stable base for the rest.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.11",
+      "kind": "task",
+      "title": "P0 task: Teach the app to read the wiki",
+      "summary": "The app shows wiki pages → a reader that checks each page's header against the rules → bad pages are flagged, not shown wrongly.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.12",
+      "kind": "task",
+      "title": "P0 task: Fingerprint pages exactly like the reference",
+      "summary": "Approvals are tied to page fingerprints → compute them in the app exactly like the reference script → a changed page can never keep an old approval.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.13",
+      "kind": "task",
+      "title": "P0 task: Build the app's views and wiki check",
+      "summary": "You need to see the plan, not raw files → dashboard, roadmap, architecture, decisions, risks and research views, plus an automatic wiki check → the plan is readable and checked.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.14",
+      "kind": "task",
+      "title": "P0 task: Build the approvals store",
+      "summary": "Approvals must not be lost or forged → a local-only store with safe writes, every approval state tested → no approval is silently wrong.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.15",
+      "kind": "task",
+      "title": "P0 task: Build the approval screens",
+      "summary": "Approvals were first planned inside the app → approve, change and reject buttons with an outdated-page badge → later replaced: you now approve in Claude Code.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.16",
+      "kind": "task",
+      "title": "P0 task: Run the full plan-app test gate",
+      "summary": "Each piece passed on its own → run every check together and save the output → proof the whole app works.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.17",
+      "kind": "task",
+      "title": "P0 task: Portal v2, then your review",
+      "summary": "You found v1 too technical → rebuild it as a read-only portal in plain words, fed by text Claude writes from the wiki → you review it and approve in Claude Code; Claude records each approval.",
+      "status": "In progress",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.18",
+      "kind": "task",
+      "title": "P0 task: Close P0",
+      "summary": "All checks pass and the pages are approved → you approve the phase exit in Claude Code → P1 may start.",
+      "status": "Not started",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.2",
+      "kind": "task",
+      "title": "P0 task: Write five research notes",
+      "summary": "Plans built from memory go stale → research the wiki method, Tauri and WebView2, measurement, the plan-app stack and related work, with dated sources → decisions rest on checked facts.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.3",
+      "kind": "task",
+      "title": "P0 task: Write the wiki rules and live status",
+      "summary": "Many sessions and helpers edit the wiki → one rulebook (page shapes, fingerprints) plus a live status file → any session can pick up where the last one stopped.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.4",
+      "kind": "task",
+      "title": "P0 task: Describe the architecture and its parts",
+      "summary": "The app has many parts with different trust levels → one page per part, saying what it talks to → security boundaries are visible before any code.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.5",
+      "kind": "task",
+      "title": "P0 task: Write the decisions and the risk register",
+      "summary": "Choices and risks get forgotten → one page per decision (19) and per risk, with likelihood, impact and response → we can always see why, and what could go wrong.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.6",
+      "kind": "task",
+      "title": "P0 task: Write the research plan pages",
+      "summary": "Ferrum is also a research project → questions, predictions, experiments, metrics and test workloads, linked to each other → nothing is measured without a reason.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.7",
+      "kind": "task",
+      "title": "P0 task: Write phase pages, index and log",
+      "summary": "Work spans nine phases and many sessions → a page per phase, an index of every page and a running log → you and Claude can find anything.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.8",
+      "kind": "task",
+      "title": "P0 task: Check the whole wiki",
+      "summary": "Hundreds of linked pages drift → run every rule by hand or script and fingerprint the raw files → work starts from a clean, tamper-evident base.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p0.9",
+      "kind": "task",
+      "title": "P0 task: Install Node and record versions",
+      "summary": "The plan app needs Node 24 → install it and record exact versions → builds can be repeated.",
+      "status": "Done",
+      "related": [
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "p1.1",
+      "kind": "task",
+      "title": "P1 task: Confirm and record the toolchain",
+      "summary": "Rust 1.99, the C++ build tools, Node 24 and PowerShell 7 are already installed → confirm each works, record exact versions, add the licence checker → every later result names the tools it was built with.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.10",
+      "kind": "task",
+      "title": "P1 task: Add history-based wiki checks",
+      "summary": "Raw files must never change and pages must stay dated → add git-history rules to the existing wiki check, no second checker → tampering or stale dates are caught.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.11",
+      "kind": "task",
+      "title": "P1 task: Turn on automatic checks on GitHub",
+      "summary": "Mistakes are cheaper caught at once → one GitHub workflow and one local script running the same checks → every change is tested the same way.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.12",
+      "kind": "task",
+      "title": "P1 task: Check dependency licences and alerts",
+      "summary": "Third-party code can carry unsuitable licences or known holes → a licence allowlist and a security-alert check, lock files committed → we only use what we may and should.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.13",
+      "kind": "task",
+      "title": "P1 task: Start the public docs",
+      "summary": "Readers need security, benchmark and reproducibility notes → short starter files linking to the wiki → documentation grows with the code.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.14",
+      "kind": "task",
+      "title": "P1 task: Start the literature review",
+      "summary": "A research claim needs prior work → write the search method and read the first batch, with checked sources → no novelty is claimed without evidence.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.15",
+      "kind": "task",
+      "title": "P1 task: Warn when code changes without its page",
+      "summary": "Code and its wiki page must change together → a pre-commit hook warns when they don't → the plan never drifts from the code.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.16",
+      "kind": "task",
+      "title": "P1 task: Run the gate; your review",
+      "summary": "All tasks done → run every check on one commit and save the output → you review the experiment evidence and approve the exit.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.17",
+      "kind": "task",
+      "title": "P1 task: Pin the Tauri and web-tool versions",
+      "summary": "Generated templates change under us → pin Tauri's command-line tool, Vite and TypeScript exactly, and write the experiments by hand → experiments can be rerun identically.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.2",
+      "kind": "task",
+      "title": "P1 task: Record this computer's hardware",
+      "summary": "Benchmark numbers depend on the machine → record CPU, memory, graphics, power plan and browser versions → results can be compared and repeated.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.3",
+      "kind": "task",
+      "title": "P1 task: Set ignore rules and licences",
+      "summary": "Build output and local data must not reach git → ignore rules plus MIT and Apache licence files → a clean, legally clear repo.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.4",
+      "kind": "task",
+      "title": "P1 task: Create the empty Rust workspace",
+      "summary": "Code needs a home → empty Rust libraries in the planned folders, with a pinned Rust version → every later task has a place to go.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.5",
+      "kind": "task",
+      "title": "P1 task: Experiment 1: several web views in one window",
+      "summary": "Tauri's multi-view feature is experimental → build a throwaway app with three tab views and test resize, focus, overlap, blank pages and freezes → if it is unstable, the design changes before P2, not after.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.6",
+      "kind": "task",
+      "title": "P1 task: Experiment 2: a separate profile per site",
+      "summary": "Per-site isolation needs a profile chosen when a view is created, and Tauri does not offer that → try four routes → pick one that keeps cookies apart, before tabs are built.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.7",
+      "kind": "task",
+      "title": "P1 task: Experiment 3: low-level WebView2 calls",
+      "summary": "Suspend, memory limits and crash events are only reachable below Tauri → call each one through Tauri's escape hatch → we know which lifecycle and security features are possible.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.8",
+      "kind": "task",
+      "title": "P1 task: Experiment 4: test robot drives the app",
+      "summary": "Benchmarks drive browsers with Playwright through a debugging channel → connect to the experiment app, Chrome and Edge the same way → one fair harness for all.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p1.9",
+      "kind": "task",
+      "title": "P1 task: Decide the design from the experiments",
+      "summary": "Four experiment verdicts → update the risks and propose decisions on profiles, back/forward and the benchmark path → you decide, then P2 and P3 are revised to match.",
+      "status": "Not started",
+      "related": [
+        "phase-p1-foundation"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "p2.1",
+      "kind": "task",
+      "title": "P2 task: Build local test pages",
+      "summary": "Real websites change → a local server with fixed pages (redirects, pop-ups, cookies, slow and error pages) → navigation tests give the same answer every run.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.10",
+      "kind": "task",
+      "title": "P2 task: New windows and outside links",
+      "summary": "Links open new windows or other apps such as mail → follow the setting, and ask before handing off to another app → nothing launches without your consent.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.11",
+      "kind": "task",
+      "title": "P2 task: Keep cookies across restarts",
+      "summary": "Logins should survive a restart → keep site data in a fixed local folder → you stay signed in.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.12",
+      "kind": "task",
+      "title": "P2 task: Developer tools only in test builds",
+      "summary": "Developer tools expose page internals → enable them only in debug builds → the release app stays locked.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.13",
+      "kind": "task",
+      "title": "P2 task: Google sign-in: offer the normal browser",
+      "summary": "Google may refuse sign-in inside embedded views → detect its sign-in page and offer the system browser, never disguise the app → we respect Google's rules.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.14",
+      "kind": "task",
+      "title": "P2 task: Structured logs, no crashes",
+      "summary": "Problems need evidence → JSON log lines and explicit errors, no crashing on bad navigation → failures can be diagnosed.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.15",
+      "kind": "task",
+      "title": "P2 task: Smoke test suite",
+      "summary": "Features interact → one suite drives shell and website view (Playwright if experiment 4 passed, otherwise Rust tests plus a manual list) → one command shows the first milestone works.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.16",
+      "kind": "task",
+      "title": "P2 task: Update docs and part pages",
+      "summary": "Code changed → README, security notes, known limits and part pages updated with the verified commit → docs match reality.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.17",
+      "kind": "task",
+      "title": "P2 task: Literature batch 2",
+      "summary": "Research runs alongside code → read on WebView2 and Chromium processes, page lifecycle and embedded-view resource studies → evidence for later experiments.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.18",
+      "kind": "task",
+      "title": "P2 task: Run the gate; your review",
+      "summary": "All tasks done → run every check and save the output → you try the release build and approve the first milestone.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.2",
+      "kind": "task",
+      "title": "P2 task: Create the desktop app",
+      "summary": "The design was fixed in P1 → create the app with the chosen Tauri version and hosting route → the shell window opens.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.3",
+      "kind": "task",
+      "title": "P2 task: Lock the bridge to the app",
+      "summary": "Every web view can reach the app's command channel → grant permissions to the shell only, none to websites → a website cannot control Ferrum.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.4",
+      "kind": "task",
+      "title": "P2 task: Settings model",
+      "summary": "Start page, navigation rules and data folder must be valid → typed settings with safe defaults → bad settings never crash or weaken the app.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.5",
+      "kind": "task",
+      "title": "P2 task: Clean up address-bar input",
+      "summary": "People type anything → one tested function turns input into a safe address or refuses it → malformed input never navigates.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.6",
+      "kind": "task",
+      "title": "P2 task: Show a website and track it",
+      "summary": "The shell must know where the page is → create the website view and report address and loading state → the address bar and spinner are always right.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.7",
+      "kind": "task",
+      "title": "P2 task: Back, forward, refresh",
+      "summary": "Basic browsing → use the method chosen in P1 and grey out buttons that cannot work → behaves like a normal browser.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.8",
+      "kind": "task",
+      "title": "P2 task: Loading and error screens",
+      "summary": "Pages are slow or fail → spinner and error panel drawn by the shell, never by loading the app's own pages into the website view → clear feedback without weakening security.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p2.9",
+      "kind": "task",
+      "title": "P2 task: Follow redirects correctly",
+      "summary": "Sites redirect → show the final address and stop loops with an error → the address bar never lies.",
+      "status": "Not started",
+      "related": [
+        "phase-p2-minimal-container"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "p3.1",
+      "kind": "task",
+      "title": "P3 task: Tab rules as plain code",
+      "summary": "Tab logic has many edge cases → write it without the window and test random sequences of actions → exactly one active tab, ids never reused.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.10",
+      "kind": "task",
+      "title": "P3 task: Guard against the freeze bug",
+      "summary": "Creating views from blocking code freezes on Windows → make that path impossible and test it in a loop → the bug cannot come back.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.11",
+      "kind": "task",
+      "title": "P3 task: One integration suite",
+      "summary": "Many features → one command runs every P3 test → a single green run proves the milestone.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.12",
+      "kind": "task",
+      "title": "P3 task: Literature batch 3",
+      "summary": "Tab lifecycle is the core research idea → read tab-usage studies and Chrome and Edge lifecycle policies → prior art for P7.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.13",
+      "kind": "task",
+      "title": "P3 task: Docs, gate, your review",
+      "summary": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.14",
+      "kind": "task",
+      "title": "P3 task: Settings screen",
+      "summary": "You need to change startup sites, profiles and the download folder → a settings screen in the trusted shell, checked by the app → websites still cannot touch settings.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.15",
+      "kind": "task",
+      "title": "P3 task: Sidebar of tabs and history",
+      "summary": "Website views are always drawn over the shell → place the sidebar beside them, never on top → nothing is hidden or overlapped.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.2",
+      "kind": "task",
+      "title": "P3 task: One web view per tab",
+      "summary": "Each tab needs its own view → create views only from non-blocking code, hide and show on switch, release fully on close → no freezes or leftover processes.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.3",
+      "kind": "task",
+      "title": "P3 task: Tab strip and shortcuts",
+      "summary": "Shortcuts must work even while typing in a website → handle them in the shell without giving websites access → fast and still safe.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.4",
+      "kind": "task",
+      "title": "P3 task: Saved settings and startup sites",
+      "summary": "Settings must survive crashes and upgrades → a versioned file, written safely, with migration → never lost or half-written.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.5",
+      "kind": "task",
+      "title": "P3 task: Restore tabs after restart or crash",
+      "summary": "Crashes happen → save the tab list regularly and on exit, safely → after a forced kill you get your tabs back.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.6",
+      "kind": "task",
+      "title": "P3 task: Separate profile per site",
+      "summary": "Sites should not see each other's data → assign profiles using the route chosen in P1 → cookies stay apart.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.7",
+      "kind": "task",
+      "title": "P3 task: History",
+      "summary": "You need back/forward per tab and a list of visited pages → kept locally, clearable, never in the repo → useful without leaking.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.8",
+      "kind": "task",
+      "title": "P3 task: Basic downloads",
+      "summary": "Files must land somewhere sensible → default folder or a prompt, with progress and errors → downloads are visible.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p3.9",
+      "kind": "task",
+      "title": "P3 task: Shell stays responsive",
+      "summary": "A busy tab must not freeze the browser → switch tabs and type while another tab burns CPU → the shell stays usable.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "p4.1",
+      "kind": "task",
+      "title": "P4 task: Threat model",
+      "summary": "Controls need a reason → list what we protect, who attacks and where trust changes, and map each threat to a control and test, or 'not enforced' → every later task traces to a threat.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.10",
+      "kind": "task",
+      "title": "P4 task: Recover from crashes",
+      "summary": "Page processes crash → show a crashed tab, allow reload, keep the shell alive → one bad site cannot take Ferrum down.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.11",
+      "kind": "task",
+      "title": "P4 task: One security test suite",
+      "summary": "Your brief lists ten security tests → one suite mapping each to a test, kept apart from speed tests → coverage is visible.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.12",
+      "kind": "task",
+      "title": "P4 task: Design the cost experiments",
+      "summary": "Security costs time and memory → build micro-benchmarks and finish the experiment designs, claiming no numbers → P6 measures it properly.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.13",
+      "kind": "task",
+      "title": "P4 task: Literature batch 4",
+      "summary": "The paper needs security context → read site-isolation and embedded-browser security studies → the trade-offs are grounded.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.14",
+      "kind": "task",
+      "title": "P4 task: Gate and your review",
+      "summary": "Controls are tested → run the gate → you review the threat model and the 'not enforced' list, and approve.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.15",
+      "kind": "task",
+      "title": "P4 task: Selectable isolation modes",
+      "summary": "Isolation has a cost → three modes set in config (shared, a profile per site, a data folder per site), observed rather than assumed → P6 can compare them.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.16",
+      "kind": "task",
+      "title": "P4 task: Benchmark-only 'no security' switch",
+      "summary": "Measuring security's cost needs a version without it → a build-time switch for local test pages only, proven absent from release builds → no risk of shipping it.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.17",
+      "kind": "task",
+      "title": "P4 task: Security settings screen",
+      "summary": "You manage blocked sites and permissions → add them to the settings screen through checked app commands → websites still cannot touch them.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.2",
+      "kind": "task",
+      "title": "P4 task: Rules engine",
+      "summary": "Navigation needs one decision point → plain Rust rules: block and allow lists, HTTPS upgrade, ask for other link types, deny anything unreadable → safe by default, every decision explained.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.3",
+      "kind": "task",
+      "title": "P4 task: Check every navigation path",
+      "summary": "Tauri's hook misses unreadable addresses and embedded frames → also hook WebView2's own events and re-check each redirect → no way around the rules by redirect, frame or pop-up.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.4",
+      "kind": "task",
+      "title": "P4 task: Ask before opening other apps",
+      "summary": "Links can launch other programs → confirm in the shell, with an allowlist per link type → nothing launches silently.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.5",
+      "kind": "task",
+      "title": "P4 task: Permission prompts",
+      "summary": "Camera, microphone, location, notifications and clipboard are sensitive → deny by default, allow per site, never stored inside WebView2 → you control access.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.6",
+      "kind": "task",
+      "title": "P4 task: Safe downloads",
+      "summary": "Downloads can hide tricks → configured folder only, no auto-open, a warning for programs, cleaned file names → no folder-escape tricks.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.7",
+      "kind": "task",
+      "title": "P4 task: Prove what is really isolated",
+      "summary": "Profiles share browser processes → test what is truly separate (cookies, storage, databases) and list what is shared → no claim of full isolation without evidence.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.8",
+      "kind": "task",
+      "title": "P4 task: No app access for websites",
+      "summary": "Websites must not reach app internals → test every channel, including one internal command the permission system skips, and block loading the app's own pages → native access stays closed.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p4.9",
+      "kind": "task",
+      "title": "P4 task: Security audit log",
+      "summary": "Denials need a record → one JSON line per denied action, rotated, with no page content → evidence without privacy leaks.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security"
+      ],
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "p5.1",
+      "kind": "task",
+      "title": "Export file format and run labels",
+      "summary": "Every later result is read from files → define one versioned format (JSONL and CSV) that labels each run with code version, Windows build, WebView2 version and settings → any number can be traced to the exact setup that made it.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.10",
+      "kind": "task",
+      "title": "Network log: coverage and cost",
+      "summary": "Some requests may be missed (embedded frames, redirects, background workers) → test each kind and run a small cost trial → the paper states exactly what the log covers.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.11",
+      "kind": "task",
+      "title": "Settings for measuring and logging",
+      "summary": "You decide what is recorded → add on/off switches for measurement and the network log, a button to open the log folder, and a retention limit → nothing is recorded that you did not choose.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.12",
+      "kind": "task",
+      "title": "Map tabs to browser processes",
+      "summary": "Tabs may share browser processes → check how each tab shows up and which processes serve it → P6 and P7 know how far per-tab numbers can be trusted.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.13",
+      "kind": "task",
+      "title": "Reading: measurement methods",
+      "summary": "Our methods must match good practice → read the literature on measurement and browser benchmarking → each headline measurement gets a final, cited definition.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.14",
+      "kind": "task",
+      "title": "Gate and your review",
+      "summary": "All tasks done → the gate script runs every check and saves the evidence → you review the accuracy results and the privacy check and approve; only then does P6 start.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.2",
+      "kind": "task",
+      "title": "Count only Ferrum's own processes",
+      "summary": "Other apps on the PC also use WebView2 → find Ferrum's processes through Ferrum's own WebView2 setup, never by program name → other apps' memory never leaks into Ferrum's numbers.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.3",
+      "kind": "task",
+      "title": "Memory and CPU meter",
+      "summary": "We need trustworthy memory and CPU numbers → read them straight from Windows (private memory as the headline, working set as secondary, CPU time) and add them up over Ferrum's processes → one fair total per moment; peaks come from the total, never from adding per-process peaks.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.4",
+      "kind": "task",
+      "title": "Prove the meter is accurate",
+      "summary": "A meter is only useful if it is right → helper programs use a known amount of memory and CPU; the meter and an independent reader are compared with those values, with tolerances written down before the run → a meter that fails blocks P6.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.5",
+      "kind": "task",
+      "title": "Measure the meter's own cost",
+      "summary": "Measuring uses some CPU and memory itself → measure the meter's own cost at each sampling speed → we know how much it disturbs results (this describes the tool, not Ferrum).",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.6",
+      "kind": "task",
+      "title": "Startup timing",
+      "summary": "Startup speed is a key result → record when the process starts, the window appears, and the first and largest content are drawn, read by Ferrum itself through the browser's debugging channel → startup can be compared fairly in P6.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.7",
+      "kind": "task",
+      "title": "Page-load timing",
+      "summary": "Page-load speed is another key result → record each load's main moments, whether it crossed to another site, and how many redirects it took → page loads can be compared fairly in P6.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.8",
+      "kind": "task",
+      "title": "Record tab state changes",
+      "summary": "Smart tab sleeping in P7 needs a record of every tab state change → define the record (from, to, why, when, which tab) and log hide and show now → P7 plugs in without a new format.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p5.9",
+      "kind": "task",
+      "title": "Network log: addresses and timings only",
+      "summary": "You asked for a log of network calls → per tab, save address, method, result, type, timing, size and the security decision to one folder per session, never headers or page content → useful for research without storing private data.",
+      "status": "Not started",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "p6.1",
+      "kind": "task",
+      "title": "Bare Tauri app to compare against",
+      "summary": "We must show what Ferrum adds over plain Tauri → build a minimal app on the same Tauri and WebView2 versions with no Ferrum features → differences can be credited to Ferrum's design.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.10",
+      "kind": "task",
+      "title": "Statistics pipeline",
+      "summary": "Numbers need honest statistics → a Python pipeline computes averages, spread, confidence ranges, effect sizes and corrections for many comparisons, plus plots → the analysis is repeatable to the byte.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.11",
+      "kind": "task",
+      "title": "Measure the noise level",
+      "summary": "Some variation is just noise → run one product against itself (an A/A test) plus short pilots → we know the smallest real difference we can detect and set the trial count for each experiment.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.12",
+      "kind": "task",
+      "title": "Write predictions before testing",
+      "summary": "Deciding what counts as success after seeing data is biased → write each prediction and its meaningful-difference threshold first, and you approve them → results cannot be bent to fit.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.13",
+      "kind": "task",
+      "title": "First test campaign",
+      "summary": "The bench is ready and checked → run the footprint, startup, page-load, smoothness, reliability, security-cost and isolation-cost experiments (and energy if supported) on Chrome, Edge, bare Tauri and Ferrum without sleeping → raw data for P8 and a reference for P7.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.14",
+      "kind": "task",
+      "title": "Reproduction guides",
+      "summary": "Others must be able to repeat our tests → write how-to guides for benchmarking and for reproducing a campaign on a clean PC → the research can be checked independently.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.15",
+      "kind": "task",
+      "title": "Reading: benchmarking and statistics",
+      "summary": "Methods must follow good practice → read the literature on benchmark methods and performance statistics → the method pages cite it.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.16",
+      "kind": "task",
+      "title": "Gate and your review",
+      "summary": "All tasks done → the gate script runs every check and saves the evidence → you review the first campaign and approve; only then does P7 start.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.2",
+      "kind": "task",
+      "title": "Ten local test workloads",
+      "summary": "Results must not depend on live websites → build ten local workloads (simple page, heavy web app, huge page, scrolling, many navigations, video, graphics, several active tabs, many background tabs, close and restore) → every product sees exactly the same content.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.3",
+      "kind": "task",
+      "title": "A few real websites as extras",
+      "summary": "Local pages may not reflect real use → pick a short list of public sites without login, with the visit date recorded → a reality check, clearly labelled extra, never the main result.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.4",
+      "kind": "task",
+      "title": "Fair settings for each product",
+      "summary": "Chrome and Edge have built-in resource savers → record every relevant setting per product in versioned files, never switching their savers off just to help Ferrum → the comparison is fair and anyone can check it.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.5",
+      "kind": "task",
+      "title": "Test runner",
+      "summary": "Trial order and leftovers can bias results → a Rust runner shuffles trials with a recorded seed, starts each product fresh with a clean profile, tracks all its processes, and records every trial including failures → runs are fair, resumable and complete.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.6",
+      "kind": "task",
+      "title": "Scripts that drive each workload",
+      "summary": "Each product must be driven the same way → one browser-automation script (Playwright) per workload, connecting to every product through the same debugging channel → differences come from the products, not the driver.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.7",
+      "kind": "task",
+      "title": "Record the setup and pin versions",
+      "summary": "A silent browser update mid-campaign would spoil the data → record Windows build, product versions, power plan and background apps for each run, and pin browser versions → any change is caught and flagged.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.8",
+      "kind": "task",
+      "title": "Smoothness measurement",
+      "summary": "Smooth scrolling and animation matter to users → measure frame timing with a Windows tool (PresentMon) and long-frame data inside the page → smoothness can be compared, or marked unsupported for a product.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p6.9",
+      "kind": "task",
+      "title": "Energy, only if it can be measured honestly",
+      "summary": "Energy use is worth reporting but hard to measure → if you approve, a separate admin-level reader collects CPU energy counters (labelled modelled, CPU only), or a wall-power meter is used → otherwise energy is marked unsupported, never estimated.",
+      "status": "Not started",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "p7.1",
+      "kind": "task",
+      "title": "Tab state machine",
+      "summary": "Each tab must always be in one clear state (active, background, idle, close candidate, closed, restoring) → write the allowed moves as a fixed table with tests → the tab you are using can never be closed by mistake.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.10",
+      "kind": "task",
+      "title": "Write predictions before testing",
+      "summary": "Deciding what counts as success after seeing data is biased → write each prediction and its meaningful-difference threshold first, and you approve them → results cannot be bent to fit.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.11",
+      "kind": "task",
+      "title": "Strategy campaign",
+      "summary": "Bench and predictions are ready → run the four strategies on identical workloads, with Chrome and Edge as shipped for reference → raw data for P8.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.12",
+      "kind": "task",
+      "title": "Literature check: what is really new",
+      "summary": "Similar ideas exist (Chrome and Edge tab sleeping, Android app standby, cost-aware caching) → compare our approach with each, using verified sources, and you approve the assessment → the paper claims only what is truly new.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.13",
+      "kind": "task",
+      "title": "Gate and your review",
+      "summary": "All tasks done → the gate script runs every check and saves the evidence → you review and approve; only then does P8 start.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.14",
+      "kind": "task",
+      "title": "Optional rerun with smart sleeping",
+      "summary": "The first campaign tested Ferrum without sleeping → if you pick option (a) in [this open question](ref:Q-208), rerun footprint, page-load, smoothness, energy and reliability with smart sleeping, same rules, kept separate → otherwise the gap is recorded as a known limitation.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.2",
+      "kind": "task",
+      "title": "Signals for sleep decisions",
+      "summary": "Good decisions need inputs → measure last use, memory pressure, tab activity, cost to restore, media playing, downloads, your exclusions and unsaved forms → each strategy decides on real signals with known limits.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.3",
+      "kind": "task",
+      "title": "Sleep actions: hide, suspend, close, restore",
+      "summary": "Sleeping has levels → build hide, suspend, low-memory mode and close-but-remember (address, history, scroll position), plus restore → each strategy can pick the right level.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.4",
+      "kind": "task",
+      "title": "Safety guards",
+      "summary": "Closing a tab mid-task can lose your work → never close a tab while media plays, a download runs, a form is unsaved, the page asks before leaving, or you excluded the site → sleeping never costs you data.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.5",
+      "kind": "task",
+      "title": "Three simple strategies",
+      "summary": "We need baselines to compare against → build never sleep, sleep after a fixed idle time, and sleep under memory pressure, switchable by a setting → one app runs every strategy, so only the strategy differs.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.6",
+      "kind": "task",
+      "title": "Cost-aware strategy",
+      "summary": "Smarter choices weigh memory saved, energy and restore delay → combine them in one weighted score (energy weight zero if energy cannot be measured) and fix the weights on separate calibration workloads → the strategy is not tuned to the test it is judged on.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.7",
+      "kind": "task",
+      "title": "Log every sleep decision",
+      "summary": "We must see what each strategy did → record every state change and refusal, and the time from restore to first content → behaviour and restore delay become measurable.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.8",
+      "kind": "task",
+      "title": "Long-running test",
+      "summary": "Some problems only show up over hours → run many background tabs for a long session under each strategy, watching memory growth, crashes and restores → every bug found is fixed, with a test, before the campaign.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p7.9",
+      "kind": "task",
+      "title": "Bench settings for each strategy",
+      "summary": "The test bench needs a setup per strategy → add one settings file for each Ferrum strategy → the only difference between Ferrum runs is the strategy switch.",
+      "status": "Not started",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "p8.1",
+      "kind": "task",
+      "title": "Set up the paper project",
+      "summary": "We need a paper that builds from day one → set up the LaTeX project with the [proposed ACM template](ref:adr-0017); Claude installs the tools and you click the admin prompt ([who installs](ref:adr-0021)) → writing can start any time.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.10",
+      "kind": "task",
+      "title": "Reproducibility package",
+      "summary": "Others must be able to check our work → package the guide, scripts, setup records and data (or an archive with checksums) with a data licence → anyone can rebuild every figure.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.11",
+      "kind": "task",
+      "title": "AI-use statement",
+      "summary": "Venues require disclosure of AI help → finish the AI-use statement to match the chosen venue's policy, with the human authors' responsibility → honest and compliant.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.12",
+      "kind": "task",
+      "title": "Integrity check and your review",
+      "summary": "The paper is drafted → a checklist confirms no invented facts, versions, measurements, citations or novelty → you read the paper and approve the end of P8.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.2",
+      "kind": "task",
+      "title": "Analyse the campaigns",
+      "summary": "Raw data alone proves nothing → run the statistics pipeline on all campaign data and mark each prediction supported, not supported or inconclusive → every verdict links to its analysis.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.3",
+      "kind": "task",
+      "title": "Figures and numbers from scripts only",
+      "summary": "Hand-typed numbers invite mistakes → every figure, table and number in the paper is generated by a script, with a record of which data made each → every number is traceable.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.4",
+      "kind": "task",
+      "title": "Trace from question to conclusion",
+      "summary": "Each conclusion must rest on evidence → build a table linking question → prediction → experiment → raw data → analysis → figure → conclusion, shown in this portal → gaps are visible at a glance.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.5",
+      "kind": "task",
+      "title": "Write method and design sections",
+      "summary": "Method and design do not depend on results → write method, architecture, tab-sleeping design and background first → the paper moves on without waiting for data.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.6",
+      "kind": "task",
+      "title": "Write results and limitations",
+      "summary": "Results must come only from finished analysis → after it, write results, security and usability trade-offs, and the limits (energy, process counting, debugging-channel effects, one PC) → no early or unsupported claims.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.7",
+      "kind": "task",
+      "title": "Related work, introduction, abstract",
+      "summary": "Claims of novelty must match the approved literature check → write related work from it, then the introduction and abstract last → the paper never overclaims.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.8",
+      "kind": "task",
+      "title": "Verify every citation",
+      "summary": "A wrong citation damages trust → a script confirms each reference against its source or its permanent paper ID (DOI) → no unverified or banned references.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "p8.9",
+      "kind": "task",
+      "title": "Report failed experiments too",
+      "summary": "Hiding failures is cherry-picking → list every failed or stopped run from the log and run records in the paper or its appendix → the record is honest.",
+      "status": "Not started",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "adr-0001",
+      "kind": "decision",
+      "title": "Decision 1: Plan first, then build phase by phase with your sign-off",
+      "summary": "Nine phases, P0 to P8. P0 is planning only, with no app code. A phase starts when you approve its plan and ends when its tests pass and you approve the result. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0002",
+        "adr-0003",
+        "adr-0014",
+        "adr-0016",
+        "phase-p0-planning",
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "adr-0002",
+      "kind": "decision",
+      "title": "Decision 2: The wiki is Claude's working memory",
+      "summary": "Claude keeps plans, decisions and research as linked pages in the wiki (Karpathy's 'LLM wiki' pattern). Your raw notes are never edited; Claude maintains everything else. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0001",
+        "adr-0003",
+        "adr-0016",
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "adr-0003",
+      "kind": "decision",
+      "title": "Decision 3: Work survives interrupted sessions",
+      "summary": "After every task Claude updates the status page and the log. When a session ends it writes a handoff note, and the next session reads them and carries on. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0001",
+        "adr-0002",
+        "adr-0011",
+        "adr-0012",
+        "phase-p0-planning",
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "adr-0004",
+      "kind": "decision",
+      "title": "Decision 4: A usable app and solid research, equally",
+      "summary": "Each phase delivers something usable plus the measurement hooks the research needs. The app is never tuned just to win a benchmark. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0001",
+        "adr-0012",
+        "adr-0013",
+        "adr-0014",
+        "phase-p2-minimal-container",
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "adr-0005",
+      "kind": "decision",
+      "title": "Decision 5: You install the developer tools (replaced)",
+      "summary": "You would run the install commands Claude supplied; Claude would only check the versions afterwards. You decided.",
+      "status": "Replaced",
+      "related": [
+        "adr-0021",
+        "adr-0006",
+        "adr-0011",
+        "adr-0016",
+        "phase-p0-planning",
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "adr-0006",
+      "kind": "decision",
+      "title": "Decision 6: Browser controls in plain TypeScript, no UI framework",
+      "summary": "Tab bar and address bar are plain TypeScript bundled by Vite. The controls never draw over the web page area. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0007",
+        "adr-0005",
+        "adr-0021",
+        "adr-0015",
+        "phase-p1-foundation",
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "adr-0007",
+      "kind": "decision",
+      "title": "Decision 7: One window, many web views",
+      "summary": "A trusted panel draws Ferrum's controls; each website tab is its own untrusted web view in the same window. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0006",
+        "adr-0010",
+        "adr-0015",
+        "adr-0019",
+        "risk-r02",
+        "risk-r01"
+      ]
+    },
+    {
+      "id": "adr-0008",
+      "kind": "decision",
+      "title": "Decision 8: Network log records what was fetched, never the content",
+      "summary": "For each request Ferrum logs address, method, status, type, timing, size, tab and block decision, one line per request in a file. No headers, no page content. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0015",
+        "adr-0019",
+        "adr-0012",
+        "phase-p5-telemetry",
+        "phase-p4-security",
+        "risk-r03"
+      ]
+    },
+    {
+      "id": "adr-0009",
+      "kind": "decision",
+      "title": "Decision 9: Benchmarks run on your AMD desktop",
+      "summary": "All measurements run on this machine. Energy is reported only as the CPU chip's own estimate, clearly labelled; whole-system energy only with a wall meter; per-program energy never. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0012",
+        "adr-0013",
+        "adr-0005",
+        "adr-0021",
+        "risk-r04",
+        "risk-r05"
+      ]
+    },
+    {
+      "id": "adr-0010",
+      "kind": "decision",
+      "title": "Decision 10: Sites kept apart by profiles in one shared browser process",
+      "summary": "Each site gets its own WebView2 profile (own cookies and storage) while all share one browser process. How to build it is still open and must be settled before P3. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0007",
+        "adr-0019",
+        "adr-0015",
+        "risk-r01",
+        "risk-r03",
+        "risk-r05"
+      ]
+    },
+    {
+      "id": "adr-0011",
+      "kind": "decision",
+      "title": "Decision 11: Git, GitHub checks, open licence; only you upload",
+      "summary": "Code lives in git. Automatic checks run on GitHub's Windows machines. Licence: MIT or Apache 2.0. Claude never pushes; you create the GitHub repo and push. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0003",
+        "adr-0005",
+        "adr-0021",
+        "adr-0018",
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "adr-0012",
+      "kind": "decision",
+      "title": "Decision 12: Benchmark robot: Rust controller plus Playwright scripts",
+      "summary": "A Rust program schedules trials and measures memory and CPU through Windows. Playwright scripts in TypeScript drive the pages. Every browser is driven the same way. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0009",
+        "adr-0013",
+        "adr-0007",
+        "adr-0008",
+        "risk-r05",
+        "risk-r06"
+      ]
+    },
+    {
+      "id": "adr-0013",
+      "kind": "decision",
+      "title": "Decision 13: Statistics in Python scripts",
+      "summary": "Analysis runs as repeatable Python scripts, not notebooks. Each comparison reports averages, spread, confidence ranges and effect sizes, with recorded random seeds. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0012",
+        "adr-0009",
+        "adr-0004",
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle",
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "adr-0014",
+      "kind": "decision",
+      "title": "Decision 14: You review the result of every phase",
+      "summary": "At the end of each phase Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0001",
+        "adr-0003",
+        "adr-0016",
+        "phase-p0-planning",
+        "phase-p1-foundation",
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "adr-0015",
+      "kind": "decision",
+      "title": "Decision 15: Open browsing with a blocklist",
+      "summary": "Any secure (HTTPS) site opens unless blocked. Plain HTTP is upgraded or warned about. Other link types (mail, apps) ask first. Local files and address-bar scripts are refused in tabs. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0007",
+        "adr-0008",
+        "adr-0010",
+        "adr-0019",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "adr-0016",
+      "kind": "decision",
+      "title": "Decision 16: Plan app reads the wiki and takes approvals (replaced)",
+      "summary": "A local Next.js app would show the wiki pages, and you would click Approve there. You decided.",
+      "status": "Replaced",
+      "related": [
+        "adr-0001",
+        "adr-0002",
+        "adr-0021",
+        "adr-0014",
+        "adr-0023",
+        "adr-0024"
+      ]
+    },
+    {
+      "id": "adr-0017",
+      "kind": "decision",
+      "title": "Decision 17: Research paper in the ACM LaTeX template, for now",
+      "summary": "The paper uses ACM's acmart template until a venue is chosen. Text stays portable, and no results section is written until experiments are done. Claude proposed; open to your veto.",
+      "status": "Proposed",
+      "related": [
+        "adr-0004",
+        "adr-0013",
+        "adr-0018",
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "adr-0018",
+      "kind": "decision",
+      "title": "Decision 18: Repo folder is the project folder; Rust code in one workspace",
+      "summary": "The planned folder layout (app, libraries, benchmarks, analysis, paper) sits directly at the repo root, plus folders for the baseline app and the benchmark robot. Claude proposed; open to your veto.",
+      "status": "Proposed",
+      "related": [
+        "adr-0011",
+        "adr-0006",
+        "adr-0012",
+        "adr-0013",
+        "adr-0016",
+        "adr-0017"
+      ]
+    },
+    {
+      "id": "adr-0019",
+      "kind": "decision",
+      "title": "Decision 19: Unsafe WebView2 code lives in one audited module",
+      "summary": "Features Tauri lacks (sleep, memory target, network events, crash detection) use raw WebView2 calls, all in one module behind a safe Rust interface, each added only when its phase needs it. Claude proposed; open to your veto.",
+      "status": "Proposed",
+      "related": [
+        "adr-0007",
+        "adr-0008",
+        "adr-0010",
+        "adr-0015",
+        "adr-0018",
+        "risk-r03"
+      ]
+    },
+    {
+      "id": "adr-0020",
+      "kind": "decision",
+      "title": "Decision 20: Wiki index lists evidence folders, not every file",
+      "summary": "The wiki index names each evidence folder once instead of every file in it. You decided.",
+      "status": "Accepted",
+      "related": [
+        "phase-p0-planning",
+        "adr-0002"
+      ]
+    },
+    {
+      "id": "adr-0021",
+      "kind": "decision",
+      "title": "Decision 21: Claude runs all tool installs",
+      "summary": "Claude runs the install commands, including ones that need admin rights (you click through the Windows prompts), and records exact versions. Kernel drivers still need your separate approval. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0005",
+        "adr-0009",
+        "adr-0011",
+        "adr-0016",
+        "phase-p0-planning",
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "adr-0022",
+      "kind": "decision",
+      "title": "Decision 22: A broken approvals file stops the wiki check",
+      "summary": "If the approvals file is unreadable or approves a missing page, the wiki check now fails instead of only warning. A decision you rejected is also flagged. Claude proposed; open to your veto.",
+      "status": "Proposed",
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "adr-0023",
+      "kind": "decision",
+      "title": "Decision 23: You approve in Claude Code; the portal is read-only",
+      "summary": "You say what you approve in Claude Code. Claude saves your words, then records the approval with a fingerprint of the page. If the page changes later, Claude asks again. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0016",
+        "adr-0024",
+        "adr-0014",
+        "adr-0022",
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "adr-0024",
+      "kind": "decision",
+      "title": "Decision 24: The portal shows only plain-language JSON",
+      "summary": "Whenever Claude edits the wiki, it rewrites the matching plain-language JSON in the same step. The portal reads only that JSON, never the wiki. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0016",
+        "adr-0023",
+        "adr-0002"
+      ]
+    },
+    {
+      "id": "adr-0025",
+      "kind": "decision",
+      "title": "Decision 25: Check scripts in PowerShell 7",
+      "summary": "Every task gets one script that proves it is done, and every phase one gate script that runs all its checks. Each part is commented in plain words. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0014",
+        "adr-0021",
+        "adr-0024",
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "adr-0026",
+      "kind": "decision",
+      "title": "Decision 26: Architecture in four groups",
+      "summary": "Components are shown as Application, Benchmark, Testing and quality, and Research and analysis, led by a layered picture of the Rust app. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0004",
+        "adr-0024"
+      ]
+    },
+    {
+      "id": "adr-0027",
+      "kind": "decision",
+      "title": "Decision 27: Mask private network and machine details",
+      "summary": "Real IP addresses, machine names, network card ids and your user-folder path are replaced by placeholders. Real values stay in one local file that git ignores. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0011",
+        "adr-0025",
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "risk-r01",
+      "kind": "risk",
+      "title": "Tauri cannot yet give each site its own profile",
+      "summary": "Sites are to be kept apart by separate WebView2 profiles, but a profile can only be set when a web view is created, and Tauri does not pass it through yet.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p3-tabs-sessions",
+        "phase-p4-security",
+        "adr-0010",
+        "adr-0007",
+        "risk-r02"
+      ]
+    },
+    {
+      "id": "risk-r02",
+      "kind": "risk",
+      "title": "Multi-view feature may be unstable",
+      "summary": "Many web views in one window needs a Tauri feature marked experimental. Known bugs: hangs, blank views, lost keyboard focus.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "adr-0007",
+        "adr-0006",
+        "risk-r01"
+      ]
+    },
+    {
+      "id": "risk-r03",
+      "kind": "risk",
+      "title": "Tab sleep and memory saving need unsafe low-level code",
+      "summary": "The WebView2 calls that put a tab to sleep or ask it to use less memory are not in Tauri, so we must reach them through unsafe code. Sleep can also simply fail.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p7-lifecycle",
+        "risk-r18",
+        "risk-r23",
+        "risk-r20"
+      ]
+    },
+    {
+      "id": "risk-r04",
+      "kind": "risk",
+      "title": "AMD energy readings may be estimates",
+      "summary": "Research suggests AMD's energy counters are modelled rather than measured, cover only the CPU chip, and need admin rights plus a kernel driver.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p5-telemetry",
+        "adr-0009",
+        "risk-r14",
+        "risk-r21"
+      ]
+    },
+    {
+      "id": "risk-r05",
+      "kind": "risk",
+      "title": "Counting each browser's memory fairly is hard",
+      "summary": "Browsers run many helper processes, some shared. Counting the wrong ones, or double-counting shared memory, would make the main comparison wrong.",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry",
+        "phase-p6-benchmark-harness",
+        "adr-0010",
+        "risk-r01",
+        "risk-r14"
+      ]
+    },
+    {
+      "id": "risk-r06",
+      "kind": "risk",
+      "title": "The test robot sees WebView2 less clearly",
+      "summary": "Playwright reaches WebView2 only through a debugging channel it calls lower fidelity, and an open channel may itself change behaviour.",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry",
+        "phase-p6-benchmark-harness",
+        "adr-0012",
+        "risk-r09",
+        "risk-r14",
+        "risk-r19"
+      ]
+    },
+    {
+      "id": "risk-r07",
+      "kind": "risk",
+      "title": "Navigation filter could let blocked pages through",
+      "summary": "Tauri's navigation check allows any address it cannot read, and never sees pages loaded inside frames, so a blocked site could slip in.",
+      "status": "Open",
+      "related": [
+        "phase-p4-security",
+        "phase-p2-minimal-container",
+        "adr-0015",
+        "risk-r19"
+      ]
+    },
+    {
+      "id": "risk-r08",
+      "kind": "risk",
+      "title": "Network log needs low-level code",
+      "summary": "Tauri has no hook that sees normal web traffic, so the network log must use unsafe WebView2 calls, or the debugging channel as a fallback.",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry",
+        "adr-0008",
+        "risk-r18",
+        "risk-r14"
+      ]
+    },
+    {
+      "id": "risk-r09",
+      "kind": "risk",
+      "title": "All web views must share identical start-up settings",
+      "summary": "Web views sharing one data folder must use exactly the same settings (flags, proxy, language) or creation fails, so no per-tab differences.",
+      "status": "Open",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "phase-p6-benchmark-harness",
+        "adr-0010",
+        "adr-0007",
+        "risk-r01",
+        "risk-r06"
+      ]
+    },
+    {
+      "id": "risk-r10",
+      "kind": "risk",
+      "title": "Google sign-in will refuse Ferrum tabs",
+      "summary": "Google's rules block sign-in from embedded web views like Ferrum's tabs, so Google login is expected to fail.",
+      "status": "Open",
+      "related": [
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "phase-p6-benchmark-harness",
+        "adr-0015",
+        "adr-0004"
+      ]
+    },
+    {
+      "id": "risk-r11",
+      "kind": "risk",
+      "title": "Browsers update themselves mid-study",
+      "summary": "Chrome, Edge and WebView2 update automatically. A version change during a measurement run makes the results incomparable.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle",
+        "phase-p8-research-paper",
+        "adr-0009",
+        "risk-r12",
+        "risk-r21"
+      ]
+    },
+    {
+      "id": "risk-r12",
+      "kind": "risk",
+      "title": "Windows background work and heat add noise",
+      "summary": "Updates, antivirus, indexing, CPU temperature and even window visibility change the numbers, adding noise or bias.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p5-telemetry",
+        "risk-r11",
+        "risk-r14",
+        "risk-r25"
+      ]
+    },
+    {
+      "id": "risk-r13",
+      "kind": "risk",
+      "title": "Rivals' power-saving features can skew comparisons",
+      "summary": "Edge and Chrome ship sleeping tabs, Startup Boost and Memory Saver. On or off changes who wins, and switching them off just to help Ferrum is not allowed.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p8-research-paper",
+        "risk-r14",
+        "risk-r17"
+      ]
+    },
+    {
+      "id": "risk-r14",
+      "kind": "risk",
+      "title": "Our own tools could bias the results",
+      "summary": "The team building Ferrum also builds the benchmark, so bias can creep in through tooling or through choices made after seeing data.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p5-telemetry",
+        "phase-p8-research-paper",
+        "adr-0012",
+        "adr-0013",
+        "risk-r05"
+      ]
+    },
+    {
+      "id": "risk-r15",
+      "kind": "risk",
+      "title": "A session can stop mid-change and lose state",
+      "summary": "Sessions run out of tokens. A stop in the middle of a multi-file change can leave broken work or a wrong status page.",
+      "status": "Being reduced",
+      "related": [
+        "phase-p0-planning",
+        "phase-p1-foundation",
+        "adr-0003",
+        "adr-0002",
+        "adr-0011",
+        "risk-r22"
+      ]
+    },
+    {
+      "id": "risk-r16",
+      "kind": "risk",
+      "title": "Scope creep: two equal goals, no tie-breaker",
+      "summary": "The app and the research weigh the same and both wish lists are long, so work can grow without anyone deciding it should.",
+      "status": "Open",
+      "related": [
+        "phase-p0-planning",
+        "adr-0004",
+        "adr-0001",
+        "adr-0014",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "risk-r17",
+      "kind": "risk",
+      "title": "Our tab-sleep policy may not be new",
+      "summary": "Chrome, Edge, ChromeOS and Android already freeze, sleep or discard tabs. Claiming novelty without a proper literature review would be wrong.",
+      "status": "Open",
+      "related": [
+        "phase-p8-research-paper",
+        "phase-p7-lifecycle",
+        "adr-0017",
+        "risk-r13",
+        "risk-r21"
+      ]
+    },
+    {
+      "id": "risk-r18",
+      "kind": "risk",
+      "title": "Bugs in unsafe low-level code",
+      "summary": "Several features need unsafe Windows code. Mistakes there can crash Ferrum, leak memory, or keep closed tabs alive.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p4-security",
+        "phase-p5-telemetry",
+        "phase-p7-lifecycle",
+        "risk-r03",
+        "risk-r07"
+      ]
+    },
+    {
+      "id": "risk-r19",
+      "kind": "risk",
+      "title": "A change could expose Ferrum's internals to websites",
+      "summary": "Every web view can technically message Ferrum's Rust code. A configuration slip could let a website run privileged commands or weaken isolation.",
+      "status": "Open",
+      "related": [
+        "phase-p4-security",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "adr-0015",
+        "adr-0007",
+        "risk-r07"
+      ]
+    },
+    {
+      "id": "risk-r20",
+      "kind": "risk",
+      "title": "Tools and libraries change under us",
+      "summary": "Over months, Tauri, Node, TypeScript, ESLint and Mermaid release new major versions that can break the build.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p0-planning",
+        "adr-0005",
+        "adr-0021",
+        "adr-0011",
+        "adr-0016"
+      ]
+    },
+    {
+      "id": "risk-r21",
+      "kind": "risk",
+      "title": "One machine may not speak for all",
+      "summary": "All results come from one AMD desktop. Memory and process behaviour depend on the machine, so results may not hold elsewhere.",
+      "status": "Open",
+      "related": [
+        "phase-p8-research-paper",
+        "phase-p6-benchmark-harness",
+        "adr-0009",
+        "risk-r04",
+        "risk-r11",
+        "risk-r17"
+      ]
+    },
+    {
+      "id": "risk-r22",
+      "kind": "risk",
+      "title": "Approval records could be wrong",
+      "summary": "Phases start only when approvals match the current pages. A fingerprint bug, a corrupt file, or an approval you never gave would start or block work wrongly.",
+      "status": "Open",
+      "related": [
+        "phase-p0-planning",
+        "adr-0023",
+        "adr-0016",
+        "adr-0001",
+        "adr-0014",
+        "risk-r15"
+      ]
+    },
+    {
+      "id": "risk-r23",
+      "kind": "risk",
+      "title": "Sleeping or closing a tab could lose your work",
+      "summary": "If Ferrum sleeps or discards a tab during a download, a call, or while you are typing, data could be lost.",
+      "status": "Open",
+      "related": [
+        "phase-p7-lifecycle",
+        "risk-r03",
+        "risk-r17"
+      ]
+    },
+    {
+      "id": "risk-r24",
+      "kind": "risk",
+      "title": "Your reviews can become a bottleneck",
+      "summary": "Every phase waits for your approval, and any edit to an approved page needs re-approval. Reviews piling up can stall work.",
+      "status": "Open",
+      "related": [
+        "phase-p0-planning",
+        "adr-0014",
+        "adr-0001",
+        "risk-r16",
+        "risk-r22"
+      ]
+    },
+    {
+      "id": "risk-r25",
+      "kind": "risk",
+      "title": "Too few trials to see real differences",
+      "summary": "With about 30 trials per setup only fairly large differences are detectable; small but meaningful ones could be missed.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle",
+        "phase-p8-research-paper",
+        "adr-0013",
+        "risk-r12",
+        "risk-r14"
+      ]
+    },
+    {
+      "id": "rq-01",
+      "kind": "research-question",
+      "title": "Memory and CPU versus browsers",
+      "summary": "Does Ferrum, with no tab sleeping, use less memory and CPU than Chrome, Edge and a bare-bones Tauri app on the same test pages? We count only the processes each product starts itself, so nothing is missed or counted twice.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-01",
+        "hyp-02",
+        "hyp-03",
+        "exp-baseline-footprint"
+      ]
+    },
+    {
+      "id": "rq-02",
+      "kind": "research-question",
+      "title": "Speed: startup, page loads, smoothness",
+      "summary": "Does showing websites inside Ferrum make startup, page loads or scrolling slower than in Chrome, Edge or the bare-bones app? Ferrum puts each tab in its own embedded web view and checks every navigation, which could add delay.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-04",
+        "hyp-05",
+        "hyp-06",
+        "exp-startup",
+        "exp-navigation",
+        "exp-rendering"
+      ]
+    },
+    {
+      "id": "rq-03",
+      "kind": "research-question",
+      "title": "Energy use",
+      "summary": "Can we measure energy honestly on this AMD desktop and, if so, does Ferrum use less energy per task than Chrome and Edge? The AMD chip's energy counter is a model, not a meter. If it fails our checks, energy is reported as not measurable, never guessed.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-07",
+        "exp-energy"
+      ]
+    },
+    {
+      "id": "rq-04",
+      "kind": "research-question",
+      "title": "Smart tab sleeping (the central question)",
+      "summary": "Does a smart tab-sleeping policy balance memory, energy and tab wake-up time better than no sleeping or a simple timer, without ever unloading a tab it must keep? Tab sleeping means pausing or unloading tabs you are not using. Scored with the overall score J. Similar ideas exist, so nothing is claimed as new before the literature review.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-08",
+        "hyp-09",
+        "hyp-10",
+        "hyp-11",
+        "exp-lifecycle-policies",
+        "metric-objective-j"
+      ]
+    },
+    {
+      "id": "rq-05",
+      "kind": "research-question",
+      "title": "Cost of the security checks",
+      "summary": "How much delay and memory do Ferrum's site-blocking and permission checks add, compared with the same build with the checks switched off? The checks-off build exists only for this test and is never shipped. Whether the checks work is tested separately.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-12",
+        "exp-security-overhead"
+      ]
+    },
+    {
+      "id": "rq-06",
+      "kind": "research-question",
+      "title": "Cost of keeping sites apart",
+      "summary": "With one WebView2 profile per site, what is still shared, and how much extra memory and processes does it cost versus the alternatives? Alternatives: one shared profile, or one data folder per site. We must list exactly what stays shared. It depends on per-site profiles working in Ferrum (an open risk).",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-13",
+        "exp-isolation-overhead"
+      ]
+    },
+    {
+      "id": "rq-07",
+      "kind": "research-question",
+      "title": "Reliability over long use",
+      "summary": "Does Ferrum stay as stable as Chrome and Edge over hours of use, and does it restore sessions and recover from tab crashes and network drops? Covers memory creep over long runs, crashes, crash recovery and session restore.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-14",
+        "hyp-15",
+        "exp-reliability"
+      ]
+    },
+    {
+      "id": "hyp-01",
+      "kind": "hypothesis",
+      "title": "Ferrum uses less memory than Chrome and Edge",
+      "summary": "We expect Ferrum (no tab sleeping) to use less memory than Chrome and Edge as shipped, on an idle page and on 4 active tabs; we would be wrong if its typical use is equal or higher.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-01",
+        "exp-baseline-footprint",
+        "metric-tree-private-commit",
+        "metric-tree-private-working-set",
+        "metric-process-count"
+      ]
+    },
+    {
+      "id": "hyp-02",
+      "kind": "hypothesis",
+      "title": "Ferrum adds little on top of a bare-bones Tauri app",
+      "summary": "We expect Ferrum's idle memory to be less than 20% above a bare-bones Tauri app showing the same page; we would be wrong if the extra could be 20% or more.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-01",
+        "exp-baseline-footprint",
+        "metric-tree-private-commit",
+        "metric-tree-cpu-time"
+      ]
+    },
+    {
+      "id": "hyp-03",
+      "kind": "hypothesis",
+      "title": "Without tab sleeping, Ferrum burns more background CPU",
+      "summary": "We expect Ferrum without tab sleeping to use more CPU per minute on 20 background tabs than Chrome and Edge; we would be wrong if it uses the same or less.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-01",
+        "exp-baseline-footprint",
+        "metric-tree-cpu-time",
+        "metric-tree-cpu-cycles"
+      ]
+    },
+    {
+      "id": "hyp-04",
+      "kind": "hypothesis",
+      "title": "Ferrum opens its window faster",
+      "summary": "We expect Ferrum's first window to appear sooner than Chrome's and Edge's on a fresh start; we would be wrong if it is the same or slower.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-02",
+        "exp-startup",
+        "metric-startup-window-visible",
+        "metric-startup-fcp",
+        "metric-startup-lcp"
+      ]
+    },
+    {
+      "id": "hyp-05",
+      "kind": "hypothesis",
+      "title": "Page loads are not slower",
+      "summary": "We expect Ferrum's page-load time to stay within 10% of Chrome and Edge for every kind of navigation; we would be wrong if it is 10% or more slower for any one kind.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-02",
+        "exp-navigation",
+        "metric-nav-latency",
+        "metric-nav-failure-rate"
+      ]
+    },
+    {
+      "id": "hyp-06",
+      "kind": "hypothesis",
+      "title": "Scrolling and animation are as smooth",
+      "summary": "We expect Ferrum's frame timing and missed frames while scrolling and animating to stay within the margins of Chrome and Edge; we would be wrong if either is worse by the margin or more.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-02",
+        "exp-rendering",
+        "metric-frame-interval",
+        "metric-frame-miss-rate",
+        "metric-canvas-throughput",
+        "metric-loaf-blocking"
+      ]
+    },
+    {
+      "id": "hyp-07",
+      "kind": "hypothesis",
+      "title": "Ferrum uses less energy per task (if measurable)",
+      "summary": "We expect Ferrum to use less energy than Chrome and Edge for an idle page and for video playback; we would be wrong if it uses the same or more.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-03",
+        "exp-energy",
+        "metric-cpu-package-energy",
+        "metric-wall-energy",
+        "metric-tree-cpu-time"
+      ]
+    },
+    {
+      "id": "hyp-08",
+      "kind": "hypothesis",
+      "title": "Smart sleeping saves memory",
+      "summary": "We expect the smart policy to use less memory on 20 background tabs than no sleeping; we would be wrong if memory is the same or higher.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-04",
+        "exp-lifecycle-policies",
+        "metric-tree-private-commit",
+        "metric-lifecycle-transitions"
+      ]
+    },
+    {
+      "id": "hyp-09",
+      "kind": "hypothesis",
+      "title": "Smart sleeping gets the best overall score",
+      "summary": "We expect the smart policy to get the lowest score J on both tab-sleeping workloads, and to win for at least two thirds of weight choices; we would be wrong if a simpler policy ties or beats it.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-04",
+        "exp-lifecycle-policies",
+        "metric-objective-j",
+        "metric-tree-private-commit",
+        "metric-restore-latency",
+        "metric-cpu-package-energy",
+        "metric-wall-energy"
+      ]
+    },
+    {
+      "id": "hyp-10",
+      "kind": "hypothesis",
+      "title": "Smart sleeping wakes tabs faster than a timer",
+      "summary": "We expect the slowest 5% of tab wake-ups to be faster under the smart policy than under the fixed timer; we would be wrong if they are the same or slower.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-04",
+        "exp-lifecycle-policies",
+        "metric-restore-latency",
+        "metric-lifecycle-transitions"
+      ]
+    },
+    {
+      "id": "hyp-11",
+      "kind": "hypothesis",
+      "title": "No policy ever unloads a protected tab",
+      "summary": "We expect zero cases of a tab being unloaded while it plays media, downloads, holds an unsaved form or is excluded by you; we would be wrong if even one happens.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-04",
+        "exp-lifecycle-policies",
+        "metric-safety-violations"
+      ]
+    },
+    {
+      "id": "hyp-12",
+      "kind": "hypothesis",
+      "title": "Security checks cost almost nothing",
+      "summary": "We expect each security decision to take under 1 ms (95% of the time), and page loads and memory to be at most 5% above a checks-off build; we would be wrong if any limit is broken.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-05",
+        "exp-security-overhead",
+        "metric-policy-eval-latency",
+        "metric-nav-latency",
+        "metric-tree-private-commit"
+      ]
+    },
+    {
+      "id": "hyp-13",
+      "kind": "hypothesis",
+      "title": "Per-site profiles are cheaper than per-site data folders",
+      "summary": "We expect each extra site to add less memory with one profile per site than with one data folder per site; we would be wrong if it adds the same or more.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-06",
+        "exp-isolation-overhead",
+        "metric-tree-private-commit",
+        "metric-process-count"
+      ]
+    },
+    {
+      "id": "hyp-14",
+      "kind": "hypothesis",
+      "title": "Memory does not creep up over long sessions",
+      "summary": "We expect Ferrum's memory growth during a long browsing run to be within 10 MiB per hour of Chrome and Edge; we would be wrong if it grows that much faster or more.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-07",
+        "exp-reliability",
+        "metric-memory-growth-slope",
+        "metric-crash-count",
+        "metric-nav-failure-rate"
+      ]
+    },
+    {
+      "id": "hyp-15",
+      "kind": "hypothesis",
+      "title": "Sessions restore and crashes recover",
+      "summary": "We expect at least 95% of sessions to restore correctly (cautious end of the range) and every forced tab crash to recover in time; we would be wrong if either fails.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-07",
+        "exp-reliability",
+        "metric-restore-success-rate",
+        "metric-recovery-time",
+        "metric-crash-count"
+      ]
+    },
+    {
+      "id": "exp-baseline-footprint",
+      "kind": "experiment",
+      "title": "Memory and CPU footprint",
+      "summary": "Run: idle page, JavaScript app, huge page, 4 active tabs, 20 background tabs, a few public sites; 30+ rounds in random order. Compare: Chrome, Edge, bare-bones Tauri app, Ferrum with and without tab sleeping (savers-off Chrome and Edge only as a side analysis). Measure: private memory, process count, CPU time.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-01",
+        "hyp-02",
+        "hyp-03",
+        "wl-static-info",
+        "wl-spa-js-heavy",
+        "wl-large-dom",
+        "wl-multi-active",
+        "wl-many-background",
+        "wl-public-supplementary",
+        "metric-tree-private-commit",
+        "metric-tree-private-working-set",
+        "metric-tree-working-set",
+        "metric-peak-tree-private-commit",
+        "metric-process-count",
+        "metric-tree-cpu-time",
+        "metric-tree-cpu-cycles",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "exp-energy",
+      "kind": "experiment",
+      "title": "Energy per task",
+      "summary": "Run: first check the energy reading is trustworthy (if not: report 'not measurable' and stop); then idle page, video, JavaScript app, background tabs. Compare: the five products. Measure: energy per task above idle.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-07",
+        "wl-static-info",
+        "wl-video-playback",
+        "wl-spa-js-heavy",
+        "wl-many-background",
+        "metric-cpu-package-energy",
+        "metric-wall-energy",
+        "metric-tree-cpu-time",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "exp-isolation-overhead",
+      "kind": "experiment",
+      "title": "Cost of keeping sites apart",
+      "summary": "Run: active tabs on 1, 2, 4 and 8 sites. Compare: one shared profile, one profile per site, one data folder per site. Measure: extra memory and processes per site, plus a list of what stays shared.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-13",
+        "wl-multi-active",
+        "wl-static-info",
+        "metric-tree-private-commit",
+        "metric-process-count",
+        "metric-nav-latency",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "exp-lifecycle-policies",
+      "kind": "experiment",
+      "title": "Tab-sleeping policies compared",
+      "summary": "Run: 20 background tabs with scripted tab switches, open-close-restore cycles, active tabs, video; tune the smart policy on separate data first. Compare: Ferrum with no sleeping, timer, memory-pressure and smart policies; Chrome and Edge as reference only. Measure: memory, energy, wake-up time, score J, safety violations.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-08",
+        "hyp-09",
+        "hyp-10",
+        "hyp-11",
+        "wl-many-background",
+        "wl-session-churn",
+        "wl-multi-active",
+        "wl-video-playback",
+        "metric-tree-private-commit",
+        "metric-cpu-package-energy",
+        "metric-wall-energy",
+        "metric-restore-latency",
+        "metric-objective-j",
+        "metric-safety-violations",
+        "metric-lifecycle-transitions",
+        "metric-tree-cpu-time",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "exp-navigation",
+      "kind": "experiment",
+      "title": "Page-load speed",
+      "summary": "Run: 200 link clicks across seven kinds of navigation, plus a few public sites. Compare: Chrome, Edge, bare-bones Tauri app, Ferrum with and without tab sleeping. Measure: page-load time and failed loads.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-05",
+        "wl-frequent-nav",
+        "wl-static-info",
+        "wl-large-dom",
+        "wl-public-supplementary",
+        "metric-nav-latency",
+        "metric-nav-failure-rate",
+        "metric-tree-cpu-time",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "exp-reliability",
+      "kind": "experiment",
+      "title": "Reliability, long runs and recovery",
+      "summary": "Run: 2-hour browsing runs (10 per product), restart-and-restore cycles, forced tab crashes, test-server outages. Compare: the five products (restore only where it can be scripted the same way). Measure: memory growth, crashes, recovery time, restore success.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-14",
+        "hyp-15",
+        "wl-frequent-nav",
+        "wl-session-churn",
+        "metric-memory-growth-slope",
+        "metric-crash-count",
+        "metric-recovery-time",
+        "metric-restore-success-rate",
+        "metric-nav-failure-rate",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "exp-rendering",
+      "kind": "experiment",
+      "title": "Smoothness of scrolling and animation",
+      "summary": "Run: scrolling a long page, canvas and 3D animation, a huge page, a JavaScript app. Compare: the same five products. Measure: time between frames, missed frames, long blocking frames, animation work per second.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-06",
+        "wl-continuous-scroll",
+        "wl-canvas-webgl",
+        "wl-large-dom",
+        "wl-spa-js-heavy",
+        "metric-frame-interval",
+        "metric-frame-miss-rate",
+        "metric-loaf-blocking",
+        "metric-canvas-throughput",
+        "metric-tree-cpu-time",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "exp-security-overhead",
+      "kind": "experiment",
+      "title": "Cost of the security checks",
+      "summary": "Run: 300 mixed navigations, some to blocked sites, all local. Compare: normal Ferrum versus a test-only build with the checks off. Measure: time per security decision, page-load time (allowed pages only), memory.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-12",
+        "wl-security-nav-mix",
+        "wl-frequent-nav",
+        "wl-static-info",
+        "metric-policy-eval-latency",
+        "metric-nav-latency",
+        "metric-tree-private-commit",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "exp-startup",
+      "kind": "experiment",
+      "title": "Startup speed",
+      "summary": "Run: launch each product to a simple page, fresh and warm starts, 30 times each. Compare: Chrome, Edge, bare-bones Tauri app, Ferrum. Measure: time to first window, first content and main content.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-04",
+        "wl-static-info",
+        "metric-startup-window-visible",
+        "metric-startup-fcp",
+        "metric-startup-lcp",
+        "metric-tree-private-commit",
+        "ov-research-fairness-protocol"
+      ]
+    },
+    {
+      "id": "metric-canvas-throughput",
+      "kind": "metric",
+      "title": "Animation work rate",
+      "summary": "Fixed units of drawing work the canvas or 3D test page completes per second. Unit: ops/s.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-rendering"
+      ]
+    },
+    {
+      "id": "metric-cpu-package-energy",
+      "kind": "metric",
+      "title": "Chip energy estimate (AMD)",
+      "summary": "Energy the AMD processor reports for itself. It is a model, leaves out memory chips and is not a wall reading, so it is labelled an estimate. Used only if it passes its checks. Unit: J.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "metric-crash-count",
+      "kind": "metric",
+      "title": "Crashes",
+      "summary": "Crashed or frozen page, graphics or main processes, per run and per hour. Unit: count per hour.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-reliability"
+      ]
+    },
+    {
+      "id": "metric-frame-interval",
+      "kind": "metric",
+      "title": "Time between frames",
+      "summary": "The gap between frames shown on screen while scrolling or animating. We look at the slow end (the slowest 5%). Unit: ms.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-rendering"
+      ]
+    },
+    {
+      "id": "metric-frame-miss-rate",
+      "kind": "metric",
+      "title": "Missed frames",
+      "summary": "Share of screen refreshes where a new frame was due but none appeared. Unit: share (0-1).",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-rendering"
+      ]
+    },
+    {
+      "id": "metric-lifecycle-transitions",
+      "kind": "metric",
+      "title": "Tab state changes",
+      "summary": "How often tabs move between states such as idle, unloaded, waking and active. Unit: count.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "metric-loaf-blocking",
+      "kind": "metric",
+      "title": "Time the page was too busy",
+      "summary": "Time per minute the page could not respond because a frame took too long, from the browser's own long-frame reports. Unit: ms per minute.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-rendering"
+      ]
+    },
+    {
+      "id": "metric-memory-growth-slope",
+      "kind": "metric",
+      "title": "Memory growth over time",
+      "summary": "How fast private memory climbs during a long run, using a trend fit that ignores outliers. Unit: MiB/h.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-reliability"
+      ]
+    },
+    {
+      "id": "metric-nav-failure-rate",
+      "kind": "metric",
+      "title": "Failed page loads",
+      "summary": "Failed navigations divided by attempted ones. A load fails if the page does not report back in time or the product shows an error. Unit: share (0-1).",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-navigation",
+        "exp-reliability"
+      ]
+    },
+    {
+      "id": "metric-nav-latency",
+      "kind": "metric",
+      "title": "Page-load time",
+      "summary": "From starting a navigation to the new page finishing its load, as the page itself reports it. Unit: ms.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-navigation",
+        "exp-security-overhead",
+        "exp-isolation-overhead"
+      ]
+    },
+    {
+      "id": "metric-objective-j",
+      "kind": "metric",
+      "title": "Overall score J",
+      "summary": "J adds up memory, energy and tab wake-up time, each divided by Ferrum's value with no tab sleeping, so 'no sleeping' scores 1 and lower is better. Weights are fixed before the real runs (equal thirds proposed; if energy is not measurable it is dropped), and we show how results change across 66 other weightings.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-lifecycle-policies",
+        "metric-tree-private-commit",
+        "metric-wall-energy",
+        "metric-cpu-package-energy",
+        "metric-restore-latency",
+        "ov-research-objective-function"
+      ]
+    },
+    {
+      "id": "metric-peak-tree-private-commit",
+      "kind": "metric",
+      "title": "Peak private memory",
+      "summary": "The highest private memory reached during the test. Unit: MiB.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint"
+      ]
+    },
+    {
+      "id": "metric-policy-eval-latency",
+      "kind": "metric",
+      "title": "Time per security decision",
+      "summary": "How long Ferrum takes to decide allow, block or ask for one navigation or permission request (not counting your answer). Unit: µs.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-security-overhead"
+      ]
+    },
+    {
+      "id": "metric-process-count",
+      "kind": "metric",
+      "title": "Number of processes",
+      "summary": "How many processes the product runs, split by kind (main, page, graphics, helper). Unit: count.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-isolation-overhead"
+      ]
+    },
+    {
+      "id": "metric-recovery-time",
+      "kind": "metric",
+      "title": "Crash recovery time",
+      "summary": "From a forced tab crash until the tab's page is ready again. Unit: ms.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-reliability"
+      ]
+    },
+    {
+      "id": "metric-restore-latency",
+      "kind": "metric",
+      "title": "Tab wake-up time",
+      "summary": "From switching to a background tab until its page is ready again, including a full reload if the tab was unloaded. Unit: ms.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "metric-restore-success-rate",
+      "kind": "metric",
+      "title": "Session restore success",
+      "summary": "Share of tabs brought back correctly (address, scroll position and page state) after a restart or after being unloaded. Unit: share (0-1).",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-reliability"
+      ]
+    },
+    {
+      "id": "metric-safety-violations",
+      "kind": "metric",
+      "title": "Safety violations",
+      "summary": "Times a policy unloaded or paused a tab it had to protect (playing media, download, unsaved form, your exclusion and similar). Target: zero. Unit: count.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "metric-startup-fcp",
+      "kind": "metric",
+      "title": "Time to first content",
+      "summary": "From launch to the start page showing its first text or image. Unit: ms.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-startup"
+      ]
+    },
+    {
+      "id": "metric-startup-lcp",
+      "kind": "metric",
+      "title": "Time to main content",
+      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'. Unit: ms.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-startup"
+      ]
+    },
+    {
+      "id": "metric-startup-window-visible",
+      "kind": "metric",
+      "title": "Time to first window",
+      "summary": "From launching the program to its first window appearing. Unit: ms.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-startup"
+      ]
+    },
+    {
+      "id": "metric-tree-cpu-cycles",
+      "kind": "metric",
+      "title": "CPU cycles",
+      "summary": "Processor work counted in clock cycles. Reported next to CPU time because it reacts differently when the clock speed changes. Unit: cycles.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint"
+      ]
+    },
+    {
+      "id": "metric-tree-cpu-time",
+      "kind": "metric",
+      "title": "CPU time",
+      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background. Unit: s.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-navigation",
+        "exp-rendering",
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "metric-tree-private-commit",
+      "kind": "metric",
+      "title": "Private memory (main memory measure)",
+      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. Not checked yet (P5). Unit: MiB.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-startup",
+        "exp-lifecycle-policies",
+        "exp-security-overhead",
+        "exp-isolation-overhead"
+      ]
+    },
+    {
+      "id": "metric-tree-private-working-set",
+      "kind": "metric",
+      "title": "Private memory held in RAM",
+      "summary": "The part of private memory that sits in RAM. A secondary measure. Unit: MiB.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint"
+      ]
+    },
+    {
+      "id": "metric-tree-working-set",
+      "kind": "metric",
+      "title": "All memory in RAM (over-counts)",
+      "summary": "All memory in RAM, but pages shared by several processes are counted once per process. Shown only with that warning. Unit: MiB.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint"
+      ]
+    },
+    {
+      "id": "metric-wall-energy",
+      "kind": "metric",
+      "title": "Wall-socket energy",
+      "summary": "Energy from a plug-in logging power meter, minus idle energy. Used only if such a meter is available. Unit: J.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "wl-canvas-webgl",
+      "kind": "workload",
+      "title": "Canvas and 3D animation",
+      "summary": "One minute of 2D canvas and one minute of WebGL (3D) drawing, with fixed scenes. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-rendering"
+      ]
+    },
+    {
+      "id": "wl-continuous-scroll",
+      "kind": "workload",
+      "title": "Continuous scrolling",
+      "summary": "A very long page that scrolls itself at a fixed speed for 60 seconds, the same in every product. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-rendering"
+      ]
+    },
+    {
+      "id": "wl-frequent-nav",
+      "kind": "workload",
+      "title": "Many page loads",
+      "summary": "200 navigations across seven kinds (same site, other site, redirects, back/forward, cached, uncached). A 2-hour repeat is used for reliability. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-navigation",
+        "exp-security-overhead",
+        "exp-reliability"
+      ]
+    },
+    {
+      "id": "wl-large-dom",
+      "kind": "workload",
+      "title": "Very large page",
+      "summary": "A page with 100,000 elements and 2,000 style rules; scripted clicks force it to re-lay itself out. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-navigation",
+        "exp-rendering"
+      ]
+    },
+    {
+      "id": "wl-many-background",
+      "kind": "workload",
+      "title": "Many background tabs",
+      "summary": "1 front tab and 20 background tabs (some playing media, holding an unsaved form or a download) for 30 minutes, with 40 scripted tab switches. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "wl-multi-active",
+      "kind": "workload",
+      "title": "Several active tabs",
+      "summary": "4 busy tabs on 4 sites, switching the front tab every 10 seconds for 5 minutes. The isolation test varies the number of sites. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-lifecycle-policies",
+        "exp-isolation-overhead"
+      ]
+    },
+    {
+      "id": "wl-public-supplementary",
+      "kind": "workload",
+      "title": "A few public websites",
+      "summary": "Real public sites (list needs your approval), one visit each, no login. Reported separately, never mixed with the local tests. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-navigation"
+      ]
+    },
+    {
+      "id": "wl-security-nav-mix",
+      "kind": "workload",
+      "title": "Mix of allowed and blocked links",
+      "summary": "300 local navigations: 20% to blocked sites and 10% redirects to blocked sites. Used only to measure the cost of the security checks. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-security-overhead"
+      ]
+    },
+    {
+      "id": "wl-session-churn",
+      "kind": "workload",
+      "title": "Open, close and restore",
+      "summary": "50 cycles of opening 5 tabs, unloading or closing them and restoring them; the app restarts every 10 cycles. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-lifecycle-policies",
+        "exp-reliability"
+      ]
+    },
+    {
+      "id": "wl-spa-js-heavy",
+      "kind": "workload",
+      "title": "JavaScript-heavy web app",
+      "summary": "A local app that switches views 20 times, each drawing a 5,000-item list and running fixed computations. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-rendering",
+        "exp-energy"
+      ]
+    },
+    {
+      "id": "wl-static-info",
+      "kind": "workload",
+      "title": "Simple article page",
+      "summary": "A local page with text and 10 images, no scripts. Used for idle tests and as the startup page. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-startup",
+        "exp-navigation",
+        "exp-energy",
+        "exp-security-overhead",
+        "exp-isolation-overhead"
+      ]
+    },
+    {
+      "id": "wl-video-playback",
+      "kind": "workload",
+      "title": "Video playback",
+      "summary": "A home-made 1080p, 30 fps test video played for 2 minutes. No third-party content. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "comp-app-shell",
+      "kind": "component",
+      "title": "Browser controls",
+      "summary": "The window you use: address bar, tabs, back, forward, reload and settings. Trusted (our code): a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
+      "status": "Planned",
+      "related": [
+        "layer-controls"
+      ]
+    },
+    {
+      "id": "comp-baseline-app",
+      "kind": "component",
+      "title": "Plain Tauri app (comparison point)",
+      "summary": "The simplest Tauri app that shows one web page, with no Ferrum features. Trusted; not shipped. Comparing with it separates Ferrum's own cost or savings from the cost of Tauri and WebView2.",
+      "status": "Planned",
+      "related": []
+    },
+    {
+      "id": "comp-benchmark-harness",
+      "kind": "component",
+      "title": "Benchmark harness",
+      "summary": "Starts each browser fresh, runs the same scripted workloads many times in random order, and measures from outside so every browser is measured the same way. Trusted; not shipped. Risk: proving Ferrum's helper processes are counted fairly; not checked yet (checked in P6).",
+      "status": "Planned",
+      "related": []
+    },
+    {
+      "id": "comp-competitor-browsers",
+      "kind": "component",
+      "title": "Chrome and Edge",
+      "summary": "The browsers Ferrum is compared with. Not ours. Run with their normal resource-saving features on, never switched off to favour Ferrum; their settings are recorded in every trial.",
+      "status": "Planned",
+      "related": []
+    },
+    {
+      "id": "comp-core",
+      "kind": "component",
+      "title": "Core library",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats. Trusted. It calls nothing itself; everything else depends on it.",
+      "status": "Planned",
+      "related": [
+        "layer-base"
+      ]
+    },
+    {
+      "id": "comp-interactive-plan",
+      "kind": "component",
+      "title": "Plan portal (this site)",
+      "summary": "The site you are reading. A planning tool, not part of Ferrum. Being rebuilt as a read-only portal that shows Claude's plain-language summaries; you approve things in Claude Code.",
+      "status": "Built; being rebuilt",
+      "related": []
+    },
+    {
+      "id": "comp-network-logger",
+      "kind": "component",
+      "title": "Measurement: network log",
+      "summary": "Writes every tab's network calls to a folder you can review: address, status, timing and size. Never headers, cookies or page content. Trusted. Its cost in speed and memory is not measured yet (measured in P5).",
+      "status": "Planned",
+      "related": [
+        "layer-engine"
+      ]
+    },
+    {
+      "id": "comp-research-analysis",
+      "kind": "component",
+      "title": "Statistics and figures",
+      "summary": "Python scripts that turn archived raw results into statistics, charts and reports for the paper. Trusted; not shipped. They read only archived runs, so every figure traces back to its data.",
+      "status": "Planned",
+      "related": []
+    },
+    {
+      "id": "comp-resource-manager",
+      "kind": "component",
+      "title": "Tab sleeping",
+      "summary": "Watches idle tabs and memory, then hides, pauses or unloads idle tabs and restores them when needed. Trusted. Four policies to compare: none, fixed idle time, memory pressure, adaptive. Never unloads the tab you are using. Risk: unloading could lose what you typed. Before P7, background tabs are only hidden.",
+      "status": "Planned",
+      "related": [
+        "layer-engine"
+      ]
+    },
+    {
+      "id": "comp-security-engine",
+      "kind": "component",
+      "title": "Security policy",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure and logs every refusal. Pure rules with no browser inside, so each rule can be tested on its own. Basic rules in P2, the full engine in P4.",
+      "status": "Planned",
+      "related": [
+        "layer-engine"
+      ]
+    },
+    {
+      "id": "comp-tab-content",
+      "kind": "component",
+      "title": "Websites in tabs",
+      "summary": "Any website you open, each in its own view. Untrusted: treated as the attacker and sandboxed. It can send messages to the app, but every command is refused, so it cannot reach Ferrum's own functions.",
+      "status": "Planned",
+      "related": [
+        "layer-websites"
+      ]
+    },
+    {
+      "id": "comp-telemetry",
+      "kind": "component",
+      "title": "Measurement: memory, CPU and timings",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and every tab sleep or wake, then exports data files. Trusted. A cross-check only: the official cross-browser numbers come from the benchmark harness. Risk: counting exactly the right processes.",
+      "status": "Planned",
+      "related": [
+        "layer-engine"
+      ]
+    },
+    {
+      "id": "comp-webview-manager",
+      "kind": "component",
+      "title": "Tab & view manager",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation, sessions and downloads. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Risk: some needed features exist only at that level; not checked yet (checked in P1 and P4).",
+      "status": "Planned",
+      "related": [
+        "layer-engine"
+      ]
+    },
+    {
+      "id": "comp-webview2-runtime",
+      "kind": "component",
+      "title": "Microsoft WebView2",
+      "summary": "Microsoft's Chromium engine (the same one inside Edge), already installed on Windows. It draws every website and the browser controls. Not ours. Ferrum relies on its sandbox; that it protects as well as Chrome's is assumed, not checked yet (checked in P4).",
+      "status": "Planned",
+      "related": [
+        "layer-webview2"
+      ]
+    },
+    {
+      "id": "comp-windows-os",
+      "kind": "component",
+      "title": "Windows 11",
+      "summary": "The operating system. Not ours. Gives memory and CPU readings per process, groups a test's processes for counting, and opens outside links in other apps. Which Windows low-memory signal to use is decided in P7.",
+      "status": "Planned",
+      "related": [
+        "layer-windows"
+      ]
+    },
+    {
+      "id": "layer-base",
+      "kind": "layer",
+      "title": "Shared base",
+      "summary": "Settings, ids and record formats used by every engine part.",
+      "status": null,
+      "related": [
+        "comp-core"
+      ]
+    },
+    {
+      "id": "layer-controls",
+      "kind": "layer",
+      "title": "What you see: browser controls",
+      "summary": "Address bar, tabs and buttons. Our code.",
+      "status": null,
+      "related": [
+        "comp-app-shell"
+      ]
+    },
+    {
+      "id": "layer-engine",
+      "kind": "layer",
+      "title": "Ferrum engine",
+      "summary": "The new Rust code: manages tab views, applies the safety rules, puts idle tabs to sleep and measures.",
+      "status": null,
+      "related": [
+        "comp-webview-manager",
+        "comp-security-engine",
+        "comp-resource-manager",
+        "comp-telemetry",
+        "comp-network-logger"
+      ]
+    },
+    {
+      "id": "layer-websites",
+      "kind": "layer",
+      "title": "What you see: websites in tabs",
+      "summary": "The open web. Sandboxed, with no access to Ferrum's own functions.",
+      "status": null,
+      "related": [
+        "comp-tab-content"
+      ]
+    },
+    {
+      "id": "layer-webview2",
+      "kind": "layer",
+      "title": "Microsoft WebView2",
+      "summary": "The Chromium engine (same as Edge) that draws each website.",
+      "status": null,
+      "related": [
+        "comp-webview2-runtime"
+      ]
+    },
+    {
+      "id": "layer-windows",
+      "kind": "layer",
+      "title": "Windows 11",
+      "summary": "The operating system: process readings and links to other apps.",
+      "status": null,
+      "related": [
+        "comp-windows-os"
+      ]
+    },
+    {
+      "id": "application",
+      "kind": "group",
+      "title": "Application",
+      "summary": "What people use: the Ferrum app itself. The measurement parts sit here because they run inside the app; the benchmark uses their output.",
+      "status": null,
+      "related": [
+        "comp-app-shell",
+        "comp-tab-content",
+        "comp-webview-manager",
+        "comp-security-engine",
+        "comp-resource-manager",
+        "comp-telemetry",
+        "comp-network-logger",
+        "comp-core",
+        "comp-webview2-runtime",
+        "comp-windows-os"
+      ]
+    },
+    {
+      "id": "benchmark",
+      "kind": "group",
+      "title": "Benchmark",
+      "summary": "Runs the same workloads on Ferrum, Chrome, Edge and a plain Tauri app, many times, in random order.",
+      "status": null,
+      "related": [
+        "comp-benchmark-harness",
+        "comp-baseline-app",
+        "comp-competitor-browsers"
+      ]
+    },
+    {
+      "id": "planning",
+      "kind": "group",
+      "title": "Planning tooling",
+      "summary": "Tools for planning the project. Not part of Ferrum.",
+      "status": null,
+      "related": [
+        "comp-interactive-plan"
+      ]
+    },
+    {
+      "id": "research",
+      "kind": "group",
+      "title": "Research & analysis",
+      "summary": "Turns raw numbers into statistics, charts and the paper. No claims without data.",
+      "status": null,
+      "related": [
+        "comp-research-analysis"
+      ]
+    },
+    {
+      "id": "testing",
+      "kind": "group",
+      "title": "Testing & quality",
+      "summary": "Proves each feature works and stays working: unit, end-to-end and security tests, plus automatic checks on every change. No component of its own.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "Q-001",
+      "kind": "question",
+      "title": "Withdrawn duplicate: browser settings",
+      "summary": "Benchmark settings: vendor defaults, matched settings, or both? Withdrawn because it repeats [a later question](ref:Q-117); please answer that one.",
+      "status": "Withdrawn",
+      "related": []
+    },
+    {
+      "id": "Q-002",
+      "kind": "question",
+      "title": "Withdrawn duplicate: which Chrome to use",
+      "summary": "Chrome build for benchmarks: normal Chrome with updates blocked, or Chrome for Testing? Withdrawn because it repeats [a later question](ref:Q-118); please answer that one.",
+      "status": "Withdrawn",
+      "related": []
+    },
+    {
+      "id": "Q-003",
+      "kind": "question",
+      "title": "Withdrawn duplicate: which WebView2 version to use",
+      "summary": "WebView2 runtime for benchmarks: self-updating, fixed version, or both? Withdrawn because it repeats [a later question](ref:Q-119); please answer that one.",
+      "status": "Withdrawn",
+      "related": []
+    },
+    {
+      "id": "Q-004",
+      "kind": "question",
+      "title": "Handoff file naming fix",
+      "summary": "Do you accept the handoff file naming fix already made in the rule book? A small naming mismatch was fixed. Approving the rule book in the first wave closes this; nothing else waits on it.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "Q-005",
+      "kind": "question",
+      "title": "Confirm the non-goals?",
+      "summary": "Do you confirm the proposed non-goals (no extensions, no sync or accounts, Windows 11 only, not a full browser) and moving split view to after P8? These are not in your brief, so they need your word. They fix the scope; asked in the first wave, before P0 ends.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "Q-006",
+      "kind": "question",
+      "title": "Plan app writes approvals to the log?",
+      "summary": "May the plan app write approval entries into the wiki log? Answered 8 Oct: Yes. Later replaced: approvals are now given in Claude Code and recorded by Claude.",
+      "status": "Answered",
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-007",
+      "kind": "question",
+      "title": "'Reset to pending' button?",
+      "summary": "Should the plan app offer a 'reset to pending' button for approvals? Answered 8 Oct: No. Approval history only grows.",
+      "status": "Answered",
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-008",
+      "kind": "question",
+      "title": "Extra accessibility test library?",
+      "summary": "Should the plan app's tests also use the axe-core accessibility library? Optional; it would be added only with your consent. Nothing waits on it.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "Q-101",
+      "kind": "question",
+      "title": "When the plan app is built",
+      "summary": "When is the plan app built? Answered 8 Oct: First, in P0. Your words: 'First the interactive plan comes together. I then approve everything else.'",
+      "status": "Answered",
+      "related": []
+    },
+    {
+      "id": "Q-102",
+      "kind": "question",
+      "title": "Node version",
+      "summary": "Which Node.js version should the plan app use? Answered 8 Oct: Stay on Node 24 for now; consider 26 later through its own decision. Node 24.20.0 is installed.",
+      "status": "Answered",
+      "related": []
+    },
+    {
+      "id": "Q-103",
+      "kind": "question",
+      "title": "Diagram library version",
+      "summary": "Should the plan app use diagram library Mermaid 12 or the older 11.17.2? Answered 8 Oct: Mermaid 12, pinned exactly; fall back to 11.17.2 if drawing breaks.",
+      "status": "Answered",
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-104",
+      "kind": "question",
+      "title": "Local commits?",
+      "summary": "May Claude make local git commits, starting in P0? Answered 8 Oct: Yes, from P0: one local commit per checked task; never upload (push).",
+      "status": "Answered",
+      "related": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "Q-105",
+      "kind": "question",
+      "title": "GitHub repository details",
+      "summary": "What name, visibility and timing do you want for the GitHub repository? Automatic checks on GitHub cannot run until it exists. Needed only for the P1 review.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "Q-106",
+      "kind": "question",
+      "title": "Approve the repository layout?",
+      "summary": "Do you approve the repository layout: the repo root is the project root, one Rust workspace, plus the extra folders other areas proposed? P1 creates the project skeleton from this layout, so P1 cannot start without it.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "Q-107",
+      "kind": "question",
+      "title": "How to build per-site profiles?",
+      "summary": "How should Ferrum give each website its own WebView2 profile, given that Tauri cannot pass a profile name through yet? Per-site profiles are central to isolation. Recommended: wait for Tauri, else patch it; direct WebView2 calls only as a last resort. A P1 test informs it; P3 waits on it.",
+      "status": "Open",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "Q-108",
+      "kind": "question",
+      "title": "End review for P0 and P1 too?",
+      "summary": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases? Decides whether you formally review P0 and P1 before the next phase starts. Asked in the first wave, before P0 ends.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "Q-109",
+      "kind": "question",
+      "title": "Google sign-in hand-off",
+      "summary": "How should Ferrum hand Google sign-in over to your normal browser, since Google blocks sign-in inside embedded web views? A P2 task builds the sign-in detection, so P2 needs the expected behaviour.",
+      "status": "Open",
+      "related": [
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "Q-110",
+      "kind": "question",
+      "title": "Approve a direct WebView2 module?",
+      "summary": "Do you approve one deliberate, audited module that talks to WebView2 directly using unsafe Rust code? Several needed features are reachable only this way. The decision is part of P1 and P2, so both wait on it.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "Q-111",
+      "kind": "question",
+      "title": "What counts as one site?",
+      "summary": "Should a 'site' mean the registrable domain, the exact origin, or containers you define? Sets how finely websites are kept apart. P3 builds per-site settings on it.",
+      "status": "Open",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "Q-112",
+      "kind": "question",
+      "title": "What to do with http: addresses?",
+      "summary": "What exactly should happen with http: addresses: upgrade to HTTPS, and what if the upgrade fails? P4 sets the final web address rules; P2 ships a simple interim version.",
+      "status": "Open",
+      "related": [
+        "phase-p4-security"
+      ]
+    },
+    {
+      "id": "Q-113",
+      "kind": "question",
+      "title": "Default blocklist",
+      "summary": "What should the default blocklist contain, and where should it come from? P4 builds the security policy engine that uses it.",
+      "status": "Open",
+      "related": [
+        "phase-p4-security"
+      ]
+    },
+    {
+      "id": "Q-114",
+      "kind": "question",
+      "title": "Network log storage and privacy",
+      "summary": "Where should the network log live, how long is it kept, and should the query part of web addresses (which can hold tokens) be removed by default? Privacy of the local network log. P5 builds it. Recommended: remove query strings by default.",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "Q-115",
+      "kind": "question",
+      "title": "Replace 'time to interactive'?",
+      "summary": "May 'time to interactive' be replaced by first-paint and largest-paint timings plus long-frame data, since that measure is retired? Your brief asks for it, but it is now considered unreliable. P5 builds the startup timing.",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "Q-116",
+      "kind": "question",
+      "title": "Benchmark machine CPU and RAM",
+      "summary": "What is the exact CPU model and RAM of the benchmark machine? The CPU generation decides which energy counters work. The energy experiment in P6 waits on it.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-117",
+      "kind": "question",
+      "title": "As shipped, matched, or both?",
+      "summary": "Should benchmarks compare the browsers as shipped, with matched settings, or both? Chrome and Edge have power-saving features on by default. The framing must be fixed before any data. Recommended: both, with as-shipped as the headline.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-118",
+      "kind": "question",
+      "title": "Normal Chrome or Chrome for Testing?",
+      "summary": "Should benchmarks use normal Chrome (updates paused) or the special Chrome for Testing build? Normal Chrome is what people use; the test build is easier to repeat. Recommended: normal Chrome and Edge, versions recorded.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-119",
+      "kind": "question",
+      "title": "Which WebView2 runtime?",
+      "summary": "Should benchmarks use the self-updating WebView2 runtime, a fixed version, or both? Affects how repeatable results are. Recommended: self-updating for the headline results, fixed version as a separate setup.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-120",
+      "kind": "question",
+      "title": "Public websites for extra tests",
+      "summary": "Which public websites should the extra real-world tests use? Recommended: Claude proposes a shortlist in P6 and you pick 5 to 8, no logins. Their results stay separate from local test pages.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-121",
+      "kind": "question",
+      "title": "Python tool for analysis",
+      "summary": "Which Python environment tool should the analysis use? Fixes how others can rerun the analysis. Proposed: a standard virtual environment with exact versions.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-122",
+      "kind": "question",
+      "title": "Wall-power meter available?",
+      "summary": "Do you have a wall-power meter? Without one, energy is only estimated from CPU counters or marked unsupported. The energy experiment waits on it.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-123",
+      "kind": "question",
+      "title": "Approve energy driver?",
+      "summary": "Do you approve installing the PawnIO kernel driver and running an energy sampler with admin rights? Needed for CPU energy readings. No kernel driver is installed without your approval.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-124",
+      "kind": "question",
+      "title": "Paper venue",
+      "summary": "Which venue should the paper target? Not needed until results exist. The paper phase waits on it.",
+      "status": "Open",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "Q-201",
+      "kind": "question",
+      "title": "Thresholds and score weights",
+      "summary": "Do you approve the proposed 'meaningful difference' thresholds and the weights of the combined score? Both must be fixed before data is collected in P6 and before the tab-sleeping settings are frozen in P7.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "Q-202",
+      "kind": "question",
+      "title": "HTTPS for local test pages?",
+      "summary": "For local test pages: install a local development certificate (HTTPS), allow plain HTTP on this PC for tests only, or use public HTTPS sites? Every option touches security. The P2 test server needs it, and P4 sets the final web address rules around it. Recommended: local certificate plus a few public HTTPS sites.",
+      "status": "Open",
+      "related": [
+        "phase-p2-minimal-container",
+        "phase-p4-security"
+      ]
+    },
+    {
+      "id": "Q-203",
+      "kind": "question",
+      "title": "Where benchmark data lives",
+      "summary": "Where should raw benchmark data be stored, and how should very large files be handled? P5 is the first phase that can produce run data. Large files may need to live outside git, with only their fingerprints kept.",
+      "status": "Open",
+      "related": [
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "Q-204",
+      "kind": "question",
+      "title": "One campaign or one per phase?",
+      "summary": "Should all main experiments run in one campaign with fixed versions, or each in the phase that builds it? Affects how comparable the results are, and the schedule.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-205",
+      "kind": "question",
+      "title": "Fewer reliability trials?",
+      "summary": "Will you accept 10 trials per setup for the long reliability test instead of 30? Each run is planned at about 2 hours (an estimate, not measured). Fewer trials would be a recorded change from your brief.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-206",
+      "kind": "question",
+      "title": "Merge related-work sections?",
+      "summary": "Should the two related-work sections in your paper outline be merged into one? Your brief lists both. Settles the paper outline.",
+      "status": "Open",
+      "related": [
+        "phase-p8-research-paper"
+      ]
+    },
+    {
+      "id": "Q-207",
+      "kind": "question",
+      "title": "Overview pages in research and risks folders?",
+      "summary": "May the rule book allow overview pages inside the research and risks folders (fix already applied), instead of moving those pages? Every phase start needs the rule book approved. Approving it accepts this fix and closes the question; rejecting it means the pages move.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "Q-208",
+      "kind": "question",
+      "title": "Re-run Ferrum with tab sleeping everywhere?",
+      "summary": "Should Ferrum with smart tab sleeping be re-run through the other main experiments in P7, or reported only in its own experiment? Your brief compares it with every other setup. Recommended: re-run, if time allows.",
+      "status": "Open",
+      "related": [
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "Q-209",
+      "kind": "question",
+      "title": "Tab moving to another site",
+      "summary": "When a tab moves to another site, should Ferrum move it to that site's profile (losing back/forward history), keep the old profile, or block it? A trade-off between isolation and convenience; it matters only if per-site profiles are used. Recommended: move it and tell the user.",
+      "status": "Open",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "Q-210",
+      "kind": "question",
+      "title": "Test tools for the plan app",
+      "summary": "May the plan app's tests use a coverage tool and download a test browser? Answered 8 Oct: Yes to both.",
+      "status": "Answered",
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-211",
+      "kind": "question",
+      "title": "Where else may unsafe code live?",
+      "summary": "May unsafe code also live in two Windows helper modules for process measurement, each with its own safety notes, or should it all go in one Windows module? Measurement needs low-level Windows calls. This extends the unsafe-code decision that P1 and P2 wait on. Recommended: two extra modules.",
+      "status": "Open",
+      "related": [
+        "phase-p1-foundation",
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "Q-212",
+      "kind": "question",
+      "title": "Run-time switches or build options?",
+      "summary": "Is it OK to switch security, isolation and tab-sleeping options at run time on one identical program, with two build-time exceptions? Your brief asks for 'feature flags'; this is Claude's reading of it. It shapes how P4 and P7 are built and benchmarked.",
+      "status": "Open",
+      "related": [
+        "phase-p4-security",
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "Q-213",
+      "kind": "question",
+      "title": "Extra baseline app variant?",
+      "summary": "Should there be an extra baseline app with a shell plus one web view? It separates the cost of Ferrum's shell from the cost of Ferrum's own logic. Recommended: yes, as a labelled extra setup.",
+      "status": "Open",
+      "related": [
+        "phase-p6-benchmark-harness"
+      ]
+    },
+    {
+      "id": "Q-214",
+      "kind": "question",
+      "title": "Settings file: TOML or JSON?",
+      "summary": "Should Ferrum's settings file use the TOML or the JSON format (two common text formats for settings)? P2 creates the settings file. Recommended: TOML.",
+      "status": "Open",
+      "related": [
+        "phase-p2-minimal-container"
+      ]
+    },
+    {
+      "id": "Q-215",
+      "kind": "question",
+      "title": "Second machine for a repeat run?",
+      "summary": "Is a second machine available for a repeat run? Without one, the paper states the single-machine limit. Nothing waits on it.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "Q-216",
+      "kind": "question",
+      "title": "Where the backup checks live",
+      "summary": "Should the backup wiki check scripts be committed in the tools folder? Answered 8 Oct: Yes, commit them under tools. The app's checker stays the main one; the Python scripts are a backup that needs no Node.",
+      "status": "Answered",
+      "related": []
+    },
+    {
+      "id": "Q-217",
+      "kind": "question",
+      "title": "Research id names",
+      "summary": "Do you accept the research ids written as 'hyp' and 'metric' instead of your brief's 'h' and 'm'? Follows the wiki's id rules. Only matters for the P8 review.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "Q-218",
+      "kind": "question",
+      "title": "Who runs installs?",
+      "summary": "Who runs tool installs, now that you said 'feel free to run install'? Answered 8 Oct: Claude runs all tool installs, including the C++ build tools; you click the admin prompts. Kernel drivers still need your separate approval.",
+      "status": "Answered",
+      "related": [
+        "phase-p1-foundation"
+      ]
+    },
+    {
+      "id": "Q-219",
+      "kind": "question",
+      "title": "Index of evidence files",
+      "summary": "How should the index list evidence files whose names have capital letters? Answered 8 Oct: List folders, not files. This also scales to benchmark results later.",
+      "status": "Answered",
+      "related": []
+    },
+    {
+      "id": "Q-220",
+      "kind": "question",
+      "title": "Format of page sources",
+      "summary": "May a page's sources be any wiki file or web link? Answered 9 Oct: Yes: you accepted all proposed fixes. Any wiki file or https link is allowed; missing targets are flagged; raw research notes are exempt.",
+      "status": "Answered",
+      "related": []
+    },
+    {
+      "id": "Q-221",
+      "kind": "question",
+      "title": "Rewrite history before first upload?",
+      "summary": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path? Old commits still hold the values masked on 9 Oct. A rewrite changes every commit id, so it must happen before any upload. It holds the first upload only.",
+      "status": "Open",
+      "related": []
+    },
+    {
+      "id": "04b27b9",
+      "kind": "commit",
+      "title": "Commit: You answered the first questions and approved building the plan app",
+      "summary": "Your first answers saved; whole-wiki check and raw-file fingerprints.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "0e5282e",
+      "kind": "commit",
+      "title": "Commit: Accessibility, security and speed checked; full test run green",
+      "summary": "Accessibility, security and speed checks.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "19b5a95",
+      "kind": "commit",
+      "title": "Commit: Wiki checker built into the app: 0 errors on the real wiki",
+      "summary": "The app's own wiki checker.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "1cfc2d5",
+      "kind": "commit",
+      "title": "Commit: Tool versions recorded; build paused on a naming question",
+      "summary": "Tool versions recorded (Node 24.20.0); version check passed.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "2c997fa",
+      "kind": "commit",
+      "title": "Commit: Plan app started; three risky ideas tested and passed",
+      "summary": "Plan app created with pinned packages; three risky ideas tested.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "3eaa641",
+      "kind": "commit",
+      "title": "Commit: Architecture graph labels fixed; small clean-ups",
+      "summary": "Architecture graph labels no longer overlap.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "496f69d",
+      "kind": "commit",
+      "title": "Commit: Project started: your brief and first answers saved",
+      "summary": "First commit: the planning wiki, rule book and your raw sources.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "4fa5ea5",
+      "kind": "commit",
+      "title": "Commit: Architecture, roadmap, decisions, risks and research screens built",
+      "summary": "Architecture, roadmap, decisions, risks and research screens.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "5536d5f",
+      "kind": "commit",
+      "title": "Commit: Change detection built: every page gets a fingerprint",
+      "summary": "Change detection: a fingerprint for every page.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "5d33859",
+      "kind": "commit",
+      "title": "Commit: Portal v2 rules written; real machine details masked",
+      "summary": "Portal v2 rules, masking of real machine details, approval recorder.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "6118d32",
+      "kind": "commit",
+      "title": "Commit: Plan app v1 finished and handed off",
+      "summary": "Plan app v1 guide, final check and handoff.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "6a78a78",
+      "kind": "commit",
+      "title": "Commit: Independent review: 26 findings, 25 fixed",
+      "summary": "Fixes for 25 review findings.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "6cc1a07",
+      "kind": "commit",
+      "title": "Commit: Approval store built and stress-tested",
+      "summary": "Approval store, safe under many writers.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "8d89329",
+      "kind": "commit",
+      "title": "Commit: Wiki-to-portal pipeline built (its automatic check is off for now)",
+      "summary": "The wiki-to-portal pipeline (automatic check off).",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "a462a9f",
+      "kind": "commit",
+      "title": "Commit: Dashboard, approvals inbox and phase pages built",
+      "summary": "Dashboard, approvals inbox and phase pages.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "a68667b",
+      "kind": "commit",
+      "title": "Commit: You settled installs, the index and the check scripts",
+      "summary": "Your answers on installs, index and check scripts applied; backup check scripts added.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "a78f1e3",
+      "kind": "commit",
+      "title": "Commit: You reviewed plan app v1 and chose the portal v2 design",
+      "summary": "Your design decisions for portal v2, saved word for word.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "ac54768",
+      "kind": "commit",
+      "title": "Commit: You delegated technical choices; wiki reader finished",
+      "summary": "Your technical answers applied; wiki reader finished.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "ad521cc",
+      "kind": "commit",
+      "title": "Commit: App frame, wiki browser, search and log screens built",
+      "summary": "App frame, wiki browser, search and log screens.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "ov-research-fairness-protocol",
+      "kind": "page",
+      "title": "Fairness rules for the comparison",
+      "summary": "Chrome and Edge run as shipped, with their own memory savers on (savers-off runs are a labelled side analysis). Every product gets the same pages, window, network, fresh profile and test robot. Security is never weakened to win, and a browser update mid-round voids that round.",
+      "status": "Draft",
+      "related": [
+        "ov-research-plan",
+        "ov-research-threats-to-validity"
+      ]
+    },
+    {
+      "id": "ov-research-objective-function",
+      "kind": "page",
+      "title": "How the overall score J is built",
+      "summary": "Memory, energy and tab wake-up time are each divided by Ferrum-with-no-sleeping and added with fixed weights; lower is better. Weights are chosen before the real data and never fitted to make a policy win. Adding scores this way is a standard method, not our invention.",
+      "status": "Draft",
+      "related": [
+        "metric-objective-j",
+        "hyp-09",
+        "exp-lifecycle-policies"
+      ]
+    },
+    {
+      "id": "ov-research-plan",
+      "kind": "page",
+      "title": "Research promises (no invented results)",
+      "summary": "No number is reported unless it links to saved raw data. Every run is kept, failed ones too: nothing is cherry-picked. Hypotheses, thresholds and analysis are frozen before real data; anything decided later is labelled exploratory, and energy that fails its checks is 'not measurable', never estimated.",
+      "status": "Draft",
+      "related": [
+        "ov-research-fairness-protocol",
+        "ov-research-threats-to-validity",
+        "ov-research-objective-function"
+      ]
+    },
+    {
+      "id": "ov-research-threats-to-validity",
+      "kind": "page",
+      "title": "What could fool us (top 5 threats)",
+      "summary": "1) One machine, an AMD desktop: results may not carry over. 2) Our memory measure is not what a user feels. 3) The AMD energy counter is a model, not a meter. 4) Test pages and tab switches are synthetic. 5) The test robot's connection may itself cost resources; we measure that.",
+      "status": "Draft",
+      "related": [
+        "ov-research-fairness-protocol",
+        "ov-research-plan"
+      ]
+    }
+  ]
+}

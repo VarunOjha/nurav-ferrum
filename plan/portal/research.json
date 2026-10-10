@@ -1,0 +1,1179 @@
+{
+  "id": "research",
+  "title": "Research",
+  "summary": "Core question: does Ferrum use less memory, CPU and energy than Chrome and Edge for the same work without being slower or less reliable, and does smart tab sleeping help? Nothing measured yet. See our [promises](ref:ov-research-plan), [fairness rules](ref:ov-research-fairness-protocol) and [what could fool us](ref:ov-research-threats-to-validity).",
+  "questions": [
+    {
+      "id": "rq-01",
+      "title": "Memory and CPU versus browsers",
+      "summary": "We count only the processes each product starts itself, so nothing is missed or counted twice.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-01",
+        "hyp-02",
+        "hyp-03",
+        "exp-baseline-footprint"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/questions/rq-01-resource-footprint.md",
+        "content_hash": "sha256:4c3955c53ab713549183b9dc71eb4f41b895a8f4963832d6c782b0792d5551bc"
+      },
+      "question": "Does Ferrum, with no tab sleeping, use less memory and CPU than Chrome, Edge and a bare-bones Tauri app on the same test pages?"
+    },
+    {
+      "id": "rq-02",
+      "title": "Speed: startup, page loads, smoothness",
+      "summary": "Ferrum puts each tab in its own embedded web view and checks every navigation, which could add delay.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-04",
+        "hyp-05",
+        "hyp-06",
+        "exp-startup",
+        "exp-navigation",
+        "exp-rendering"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/questions/rq-02-responsiveness.md",
+        "content_hash": "sha256:b4ed050ee0175907396fc9e5ff7f63724e6dc598b5c1591f069c15dcd025aaa3"
+      },
+      "question": "Does showing websites inside Ferrum make startup, page loads or scrolling slower than in Chrome, Edge or the bare-bones app?"
+    },
+    {
+      "id": "rq-03",
+      "title": "Energy use",
+      "summary": "The AMD chip's energy counter is a model, not a meter. If it fails our checks, energy is reported as not measurable, never guessed.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-07",
+        "exp-energy"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/questions/rq-03-energy.md",
+        "content_hash": "sha256:295c9dacef3b2cb52d4646ff866da7d5e3e595b9d73fd253307949f54e824868"
+      },
+      "question": "Can we measure energy honestly on this AMD desktop and, if so, does Ferrum use less energy per task than Chrome and Edge?"
+    },
+    {
+      "id": "rq-04",
+      "title": "Smart tab sleeping (the central question)",
+      "summary": "Tab sleeping means pausing or unloading tabs you are not using. Scored with the overall score J. Similar ideas exist, so nothing is claimed as new before the literature review.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-08",
+        "hyp-09",
+        "hyp-10",
+        "hyp-11",
+        "exp-lifecycle-policies",
+        "metric-objective-j"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/questions/rq-04-lifecycle-policies.md",
+        "content_hash": "sha256:182a33f4a1772a3b99284bd7b29aeaba1be0b82def7c2fac6355c05fdc29a54d"
+      },
+      "question": "Does a smart tab-sleeping policy balance memory, energy and tab wake-up time better than no sleeping or a simple timer, without ever unloading a tab it must keep?"
+    },
+    {
+      "id": "rq-05",
+      "title": "Cost of the security checks",
+      "summary": "The checks-off build exists only for this test and is never shipped. Whether the checks work is tested separately.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-12",
+        "exp-security-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/questions/rq-05-security-overhead.md",
+        "content_hash": "sha256:0abb67115309189314bd23d492141fb7d5fc23e4103d9c3aa337bf7d9ab4f442"
+      },
+      "question": "How much delay and memory do Ferrum's site-blocking and permission checks add, compared with the same build with the checks switched off?"
+    },
+    {
+      "id": "rq-06",
+      "title": "Cost of keeping sites apart",
+      "summary": "Alternatives: one shared profile, or one data folder per site. We must list exactly what stays shared. It depends on per-site profiles working in Ferrum (an open risk).",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-13",
+        "exp-isolation-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/questions/rq-06-isolation.md",
+        "content_hash": "sha256:c3b388d23d194b6537332411bf403488cc83d9bb5c06c956abe251cdc0d713a8"
+      },
+      "question": "With one WebView2 profile per site, what is still shared, and how much extra memory and processes does it cost versus the alternatives?"
+    },
+    {
+      "id": "rq-07",
+      "title": "Reliability over long use",
+      "summary": "Covers memory creep over long runs, crashes, crash recovery and session restore.",
+      "status": "Open, no data yet",
+      "related": [
+        "hyp-14",
+        "hyp-15",
+        "exp-reliability"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/questions/rq-07-reliability.md",
+        "content_hash": "sha256:3ea1ede1a9b7faeb5e48f25c7ff629340b6648fcde48a45d95460af6b141a23c"
+      },
+      "question": "Does Ferrum stay as stable as Chrome and Edge over hours of use, and does it restore sessions and recover from tab crashes and network drops?"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "hyp-01",
+      "title": "Ferrum uses less memory than Chrome and Edge",
+      "summary": "Counts as a real win only if the gap is at least 10% (proposed). Memory means private memory, added up over all the product's processes.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-01",
+        "exp-baseline-footprint",
+        "metric-tree-private-commit",
+        "metric-tree-private-working-set",
+        "metric-process-count"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-01-idle-memory-vs-browsers.md",
+        "content_hash": "sha256:c17598d8b819e55e29f297c7121a1a94886ef3d413b4ef1252ead657d7f3aa78"
+      },
+      "prediction": "We expect Ferrum (no tab sleeping) to use less memory than Chrome and Edge as shipped, on an idle page and on 4 active tabs; we would be wrong if its typical use is equal or higher."
+    },
+    {
+      "id": "hyp-02",
+      "title": "Ferrum adds little on top of a bare-bones Tauri app",
+      "summary": "A 'not worse than' test with a 20% margin (proposed), judged on the cautious end of the 95% confidence range.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-01",
+        "exp-baseline-footprint",
+        "metric-tree-private-commit",
+        "metric-tree-cpu-time"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-02-overhead-vs-tauri-baseline.md",
+        "content_hash": "sha256:abd53a88e4b0ceb35fea2ff4693b61c3c38ca24a217c177d6eaac96ae1ee240b"
+      },
+      "prediction": "We expect Ferrum's idle memory to be less than 20% above a bare-bones Tauri app showing the same page; we would be wrong if the extra could be 20% or more."
+    },
+    {
+      "id": "hyp-03",
+      "title": "Without tab sleeping, Ferrum burns more background CPU",
+      "summary": "Chrome and Edge freeze or sleep background tabs by default; Ferrum without sleeping does not. Counts at a 10% gap (proposed). This motivates the tab-sleeping work.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-01",
+        "exp-baseline-footprint",
+        "metric-tree-cpu-time",
+        "metric-tree-cpu-cycles"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-03-background-cpu-without-lifecycle.md",
+        "content_hash": "sha256:81385c9f554cf100fa98938f5f5c88ede4c58eb5fab47438a44d03fa104262ff"
+      },
+      "prediction": "We expect Ferrum without tab sleeping to use more CPU per minute on 20 background tabs than Chrome and Edge; we would be wrong if it uses the same or less."
+    },
+    {
+      "id": "hyp-04",
+      "title": "Ferrum opens its window faster",
+      "summary": "Counts if at least 10% and 50 ms faster (proposed). Edge's pre-launch 'Startup Boost' is switched off so the race is fair.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-02",
+        "exp-startup",
+        "metric-startup-window-visible",
+        "metric-startup-fcp",
+        "metric-startup-lcp"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-04-startup-window-visible.md",
+        "content_hash": "sha256:8a4e367fc321cda81fcca706d3ae2865c959c99c8f7f76bf6b1d960a4fb1d247"
+      },
+      "prediction": "We expect Ferrum's first window to appear sooner than Chrome's and Edge's on a fresh start; we would be wrong if it is the same or slower."
+    },
+    {
+      "id": "hyp-05",
+      "title": "Page loads are not slower",
+      "summary": "Seven kinds: same site, other origin, other site, redirects, back/forward, cached and uncached. A 'not worse than' test with a 10% margin (proposed).",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-02",
+        "exp-navigation",
+        "metric-nav-latency",
+        "metric-nav-failure-rate"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-05-navigation-non-inferiority.md",
+        "content_hash": "sha256:f02bfd9ca5b58ed3db5d317034c03014ec611499b0e6d35f35468c1026376a0b"
+      },
+      "prediction": "We expect Ferrum's page-load time to stay within 10% of Chrome and Edge for every kind of navigation; we would be wrong if it is 10% or more slower for any one kind."
+    },
+    {
+      "id": "hyp-06",
+      "title": "Scrolling and animation are as smooth",
+      "summary": "Margins (proposed): slow frames at most 10% slower; missed frames at most 1 percentage point more. An embedded web view may draw frames differently; we record that.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-02",
+        "exp-rendering",
+        "metric-frame-interval",
+        "metric-frame-miss-rate",
+        "metric-canvas-throughput",
+        "metric-loaf-blocking"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-06-rendering-non-inferiority.md",
+        "content_hash": "sha256:79840ce757a4774ebb0910af4998ada2bf41c926bca2fcbb18aaab0bdf960159"
+      },
+      "prediction": "We expect Ferrum's frame timing and missed frames while scrolling and animating to stay within the margins of Chrome and Edge; we would be wrong if either is worse by the margin or more."
+    },
+    {
+      "id": "hyp-07",
+      "title": "Ferrum uses less energy per task (if measurable)",
+      "summary": "Tested only if an energy reading passes its checks; otherwise withdrawn, never guessed. Counts at a 10% gap (proposed). Chip readings are labelled as estimates.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-03",
+        "exp-energy",
+        "metric-cpu-package-energy",
+        "metric-wall-energy",
+        "metric-tree-cpu-time"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-07-energy-per-workload.md",
+        "content_hash": "sha256:905680259b28bd801793d233b5d5ecb057c4d2cbc372b4db3a527096e865e7c4"
+      },
+      "prediction": "We expect Ferrum to use less energy than Chrome and Edge for an idle page and for video playback; we would be wrong if it uses the same or more."
+    },
+    {
+      "id": "hyp-08",
+      "title": "Smart sleeping saves memory",
+      "summary": "Counts if at least 15% lower (proposed). WebView2's own memory-saving calls are best effort, so how much they free is not known yet (checked in P7).",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-04",
+        "exp-lifecycle-policies",
+        "metric-tree-private-commit",
+        "metric-lifecycle-transitions"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-08-adaptive-reduces-memory.md",
+        "content_hash": "sha256:0e3c5461797432593647fb725eb46acf438939c838f4c214d81707d59c8dbb1f"
+      },
+      "prediction": "We expect the smart policy to use less memory on 20 background tabs than no sleeping; we would be wrong if memory is the same or higher."
+    },
+    {
+      "id": "hyp-09",
+      "title": "Smart sleeping gets the best overall score",
+      "summary": "Compared with the timer policy and the memory-pressure policy. Counts at a score gap of 0.05 or more (proposed); no sleeping scores exactly 1.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-04",
+        "exp-lifecycle-policies",
+        "metric-objective-j",
+        "metric-tree-private-commit",
+        "metric-restore-latency",
+        "metric-cpu-package-energy",
+        "metric-wall-energy"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-09-adaptive-lowest-objective.md",
+        "content_hash": "sha256:410766d14aec808daf20ad23105b2775af7590370d41d40c70f3334ea1e58247"
+      },
+      "prediction": "We expect the smart policy to get the lowest score J on both tab-sleeping workloads, and to win for at least two thirds of weight choices; we would be wrong if a simpler policy ties or beats it."
+    },
+    {
+      "id": "hyp-10",
+      "title": "Smart sleeping wakes tabs faster than a timer",
+      "summary": "Counts if at least 20% faster (proposed). Wake-up time runs from switching to a background tab until its page is ready.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-04",
+        "exp-lifecycle-policies",
+        "metric-restore-latency",
+        "metric-lifecycle-transitions"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-10-adaptive-restore-latency.md",
+        "content_hash": "sha256:2cfa5b5cae75e2e733e77ec66a4cd1857503b382208ab0e1dade297ffadf0e05"
+      },
+      "prediction": "We expect the slowest 5% of tab wake-ups to be faster under the smart policy than under the fixed timer; we would be wrong if they are the same or slower."
+    },
+    {
+      "id": "hyp-11",
+      "title": "No policy ever unloads a protected tab",
+      "summary": "Zero tolerance across every real run of all three sleeping policies. We also report the statistical upper limit on how often it could happen.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-04",
+        "exp-lifecycle-policies",
+        "metric-safety-violations"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-11-lifecycle-safety.md",
+        "content_hash": "sha256:b3d4c566f3313d963c8831c6034e3739d1b9d1baa823bd6a4864c3702dcbbd14"
+      },
+      "prediction": "We expect zero cases of a tab being unloaded while it plays media, downloads, holds an unsaved form or is excluded by you; we would be wrong if even one happens."
+    },
+    {
+      "id": "hyp-12",
+      "title": "Security checks cost almost nothing",
+      "summary": "Only allowed pages are compared for speed, because blocked pages have no counterpart in the checks-off build. Limits are proposed.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-05",
+        "exp-security-overhead",
+        "metric-policy-eval-latency",
+        "metric-nav-latency",
+        "metric-tree-private-commit"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-12-security-overhead-small.md",
+        "content_hash": "sha256:fbd47cbd1d36c0c5dc0b4652cc11e602e1905016a18f58614dcc9cd4367cba0e"
+      },
+      "prediction": "We expect each security decision to take under 1 ms (95% of the time), and page loads and memory to be at most 5% above a checks-off build; we would be wrong if any limit is broken."
+    },
+    {
+      "id": "hyp-13",
+      "title": "Per-site profiles are cheaper than per-site data folders",
+      "summary": "Measured with 1, 2, 4 and 8 sites. Counts at a 10% difference (proposed). Withdrawn if per-site profiles cannot be built.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-06",
+        "exp-isolation-overhead",
+        "metric-tree-private-commit",
+        "metric-process-count"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-13-profiles-cheaper-than-udfs.md",
+        "content_hash": "sha256:bb944beb3f113cd5e659988d3da8f4d9b045c38e4b32327d7f412747f7820162"
+      },
+      "prediction": "We expect each extra site to add less memory with one profile per site than with one data folder per site; we would be wrong if it adds the same or more."
+    },
+    {
+      "id": "hyp-14",
+      "title": "Memory does not creep up over long sessions",
+      "summary": "A 'not worse than' test with a 10 MiB/h margin (proposed). Each run lasts about 2 hours.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-07",
+        "exp-reliability",
+        "metric-memory-growth-slope",
+        "metric-crash-count",
+        "metric-nav-failure-rate"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-14-memory-growth-non-inferior.md",
+        "content_hash": "sha256:d87907fc621712dfdce75b1d59b909282681acc2711ba65c6c33ad1b068428af"
+      },
+      "prediction": "We expect Ferrum's memory growth during a long browsing run to be within 10 MiB per hour of Chrome and Edge; we would be wrong if it grows that much faster or more."
+    },
+    {
+      "id": "hyp-15",
+      "title": "Sessions restore and crashes recover",
+      "summary": "The 95% bar and the time limit are proposed. Crashes are forced only on harmless local test pages.",
+      "status": "Draft, not tested",
+      "related": [
+        "rq-07",
+        "exp-reliability",
+        "metric-restore-success-rate",
+        "metric-recovery-time",
+        "metric-crash-count"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/hypotheses/hyp-15-restore-and-recovery.md",
+        "content_hash": "sha256:4c7fb515c56080a56d4cb9578acc81102dcf8cd7ed7dba5f9a14ffd0a9b3d80c"
+      },
+      "prediction": "We expect at least 95% of sessions to restore correctly (cautious end of the range) and every forced tab crash to recover in time; we would be wrong if either fails."
+    }
+  ],
+  "experiments": [
+    {
+      "id": "exp-baseline-footprint",
+      "title": "Memory and CPU footprint",
+      "summary": "Run: idle page, JavaScript app, huge page, 4 active tabs, 20 background tabs, a few public sites; 30+ rounds in random order. Compare: Chrome, Edge, bare-bones Tauri app, Ferrum with and without tab sleeping (savers-off Chrome and Edge only as a side analysis). Measure: private memory, process count, CPU time.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-01",
+        "hyp-02",
+        "hyp-03",
+        "wl-static-info",
+        "wl-spa-js-heavy",
+        "wl-large-dom",
+        "wl-multi-active",
+        "wl-many-background",
+        "wl-public-supplementary",
+        "metric-tree-private-commit",
+        "metric-tree-private-working-set",
+        "metric-tree-working-set",
+        "metric-peak-tree-private-commit",
+        "metric-process-count",
+        "metric-tree-cpu-time",
+        "metric-tree-cpu-cycles",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-baseline-footprint.md",
+        "content_hash": "sha256:6a701e3a3923c15a57eafe464272f06cf7ec80260d7beb6dcfa28fc0c405832d"
+      },
+      "phase": "phase-p6-benchmark-harness"
+    },
+    {
+      "id": "exp-startup",
+      "title": "Startup speed",
+      "summary": "Run: launch each product to a simple page, fresh and warm starts, 30 times each. Compare: Chrome, Edge, bare-bones Tauri app, Ferrum. Measure: time to first window, first content and main content.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-04",
+        "wl-static-info",
+        "metric-startup-window-visible",
+        "metric-startup-fcp",
+        "metric-startup-lcp",
+        "metric-tree-private-commit",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-startup.md",
+        "content_hash": "sha256:ab18e1ef224958afa5566b332742593b395f992cedfcb0efb35dada4c9105c10"
+      },
+      "phase": "phase-p6-benchmark-harness"
+    },
+    {
+      "id": "exp-navigation",
+      "title": "Page-load speed",
+      "summary": "Run: 200 link clicks across seven kinds of navigation, plus a few public sites. Compare: Chrome, Edge, bare-bones Tauri app, Ferrum with and without tab sleeping. Measure: page-load time and failed loads.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-05",
+        "wl-frequent-nav",
+        "wl-static-info",
+        "wl-large-dom",
+        "wl-public-supplementary",
+        "metric-nav-latency",
+        "metric-nav-failure-rate",
+        "metric-tree-cpu-time",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-navigation.md",
+        "content_hash": "sha256:2fb7234dd64ef4b851ac8f24d040f4d62f663ec2a613cb3bdbfdadbc427a9c13"
+      },
+      "phase": "phase-p6-benchmark-harness"
+    },
+    {
+      "id": "exp-rendering",
+      "title": "Smoothness of scrolling and animation",
+      "summary": "Run: scrolling a long page, canvas and 3D animation, a huge page, a JavaScript app. Compare: the same five products. Measure: time between frames, missed frames, long blocking frames, animation work per second.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-06",
+        "wl-continuous-scroll",
+        "wl-canvas-webgl",
+        "wl-large-dom",
+        "wl-spa-js-heavy",
+        "metric-frame-interval",
+        "metric-frame-miss-rate",
+        "metric-loaf-blocking",
+        "metric-canvas-throughput",
+        "metric-tree-cpu-time",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-rendering.md",
+        "content_hash": "sha256:da4e27ea9d86714cb6b284468bbce3433b2da9783ccdb12e77f6e5526c8afdcc"
+      },
+      "phase": "phase-p6-benchmark-harness"
+    },
+    {
+      "id": "exp-energy",
+      "title": "Energy per task",
+      "summary": "Run: first check the energy reading is trustworthy (if not: report 'not measurable' and stop); then idle page, video, JavaScript app, background tabs. Compare: the five products. Measure: energy per task above idle.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-07",
+        "wl-static-info",
+        "wl-video-playback",
+        "wl-spa-js-heavy",
+        "wl-many-background",
+        "metric-cpu-package-energy",
+        "metric-wall-energy",
+        "metric-tree-cpu-time",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-energy.md",
+        "content_hash": "sha256:281c103c66db63fde92af6337825c3739c0da08ba2d5c5fbc2852b64876e5033"
+      },
+      "phase": "phase-p6-benchmark-harness"
+    },
+    {
+      "id": "exp-lifecycle-policies",
+      "title": "Tab-sleeping policies compared",
+      "summary": "Run: 20 background tabs with scripted tab switches, open-close-restore cycles, active tabs, video; tune the smart policy on separate data first. Compare: Ferrum with no sleeping, timer, memory-pressure and smart policies; Chrome and Edge as reference only. Measure: memory, energy, wake-up time, score J, safety violations.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-08",
+        "hyp-09",
+        "hyp-10",
+        "hyp-11",
+        "wl-many-background",
+        "wl-session-churn",
+        "wl-multi-active",
+        "wl-video-playback",
+        "metric-tree-private-commit",
+        "metric-cpu-package-energy",
+        "metric-wall-energy",
+        "metric-restore-latency",
+        "metric-objective-j",
+        "metric-safety-violations",
+        "metric-lifecycle-transitions",
+        "metric-tree-cpu-time",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-lifecycle-policies.md",
+        "content_hash": "sha256:e9572dd761e7c085dc487430c2958a2c26ffb88e65d8f674e3d928eaf7f7d6a3"
+      },
+      "phase": "phase-p7-lifecycle"
+    },
+    {
+      "id": "exp-security-overhead",
+      "title": "Cost of the security checks",
+      "summary": "Run: 300 mixed navigations, some to blocked sites, all local. Compare: normal Ferrum versus a test-only build with the checks off. Measure: time per security decision, page-load time (allowed pages only), memory.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-12",
+        "wl-security-nav-mix",
+        "wl-frequent-nav",
+        "wl-static-info",
+        "metric-policy-eval-latency",
+        "metric-nav-latency",
+        "metric-tree-private-commit",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-security-overhead.md",
+        "content_hash": "sha256:580bdb5d50fa9bfbf0e4f3be2009a02ca65161021bcefac7621540a50df2d3bd"
+      },
+      "phase": "phase-p6-benchmark-harness"
+    },
+    {
+      "id": "exp-isolation-overhead",
+      "title": "Cost of keeping sites apart",
+      "summary": "Run: active tabs on 1, 2, 4 and 8 sites. Compare: one shared profile, one profile per site, one data folder per site. Measure: extra memory and processes per site, plus a list of what stays shared.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-13",
+        "wl-multi-active",
+        "wl-static-info",
+        "metric-tree-private-commit",
+        "metric-process-count",
+        "metric-nav-latency",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-isolation-overhead.md",
+        "content_hash": "sha256:4b3be3073ddfe304b1eb27bf32f7745de71f662ab90eaa867c25faa5f8bee0e4"
+      },
+      "phase": "phase-p6-benchmark-harness"
+    },
+    {
+      "id": "exp-reliability",
+      "title": "Reliability, long runs and recovery",
+      "summary": "Run: 2-hour browsing runs (10 per product), restart-and-restore cycles, forced tab crashes, test-server outages. Compare: the five products (restore only where it can be scripted the same way). Measure: memory growth, crashes, recovery time, restore success.",
+      "status": "Designed, not run",
+      "related": [
+        "hyp-14",
+        "hyp-15",
+        "wl-frequent-nav",
+        "wl-session-churn",
+        "metric-memory-growth-slope",
+        "metric-crash-count",
+        "metric-recovery-time",
+        "metric-restore-success-rate",
+        "metric-nav-failure-rate",
+        "ov-research-fairness-protocol"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/experiments/exp-reliability.md",
+        "content_hash": "sha256:f92d621da838b622b3b2f69bf62c816e047b70e6a25ed0a5639419daa676c59e"
+      },
+      "phase": "phase-p6-benchmark-harness"
+    }
+  ],
+  "metrics": [
+    {
+      "id": "metric-tree-private-commit",
+      "title": "Private memory (main memory measure)",
+      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. Not checked yet (P5).",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-startup",
+        "exp-lifecycle-policies",
+        "exp-security-overhead",
+        "exp-isolation-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-tree-private-commit.md",
+        "content_hash": "sha256:4922cd7b55ac05b53a7bf6caa041016a8df4e3acbf64adcceac35e033a015dc8"
+      },
+      "unit": "MiB"
+    },
+    {
+      "id": "metric-tree-private-working-set",
+      "title": "Private memory held in RAM",
+      "summary": "The part of private memory that sits in RAM. A secondary measure.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-tree-private-working-set.md",
+        "content_hash": "sha256:ea4a080b2903df4e58434ce3bc28536c87ea9a20199e39dbc98a49a66fd70ea7"
+      },
+      "unit": "MiB"
+    },
+    {
+      "id": "metric-tree-working-set",
+      "title": "All memory in RAM (over-counts)",
+      "summary": "All memory in RAM, but pages shared by several processes are counted once per process. Shown only with that warning.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-tree-working-set.md",
+        "content_hash": "sha256:6d30aab964cdf558c0f2a577da5790c2de42f4f3721e7c34dd848081d0d49aff"
+      },
+      "unit": "MiB"
+    },
+    {
+      "id": "metric-peak-tree-private-commit",
+      "title": "Peak private memory",
+      "summary": "The highest private memory reached during the test.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-peak-tree-private-commit.md",
+        "content_hash": "sha256:ec84284c38792233b3f0a163f263e618148ffc9fe9034bdb9a848ba5be275049"
+      },
+      "unit": "MiB"
+    },
+    {
+      "id": "metric-process-count",
+      "title": "Number of processes",
+      "summary": "How many processes the product runs, split by kind (main, page, graphics, helper).",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-isolation-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-process-count.md",
+        "content_hash": "sha256:b639f43c51da54956cdc19762b73097755b29b437458d7609c6bdf227e2fc129"
+      },
+      "unit": "count"
+    },
+    {
+      "id": "metric-tree-cpu-time",
+      "title": "CPU time",
+      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-navigation",
+        "exp-rendering",
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-tree-cpu-time.md",
+        "content_hash": "sha256:5a3dca215a81d06a6783ddb21ac612d56b58fd1a6fc4ada0f9088868992b3e9e"
+      },
+      "unit": "s"
+    },
+    {
+      "id": "metric-tree-cpu-cycles",
+      "title": "CPU cycles",
+      "summary": "Processor work counted in clock cycles. Reported next to CPU time because it reacts differently when the clock speed changes.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-baseline-footprint"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-tree-cpu-cycles.md",
+        "content_hash": "sha256:3b907baffbcbbe379171431f5a36abd0282880a9817d5c466f664a8e6ed685ec"
+      },
+      "unit": "cycles"
+    },
+    {
+      "id": "metric-startup-window-visible",
+      "title": "Time to first window",
+      "summary": "From launching the program to its first window appearing.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-startup"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-startup-window-visible.md",
+        "content_hash": "sha256:2c8bf0357ec384ee169ae916ae396e8d9a56a2e59c91a29b0b731f0a4c14667a"
+      },
+      "unit": "ms"
+    },
+    {
+      "id": "metric-startup-fcp",
+      "title": "Time to first content",
+      "summary": "From launch to the start page showing its first text or image.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-startup"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-startup-fcp.md",
+        "content_hash": "sha256:e06eb0e3cbce9f089333cb99dbb1de1ab68827f7e6b9101662ddc71f1275f158"
+      },
+      "unit": "ms"
+    },
+    {
+      "id": "metric-startup-lcp",
+      "title": "Time to main content",
+      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-startup"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-startup-lcp.md",
+        "content_hash": "sha256:3747c808bcc9aa3bbccdbf07d122c6f3ac2c114aba0b2c8b1a773a9b6480618b"
+      },
+      "unit": "ms"
+    },
+    {
+      "id": "metric-nav-latency",
+      "title": "Page-load time",
+      "summary": "From starting a navigation to the new page finishing its load, as the page itself reports it.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-navigation",
+        "exp-security-overhead",
+        "exp-isolation-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-nav-latency.md",
+        "content_hash": "sha256:faf52e1819f809faec534e93caf68be733eed0b0cbba0ff1020568e04584c85d"
+      },
+      "unit": "ms"
+    },
+    {
+      "id": "metric-nav-failure-rate",
+      "title": "Failed page loads",
+      "summary": "Failed navigations divided by attempted ones. A load fails if the page does not report back in time or the product shows an error.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-navigation",
+        "exp-reliability"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-nav-failure-rate.md",
+        "content_hash": "sha256:d8e294205a8292e839fec26d70db8549574f4605054da665ab5c421c1f81b38d"
+      },
+      "unit": "share (0-1)"
+    },
+    {
+      "id": "metric-frame-interval",
+      "title": "Time between frames",
+      "summary": "The gap between frames shown on screen while scrolling or animating. We look at the slow end (the slowest 5%).",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-rendering"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-frame-interval.md",
+        "content_hash": "sha256:3862b85c70f7093b451d4c5a96dbe9c8c86ccc9a022a96c2106709ca3c8c3b16"
+      },
+      "unit": "ms"
+    },
+    {
+      "id": "metric-frame-miss-rate",
+      "title": "Missed frames",
+      "summary": "Share of screen refreshes where a new frame was due but none appeared.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-rendering"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-frame-miss-rate.md",
+        "content_hash": "sha256:e344fc6a1b0e46bb2cbfb0a12c72916807e9d7ce83cb78e4d1810039d8083057"
+      },
+      "unit": "share (0-1)"
+    },
+    {
+      "id": "metric-loaf-blocking",
+      "title": "Time the page was too busy",
+      "summary": "Time per minute the page could not respond because a frame took too long, from the browser's own long-frame reports.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-rendering"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-loaf-blocking.md",
+        "content_hash": "sha256:68c5b1b794cbdc26acfee1baf0cdabe627c012cf756127ed0da69d4f7a9cbdd6"
+      },
+      "unit": "ms per minute"
+    },
+    {
+      "id": "metric-canvas-throughput",
+      "title": "Animation work rate",
+      "summary": "Fixed units of drawing work the canvas or 3D test page completes per second.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-rendering"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-canvas-throughput.md",
+        "content_hash": "sha256:225beb2ff7efb715598ab5a16e8e0550cb1b25fd1d9b929627e850be7abf7982"
+      },
+      "unit": "ops/s"
+    },
+    {
+      "id": "metric-cpu-package-energy",
+      "title": "Chip energy estimate (AMD)",
+      "summary": "Energy the AMD processor reports for itself. It is a model, leaves out memory chips and is not a wall reading, so it is labelled an estimate. Used only if it passes its checks.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-cpu-package-energy.md",
+        "content_hash": "sha256:25aa7f745148269959ce87fdc56c61e2c2e25461e40cadf4956ed7512b2c3366"
+      },
+      "unit": "J"
+    },
+    {
+      "id": "metric-wall-energy",
+      "title": "Wall-socket energy",
+      "summary": "Energy from a plug-in logging power meter, minus idle energy. Used only if such a meter is available.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-wall-energy.md",
+        "content_hash": "sha256:83f1d04affb1d094576bf91a624d1913a98a982d4bf3c9d1f85cd8b59be48a31"
+      },
+      "unit": "J"
+    },
+    {
+      "id": "metric-restore-latency",
+      "title": "Tab wake-up time",
+      "summary": "From switching to a background tab until its page is ready again, including a full reload if the tab was unloaded.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-lifecycle-policies"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-restore-latency.md",
+        "content_hash": "sha256:d0ee47f6a4158151675ec2ff2da3385887d6857d09cf185799daa9ac83e6adbc"
+      },
+      "unit": "ms"
+    },
+    {
+      "id": "metric-restore-success-rate",
+      "title": "Session restore success",
+      "summary": "Share of tabs brought back correctly (address, scroll position and page state) after a restart or after being unloaded.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-reliability"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-restore-success-rate.md",
+        "content_hash": "sha256:721a1752370eab50238873afb05fdebae4cb90e3e8c41a142bf094e13cbad8fe"
+      },
+      "unit": "share (0-1)"
+    },
+    {
+      "id": "metric-recovery-time",
+      "title": "Crash recovery time",
+      "summary": "From a forced tab crash until the tab's page is ready again.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-reliability"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-recovery-time.md",
+        "content_hash": "sha256:3447a8de4eafed1e5a224b2a15771dcc6c47819888e5181a89e6d3d70a7a9b71"
+      },
+      "unit": "ms"
+    },
+    {
+      "id": "metric-crash-count",
+      "title": "Crashes",
+      "summary": "Crashed or frozen page, graphics or main processes, per run and per hour.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-reliability"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-crash-count.md",
+        "content_hash": "sha256:7f44148b0bf9e7f2c12c540fa1d9e71827fbcea9d91322c326214d5ed9fa6455"
+      },
+      "unit": "count per hour"
+    },
+    {
+      "id": "metric-memory-growth-slope",
+      "title": "Memory growth over time",
+      "summary": "How fast private memory climbs during a long run, using a trend fit that ignores outliers.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-reliability"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-memory-growth-slope.md",
+        "content_hash": "sha256:4d78a9d48a820ec8188315a574e059c75ea7561039d3feb2b1fae26e70667bda"
+      },
+      "unit": "MiB/h"
+    },
+    {
+      "id": "metric-lifecycle-transitions",
+      "title": "Tab state changes",
+      "summary": "How often tabs move between states such as idle, unloaded, waking and active.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-lifecycle-policies"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-lifecycle-transitions.md",
+        "content_hash": "sha256:575b6e0f348f590e163239c3967c93c5de845f9eab18d30d640dc26d64ef8ca5"
+      },
+      "unit": "count"
+    },
+    {
+      "id": "metric-safety-violations",
+      "title": "Safety violations",
+      "summary": "Times a policy unloaded or paused a tab it had to protect (playing media, download, unsaved form, your exclusion and similar). Target: zero.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-lifecycle-policies"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-safety-violations.md",
+        "content_hash": "sha256:4533e7bd6073f5f682d047e46a58c128d12dd680a1097bc345a53167ca358002"
+      },
+      "unit": "count"
+    },
+    {
+      "id": "metric-policy-eval-latency",
+      "title": "Time per security decision",
+      "summary": "How long Ferrum takes to decide allow, block or ask for one navigation or permission request (not counting your answer).",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-security-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-policy-eval-latency.md",
+        "content_hash": "sha256:6f1349b6d81618d93b56361e5ad68221853a59f28f2cd505ce096e2f2fcec748"
+      },
+      "unit": "µs"
+    },
+    {
+      "id": "metric-objective-j",
+      "title": "Overall score J",
+      "summary": "J adds up memory, energy and tab wake-up time, each divided by Ferrum's value with no tab sleeping, so 'no sleeping' scores 1 and lower is better. Weights are fixed before the real runs (equal thirds proposed; if energy is not measurable it is dropped), and we show how results change across 66 other weightings.",
+      "status": "Proposed, not checked",
+      "related": [
+        "exp-lifecycle-policies",
+        "metric-tree-private-commit",
+        "metric-wall-energy",
+        "metric-cpu-package-energy",
+        "metric-restore-latency",
+        "ov-research-objective-function"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/metrics/metric-objective-j.md",
+        "content_hash": "sha256:fe4755d18b95edd61163926468fbf97da28cd9b9fb1540c1b0b47c42782c7e5a"
+      },
+      "unit": "none (ratio)"
+    }
+  ],
+  "workloads": [
+    {
+      "id": "wl-static-info",
+      "title": "Simple article page",
+      "summary": "A local page with text and 10 images, no scripts. Used for idle tests and as the startup page. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-startup",
+        "exp-navigation",
+        "exp-energy",
+        "exp-security-overhead",
+        "exp-isolation-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-static-info.md",
+        "content_hash": "sha256:0ea279b167bdd0ffb035564c104870bdbf1fe5bb04b10e44adf2c591058cf30c"
+      }
+    },
+    {
+      "id": "wl-spa-js-heavy",
+      "title": "JavaScript-heavy web app",
+      "summary": "A local app that switches views 20 times, each drawing a 5,000-item list and running fixed computations. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-rendering",
+        "exp-energy"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-spa-js-heavy.md",
+        "content_hash": "sha256:98a644fffe9bd3b188dc18f35a13f215f7a15e296f8d1d234715edf71cb5e61a"
+      }
+    },
+    {
+      "id": "wl-large-dom",
+      "title": "Very large page",
+      "summary": "A page with 100,000 elements and 2,000 style rules; scripted clicks force it to re-lay itself out. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-navigation",
+        "exp-rendering"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-large-dom.md",
+        "content_hash": "sha256:5efc37a62681d0794952c90fa3571aba775027f5fe835b4d963615eeec43a38d"
+      }
+    },
+    {
+      "id": "wl-continuous-scroll",
+      "title": "Continuous scrolling",
+      "summary": "A very long page that scrolls itself at a fixed speed for 60 seconds, the same in every product. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-rendering"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-continuous-scroll.md",
+        "content_hash": "sha256:35c7aa123a5a280b4a9a0b56c259b819eaf7066f94d736a934031ef916dcdd92"
+      }
+    },
+    {
+      "id": "wl-frequent-nav",
+      "title": "Many page loads",
+      "summary": "200 navigations across seven kinds (same site, other site, redirects, back/forward, cached, uncached). A 2-hour repeat is used for reliability. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-navigation",
+        "exp-security-overhead",
+        "exp-reliability"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-frequent-nav.md",
+        "content_hash": "sha256:661996ee5c8f5bf8cbe7573cd57d9ad9b4cf55bd23e6f5786248a12ce2dc90eb"
+      }
+    },
+    {
+      "id": "wl-video-playback",
+      "title": "Video playback",
+      "summary": "A home-made 1080p, 30 fps test video played for 2 minutes. No third-party content. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-video-playback.md",
+        "content_hash": "sha256:7b8556332588dfb9e46dd5eca7f796ad2130ed4de1c0c0da718b1d9eac705d60"
+      }
+    },
+    {
+      "id": "wl-canvas-webgl",
+      "title": "Canvas and 3D animation",
+      "summary": "One minute of 2D canvas and one minute of WebGL (3D) drawing, with fixed scenes. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-rendering"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-canvas-webgl.md",
+        "content_hash": "sha256:26c0993f062c39e2984649cbef9069a43fdd36087cb804ac45cb2fa8269581ac"
+      }
+    },
+    {
+      "id": "wl-multi-active",
+      "title": "Several active tabs",
+      "summary": "4 busy tabs on 4 sites, switching the front tab every 10 seconds for 5 minutes. The isolation test varies the number of sites. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-lifecycle-policies",
+        "exp-isolation-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-multi-active.md",
+        "content_hash": "sha256:7ec1be94b036c19f183a5c70f998f685ad8127175a7d45a1656afc9c709a24df"
+      }
+    },
+    {
+      "id": "wl-many-background",
+      "title": "Many background tabs",
+      "summary": "1 front tab and 20 background tabs (some playing media, holding an unsaved form or a download) for 30 minutes, with 40 scripted tab switches. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-energy",
+        "exp-lifecycle-policies"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-many-background.md",
+        "content_hash": "sha256:c491b8a70d2bab6846a6198a6895ab37bfca33a2a6398df0e9f1ff8e00a8c899"
+      }
+    },
+    {
+      "id": "wl-session-churn",
+      "title": "Open, close and restore",
+      "summary": "50 cycles of opening 5 tabs, unloading or closing them and restoring them; the app restarts every 10 cycles. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-lifecycle-policies",
+        "exp-reliability"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-session-churn.md",
+        "content_hash": "sha256:9aff7eda69f2658d51fcdd048617a7855a17f3331696947035f6060c3ae6be41"
+      }
+    },
+    {
+      "id": "wl-security-nav-mix",
+      "title": "Mix of allowed and blocked links",
+      "summary": "300 local navigations: 20% to blocked sites and 10% redirects to blocked sites. Used only to measure the cost of the security checks. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-security-overhead"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-security-nav-mix.md",
+        "content_hash": "sha256:77b7599226cc343ef402cebcc03ea0bb172e99b8c94cb138325b3d926210d694"
+      }
+    },
+    {
+      "id": "wl-public-supplementary",
+      "title": "A few public websites",
+      "summary": "Real public sites (list needs your approval), one visit each, no login. Reported separately, never mixed with the local tests. Settings are proposed; the test page is built in P6.",
+      "status": "Proposed, not built",
+      "related": [
+        "exp-baseline-footprint",
+        "exp-navigation"
+      ],
+      "source": {
+        "wiki_path": "wiki/research/workloads/wl-public-supplementary.md",
+        "content_hash": "sha256:4cac1826dfdea5c88c847b40dffc01f6a8ce185c72a4d2772f30388782caa0d0"
+      }
+    }
+  ]
+}

@@ -16,7 +16,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Claude: p0.17 next step - write the plain-language portal JSON for every page (plan/portal/, using the wiki-to-portal skill) until pwsh tools/portal-sync-check.ps1 prints clean, then create plan/portal/.hook-enabled to switch the Stop hook on. No owner action needed before that."
+next_action: "Claude: p0.17 next steps - write the PowerShell 7 check scripts (scripts/verify/<task-id>-<slug>.ps1 per task, scripts/gates/<pN>-gate.ps1 per phase) and fill their paths in plan/portal/phases/*.json; then rebuild the portal from the approved mockups (read-only, reads plan/portal/). No owner action needed before that."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -34,7 +34,7 @@ last_handoff: handoff-2026-10-09-s01
 [raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
 
 P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) its architecture, roadmap, decisions, risks and research views (IP-8) and its accessibility, security and timing checks with a green `npm run verify` and coverage thresholds (IP-9) and its README, final lint and handoff (IP-10, the app build is complete); nothing is approved in `plan/approvals.json`
+and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) its architecture, roadmap, decisions, risks and research views (IP-8) and its accessibility, security and timing checks with a green `npm run verify` and coverage thresholds (IP-9) and its README, final lint and handoff (IP-10, the app build is complete); p0.17 (portal v2, after the owner found v1 too technical) has its rules, its wiki-to-portal pipeline and the plain-language portal text for every page, with check scripts and the new portal site next; nothing is approved in `plan/approvals.json`
 yet (every approvable page is PENDING).**
 
 ## Done this session (s01)
@@ -167,6 +167,14 @@ yet (every approvable page is PENDING).**
   `plan/portal/.hook-enabled` exists. Check-script folders: `scripts/verify/`, `scripts/gates/`. Checks: 20 checker tests pass,
   quick lint 0 errors, lint:wiki 0 errors, mask scan 0 unmasked
   ([p0.17-pipeline-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-pipeline-checks.txt)).
+- p0.17 step "content" done (commit (this step's commit)): the plain-language portal text exists for every page. One file per portal tab in
+  `plan/portal/` (overview, roadmap, 9 phase files, decisions, risks, research, architecture, questions, log) plus
+  `refs.json` with 374 explainers so every id opens a popup; written by six parallel writers, merged and read through
+  once as the owner would. Check-script fields stay empty (`null`) until the scripts exist. Stale approval wording fixed
+  on phase-p0-planning, phase-p1-foundation, risk-r22 and adr-0001 (approvals are given in Claude Code, adr-0023).
+  The end-of-turn check is **switched on** (`plan/portal/.hook-enabled`). Checks: portal check clean, quick lint 0 errors,
+  lint:wiki 0 errors, mask scan 0 unmasked
+  ([p0.17-content-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-content-checks.txt)).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -177,7 +185,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "pipeline" verified and committed 2026-10-09 (`8d89329`); next the portal content JSON step)
+(empty: p0.17 step "content" verified and committed 2026-10-09 ((this step's commit)); next the check scripts)
 
 ## Blockers
 
@@ -189,7 +197,7 @@ yet (every approvable page is PENDING).**
 | Who runs toolchain installs (Q-218; CONTRADICTION on adr-0005) | Held P1 entry | Owner | **Resolved 2026-10-08**: Claude runs all toolchain installs (adr-0021 supersedes adr-0005) |
 | Index ids for upper-case evidence names (Q-219) | Quick lint reported 1 INDEX-MISSING error (IP-0-toolchain); paused the build before IP-1 | Owner | **Resolved 2026-10-08**: index lists evidence folders (adr-0020); quick lint 0 errors |
 | `sources` format on the real wiki (found by the IP-2 loader) | Holds p0.11 / IP-2: the real-wiki loader test reports 4 FM-MISSING errors | Owner / integrator | **Resolved 2026-10-09** (wave 0c items 1-3, Q-220): any wiki-relative path or https URL; raw research notes exempt; IP-2 gate passed |
-| Rust (rustup/cargo), MSVC Build Tools | Block P1 toolchain tasks; do not block P0 | Claude runs winget, owner clicks UAC (adr-0021) | Not installed |
+| Rust (rustup/cargo), MSVC Build Tools | Needed by P1 toolchain tasks; do not block P0 | Claude runs winget, owner clicks UAC (adr-0021) | **Installed** (observed 2026-10-09: Rust 1.99.0 stable-msvc, VS Build Tools 2022 17.14); versions are recorded as evidence in p1.1. cargo-deny not installed yet |
 | Owner approvals | Every phase entry gate; `plan/approvals.json` does not exist | Owner (in Claude Code), recorded by Claude (adr-0023) | Pending — asked after portal v2 is built (p0.17), wave by wave |
 | **First push to GitHub** | Old commits still contain the real IP addresses and user-folder path that were masked on 2026-10-09 | Owner ([Q-221](wiki/overview/ov-open-questions.md#q-221-rewrite-git-history-before-the-first-push-to-remove-real-machine-values)) | Open — **blocks the first push**: Claude asks the owner to approve a history rewrite before anything is pushed (adr-0027) |
 
@@ -214,13 +222,16 @@ Where we are:
 |---|---|
 | Plan app v1 | Built (IP-0 to IP-10), but the owner found it too technical; being redesigned as portal v2 (task p0.17) |
 | Rules for portal v2 | Done today (`5d33859`): approvals in Claude Code, read-only portal, PowerShell checks, four architecture groups, masking |
-| Wiki-to-portal pipeline | Built today (`8d89329`): skill, file shapes, check script, end-of-turn check (switched off until the text exists) |
+| Wiki-to-portal pipeline | Built today (`8d89329`): skill, file shapes, check script, end-of-turn check |
+| Portal text | Written today ((this step's commit)) for every page; check clean; end-of-turn check switched on |
+| Check scripts, new portal site | Not yet: next steps |
 | Approvals | None recorded yet; asked after portal v2, wave by wave |
 | First push | Blocked until the owner answers Q-221 (history rewrite) |
 
-1. **Claude, next step of p0.17:** write the plain-language JSON for every page → `pwsh tools/portal-sync-check.ps1`
-   prints clean → switch the end-of-turn check on (create `plan/portal/.hook-enabled`) → from then on every wiki edit
-   must carry its JSON ([ops-portal-pipeline](wiki/operations/ops-portal-pipeline.md)).
+1. **Claude, next step of p0.17:** write the PowerShell 7 check scripts, one per task (`scripts/verify/`) and one per
+   phase gate (`scripts/gates/`) → fill their paths in the phase JSON → the portal check stays clean. Every wiki edit
+   now carries its JSON in the same edit; the end-of-turn check enforces it
+   ([ops-portal-pipeline](wiki/operations/ops-portal-pipeline.md)).
 2. **Then:** rebuild the portal from the approved mockups (Option A layout), read-only, with popups for phases and
    decisions ([adr-0023](wiki/decisions/adr-0023-approvals-in-claude-code-portal-read-only.md)).
 3. **Then the owner, in Claude Code:** review in the portal and give the Wave 1 approvals; Claude records each one
@@ -239,4 +250,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.17 step "pipeline", `8d89329`; next: the portal content JSON). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+2026-10-09, session s01 (after p0.17 step "content", (this step's commit); next: the check scripts). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).

@@ -1,0 +1,183 @@
+{
+  "id": "roadmap",
+  "title": "Roadmap",
+  "summary": "Build the app first (P0 to P5), then measure it fairly (P6 and P7), then write it up (P8).",
+  "stages": [
+    {
+      "id": "stage-build",
+      "name": "Build",
+      "summary": "A working, secure browser container that measures itself.",
+      "phases": [
+        "phase-p0-planning",
+        "phase-p1-foundation",
+        "phase-p2-minimal-container",
+        "phase-p3-tabs-sessions",
+        "phase-p4-security",
+        "phase-p5-telemetry"
+      ]
+    },
+    {
+      "id": "stage-measure",
+      "name": "Measure",
+      "summary": "Fair tests against Chrome and Edge, then smart tab sleeping.",
+      "phases": [
+        "phase-p6-benchmark-harness",
+        "phase-p7-lifecycle"
+      ]
+    },
+    {
+      "id": "stage-publish",
+      "name": "Publish",
+      "summary": "Statistics, figures and the research paper.",
+      "phases": [
+        "phase-p8-research-paper"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "phase-p0-planning",
+      "short": "P0",
+      "name": "Planning",
+      "one_line_goal": "Plan written, checked and approved by you; no app code yet",
+      "status": "In progress",
+      "tasks_done": 16,
+      "tasks_total": 18,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p0-planning.md",
+        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+      }
+    },
+    {
+      "id": "phase-p1-foundation",
+      "short": "P1",
+      "name": "Foundation",
+      "one_line_goal": "Tools confirmed, empty project builds, riskiest ideas tested",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 17,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p1-foundation.md",
+        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+      }
+    },
+    {
+      "id": "phase-p2-minimal-container",
+      "short": "P2",
+      "name": "First working app",
+      "one_line_goal": "One window browses websites safely: address bar, back, forward, refresh",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 18,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
+        "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+      }
+    },
+    {
+      "id": "phase-p3-tabs-sessions",
+      "short": "P3",
+      "name": "Tabs and sessions",
+      "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 15,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+      }
+    },
+    {
+      "id": "phase-p4-security",
+      "short": "P4",
+      "name": "Security",
+      "one_line_goal": "Blocking, permissions and isolation proven by tests; threat model written",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 17,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p4-security.md",
+        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+      }
+    },
+    {
+      "id": "phase-p5-telemetry",
+      "short": "P5",
+      "name": "Measurement",
+      "one_line_goal": "Memory, CPU, timing and network logged, and the numbers proven accurate",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 14,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p5-telemetry.md",
+        "content_hash": "sha256:aed00b9ffd0cd55f52692f53144181b0b88ec2430e56a1952fab403d6ff08eda"
+      }
+    },
+    {
+      "id": "phase-p6-benchmark-harness",
+      "short": "P6",
+      "name": "Benchmarks",
+      "one_line_goal": "Fair, repeatable tests vs Chrome, Edge and plain Tauri; first data collected",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 16,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p6-benchmark-harness.md",
+        "content_hash": "sha256:1a8fa8a0ca00947a00fcc58f60f9ccecdffbc32195b6940270863915fa06236c"
+      }
+    },
+    {
+      "id": "phase-p7-lifecycle",
+      "short": "P7",
+      "name": "Smart tab sleeping",
+      "one_line_goal": "Four tab-sleeping strategies built safely and compared on the test bench",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 14,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p7-lifecycle.md",
+        "content_hash": "sha256:85e05bc1aa21fc3ce757150b661887aa1cbef96743300652be58a3f5d56ae892"
+      }
+    },
+    {
+      "id": "phase-p8-research-paper",
+      "short": "P8",
+      "name": "Research paper",
+      "one_line_goal": "Results analysed; paper drafted with every claim checked",
+      "status": "Not started",
+      "tasks_done": 0,
+      "tasks_total": 12,
+      "source": {
+        "wiki_path": "wiki/phases/phase-p8-research-paper.md",
+        "content_hash": "sha256:6df0f3f598cd14de01897d78b360efe9a54d2aebeb0573cfe2393041277442e9"
+      }
+    }
+  ],
+  "same_in_every_phase": [
+    {
+      "id": "every-phase-commit",
+      "title": "One commit per task",
+      "summary": "Each finished, checked task is saved on its own, so an interruption loses at most one task."
+    },
+    {
+      "id": "every-phase-log",
+      "title": "A plain-language log entry",
+      "summary": "After each task Claude writes what was done and what comes next, in plain words."
+    },
+    {
+      "id": "every-phase-gate",
+      "title": "The gate script must pass",
+      "summary": "One PowerShell script runs all of the phase's checks and saves the output as evidence. The phase cannot end until it passes."
+    },
+    {
+      "id": "every-phase-review",
+      "title": "Your review at the end",
+      "summary": "Each phase ends with you reviewing the evidence and approving in Claude Code. The next phase waits for that."
+    },
+    {
+      "id": "every-phase-sync",
+      "title": "Portal and wiki in sync",
+      "summary": "Every wiki change carries its plain-language portal text in the same edit, so this portal is never out of date."
+    }
+  ]
+}

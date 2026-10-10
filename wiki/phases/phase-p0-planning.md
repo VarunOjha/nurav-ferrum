@@ -80,8 +80,8 @@ tasks:
     title: "Run full plan-app test gate and save outputs as evidence"
     verify: "ip-build-plan steps IP-9 and IP-10 gates pass: 'npm run verify' (lint, typecheck, unit, e2e, build) output with exit code 0 saved as raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt, plus IP-9-perf.txt, playwright-report.zip and IP-10-final-lint.json ('npm run lint:wiki' 0 errors)."
   - id: p0.17
-    title: "Owner walkthrough: owner reviews pages in the app, answers open questions, approves or requests changes; Claude revises until the P1 dependency set is APPROVED"
-    verify: "plan/approvals.json (written by the app only) shows APPROVED or APPROVED_VOLATILE_DRIFT for schema, phase-p1-foundation, every ADR in its decisions list, its components and experiments; owner answers transcribed to raw/owner/."
+    title: "Portal v2 and owner walkthrough: Claude rebuilds the plan app as a read-only portal fed by plain-language JSON (owner feedback 2026-10-09; adr-0023 to adr-0027); owner reviews it, answers open questions and approves or requests changes in Claude Code; Claude revises until the P1 dependency set is APPROVED"
+    verify: "pwsh tools/portal-sync-check.ps1 prints clean; plan/approvals.json (written by Claude with tools/approvals_record.py from the owner's words in Claude Code, adr-0023) shows APPROVED or APPROVED_VOLATILE_DRIFT for schema, phase-p1-foundation, every ADR in its decisions list, its components and experiments; owner answers transcribed to raw/owner/."
   - id: p0.18
     title: "Exit: set status gate-review, owner approves phase-p0-planning#exit, first local commit if authorised (Claude never pushes)"
     verify: "approvals.json has key phase-p0-planning#exit with status approved; 'gate' log entry exists; 'git log -1' shows the commit or the handoff lists uncommitted paths."

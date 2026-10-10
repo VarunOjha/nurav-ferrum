@@ -1,0 +1,515 @@
+{
+  "id": "architecture",
+  "title": "Architecture",
+  "summary": "Four groups. The application is what people use; the other three exist to test it, measure it and report on it.",
+  "layers": [
+    {
+      "id": "layer-controls",
+      "name": "What you see: browser controls",
+      "summary": "Address bar, tabs and buttons. Our code.",
+      "trust": "trusted",
+      "components": [
+        "comp-app-shell"
+      ],
+      "language": "TypeScript"
+    },
+    {
+      "id": "layer-websites",
+      "name": "What you see: websites in tabs",
+      "summary": "The open web. Sandboxed, with no access to Ferrum's own functions.",
+      "trust": "untrusted",
+      "components": [
+        "comp-tab-content"
+      ]
+    },
+    {
+      "id": "layer-engine",
+      "name": "Ferrum engine",
+      "summary": "The new Rust code: manages tab views, applies the safety rules, puts idle tabs to sleep and measures.",
+      "trust": "trusted",
+      "components": [
+        "comp-webview-manager",
+        "comp-security-engine",
+        "comp-resource-manager",
+        "comp-telemetry",
+        "comp-network-logger"
+      ],
+      "language": "Rust"
+    },
+    {
+      "id": "layer-base",
+      "name": "Shared base",
+      "summary": "Settings, ids and record formats used by every engine part.",
+      "trust": "trusted",
+      "components": [
+        "comp-core"
+      ],
+      "language": "Rust"
+    },
+    {
+      "id": "layer-webview2",
+      "name": "Microsoft WebView2",
+      "summary": "The Chromium engine (same as Edge) that draws each website.",
+      "trust": "not ours",
+      "components": [
+        "comp-webview2-runtime"
+      ]
+    },
+    {
+      "id": "layer-windows",
+      "name": "Windows 11",
+      "summary": "The operating system: process readings and links to other apps.",
+      "trust": "not ours",
+      "components": [
+        "comp-windows-os"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "application",
+      "name": "Application",
+      "purpose": "What people use: the Ferrum app itself. The measurement parts sit here because they run inside the app; the benchmark uses their output.",
+      "flow": "you click → browser controls → engine checks the rules → WebView2 loads the site → it shows in the tab",
+      "components": [
+        "comp-app-shell",
+        "comp-tab-content",
+        "comp-webview-manager",
+        "comp-security-engine",
+        "comp-resource-manager",
+        "comp-telemetry",
+        "comp-network-logger",
+        "comp-core",
+        "comp-webview2-runtime",
+        "comp-windows-os"
+      ]
+    },
+    {
+      "id": "benchmark",
+      "name": "Benchmark",
+      "purpose": "Runs the same workloads on Ferrum, Chrome, Edge and a plain Tauri app, many times, in random order.",
+      "flow": "harness → launch browser → run workload → record numbers",
+      "components": [
+        "comp-benchmark-harness",
+        "comp-baseline-app",
+        "comp-competitor-browsers"
+      ]
+    },
+    {
+      "id": "testing",
+      "name": "Testing & quality",
+      "purpose": "Proves each feature works and stays working: unit, end-to-end and security tests, plus automatic checks on every change. No component of its own.",
+      "flow": "change → tests + check scripts → green → commit",
+      "components": []
+    },
+    {
+      "id": "research",
+      "name": "Research & analysis",
+      "purpose": "Turns raw numbers into statistics, charts and the paper. No claims without data.",
+      "flow": "raw results → statistics → figures → paper",
+      "components": [
+        "comp-research-analysis"
+      ]
+    }
+  ],
+  "footnote": {
+    "text": "Planning tooling, not part of Ferrum: this plan portal, which Claude keeps in step with the wiki.",
+    "components": [
+      "comp-interactive-plan"
+    ]
+  },
+  "components": [
+    {
+      "id": "comp-app-shell",
+      "title": "Browser controls",
+      "summary": "The window you use: address bar, tabs, back, forward, reload and settings. Trusted (our code): a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
+      "group": "application",
+      "layer": "layer-controls",
+      "status": "Planned",
+      "phase": "phase-p2-minimal-container",
+      "connects": [
+        {
+          "to": "comp-webview-manager",
+          "what": "sends tab commands: open, close, go to, back, reload"
+        },
+        {
+          "to": "comp-security-engine",
+          "what": "passes your settings changes to the safety rules"
+        },
+        {
+          "to": "comp-core",
+          "what": "loads and saves settings"
+        },
+        {
+          "to": "comp-windows-os",
+          "what": "hands outside links to Windows after you confirm"
+        }
+      ],
+      "related": [
+        "risk-r02",
+        "risk-r19"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-app-shell.md",
+        "content_hash": "sha256:3794b3d9917d6bcc8c09fd86780044fd2603eef4f5386348c2107d6b9c0ba9c2"
+      }
+    },
+    {
+      "id": "comp-tab-content",
+      "title": "Websites in tabs",
+      "summary": "Any website you open, each in its own view. Untrusted: treated as the attacker and sandboxed. It can send messages to the app, but every command is refused, so it cannot reach Ferrum's own functions.",
+      "group": "application",
+      "layer": "layer-websites",
+      "status": "Planned",
+      "phase": "phase-p2-minimal-container",
+      "connects": [
+        {
+          "to": "comp-app-shell",
+          "what": "can send messages; every command is refused"
+        },
+        {
+          "to": "comp-webview2-runtime",
+          "what": "asks to open pages, pop-ups, downloads and permissions"
+        }
+      ],
+      "related": [
+        "risk-r19"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-tab-content.md",
+        "content_hash": "sha256:2d655aa3d1948ab440f6dad642889524e102970c51878faab392b99216c2f791"
+      }
+    },
+    {
+      "id": "comp-webview-manager",
+      "title": "Tab & view manager",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation, sessions and downloads. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Risk: some needed features exist only at that level; not checked yet (checked in P1 and P4).",
+      "group": "application",
+      "layer": "layer-engine",
+      "status": "Planned",
+      "phase": "phase-p2-minimal-container",
+      "connects": [
+        {
+          "to": "comp-security-engine",
+          "what": "asks whether each navigation, download or permission is allowed"
+        },
+        {
+          "to": "comp-webview2-runtime",
+          "what": "creates, moves, shows, hides and pauses tab views"
+        },
+        {
+          "to": "comp-telemetry",
+          "what": "reports page timings and which processes are Ferrum's"
+        },
+        {
+          "to": "comp-network-logger",
+          "what": "passes network call details (no content)"
+        },
+        {
+          "to": "comp-app-shell",
+          "what": "reports each tab's address, title, loading and errors"
+        }
+      ],
+      "related": [
+        "risk-r01",
+        "risk-r02",
+        "risk-r03",
+        "risk-r07",
+        "risk-r18"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
+        "content_hash": "sha256:9ee9a1bb996a07b9443c006304f64a5e92a17efd40c4ff6170ff233e6fff28a7"
+      }
+    },
+    {
+      "id": "comp-security-engine",
+      "title": "Security policy",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure and logs every refusal. Pure rules with no browser inside, so each rule can be tested on its own. Basic rules in P2, the full engine in P4.",
+      "group": "application",
+      "layer": "layer-engine",
+      "status": "Planned",
+      "phase": "phase-p2-minimal-container",
+      "connects": [
+        {
+          "to": "comp-core",
+          "what": "reads the rule settings"
+        },
+        {
+          "to": "comp-telemetry",
+          "what": "reports how long each decision takes"
+        }
+      ],
+      "related": [
+        "risk-r07",
+        "risk-r10",
+        "risk-r19"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-security-engine.md",
+        "content_hash": "sha256:7d67612f4d8a95803c7bf75537a0b24165f1272992fcdca362903c850086de85"
+      }
+    },
+    {
+      "id": "comp-resource-manager",
+      "title": "Tab sleeping",
+      "summary": "Watches idle tabs and memory, then hides, pauses or unloads idle tabs and restores them when needed. Trusted. Four policies to compare: none, fixed idle time, memory pressure, adaptive. Never unloads the tab you are using. Risk: unloading could lose what you typed. Before P7, background tabs are only hidden.",
+      "group": "application",
+      "layer": "layer-engine",
+      "status": "Planned",
+      "phase": "phase-p7-lifecycle",
+      "connects": [
+        {
+          "to": "comp-webview-manager",
+          "what": "tells it to hide, pause, unload or restore a tab"
+        },
+        {
+          "to": "comp-telemetry",
+          "what": "records every sleep and wake decision"
+        },
+        {
+          "to": "comp-core",
+          "what": "reads tab-sleeping settings"
+        }
+      ],
+      "related": [
+        "risk-r03",
+        "risk-r23"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-resource-manager.md",
+        "content_hash": "sha256:58189b8744358c432d9e90240d921ba471a30fe18f000cb5af4613c3bff99d96"
+      }
+    },
+    {
+      "id": "comp-telemetry",
+      "title": "Measurement: memory, CPU and timings",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and every tab sleep or wake, then exports data files. Trusted. A cross-check only: the official cross-browser numbers come from the benchmark harness. Risk: counting exactly the right processes.",
+      "group": "application",
+      "layer": "layer-engine",
+      "status": "Planned",
+      "phase": "phase-p5-telemetry",
+      "connects": [
+        {
+          "to": "comp-windows-os",
+          "what": "reads memory and CPU counters per process"
+        },
+        {
+          "to": "comp-resource-manager",
+          "what": "sends memory readings and a low-memory signal"
+        },
+        {
+          "to": "comp-benchmark-harness",
+          "what": "exports per-run data; lends its process-reading code"
+        },
+        {
+          "to": "comp-research-analysis",
+          "what": "exports data files for analysis"
+        }
+      ],
+      "related": [
+        "risk-r05"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-telemetry.md",
+        "content_hash": "sha256:ba6d29abcc5afb9ba8d7aa9b15327eb489bbd4ef6235e3d8c95827dbf77fa8c3"
+      }
+    },
+    {
+      "id": "comp-network-logger",
+      "title": "Measurement: network log",
+      "summary": "Writes every tab's network calls to a folder you can review: address, status, timing and size. Never headers, cookies or page content. Trusted. Its cost in speed and memory is not measured yet (measured in P5).",
+      "group": "application",
+      "layer": "layer-engine",
+      "status": "Planned",
+      "phase": "phase-p5-telemetry",
+      "connects": [
+        {
+          "to": "comp-benchmark-harness",
+          "what": "gives request logs to check each trial loaded the same things"
+        },
+        {
+          "to": "comp-core",
+          "what": "uses the shared record format"
+        }
+      ],
+      "related": [
+        "risk-r08"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-network-logger.md",
+        "content_hash": "sha256:a7f692ed189f0e13018a27215dfaad0475e26c6e52f0deb21efbbade242ae152"
+      }
+    },
+    {
+      "id": "comp-core",
+      "title": "Core library",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats. Trusted. It calls nothing itself; everything else depends on it.",
+      "group": "application",
+      "layer": "layer-base",
+      "status": "Planned",
+      "phase": "phase-p1-foundation",
+      "connects": [],
+      "related": [],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-core.md",
+        "content_hash": "sha256:a380074114ceaa8ea0285878cd09cdb74f0d1d9f7e996cc4e7eca37b3cb0adea"
+      }
+    },
+    {
+      "id": "comp-webview2-runtime",
+      "title": "Microsoft WebView2",
+      "summary": "Microsoft's Chromium engine (the same one inside Edge), already installed on Windows. It draws every website and the browser controls. Not ours. Ferrum relies on its sandbox; that it protects as well as Chrome's is assumed, not checked yet (checked in P4).",
+      "group": "application",
+      "layer": "layer-webview2",
+      "status": "Planned",
+      "phase": "phase-p1-foundation",
+      "connects": [
+        {
+          "to": "comp-webview-manager",
+          "what": "reports navigations, pop-ups, downloads, permissions and crashes"
+        },
+        {
+          "to": "comp-tab-content",
+          "what": "loads and draws the websites"
+        }
+      ],
+      "related": [
+        "risk-r01",
+        "risk-r03",
+        "risk-r05",
+        "risk-r06"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-webview2-runtime.md",
+        "content_hash": "sha256:9bf02a6c3c06d40772a8e6adfb22161a5014271895c7d4e0c19cbe4f983af73b"
+      }
+    },
+    {
+      "id": "comp-windows-os",
+      "title": "Windows 11",
+      "summary": "The operating system. Not ours. Gives memory and CPU readings per process, groups a test's processes for counting, and opens outside links in other apps. Which Windows low-memory signal to use is decided in P7.",
+      "group": "application",
+      "layer": "layer-windows",
+      "status": "Planned",
+      "phase": "phase-p1-foundation",
+      "connects": [],
+      "related": [
+        "risk-r04",
+        "risk-r05"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-windows-os.md",
+        "content_hash": "sha256:880c277cd917e976181d4218bfdc06f2c34a8000662e2b3ea029e41a9b4d29bd"
+      }
+    },
+    {
+      "id": "comp-benchmark-harness",
+      "title": "Benchmark harness",
+      "summary": "Starts each browser fresh, runs the same scripted workloads many times in random order, and measures from outside so every browser is measured the same way. Trusted; not shipped. Risk: proving Ferrum's helper processes are counted fairly; not checked yet (checked in P6).",
+      "group": "benchmark",
+      "layer": null,
+      "status": "Planned",
+      "phase": "phase-p6-benchmark-harness",
+      "connects": [
+        {
+          "to": "comp-app-shell",
+          "what": "starts Ferrum fresh and isolated for each trial"
+        },
+        {
+          "to": "comp-baseline-app",
+          "what": "starts the plain Tauri app the same way"
+        },
+        {
+          "to": "comp-competitor-browsers",
+          "what": "starts Chrome and Edge and drives the workloads"
+        },
+        {
+          "to": "comp-windows-os",
+          "what": "reads memory, CPU and process groups"
+        },
+        {
+          "to": "comp-research-analysis",
+          "what": "hands over raw results, archived unedited"
+        }
+      ],
+      "related": [
+        "risk-r04",
+        "risk-r05",
+        "risk-r06"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-benchmark-harness.md",
+        "content_hash": "sha256:61b57ab6e11a7cab90c57f58e5b620c287d23eadc0bb824bd0b379257636c575"
+      }
+    },
+    {
+      "id": "comp-baseline-app",
+      "title": "Plain Tauri app (comparison point)",
+      "summary": "The simplest Tauri app that shows one web page, with no Ferrum features. Trusted; not shipped. Comparing with it separates Ferrum's own cost or savings from the cost of Tauri and WebView2.",
+      "group": "benchmark",
+      "layer": null,
+      "status": "Planned",
+      "phase": "phase-p6-benchmark-harness",
+      "connects": [
+        {
+          "to": "comp-webview2-runtime",
+          "what": "shows one page with plain Tauri, no Ferrum parts"
+        }
+      ],
+      "related": [],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-baseline-app.md",
+        "content_hash": "sha256:eaeffb86cd0e4a0691201d074cef2f8a70023f38e2a25ed2dd512a2b000c1bd8"
+      }
+    },
+    {
+      "id": "comp-competitor-browsers",
+      "title": "Chrome and Edge",
+      "summary": "The browsers Ferrum is compared with. Not ours. Run with their normal resource-saving features on, never switched off to favour Ferrum; their settings are recorded in every trial.",
+      "group": "benchmark",
+      "layer": null,
+      "status": "Planned",
+      "phase": "phase-p6-benchmark-harness",
+      "connects": [],
+      "related": [
+        "risk-r05",
+        "risk-r06"
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-competitor-browsers.md",
+        "content_hash": "sha256:99d6763f50c6395f5bdc80021043a11cbb358c9364048197f96ae05432e2b5c5"
+      }
+    },
+    {
+      "id": "comp-research-analysis",
+      "title": "Statistics and figures",
+      "summary": "Python scripts that turn archived raw results into statistics, charts and reports for the paper. Trusted; not shipped. They read only archived runs, so every figure traces back to its data.",
+      "group": "research",
+      "layer": null,
+      "status": "Planned",
+      "phase": "phase-p6-benchmark-harness",
+      "connects": [],
+      "related": [],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-research-analysis.md",
+        "content_hash": "sha256:162993a62844d90b2cee078598c4a9f8ce78bad4ea9004330184430c973fea0e"
+      }
+    },
+    {
+      "id": "comp-interactive-plan",
+      "title": "Plan portal (this site)",
+      "summary": "The site you are reading. A planning tool, not part of Ferrum. Being rebuilt as a read-only portal that shows Claude's plain-language summaries; you approve things in Claude Code.",
+      "group": "planning",
+      "layer": null,
+      "status": "Built; being rebuilt",
+      "phase": "phase-p0-planning",
+      "connects": [],
+      "related": [],
+      "source": {
+        "wiki_path": "wiki/architecture/components/comp-interactive-plan.md",
+        "content_hash": "sha256:7d3f5f6af49191764419dca87a4f394ddb571a529ee514504bbcd5d181363576"
+      }
+    }
+  ]
+}

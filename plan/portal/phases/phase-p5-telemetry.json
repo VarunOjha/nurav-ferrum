@@ -1,0 +1,177 @@
+{
+  "id": "phase-p5-telemetry",
+  "short": "P5",
+  "title": "Measurement",
+  "one_line_goal": "Memory, CPU, timing and network logged, and the numbers proven accurate",
+  "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. Before it starts you answer three privacy questions about the network log.",
+  "status": "Not started",
+  "progress": {
+    "done": 0,
+    "total": 14
+  },
+  "step_order": [
+    "File format",
+    "Find Ferrum's processes",
+    "Memory and CPU meter",
+    "Accuracy test",
+    "Timing",
+    "Network log",
+    "Settings",
+    "Your review"
+  ],
+  "tasks": [
+    {
+      "id": "p5.1",
+      "title": "Export file format and run labels",
+      "chain": "Every later result is read from files → define one versioned format (plain data files) that labels each run with code version, Windows build, WebView2 version and settings → any number can be traced to the exact setup that made it.",
+      "check": "Each record type saves and reloads unchanged; a checker accepts good files and rejects a damaged one.",
+      "script": null
+    },
+    {
+      "id": "p5.2",
+      "title": "Count only Ferrum's own processes",
+      "chain": "Other apps on the PC also use WebView2 → find Ferrum's processes through Ferrum's own WebView2 setup, never by program name → other apps' memory never leaks into Ferrum's numbers.",
+      "check": "A test runs Ferrum next to another WebView2 app: every Ferrum process is counted, none of the other app's.",
+      "script": null
+    },
+    {
+      "id": "p5.3",
+      "title": "Memory and CPU meter",
+      "chain": "We need trustworthy memory and CPU numbers → read them straight from Windows (private memory as the headline, working set as secondary, CPU time) and add them up over Ferrum's processes → one fair total per moment; peaks come from the total, never from adding per-process peaks.",
+      "check": "Tests confirm totals and peaks are computed correctly.",
+      "script": null
+    },
+    {
+      "id": "p5.4",
+      "title": "Prove the meter is accurate",
+      "chain": "A meter is only useful if it is right → helper programs use a known amount of memory and CPU; the meter and an independent reader are compared with those values, with tolerances written down before the run → a meter that fails blocks P6.",
+      "check": "Readings fall within the tolerances written beforehand; raw outputs saved as evidence.",
+      "script": null
+    },
+    {
+      "id": "p5.5",
+      "title": "Measure the meter's own cost",
+      "chain": "Measuring uses some CPU and memory itself → measure the meter's own cost at each sampling speed → we know how much it disturbs results (this describes the tool, not Ferrum).",
+      "check": "Raw outputs saved as evidence; no comparison claims made.",
+      "script": null
+    },
+    {
+      "id": "p5.6",
+      "title": "Startup timing",
+      "chain": "Startup speed is a key result → record when the process starts, the window appears, and the first and largest content are drawn, read by Ferrum itself through the browser's debugging channel → startup can be compared fairly in P6.",
+      "check": "On a test page every moment is recorded, in the right order.",
+      "script": null
+    },
+    {
+      "id": "p5.7",
+      "title": "Page-load timing",
+      "chain": "Page-load speed is another key result → record each load's main moments, whether it crossed to another site, and how many redirects it took → page loads can be compared fairly in P6.",
+      "check": "Test pages with known redirects give the right redirect count and timing order.",
+      "script": null
+    },
+    {
+      "id": "p5.8",
+      "title": "Record tab state changes",
+      "chain": "Smart tab sleeping in P7 needs a record of every tab state change → define the record (from, to, why, when, which tab) and log hide and show now → P7 plugs in without a new format.",
+      "check": "Switching tabs produces hide and show records that pass the format check.",
+      "script": null
+    },
+    {
+      "id": "p5.9",
+      "title": "Network log: addresses and timings only",
+      "chain": "You asked for a log of network calls → per tab, save address, method, result, type, timing, size and the security decision to one folder per session, never headers or page content → useful for research without storing private data.",
+      "check": "A test page with known requests gives exactly the expected entries; a test proves no headers or content are stored.",
+      "script": null
+    },
+    {
+      "id": "p5.10",
+      "title": "Network log: coverage and cost",
+      "chain": "Some requests may be missed (embedded frames, redirects, background workers) → test each kind and run a small cost trial → the paper states exactly what the log covers.",
+      "check": "A coverage table and the cost-trial output are saved as evidence.",
+      "script": null
+    },
+    {
+      "id": "p5.11",
+      "title": "Settings for measuring and logging",
+      "chain": "You decide what is recorded → add on/off switches for measurement and the network log, a button to open the log folder, and a retention limit → nothing is recorded that you did not choose.",
+      "check": "A quick test flips each switch and confirms files are or are not written.",
+      "script": null
+    },
+    {
+      "id": "p5.12",
+      "title": "Map tabs to browser processes",
+      "chain": "Tabs may share browser processes → check how each tab shows up and which processes serve it → P6 and P7 know how far per-tab numbers can be trusted.",
+      "check": "Findings saved as evidence; each open assumption confirmed or moved to a later phase.",
+      "script": null
+    },
+    {
+      "id": "p5.13",
+      "title": "Reading: measurement methods",
+      "chain": "Our methods must match good practice → read the literature on measurement and browser benchmarking → each headline measurement gets a final, cited definition.",
+      "check": "New research notes saved; each headline measurement is marked defined and cites the accuracy test.",
+      "script": null
+    },
+    {
+      "id": "p5.14",
+      "title": "Gate and your review",
+      "chain": "All tasks done → the gate script runs every check and saves the evidence → you review the accuracy results and the privacy check and approve; only then does P6 start.",
+      "check": "All evidence files exist, the wiki check is clean, and you approve the end of P5.",
+      "script": null
+    }
+  ],
+  "test_gate": {
+    "explanation": "Code and tests pass → the meters match known values → exported files match the format → the network log holds no private data → earlier features still work → you browse with logging on and check the log folder → you approve. Only then does P6 start.",
+    "rows": [
+      {
+        "check": "Code checks",
+        "proves": "Code is tidy and warning-free, all automatic tests pass, and the release build works."
+      },
+      {
+        "check": "Library check",
+        "proves": "Third-party libraries have acceptable licences and no known security problems."
+      },
+      {
+        "check": "Accuracy suite",
+        "proves": "Memory and CPU readings match known values within the written tolerances."
+      },
+      {
+        "check": "File format check",
+        "proves": "Exported files match the published format."
+      },
+      {
+        "check": "Network log tests",
+        "proves": "Exactly the expected requests are logged, with no headers or content."
+      },
+      {
+        "check": "Earlier features",
+        "proves": "Security, tabs and basic browsing tests still pass."
+      },
+      {
+        "check": "Wiki check",
+        "proves": "The plan pages are consistent and have no broken links."
+      },
+      {
+        "check": "Your privacy check",
+        "proves": "You browse for a session with logging on and find nothing in the log that should not be there."
+      },
+      {
+        "check": "Your settings check",
+        "proves": "The on/off switches behave as described."
+      }
+    ],
+    "script": null
+  },
+  "related": [
+    "phase-p4-security",
+    "phase-p6-benchmark-harness",
+    "adr-0008",
+    "adr-0014",
+    "exp-baseline-footprint",
+    "exp-startup",
+    "exp-navigation"
+  ],
+  "source": {
+    "wiki_path": "wiki/phases/phase-p5-telemetry.md",
+    "content_hash": "sha256:aed00b9ffd0cd55f52692f53144181b0b88ec2430e56a1952fab403d6ff08eda"
+  }
+}

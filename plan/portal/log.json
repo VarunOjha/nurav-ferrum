@@ -2,50 +2,701 @@
   "$schema": "schema/log.schema.json",
   "id": "log",
   "title": "Log",
-  "summary": "What happened in the project, in plain words, newest last.",
+  "summary": "What happened in the project, in plain words, oldest first. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:ab3a2df6054b81bc504674c6a422602efebc6543ecc13fc1e3fd7096043975d0"
+    "content_hash": "sha256:9731cb2e434ec46b3475e79d84b3594b52016c224e21f6c9a5a834233d5e5d63"
   },
   "entries": [
     {
+      "id": "log-2026-10-08-start",
+      "date": "2026-10-08",
+      "title": "Project started: your brief and first answers saved",
+      "done": "Saved your original brief word for word, plus your answers to the 14 scoping questions and your 9 standing directions. These files are never edited.",
+      "next": "Claude researches the main technical questions before planning.",
+      "decisions": [
+        {
+          "what": "Scope, phases and research goals as set in your brief and scoping answers",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": "496f69d",
+      "covers": [
+        "## [2026-10-08] ingest | Raw sources: master prompt and owner scoping decisions"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-research",
+      "date": "2026-10-08",
+      "title": "Five research notes written",
+      "done": "Wrote five notes: how a Claude-kept wiki works, what Tauri and WebView2 can do, how to measure browsers fairly on Windows, the plan-app tech stack, and related research. Each claim is marked checked or uncertain. Two notes conflict with earlier decisions; both were flagged, not hidden. No novelty is claimed.",
+      "next": "Claude writes the wiki's rule book.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "496f69d",
+      "covers": [
+        "## [2026-10-08] ingest | Research note research-llm-wiki-pattern",
+        "## [2026-10-08] ingest | Research note research-tauri-webview2-capabilities",
+        "## [2026-10-08] ingest | Research note research-measurement-methodology",
+        "## [2026-10-08] ingest | Research note research-nextjs-stack",
+        "## [2026-10-08] ingest | Research note research-related-work-seed"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-rulebook",
+      "date": "2026-10-08",
+      "title": "Wiki rule book and start-of-session guide written",
+      "done": "Wrote the wiki's rule book (page types, ids, checks, how approvals work) and the guide Claude reads at the start of every session. The rule book waits for your approval.",
+      "next": "A team of Claude agents drafts the whole plan.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "496f69d",
+      "covers": [
+        "## [2026-10-08] schema | SCHEMA.md and CLAUDE.md drafted"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-drafted",
+      "date": "2026-10-08",
+      "title": "Whole plan drafted by a team of Claude agents",
+      "done": "Eight agents each wrote one area in parallel: operations (12 pages), architecture (24), phases P0 to P8 (9), decisions (19), risks (26), research (81), quality (5) and the plan app's design (7). No measurements exist yet.",
+      "next": "Review agents check every area.",
+      "decisions": [
+        {
+          "what": "Decisions 1 to 16 come from your scoping answers",
+          "by": "you"
+        },
+        {
+          "what": "Decisions 17 to 19 proposed by Claude, for your review",
+          "by": "claude"
+        },
+        {
+          "what": "Three extra parts added to the architecture model: tab content, Windows itself, competitor browsers",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "496f69d",
+      "covers": [
+        "## [2026-10-08] plan | Operations and overview area drafted (multi-agent)",
+        "## [2026-10-08] plan | Architecture area drafted (multi-agent)",
+        "## [2026-10-08] plan | Phases area drafted (multi-agent)",
+        "## [2026-10-08] plan | Decisions area drafted (multi-agent)",
+        "## [2026-10-08] plan | Risks area drafted (multi-agent)",
+        "## [2026-10-08] plan | Research area drafted (multi-agent)",
+        "## [2026-10-08] plan | Quality area drafted (multi-agent)",
+        "## [2026-10-08] plan | Interactive-plan area drafted (multi-agent)"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-review",
+      "date": "2026-10-08",
+      "title": "Plan reviewed, gaps fixed, whole wiki checks clean",
+      "done": "Reviewers raised 52 issues and a completeness check found 23 gaps; all were fixed. Your questions were gathered into one list, and approvals were split into small waves. The WebView2 version on this PC was confirmed (154.0.4258.62). An index of every page was made. Full wiki check: 0 errors, 0 warnings.",
+      "next": "Claude asks you the first batch of questions.",
+      "decisions": [
+        {
+          "what": "Approvals are asked in small waves, most urgent first",
+          "by": "claude"
+        },
+        {
+          "what": "A question that only matters at a phase's end does not block its start",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "496f69d",
+      "covers": [
+        "## [2026-10-08] plan | Multi-agent review of all areas",
+        "## [2026-10-08] plan | Completeness critic pass",
+        "## [2026-10-08] schema | SCHEMA amendment batch (integration)",
+        "## [2026-10-08] ingest | Evidence: WebView2 runtime registry version",
+        "## [2026-10-08] plan | Integration: completeness gaps addressed",
+        "## [2026-10-08] plan | Integration: index.md created",
+        "## [2026-10-08] lint | Integration lint over the whole wiki"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-wave0",
+      "date": "2026-10-08",
+      "title": "You answered the first questions and approved building the plan app",
+      "done": "Saved your answers word for word and updated the affected pages. You approved the plan app's design in chat. Your 'feel free to run install' contradicted an older rule that you run installs, so Claude raised it as a new question instead of guessing.",
+      "next": "Claude runs a full wiki check, then starts the plan app.",
+      "decisions": [
+        {
+          "what": "Claude makes local commits, one per checked task, and never uploads (pushes)",
+          "by": "you"
+        },
+        {
+          "what": "Claude may run installs; Node 24 was installed this way",
+          "by": "you"
+        },
+        {
+          "what": "Claude asks before deleting anything it did not create",
+          "by": "you"
+        },
+        {
+          "what": "Stay on Node 24 for now",
+          "by": "you"
+        },
+        {
+          "what": "Diagram library Mermaid 12, pinned; fall back to 11 if it breaks",
+          "by": "you"
+        },
+        {
+          "what": "Yes to the test coverage tool and the test browser download",
+          "by": "you"
+        },
+        {
+          "what": "The plan app may write approvals to the log; no 'reset to pending' button",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Plan app design pages and their decision (approved in chat)",
+          "status": "Approved"
+        }
+      ],
+      "commit": "04b27b9",
+      "covers": [
+        "## [2026-10-08] ingest | Owner answers, Approval Wave 0 (s01)"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-manual-check",
+      "date": "2026-10-08",
+      "title": "Whole wiki checked by hand; raw-file fingerprints saved",
+      "done": "Checked every page by script and by hand: 0 errors, 33 warnings, each reviewed (mostly planned thresholds, not results). Saved a fingerprint list that proves raw source files are never changed.",
+      "next": "Claude records the Node, npm and git versions.",
+      "decisions": [
+        {
+          "what": "Warnings that are planned thresholds stay as they are",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "04b27b9",
+      "covers": [
+        "## [2026-10-08] lint | p0.8 manual lint over the whole wiki + raw manifest"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-toolchain",
+      "date": "2026-10-08",
+      "title": "Tool versions recorded; build paused on a naming question",
+      "done": "Recorded Node 24.20.0, npm 11.19.0 and git 2.52.0; the version check passed. The evidence file's capital letters broke an index rule, so Claude paused and asked you instead of working around it.",
+      "next": "You decide how the index lists evidence files.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "1cfc2d5",
+      "covers": [
+        "## [2026-10-08] code | p0.9 (IP-0 preconditions): toolchain recorded, Node gate passed"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-wave0b",
+      "date": "2026-10-08",
+      "title": "You settled installs, the index and the check scripts",
+      "done": "Saved your three answers and wrote two decisions from them. Pages that said you run installs were corrected. The index now lists evidence folders, not single files. The two backup check scripts were committed with 27 passing tests; wiki check: 0 errors.",
+      "next": "Claude starts building the plan app.",
+      "decisions": [
+        {
+          "what": "Claude runs all tool installs, including the C++ build tools; you click the admin prompts",
+          "by": "you"
+        },
+        {
+          "what": "Kernel drivers still need your separate approval",
+          "by": "you"
+        },
+        {
+          "what": "The index lists evidence folders, not every file",
+          "by": "you"
+        },
+        {
+          "what": "Commit the backup wiki check scripts in the tools folder",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": "a68667b",
+      "covers": [
+        "## [2026-10-08] ingest | Owner answers Q-216, Q-218, Q-219 (wave 0b, s01)",
+        "## [2026-10-08] decide | adr-0020 (index lists evidence folders) and adr-0021 (Claude runs toolchain installs, supersedes adr-0005)",
+        "## [2026-10-08] schema | SCHEMA §11 raw evidence/bench folders (adr-0020), §8 registry, §9.3 tools/ fallback; CLAUDE.md",
+        "## [2026-10-08] lint | tools/ committed (Q-216); quick lint over the whole wiki after the wave-0b ingest"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-scaffold",
+      "date": "2026-10-08",
+      "title": "Plan app started; three risky ideas tested and passed",
+      "done": "Created the Next.js plan app with every package pinned to an exact version, with no conflicts. Three quick tests passed: it can read the wiki, diagrams draw with no outside requests, and it listens only on this PC. 7 known package warnings were left (the only fix forces breaking upgrades). A small formatting fix to this log entry came later; it broke the never-edit-the-log rule and was reported.",
+      "next": "Claude builds the part that reads wiki pages.",
+      "decisions": [
+        {
+          "what": "The type check first lets Next.js generate its types (needed for this version)",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "2c997fa",
+      "covers": [
+        "## [2026-10-08] code | p0.10 (IP-1 scaffold + spikes): interactive_plan/ scaffolded, stack pinned, S1-S3 pass",
+        "## [2026-10-08] correct | p0.10 code entry: tag keyword put in backticks (lint UNV-NOPHASE)"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-08-loader-stopped",
+      "date": "2026-10-08",
+      "title": "Wiki reader built; stopped on a question about source links",
+      "done": "Built the part of the app that reads and checks every wiki page, with 467 tests. One test failed: 4 pages list their sources in a format the rules did not clearly allow. That changes how pages are checked, so Claude stopped and asked you. Not committed.",
+      "next": "You decide which source formats are allowed.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-08] code | p0.11 (IP-2 wiki loader + zod schemas + fixtures): implemented, gate STOPPED on real-wiki `sources` errors"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-wave0c",
+      "date": "2026-10-09",
+      "title": "You delegated technical choices; wiki reader finished",
+      "done": "You accepted all ten proposed fixes. Sources may be any wiki file or web link; the backup check now fails loudly on errors; unit tests no longer depend on wiki content. The wiki reader then passed: 477 tests, and all 574 source links on the real wiki exist.",
+      "next": "Claude builds change detection: a fingerprint for every page.",
+      "decisions": [
+        {
+          "what": "Accept all ten technical fixes",
+          "by": "you"
+        },
+        {
+          "what": "From now on Claude decides tooling, format and check details itself and logs them",
+          "by": "you"
+        },
+        {
+          "what": "Claude still asks you about scope, product behaviour, security, research method, cost and deletion",
+          "by": "you"
+        },
+        {
+          "what": "Known package warnings accepted for the local plan tool; recheck before P0 ends",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Plan app design pages approved in chat: edited since, so re-approval is needed",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "ac54768",
+      "covers": [
+        "## [2026-10-09] ingest | Owner answers on IP-1/IP-2 technical questions + delegation policy (wave 0c, s01)",
+        "## [2026-10-09] schema | SCHEMA §5.1/§6.13/§9.3: `sources` format and existence (wave 0c items 1-2); delegated details decided",
+        "## [2026-10-09] code | p0.11 (IP-2 wiki loader + zod schemas + fixtures): gate PASS after the wave 0c answers"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-hashes",
+      "date": "2026-10-09",
+      "title": "Change detection built: every page gets a fingerprint",
+      "done": "Built the module that fingerprints each page, so an approval goes out of date when its page changes, plus the checks that decide whether a phase may start. It matches the rule book's reference on 15 hand-made and 401 generated cases; 571 tests pass.",
+      "next": "Claude builds the store that saves approvals safely.",
+      "decisions": [
+        {
+          "what": "If the start-of-session guide is missing, approvals count as outdated (fail safe)",
+          "by": "claude"
+        },
+        {
+          "what": "Five extra test cases for tricky line endings",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "5536d5f",
+      "covers": [
+        "## [2026-10-09] decide | IP-3 delegated details: bootstrap_hash fail-closed, entry-gate step 4, model/diff placement, new hash vectors",
+        "## [2026-10-09] code | p0.12 (IP-3 hashes + effective state + entry gates): gate PASS incl. the Python cross-check"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-store",
+      "date": "2026-10-09",
+      "title": "Approval store built and stress-tested",
+      "done": "Built the part that saves approvals to one file safely, even with several writers at once. A test with 4 processes writing 10 times each, plus a reader, passed, then passed 3 more times in a row. 670 tests pass.",
+      "next": "Claude builds the wiki checker into the app.",
+      "decisions": [
+        {
+          "what": "Retry a failed save up to 6 times, because Windows briefly locks open files",
+          "by": "claude"
+        },
+        {
+          "what": "A refused request never creates any file",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "6cc1a07",
+      "covers": [
+        "## [2026-10-09] decide | IP-4 delegated details: seen_bootstrap_hash, lock scope, rename retry budget, GET details, fake clock",
+        "## [2026-10-09] code | p0.14 (IP-4 approvals store + API route): gate PASS, cross-process test green 3 more times in a row"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-lint",
+      "date": "2026-10-09",
+      "title": "Wiki checker built into the app: 0 errors on the real wiki",
+      "done": "Built the app's own wiki checker (40 rules); it is now the official check. Real wiki: 0 errors, 34 warnings, each reviewed (mostly planned thresholds, not results). It also confirms P1 cannot start yet: nothing is approved and 4 questions are open. 701 tests pass.",
+      "next": "Claude builds the app's main screens.",
+      "decisions": [
+        {
+          "what": "Uncertain-claim tags inside code formatting still count, so none slip past their deadline",
+          "by": "claude"
+        },
+        {
+          "what": "The log is exempt from deadline checks, because it is never edited",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "19b5a95",
+      "covers": [
+        "## [2026-10-09] decide | IP-5 delegated details: tags in inline code, log.md exemption, ADR-CHAIN timing, parity differences, runner settings",
+        "## [2026-10-09] lint | first run of npm run lint:wiki (IP-5) on the real wiki: 0 errors, 34 warnings, dispositions",
+        "## [2026-10-09] code | p0.13 (IP-5 wiki lint + gate report): gate PASS, real wiki 0 errors"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-shell",
+      "date": "2026-10-09",
+      "title": "App frame, wiki browser, search and log screens built",
+      "done": "Built the app's frame (top bar, light and dark theme), the page view with diagrams, the wiki browser, search and the log. HTML inside pages is shown as text and never runs. 773 tests and 44 browser tests pass.",
+      "next": "Claude builds the dashboard and the approvals screens.",
+      "decisions": [
+        {
+          "what": "HTML inside wiki pages is shown as plain text, never run",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "ad521cc",
+      "covers": [
+        "## [2026-10-09] decide | IP-6 delegated details: raw HTML as text, heading shift, /go targets, disabled nav, E2E overlay and setup, ApproveBar tests in IP-7",
+        "## [2026-10-09] code | p0.13 (IP-6 app shell, markdown, wiki browser, search, log): gate PASS"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-dashboard",
+      "date": "2026-10-09",
+      "title": "Dashboard, approvals inbox and phase pages built",
+      "done": "Built the dashboard, the approvals inbox (no bulk approve), the phase pages with their start checks and test evidence, and the approve buttons. 801 tests and 71 browser tests pass; the real approvals file was never touched.",
+      "next": "Claude builds the architecture, roadmap, decisions, risks and research screens.",
+      "decisions": [
+        {
+          "what": "A phase's end review shows as pending only once the phase reaches review",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "a462a9f",
+      "covers": [
+        "## [2026-10-09] decide | IP-7 delegated details: eligible exit keys, Stale tab, wave and grouping rules, evidence paths, ApproveBar placement, E2E isolation",
+        "## [2026-10-09] code | p0.15 (IP-7 dashboard, approvals inbox, phase detail, ApproveBar, lint view): gate PASS"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-views",
+      "date": "2026-10-09",
+      "title": "Architecture, roadmap, decisions, risks and research screens built",
+      "done": "Built the component graph, phase roadmap, decisions list, risk heatmap and research map, each usable by keyboard and with a text version. The first test run found a Windows file-lock problem in the approval store; it was fixed and re-run green. 827 tests and 100 browser tests pass.",
+      "next": "Claude adds accessibility, security and speed checks.",
+      "decisions": [
+        {
+          "what": "Graph layout is worked out on the server; filters live in the web address",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "4fa5ea5",
+      "covers": [
+        "## [2026-10-09] decide | IP-8 delegated details: graph layout and keyboard model, filters as URL parameters, roadmap/research/risk/decision rules, fixture scope, lock busy-retry",
+        "## [2026-10-09] code | p0.13 (IP-8 architecture, roadmap, decisions, risks, research views): gate PASS"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-verify",
+      "date": "2026-10-09",
+      "title": "Accessibility, security and speed checked; full test run green",
+      "done": "Added accessibility and security tests, a read-only test server and minimum test-coverage levels. The full run passed in one go: 830 tests, wiki check 0 errors, 131 browser tests. Speed: normal page loads take 27-178 ms, under the 500 ms target; the first load after start (about 2.2 s) misses it.",
+      "next": "An independent review of the app.",
+      "decisions": [
+        {
+          "what": "Minimum test coverage is enforced by the test tool itself",
+          "by": "claude"
+        },
+        {
+          "what": "No extra accessibility test library (your question on it is still open)",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "0e5282e",
+      "covers": [
+        "## [2026-10-09] decide | IP-9 delegated details: coverage thresholds in vitest config, read-only E2E server, bind probe with control, perf method, no axe",
+        "## [2026-10-09] code | p0.16 (IP-9 accessibility, performance, security, full verify): gate PASS"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-review-fixes",
+      "date": "2026-10-09",
+      "title": "Independent review: 26 findings, 25 fixed",
+      "done": "A reviewer raised 26 issues; 25 were fixed and 1 was caused by another program using the same port. Fixes include security headers on every page, refusing requests that do not come from this PC, and stricter wiki rules. A broken approvals file now counts as an error. 869 tests and 143 browser tests pass.",
+      "next": "Claude writes the app's guide and the session handoff.",
+      "decisions": [
+        {
+          "what": "A broken approvals file is an error, not a warning (proposed; you can reject it)",
+          "by": "claude"
+        },
+        {
+          "what": "The in-app wiki check skips git; the full git checks run in the command-line check",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "6a78a78",
+      "covers": [
+        "## [2026-10-09] decide | IP-9 review delegated details: in-server lint without git, owner-ADR overturn, graph zoom and labels, bind-probe skip, launcher",
+        "## [2026-10-09] schema | APPROVAL-INVALID added to the SCHEMA §9.3 table as an error (adr-0022, claude-proposed)",
+        "## [2026-10-09] code | p0.16 (IP-9 review fixes: security, spec gaps, lint correctness, graph and layout UX, tests): gate PASS"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-v1-done",
+      "date": "2026-10-09",
+      "title": "Plan app v1 finished and handed off",
+      "done": "Wrote the app's guide (how to start it, scripts, known issues), ran the final wiki check (0 errors, 34 reviewed warnings) and wrote the session handoff. One review issue stayed open: labels on the architecture graph overlapped.",
+      "next": "You review the app and give the first wave of approvals.",
+      "decisions": [
+        {
+          "what": "The speed target stays marked as not fully checked (the 300-page case was not measured)",
+          "by": "claude"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "First approval wave: the P0 planning pages",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "6118d32",
+      "covers": [
+        "## [2026-10-09] decide | IP-10 delegated details: perf tag kept, README known issue, failed self-referencing lint run kept",
+        "## [2026-10-09] lint | p0.16 (IP-10 documentation, evidence, handoff): final lint:wiki 0 errors, gate PASS",
+        "## [2026-10-09] handoff | s01 end of the plan-app build: handoff-2026-10-09-s01"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-labels",
+      "date": "2026-10-09",
+      "title": "Architecture graph labels fixed; small clean-ups",
+      "done": "Graph labels are now short tags that never overlap (before: 19 overlapping pairs; after: 0). The full text sits in a list beside the graph, and a new test checks this on the real wiki. Two evidence files with stray line-ending bytes were restored from git; nothing in git changed. 873 tests and 144 browser tests pass.",
+      "next": "You review the app and give the first wave of approvals.",
+      "decisions": [
+        {
+          "what": "Slow first page load accepted as a limit of a local, one-person tool",
+          "by": "claude"
+        },
+        {
+          "what": "Labels that do not fit are left off the graph and shown in the list",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "3eaa641",
+      "covers": [
+        "## [2026-10-09] decide | IP-10 follow-up delegated details: architecture edge chips, edge list beside the graph, real-wiki E2E server",
+        "## [2026-10-09] decide | ip-spec §5 cold-request timing misses accepted as a local-tool limitation",
+        "## [2026-10-09] decide | raw working copies restored from git; comp-interactive-plan implemented",
+        "## [2026-10-09] code | p0.16 (IP-10 follow-up: architecture edge-label overlap fixed, E2E overlap assertion): gate PASS"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-feedback",
+      "date": "2026-10-09",
+      "title": "You reviewed plan app v1 and chose the portal v2 design",
+      "done": "You found v1 too technical and too wordy, and asked for a plain-language, read-only portal you can look things up in. Your feedback and your design answers were saved word for word.",
+      "next": "Claude turns your decisions into written rules.",
+      "decisions": [
+        {
+          "what": "Approvals are given in Claude Code only; the portal is read-only",
+          "by": "you"
+        },
+        {
+          "what": "Claude records each approval with change detection and re-asks if the page changes",
+          "by": "you"
+        },
+        {
+          "what": "Claude writes the portal's plain-language text in the same edit as the wiki",
+          "by": "you"
+        },
+        {
+          "what": "This is enforced by a rule book for Claude, an end-of-turn check and a check script",
+          "by": "you"
+        },
+        {
+          "what": "Check scripts are PowerShell 7: one per task, one per phase gate",
+          "by": "you"
+        },
+        {
+          "what": "Architecture in four groups: Application, Benchmark, Testing & quality, Research & analysis",
+          "by": "you"
+        },
+        {
+          "what": "Mask real IP addresses now; rewrite old commits before the first upload",
+          "by": "you"
+        },
+        {
+          "what": "Questions are asked in Claude Code and shown as a log",
+          "by": "you"
+        },
+        {
+          "what": "Overview layout: Option A, a briefing page with top tabs",
+          "by": "you"
+        },
+        {
+          "what": "Build the phase popup, roadmap, architecture and log from the mockups",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": "a78f1e3",
+      "covers": [
+        "## [2026-10-09] ingest | owner feedback on plan app v1 and owner decisions for portal v2"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-rules",
+      "date": "2026-10-09",
+      "title": "Portal v2 rules written; real machine details masked",
+      "done": "Your decisions became five written decisions plus matching rule-book changes. Claude records approvals with a small tool that refuses any approval without your saved words. Real IP addresses and the user-folder path in 16 committed test logs were replaced by placeholders; the real values stay in a local file that is never committed. Checks: 0 errors, 0 unmasked values.",
+      "next": "Claude builds the wiki-to-portal pipeline.",
+      "decisions": [
+        {
+          "what": "The old 'approve in the plan app' decision is replaced; local-only app and version pins still hold",
+          "by": "claude"
+        },
+        {
+          "what": "The raw-file guard accepts only the listed masking edits",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "5d33859",
+      "covers": [
+        "## [2026-10-09] decide | portal v2 rules: five owner decisions written as adr-0023 to adr-0027",
+        "## [2026-10-09] decide | delegated details of the portal v2 rules (tooling and lint consistency)",
+        "## [2026-10-09] schema | approvals given in Claude Code and recorded by Claude; read-only portal; masking and the sanctioned raw edit",
+        "## [2026-10-09] correct | committed files masked: real IPs and the user-folder path replaced by masks (sanctioned raw edit)",
+        "## [2026-10-09] lint | p0.17 rules step: quick lint 0 errors, lint:wiki 0 errors, mask scan 0 unmasked",
+        "## [2026-10-09] plan | p0.17 step \"rules\" committed: portal v2 rules, masking, approvals recorder"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
       "id": "log-2026-10-09-pipeline",
       "date": "2026-10-09",
-      "title": "The wiki-to-portal pipeline is built (switched off for now)",
-      "done": "Built the machinery that keeps the portal's plain-language text in step with the wiki: a rule book for Claude on how to write it, a shape for every portal file, a check script that spots outdated or missing text, and an automatic check at the end of each Claude turn. 20 tests pass. The automatic check stays off until the portal text exists.",
+      "title": "Wiki-to-portal pipeline built (its automatic check is off for now)",
+      "done": "Built what keeps the portal's plain text in step with the wiki: a rule book for Claude on how to write it, a fixed shape for every portal file, a check script that spots outdated or missing text, and an automatic check at the end of each Claude turn. 20 tests pass. The automatic check stays off until the portal text exists.",
       "next": "Claude writes the plain-language text for every page, then switches the automatic check on.",
       "decisions": [
         {
-          "what": "Portal text lives in plan/portal/, one file per portal tab, each with a fixed shape",
+          "what": "Portal text lives in one file per portal tab, each with a fixed shape",
           "by": "claude"
         },
         {
-          "what": "Each record remembers the fingerprint of its wiki page, so outdated text is caught",
+          "what": "Each record remembers its wiki page's fingerprint, so outdated text is caught",
           "by": "claude"
         },
         {
-          "what": "Every id shown in the portal must have a short explainer popup",
+          "what": "Every id shown in the portal gets a short explainer popup",
           "by": "claude"
         },
         {
-          "what": "Check scripts go in scripts/verify (one per task) and scripts/gates (one per phase)",
+          "what": "Task check scripts go in one folder, phase gate scripts in another",
           "by": "claude"
         },
         {
-          "what": "The end-of-turn check never blocks twice in a row and never traps a session if it breaks",
+          "what": "The end-of-turn check never blocks twice in a row",
           "by": "claude"
         }
       ],
       "approvals": [],
       "commit": "8d89329",
-      "phase": "phase-p0-planning",
       "covers": [
         "## [2026-10-09] ingest | Claude Code docs on Stop hooks and project skills",
         "## [2026-10-09] decide | wiki-to-portal pipeline: where the JSON lives, its shapes, the checker, the hook, check-script folders",
         "## [2026-10-09] schema | portal JSON location and the same-edit rule",
         "## [2026-10-09] lint | p0.17 pipeline step: 20 checker tests pass, quick lint and lint:wiki 0 errors",
         "## [2026-10-09] plan | p0.17 step \"pipeline\" committed: wiki-to-portal JSON pipeline, hook switched off"
-      ]
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-content",
+      "date": "2026-10-09",
+      "title": "Portal text written for every page; automatic check switched on",
+      "done": "Six Claude writers turned every wiki page into short plain-language text for the new portal: phases with their tasks and checks, roadmap, decisions, risks, research, architecture, questions and this log. Their work was merged and read through once as you would read it; jargon was replaced. Every id now opens a short explainer. The portal check is clean, and it now runs at the end of every Claude turn.",
+      "next": "Claude writes a check script for every task and phase, then builds the new read-only portal from your chosen mockups.",
+      "decisions": [
+        {
+          "what": "Where two writers explained the same id, the area that owns it wins",
+          "by": "claude"
+        },
+        {
+          "what": "A task's script link stays empty until the script really exists",
+          "by": "claude"
+        },
+        {
+          "what": "Four pages still said you approve in the plan app; fixed to Claude Code",
+          "by": "claude"
+        },
+        {
+          "what": "The end-of-turn portal check is switched on",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-09] decide | portal content: how the six writers' text was merged, empty script fields, plain-word fixes, check switched on",
+        "## [2026-10-09] correct | stale \"approve in the plan app\" wording fixed on two phase pages, risk-r22 and adr-0001",
+        "## [2026-10-09] lint | p0.17 content step: portal check clean, quick lint and lint:wiki 0 errors, mask scan 0 unmasked"
+      ],
+      "phase": "phase-p0-planning"
     }
   ]
 }

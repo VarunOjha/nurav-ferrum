@@ -1,0 +1,82 @@
+{
+  "$schema": "schema/overview.schema.json",
+  "id": "overview",
+  "title": "Where we are",
+  "summary": "We are finishing the plan (P0). The plain-language text behind the new portal is written and checked; next come the check scripts and the new portal itself. Nothing is approved yet, and no Ferrum code exists yet.",
+  "source": {
+    "wiki_path": "STATUS.md",
+    "content_hash": "sha256:f59870bc1ea913a29e56f7cf82d82c701d6c028daec966e15aacd74208892e17"
+  },
+  "updated": "2026-10-09",
+  "where_we_are": [
+    {
+      "item": "Current phase",
+      "state": "P0 Planning, in progress: 16 of 18 tasks done",
+      "ref": "phase-p0-planning"
+    },
+    {
+      "item": "Portal text",
+      "state": "Written for every page and checked: nothing outdated, missing or unexplained"
+    },
+    {
+      "item": "Plan portal (the site)",
+      "state": "Still the old version; the new read-only one is built from your chosen mockups"
+    },
+    {
+      "item": "Approvals",
+      "state": "None yet. You give them in Claude Code, wave by wave; Claude records them"
+    },
+    {
+      "item": "Questions for you",
+      "state": "39 open; 4 of them are asked with the first approval wave"
+    },
+    {
+      "item": "Tools",
+      "state": "Node 24, PowerShell 7, Rust and the C++ build tools are installed; P1 records the versions"
+    },
+    {
+      "item": "First upload to GitHub",
+      "state": "On hold until you answer the history-rewrite question",
+      "ref": "Q-221"
+    }
+  ],
+  "next_action": {
+    "who": "claude",
+    "where_we_are": [
+      {
+        "item": "Portal text",
+        "state": "Done and checked"
+      },
+      {
+        "item": "Check scripts (one per task, one per phase)",
+        "state": "Claude writes them next"
+      },
+      {
+        "item": "New portal site",
+        "state": "Claude builds it after the scripts"
+      },
+      {
+        "item": "Your first approvals",
+        "state": "After you have seen the new portal"
+      }
+    ],
+    "why": "Nothing to run yet. Claude writes a short PowerShell check script for each task and phase → then builds the new read-only portal from your chosen mockups → you review it and give your first approvals in Claude Code.",
+    "script": null,
+    "tell_claude": "Nothing for now. When Claude says the new portal is ready, open it and say what to change, or “I approve the first wave”."
+  },
+  "questions_for_you": {
+    "open": 39,
+    "items": [
+      {
+        "id": "Q-005",
+        "question": "Do you confirm the proposed non-goals (no extensions, no sync or accounts, Windows 11 only, not a full browser) and moving split view to after P8?",
+        "asked": "2026-10-08"
+      },
+      {
+        "id": "Q-108",
+        "question": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases?",
+        "asked": "2026-10-08"
+      }
+    ]
+  }
+}

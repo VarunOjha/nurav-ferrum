@@ -1,0 +1,198 @@
+{
+  "id": "phase-p0-planning",
+  "short": "P0",
+  "title": "Planning",
+  "one_line_goal": "Plan written, checked and approved by you; no app code yet",
+  "summary": "Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. Most of it is done; Claude is now rebuilding the portal in plain language.",
+  "status": "In progress",
+  "progress": {
+    "done": 16,
+    "total": 18
+  },
+  "step_order": [
+    "Starting documents",
+    "Research notes",
+    "Wiki pages",
+    "Wiki check",
+    "Plan app v1",
+    "Portal v2",
+    "Your review",
+    "Exit"
+  ],
+  "tasks": [
+    {
+      "id": "p0.1",
+      "title": "Save the starting documents",
+      "chain": "Your brief and scoping answers are the ground truth → store them word for word, never edited → every later page can cite them.",
+      "check": "Both files exist, are marked unchangeable, and their fingerprints are recorded.",
+      "script": null
+    },
+    {
+      "id": "p0.2",
+      "title": "Write five research notes",
+      "chain": "Plans built from memory go stale → research the wiki method, Tauri and WebView2, measurement, the plan-app stack and related work, with dated sources → decisions rest on checked facts.",
+      "check": "Five notes exist; every source has an access date and a checked or uncertain label.",
+      "script": null
+    },
+    {
+      "id": "p0.3",
+      "title": "Write the wiki rules and live status",
+      "chain": "Many sessions and helpers edit the wiki → one rulebook (page shapes, fingerprints) plus a live status file → any session can pick up where the last one stopped.",
+      "check": "The fingerprint script runs on the rulebook; Claude's instructions link to it; the status file has its required fields.",
+      "script": null
+    },
+    {
+      "id": "p0.4",
+      "title": "Describe the architecture and its parts",
+      "chain": "The app has many parts with different trust levels → one page per part, saying what it talks to → security boundaries are visible before any code.",
+      "check": "Every planned part has exactly one page; every link that crosses a trust level is marked.",
+      "script": null
+    },
+    {
+      "id": "p0.5",
+      "title": "Write the decisions and the risk register",
+      "chain": "Choices and risks get forgotten → one page per decision (19) and per risk, with likelihood, impact and response → we can always see why, and what could go wrong.",
+      "check": "19 decision pages with all required sections; every risk has likelihood, impact, response and an owning phase.",
+      "script": null
+    },
+    {
+      "id": "p0.6",
+      "title": "Write the research plan pages",
+      "chain": "Ferrum is also a research project → questions, predictions, experiments, metrics and test workloads, linked to each other → nothing is measured without a reason.",
+      "check": "Links agree in both directions; no page states a measured number.",
+      "script": null
+    },
+    {
+      "id": "p0.7",
+      "title": "Write phase pages, index and log",
+      "chain": "Work spans nine phases and many sessions → a page per phase, an index of every page and a running log → you and Claude can find anything.",
+      "check": "The index lists every page once; log headings follow the agreed format.",
+      "script": null
+    },
+    {
+      "id": "p0.8",
+      "title": "Check the whole wiki",
+      "chain": "Hundreds of linked pages drift → run every rule by hand or script and fingerprint the raw files → work starts from a clean, tamper-evident base.",
+      "check": "The check report shows zero errors; every raw file has a recorded fingerprint.",
+      "script": null
+    },
+    {
+      "id": "p0.9",
+      "title": "Install Node and record versions",
+      "chain": "The plan app needs Node 24 → install it and record exact versions → builds can be repeated.",
+      "check": "Node, npm and git versions saved; Node's major version is 24.",
+      "script": null
+    },
+    {
+      "id": "p0.10",
+      "title": "Create the plan app skeleton",
+      "chain": "Loose versions break things later → create the web app with exact versions and three small feasibility tests → a stable base for the rest.",
+      "check": "Install shows no version conflicts; type check, style check and build succeed; the feasibility tests pass.",
+      "script": null
+    },
+    {
+      "id": "p0.11",
+      "title": "Teach the app to read the wiki",
+      "chain": "The app shows wiki pages → a reader that checks each page's header against the rules → bad pages are flagged, not shown wrongly.",
+      "check": "Tests on sample pages pass; the real wiki loads with zero header errors.",
+      "script": null
+    },
+    {
+      "id": "p0.12",
+      "title": "Fingerprint pages exactly like the reference",
+      "chain": "Approvals are tied to page fingerprints → compute them in the app exactly like the reference script → a changed page can never keep an old approval.",
+      "check": "The app and the reference script give identical fingerprints on every test case.",
+      "script": null
+    },
+    {
+      "id": "p0.13",
+      "title": "Build the app's views and wiki check",
+      "chain": "You need to see the plan, not raw files → dashboard, roadmap, architecture, decisions, risks and research views, plus an automatic wiki check → the plan is readable and checked.",
+      "check": "Browser tests open every view on a production build with no errors.",
+      "script": null
+    },
+    {
+      "id": "p0.14",
+      "title": "Build the approvals store",
+      "chain": "Approvals must not be lost or forged → a local-only store with safe writes, every approval state tested → no approval is silently wrong.",
+      "check": "Tests cover every approval state; requests from other computers are refused.",
+      "script": null
+    },
+    {
+      "id": "p0.15",
+      "title": "Build the approval screens",
+      "chain": "Approvals were first planned inside the app → approve, change and reject buttons with an outdated-page badge → later replaced: you now approve in Claude Code.",
+      "check": "Browser test: editing an approved page turns its badge to outdated.",
+      "script": null
+    },
+    {
+      "id": "p0.16",
+      "title": "Run the full plan-app test gate",
+      "chain": "Each piece passed on its own → run every check together and save the output → proof the whole app works.",
+      "check": "All checks pass in one run with zero wiki errors; output saved.",
+      "script": null
+    },
+    {
+      "id": "p0.17",
+      "title": "Portal v2, then your review",
+      "chain": "You found v1 too technical → rebuild it as a read-only portal in plain words, fed by text Claude writes from the wiki → you review it and approve in Claude Code; Claude records each approval.",
+      "check": "The portal check reports clean; your approvals for the P1 pages are recorded.",
+      "script": null
+    },
+    {
+      "id": "p0.18",
+      "title": "Close P0",
+      "chain": "All checks pass and the pages are approved → you approve the phase exit in Claude Code → P1 may start.",
+      "check": "Exit approval recorded; a gate entry in the log; work committed locally.",
+      "script": null
+    }
+  ],
+  "test_gate": {
+    "explanation": "The plan app becomes the gatekeeper for every later phase → its style checks, tests and build must all pass in one run, output saved → you review the plan and approve in Claude Code → only then does P1 start.",
+    "rows": [
+      {
+        "check": "Style and type checks",
+        "proves": "The plan app's code is clean and consistent."
+      },
+      {
+        "check": "Unit tests",
+        "proves": "Wiki reader, fingerprints and approval states behave as specified."
+      },
+      {
+        "check": "Browser tests",
+        "proves": "Every view works on a production build, reachable from this computer only."
+      },
+      {
+        "check": "Production build",
+        "proves": "The app builds."
+      },
+      {
+        "check": "Fingerprint cross-check",
+        "proves": "The app and the reference script compute identical fingerprints."
+      },
+      {
+        "check": "Wiki check",
+        "proves": "The wiki has zero errors."
+      },
+      {
+        "check": "Your walkthrough",
+        "proves": "You opened every view and confirmed it matches the wiki."
+      },
+      {
+        "check": "Open questions",
+        "proves": "You answered or deferred each open question."
+      }
+    ],
+    "script": null
+  },
+  "related": [
+    "phase-p1-foundation",
+    "adr-0023",
+    "adr-0024",
+    "adr-0025"
+  ],
+  "source": {
+    "wiki_path": "wiki/phases/phase-p0-planning.md",
+    "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+  }
+}

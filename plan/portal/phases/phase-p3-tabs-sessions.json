@@ -1,0 +1,180 @@
+{
+  "id": "phase-p3-tabs-sessions",
+  "short": "P3",
+  "title": "Tabs and sessions",
+  "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
+  "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
+  "status": "Not started",
+  "progress": {
+    "done": 0,
+    "total": 15
+  },
+  "step_order": [
+    "Tab rules",
+    "View per tab",
+    "Settings and restore",
+    "Per-site profiles",
+    "History and downloads",
+    "Settings screen, sidebar",
+    "Gate",
+    "Your review"
+  ],
+  "tasks": [
+    {
+      "id": "p3.1",
+      "title": "Tab rules as plain code",
+      "chain": "Tab logic has many edge cases → write it without the window and test random sequences of actions → exactly one active tab, ids never reused.",
+      "check": "Unit and random-sequence tests keep every rule.",
+      "script": null
+    },
+    {
+      "id": "p3.2",
+      "title": "One web view per tab",
+      "chain": "Each tab needs its own view → create views only from non-blocking code, hide and show on switch, release fully on close → no freezes or leftover processes.",
+      "check": "Open 20 tabs, switch, close all: view count back to zero, no leftover processes.",
+      "script": null
+    },
+    {
+      "id": "p3.3",
+      "title": "Tab strip and shortcuts",
+      "chain": "Shortcuts must work even while typing in a website → handle them in the shell without giving websites access → fast and still safe.",
+      "check": "Each shortcut works from the shell and from a tab; the bridge lockdown test still passes.",
+      "script": null
+    },
+    {
+      "id": "p3.4",
+      "title": "Saved settings and startup sites",
+      "chain": "Settings must survive crashes and upgrades → a versioned file, written safely, with migration → never lost or half-written.",
+      "check": "Round trip works; a future version is refused clearly; a corrupt file falls back with a backup; startup sites open in order.",
+      "script": null
+    },
+    {
+      "id": "p3.5",
+      "title": "Restore tabs after restart or crash",
+      "chain": "Crashes happen → save the tab list regularly and on exit, safely → after a forced kill you get your tabs back.",
+      "check": "Normal exit, forced kill and unreachable-site restores all behave.",
+      "script": null
+    },
+    {
+      "id": "p3.6",
+      "title": "Separate profile per site",
+      "chain": "Sites should not see each other's data → assign profiles using the route chosen in P1 → cookies stay apart.",
+      "check": "Two sites in different profiles cannot see each other's cookies; one site in two tabs shares one profile; survives restart.",
+      "script": null
+    },
+    {
+      "id": "p3.7",
+      "title": "History",
+      "chain": "You need back/forward per tab and a list of visited pages → kept locally, clearable, never in the repo → useful without leaking.",
+      "check": "History tests pass; clearing empties the list and the file.",
+      "script": null
+    },
+    {
+      "id": "p3.8",
+      "title": "Basic downloads",
+      "chain": "Files must land somewhere sensible → default folder or a prompt, with progress and errors → downloads are visible.",
+      "check": "A test file arrives with the right size and fingerprint; a failing one shows an error.",
+      "script": null
+    },
+    {
+      "id": "p3.9",
+      "title": "Shell stays responsive",
+      "chain": "A busy tab must not freeze the browser → switch tabs and type while another tab burns CPU → the shell stays usable.",
+      "check": "Switching and typing finish within the test's time limit (a requirement, not a measurement).",
+      "script": null
+    },
+    {
+      "id": "p3.10",
+      "title": "Guard against the freeze bug",
+      "chain": "Creating views from blocking code freezes on Windows → make that path impossible and test it in a loop → the bug cannot come back.",
+      "check": "A review checklist item plus a loop test that never hangs.",
+      "script": null
+    },
+    {
+      "id": "p3.14",
+      "title": "Settings screen",
+      "chain": "You need to change startup sites, profiles and the download folder → a settings screen in the trusted shell, checked by the app → websites still cannot touch settings.",
+      "check": "Changes persist and apply after restart; bad input is refused; websites cannot call these commands.",
+      "script": null
+    },
+    {
+      "id": "p3.15",
+      "title": "Sidebar of tabs and history",
+      "chain": "Website views are always drawn over the shell → place the sidebar beside them, never on top → nothing is hidden or overlapped.",
+      "check": "Toggling the sidebar resizes the tab view with no overlap; choosing an entry opens it.",
+      "script": null
+    },
+    {
+      "id": "p3.11",
+      "title": "One integration suite",
+      "chain": "Many features → one command runs every P3 test → a single green run proves the milestone.",
+      "check": "The suite passes; output saved.",
+      "script": null
+    },
+    {
+      "id": "p3.12",
+      "title": "Literature batch 3",
+      "chain": "Tab lifecycle is the core research idea → read tab-usage studies and Chrome and Edge lifecycle policies → prior art for P7.",
+      "check": "New dated notes; uncertain seed entries checked or still flagged.",
+      "script": null
+    },
+    {
+      "id": "p3.13",
+      "title": "Docs, gate, your review",
+      "chain": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
+      "check": "All evidence saved; wiki clean; you approved the P3 exit.",
+      "script": null
+    }
+  ],
+  "test_gate": {
+    "explanation": "Tabs multiply every P2 behaviour → rerun P2's tests plus the new suite, and test restore after a forced kill → you use it for a real working session → only then does security work start in P4.",
+    "rows": [
+      {
+        "check": "Formatting and code warnings",
+        "proves": "Rust code is clean."
+      },
+      {
+        "check": "Tests",
+        "proves": "Workspace tests pass."
+      },
+      {
+        "check": "Licences and alerts",
+        "proves": "Dependencies are allowed and have no open alerts."
+      },
+      {
+        "check": "Shell checks",
+        "proves": "Shell style, types and tests pass."
+      },
+      {
+        "check": "Release build",
+        "proves": "The app you would ship builds."
+      },
+      {
+        "check": "Integration suite",
+        "proves": "Tabs, restore, profiles, history, downloads, settings and sidebar work."
+      },
+      {
+        "check": "Earlier tests again",
+        "proves": "P2's quick app tests and the bridge lockdown still pass."
+      },
+      {
+        "check": "Wiki check",
+        "proves": "The wiki has zero errors."
+      },
+      {
+        "check": "Your working session",
+        "proves": "You used eight or more tabs, every shortcut, a kill-and-restore and a real download."
+      }
+    ],
+    "script": null
+  },
+  "related": [
+    "adr-0007",
+    "adr-0010",
+    "risk-r01"
+  ],
+  "source": {
+    "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
+    "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+  }
+}

@@ -3,7 +3,7 @@ id: phase-p1-foundation
 type: phase
 title: "P1 Foundation: toolchain, repo scaffold, CI, de-risking spikes"
 status: planned
-updated: 2026-10-08
+updated: 2026-10-09
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -26,7 +26,7 @@ entry_criteria:
   - "No open Q-NNN in ov-open-questions blocks any id in the dependency set."
   - "Owner is available to confirm the UAC prompts of the toolchain installs Claude runs (adr-0021, superseding adr-0005); no kernel driver is installed in P1 (drivers need separate owner approval)."
 deliverables:
-  - "Installed and recorded toolchain: rustup/rustc/cargo (stable-msvc, Rust >= 1.90), MSVC Build Tools, Node LTS, Python, Git (raw/evidence/phase-p1-foundation/toolchain.txt)."
+  - "Installed and recorded toolchain: rustup/rustc/cargo (stable-msvc, Rust >= 1.90), MSVC Build Tools, Node LTS, Python, Git, PowerShell 7 (raw/evidence/phase-p1-foundation/toolchain.txt)."
   - "Benchmark machine inventory (CPU model and Zen generation, RAM, GPU, display, power plan, browser and WebView2 versions)."
   - "Git hygiene: .gitignore, .gitattributes, LICENSE-MIT, LICENSE-APACHE, first local commits."
   - "Cargo workspace mirroring master prompt section 12 (adr-0018) with empty, compiling, linted library crates."
@@ -39,14 +39,14 @@ deliverables:
   - "Literature review protocol and first batch of verified reading notes (research track start)."
 tasks:
   - id: p1.1
-    title: "Claude installs the toolchain with the exact winget commands in the body (owner clicks through UAC prompts, adr-0021); Claude verifies and records versions and installs cargo-deny with 'cargo install cargo-deny --locked'"
-    verify: "rustc -Vv shows host x86_64-pc-windows-msvc and release >= 1.90; cargo -V, rustup show, node --version, npm --version, python --version, git --version and 'cargo deny --version' outputs saved to raw/evidence/phase-p1-foundation/toolchain.txt; 'cargo new --lib' in a temp dir followed by 'cargo build' links successfully (proves MSVC linker)."
+    title: "Claude confirms and records the toolchain already installed on 2026-10-09 (Rust stable-msvc, VS 2022 Build Tools, Node 24, PowerShell 7; see Scope), runs the winget commands in the body only for anything missing (owner clicks through UAC prompts, adr-0021), and installs cargo-deny with 'cargo install cargo-deny --locked'"
+    verify: "rustc -Vv shows host x86_64-pc-windows-msvc and release >= 1.90; cargo -V, rustup show, node --version, npm --version, python --version, git --version, pwsh --version and 'cargo deny --version' outputs saved to raw/evidence/phase-p1-foundation/toolchain.txt; 'cargo new --lib' in a temp dir followed by 'cargo build' links successfully (proves MSVC linker)."
   - id: p1.2
     title: "Record the benchmark machine inventory and current browser/WebView2 versions; owner answers CPU/RAM and meter questions"
     verify: "raw/evidence/phase-p1-foundation/environment.md contains outputs of the PowerShell inventory commands in the body (CPU name, cores, RAM, GPU, power scheme, OS build, WebView2 pv re-read and compared with raw/evidence/phase-p0-planning/env-webview2-pv.txt, Edge and Chrome versions)."
   - id: p1.3
     title: "Git hygiene: .gitignore (target/, spikes/*/target/, node_modules/, .next/, benchmarks/results/, profiles, *.etl; plan/snapshots/ stays tracked), .gitattributes, LICENSE-MIT and LICENSE-APACHE from their official texts, README license section"
-    verify: "'git check-ignore -v target/x spikes/s1-multiwebview/target/x node_modules/x interactive_plan/.next/x benchmarks/results/x' prints a rule for each and 'git check-ignore plan/snapshots/x' prints nothing; both licence files exist; owner authorises local commits (raw/owner/ transcription) and 'git log --oneline' shows the first commit."
+    verify: "'git check-ignore -v target/x spikes/s1-multiwebview/target/x node_modules/x interactive_plan/.next/x benchmarks/results/x' prints a rule for each and 'git check-ignore plan/snapshots/x' prints nothing; both licence files exist; local commits are already authorised (Q-104, 2026-10-08) and 'git log --oneline' shows the commit."
   - id: p1.4
     title: "Cargo workspace scaffold per adr-0018: root Cargo.toml (resolver 2, exclude = [\"spikes/*\"]), crates/core, crates/webview-manager, crates/security, crates/resource-manager, crates/telemetry, crates/network-logger (if Q-106 approves it) as library stubs; rust-toolchain.toml pinned to the observed stable version; section 12 directories with README placeholders"
     verify: "cargo build --workspace --locked, cargo test --workspace --locked, cargo fmt --all -- --check and cargo clippy --workspace --all-targets --locked -- -D warnings all exit 0; outputs saved as evidence."
@@ -67,7 +67,7 @@ tasks:
     verify: "Script exits 0 and writes targets.json listing every CDP target (shell and each child identifiable); it navigates one child to a local fixture and reads paint timing entries; the report lists which Playwright features failed over CDP."
   - id: p1.9
     title: "Spike synthesis and M1 design freeze: update risk pages, component pages and architecture; propose new ADRs (next free numbers) for the profile route, back/forward mechanism and CDP benchmark path; owner decides"
-    verify: "New ADR pages exist with status proposed; each spiked risk page has an updated status and cites its spike report; the owner approved the new ADRs in the plan app (effective state APPROVED)."
+    verify: "New ADR pages exist with status proposed; each spiked risk page has an updated status and cites its spike report; the owner approved the new ADRs in Claude Code, recorded by Claude (adr-0023; effective state APPROVED)."
   - id: p1.10
     title: "Extend lint: git-backed rules (RAW-IMMUTABLE from git history plus wiki/raw/MANIFEST.sha256, STALE-UPDATED) in the existing TS npm run lint:wiki from P0 (IP-5); no second linter"
     verify: "Fixture repos trigger RAW-IMMUTABLE and STALE-UPDATED in unit tests; 'npm run lint:wiki' on the real wiki exits 0 with zero errors; the MANIFEST created in p0.8 matches every raw file, and new raw files since p0.8 have appended lines."
@@ -97,7 +97,7 @@ test_gate:
     - "cargo deny check"
     - "cd interactive_plan && npm run lint:wiki (zero errors)"
     - "cd interactive_plan && npm run lint && npm run typecheck && npm run test && npm run build"
-    - "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/ci-local.ps1 (Windows PowerShell 5.1, which ships with Windows 11; PowerShell 7 is not required)"
+    - "pwsh -NoProfile -File scripts/ci-local.ps1 (PowerShell 7, adr-0025)"
     - "Spike S4 Playwright script (spikes/s4-playwright-cdp) exits 0"
   manual:
     - "Owner confirmed the UAC prompts of the installs Claude ran (adr-0021) and saw each complete (or reports the error text)."
@@ -160,7 +160,7 @@ winget install -e --id OpenJS.NodeJS.LTS
 rustup default stable-msvc
 ```
 
-Node is normally already installed in P0 (p0.9). If it is not, the third command applies. Whether the Build Tools command is sufficient for Tauri is UNVERIFIED[phase-p1-foundation]. Tauri 2.12.1 needs Rust 1.90 or newer (research note section 10, item 10). After 2026-10-28 the LTS winget id may resolve to Node 26 ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) section 2); pinning with `--version` is UNVERIFIED[phase-p1-foundation].
+Observed on 2026-10-09 (session s01, not yet saved as evidence): Rust 1.99.0 on `stable-x86_64-pc-windows-msvc` (default), Visual Studio Build Tools 2022 17.14 with MSVC 14.44 and Windows SDK 10.0.26100, Node v24.20.0 (installed in P0, p0.9) and PowerShell 7.6.6 are already installed; cargo-deny is not. p1.1 therefore confirms and records these versions and runs a command above only for a missing tool. Whether the Build Tools command is sufficient for Tauri is UNVERIFIED[phase-p1-foundation]. Tauri 2.12.1 needs Rust 1.90 or newer (research note section 10, item 10). After 2026-10-28 the LTS winget id may resolve to Node 26 ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) section 2); pinning with `--version` is UNVERIFIED[phase-p1-foundation].
 
 Verification commands Claude runs afterwards (output to `toolchain.txt`):
 
@@ -172,6 +172,7 @@ node --version
 npm --version
 python --version
 git --version
+pwsh --version
 where.exe link.exe
 ```
 

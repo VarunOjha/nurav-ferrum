@@ -1,0 +1,207 @@
+{
+  "id": "phase-p4-security",
+  "short": "P4",
+  "title": "Security",
+  "one_line_goal": "Blocking, permissions and isolation proven by tests; threat model written",
+  "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
+  "status": "Not started",
+  "progress": {
+    "done": 0,
+    "total": 17
+  },
+  "step_order": [
+    "Threat model",
+    "Rules engine",
+    "Every navigation path",
+    "Permissions, downloads",
+    "Isolation",
+    "Audit log",
+    "Security suite",
+    "Your review"
+  ],
+  "tasks": [
+    {
+      "id": "p4.1",
+      "title": "Threat model",
+      "chain": "Controls need a reason → list what we protect, who attacks and where trust changes, and map each threat to a control and test, or 'not enforced' → every later task traces to a threat.",
+      "check": "The security document maps every boundary and threat to a control and a test, or says not enforced.",
+      "script": null
+    },
+    {
+      "id": "p4.2",
+      "title": "Rules engine",
+      "chain": "Navigation needs one decision point → plain Rust rules: block and allow lists, HTTPS upgrade, ask for other link types, deny anything unreadable → safe by default, every decision explained.",
+      "check": "Tests per rule plus random inputs; every decision branch covered (report saved).",
+      "script": null
+    },
+    {
+      "id": "p4.3",
+      "title": "Check every navigation path",
+      "chain": "Tauri's hook misses unreadable addresses and embedded frames → also hook WebView2's own events and re-check each redirect → no way around the rules by redirect, frame or pop-up.",
+      "check": "A blocked site is denied and logged via direct link, redirect, frame, pop-up and malformed address.",
+      "script": null
+    },
+    {
+      "id": "p4.4",
+      "title": "Ask before opening other apps",
+      "chain": "Links can launch other programs → confirm in the shell, with an allowlist per link type → nothing launches silently.",
+      "check": "Without consent the other program is never started.",
+      "script": null
+    },
+    {
+      "id": "p4.5",
+      "title": "Permission prompts",
+      "chain": "Camera, microphone, location, notifications and clipboard are sensitive → deny by default, allow per site, never stored inside WebView2 → you control access.",
+      "check": "Each kind is denied by default; a grant works and can be revoked.",
+      "script": null
+    },
+    {
+      "id": "p4.6",
+      "title": "Safe downloads",
+      "chain": "Downloads can hide tricks → configured folder only, no auto-open, a warning for programs, cleaned file names → no folder-escape tricks.",
+      "check": "Trick names and program files land cleaned in the folder, with a warning.",
+      "script": null
+    },
+    {
+      "id": "p4.7",
+      "title": "Prove what is really isolated",
+      "chain": "Profiles share browser processes → test what is truly separate (cookies, storage, databases) and list what is shared → no claim of full isolation without evidence.",
+      "check": "Site A's data is unreadable from B; clearing A leaves B intact; the shared list cites evidence.",
+      "script": null
+    },
+    {
+      "id": "p4.8",
+      "title": "No app access for websites",
+      "chain": "Websites must not reach app internals → test every channel, including one internal command the permission system skips, and block loading the app's own pages → native access stays closed.",
+      "check": "Every listed path fails from a remote test page.",
+      "script": null
+    },
+    {
+      "id": "p4.9",
+      "title": "Security audit log",
+      "chain": "Denials need a record → one log line per denied action, old logs rolled over, with no page content → evidence without privacy leaks.",
+      "check": "Each security test finds its record; all records match the format.",
+      "script": null
+    },
+    {
+      "id": "p4.10",
+      "title": "Recover from crashes",
+      "chain": "Page processes crash → show a crashed tab, allow reload, keep the shell alive → one bad site cannot take Ferrum down.",
+      "check": "A deliberate crash shows the crashed state; reload works; the shell stays responsive.",
+      "script": null
+    },
+    {
+      "id": "p4.11",
+      "title": "One security test suite",
+      "chain": "Your brief lists ten security tests → one suite mapping each to a test, kept apart from speed tests → coverage is visible.",
+      "check": "The suite passes, including allowlist cases; the mapping table is published.",
+      "script": null
+    },
+    {
+      "id": "p4.15",
+      "title": "Selectable isolation modes",
+      "chain": "Isolation has a cost → three modes set in config (shared, a profile per site, a data folder per site), observed rather than assumed → P6 can compare them.",
+      "check": "The same two-site test per mode shows the expected separation; process counts recorded; any mode that fails is recorded with its error.",
+      "script": null
+    },
+    {
+      "id": "p4.16",
+      "title": "Benchmark-only 'no security' switch",
+      "chain": "Measuring security's cost needs a version without it → a build-time switch for local test pages only, proven absent from release builds → no risk of shipping it.",
+      "check": "With the switch everything is allowed; the release build is scanned and the switch is absent.",
+      "script": null
+    },
+    {
+      "id": "p4.17",
+      "title": "Security settings screen",
+      "chain": "You manage blocked sites and permissions → add them to the settings screen through checked app commands → websites still cannot touch them.",
+      "check": "A block and a grant persist after restart and are enforced; revoking works; websites cannot call these commands.",
+      "script": null
+    },
+    {
+      "id": "p4.12",
+      "title": "Design the cost experiments",
+      "chain": "Security costs time and memory → build small timing tests and finish the experiment designs, claiming no numbers → P6 measures it properly.",
+      "check": "Small timing tests run (proof the tool works, not results); experiment pages updated; you approve them.",
+      "script": null
+    },
+    {
+      "id": "p4.13",
+      "title": "Literature batch 4",
+      "chain": "The paper needs security context → read site-isolation and embedded-browser security studies → the trade-offs are grounded.",
+      "check": "New dated notes.",
+      "script": null
+    },
+    {
+      "id": "p4.14",
+      "title": "Gate and your review",
+      "chain": "Controls are tested → run the gate → you review the threat model and the 'not enforced' list, and approve.",
+      "check": "All evidence saved; wiki clean; you approved the P4 exit.",
+      "script": null
+    }
+  ],
+  "test_gate": {
+    "explanation": "Security claims need proof → attack-style tests try the known bypasses, every rule branch is covered, and the release build is scanned → you accept the 'not enforced' list → only then does P5 start.",
+    "rows": [
+      {
+        "check": "Formatting and code warnings",
+        "proves": "Rust code is clean."
+      },
+      {
+        "check": "Tests",
+        "proves": "Workspace tests pass."
+      },
+      {
+        "check": "Licences and alerts",
+        "proves": "Dependencies are allowed and have no open alerts."
+      },
+      {
+        "check": "Rules coverage",
+        "proves": "Every rules-engine decision branch is tested."
+      },
+      {
+        "check": "Security suite",
+        "proves": "Each of the ten security items has a passing test."
+      },
+      {
+        "check": "Earlier tests again",
+        "proves": "P2 and P3 suites and the bridge lockdown still pass."
+      },
+      {
+        "check": "Shell checks",
+        "proves": "Shell style, types and tests pass."
+      },
+      {
+        "check": "Release build",
+        "proves": "The app you would ship builds."
+      },
+      {
+        "check": "No-security switch absent",
+        "proves": "The release build cannot skip security."
+      },
+      {
+        "check": "Isolation modes",
+        "proves": "Each mode separates what it should."
+      },
+      {
+        "check": "Wiki check",
+        "proves": "The wiki has zero errors."
+      },
+      {
+        "check": "Your checks",
+        "proves": "You read the threat model, blocked a site, and saw a camera or location request denied."
+      }
+    ],
+    "script": null
+  },
+  "related": [
+    "adr-0010",
+    "adr-0015",
+    "risk-r01",
+    "risk-r03"
+  ],
+  "source": {
+    "wiki_path": "wiki/phases/phase-p4-security.md",
+    "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+  }
+}
