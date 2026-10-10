@@ -745,7 +745,7 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - session: s01
 - pages: [status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt, raw/evidence/phase-p0-planning/portal-v2/p0-gate.txt]
-- result: What was done → the portal was checked against the mockups at desktop and phone width and five layout problems were fixed; one script now starts it; the ip-* pages describe the new portal. STATUS: In-flight cleared, next action set (owner walkthrough with scripts/start-portal.ps1); a refs.json explainer was added for the new commit.
+- result: What was done → the portal was checked against the mockups at desktop and phone width and five layout problems were fixed; one script now starts it; the ip-* pages describe the new portal. STATUS: In-flight cleared, next action set (owner walkthrough with scripts/start-portal.ps1); a refs.json explainer was added for the new commit. After the commit, `npm run lint:wiki` shows 0 errors and 42 warnings instead of 34: the 8 new ones are STALE-UPDATED on the pages this step changed (STATUS, log, comp-interactive-plan, ip-routes-and-views, ops-portal-pipeline, ov-open-questions, both phase pages), because the computer clock had passed midnight, so the commit is dated 2026-10-10 while the pages keep the session date 2026-10-09 given for this session. Left as is (warnings only); they clear at the next edit of each page.
 - next: the owner walks through the portal and says what reads wrong or unclear; then Claude asks Approval Wave 1 in Claude Code
 - commit: ef5dcc5
 
@@ -778,3 +778,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-interactive-plan, ops-portal-pipeline, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/review-fixes.txt]
 - result: cd interactive_plan && npm run verify: exit 0 in one run (typecheck and eslint clean; 742 unit tests passed and 1 skipped (the link-escape test needs Windows Developer Mode); lint:wiki 0 errors, 34 warnings (unchanged), 2 info; build exit 0; 72 browser tests passed, including axe on every tab in both themes; the end-of-run guard found the 22 protected files unchanged). One earlier verify run in this step failed in the Log browser test (a reused log entry id), fixed before the final run. P0 gate (scripts/gates/p0-gate.ps1): PASS, 24 PASS and 4 YOURS in 226 s, with the new step for the saved outputs of p0.16. Portal check clean (18 files, 168 translated records, 379 explainers; fewer records than before because explainers no longer carry a source). Portal checker tests 26 passed, 0 failed (full real-repo run 2.19 s). Check-script self-test PASS (5 steps, including the plain-header rule and the broken approvals file). Quick lint 202 files, 0 errors. Task script p0.17: NOT READY, 3 PASS and 1 WAIT for the owner's approvals, as expected. Mask scan 0 unmasked. The visual result was checked on screenshots at 1440 px (Overview, Architecture with a part popup, a decision popup, the P0 phase popup and its gate). npm run test:coverage was not run in this step.
+
+## [2026-10-09] plan | p0.17 step "fix" committed: review fixes for portal v2
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/review-fixes.txt]
+- result: What was done → a review read the portal as the owner would; 29 of its 30 findings were fixed and 1 rejected, and every check passed in one run. STATUS: In-flight cleared, the P0 gate command is now the gate script itself; a refs.json explainer was added for the new commit. After the commit, `npm run lint:wiki` shows 0 errors and 42 warnings instead of 34: the 8 new ones are STALE-UPDATED on the pages this step changed (STATUS, log, comp-interactive-plan, ip-routes-and-views, ops-portal-pipeline, ov-open-questions, both phase pages), because the computer clock had passed midnight, so the commit is dated 2026-10-10 while the pages keep the session date 2026-10-09 given for this session. Left as is (warnings only); they clear at the next edit of each page.
+- next: the owner walks through the portal and says what reads wrong or unclear; then Claude asks Approval Wave 1 in Claude Code
+- commit: 10c7829

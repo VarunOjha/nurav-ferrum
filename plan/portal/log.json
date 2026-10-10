@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5cfdd24210a0ea49dcdde96e086d8ee6d0841dcf42b09c43d33eb1dbf60a5a7e"
+    "content_hash": "sha256:cbd6096d04d29fdd6fda7be6f62a073b4d715ba815bc596fcc8b7386db3e21d7"
   },
   "entries": [
     {
@@ -863,12 +863,13 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "10c7829",
       "covers": [
         "## [2026-10-09] correct | Q-008: the accessibility checker was added before the owner answered",
         "## [2026-10-09] decide | p0.17 review fixes: one question list, task states, no slugs in popups, cross-file checks, faster portal check",
         "## [2026-10-09] code | p0.17 review fixes: portal, portal checker, check scripts",
-        "## [2026-10-09] lint | p0.17 review fixes: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked"
+        "## [2026-10-09] lint | p0.17 review fixes: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
+        "## [2026-10-09] plan | p0.17 step \"fix\" committed: review fixes for portal v2"
       ],
       "phase": "phase-p0-planning"
     }

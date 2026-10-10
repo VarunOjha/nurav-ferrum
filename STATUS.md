@@ -207,14 +207,15 @@ yet (every approvable page is PENDING).**
   `ip-build-plan` are retired history (not approvable). Checks: `npm run verify` exit 0, P0 gate PASS, portal check
   clean, quick lint and lint:wiki 0 errors, mask scan 0 unmasked
   ([portal-verify.txt](wiki/raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt)).
-- p0.17 step "fix" (review fixes for portal v2): 30 review findings checked, 29 fixed, 1 rejected (withdrawn
+- p0.17 step "fix" done (commit `10c7829`, review fixes for portal v2): 30 review findings checked, 29 fixed, 1 rejected (withdrawn
   questions already link to their replacement). One "Questions for you" list (the four first-wave questions) drives the
   Overview row, the list and the tab badge; every task has a state; popups show titles and short names, never internal
   slugs; a decision shows one plain standing; parts that are not ours say "Used from"; Architecture follows the mockup
   (diagram plus "How to read this", connections in each part's popup); the Overview's start script opens in the script
   popup. The portal check now also compares copies with their records (MISMATCH) and takes about 2.3 s; every check
   script ends its header with a "For Claude" field and uses plain words before it. Q-008 corrected (the accessibility
-  checker was added before the owner answered). Details: the `correct`, `decide` and `code` log entries of this step.
+  checker was added before the owner answered). Checks: `npm run verify` exit 0, P0 gate PASS, portal check clean, mask scan 0
+  unmasked ([review-fixes.txt](wiki/raw/evidence/phase-p0-planning/portal-v2/review-fixes.txt)). Details: the log entries of this step.
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -225,10 +226,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "fix" (review fixes for portal v2), session s01, started 2026-10-09
-- intent: fix the 30 review findings on portal v2 (plain wording, one question count, per-task status, popups without internal ids, architecture side panel, cross-file checks and a faster portal checker, clearer check-script messages); then npm run verify, portal check, P0 gate, quick lint, lint:wiki, mask scan; evidence portal-v2/review-fixes.txt
-- planned paths: plan/portal/**, interactive_plan/{app,components,lib,tests,proxy.ts}, tools/portal-sync-check.ps1, tools/test-portal-sync-check.ps1, tools/fixtures/portal-sync/**, scripts/**, .claude/skills/wiki-to-portal/SKILL.md, wiki/phases/phase-p0-planning.md, wiki/phases/phase-p1-foundation.md, wiki/overview/ov-open-questions.md, wiki/operations/ops-portal-pipeline.md, wiki/architecture/components/comp-interactive-plan.md, wiki/raw/evidence/phase-p0-planning/portal-v2/review-fixes.txt, wiki/raw/MANIFEST.sha256
-- rollback: git restore --staged --worktree on the planned paths (all tracked except the new evidence file, which is deleted); HEAD ce5cad7
+(empty: p0.17 step "fix" (review fixes for portal v2) verified and committed 2026-10-09 (`10c7829`); next the owner walkthrough of the portal)
 
 ## Blockers
 
@@ -267,15 +265,15 @@ Where we are:
 | Rules for portal v2 | Done today (`5d33859`): approvals in Claude Code, read-only portal, PowerShell checks, four architecture groups, masking |
 | Wiki-to-portal pipeline | Built today (`8d89329`): skill, file shapes, check script, end-of-turn check |
 | Portal text | Written today (`ed8b89c`) for every page; check clean; end-of-turn check switched on |
-| Check scripts | Written today (`adc3651`): one per task and per phase; P0 gate passes; run `pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P0` |
-| New portal site | Built (`dfe164f`) and reviewed: all seven tabs, popups, clickable ids; read-only; start it with `scripts/start-portal.ps1` |
+| Check scripts | Written today (`adc3651`): one per task and per phase; P0 gate passes; run `pwsh -NoProfile -File scripts/gates/p0-gate.ps1` |
+| New portal site | Built (`dfe164f`), reviewed and fixed after a review pass (`10c7829`): all seven tabs, popups, clickable ids; read-only; start it with `scripts/start-portal.ps1` |
 | Approvals | None recorded yet; asked after portal v2, wave by wave |
 | First push | Blocked until the owner answers Q-221 (history rewrite) |
 
 1. **Owner, now: walk through the portal.** In PowerShell 7, from the repo folder:
    `pwsh -NoProfile -File scripts/start-portal.ps1` (finds Node, builds, opens http://127.0.0.1:3417/; Ctrl+C stops it).
    Read each tab and popup, then tell Claude in Claude Code what reads wrong or unclear, or "the portal reads fine".
-2. **Any time (optional, owner):** re-run the P0 checks yourself: `pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P0`
+2. **Any time (optional, owner):** re-run the P0 checks yourself: `pwsh -NoProfile -File scripts/gates/p0-gate.ps1`
    (about 5 minutes; close any plan app you started first). Nothing to tell Claude if it ends PASS.
 3. **Then Claude asks, the owner answers in Claude Code:** the Wave 1 approvals; Claude records each one
    with `tools/approvals_record.py` ([ops-approval-workflow](wiki/operations/ops-approval-workflow.md)).

@@ -4171,6 +4171,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "10c7829",
+      "kind": "commit",
+      "title": "Commit: Review fixes for the portal",
+      "summary": "A review read the portal as you would; Claude fixed 29 of its 30 findings: one list of questions for you, task states, names instead of internal ids, clearer check scripts and a stricter portal check.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }
