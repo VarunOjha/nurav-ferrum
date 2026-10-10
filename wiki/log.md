@@ -3,7 +3,7 @@ id: log
 type: log
 title: "Wiki log (append-only)"
 status: active
-updated: 2026-10-09
+updated: 2026-10-10
 sources: []
 related: [schema, index]
 approvable: false
@@ -787,3 +787,33 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: What was done → a review read the portal as the owner would; 29 of its 30 findings were fixed and 1 rejected, and every check passed in one run. STATUS: In-flight cleared, the P0 gate command is now the gate script itself; a refs.json explainer was added for the new commit. After the commit, `npm run lint:wiki` shows 0 errors and 42 warnings instead of 34: the 8 new ones are STALE-UPDATED on the pages this step changed (STATUS, log, comp-interactive-plan, ip-routes-and-views, ops-portal-pipeline, ov-open-questions, both phase pages), because the computer clock had passed midnight, so the commit is dated 2026-10-10 while the pages keep the session date 2026-10-09 given for this session. Left as is (warnings only); they clear at the next edit of each page.
 - next: the owner walks through the portal and says what reads wrong or unclear; then Claude asks Approval Wave 1 in Claude Code
 - commit: 10c7829
+
+## [2026-10-10] schema | CLAUDE.md for portal v2: working with the owner, wiki edit means portal edit, approvals given in chat
+
+- session: s01
+- pages: [schema]
+- sources: [raw/owner/2026-10-09-s01-plan-app-feedback.md, raw/owner/2026-10-09-s01-portal-v2-decisions.md]
+- result: CLAUDE.md gains §0 "Working with the owner": plain words with no unexplained internal ids, tasks as a thought chain (cause → action → why it matters), the owner's four-part format whenever he must run something (where we are as a small table, why and what it does, one PowerShell 7 script explained part by part, what to tell Claude afterwards), he works in Claude Code only, and the portal start command `pwsh -NoProfile -File scripts/start-portal.ps1`. §5 step 1 names the full checks (quick lint, `npm run lint:wiki`, portal check) instead of "until npm run lint:wiki exists". §7: wiki edit ⇒ portal JSON in the same edit, and the Stop hook is on while `plan/portal/.hook-enabled` exists (never removed to get past a finding). §8: approvals are given in chat and recorded by Claude in the same turn. §11: P0 code is the portal, the check scripts and tools/; the PATH line now adds pwsh. The masking rule (§6) was already present and is unchanged. The §1 start order is unchanged, so SCHEMA §9.6 still matches it (SCHEMA-SPLIT checked by reading both). SCHEMA.md itself is unchanged.
+- stales: [schema] (CLAUDE.md is hashed into the schema approval as bootstrap_hash; no approvals exist yet)
+
+## [2026-10-10] decide | p0.17 handoff: the session handoff is updated in place, pages edited after midnight carry 2026-10-10
+
+- session: s01
+- pages: [handoff-2026-10-09-s01, status-live]
+- sources: [raw/owner/2026-10-09-s01-wave0c.md]
+- result: Decided by Claude under the delegation policy (bookkeeping only). (1) The handoff for session s01 is the existing file handoff-2026-10-09-s01, rewritten for portal v2, because ops-handoff-template allows one file per session and the next session has not started; the v1 text stays in git (commit 6118d32). A second file would need a new id for the same session. (2) The computer clock passed midnight during the previous step, so pages edited in this step (STATUS, log, index, the handoff) carry `updated: 2026-10-10` and these log headings are dated 2026-10-10, matching the commit date; the session id stays s01. This clears the date warning on the log and does not add new ones. The other pages from the previous step keep their 2026-10-09 date and warning until their next real edit, rather than editing them only to change a date. (3) The Stop hook was already switched on in the content step (`plan/portal/.hook-enabled` is tracked); this step proves it rather than re-creating the file.
+
+## [2026-10-10] handoff | s01: portal v2 handed over; the owner walks through it, then approvals in chat, then P0 sign-off
+
+- session: s01
+- pages: [handoff-2026-10-09-s01, status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/handoff-checks.txt]
+- result: Handoff rewritten for portal v2 (Done, In progress, Next, Blockers, Notes, open items for the owner). STATUS next action is in the owner's four-part format: where we are, why, the start script explained, what to tell Claude; then Claude fixes wording, asks Approval Wave 1 in chat, and task p0.18 ends with the owner's P0 sign-off. Open items listed for the owner: Q-008 (keep or remove the accessibility checker), npm audit recheck before P0 sign-off, the unverified line-ending claim on risk-r22, the dev-server overlay endpoints outside the address guard (comment only), cargo-deny not installed (P1), Q-221 before the first push.
+- next: the owner starts the portal with scripts/start-portal.ps1, reads every tab and popup including the P1 scripts, and tells Claude what reads unclear
+
+## [2026-10-10] lint | p0.17 handoff: P0 gate passes, the end-of-turn hook passes clean and blocks stale, portal check clean, mask scan 0 unmasked
+
+- session: s01
+- pages: [status-live, handoff-2026-10-09-s01, schema]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/handoff-checks.txt]
+- result: End-of-turn hook (the Stop hook command run by hand with a simulated Stop input): on the clean repo at HEAD 0150224 exit 0 in 2.2 s, also exit 0 with stop_hook_active true; after STATUS.md was edited and before overview.json was re-translated, exit 2 with "1 STALE plan/portal/overview.json" on stderr; on the final state exit 0. P0 gate (scripts/gates/p0-gate.ps1): PASS, 24 PASS and 4 YOURS in 223 s (742 unit tests passed, 1 skipped; 72 browser tests passed; build exit 0; tool tests 34 OK and portal checker 26 passed). Portal check clean (18 files, 168 records, 380 explainers). Quick lint 202 files, 0 errors. `npm run lint:wiki`: 0 errors, 40 warnings (the 34 known ones plus 6 date warnings on pages last committed after midnight; the log's date warning is cleared), 2 info, with the evidence file present and unstaged; after staging, the only error is RAW-IMMUTABLE "uncommitted change (A)" on the new evidence file itself, which clears with the commit (re-checked after it). Mask scan after staging: 682 tracked files, 0 unmasked. npm run verify and npm run test:coverage were not run separately in this step (no portal code changed; the gate runs the unit, browser and build parts).

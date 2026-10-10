@@ -2,12 +2,12 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "We are finishing the plan (P0). The new read-only portal is built and reviewed, and you can start it with one script. Nothing is approved yet, and no Ferrum code exists yet.",
+  "summary": "We are finishing the plan (P0). The new read-only portal is built, reviewed and handed over to you; Claude cannot end a turn while its text is out of date. Nothing is approved yet, and no Ferrum code exists yet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:8f34fd528d43e1e05176a16335a07544b1c62f6c87cf77abec00f889d6b17b1e"
+    "content_hash": "sha256:489051ac18ed84ae4074ae8aa6b7b80b22570e1afd0cac00f3e6d5aec7321537"
   },
-  "updated": "2026-10-09",
+  "updated": "2026-10-10",
   "where_we_are": [
     {
       "item": "Current phase",
@@ -15,16 +15,12 @@
       "ref": "phase-p0-planning"
     },
     {
-      "item": "Portal text",
-      "state": "Written for every page and checked: nothing outdated, missing or unexplained"
+      "item": "Plan portal (the site)",
+      "state": "Built, reviewed and checked: seven tabs and popups; start it with one PowerShell script"
     },
     {
       "item": "Check scripts",
-      "state": "One per task and per phase; the P0 checks all pass in one run"
-    },
-    {
-      "item": "Plan portal (the site)",
-      "state": "Built and reviewed: all seven tabs and popups; start it with one PowerShell script"
+      "state": "One per task and per phase; the P0 checks all pass; the P1 scripts are ready for you to read"
     },
     {
       "item": "Approvals",
@@ -45,28 +41,32 @@
     "where_we_are": [
       {
         "item": "Portal",
-        "state": "Built and checked; every tab compared with your mockups"
+        "state": "Built, reviewed and handed over"
       },
       {
-        "item": "Start script",
-        "state": "New: one PowerShell script starts the portal and opens it"
+        "item": "Safety check",
+        "state": "On: Claude cannot end a turn while the portal text is out of date"
       },
       {
         "item": "Your walkthrough",
-        "state": "Now: read each tab and popup"
+        "state": "Now: read each tab and popup, including the P1 scripts"
       },
       {
         "item": "First approvals",
-        "state": "Next: Claude asks them in Claude Code, one wave at a time"
+        "state": "Next: Claude asks them in Claude Code; your P0 sign-off comes last"
       }
     ],
-    "why": "The portal is how you follow the project → you read it once end to end and say what is unclear → Claude fixes the wording, then asks your first approvals in Claude Code.",
+    "why": "The portal is how you follow the project → you read it once end to end, including the P1 task and gate scripts → Claude fixes what reads unclear and asks your first approvals in chat → your P0 sign-off lets P1 start. The script only starts the portal; it changes nothing in the plan.",
     "script": {
       "path": "scripts/start-portal.ps1",
       "parts": [
         {
           "code": "pwsh -NoProfile -File scripts/start-portal.ps1",
-          "explains": "Run this in PowerShell 7 from the repo folder. It finds Node, builds the portal (about 1 minute) and opens http://127.0.0.1:3417/ in your browser."
+          "explains": "Run this in PowerShell 7 from the repo folder. It finds Node, builds the portal (about 1 minute), starts it on this computer only and opens http://127.0.0.1:3417/ in your browser."
+        },
+        {
+          "code": "Roadmap → P1 → script buttons",
+          "explains": "In the portal, open P1 on the Roadmap and use the script buttons to read each task's check script and the gate script that decides when P1 is done."
         },
         {
           "code": "Ctrl+C",
@@ -74,7 +74,7 @@
         }
       ]
     },
-    "tell_claude": "\"The portal reads fine\", or which tab or popup reads wrong or unclear and why."
+    "tell_claude": "\"The portal reads fine\", or which tab, popup or script reads wrong or unclear and why."
   },
   "questions_for_you": {
     "open": 39,

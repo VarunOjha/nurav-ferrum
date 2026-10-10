@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:cbd6096d04d29fdd6fda7be6f62a073b4d715ba815bc596fcc8b7386db3e21d7"
+    "content_hash": "sha256:681efdba4103999982aaffa20037ed96df274fd1b9f57b572b135422dc698399"
   },
   "entries": [
     {
@@ -870,6 +870,36 @@
         "## [2026-10-09] code | p0.17 review fixes: portal, portal checker, check scripts",
         "## [2026-10-09] lint | p0.17 review fixes: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
         "## [2026-10-09] plan | p0.17 step \"fix\" committed: review fixes for portal v2"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-10-portal-v2-handoff",
+      "date": "2026-10-10",
+      "title": "Portal v2 handed over to you; the safety check is on",
+      "done": "Claude proved the end-of-turn safety check works: it lets a turn end when the portal text is up to date and stops it when the plan changed without its portal text. The start-of-session rules for Claude now say: write in plain words, use the four-part format whenever you must run something, update the portal in the same edit as the wiki, and record approvals you give in chat. The session notes for the next Claude session are written, and every check passed.",
+      "next": "You start the portal, read every tab and popup including the P1 scripts, and tell Claude what reads unclear. Then Claude asks your first approvals in chat; your P0 sign-off comes last.",
+      "decisions": [
+        {
+          "what": "Claude's session notes for today are one file, updated, not a second file for the same session",
+          "by": "claude"
+        },
+        {
+          "what": "Pages edited after midnight carry the date 10 Oct, the same as their commit",
+          "by": "claude"
+        },
+        {
+          "what": "The start-of-session rules open with how to write for you",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] schema | CLAUDE.md for portal v2: working with the owner, wiki edit means portal edit, approvals given in chat",
+        "## [2026-10-10] decide | p0.17 handoff: the session handoff is updated in place, pages edited after midnight carry 2026-10-10",
+        "## [2026-10-10] handoff | s01: portal v2 handed over; the owner walks through it, then approvals in chat, then P0 sign-off",
+        "## [2026-10-10] lint | p0.17 handoff: P0 gate passes, the end-of-turn hook passes clean and blocks stale, portal check clean, mask scan 0 unmasked"
       ],
       "phase": "phase-p0-planning"
     }

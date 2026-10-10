@@ -8,6 +8,26 @@ This file is the short bootstrap. Full rules: [wiki/SCHEMA.md](wiki/SCHEMA.md) (
 Detailed procedures: [wiki/operations/](wiki/operations/). The project spans many sessions and days and
 WILL be interrupted. Assume you remember nothing; the files are the memory.
 
+## 0. Working with the owner (every session, owner's rule of 2026-10-09)
+
+The owner's understanding is the project's bottleneck
+([raw/owner/2026-10-09-s01-plan-app-feedback.md](wiki/raw/owner/2026-10-09-s01-plan-app-feedback.md)).
+Everything he reads (chat replies, the plan portal, log entries, next actions, script headers, questions)
+is for a smart non-specialist:
+
+- **Plain words.** Short and crisp, one idea per sentence, little jargon. Never an unexplained internal id
+  or section reference ("IP-9", "§10.4", "p0.17"): say what it is in words, or in portal text use a
+  `[words](ref:id)` link that has a `refs.json` explainer.
+- **Tasks as a thought chain:** cause → action → why it matters.
+- **When the owner must run something, use four parts:** (1) where we are, as a small table; (2) why it
+  has to run and what it does; (3) **one** PowerShell 7 script, each part explained in plain words;
+  (4) the exact words to tell Claude afterwards. The portal's `next_action` has the same four parts
+  ([wiki-to-portal skill](.claude/skills/wiki-to-portal/SKILL.md), "The four-part next action").
+- **He works in Claude Code only.** The plan portal is read-only: he reads it, and he answers questions and
+  gives approvals here in chat (§8). Start it for him with
+  `pwsh -NoProfile -File scripts/start-portal.ps1` from the repo folder (finds Node, builds, opens
+  http://127.0.0.1:3417/, binds 127.0.0.1 only; Ctrl+C stops it).
+
 ## 1. Session start (MANDATORY, before any other work)
 
 0. Read [wiki/SCHEMA.md](wiki/SCHEMA.md) (at least §5–§10) unless already read this session.
@@ -87,8 +107,9 @@ files, removing a lock file) without explicit owner consent.
 
 ## 5. Session end — HANDOFF (SCHEMA §9.5)
 
-1. Quick lint (at minimum FM-*, ID-*, REF-DANGLING, INDEX-MISSING): `python tools/quick_lint.py` from the
-   repo root (until the plan app's `npm run lint:wiki` exists) — details in
+1. Lint: `python tools/quick_lint.py` from the repo root (at minimum FM-*, ID-*, REF-DANGLING,
+   INDEX-MISSING), then the full wiki check `npm run lint:wiki` in `interactive_plan/` (0 errors), and
+   `pwsh tools/portal-sync-check.ps1` (`clean`) — details in
    [ops-wiki-maintenance](wiki/operations/ops-wiki-maintenance.md#5-lint).
 2. Write `wiki/operations/handoffs/handoff-YYYY-MM-DD-sNN.md` per
    [ops-handoff-template](wiki/operations/ops-handoff-template.md) (file name starts with the id, SCHEMA
@@ -130,16 +151,20 @@ schema (`wiki/SCHEMA.md` + this file). Operations and when to run them:
 Every op appends `## [YYYY-MM-DD] <op> | <title>` to `wiki/log.md` (append-only). New pages go in
 `wiki/index.md` in the same edit. Step-by-step: [ops-wiki-maintenance](wiki/operations/ops-wiki-maintenance.md).
 
-**Portal JSON (adr-0024):** every wiki or `STATUS.md` change also updates its plain-language JSON in
-`plan/portal/` in the **same edit**, using the repo skill `wiki-to-portal`
-(`.claude/skills/wiki-to-portal/SKILL.md`); then `pwsh tools/portal-sync-check.ps1` must print `clean`.
-A Stop hook runs that check once `plan/portal/.hook-enabled` exists. Details:
-[ops-portal-pipeline](wiki/operations/ops-portal-pipeline.md).
+**Portal JSON (adr-0024): wiki edit ⇒ portal edit, in the same edit.** Every change to a wiki page,
+`wiki/log.md` or `STATUS.md` also updates its plain-language JSON in `plan/portal/`, using the repo
+skill `wiki-to-portal` (`.claude/skills/wiki-to-portal/SKILL.md`); then
+`pwsh tools/portal-sync-check.ps1` must print `clean`. The owner reads only the portal, so a wiki change
+without its JSON is invisible to him. A safety-net Stop hook (`.claude/settings.json`) runs the same
+check at the end of every turn and blocks the turn while anything is outdated; it is **on** while
+`plan/portal/.hook-enabled` exists (switched on 2026-10-09; never delete that file to get past a
+finding, fix the JSON instead). Details: [ops-portal-pipeline](wiki/operations/ops-portal-pipeline.md).
 
 ## 8. Approvals
 
-- The owner approves (or requests changes, or rejects) **in Claude Code**. The plan portal
-  (`interactive_plan/`) is read-only (adr-0023). Claude records the decision: (1) transcribe the owner's
+- The owner approves (or requests changes, or rejects) **in Claude Code, in chat**. The plan portal
+  (`interactive_plan/`) is read-only and has no approve button (adr-0023). When he gives a decision in
+  chat, Claude records it in the same turn: (1) transcribe the owner's
   words to `wiki/raw/owner/YYYY-MM-DD-<slug>.md`; (2) `python tools/approvals_record.py <key> <decision>
   --source <that file>` (stores content/scope hashes, `bootstrap_hash` for `schema`, keeps `history`);
   (3) append an `approval` log entry. Never record a decision the owner did not give, never edit
@@ -170,4 +195,7 @@ Details: [ops-multi-agent-workflow](wiki/operations/ops-multi-agent-workflow.md)
 Windows 11, repo path contains a space — always quote paths. Git Bash for POSIX commands; PowerShell for
 winget (Claude runs installs, adr-0021). Toolchain status and commands: [ops-environment-setup](wiki/operations/ops-environment-setup.md).
 Current phase: **P0 planning — no Ferrum application code** (no Rust, no Tauri project) until the
-owner approves P1 entry. The only code in P0 is the `interactive_plan/` planning tool the owner asked for.
+owner approves P1 entry. The only code in P0 is the planning tooling the owner asked for: the read-only
+portal `interactive_plan/`, the PowerShell 7 check scripts in `scripts/` and the helpers in `tools/`.
+Node is not on the Bash PATH: `export PATH="/c/Program Files/nodejs:$PATH:$LOCALAPPDATA/Microsoft/WindowsApps"`
+(the last part adds `pwsh`).

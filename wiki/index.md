@@ -3,7 +3,7 @@ id: index
 type: index
 title: "Wiki index (catalogue of every page)"
 status: active
-updated: 2026-10-09
+updated: 2026-10-10
 sources: []
 related: [schema, log]
 approvable: false
@@ -240,7 +240,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 
 ## Handoffs
 
-- [handoff-2026-10-09-s01](operations/handoffs/handoff-2026-10-09-s01.md) | final | Handoff s01 (2026-10-09): interactive_plan built (IP-0 to IP-10); owner approves Wave 1 in the app | End of the plan-app build: what is done, owner next steps in the app, open review issue, integrator requests
+- [handoff-2026-10-09-s01](operations/handoffs/handoff-2026-10-09-s01.md) | final | Handoff s01 (2026-10-09/10): portal v2 built and checked; owner walkthrough, then P0 sign-off | End of session s01: v1 plan app, then portal v2 (rules, pipeline, content, scripts, portal, review fixes), hook on, owner next steps, open items
 
 ## Interactive plan
 
