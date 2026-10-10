@@ -165,8 +165,12 @@ test("the tasks table has the eight columns in order, and every task row shows w
     }
     // Logic: the thought chain, one step per line.
     const steps = row.locator('td[data-field="logic"] .chain-step');
-    expect(await steps.count()).toBeGreaterThanOrEqual(1);
-    if (!t.chain.includes("](ref:")) expect(await steps.count()).toBe(t.chain.split("→").filter((x) => x.trim()).length);
+    // Exactly three steps (cause, action, why it matters); a screen reader hears "then" and "so"
+    // in place of the drawn arrows (review 2026-10-10).
+    await expect(steps).toHaveCount(3);
+    await expect(steps.nth(1).locator(".sr-only")).toHaveText("then");
+    await expect(steps.nth(2).locator(".sr-only")).toHaveText("so");
+    await expect(steps.nth(1).locator(".chain-arrow")).toHaveAttribute("aria-hidden", "true");
     // Check script: the script (or "Not written yet") with the plain check line under it.
     const scriptCell = row.locator('td[data-field="script"]');
     if (t.script) await expect(scriptCell.locator(`button[data-script="${t.script}"]`)).toBeVisible();
@@ -180,6 +184,18 @@ test("the tasks table has the eight columns in order, and every task row shows w
   expect(box.x + box.width).toBeLessThanOrEqual(1440);
   const pageOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(pageOverflow).toBeLessThanOrEqual(0);
+});
+
+test("on a 1280 px laptop the tasks table fits the phase popup without sideways scrolling", async ({ page }) => {
+  // Review 2026-10-10: the table used to need 1240 px and scrolled sideways below about 1300 px.
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/");
+  await page.getByTestId("phase-cards").getByRole("button").first().click();
+  const dialog = page.locator("dialog.phase-modal[open]");
+  await expect(dialog).toBeVisible();
+  const wrap = dialog.getByRole("region", { name: "Tasks table", exact: true });
+  await expect(wrap).toBeVisible();
+  expect(await wrap.evaluate((w) => w.scrollWidth - w.clientWidth)).toBeLessThanOrEqual(0);
 });
 
 test("a phase popup opens from the keyboard", async ({ page }) => {

@@ -99,7 +99,12 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   (cause → action → why it matters), `check` (how we know it is done, plain), `script`
   (`scripts/verify/<task-id>-<slug>.ps1`, or `null` until that script exists). `what`, `why` and `how`
   are required, one line each, 1-2 short sentences, at most 240 characters, translated from the phase
-  page (no new facts); any id in them needs a `refs.json` entry like every other portal text. The
+  page (no new facts); any id in them needs a `refs.json` entry like every other portal text. They sit
+  in one row next to the chain and the check line, so never repeat those (review 2026-10-10): `why`
+  answers "why": what goes wrong without the task, or who is affected, and not the design itself; `how`
+  is the method of doing the task, and leaves the proof to `check`. A task `chain` has exactly three
+  steps, so exactly two `→` (the schema rejects any other count); write a list inside a step with commas
+  ("linking question, prediction and conclusion"), never with arrows. The
   popup's tasks table (owner request 2026-10-10) shows these columns, in this order: **Id** (`id`),
   **Title** (`title`), **What** (`what`), **Why** (`why`), **How** (`how`), **Logic** (`chain`, one
   step per line), **Check script** (`script`, clickable, "Not written yet" when `null`, with the

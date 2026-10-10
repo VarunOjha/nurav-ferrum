@@ -60,7 +60,7 @@ npm run test:coverage   # unit tests with coverage thresholds
 | `security.test.ts`, `config.test.ts` | Loopback `Host` allowlist and GET/HEAD only on every route, security headers, every server script binds 127.0.0.1 on `PLAN_PORT`, configuration from environment variables |
 | `mask-labels.test.ts` | Machine addresses printed by tests are always masked |
 | `ui-refs.test.ts` | Ref mode's id registry: ids unique and well formed; every id used in the portal code is in the registry and every registry id is used; no id sits on an element that cannot hold the label; popup ids only in their popup; label, copy text and Layout map format; repeated items take their number and word from the registry (every stage and layer row in the plan data is registered) and never from a list position |
-| `portal-task-table.test.ts` | The phase popup's tasks table: the eight column headers in the owner's order ([request](../raw/owner/2026-10-10-s01-task-table-columns.md)); the thought chain splits into one step per arrow without breaking a `[words](ref:id)` link; the phase schema requires `what`, `why` and `how` and rejects empty or over-long text |
+| `portal-task-table.test.ts` | The phase popup's tasks table: the eight column headers in the owner's order ([request](../raw/owner/2026-10-10-s01-task-table-columns.md)); the thought chain splits into one step per arrow without breaking a `[words](ref:id)` link; the phase schema requires `what`, `why` and `how` and rejects empty or over-long text; a task chain must have exactly three steps, and every task in the real phase files does; the hidden words "then" and "so" stand in for the arrows |
 | the other files | The command-line wiki check ([ip-wiki-lint](ip-wiki-lint.md)): loader, frontmatter, links, rules, git checks, Python parity, SCHEMA sync |
 
 Coverage thresholds (`vitest.config.mts`): `lib/portal/**` 90 % lines and 80 % branches; `lib/approvals/**` 90/90;
@@ -77,11 +77,11 @@ One production server on 127.0.0.1:3418 reads the real `plan/` folder. A teardow
 
 | Spec | What it proves |
 |---|---|
-| `overview`, `roadmap`, `architecture`, `decisions`, `research`, `questions`, `log` | Each tab shows the real JSON as the mockups lay it out, its popups open and close with focus returning, and at 390 px nothing scrolls sideways; the phase popup's tasks table has its eight column headers in order, every task row shows its what, why, how, thought-chain steps, script and check line, and state, and the popup fits at 1440 px |
+| `overview`, `roadmap`, `architecture`, `decisions`, `research`, `questions`, `log` | Each tab shows the real JSON as the mockups lay it out, its popups open and close with focus returning, and at 390 px nothing scrolls sideways; the phase popup's tasks table has its eight column headers in order, every task row shows its what, why, how, thought-chain steps, script and check line, and state, each chain has exactly three steps with "then" and "so" for screen readers, the popup fits at 1440 px and the table needs no sideways scrolling at 1280 px |
 | `refs` | Every id opens its explainer; Enter, Space, Esc, close button and backdrop work; related ids and Back; an id inside a phase popup opens on top |
 | `scripts` | A task's script button shows the real file; the gate header shows labelled fields and opens the whole gate script; the script route serves only named scripts, only for GET |
 | `security` | Spoofed `Host` gets 403 on pages and assets; the v1 approvals API is gone; no request leaves the computer; no framing; the server refuses every non-loopback address of the machine |
-| `shell` | Landmarks, one `h1`, skip link, theme toggle, 404 page; at 390 px the overview and the phase popup (tasks as cards with eight labelled rows) fit |
+| `shell` | Landmarks, one `h1`, skip link, theme toggle, 404 page; at 390 px the overview and the phase popup (tasks as cards with eight labelled rows, opening with one Id, State and Title line) fit |
 | `a11y` | axe-core 4.14.0 (WCAG 2.1 A and AA rules) finds no violation on any tab in the light and the dark theme, nor in an open reference popup, nor in an open phase popup at 1440 and 390 px |
 | `ref-mode` | The Ref button turns Ref mode on and off (click and Esc); each tab shows its expected labels and none in normal mode; the phase, script, reference and item popups show theirs; a label copies the right text (clipboard permission granted) and says "Copied"; labels are reachable with Tab only in Ref mode; the mode lasts across tabs and reloads; List all shows every id; no sideways scrolling at 390 px; axe finds nothing in Ref mode in either theme; Ref mode moves no block and keeps the top bar's height at 1440 and 390 px; at 390 px the end of every tab, of the phase popup and of the Layout map scrolls clear of the bar; the log labels the first visible entry under every filter; repeated items name their item; an old "Copied" message is cleared in a new popup; focus returns to List all and stays inside a popup after Turn off; the Layout map opens at the current group and its jump links work |
 
@@ -109,6 +109,11 @@ phase popup's tasks table at 1440 and 390 pixels in both themes: at 1440 px all 
 no sideways scrolling and each thought-chain step starts on its own line; at 390 px every task is a card with eight
 labelled rows. No defect was found
 ([task-columns-checks.txt](../raw/evidence/phase-p0-planning/portal-v2/task-columns-checks.txt)).
+A second review the same day found seven points: one thought chain split into nine lines, Why cells that repeated the
+Logic column, How cells that repeated the check line, sideways scrolling on 1280 px laptops, very long phone cards and
+two screen-reader details. All were fixed, a schema rule now keeps every task chain at three steps, and new screenshots
+at 1440, 1280 and 390 px were read
+([task-columns-fixes-checks.txt](../raw/evidence/phase-p0-planning/portal-v2/task-columns-fixes-checks.txt)).
 
 ## 5. Owner walkthrough
 

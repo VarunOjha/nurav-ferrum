@@ -240,7 +240,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "task-columns" (eight separate columns in the phase popup's tasks table) verified and committed 2026-10-10 (`97d3f22`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 step "task-columns-fixes" (review fixes for the eight-column tasks table, owner request 2026-10-10)
+- intent: fix the review findings: p8.4 thought chain cut into 9 steps (data fix + a schema rule of exactly three steps), Why cells that repeat the Logic column, How cells that repeat the check line, sideways scroll at 1280 px, long phone cards, screen-reader labels; then checks in a scratch copy, screenshots, evidence, commit
+- planned paths: plan/portal/phases/*.json, plan/portal/refs.json, plan/portal/schema/phase.schema.json, interactive_plan/lib/portal/schemas.gen.ts, interactive_plan/app/globals.css, interactive_plan/components/portal/PhasePopup.tsx, interactive_plan/tests/**, .claude/skills/wiki-to-portal/SKILL.md, tools/fixtures/portal-sync/clean/**, wiki/interactive-plan/ip-routes-and-views.md, plan/portal/log.json, plan/portal/overview.json, wiki/raw/evidence/phase-p0-planning/portal-v2/task-columns-fixes-checks.txt (new)
+- rollback: git restore --source=HEAD -- <planned paths> (and delete the new evidence file); nothing is committed until all checks pass
 
 ## Blockers
 

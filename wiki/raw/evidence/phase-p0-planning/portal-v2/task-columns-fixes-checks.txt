@@ -1,0 +1,79 @@
+# Tasks table review fixes (p0.17 step task-columns-fixes, session s01, 2026-10-10)
+# Review of the eight-column tasks table (owner request raw/owner/2026-10-10-s01-task-table-columns.md) found seven
+# points; all fixed. npm run verify and the screenshots ran in a scratch git worktree of HEAD dbd9304 with this step's
+# changed and new files copied in (byte-identical, checked with cmp), core.longpaths given to that worktree's git calls
+# through environment variables only, E2E on port 3418 and screenshots on 3423, so the owner's running portal (port
+# 3417) was not rebuilt or stopped. The worktree was deleted afterwards.
+
+## npm run verify (scratch worktree), first run
+1 failed: overview.spec.ts 'on a 1280 px laptop the tasks table fits the phase popup without sideways scrolling'
+  (table area scrollWidth - clientWidth = 1, with a 1150 px table minimum). Fix: minimum 1120 px, columns narrowed. rc=1
+
+## npm run verify (scratch worktree), second run on the final files, summary lines
+> interactive_plan@0.1.0 verify
+> npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e
+> interactive_plan@0.1.0 typecheck
+> next typegen && tsc --noEmit
+> interactive_plan@0.1.0 lint
+> eslint .
+> interactive_plan@0.1.0 test
+> vitest run
+ Test Files  25 passed (25)
+      Tests  773 passed | 1 skipped (774)
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+lint: 0 errors, 36 warnings, 2 info (pages: 202)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+> interactive_plan@0.1.0 build
+> next build
+> interactive_plan@0.1.0 test:e2e
+> playwright test
+E2E guard: 22 real files unchanged (approvals.json absent)
+  102 passed (4.0m)
+rc=0
+New or changed browser tests in that run (all passed):
+  ✓   16 [chromium] › tests\e2e\a11y.spec.ts:29:9 › the open phase popup has no accessibility violations (light theme, 1440 wide) (1.4s)
+  ✓   17 [chromium] › tests\e2e\a11y.spec.ts:29:9 › the open phase popup has no accessibility violations (light theme, 390 wide) (1.4s)
+  ✓   18 [chromium] › tests\e2e\a11y.spec.ts:29:9 › the open phase popup has no accessibility violations (dark theme, 1440 wide) (1.8s)
+  ✓   19 [chromium] › tests\e2e\a11y.spec.ts:29:9 › the open phase popup has no accessibility violations (dark theme, 390 wide) (1.5s)
+  ✓   36 [chromium] › tests\e2e\overview.spec.ts:143:5 › the tasks table has the eight columns in order, and every task row shows what, why, how, logic, check and state (16.2s)
+  ✓   37 [chromium] › tests\e2e\overview.spec.ts:189:5 › on a 1280 px laptop the tasks table fits the phase popup without sideways scrolling (990ms)
+  ✓  102 [chromium] › tests\e2e\shell.spec.ts:64:5 › phone width: the overview and a phase popup fit without sideways scrolling (1.3s)
+
+## Text overlap in the nine phase files after the rewrite (Python difflib ratio on lower-cased words)
+Why vs its closest Logic step, How vs the check line; reviewer's measure was 0.6 or higher.
+before (HEAD dbd9304): Why >= 0.6 in 85 of 141 tasks, How >= 0.6 in 30; at 0.5: 117 and 60; p8.4 had 9 chain steps
+after, threshold 0.6: total 141 why-sim 0 how-sim 0 non3 []
+after, threshold 0.5: total 141 why-sim 1 how-sim 10 non3 []
+longest texts after the rewrite: what 208, why 163, how 197 characters (limit 240)
+
+## Screenshots of the P1 phase popup tasks table (Claude read them)
+Probe: page width, table area visible width / scroll width, row heights, header widths
+light 1440: page 1440, table area 1334 visible / 1334 scroll; Id 76, Title 152, What 195, Why 186, How 186, Logic 245, Check script 174, State 119
+light 1280: page 1280, table area 1174 visible / 1174 scroll; Id 67, Title 134, What 172, Why 164, How 164, Logic 216, Check script 153, State 105
+light 390: page 390, table area 340 visible / 340 scroll; 17 cards, average 553 px each, 9406 px for all (before: about 700 px each)
+dark 1440, dark 1280, dark 390: same numbers as light
+p8.4 row at 1440 (P8 popup): 3 Logic steps; the hidden words "then" and "so" are present before steps 2 and 3
+Read: at 1440 and 1280 all eight columns fit with no sideways scrolling, Id and State are narrower, Logic shows three
+steps each starting on its own line; the Why and How cells no longer repeat Logic or the check line. At 390 each card
+opens with one line of Id, State and Title, What/Why/How carry their name in front, Logic and Check script have their
+name above. Both themes readable. No defect found after the second run.
+Files: p1-tasks-{light,dark}-{1440,1280,390}-{view,table}.png, p1-tasks-{light,dark}-390-card.png,
+p8-p8.4-row-light-1440.png (in Claude's scratchpad, not committed).
+
+## Checks on the real repo (final tree)
+$ pwsh tools/portal-sync-check.ps1
+portal-sync: clean - 18 files, 168 translated records, 385 refs
+$ pwsh tools/test-portal-sync-check.ps1 (last line)
+test-portal-sync-check: 27 passed, 0 failed
+$ python tools/quick_lint.py (last line)
+202 files checked, 0 errors, 0 warnings
+$ npm run lint:wiki (real repo, read-only, summary)
+lint: 0 errors, 36 warnings, 2 info (pages: 202)
+      Tests  8 passed | 1 skipped (9)
+$ npx vitest run (real repo, summary)
+ Test Files  25 passed (25)
+      Tests  773 passed | 1 skipped (774)
+$ pwsh tools/mask.ps1 --scan (with this file staged)
+mask scan: 694 tracked files, 0 unmasked value group(s), 0 file(s) not checkable

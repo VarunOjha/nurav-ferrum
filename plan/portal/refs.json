@@ -1469,7 +1469,7 @@
       "id": "p8.4",
       "kind": "task",
       "title": "P8 task: Trace from question to conclusion",
-      "summary": "Each conclusion must rest on evidence → build a table linking question → prediction → experiment → raw data → analysis → figure → conclusion, shown in this portal → gaps are visible at a glance.",
+      "summary": "Each conclusion must rest on evidence → build a table linking each question to its prediction, experiment, raw data, analysis, figure and conclusion, shown in this portal → gaps are visible at a glance.",
       "status": "Not started",
       "related": [
         "phase-p8-research-paper"

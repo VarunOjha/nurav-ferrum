@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:34af2e92c49aa511a826d8fb4a6bebacc20a3b23b59624bb5531c4500b1c69d1"
+    "content_hash": "sha256:2fa5356123efb14ac8045273d8a971139c8e47cd7aa3d442edc509595c18e7ae"
   },
   "entries": [
     {
@@ -1023,6 +1023,30 @@
         "## [2026-10-10] code | p0.17 tasks table: eight columns, task JSON gains what, why and how",
         "## [2026-10-10] lint | p0.17 tasks table: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px",
         "## [2026-10-10] plan | p0.17 step \"task-columns\" committed: tasks table in eight columns"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-10-task-columns-fixes",
+      "date": "2026-10-10",
+      "title": "Tasks table fixed after a review",
+      "done": "A review of the new tasks table found seven problems, and all are fixed. Every Why now says what goes wrong without the task, instead of repeating the Logic column. Every How now says how the work is done, instead of repeating the check. Every Logic cell has exactly three steps. The table fits a 1280 px laptop screen. On a phone, each task card starts with its id, state and title on one line.",
+      "next": "Restart the portal to see the fixed table, then go on with your walkthrough using Ref. Then your first approvals in chat and your P0 sign-off.",
+      "decisions": [
+        {
+          "what": "Every task's thought chain has exactly three steps, and the checker rejects any other count",
+          "by": "claude"
+        },
+        {
+          "what": "The tasks table stays reachable with the Tab key at every width, because it can still scroll sideways on narrow windows",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] code | p0.17 tasks table review fixes: three-step chains, why and how rewritten, fits 1280 px, short phone cards",
+        "## [2026-10-10] lint | p0.17 tasks table review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read"
       ],
       "phase": "phase-p0-planning"
     }

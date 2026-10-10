@@ -121,8 +121,11 @@
             "description": "How the task is done (the approach), in plain words (1-2 short sentences). Shown in the 'How' column."
           },
           "chain": {
-            "$ref": "#/$defs/chain",
-            "description": "The thought chain cause → action → why it matters. Shown in the 'Logic' column."
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400,
+            "pattern": "^[^→\\n]+→[^→\\n]+→[^→\\n]+$",
+            "description": "The thought chain cause → action → why it matters: exactly three steps, so exactly two → (review 2026-10-10: an arrow inside a step would split it into extra lines of the 'Logic' column; write lists inside a step with commas). Shown in the 'Logic' column, one step per line."
           },
           "check": {
             "$ref": "#/$defs/short_text"

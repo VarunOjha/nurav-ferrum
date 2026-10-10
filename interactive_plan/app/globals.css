@@ -927,36 +927,40 @@ dialog::backdrop {
   border-top: 1px solid var(--line);
 }
 /* The phase popup is wider than other popups: its tasks table has eight columns (owner request
-   2026-10-10). Below its minimum width the table scrolls sideways inside the popup; text wraps. */
+   2026-10-10). The minimum width (review 2026-10-10) fits a 1280 px window without sideways scrolling;
+   below it the table scrolls sideways inside the popup; text wraps. On wider popups the fixed layout
+   shares the extra width out in proportion to these widths. */
 .phase-modal {
   width: min(1400px, calc(100vw - 48px));
 }
 .tasks-table {
-  min-width: 1240px;
+  min-width: 1120px;
   table-layout: fixed;
 }
 .tasks-table td {
   overflow-wrap: anywhere;
 }
 .col-id {
-  width: 76px;
+  width: 64px;
 }
 .col-title {
-  width: 150px;
+  width: 128px;
 }
-.col-what,
+.col-what {
+  width: 164px;
+}
 .col-why,
 .col-how {
-  width: 175px;
+  width: 156px;
 }
 .col-logic {
-  width: 210px;
+  width: 206px;
 }
 .col-check-script {
-  width: 190px;
+  width: 146px;
 }
 .col-state {
-  width: 120px;
+  width: 100px;
 }
 /* Logic: the thought chain, one step per line, each later step starting with its arrow. */
 .chain-steps {
@@ -1735,7 +1739,9 @@ section[tabindex="-1"]:focus {
 }
 
 /* Phone width: each task of the phase popup becomes a small card instead of an eight-column table
-   that needs sideways scrolling. Every value gets its column name as a small label above it. */
+   that needs sideways scrolling. Review 2026-10-10: the card starts with one heading line (Id, State,
+   Title, no labels, as in the old layout); What, Why and How follow with their column name in front,
+   Logic and Check script with their name above, so a card stays short. */
 @media (max-width: 640px) {
   .tasks-table thead {
     position: absolute;
@@ -1747,7 +1753,6 @@ section[tabindex="-1"]:focus {
   }
   .tasks-table,
   .tasks-table tbody,
-  .tasks-table tr,
   .tasks-table td {
     display: block;
     width: 100%;
@@ -1757,20 +1762,38 @@ section[tabindex="-1"]:focus {
     table-layout: auto;
   }
   .tasks-table tr {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    column-gap: 8px;
+    align-items: start;
+    width: 100%;
     padding: 12px 14px;
   }
   .tasks-table tbody tr:first-child {
     border-top: none;
   }
   .tasks-table td {
+    grid-column: 1 / -1;
     padding: 2px 0;
     border: none;
-  }
-  .tasks-table td[data-label] {
     margin-top: 6px;
   }
-  .tasks-table td[data-label]:first-child {
+  /* the heading line: Id, then State, then the Title, which wraps in the space left */
+  .tasks-table td[data-label="Id"],
+  .tasks-table td[data-label="State"],
+  .tasks-table td[data-label="Title"] {
+    grid-row: 1;
+    width: auto;
     margin-top: 0;
+  }
+  .tasks-table td[data-label="Id"] {
+    grid-column: 1;
+  }
+  .tasks-table td[data-label="State"] {
+    grid-column: 2;
+  }
+  .tasks-table td[data-label="Title"] {
+    grid-column: 3;
   }
   .tasks-table td[data-label]::before {
     content: attr(data-label);
@@ -1778,6 +1801,17 @@ section[tabindex="-1"]:focus {
     font-size: 12px;
     font-weight: 600;
     color: var(--muted);
+  }
+  .tasks-table td[data-label="Id"]::before,
+  .tasks-table td[data-label="State"]::before,
+  .tasks-table td[data-label="Title"]::before {
+    content: none;
+  }
+  .tasks-table td[data-field="what"]::before,
+  .tasks-table td[data-field="why"]::before,
+  .tasks-table td[data-field="how"]::before {
+    display: inline;
+    margin-right: 6px;
   }
 }
 

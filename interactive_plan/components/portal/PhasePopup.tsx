@@ -1,7 +1,8 @@
 /**
  * The phase popup (owner-approved Phase-Modal mockup): header with status and approvals, step order,
- * tasks table (Id, Title, What, Why, How, Logic = the thought chain one step per line, Check script with the
- * plain "how we check" line, State; owner request 2026-10-10), the test gate
+ * tasks table (Id, Title, What, Why, How, Logic = the thought chain one step per line, read out as
+ * "cause, then action, so why it matters", Check script with the plain "how we check" line, State; owner
+ * request 2026-10-10, review fixes the same day), the test gate
  * in plain words with its table and gate script, and what is the same in every phase. Server
  * component, rendered once per phase in the layout so every tab (and every phase id) can open it;
  * Modal (client) only opens and closes it. Script buttons open the script popup with the real file.
@@ -12,7 +13,7 @@ import type { Phase, Roadmap } from "@/lib/portal/schemas.gen";
 import { runCommand } from "@/lib/portal/scriptCommand";
 import { getScriptHeader } from "@/lib/portal/server";
 import { ownerHeaderParts } from "@/lib/portal/scripts";
-import { approvalLabel, chainSteps, phaseTone, TASK_COLUMNS, taskTone } from "@/lib/portal/view";
+import { approvalLabel, chainJoin, chainSteps, phaseTone, TASK_COLUMNS, taskTone } from "@/lib/portal/view";
 import { popupContext, ui } from "@/lib/portal/uiRefs";
 import CloseLink from "./CloseLink";
 import Modal, { CloseModalButton } from "./Modal";
@@ -93,7 +94,7 @@ export default async function PhasePopup({
             </h3>
             <span className="small muted">Each check script is kept in the repo so it can be re-run any time</span>
           </div>
-          <div className="table-wrap tasks-wrap" tabIndex={0} role="region" aria-label="Tasks table, scrolls sideways">
+          <div className="table-wrap tasks-wrap" tabIndex={0} role="region" aria-label="Tasks table">
             <table className="table tasks-table" data-testid="tasks-table">
               <thead>
                 <tr>
@@ -127,9 +128,12 @@ export default async function PhasePopup({
                         {chainSteps(t.chain).map((step, i) => (
                           <li key={i} className="chain-step">
                             {i > 0 && (
-                              <span className="chain-arrow" aria-hidden="true">
-                                →{" "}
-                              </span>
+                              <>
+                                <span className="chain-arrow" aria-hidden="true">
+                                  →{" "}
+                                </span>
+                                <span className="sr-only">{chainJoin(i)} </span>
+                              </>
                             )}
                             <RichText text={step} />
                           </li>

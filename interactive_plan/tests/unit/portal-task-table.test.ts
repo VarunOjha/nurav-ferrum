@@ -1,9 +1,13 @@
 // The phase popup's tasks table (owner request 2026-10-10, wiki/raw/owner/2026-10-10-s01-task-table-columns.md):
 // the column order, the Logic column's steps (lib/portal/view.ts) and the task fields the schema now
 // requires (what, why, how; plan/portal/schema/phase.schema.json via lib/portal/schemas.gen.ts).
+import { readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { PhaseFile } from "@/lib/portal/schemas.gen";
-import { chainSteps, TASK_COLUMNS } from "@/lib/portal/view";
+import { chainJoin, chainSteps, TASK_COLUMNS } from "@/lib/portal/view";
+
+const PHASES_DIR = path.resolve(__dirname, "..", "..", "..", "plan", "portal", "phases");
 
 const task = {
   id: "p1.1",
@@ -75,4 +79,31 @@ describe("task fields what, why and how", () => {
       expect(PhaseFile.safeParse(phase([{ ...task, [field]: "x".repeat(240) }])).success).toBe(true);
     });
   }
+});
+
+// Review 2026-10-10: one task chain had arrows inside its middle step, so the Logic column showed 9
+// "steps". The schema now allows exactly three steps; these tests keep that rule and the real data honest.
+describe("task chains have exactly three steps", () => {
+  it("rejects a task chain with fewer or more than two arrows", () => {
+    for (const bad of ["Cause → action", "A → B → C → D", "Question → prediction → experiment → raw data → conclusion", "A →→ B"]) {
+      expect(PhaseFile.safeParse(phase([{ ...task, chain: bad }])).success, bad).toBe(false);
+    }
+    expect(PhaseFile.safeParse(phase([{ ...task, chain: "Cause → action, with a list of a, b and c → why it matters" }])).success).toBe(true);
+  });
+  it("every task in the real phase files splits into exactly three Logic steps", () => {
+    const files = readdirSync(PHASES_DIR).filter((f) => f.endsWith(".json"));
+    expect(files.length).toBeGreaterThan(0);
+    let tasks = 0;
+    for (const f of files) {
+      const data = JSON.parse(readFileSync(path.join(PHASES_DIR, f), "utf8")) as { tasks: { id: string; chain: string }[] };
+      for (const t of data.tasks) {
+        tasks += 1;
+        expect(chainSteps(t.chain), `${f} ${t.id}`).toHaveLength(3);
+      }
+    }
+    expect(tasks).toBeGreaterThan(0);
+  });
+  it("names the hidden joining words a screen reader hears instead of the arrows", () => {
+    expect([1, 2].map(chainJoin)).toEqual(["then", "so"]);
+  });
 });

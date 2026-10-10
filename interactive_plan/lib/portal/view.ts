@@ -171,6 +171,15 @@ export function chainSteps(chain: string): string[] {
   return steps;
 }
 
+/**
+ * The word a screen reader hears before step i (1-based after the first) of a thought chain, in place of
+ * the arrow the view draws but hides from screen readers (review 2026-10-10): cause, "then" action,
+ * "so" why it matters. A task chain has exactly three steps (plan/portal/schema/phase.schema.json).
+ */
+export function chainJoin(i: number): string {
+  return i <= 1 ? "then" : "so";
+}
+
 /** "P0 → P5" for a stage, from the short names of its first and last phase ("P8" for one phase). */
 export function stageRange(roadmap: Roadmap, stage: Roadmap["stages"][number]): string {
   const shorts = stage.phases.map((id) => roadmapRow(roadmap, id)?.short ?? id);

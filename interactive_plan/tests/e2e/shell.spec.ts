@@ -84,4 +84,18 @@ test("phone width: the overview and a phase popup fit without sideways scrolling
   expect(labels).toEqual(["Id", "Title", "What", "Why", "How", "Logic", "Check script", "State"]);
   const label = await firstRow.locator('td[data-label="What"]').evaluate((td) => getComputedStyle(td, "::before").content);
   expect(label).toBe('"What"');
+  // Review 2026-10-10: the card opens with one heading line, Id then State then Title, without labels,
+  // and the rows below start under it.
+  const top = (sel: string) => firstRow.locator(sel).evaluate((td) => Math.round(td.getBoundingClientRect().top));
+  const left = (sel: string) => firstRow.locator(sel).evaluate((td) => Math.round(td.getBoundingClientRect().left));
+  const [idTop, stateTop, titleTop, whatTop] = await Promise.all([top('td[data-label="Id"]'), top('td[data-label="State"]'), top('td[data-label="Title"]'), top('td[data-label="What"]')]);
+  expect(Math.abs(stateTop - idTop)).toBeLessThanOrEqual(2);
+  expect(Math.abs(titleTop - idTop)).toBeLessThanOrEqual(2);
+  expect(whatTop).toBeGreaterThan(idTop);
+  const [idLeft, stateLeft, titleLeft] = await Promise.all([left('td[data-label="Id"]'), left('td[data-label="State"]'), left('td[data-label="Title"]')]);
+  expect(idLeft).toBeLessThan(stateLeft);
+  expect(stateLeft).toBeLessThan(titleLeft);
+  for (const l of ["Id", "State", "Title"]) {
+    expect(await firstRow.locator(`td[data-label="${l}"]`).evaluate((td) => getComputedStyle(td, "::before").content)).toBe("none");
+  }
 });
