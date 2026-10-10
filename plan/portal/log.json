@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words, oldest first. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:875ec11d5ce52fb6e8d3dff4125bc81e6a484db871b3e5cb55a6579dfed444da"
+    "content_hash": "sha256:439776dae6aef666419699463d0881010915522cc709feabb814e97bd216681d"
   },
   "entries": [
     {
@@ -724,10 +724,11 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "adc3651",
       "covers": [
         "## [2026-10-09] decide | check scripts: names, result words and exit codes, owner steps in gates, drafts for P2-P8, report formats P1 needs",
-        "## [2026-10-09] lint | p0.17 scripts step: P0 gate PASS, P1 gate FAIL as expected, script test PASS, portal check clean"
+        "## [2026-10-09] lint | p0.17 scripts step: P0 gate PASS, P1 gate FAIL as expected, script test PASS, portal check clean",
+        "## [2026-10-09] plan | p0.17 step \"scripts\" committed: check scripts for every task and phase, P0 gate passes"
       ],
       "phase": "phase-p0-planning"
     }

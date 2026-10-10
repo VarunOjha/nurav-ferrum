@@ -4507,6 +4507,16 @@
         "ov-research-fairness-protocol",
         "ov-research-plan"
       ]
+    },
+    {
+      "id": "adc3651",
+      "kind": "commit",
+      "title": "Commit: Check scripts for every task and phase",
+      "summary": "A PowerShell 7 check script for each task and phase, a shared helper, a runner for phase gates and a test of the scripts themselves.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }
