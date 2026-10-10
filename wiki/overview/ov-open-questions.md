@@ -175,6 +175,15 @@ Raised in [ip-spec](../interactive-plan/ip-spec.md) §9 item 5. Should the plan 
 your consent, pinned from the registry at build time. Not blocking: the app can be built without it.
 (ip-spec §9 items 1 and 4 are Q-103 and Q-101.)
 
+**Correction (2026-10-09, review of portal v2):** before this question was answered, Claude added the
+accessibility checker anyway: `axe-core` 4.14.0 (the engine behind `@axe-core/playwright`, already in the
+lockfile through eslint) became an exact devDependency of `interactive_plan/` in the p0.17 "portal-views"
+step (commit `dfe164f`), and the browser tests now check every portal tab with it. Claude treated it as a
+tooling choice under the delegation policy ([raw/owner/2026-10-09-s01-wave0c.md](../raw/owner/2026-10-09-s01-wave0c.md)),
+but this question had promised to ask first, so the register said something untrue until this correction.
+The question stays open in a new form: **keep the checker, or remove it?** If the owner says remove,
+Claude uninstalls it and drops the accessibility browser tests; nothing else depends on it.
+
 ## Q-101 When is the plan app built?
 
 - asked: 2026-10-08

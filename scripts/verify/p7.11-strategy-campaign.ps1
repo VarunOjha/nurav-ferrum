@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P7 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) A complete raw-data folder with every trial and checksums; no results stated
                    yet.
   Why            : Bench and predictions are ready → run the four strategies on identical workloads, with
@@ -13,10 +13,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p7.11-strategy-campaign.ps1
-  Result         : NOT READY = exit 2 until P7; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P7 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P7" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     raw/bench/<run-id>/ with manifest, every trial, checksums; experiment status complete with
     results_ref; no result statements yet.
 #>

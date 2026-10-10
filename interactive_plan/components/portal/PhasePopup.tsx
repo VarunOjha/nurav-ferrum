@@ -1,6 +1,6 @@
 /**
  * The phase popup (owner-approved Phase-Modal mockup): header with status and approvals, step order,
- * tasks table (id, title, what & why as a thought chain, how we check, check script), the test gate
+ * tasks table (id and state, title, what & why as a thought chain, how we check, check script), the test gate
  * in plain words with its table and gate script, and what is the same in every phase. Server
  * component, rendered once per phase in the layout so every tab (and every phase id) can open it;
  * Modal (client) only opens and closes it. Script buttons open the script popup with the real file.
@@ -10,8 +10,8 @@ import { phaseDialogId } from "@/lib/portal/dialogs";
 import type { Phase, Roadmap } from "@/lib/portal/schemas.gen";
 import { runCommand } from "@/lib/portal/scriptCommand";
 import { getScriptHeader } from "@/lib/portal/server";
-import { headerParts } from "@/lib/portal/scripts";
-import { approvalLabel, phaseTone } from "@/lib/portal/view";
+import { ownerHeaderParts } from "@/lib/portal/scripts";
+import { approvalLabel, phaseTone, taskTone } from "@/lib/portal/view";
 import CloseLink from "./CloseLink";
 import Modal, { CloseModalButton } from "./Modal";
 import Ref from "./Ref";
@@ -96,7 +96,7 @@ export default async function PhasePopup({
               <thead>
                 <tr>
                   <th scope="col" className="col-id">
-                    Id
+                    Id · state
                   </th>
                   <th scope="col" className="col-title">
                     Title
@@ -112,9 +112,10 @@ export default async function PhasePopup({
               </thead>
               <tbody>
                 {phase.tasks.map((t) => (
-                  <tr key={t.id}>
+                  <tr key={t.id} data-task={t.id} data-task-status={t.status}>
                     <td className="cell-id">
                       <Ref id={t.id} variant="code" />
+                      <span className={`chip chip-sm chip-${taskTone(t.status)} task-status`}>{t.status}</span>
                     </td>
                     <td className="strong cell-title">
                       <RichText text={t.title} />
@@ -175,11 +176,12 @@ export default async function PhasePopup({
 ${runCommand(phase.test_gate.script)}`}</pre>
                 {gateHeader && (
                   <div className="gate-header" tabIndex={0} role="region" aria-label="What the gate script says about itself" data-testid="gate-header">
-                    {headerParts(gateHeader).map((part, i) =>
+                    {/* The command is shown once, above; the "For Claude" notes stay in the full script. */}
+                    {ownerHeaderParts(gateHeader).map((part, i) =>
                       part.label ? (
                         <div key={i} className="gate-field">
                           <span className="gate-field-label">{part.label}</span>
-                          <span className={part.label === "How to run" ? "gate-field-text mono" : "gate-field-text"}>{part.text}</span>
+                          <span className="gate-field-text">{part.text}</span>
                         </div>
                       ) : (
                         <p key={i} className={i === 0 ? "gate-para strong" : "gate-para"} style={part.indent ? { paddingLeft: `${part.indent * 6}px` } : undefined}>

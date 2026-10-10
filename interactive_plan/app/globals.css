@@ -513,6 +513,16 @@ pre,
   background: var(--you-bg);
   color: var(--you-fg);
 }
+.chip-sm {
+  font-size: 11px;
+  padding: 1px 6px;
+}
+/* the state of each task in the phase popup, under its id */
+.tasks-table .task-status {
+  display: block;
+  width: max-content;
+  margin-top: 4px;
+}
 
 /* what happens next */
 .next-grid {
@@ -721,7 +731,6 @@ dialog::backdrop {
   align-items: baseline;
 }
 .ref-dialog-id {
-  font-family: var(--font-mono);
   font-weight: 400;
 }
 .ref-dialog-title {
@@ -766,7 +775,6 @@ dialog::backdrop {
   background: var(--accent-bg);
 }
 .ref-related-id {
-  font-family: var(--font-mono);
   font-size: 12px;
   color: var(--muted);
   margin-left: auto;
@@ -1346,7 +1354,6 @@ section[tabindex="-1"]:focus {
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
-.comp-grid,
 .glance-grid {
   list-style: none;
   margin: 0;
@@ -1355,14 +1362,12 @@ section[tabindex="-1"]:focus {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
 }
-.comp-card,
 .glance-card {
   padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.comp-card p,
 .glance-card p {
   margin: 0;
 }
@@ -1651,18 +1656,34 @@ section[tabindex="-1"]:focus {
   white-space: nowrap;
 }
 
-/* Architecture part cards: a long name wraps left-aligned and the status chip stays top right. */
-.comp-card > .row-between {
-  flex-wrap: nowrap;
-  align-items: flex-start;
+/* Architecture, Application group: the layered diagram with the "How to read this" panel beside it
+   (Architecture mockup); one column on narrower screens. */
+.arch-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 18px;
+  align-items: start;
 }
-.comp-card > .row-between > .ref {
-  text-align: left;
-  min-width: 0;
+.arch-main .layer-label {
+  width: 110px;
 }
-.comp-card > .row-between > .chip {
-  flex: none;
-  white-space: nowrap;
+.arch-main .layer-boxes {
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+}
+.arch-side {
+  padding: 18px;
+}
+.arch-side p {
+  margin: 0;
+}
+.legend-stack {
+  flex-direction: column;
+  gap: 8px;
+}
+@media (max-width: 1100px) {
+  .arch-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 /* "The other groups at a glance": the three cards share the full width. */
 .glance-grid {
@@ -1707,6 +1728,10 @@ section[tabindex="-1"]:focus {
   }
   .tasks-table td.cell-id {
     margin-right: 8px;
+  }
+  .tasks-table td.cell-id .task-status {
+    display: inline-block;
+    margin: 0 0 0 6px;
   }
   .tasks-table td[data-label] {
     margin-top: 6px;

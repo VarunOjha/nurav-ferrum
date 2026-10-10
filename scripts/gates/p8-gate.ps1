@@ -5,20 +5,22 @@
 
 .DESCRIPTION
   Status         : DRAFT. The real gate is written when P8 starts; until then it only lists the planned
-                   checks and ends NOT READY (exit 2).
+                   checks and ends NOT READY.
   What it checks : (planned) every task check of P8, then: Statistics tests; Same input, same output;
                    Paper builds; Numbers from scripts; Citation check; Traceability table; Wiki check.
-                   Your own checks are listed as YOURS.
+                   Steps only you can do are listed as YOURS.
   Why            : Analysis tests pass and a rerun gives identical output → the paper builds → every
                    number comes from a script → every citation checks out → every conclusion traces to
                    data → you read the whole paper and approve.
   What it changes: nothing (once real, -SaveEvidence saves the printout as masked evidence).
   How long       : under a second while it is a draft.
-  How to run     : pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P8
-  Result         : NOT READY = exit 2 until P8; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  How to run     : pwsh -NoProfile -File scripts/gates/p8-gate.ps1
+  Result         : NOT READY until P8 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P8" is the expected result for now.
 
-  For Claude - the planned automatic gate items, from the test_gate of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). scripts/run-all-checks.ps1 -Phase P8 starts this same
+                   script. The planned automatic gate items, from the test_gate of the phase page:
     - analysis: pytest
     - Analysis rerun determinism check (p8.2)
     - Manuscript build (latexmk or chosen command)

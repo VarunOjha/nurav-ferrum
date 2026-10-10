@@ -87,6 +87,68 @@ export function approvalLabel(read: ApprovalsRead, key: string, currentHash: str
   return "Approved";
 }
 
+/**
+ * One plain answer to "where does this decision stand?" (review 2026-10-09: "Accepted", "You decided"
+ * and "Not approved yet" side by side read as a contradiction). Choosing a decision (in chat) and
+ * signing off its written page (an approval in Claude Code) are two steps; this says which are done.
+ * `chip` is the short status, `short` the list-row line, `line` the popup sentence.
+ */
+export function decisionStanding(
+  d: Pick<Decisions["items"][number], "status" | "decided_by" | "date">,
+  approval: ApprovalLabel,
+): { chip: string; short: string; line: string } {
+  const when = shortDate(d.date);
+  if (d.status === "Replaced") return { chip: "Replaced", short: `Replaced · decided ${when}`, line: `Decided on ${when} and later replaced, so its page needs no sign-off.` };
+  if (d.status === "Rejected") return { chip: "Rejected", short: `Rejected · ${when}`, line: `Rejected on ${when}; nothing to sign off.` };
+  const chose = d.decided_by === "you" ? `You chose this on ${when}` : `Claude proposed this on ${when}`;
+  const chip = d.decided_by === "you" ? "Chosen by you" : d.status === "Proposed" ? "Proposed by Claude" : "Accepted";
+  const page: Record<ApprovalLabel, [string, string]> = {
+    "Not approved yet": [
+      "page not signed off yet",
+      d.decided_by === "you" ? "its written page waits for your sign-off in Claude Code." : "it waits for your decision in Claude Code.",
+    ],
+    Approved: ["page signed off", "you signed off its written page."],
+    "Approved, page edited since": ["page changed since your sign-off", "you signed off its page, but the page changed since, so Claude will ask you again."],
+    "Changes requested": ["you asked for changes", "you asked for changes to its written page."],
+    Rejected: ["you rejected the page", "you rejected its written page."],
+    "Approvals file unreadable": ["sign-off unknown", "the approvals file could not be read, so its sign-off is unknown."],
+  };
+  const [shortPage, linePage] = page[approval];
+  const who = d.decided_by === "you" ? "You chose" : "Claude proposed";
+  return { chip, short: `${who} · ${when} · ${shortPage}`, line: `${chose}; ${linePage}` };
+}
+
+/** The Overview's "Questions for you" row, counted from the list itself so the numbers cannot drift. */
+export function questionsRow(q: { open: number; items: readonly unknown[] }): string {
+  const asked = q.items.length;
+  if (q.open === 0) return "None open";
+  if (asked === 0) return `${q.open} open; none asked right now`;
+  return `${q.open} open; ${asked} of them ${asked === 1 ? "is" : "are"} asked now`;
+}
+
+/**
+ * When a part arrives: "Built in P2 · First working app" for our own parts, "Used from P1 · Foundation"
+ * for parts someone else provides (Windows, WebView2, Chrome, Edge). Review 2026-10-09: "Built in" next
+ * to Windows read as if we were building Windows.
+ */
+export function partWhen(c: { ours: boolean }, phaseName: string): string {
+  return `${c.ours ? "Built in" : "Used from"} ${phaseName}`;
+}
+
+/** Plain label of a task's status chip and its colour family. */
+export function taskTone(status: Phase["tasks"][number]["status"]): Tone | "you" {
+  switch (status) {
+    case "Done":
+      return "done";
+    case "In progress":
+      return "now";
+    case "Waiting for you":
+      return "you";
+    default:
+      return "later";
+  }
+}
+
 /** "P0 → P5" for a stage, from the short names of its first and last phase ("P8" for one phase). */
 export function stageRange(roadmap: Roadmap, stage: Roadmap["stages"][number]): string {
   const shorts = stage.phases.map((id) => roadmapRow(roadmap, id)?.short ?? id);

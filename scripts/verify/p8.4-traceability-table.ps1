@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P8 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) No empty cell for any reported conclusion; the wiki link checks are clean.
   Why            : Each conclusion must rest on evidence → build a table linking question → prediction →
                    experiment → raw data → analysis → figure → conclusion, shown in this portal → gaps are
@@ -13,10 +13,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p8.4-traceability-table.ps1
-  Result         : NOT READY = exit 2 until P8; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P8 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P8" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     Matrix has no empty cell for any reported conclusion; wiki lint REF-RECIPROCAL and HYP-NO-DATA clean.
 #>
 [CmdletBinding()]

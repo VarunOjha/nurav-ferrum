@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P4 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) Small timing tests run (proof the tool works, not results); experiment pages
                    updated; you approve them.
   Why            : Security costs time and memory → build small timing tests and finish the experiment
@@ -13,10 +13,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p4.12-design-cost-experiments.ps1
-  Result         : NOT READY = exit 2 until P4; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P4 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P4" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     Microbenchmarks run and save raw output as evidence of harness operation only (no claims); experiment
     pages updated with workloads, metrics and analysis plan; owner approves them.
 #>

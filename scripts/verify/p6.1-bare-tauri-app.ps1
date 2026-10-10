@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P6 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) It builds and loads a test page; a version comparison with Ferrum shows only
                    intended differences.
   Why            : We must show what Ferrum adds over plain Tauri → build a minimal app on the same Tauri
@@ -14,10 +14,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p6.1-bare-tauri-app.ps1
-  Result         : NOT READY = exit 2 until P6; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P6 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P6" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     Builds in release; a smoke script loads a fixture page in it; its dependency versions diff against
     Ferrum's shows only intended differences (saved as evidence).
 #>

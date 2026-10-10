@@ -5,21 +5,23 @@
 
 .DESCRIPTION
   Status         : DRAFT. The real gate is written when P4 starts; until then it only lists the planned
-                   checks and ends NOT READY (exit 2).
+                   checks and ends NOT READY.
   What it checks : (planned) every task check of P4, then: Formatting and code warnings; Tests; Licences
                    and alerts; Rules coverage; Security suite; Earlier tests again; Shell checks; Release
-                   build; No-security switch absent; Isolation modes; Wiki check. Your own checks are
+                   build; No-security switch absent; Isolation modes; Wiki check. Steps only you can do are
                    listed as YOURS.
   Why            : Security claims need proof → attack-style tests try the known bypasses, every rule
                    branch is covered, and the release build is scanned → you accept the 'not enforced'
                    list → only then does P5 start.
   What it changes: nothing (once real, -SaveEvidence saves the printout as masked evidence).
   How long       : under a second while it is a draft.
-  How to run     : pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P4
-  Result         : NOT READY = exit 2 until P4; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  How to run     : pwsh -NoProfile -File scripts/gates/p4-gate.ps1
+  Result         : NOT READY until P4 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P4" is the expected result for now.
 
-  For Claude - the planned automatic gate items, from the test_gate of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). scripts/run-all-checks.ps1 -Phase P4 starts this same
+                   script. The planned automatic gate items, from the test_gate of the phase page:
     - cargo fmt --all -- --check
     - cargo clippy --workspace --all-targets -- -D warnings
     - cargo test --workspace

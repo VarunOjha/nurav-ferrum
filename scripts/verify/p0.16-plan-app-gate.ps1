@@ -6,15 +6,18 @@
 .DESCRIPTION
   What it checks : the plan app's complete check (npm run verify) passes in one run: type check, code
                    style, all unit tests, the wiki check, the production build and all browser tests; and the
-                   saved outputs of the first full run exist (IP-9-verify.txt, IP-9-perf.txt,
-                   playwright-report.zip, IP-10-final-lint.json).
+                   four saved outputs of the first full run exist.
   Why            : each piece passed on its own → all of them together, in one run, prove the whole app.
   What it changes: nothing in the repo. Browser tests use a temporary sample wiki; ignored folders are written.
   How long       : about 3 to 4 minutes.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.16-plan-app-gate.ps1
                    (close any plan app you started yourself first: the tests use port 3418)
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.16 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Saved outputs: IP-9-verify.txt, IP-9-perf.txt, playwright-
+                   report.zip, IP-10-final-lint.json in wiki/raw/evidence/phase-p0-planning/interactive-plan/.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

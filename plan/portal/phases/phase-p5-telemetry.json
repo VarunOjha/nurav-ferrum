@@ -23,6 +23,7 @@
     {
       "id": "p5.1",
       "title": "Export file format and run labels",
+      "status": "Not started",
       "chain": "Every later result is read from files → define one versioned format (plain data files) that labels each run with code version, Windows build, WebView2 version and settings → any number can be traced to the exact setup that made it.",
       "check": "Each record type saves and reloads unchanged; a checker accepts good files and rejects a damaged one.",
       "script": "scripts/verify/p5.1-export-file-format.ps1"
@@ -30,6 +31,7 @@
     {
       "id": "p5.2",
       "title": "Count only Ferrum's own processes",
+      "status": "Not started",
       "chain": "Other apps on the PC also use WebView2 → find Ferrum's processes through Ferrum's own WebView2 setup, never by program name → other apps' memory never leaks into Ferrum's numbers.",
       "check": "A test runs Ferrum next to another WebView2 app: every Ferrum process is counted, none of the other app's.",
       "script": "scripts/verify/p5.2-count-ferrum-processes.ps1"
@@ -37,6 +39,7 @@
     {
       "id": "p5.3",
       "title": "Memory and CPU meter",
+      "status": "Not started",
       "chain": "We need trustworthy memory and CPU numbers → read them straight from Windows (private memory as the headline, working set as secondary, CPU time) and add them up over Ferrum's processes → one fair total per moment; peaks come from the total, never from adding per-process peaks.",
       "check": "Tests confirm totals and peaks are computed correctly.",
       "script": "scripts/verify/p5.3-memory-cpu-meter.ps1"
@@ -44,6 +47,7 @@
     {
       "id": "p5.4",
       "title": "Prove the meter is accurate",
+      "status": "Not started",
       "chain": "A meter is only useful if it is right → helper programs use a known amount of memory and CPU; the meter and an independent reader are compared with those values, with tolerances written down before the run → a meter that fails blocks P6.",
       "check": "Readings fall within the tolerances written beforehand; raw outputs saved as evidence.",
       "script": "scripts/verify/p5.4-prove-meter-accurate.ps1"
@@ -51,6 +55,7 @@
     {
       "id": "p5.5",
       "title": "Measure the meter's own cost",
+      "status": "Not started",
       "chain": "Measuring uses some CPU and memory itself → measure the meter's own cost at each sampling speed → we know how much it disturbs results (this describes the tool, not Ferrum).",
       "check": "Raw outputs saved as evidence; no comparison claims made.",
       "script": "scripts/verify/p5.5-meter-own-cost.ps1"
@@ -58,6 +63,7 @@
     {
       "id": "p5.6",
       "title": "Startup timing",
+      "status": "Not started",
       "chain": "Startup speed is a key result → record when the process starts, the window appears, and the first and largest content are drawn, read by Ferrum itself through the browser's debugging channel → startup can be compared fairly in P6.",
       "check": "On a test page every moment is recorded, in the right order.",
       "script": "scripts/verify/p5.6-startup-timing.ps1"
@@ -65,6 +71,7 @@
     {
       "id": "p5.7",
       "title": "Page-load timing",
+      "status": "Not started",
       "chain": "Page-load speed is another key result → record each load's main moments, whether it crossed to another site, and how many redirects it took → page loads can be compared fairly in P6.",
       "check": "Test pages with known redirects give the right redirect count and timing order.",
       "script": "scripts/verify/p5.7-page-load-timing.ps1"
@@ -72,6 +79,7 @@
     {
       "id": "p5.8",
       "title": "Record tab state changes",
+      "status": "Not started",
       "chain": "Smart tab sleeping in P7 needs a record of every tab state change → define the record (from, to, why, when, which tab) and log hide and show now → P7 plugs in without a new format.",
       "check": "Switching tabs produces hide and show records that pass the format check.",
       "script": "scripts/verify/p5.8-record-tab-state.ps1"
@@ -79,6 +87,7 @@
     {
       "id": "p5.9",
       "title": "Network log: addresses and timings only",
+      "status": "Not started",
       "chain": "You asked for a log of network calls → per tab, save address, method, result, type, timing, size and the security decision to one folder per session, never headers or page content → useful for research without storing private data.",
       "check": "A test page with known requests gives exactly the expected entries; a test proves no headers or content are stored.",
       "script": "scripts/verify/p5.9-network-log-addresses.ps1"
@@ -86,6 +95,7 @@
     {
       "id": "p5.10",
       "title": "Network log: coverage and cost",
+      "status": "Not started",
       "chain": "Some requests may be missed (embedded frames, redirects, background workers) → test each kind and run a small cost trial → the paper states exactly what the log covers.",
       "check": "A coverage table and the cost-trial output are saved as evidence.",
       "script": "scripts/verify/p5.10-network-log-coverage.ps1"
@@ -93,6 +103,7 @@
     {
       "id": "p5.11",
       "title": "Settings for measuring and logging",
+      "status": "Not started",
       "chain": "You decide what is recorded → add on/off switches for measurement and the network log, a button to open the log folder, and a retention limit → nothing is recorded that you did not choose.",
       "check": "A quick test flips each switch and confirms files are or are not written.",
       "script": "scripts/verify/p5.11-settings-measuring-logging.ps1"
@@ -100,6 +111,7 @@
     {
       "id": "p5.12",
       "title": "Map tabs to browser processes",
+      "status": "Not started",
       "chain": "Tabs may share browser processes → check how each tab shows up and which processes serve it → P6 and P7 know how far per-tab numbers can be trusted.",
       "check": "Findings saved as evidence; each open assumption confirmed or moved to a later phase.",
       "script": "scripts/verify/p5.12-tabs-to-processes.ps1"
@@ -107,6 +119,7 @@
     {
       "id": "p5.13",
       "title": "Reading: measurement methods",
+      "status": "Not started",
       "chain": "Our methods must match good practice → read the literature on measurement and browser benchmarking → each headline measurement gets a final, cited definition.",
       "check": "New research notes saved; each headline measurement is marked defined and cites the accuracy test.",
       "script": "scripts/verify/p5.13-reading-measurement-methods.ps1"
@@ -114,6 +127,7 @@
     {
       "id": "p5.14",
       "title": "Gate and your review",
+      "status": "Not started",
       "chain": "All tasks done → the gate script runs every check and saves the evidence → you review the accuracy results and the privacy check and approve; only then does P6 start.",
       "check": "All evidence files exist, the wiki check is clean, and you approve the end of P5.",
       "script": "scripts/verify/p5.14-gate-review.ps1"

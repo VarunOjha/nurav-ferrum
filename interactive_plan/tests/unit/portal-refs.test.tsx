@@ -8,7 +8,7 @@ import path from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { TokensView } from "@/components/portal/RichText";
-import { buildRefData, compilePatterns, resolveRef, tokenize, type TextToken } from "@/lib/portal/refs";
+import { buildRefData, compilePatterns, friendlyId, popupKind, resolveRef, tokenize, type TextToken } from "@/lib/portal/refs";
 import { RefsFile } from "@/lib/portal/schemas.gen";
 import { REPO_ROOT } from "./helpers";
 
@@ -131,5 +131,38 @@ describe("TokensView keeps punctuation on the chip's line", () => {
   it("does not glue words or linked text", () => {
     const html = renderToStaticMarkup(<TokensView tokens={tokenize("phase P1 starts; [the rule](ref:adr-0023).", PATTERNS)} />);
     expect(html).not.toContain("ref-glue");
+  });
+});
+
+describe("short names instead of internal slugs (review 2026-10-09)", () => {
+  it("friendlyId gives the name the owner knows, or null", () => {
+    expect(friendlyId("adr-0019")).toBe("Decision 19");
+    expect(friendlyId("risk-r04")).toBe("Risk 4");
+    expect(friendlyId("rq-01")).toBe("Research question 1");
+    expect(friendlyId("hyp-03")).toBe("Hypothesis 3");
+    expect(friendlyId("phase-p0-planning")).toBe("P0");
+    expect(friendlyId("P1")).toBe("P1");
+    expect(friendlyId("p1.3")).toBe("Task p1.3");
+    expect(friendlyId("Q-221")).toBe("Q-221");
+    expect(friendlyId("ef5dcc5", "commit")).toBe("ef5dcc5");
+    for (const id of ["comp-resource-manager", "layer-engine", "metric-objective-j", "ov-research-plan", "wl-news", "application"]) {
+      expect(friendlyId(id), id).toBeNull();
+    }
+  });
+
+  it("popupKind never shows a slug and does not repeat the title", () => {
+    expect(popupKind({ id: "adr-0007", kind: "decision", title: "Decision 7: One window" })).toEqual({ head: "Decision 7", extra: null });
+    expect(popupKind({ id: "comp-core", kind: "component", title: "Core library" })).toEqual({ head: "Part of the system", extra: null });
+    expect(popupKind({ id: "phase-p1-foundation", kind: "phase", title: "P1 Foundation" })).toEqual({ head: "Phase", extra: null });
+    expect(popupKind({ id: "Q-221", kind: "question", title: "Rewrite old commits?" })).toEqual({ head: "Question for you", extra: "Q-221" });
+    expect(popupKind({ id: "ov-research-plan", kind: "page", title: "Research plan" })).toEqual({ head: "Plan note", extra: null });
+  });
+
+  it("on the real refs.json, no popup head shows a slug-shaped id", () => {
+    const data = RefsFile.parse(JSON.parse(readFileSync(path.join(PORTAL, "refs.json"), "utf8")));
+    for (const r of data.refs) {
+      const { head, extra } = popupKind(r);
+      expect(`${head} ${extra ?? ""}`, r.id).not.toMatch(/\b(?:comp|layer|metric|wl|exp|cfg|ov|ops|qual|ip|adr|risk|rq|hyp)-[a-z0-9]/);
+    }
   });
 });

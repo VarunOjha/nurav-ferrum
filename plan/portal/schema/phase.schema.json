@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "phase.schema.json",
   "title": "phases/<phase-id>.json - one phase, shown in the phase popup",
-  "description": "Translated from wiki/phases/<phase-id>.md. Task progress comes from STATUS.md and the log (the phase page does not store it).",
+  "description": "Translated from wiki/phases/<phase-id>.md. Task progress (each task's status and progress.done) comes from STATUS.md and the log (the phase page does not store it); the checker keeps progress.done equal to the number of 'Done' tasks.",
   "type": "object",
   "required": [
     "id",
@@ -80,6 +80,7 @@
         "required": [
           "id",
           "title",
+          "status",
           "chain",
           "check",
           "script"
@@ -94,6 +95,15 @@
             "minLength": 1,
             "maxLength": 70,
             "pattern": "^[^\\n]+$"
+          },
+          "status": {
+            "enum": [
+              "Done",
+              "In progress",
+              "Waiting for you",
+              "Not started"
+            ],
+            "description": "Where this task stands, in plain words. The number of 'Done' tasks must equal progress.done (the checker reports MISMATCH otherwise)."
           },
           "chain": {
             "$ref": "#/$defs/chain"

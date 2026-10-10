@@ -11,7 +11,9 @@
                    (3) every task and phase in plan/portal/phases/*.json names its script, the file exists
                    with the agreed name (scripts/verify/<task-id>-<slug>.ps1, scripts/gates/p<N>-gate.ps1),
                    and no script in those folders is left without a task;
-                   (4) with -RunDrafts: every draft script (P2 to P8) runs and ends NOT READY (exit 2).
+                   (4) the part of each header you read has no rule codes, exit codes or tool paths (those go
+                   in its "For Claude" field); (5) a broken approvals file is reported as broken;
+                   (6) with -RunDrafts: every draft script (P2 to P8) runs and ends NOT READY (exit 2).
   Why            : a script that cannot even be read would fail only on the day you need it → this catches it
                    at once, and keeps the portal's script links honest.
   What it changes: nothing. It only reads files (with -RunDrafts it also runs the drafts, which change nothing).
@@ -53,6 +55,7 @@ Invoke-Step 'Every check script follows the house rules' {
         'says what it changes' = 'What it changes'
         'says how long it takes' = 'How long'
         'says what to tell Claude' = 'Tell Claude'
+        'ends its header with notes for Claude' = '(?m)^\s+For Claude\s+:'
         'uses strict mode' = 'Set-StrictMode -Version Latest'
         'stops on errors' = "\`$ErrorActionPreference = 'Stop'"
         'loads the shared module' = 'Ferrum\.Check\.psm1'
@@ -64,6 +67,38 @@ Invoke-Step 'Every check script follows the house rules' {
     })
     if ($bad.Count) { Stop-Fail (($bad | Select-Object -First 15) -join "`n") }
     "$($checkScripts.Count) task and gate scripts"
+}
+
+Invoke-Step 'The part of each header you read has no rule codes, exit codes or tool paths' {
+    # Review 2026-10-09: the owner reads the header (the phase popup shows a gate's header inline).
+    # Codes like INDEX-MISSING, exit numbers and module paths belong in the "For Claude" field at its end.
+    $bad = @(foreach ($f in $checkScripts) {
+        $t = [IO.File]::ReadAllText($f.FullName).Replace("`r`n", "`n")
+        $h = $t.Substring($t.IndexOf('<#'), $t.IndexOf('#>') - $t.IndexOf('<#'))
+        $cut = $h.IndexOf('For Claude')
+        $owner = if ($cut -ge 0) { $h.Substring(0, $cut) } else { $h }
+        foreach ($rx in '\b[A-Z]{2,}(?:-[A-Z]+)+\b', '\bexit [0-9]\b', '\.psm1\b', '\b[a-z_]+\.py\b', '\(rule ') {
+            $m = [regex]::Match($owner, $rx)
+            if ($m.Success) { "$(& $rel $f.FullName): '$($m.Value)' in the part you read" }
+        }
+    })
+    if ($bad.Count) { Stop-Fail (($bad | Select-Object -First 15) -join "`n") }
+    "$($checkScripts.Count) headers: plain words before 'For Claude'"
+}
+
+Invoke-Step 'A broken approvals file is reported as broken, not as "waiting for you"' {
+    $tmp = Join-Path ([IO.Path]::GetTempPath()) ("ferrum approvals test " + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    try {
+        New-Item -ItemType Directory -Path (Join-Path $tmp 'tools'), (Join-Path $tmp 'plan'), (Join-Path $tmp 'wiki') -Force | Out-Null
+        Copy-Item -LiteralPath (Get-RepoPath 'tools/approvals_check.py') -Destination (Join-Path $tmp 'tools')
+        [IO.File]::WriteAllText((Join-Path $tmp 'plan/approvals.json'), '{ "approvals": ')
+        $result = $null
+        try { [void](Get-ApprovalStates -Root $tmp); $result = 'no error' }
+        catch { $result = "$($_.Exception.Data['ferrum']): $($_.Exception.Message)" }
+        if ($result -notmatch '^FAIL: The approvals file could not be read') { Stop-Fail "Expected a FAIL about the approvals file, got: $result" }
+        'a broken plan/approvals.json gives FAIL "The approvals file could not be read"'
+    }
+    finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 }
 
 Invoke-Step 'Every task and phase names an existing script with the agreed name' {

@@ -125,9 +125,43 @@ export const KIND_LABEL: Record<RefInfo["kind"], string> = {
   component: "Part of the system",
   question: "Question for you",
   commit: "Saved change (commit)",
-  page: "Planning page",
+  page: "Plan note",
   step: "Build step",
   term: "Term",
   group: "Group of parts",
   layer: "Layer",
 };
+
+/**
+ * The short name the owner already knows for an id, or null when the id has none and only its title
+ * should show (owner feedback 2026-10-09: no unexplained internal ids). "adr-0019" -> "Decision 19",
+ * "risk-r04" -> "Risk 4", "rq-01" -> "Research question 1", "hyp-03" -> "Hypothesis 3", a phase id ->
+ * "P1", a task -> "Task p1.3". Questions (Q-221) and commits keep their id: the Questions and Log tabs
+ * show it. Parts, layers, measurements, workloads and plan notes have no short name.
+ */
+export function friendlyId(id: string, kind?: RefInfo["kind"]): string | null {
+  let m: RegExpExecArray | null;
+  if ((m = /^adr-0*(\d+)$/.exec(id))) return `Decision ${m[1]}`;
+  if ((m = /^risk-r0*(\d+)$/.exec(id))) return `Risk ${m[1]}`;
+  if ((m = /^rq-0*(\d+)$/.exec(id))) return `Research question ${m[1]}`;
+  if ((m = /^hyp-0*(\d+)$/.exec(id))) return `Hypothesis ${m[1]}`;
+  if ((m = /^phase-p([0-8])(?:-[a-z0-9]+)+$/.exec(id))) return `P${m[1]}`;
+  if (/^P[0-8]$/.test(id)) return id;
+  if (/^p[0-8]\.\d+$/.test(id)) return `Task ${id}`;
+  if (/^Q-\d{3}$/.test(id)) return id;
+  if (kind === "commit") return id;
+  return null;
+}
+
+/**
+ * The small line above a reference popup's title: the kind in words, or the short name when it already
+ * says the kind ("Decision 19", "Task p1.3"), plus the short name when it adds something the title
+ * does not show ("Question for you · Q-221"). Never the internal slug.
+ */
+export function popupKind(info: Pick<RefInfo, "id" | "kind" | "title">): { head: string; extra: string | null } {
+  const kind = KIND_LABEL[info.kind];
+  const short = friendlyId(info.id, info.kind);
+  if (!short) return { head: kind, extra: null };
+  if (short.startsWith(kind)) return { head: short, extra: null };
+  return { head: kind, extra: info.title.startsWith(short) ? null : short };
+}

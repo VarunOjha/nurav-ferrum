@@ -5,20 +5,22 @@
 
 .DESCRIPTION
   Status         : DRAFT. The real gate is written when P5 starts; until then it only lists the planned
-                   checks and ends NOT READY (exit 2).
+                   checks and ends NOT READY.
   What it checks : (planned) every task check of P5, then: Code checks; Library check; Accuracy suite;
-                   File format check; Network log tests; Earlier features; Wiki check. Your own checks are
+                   File format check; Network log tests; Earlier features; Wiki check. Steps only you can do are
                    listed as YOURS.
   Why            : Code and tests pass → the meters match known values → exported files match the format →
                    the network log holds no private data → earlier features still work → you browse with
                    logging on and check the log folder → you approve. Only then does P6 start.
   What it changes: nothing (once real, -SaveEvidence saves the printout as masked evidence).
   How long       : under a second while it is a draft.
-  How to run     : pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P5
-  Result         : NOT READY = exit 2 until P5; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  How to run     : pwsh -NoProfile -File scripts/gates/p5-gate.ps1
+  Result         : NOT READY until P5 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P5" is the expected result for now.
 
-  For Claude - the planned automatic gate items, from the test_gate of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). scripts/run-all-checks.ps1 -Phase P5 starts this same
+                   script. The planned automatic gate items, from the test_gate of the phase page:
     - cargo fmt --all -- --check
     - cargo clippy --workspace --all-targets -- -D warnings
     - cargo test --workspace

@@ -5,7 +5,7 @@
   "summary": "We are finishing the plan (P0). The new read-only portal is built and reviewed, and you can start it with one script. Nothing is approved yet, and no Ferrum code exists yet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:668111099ca9462de19bebf405ec7441921846d281c14c641dd6332a93d0a91c"
+    "content_hash": "sha256:723aecaaa398fff9573734d34f261d77b5093d37d76324059714c0aa9a526f81"
   },
   "updated": "2026-10-09",
   "where_we_are": [
@@ -31,12 +31,8 @@
       "state": "None yet. You give them in Claude Code, wave by wave; Claude records them"
     },
     {
-      "item": "Questions for you",
-      "state": "39 open; 4 of them are asked with the first approval wave"
-    },
-    {
       "item": "Tools",
-      "state": "Node 24, PowerShell 7, Rust and the C++ build tools are installed; P1 records the versions"
+      "state": "Node 24, PowerShell 7, Rust and the C++ build tools are installed; the licence checker (cargo-deny) is added in P1, which also records the versions"
     },
     {
       "item": "First upload to GitHub",
@@ -83,6 +79,16 @@
   "questions_for_you": {
     "open": 39,
     "items": [
+      {
+        "id": "Q-207",
+        "question": "The rule book lets a few summary pages stay in the research and risks folders instead of moving them. Keep that rule?",
+        "asked": "2026-10-08"
+      },
+      {
+        "id": "Q-004",
+        "question": "Claude renamed its end-of-session notes so each file name starts with the note's id, as the wiki rules require. Keep the new names?",
+        "asked": "2026-10-08"
+      },
       {
         "id": "Q-005",
         "question": "Do you confirm the proposed non-goals (no extensions, no sync or accounts, Windows 11 only, not a full browser) and moving split view to after P8?",

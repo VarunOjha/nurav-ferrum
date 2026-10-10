@@ -4,7 +4,7 @@ type: component
 title: "Plan portal (Next.js, read-only, planning tooling, not shipped)"
 status: implemented
 updated: 2026-10-09
-last_verified_commit: 46fb685
+last_verified_commit: ef5dcc5
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -22,7 +22,7 @@ unsafe_code: false
 responsibilities:
   - "Show the plan to the owner in plain language: a read-only portal that renders only the portal JSON in plan/portal/ (adr-0024), never the wiki pages themselves"
   - "Validate every portal file against plan/portal/schema/ with zod schemas generated from those JSON Schemas (scripts/gen-portal-schemas.mjs; a test keeps them in step and PowerShell Test-Json referees)"
-  - "Make every id clickable: a reference popup shows its refs.json explainer, related ids open in the same popup; a phase id also opens the whole phase popup"
+  - "Make every id clickable: a reference popup shows its refs.json explainer, related ids open in the same popup; a phase id also opens the whole phase popup. Popups show titles and the short names the owner knows ('Decision 19'), never internal slugs"
   - "Show the seven tabs of the approved mockups: Overview, Roadmap (stages and one row per phase), Architecture (layered diagram of the Rust app and the four groups), Decisions (and risks), Research, Questions and Log, each item in a popup"
   - "Show, read-only, the text of each PowerShell check script that the portal JSON names (adr-0024 elaboration), so the owner can read a script before running it; nothing else under scripts/ is served"
   - "Show approval state read-only from plan/approvals.json; never write it (the owner approves in Claude Code and Claude records, adr-0023)"

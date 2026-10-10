@@ -4,8 +4,8 @@
   Check for task p0.17 (P0 Planning): Portal v2, then your review.
 
 .DESCRIPTION
-  What it checks : (1) the portal's plain-language text (plan/portal/) is complete and up to date with the
-                   wiki (tools/portal-sync-check.ps1 says "clean"); (2) every task and phase has its check
+  What it checks : (1) the portal's plain-language text is complete and up to date with the wiki (the
+                   portal check says "clean"); (2) every task and phase has its check
                    script and every script can be read by PowerShell; (3) the portal reads that text
                    correctly: its file shapes match the JSON Schemas (PowerShell's Test-Json agrees), and
                    every id in the text opens its explainer (portal unit tests); (4) your approvals of the pages P1
@@ -15,10 +15,13 @@
   What it changes: nothing. It only reads files.
   How long       : about 40 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.17-portal-v2.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
-                   Until you have approved the P1 pages it ends NOT READY (exit 2): that is expected.
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
+                   Until you have approved the P1 pages it ends NOT READY: that is expected.
   Tell Claude    : nothing while it says NOT READY. If a step FAILS, paste the FAIL lines and say
                    "p0.17 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Portal check: tools/portal-sync-check.ps1; text in plan/portal/.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

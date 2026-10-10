@@ -45,7 +45,7 @@ tasks:
     verify: "Every registry component id has exactly one page under wiki/architecture/components/; every connects edge with differing trust levels has crosses_trust_boundary true (manual TRUST-EDGE check)."
   - id: p0.5
     title: "Write ADR pages adr-0001..adr-0019 (every registered ADR) and the risk register (risk-r01..r06 plus newly found risks)"
-    verify: "One file per registered ADR (adr-0001..adr-0019, 19 files matching decisions/adr-00NN-*.md) exists; each has the five required body sections; each risk page has likelihood, impact, mitigation, spike, owner_phase."
+    verify: "One file per registered ADR (adr-0001..adr-0019, 19 files matching decisions/adr-00NN-*.md) exists; each has the five required body sections; each risk page has likelihood, impact, mitigation, spike, owner_phase. (19 was the count when this task was done; adr-0020 onward were added later, so the decision list is longer today.)"
   - id: p0.6
     title: "Write research-track pages: research questions, hypotheses, experiment families, metrics, workloads"
     verify: "rq/hyp/exp reciprocal lists agree (manual REF-RECIPROCAL check); every experiment lists configurations from the cfg-* set; no page states a measured value (INT-NUMBER-NOSRC manual grep)."
@@ -75,7 +75,7 @@ tasks:
     verify: "Vitest unit tests for state computation (PENDING, APPROVED, APPROVED_VOLATILE_DRIFT, STALE, CHANGES_REQUESTED, REJECTED, INVALID); E2E posts approve/changes-requested against a temp data dir and asserts file contents and history append; a non-loopback Host header is refused."
   - id: p0.15
     title: "Approval UI: approve / request changes / reject with comment on every approvable page; staleness badges; '#exit' review for phases"
-    verify: "E2E: approve a temp-copy page, modify its body, reload, badge shows STALE; modify only 'status' line, badge shows APPROVED_VOLATILE_DRIFT."
+    verify: "E2E: approve a temp-copy page, modify its body, reload, badge shows STALE; modify only 'status' line, badge shows APPROVED_VOLATILE_DRIFT. (Done in v1. The approval screens were removed in p0.17 (adr-0023), so the browser test went with them; its check script now runs the unit tests of the approval states and the portal's read-only label 'Approved, page edited since'.)"
   - id: p0.16
     title: "Run full plan-app test gate and save outputs as evidence"
     verify: "ip-build-plan steps IP-9 and IP-10 gates pass: 'npm run verify' (lint, typecheck, unit, e2e, build) output with exit code 0 saved as raw/evidence/phase-p0-planning/interactive-plan/IP-9-verify.txt, plus IP-9-perf.txt, playwright-report.zip and IP-10-final-lint.json ('npm run lint:wiki' 0 errors)."
@@ -94,8 +94,7 @@ test_gate:
     - "cd interactive_plan && npm run build"
     - "python reference hash (SCHEMA section 10.2) on every hash test vector; outputs equal the TS outputs"
   manual:
-    - "Owner opens the app on 127.0.0.1, navigates every view and confirms it reflects the wiki."
-    - "Owner performs one real approval and one change request and confirms plan/approvals.json changed as expected (git diff)."
+    - "Owner walkthrough of portal v2 (p0.17): the owner starts the portal with scripts/start-portal.ps1 (127.0.0.1 only), reads every tab and popup and tells Claude in Claude Code what is unclear; Claude fixes the wording until the owner says it reads clearly. (The v1 items 'confirm every view reflects the wiki' and 'perform one approval in the app' were dropped: the portal does not show the wiki and approvals are given in Claude Code, adr-0023, adr-0024.)"
     - "Owner answers or defers each open question in ov-open-questions."
     - "Owner confirms the manual lint report is acceptable."
   evidence:
@@ -144,7 +143,7 @@ P0 creates the project's memory and its approval mechanism before any Ferrum cod
 
 1. **Wiki (p0.1 to p0.8).** Raw sources, research notes, schema, every planning page, index, log, root summaries, manual lint.
 2. **Plan app (p0.9 to p0.16).** A local-only Next.js app (`comp-interactive-plan`, adr-0016) that reads `wiki/` at runtime and writes approvals to `plan/approvals.json`. Stack recommendation and its open checks come from [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) sections 5 and 6. That note labels its open checks "P1 (plan-app build phase)"; in this plan the plan app is built in P0, so those checks are verified here (see `unverified` above).
-3. **Owner approval (p0.17, p0.18).** Owner reviews in the app; Claude revises; P0 exits when the P1 dependency set is approved.
+3. **Portal v2 and owner approval (p0.17, p0.18).** After the owner found v1 too technical, Claude rebuilt the app as a read-only portal in plain language (adr-0023 to adr-0027). State on 2026-10-09: the portal is built, reviewed and fixed after a review pass; it waits for the owner's walkthrough. The owner then approves in Claude Code; Claude revises; P0 exits when the P1 dependency set is approved.
 
 ## Out of scope
 
@@ -211,7 +210,7 @@ Rules for a resuming session:
 
 ## Test gate rationale
 
-The plan app is tooling, but it becomes the gatekeeper of every later phase. A wrong hash or a wrong effective state would let unapproved work proceed. That is why p0.12 tests the TypeScript hashes against the Python reference, p0.14 tests every effective state, and the E2E suite always writes to a temporary data directory so tests never touch the real `plan/approvals.json`. The loader integration test (p0.11) doubles as an automated part of the wiki lint.
+The plan app is tooling, but the approvals and checks it introduced guard every later phase (since p0.17 the approvals are given in Claude Code and the portal only shows them). A wrong hash or a wrong effective state would let unapproved work proceed. That is why p0.12 tests the TypeScript hashes against the Python reference, p0.14 tests every effective state, and the E2E suite always writes to a temporary data directory so tests never touch the real `plan/approvals.json`. The loader integration test (p0.11) doubles as an automated part of the wiki lint.
 
 Evidence files under `wiki/raw/evidence/` are raw and immutable. A failed run is saved under a dated name (`<name>.<YYYYMMDD-HHMM>.txt`); the canonical file name listed in `test_gate.evidence` is created once, from the passing run on the exit commit.
 

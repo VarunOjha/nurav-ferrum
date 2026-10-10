@@ -23,6 +23,7 @@
     {
       "id": "p7.1",
       "title": "Tab state machine",
+      "status": "Not started",
       "chain": "Each tab must always be in one clear state (active, background, idle, close candidate, closed, restoring) → write the allowed moves as a fixed table with tests → the tab you are using can never be closed by mistake.",
       "check": "Tests cover every allowed and forbidden move, plus random sequences that never break the rules.",
       "script": "scripts/verify/p7.1-tab-state-machine.ps1"
@@ -30,6 +31,7 @@
     {
       "id": "p7.2",
       "title": "Signals for sleep decisions",
+      "status": "Not started",
       "chain": "Good decisions need inputs → measure last use, memory pressure, tab activity, cost to restore, media playing, downloads, your exclusions and unsaved forms → each strategy decides on real signals with known limits.",
       "check": "Each signal has tests with fake inputs and with a test page; its limits are written down.",
       "script": "scripts/verify/p7.2-signals-sleep-decisions.ps1"
@@ -37,6 +39,7 @@
     {
       "id": "p7.3",
       "title": "Sleep actions: hide, suspend, close, restore",
+      "status": "Not started",
       "chain": "Sleeping has levels → build hide, suspend, low-memory mode and close-but-remember (address, history, scroll position), plus restore → each strategy can pick the right level.",
       "check": "Tests confirm the web view's state after each action and that restore returns to the same page.",
       "script": "scripts/verify/p7.3-sleep-actions.ps1"
@@ -44,6 +47,7 @@
     {
       "id": "p7.4",
       "title": "Safety guards",
+      "status": "Not started",
       "chain": "Closing a tab mid-task can lose your work → never close a tab while media plays, a download runs, a form is unsaved, the page asks before leaving, or you excluded the site → sleeping never costs you data.",
       "check": "Guarded test pages are never closed under any strategy, even under memory pressure; each refusal is logged.",
       "script": "scripts/verify/p7.4-safety-guards.ps1"
@@ -51,6 +55,7 @@
     {
       "id": "p7.5",
       "title": "Three simple strategies",
+      "status": "Not started",
       "chain": "We need baselines to compare against → build never sleep, sleep after a fixed idle time, and sleep under memory pressure, switchable by a setting → one app runs every strategy, so only the strategy differs.",
       "check": "Tests per strategy on scripted timelines pass; one build switches strategy by setting.",
       "script": "scripts/verify/p7.5-three-simple-strategies.ps1"
@@ -58,6 +63,7 @@
     {
       "id": "p7.6",
       "title": "Cost-aware strategy",
+      "status": "Not started",
       "chain": "Smarter choices weigh memory saved, energy and restore delay → combine them in one weighted score (energy weight zero if energy cannot be measured) and fix the weights on separate calibration workloads → the strategy is not tuned to the test it is judged on.",
       "check": "Score tests pass; weights and calibration method saved before the campaign; calibration and test workloads do not overlap.",
       "script": "scripts/verify/p7.6-cost-aware-strategy.ps1"
@@ -65,6 +71,7 @@
     {
       "id": "p7.7",
       "title": "Log every sleep decision",
+      "status": "Not started",
       "chain": "We must see what each strategy did → record every state change and refusal, and the time from restore to first content → behaviour and restore delay become measurable.",
       "check": "A scripted close and restore produce the expected records and a restore-time record.",
       "script": "scripts/verify/p7.7-log-every-sleep.ps1"
@@ -72,6 +79,7 @@
     {
       "id": "p7.8",
       "title": "Long-running test",
+      "status": "Not started",
       "chain": "Some problems only show up over hours → run many background tabs for a long session under each strategy, watching memory growth, crashes and restores → every bug found is fixed, with a test, before the campaign.",
       "check": "Raw output saved; every crash or failed restore has a fix and a test.",
       "script": "scripts/verify/p7.8-long-running-test.ps1"
@@ -79,6 +87,7 @@
     {
       "id": "p7.9",
       "title": "Bench settings for each strategy",
+      "status": "Not started",
       "chain": "The test bench needs a setup per strategy → add one settings file for each Ferrum strategy → the only difference between Ferrum runs is the strategy switch.",
       "check": "Settings files pass the format check; the diff shows only the strategy switch differs.",
       "script": "scripts/verify/p7.9-bench-settings-strategy.ps1"
@@ -86,6 +95,7 @@
     {
       "id": "p7.10",
       "title": "Write predictions before testing",
+      "status": "Not started",
       "chain": "Deciding what counts as success after seeing data is biased → write each prediction and its meaningful-difference threshold first, and you approve them → results cannot be bent to fit.",
       "check": "Every prediction is recorded and approved by you before the campaign starts.",
       "script": "scripts/verify/p7.10-write-predictions-before.ps1"
@@ -93,6 +103,7 @@
     {
       "id": "p7.11",
       "title": "Strategy campaign",
+      "status": "Not started",
       "chain": "Bench and predictions are ready → run the four strategies on identical workloads, with Chrome and Edge as shipped for reference → raw data for P8.",
       "check": "A complete raw-data folder with every trial and checksums; no results stated yet.",
       "script": "scripts/verify/p7.11-strategy-campaign.ps1"
@@ -100,6 +111,7 @@
     {
       "id": "p7.12",
       "title": "Literature check: what is really new",
+      "status": "Not started",
       "chain": "Similar ideas exist (Chrome and Edge tab sleeping, Android app standby, cost-aware caching) → compare our approach with each, using verified sources, and you approve the assessment → the paper claims only what is truly new.",
       "check": "Every close earlier work is listed with a verified source and what differs; your approval recorded.",
       "script": "scripts/verify/p7.12-literature-check.ps1"
@@ -107,6 +119,7 @@
     {
       "id": "p7.14",
       "title": "Optional rerun with smart sleeping",
+      "status": "Not started",
       "chain": "The first campaign tested Ferrum without sleeping → if you pick option (a) in [this open question](ref:Q-208), rerun footprint, page-load, smoothness, energy and reliability with smart sleeping, same rules, kept separate → otherwise the gap is recorded as a known limitation.",
       "check": "A sealed raw-data folder with every trial, or a written deviation note that cites your answer.",
       "script": "scripts/verify/p7.14-optional-rerun.ps1"
@@ -114,6 +127,7 @@
     {
       "id": "p7.13",
       "title": "Gate and your review",
+      "status": "Not started",
       "chain": "All tasks done → the gate script runs every check and saves the evidence → you review and approve; only then does P8 start.",
       "check": "All evidence files exist, the wiki check is clean, and you approve the end of P7.",
       "script": "scripts/verify/p7.13-gate-review.ps1"

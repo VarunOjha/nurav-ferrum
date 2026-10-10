@@ -4,7 +4,7 @@
   Check for task p0.8 (P0 Planning): Check the whole wiki.
 
 .DESCRIPTION
-  What it checks : the full wiki check reports zero errors; the quick Python check (tools/quick_lint.py)
+  What it checks : the full wiki check reports zero errors; the quick Python check
                    reports zero errors; every raw file under wiki/raw/ has a fingerprint line in
                    wiki/raw/MANIFEST.sha256 and still matches it; the first check report
                    (wiki-lint-manual.md) and a "lint" log entry exist.
@@ -13,8 +13,11 @@
   What it changes: nothing. It only reads files (unless you add -SaveEvidence).
   How long       : about 8 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.8-wiki-check.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.8 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Quick check: tools/quick_lint.py.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

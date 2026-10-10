@@ -7,7 +7,11 @@ import { detailDialogId, phaseDialogId } from "@/lib/portal/dialogs";
 import { loadPortalUncached } from "@/lib/portal/load";
 import type { Architecture, Log, Questions, Risks, Roadmap } from "@/lib/portal/schemas.gen";
 import {
+  decisionStanding,
   decisionTone,
+  partWhen,
+  questionsRow,
+  taskTone,
   firstSentence,
   layerRows,
   layerShortName,
@@ -116,5 +120,42 @@ describe("popup ids", () => {
     expect(phaseDialogId("phase-p1-foundation")).toBe("phase-dialog-phase-p1-foundation");
     expect(detailDialogId("adr-0001")).toBe("detail-dialog-adr-0001");
     expect(detailDialogId("odd id#1")).toBe("detail-dialog-odd_id_1");
+  });
+});
+
+describe("plain standings (review 2026-10-09)", () => {
+  const mine = { status: "Accepted" as const, decided_by: "you" as const, date: "2026-10-08" };
+  it("a decision you chose whose page is not signed off reads as one sentence, not a contradiction", () => {
+    const s = decisionStanding(mine, "Not approved yet");
+    expect(s.chip).toBe("Chosen by you");
+    expect(s.short).toBe("You chose · 8 Oct · page not signed off yet");
+    expect(s.line).toBe("You chose this on 8 Oct; its written page waits for your sign-off in Claude Code.");
+    expect(decisionStanding(mine, "Approved").line).toContain("you signed off its written page");
+    expect(decisionStanding(mine, "Approved, page edited since").line).toContain("Claude will ask you again");
+  });
+  it("Claude's proposals and replaced decisions", () => {
+    const p = decisionStanding({ status: "Proposed", decided_by: "claude", date: "2026-10-09" }, "Not approved yet");
+    expect(p.chip).toBe("Proposed by Claude");
+    expect(p.line).toBe("Claude proposed this on 9 Oct; it waits for your decision in Claude Code.");
+    expect(decisionStanding({ status: "Replaced", decided_by: "you", date: "2026-10-08" }, "Not approved yet").line).toContain("later replaced");
+  });
+  it("the Overview questions row is counted from the list", () => {
+    expect(questionsRow({ open: 39, items: [1, 2, 3, 4] })).toBe("39 open; 4 of them are asked now");
+    expect(questionsRow({ open: 39, items: [1] })).toBe("39 open; 1 of them is asked now");
+    expect(questionsRow({ open: 3, items: [] })).toBe("3 open; none asked right now");
+    expect(questionsRow({ open: 0, items: [] })).toBe("None open");
+  });
+  it("task tones and when a part arrives", () => {
+    expect(taskTone("Done")).toBe("done");
+    expect(taskTone("Waiting for you")).toBe("you");
+    expect(taskTone("In progress")).toBe("now");
+    expect(taskTone("Not started")).toBe("later");
+    expect(partWhen({ ours: true }, "P2 · First working app")).toBe("Built in P2 · First working app");
+    expect(partWhen({ ours: false }, "P1 · Foundation")).toBe("Used from P1 · Foundation");
+  });
+  it("real portal: every phase's progress equals its tasks marked Done; parts not ours are not 'Planned'", async () => {
+    const { files } = await loadPortalUncached({ portalDir: path.join(REPO_ROOT, "plan", "portal"), approvalsFile: path.join(REPO_ROOT, "plan", "approvals.json") });
+    for (const ph of files.phases) expect(ph.tasks.filter((t) => t.status === "Done").length, ph.id).toBe(ph.progress.done);
+    for (const c of files.architecture!.components.filter((x) => !x.ours)) expect(c.status, c.id).not.toBe("Planned");
   });
 });

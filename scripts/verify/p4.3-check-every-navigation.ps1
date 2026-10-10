@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P4 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) A blocked site is denied and logged via direct link, redirect, frame, pop-up
                    and malformed address.
   Why            : Tauri's hook misses unreadable addresses and embedded frames → also hook WebView2's own
@@ -14,10 +14,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p4.3-check-every-navigation.ps1
-  Result         : NOT READY = exit 2 until P4; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P4 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P4" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     Security tests: blocked domain via direct navigation, via 302 redirect from an allowed fixture, via
     iframe, via window.open and via a malformed URL are all denied and logged.
 #>

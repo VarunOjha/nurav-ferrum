@@ -12,8 +12,11 @@
   What it changes: nothing in the repo. The build writes only to interactive_plan/.next (ignored by git).
   How long       : about 30 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.10-plan-app-skeleton.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.10 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

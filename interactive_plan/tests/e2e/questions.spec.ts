@@ -39,3 +39,16 @@ test("phone width: no sideways scrolling", async ({ page }) => {
   await page.goto("/questions");
   expect(await sidewaysOverflow(page)).toBeLessThanOrEqual(0);
 });
+
+test("a withdrawn question links to the question that replaced it (review 2026-10-09)", async ({ page }) => {
+  await page.goto("/questions");
+  for (const [id, to] of [["Q-001", "Q-117"], ["Q-002", "Q-118"], ["Q-003", "Q-119"]] as const) {
+    const card = page.locator(`[data-question="${id}"]`);
+    const link = card.locator(`.lh [data-ref-id="${to}"]`);
+    await expect(link).toBeVisible();
+    await link.click();
+    await expect(page.getByTestId("ref-dialog")).toBeVisible();
+    await expect(page.getByTestId("ref-dialog")).toContainText(to);
+    await page.keyboard.press("Escape");
+  }
+});

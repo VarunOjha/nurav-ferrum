@@ -14,6 +14,12 @@
                    log heading has an entry                                                    (MISSING, UNCOVERED)
     4. Refs      - every id written in portal text has an explainer in refs.json               (UNKNOWN-REF, DUP-ID)
     5. Scripts   - every check-script path named in the JSON exists                            (MISSING-SCRIPT)
+    6. Consistency - a copy of a record in another file says the same thing: refs.json explainers
+                   (title, status, summary) follow their phase, task, decision, risk, question,
+                   research item, part or layer; the Overview's open-question count and list follow
+                   questions.json; a phase's progress counts its tasks marked Done; roadmap rows follow
+                   the phase files; layer and group lists follow each part's own layer and group; each
+                   log entry id is used once                                                   (MISMATCH)
   The rules (which pages, which files, which id shapes) live in plan/portal/pipeline.json.
 
   Exit codes: 0 = clean, 1 = problems found (or the config is broken).
@@ -89,32 +95,270 @@ function Get-MatchingFiles([string]$Base, [string]$Pattern) {
     return @(Get-ChildItem -LiteralPath $full -File | Where-Object { $_.Name -like $leaf } | Sort-Object Name)
 }
 
-# Walk a parsed JSON value; call $Visit for each node with its JSON pointer and parent key.
-function Invoke-JsonWalk($Node, [string]$Pointer, [string]$Key, [scriptblock]$Visit) {
-    & $Visit $Node $Pointer $Key
-    if ($Node -is [System.Collections.IDictionary]) {
-        foreach ($k in @($Node.Keys)) { Invoke-JsonWalk $Node[$k] "$Pointer/$k" $k $Visit }
-    }
-    elseif ($Node -is [System.Collections.IList]) {
-        for ($i = 0; $i -lt $Node.Count; $i++) { Invoke-JsonWalk $Node[$i] "$Pointer/$i" $Key $Visit }
-    }
-}
-
-# Collect every id written in portal text: [words](ref:id) links and bare id-shaped words. Keys listed
-# in skip_keys (paths, code, hashes, log headings) are not portal text and are not searched.
-function Find-RefHits($Node, [string]$Pointer, $SkipKeys, $Patterns, $LinkRx, $Hits) {
-    if ($Node -is [string]) {
-        foreach ($m in $LinkRx.Matches($Node)) { $Hits.Add(@{ Id = $m.Groups[1].Value; Pointer = $Pointer }) }
-        foreach ($rx in $Patterns) { foreach ($m in $rx.Matches($Node)) { $Hits.Add(@{ Id = $m.Value; Pointer = $Pointer }) } }
-    }
-    elseif ($Node -is [System.Collections.IDictionary]) {
-        foreach ($key in @($Node.Keys)) {
-            if (-not $SkipKeys.Contains([string]$key)) { Find-RefHits $Node[$key] "$Pointer/$key" $SkipKeys $Patterns $LinkRx $Hits }
+# One pass over a parsed JSON document (iterative, no per-node function calls: the checker must stay fast
+# enough for the Stop hook). Collects what the later checks need:
+#   Sources  - every object with source.wiki_path (pointer, path, hash)
+#   Scripts  - every 'script' value (a path string, or an object with a 'path')
+#   Fields   - for each name in $FieldNames, every string value of that key anywhere in the document
+#   Strings  - every string that is portal text (not under a key listed in skip_keys), with its pointer
+function Get-DocFacts($Doc, $SkipKeys, [string[]]$FieldNames) {
+    $sources = [System.Collections.Generic.List[object]]::new()
+    $scripts = [System.Collections.Generic.List[object]]::new()
+    $strings = [System.Collections.Generic.List[object]]::new()
+    $fields = @{}
+    foreach ($f in $FieldNames) { $fields[$f] = [System.Collections.Generic.HashSet[string]]::new() }
+    $stack = [System.Collections.Generic.Stack[object]]::new()
+    $stack.Push(@($Doc, '', $true))
+    while ($stack.Count -gt 0) {
+        $item = $stack.Pop()
+        $n = $item[0]; $ptr = $item[1]; $isText = $item[2]
+        if ($n -is [string]) {
+            if ($isText) { $strings.Add(@($ptr, $n)) }
+        }
+        elseif ($n -is [System.Collections.IDictionary]) {
+            $src = $n['source']
+            if ($src -is [System.Collections.IDictionary] -and $src.Contains('wiki_path')) {
+                $sources.Add(@{ Pointer = $ptr; Path = [string]$src['wiki_path']; Hash = [string]$src['content_hash'] })
+            }
+            foreach ($f in $FieldNames) {
+                if ($n.Contains($f)) { foreach ($v in @($n[$f])) { if ($v -is [string]) { [void]$fields[$f].Add($v) } } }
+            }
+            $keys = @($n.Keys)
+            for ($i = $keys.Count - 1; $i -ge 0; $i--) {
+                $k = [string]$keys[$i]
+                $child = $n[$k]
+                if ($k -eq 'script') {
+                    if ($child -is [string]) { $scripts.Add(@{ Path = $child; Pointer = "$ptr/$k" }) }
+                    elseif ($child -is [System.Collections.IDictionary] -and $child['path'] -is [string]) {
+                        $scripts.Add(@{ Path = $child['path']; Pointer = "$ptr/$k/path" })
+                    }
+                }
+                $stack.Push(@($child, "$ptr/$k", ($isText -and -not $SkipKeys.Contains($k))))
+            }
+        }
+        elseif ($n -is [System.Collections.IList]) {
+            for ($i = $n.Count - 1; $i -ge 0; $i--) { $stack.Push(@($n[$i], "$ptr/$i", $isText)) }
         }
     }
-    elseif ($Node -is [System.Collections.IList]) {
-        for ($j = 0; $j -lt $Node.Count; $j++) { Find-RefHits $Node[$j] "$Pointer/$j" $SkipKeys $Patterns $LinkRx $Hits }
+    $sources.Reverse()
+    $scripts.Reverse()
+    return @{ Sources = $sources; Scripts = $scripts; Strings = $strings; Fields = $fields }
+}
+
+# Every id written in portal text: [words](ref:id) links and bare id-shaped words. All strings of one
+# document are joined with a line break (no pattern can match across it), so each pattern runs once per
+# file instead of once per string; a match's offset maps back to the pointer of its string.
+function Find-RefHits($Strings, $Patterns, $LinkRx) {
+    $hits = [System.Collections.Generic.List[object]]::new()
+    if ($Strings.Count -eq 0) { return , $hits }
+    $sb = [System.Text.StringBuilder]::new()
+    $starts = [int[]]::new($Strings.Count)
+    for ($i = 0; $i -lt $Strings.Count; $i++) {
+        $starts[$i] = $sb.Length
+        [void]$sb.Append($Strings[$i][1]).Append("`n")
     }
+    $all = $sb.ToString()
+    foreach ($rx in @($LinkRx) + $Patterns) {
+        $isLink = [object]::ReferenceEquals($rx, $LinkRx)
+        foreach ($m in $rx.Matches($all)) {
+            $at = [Array]::BinarySearch($starts, $m.Index)
+            if ($at -lt 0) { $at = (-bnot $at) - 1 }
+            $id = if ($isLink) { $m.Groups[1].Value } else { $m.Value }
+            $hits.Add(@{ Id = $id; Pointer = $Strings[$at][0] })
+        }
+    }
+    return , $hits
+}
+
+# Cross-file consistency (MISMATCH). Some portal text is a copy of another record: a refs.json explainer
+# repeats its phase, task, decision, risk, question, research item, part or layer; the Overview repeats
+# the open questions; roadmap rows repeat the phase files; a phase's progress counts its tasks. The copy
+# must say what the record says. Returns a list of @{ Where; Message }.
+function Get-PortalMismatches($Docs, $RefsById, [string]$RefsFile) {
+    $out = [System.Collections.Generic.List[object]]::new()
+    $add = { param($w, $m) $out.Add(@{ Where = $w; Message = $m }) }
+    function Get-Doc([string]$Name) { if ($Docs.Contains($Name) -and $Docs[$Name] -is [System.Collections.IDictionary]) { return $Docs[$Name] } return $null }
+    # An explainer field must equal one of the allowed values (or, with -Prefix, start with one).
+    function Test-Ref([string]$Id, [string]$Field, [object[]]$Allowed, [string]$Record, [switch]$Prefix) {
+        if (-not $RefsById.ContainsKey($Id)) {
+            & $add "plan/portal/$RefsFile" "$Record has '$Id' but refs.json has no explainer for it, so its popup would be empty. Add one."
+            return
+        }
+        $entry = $RefsById[$Id]
+        $have = $entry.Ref[$Field]
+        foreach ($want in $Allowed) {
+            if ($Prefix) { if ($have -is [string] -and $want -is [string] -and $have.StartsWith($want, [StringComparison]::Ordinal)) { return } }
+            elseif ($have -ceq $want) { return }
+        }
+        $should = if ($Prefix) { "start with '$($Allowed[0])'" } else { "be '$($Allowed[0])'" }
+        & $add "plan/portal/$RefsFile at /refs/$($entry.Index)/$Field" "The explainer of '$Id' says '$have', but $Record says otherwise: it should $should. Update the explainer from the record."
+    }
+
+    # Phases: progress counts the tasks marked Done; explainers of the phase and its tasks follow the file.
+    $phaseDocs = @{}
+    foreach ($rel in @($Docs.Keys | Where-Object { $_ -like 'phases/*.json' })) {
+        $ph = $Docs[$rel]
+        if ($ph -isnot [System.Collections.IDictionary] -or -not $ph.Contains('id') -or -not $ph.Contains('tasks')) { continue }
+        $phaseDocs[[string]$ph['id']] = $ph
+        $tasks = @($ph['tasks'] | Where-Object { $_ -is [System.Collections.IDictionary] })
+        $done = @($tasks | Where-Object { $_['status'] -eq 'Done' }).Count
+        if ($ph['progress']['done'] -ne $done) {
+            & $add "plan/portal/$rel at /progress/done" "progress.done is $($ph['progress']['done']) but $done tasks are marked Done. Make them agree."
+        }
+        if ($ph['progress']['total'] -ne $tasks.Count) {
+            & $add "plan/portal/$rel at /progress/total" "progress.total is $($ph['progress']['total']) but the phase lists $($tasks.Count) tasks."
+        }
+        $record = "plan/portal/$rel"
+        Test-Ref $ph['id'] 'title' @("$($ph['short']) $($ph['title'])") $record
+        Test-Ref $ph['id'] 'status' @($ph['status']) $record
+        Test-Ref $ph['id'] 'summary' @($ph['summary'], "Goal: $($ph['one_line_goal']). $($ph['summary'])") $record
+        foreach ($t in $tasks) {
+            Test-Ref $t['id'] 'title' @($t['title'], "$($ph['short']) task: $($t['title'])") $record
+            Test-Ref $t['id'] 'status' @($t['status']) $record
+            Test-Ref $t['id'] 'summary' @($t['chain']) $record
+        }
+    }
+
+    # Roadmap rows repeat each phase file; the stages hold every phase exactly once.
+    $roadmap = Get-Doc 'roadmap.json'
+    if ($roadmap) {
+        $i = 0
+        foreach ($row in @($roadmap['phases'])) {
+            $ph = $phaseDocs[[string]$row['id']]
+            if ($ph) {
+                $pairs = @(
+                    @('short', $row['short'], $ph['short']), @('name', $row['name'], $ph['title']),
+                    @('one_line_goal', $row['one_line_goal'], $ph['one_line_goal']), @('status', $row['status'], $ph['status']),
+                    @('tasks_done', $row['tasks_done'], $ph['progress']['done']), @('tasks_total', $row['tasks_total'], $ph['progress']['total']))
+                foreach ($p in $pairs) {
+                    if ("$($p[1])" -cne "$($p[2])") {
+                        & $add "plan/portal/roadmap.json at /phases/$i/$($p[0])" "The roadmap row says '$($p[1])' but phases/$($row['id']).json says '$($p[2])'."
+                    }
+                }
+            }
+            $i++
+        }
+        $inStages = @($roadmap['stages'] | ForEach-Object { @($_['phases']) })
+        foreach ($row in @($roadmap['phases'])) {
+            $n = @($inStages | Where-Object { $_ -eq $row['id'] }).Count
+            if ($n -ne 1) { & $add 'plan/portal/roadmap.json at /stages' "$($row['id']) appears in $n stages; every phase belongs to exactly one stage." }
+        }
+    }
+
+    # Questions: the Overview's count and list repeat questions.json; explainers follow each question.
+    $questions = Get-Doc 'questions.json'
+    $overview = Get-Doc 'overview.json'
+    if ($questions) {
+        $byId = @{}
+        foreach ($q in @($questions['items'] | Where-Object { $_ -is [System.Collections.IDictionary] })) {
+            $byId[[string]$q['id']] = $q
+            $st = [string]$q['status']
+            $label = if ($st) { $st.Substring(0, 1).ToUpperInvariant() + $st.Substring(1) } else { $st }
+            Test-Ref $q['id'] 'status' @($label) 'plan/portal/questions.json'
+            Test-Ref $q['id'] 'summary' @($q['question']) 'plan/portal/questions.json' -Prefix
+        }
+        if ($overview -and $overview['questions_for_you'] -is [System.Collections.IDictionary]) {
+            $open = @($questions['items'] | Where-Object { $_ -is [System.Collections.IDictionary] -and $_['status'] -eq 'open' }).Count
+            $qfy = $overview['questions_for_you']
+            if ($qfy['open'] -ne $open) {
+                & $add 'plan/portal/overview.json at /questions_for_you/open' "The Overview says $($qfy['open']) open questions but questions.json has $open."
+            }
+            $i = 0
+            foreach ($it in @($qfy['items'])) {
+                $q = $byId[[string]$it['id']]
+                $where = "plan/portal/overview.json at /questions_for_you/items/$i"
+                if (-not $q) { & $add $where "$($it['id']) is not in questions.json." }
+                elseif ($q['status'] -ne 'open') { & $add $where "$($it['id']) is listed as waiting for you, but its status in questions.json is '$($q['status'])'." }
+                elseif ($q['question'] -cne $it['question']) { & $add "$where/question" "The question text of $($it['id']) differs from questions.json; copy it from there." }
+                $i++
+            }
+        }
+    }
+    # Overview rows that state a phase's progress ("16 of 18 tasks") repeat the phase file.
+    if ($overview) {
+        $i = 0
+        foreach ($row in @($overview['where_we_are'])) {
+            if ($row -is [System.Collections.IDictionary]) {
+                $m = [regex]::Match([string]$row['state'], '(\d+) of (\d+) tasks')
+                $ph = if ($row.Contains('ref')) { $phaseDocs[[string]$row['ref']] } else { $null }
+                if ($m.Success -and $ph -and ([int]$m.Groups[1].Value -ne $ph['progress']['done'] -or [int]$m.Groups[2].Value -ne $ph['progress']['total'])) {
+                    & $add "plan/portal/overview.json at /where_we_are/$i/state" "It says '$($m.Value)' but phases/$($row['ref']).json has $($ph['progress']['done']) of $($ph['progress']['total'])."
+                }
+            }
+            $i++
+        }
+    }
+
+    # Log entries: each id once (the Log tab uses it as the entry's anchor).
+    $log = Get-Doc 'log.json'
+    if ($log) {
+        $seenIds = @{}
+        $i = 0
+        foreach ($e in @($log['entries'])) {
+            if ($e -is [System.Collections.IDictionary]) {
+                $eid = [string]$e['id']
+                if ($seenIds.ContainsKey($eid)) { & $add "plan/portal/log.json at /entries/$i/id" "The entry id '$eid' is already used by entry $($seenIds[$eid]); give this entry its own id." }
+                else { $seenIds[$eid] = $i }
+            }
+            $i++
+        }
+    }
+
+    # Decisions, risks, research items: explainers follow the record.
+    $decisions = Get-Doc 'decisions.json'
+    if ($decisions) {
+        foreach ($d in @($decisions['items'] | Where-Object { $_ -is [System.Collections.IDictionary] })) {
+            Test-Ref $d['id'] 'title' @("Decision $($d['number']): $($d['title'])") 'plan/portal/decisions.json'
+            Test-Ref $d['id'] 'status' @($d['status']) 'plan/portal/decisions.json'
+            Test-Ref $d['id'] 'summary' @($d['summary']) 'plan/portal/decisions.json' -Prefix
+        }
+    }
+    $risks = Get-Doc 'risks.json'
+    if ($risks) {
+        foreach ($r in @($risks['items'] | Where-Object { $_ -is [System.Collections.IDictionary] })) {
+            foreach ($f in 'title', 'status', 'summary') { Test-Ref $r['id'] $f @($r[$f]) 'plan/portal/risks.json' }
+        }
+    }
+    $research = Get-Doc 'research.json'
+    if ($research) {
+        foreach ($sec in 'questions', 'hypotheses', 'experiments', 'metrics', 'workloads') {
+            if (-not $research.Contains($sec)) { continue }
+            foreach ($r in @($research[$sec] | Where-Object { $_ -is [System.Collections.IDictionary] })) {
+                foreach ($f in 'title', 'status') { Test-Ref $r['id'] $f @($r[$f]) 'plan/portal/research.json' }
+            }
+        }
+    }
+
+    # Architecture: explainers follow parts and layers; layer and group lists follow each part's own layer and group.
+    $arch = Get-Doc 'architecture.json'
+    if ($arch) {
+        $comps = @($arch['components'] | Where-Object { $_ -is [System.Collections.IDictionary] })
+        foreach ($c in $comps) {
+            foreach ($f in 'title', 'status', 'summary') { Test-Ref $c['id'] $f @($c[$f]) 'plan/portal/architecture.json' }
+        }
+        $i = 0
+        foreach ($l in @($arch['layers'] | Where-Object { $_ -is [System.Collections.IDictionary] })) {
+            Test-Ref $l['id'] 'title' @($l['name']) 'plan/portal/architecture.json'
+            Test-Ref $l['id'] 'summary' @($l['summary']) 'plan/portal/architecture.json'
+            $want = @($comps | Where-Object { $_['layer'] -eq $l['id'] } | ForEach-Object { [string]$_['id'] } | Sort-Object)
+            $have = @(@($l['components']) | Sort-Object)
+            if (($want -join ',') -cne ($have -join ',')) {
+                & $add "plan/portal/architecture.json at /layers/$i/components" "The layer lists [$($have -join ', ')] but the parts that name this layer are [$($want -join ', ')]."
+            }
+            $i++
+        }
+        $i = 0
+        foreach ($g in @($arch['groups'] | Where-Object { $_ -is [System.Collections.IDictionary] })) {
+            Test-Ref $g['id'] 'title' @($g['name']) 'plan/portal/architecture.json'
+            $want = @($comps | Where-Object { $_['group'] -eq $g['id'] } | ForEach-Object { [string]$_['id'] } | Sort-Object)
+            $have = @(@($g['components']) | Sort-Object)
+            if (($want -join ',') -cne ($have -join ',')) {
+                & $add "plan/portal/architecture.json at /groups/$i/components" "The group lists [$($have -join ', ')] but the parts that name this group are [$($want -join ', ')]."
+            }
+            $i++
+        }
+    }
+    return , $out
 }
 
 function Invoke-PortalSyncCheck {
@@ -174,6 +418,11 @@ function Invoke-PortalSyncCheck {
         }
     }
 
+    # One pass over every document collects sources, script paths, section fields and portal text.
+    $fieldNames = @($config['sections'] | ForEach-Object { [string]$_['field'] } | Select-Object -Unique)
+    $facts = @{}
+    foreach ($rel in $docs.Keys) { $facts[$rel] = Get-DocFacts $docs[$rel] $skipKeys $fieldNames }
+
     # 2. Freshness: every record with a source must match its page's current hash -------------------
     $hashCache = @{}
     $sourcesByFile = @{}          # 'decisions.json' -> set of wiki paths it translates
@@ -181,24 +430,18 @@ function Invoke-PortalSyncCheck {
     foreach ($rel in $docs.Keys) {
         $set = [System.Collections.Generic.HashSet[string]]::new()
         $sourcesByFile[$rel] = $set
-        $found = [System.Collections.Generic.List[object]]::new()
-        Invoke-JsonWalk $docs[$rel] '' '' {
-            param($n, $p, $k)
-            if ($n -is [System.Collections.IDictionary] -and $n.Contains('source') -and
-                $n['source'] -is [System.Collections.IDictionary] -and $n['source'].Contains('wiki_path')) {
-                $found.Add(@{ Pointer = $p; Path = [string]$n['source']['wiki_path']; Hash = [string]$n['source']['content_hash'] })
-            }
-        }
-        foreach ($s in $found) {
+        foreach ($s in $facts[$rel].Sources) {
             $recordCount++
             [void]$set.Add($s.Path)
             $where = "plan/portal/$rel at $($s.Pointer)"
             $full = Join-Path $Root $s.Path
-            if (-not (Test-Path -LiteralPath $full -PathType Leaf)) {
+            if (-not $hashCache.ContainsKey($s.Path)) {
+                $hashCache[$s.Path] = if (Test-Path -LiteralPath $full -PathType Leaf) { Get-PortalContentHash $full } else { $null }
+            }
+            if ($null -eq $hashCache[$s.Path]) {
                 Add-Problem 'ORPHAN' $where "Translated from $($s.Path), which no longer exists. Remove this record or point it at the page that replaced it."
                 continue
             }
-            if (-not $hashCache.ContainsKey($s.Path)) { $hashCache[$s.Path] = Get-PortalContentHash $full }
             if ($hashCache[$s.Path] -ne $s.Hash) {
                 Add-Problem 'STALE' $where "$($s.Path) changed after this record was written. Re-translate it with the wiki-to-portal skill."
             }
@@ -222,14 +465,7 @@ function Invoke-PortalSyncCheck {
         $pageFull = Join-Path $Root $rule['page']
         if (-not (Test-Path -LiteralPath $pageFull -PathType Leaf)) { continue }
         if (-not $docs.Contains($rule['into'])) { continue }   # already reported as MISSING-FILE / BAD-JSON
-        $have = [System.Collections.Generic.HashSet[string]]::new()
-        $field = $rule['field']
-        Invoke-JsonWalk $docs[$rule['into']] '' '' {
-            param($n, $p, $k)
-            if ($n -is [System.Collections.IDictionary] -and $n.Contains($field)) {
-                foreach ($v in @($n[$field])) { if ($v -is [string]) { [void]$have.Add($v) } }
-            }
-        }
+        $have = $facts[$rule['into']].Fields[[string]$rule['field']]
         $rx = [regex]::new($rule['heading'])
         foreach ($line in [IO.File]::ReadAllLines($pageFull)) {
             $m = $rx.Match($line)
@@ -243,10 +479,12 @@ function Invoke-PortalSyncCheck {
     $known = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
     $refsFile = $config['refs_file']
     $refCount = 0
+    $refsById = @{}
     if ($docs.Contains($refsFile) -and $docs[$refsFile] -is [System.Collections.IDictionary] -and $docs[$refsFile].Contains('refs')) {
         $i = 0
         foreach ($r in @($docs[$refsFile]['refs'])) {
             if ($r -isnot [System.Collections.IDictionary]) { $i++; continue }
+            if ($r['id'] -is [string] -and -not $refsById.ContainsKey($r['id'])) { $refsById[$r['id']] = @{ Ref = $r; Index = $i } }
             $names = @($r['id'])
             if ($r.Contains('aliases')) { $names += @($r['aliases']) }
             foreach ($nm in $names) {
@@ -261,9 +499,7 @@ function Invoke-PortalSyncCheck {
     $linkRx = [regex]::new('\]\(ref:([^)\s]+)\)')
     $seen = [System.Collections.Generic.HashSet[string]]::new()
     foreach ($rel in $docs.Keys) {
-        $hits = [System.Collections.Generic.List[object]]::new()
-        Find-RefHits $docs[$rel] '' $skipKeys $patterns $linkRx $hits
-        foreach ($h in $hits) {
+        foreach ($h in (Find-RefHits $facts[$rel].Strings $patterns $linkRx)) {
             if ($known.Contains($h.Id)) { continue }
             if (-not $seen.Add("$rel|$($h.Id)")) { continue }
             Add-Problem 'UNKNOWN-REF' "plan/portal/$rel at $($h.Pointer)" "'$($h.Id)' looks like an id but refs.json has no explainer for it. Add one, or rephrase in plain words."
@@ -272,20 +508,17 @@ function Invoke-PortalSyncCheck {
 
     # 5. Scripts: every check-script path must exist ------------------------------------------------
     foreach ($rel in $docs.Keys) {
-        $paths = [System.Collections.Generic.List[object]]::new()
-        Invoke-JsonWalk $docs[$rel] '' '' {
-            param($n, $p, $k)
-            if ($k -eq 'script' -and $n -is [string]) { $paths.Add(@{ Path = $n; Pointer = $p }) }
-            elseif ($k -eq 'script' -and $n -is [System.Collections.IDictionary] -and $n['path'] -is [string]) {
-                $paths.Add(@{ Path = $n['path']; Pointer = "$p/path" })
-            }
-        }
-        foreach ($s in $paths) {
+        foreach ($s in $facts[$rel].Scripts) {
             if (-not (Test-Path -LiteralPath (Join-Path $Root $s.Path) -PathType Leaf)) {
                 Add-Problem 'MISSING-SCRIPT' "plan/portal/$rel at $($s.Pointer)" "The check script $($s.Path) does not exist. Write it, or set the field to null until it exists."
             }
         }
     }
+
+    # 6. Consistency: text copied from one record into another file must say the same thing ---------
+    # A refs.json explainer, the Overview's question count and a phase's progress are copies of another
+    # record. They carry no source of their own, so freshness (2) cannot see them; these checks can.
+    foreach ($m in (Get-PortalMismatches $docs $refsById $refsFile)) { Add-Problem 'MISMATCH' $m.Where $m.Message }
 
     $script:Stats = @{ Files = $docs.Count; Records = $recordCount; Refs = $refCount }
     return , $problems

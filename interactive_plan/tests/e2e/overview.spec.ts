@@ -16,7 +16,8 @@ interface Roadmap {
 interface Phase {
   id: string;
   title: string;
-  tasks: { id: string; script: string | null }[];
+  tasks: { id: string; status: string; script: string | null }[];
+  progress: { done: number; total: number };
   test_gate: { rows: unknown[]; script: string | null };
   step_order: string[];
 }
@@ -47,10 +48,14 @@ test("the overview shows where we are, questions, the next step, phases and the 
   await expect(nav.getByRole("link", { name: "Overview" })).toHaveAttribute("aria-current", "page");
   await expect(page.getByTestId("readonly-badge")).toBeVisible();
 
-  // Where we are: one row per item, plus "Last update".
+  // Where we are: one row per item, the questions row counted from the list, plus "Last update".
   const rows = page.getByTestId("where-we-are").locator("tr");
-  await expect(rows).toHaveCount(overview.where_we_are.length + (log.entries.length ? 1 : 0));
+  await expect(rows).toHaveCount(overview.where_we_are.length + 1 + (log.entries.length ? 1 : 0));
   await expect(rows.first().locator("th")).toHaveText(overview.where_we_are[0].item);
+  // Review 2026-10-09: the row, the list and the tab badge must give the same number.
+  const asked = overview.questions_for_you.items.length;
+  await expect(page.getByTestId("questions-row")).toContainText(`${overview.questions_for_you.open} open`);
+  if (asked) await expect(page.getByTestId("questions-row")).toContainText(`${asked} of them`);
 
   // Questions for you.
   const q = page.getByTestId("questions-for-you");
@@ -64,6 +69,17 @@ test("the overview shows where we are, questions, the next step, phases and the 
   const next = page.getByTestId("what-next");
   await expect(next.locator(".next-part-title")).toHaveText(["1 · Where we are", "2 · Why run something", "3 · The script", "4 · Then tell Claude"]);
   if (overview.next_action.script === null) await expect(next).toContainText("— none needed —");
+  else {
+    // Review 2026-10-09: the script the owner is asked to run can be read before running it.
+    const path = (overview.next_action.script as { path: string }).path;
+    await next.locator(`[data-script="${path}"]`).click();
+    const dlg = page.getByTestId("script-dialog");
+    await expect(dlg).toBeVisible();
+    await expect(dlg.getByTestId("script-text")).toContainText("#Requires -Version 7.0");
+    if (!/^scripts\/(verify|gates)\//.test(path)) await expect(dlg.getByTestId("script-note")).not.toContainText("PASS, FAIL or NOT READY");
+    await page.keyboard.press("Escape");
+    await expect(dlg).toBeHidden();
+  }
 
   // Phase cards: one per roadmap phase, in order.
   const cards = page.getByTestId("phase-cards").getByRole("button");
@@ -94,10 +110,19 @@ test("each phase card opens its popup; Esc and the close button close it and foc
     // Step order, the tasks table (one row per task, script names shown) and the gate.
     await expect(dialog.locator(".step-pill")).toHaveCount(phase.step_order.length);
     await expect(dialog.locator(".tasks-table tbody tr")).toHaveCount(phase.tasks.length);
+    // Review 2026-10-09: every task shows its state, and the Done count matches the progress line.
+    await expect(dialog.locator(".tasks-table .task-status")).toHaveCount(phase.tasks.length);
+    await expect(dialog.locator('.tasks-table tr[data-task-status="Done"]')).toHaveCount(phase.progress.done);
+    await expect(dialog).toContainText(`${phase.progress.done} of ${phase.progress.total} tasks done`);
     for (const t of phase.tasks.filter((x) => x.script).slice(0, 3)) {
       await expect(dialog.locator(".tasks-table")).toContainText(t.script!.split("/").pop()!);
     }
-    if (phase.test_gate.script) await expect(dialog).toContainText(phase.test_gate.script);
+    if (phase.test_gate.script) {
+      await expect(dialog).toContainText(phase.test_gate.script);
+      // One command only (review 2026-10-09): the gate header shown inline names no second command.
+      await expect(dialog.getByTestId("gate-header")).not.toContainText("run-all-checks");
+      await expect(dialog.getByTestId("gate-header")).not.toContainText("How to run");
+    }
     await expect(dialog.getByTestId("phase-approvals")).toContainText("Your approval of this plan");
     // The page behind is inert while the popup is open.
     if (i % 2 === 0) await page.keyboard.press("Escape");

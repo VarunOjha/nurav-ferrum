@@ -64,6 +64,10 @@ test("related ids open in the same dialog, and Back returns", async ({ page }) =
   const d = refDialog(page);
   await expect(d.locator("#ref-dialog-title")).toHaveText(first.title);
   const relId = first.related[0];
+  // No internal slugs in the head or the related list, only titles and short names (review 2026-10-09).
+  const slug = /(?:comp|layer|metric|wl|exp|cfg|ov|ops|qual|ip|adr|risk|rq|hyp)-[a-z0-9]/;
+  expect(await d.locator(".ref-dialog-kind").innerText()).not.toMatch(slug);
+  for (const t of await d.locator(".ref-related").allInnerTexts()) expect(t).not.toMatch(slug);
   await d.locator(`.ref-related[data-ref-id="${relId}"]`).click();
   const second = byId.get(relId);
   await expect(d.locator("#ref-dialog-title")).toHaveText(second ? second.title : `No explainer for ${relId}`);

@@ -5,15 +5,19 @@
 
 .DESCRIPTION
   What it checks : Node.js is installed with major version 24 (the plan app needs it), npm and git answer
-                   with their versions, the saved record of those versions (IP-0-toolchain.txt) exists and
+                   with their versions, the saved record of those versions exists and
                    names Node 24, and your first approval round ("Wave 0") was saved word for word.
   Why            : the plan app needs Node 24 → exact versions written down mean builds can be repeated.
   What it changes: nothing. It only reads files and asks programs for their version.
   How long       : about 3 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.9-node-toolchain.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If Node is no longer version 24, say "p0.9 check failed: Node is
                    version <n>"; Claude must ask you before using another major version.
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Saved record:
+                   wiki/raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

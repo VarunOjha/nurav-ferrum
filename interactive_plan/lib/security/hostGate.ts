@@ -5,6 +5,8 @@
  *   `localhost:<port>` or `[::1]:<port>` cannot read the plan through the portal (403).
  * - Reads only: any method other than GET and HEAD is refused with 405. The portal has no write route
  *   (the approvals POST API of v1 was removed in p0.17) and no server actions.
+ * Scope: every route of the production server (`next start`). The dev server's own overlay endpoints
+ * (/__nextjs_*) run before proxy.ts and are outside this gate; Next checks their Origin itself.
  * Returns the refusal, or null when the request may continue. Pure apart from building a Response,
  * so unit tests call it directly.
  */

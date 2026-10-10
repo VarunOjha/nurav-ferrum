@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "architecture.schema.json",
   "title": "architecture.json - layered view of the Rust app, the four groups, every component",
-  "description": "Layers and groups follow adr-0026 and the owner-approved Architecture mockup. Components are translated from wiki/architecture/components/comp-*.md.",
+  "description": "Layers (source: the architecture system overview) and groups (source: adr-0026) follow the owner-approved Architecture mockup. Components are translated from wiki/architecture/components/comp-*.md.",
   "type": "object",
   "required": [
     "id",
@@ -64,6 +64,9 @@
             "minLength": 1,
             "maxLength": 30,
             "pattern": "^[^\\n]+$"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
           }
         },
         "additionalProperties": false
@@ -103,6 +106,9 @@
           },
           "components": {
             "$ref": "#/$defs/id_list"
+          },
+          "source": {
+            "$ref": "#/$defs/source"
           }
         },
         "additionalProperties": false
@@ -137,6 +143,7 @@
           "group",
           "layer",
           "status",
+          "ours",
           "phase",
           "connects",
           "related",
@@ -173,6 +180,10 @@
           },
           "status": {
             "$ref": "#/$defs/status_label"
+          },
+          "ours": {
+            "type": "boolean",
+            "description": "true = we build it; false = it is provided by someone else (Windows, WebView2, Chrome, Edge). The portal then says 'Used from <phase>' instead of 'Built in <phase>'."
           },
           "phase": {
             "$ref": "#/$defs/phase_id"

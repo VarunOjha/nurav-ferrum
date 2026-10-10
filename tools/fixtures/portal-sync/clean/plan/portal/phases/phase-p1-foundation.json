@@ -18,6 +18,7 @@
     {
       "id": "p1.1",
       "title": "Confirm the toolchain",
+      "status": "Not started",
       "chain": "Tools installed → record exact versions → every later result names the tools it was built with.",
       "check": "Each tool prints a version; versions saved as evidence.",
       "script": null

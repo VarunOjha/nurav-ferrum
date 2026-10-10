@@ -5,30 +5,34 @@
 
 .DESCRIPTION
   What it checks, in four parts:
-    1. P1 was allowed to start: your approvals of the P1 pages are recorded and no open question blocks it
-       (tools/approvals_check.py --gate phase-p1-foundation).
-    2. The task checks p1.1 to p1.17 (toolchain, machine inventory, ignore rules and licences, Rust
-       workspace, the four experiments, the design decisions, wiki history checks, GitHub workflow,
-       dependency audit, public docs, literature review, code-and-page warning). p1.16 is this gate's
-       own review step and runs last.
+    1. P1 was allowed to start: your approvals of the P1 pages are recorded and no open question blocks it.
+    2. Every P1 task is checked: tools, machine inventory, ignore rules and licences, the Rust project,
+       the four experiments, the design decisions, the history-based wiki checks, the GitHub workflow,
+       the dependency audit, public docs, the literature review and the code-and-page warning. The
+       gate's own review task runs last.
     3. The test-gate rows of the P1 page, on one commit: Rust formatting and code warnings, Rust tests,
-       licences and security alerts, the wiki check, the plan-app checks, the local check script and the
+       licences and security alerts, the wiki check, the portal checks, the local check script and the
        test-robot experiment.
-    4. Your part, listed as YOURS: the admin prompts of the installs, the Alt+Tab and resize checks of
-       experiment 1, your choice of profile route, and the GitHub run (or deferring it).
+    4. Steps only you can do, listed as YOURS: the admin prompts of the installs, the Alt+Tab and resize
+       checks of experiment 1, your choice of profile route, and the GitHub run (or deferring it).
   Why            : tools confirmed → the empty project builds and passes every automatic check → each risky
                    assumption has a written verdict → you review the evidence and settle the design → only
                    then does P2 start.
-  What it changes: nothing in the repo (builds write ignored folders). With -SaveEvidence it saves, masked,
-                   each command's output under the names the P1 page lists (cargo-fmt.txt, cargo-clippy.txt,
-                   cargo-test.txt, cargo-deny.txt, wiki-lint.txt, ci-local.txt) and the whole printout as
-                   p1-gate.txt, all in wiki/raw/evidence/phase-p1-foundation/.
-  How long       : about 10 minutes once P1 exists (Rust builds, plan-app tests, experiments).
+  What it changes: nothing in the repo (builds write ignored folders). With -SaveEvidence it also saves each
+                   command's output and the whole printout, masked, as evidence.
+  How long       : about 10 minutes once P1 exists (Rust builds, portal tests, experiments).
                    Before P1 starts it finishes in about a minute and reports FAIL: that is expected.
-  How to run     : pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P1
-  Result         : PASS = exit 0 (your YOURS items may still be open), FAIL = exit 1, NOT READY = exit 2.
+  How to run     : pwsh -NoProfile -File scripts/gates/p1-gate.ps1
+  Result         : PASS (every automatic check is fine; your own steps may still be open), FAIL (something
+                   is wrong) or NOT READY (something still waits).
   Tell Claude    : before P1 has started: nothing. After: "P1 gate passed", or "P1 gate failed" and the
                    FAIL lines.
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (scripts/lib/Ferrum.Check.psm1). Part 1 runs
+                   tools/approvals_check.py --gate phase-p1-foundation; part 2 runs p1.1 to p1.17 (p1.16
+                   last). -SaveEvidence writes cargo-fmt.txt, cargo-clippy.txt, cargo-test.txt,
+                   cargo-deny.txt, wiki-lint.txt, ci-local.txt and p1-gate.txt to
+                   wiki/raw/evidence/phase-p1-foundation/. scripts/run-all-checks.ps1 -Phase P1 starts this
+                   same script.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
@@ -63,7 +67,7 @@ try {
     }
 
     # --- Part 2: every task check ---------------------------------------------------------------------
-    Write-Section 'Part 2 - Task checks p1.1 to p1.17'
+    Write-Section 'Part 2 - Every P1 task, checked'
     Invoke-Step 'Wiki check (run once, reused by the task checks)' {
         $lint = Initialize-SharedWikiLint
         Assert-NoLintErrors -Report $lint
@@ -114,4 +118,4 @@ try {
 }
 finally { Clear-SharedWikiLint }
 
-Complete-Check -SaveEvidence:$SaveEvidence -EvidencePath "$ev/p1-gate.txt" -WhenPassed 'All automatic P1 checks passed on one commit.'
+Complete-Check -SaveEvidence:$SaveEvidence -EvidencePath "$ev/p1-gate.txt" -WhenPassed 'All automatic P1 checks passed on one commit.' -TellClaude 'P1 gate passed'

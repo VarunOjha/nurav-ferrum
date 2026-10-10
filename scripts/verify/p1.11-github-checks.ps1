@@ -13,9 +13,12 @@
   What it changes: nothing in the repo. The local script builds into ignored folders.
   How long       : as long as scripts/ci-local.ps1 (several minutes).
   How to run     : pwsh -NoProfile -File scripts/verify/p1.11-github-checks.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : if it passes, push when you are ready and tell Claude "GitHub checks: passed" or paste the
                    failure; or say "defer GitHub". If it fails, paste the FAIL lines.
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

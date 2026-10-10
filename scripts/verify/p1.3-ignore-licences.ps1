@@ -6,14 +6,17 @@
 .DESCRIPTION
   What it checks : git ignores every build-output and local-data folder (Rust "target" folders, the spikes'
                    target folders, Node's node_modules, the plan app's .next, benchmark results) but does NOT
-                   ignore plan snapshots; both licence files (LICENSE-MIT and LICENSE-APACHE) exist.
+                   ignore plan snapshots; both licence files (MIT and Apache) exist.
   Why            : build output and local data must never reach git → plus two licence files, the repo is
                    clean and legally clear.
   What it changes: nothing. It only asks git which paths it would ignore.
   How long       : about 2 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p1.3-ignore-licences.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p1.3 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Licence files: LICENSE-MIT, LICENSE-APACHE.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

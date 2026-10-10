@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P3 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) Round trip works; a future version is refused clearly; a corrupt file falls
                    back with a backup; startup sites open in order.
   Why            : Settings must survive crashes and upgrades → a versioned file, written safely, with
@@ -13,10 +13,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p3.4-saved-settings-startup.ps1
-  Result         : NOT READY = exit 2 until P3; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P3 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P3" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     Unit tests: round trip, unknown future version refused with a clear error, corrupted file falls back
     to defaults and keeps a backup; integration test: startup sites open in order.
 #>

@@ -6,7 +6,7 @@
  * so it stacks on top of a phase popup; Esc or Close returns focus to the button that opened it.
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { runCommand } from "@/lib/portal/scriptCommand";
+import { isCheckScript, runCommand } from "@/lib/portal/scriptCommand";
 
 type Load = { state: "loading" } | { state: "ok"; text: string } | { state: "error"; message: string };
 
@@ -94,7 +94,7 @@ export default function ScriptProvider({ children }: { children: React.ReactNode
         <div className="modal-panel">
           <div className="phase-head">
             <div className="phase-head-text">
-              <div className="eyebrow">Check script · read-only copy from the repo</div>
+              <div className="eyebrow">{path && isCheckScript(path) ? "Check script" : "Script"} · read-only copy from the repo</div>
               <h2 id="script-dialog-title" ref={headingRef} tabIndex={-1} className="script-title">
                 {name}
               </h2>
@@ -111,10 +111,16 @@ export default function ScriptProvider({ children }: { children: React.ReactNode
               <div className="stack-8">
                 <div className="small strong">To run it, open PowerShell 7 in the repo folder and type:</div>
                 <pre className="code-block code-sm">{runCommand(path)}</pre>
-                <p className="small muted lh">
-                  It explains itself at the top, then prints PASS, FAIL or NOT READY for each step. It changes nothing unless you add
-                  -SaveEvidence.
-                </p>
+                {isCheckScript(path) ? (
+                  <p className="small muted lh" data-testid="script-note">
+                    It explains itself at the top, then prints PASS, FAIL or NOT READY for each step. It changes nothing unless you add
+                    -SaveEvidence.
+                  </p>
+                ) : (
+                  <p className="small muted lh" data-testid="script-note">
+                    Read its explanation at the top before you run it: it says what the script does, what it changes and how to stop it.
+                  </p>
+                )}
               </div>
             )}
             <div aria-live="polite" aria-busy={load.state === "loading"}>

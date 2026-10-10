@@ -72,6 +72,18 @@ flowchart LR
   They get a `refs.json` explainer only if portal text mentions them.
 - Text limits and required arrows (`→` in every thought chain) are in the schemas, so "short and crisp"
   is checked, not just asked for.
+- **Copies carry no source; they are checked for consistency** (decided 2026-10-09 after the v2
+  review). Some portal text repeats another record: every `refs.json` explainer (title, status,
+  summary) repeats its phase, task, decision, risk, question, research item, part or layer; the
+  Overview's open-question count and list repeat `questions.json`; roadmap rows repeat the phase files;
+  a phase's `progress.done` counts its tasks whose `status` is `Done`; layer and group lists repeat each
+  part's own `layer` and `group`. A copy has no `source` of its own (the refs schema forbids it), so
+  editing one page never fans out into dozens of STALE lines; instead the checker compares each copy
+  with its record and reports `MISMATCH`. Records whose wording comes from a page other than the one
+  they sit next to carry that page as their own source: architecture layers
+  (`wiki/architecture/ov-arch-system-overview.md`) and groups (adr-0026). The roadmap stages and "same
+  in every phase" are portal-only summaries of the phase list and of CLAUDE.md §2; the checker makes
+  sure every phase is in exactly one stage.
 - Ids in prose are written as links with words, `[one window, many web views](ref:adr-0007)`; the
   portal turns them into popups. Anything that looks like an id (patterns in `pipeline.json`) must
   resolve in `refs.json`, including phase short names `P0`-`P8` (aliases) and commit shas.
@@ -97,13 +109,21 @@ flowchart LR
 | `UNKNOWN-REF` | An id written in portal text has no explainer in `refs.json` |
 | `DUP-ID` | `refs.json` explains the same id or alias twice |
 | `MISSING-SCRIPT` | A check-script path in the JSON does not exist |
+| `MISMATCH` | A copy disagrees with its record (an explainer's title, status or summary; the Overview's question count or list; a phase's progress; a roadmap row; a layer or group list) |
 
 `-Hash <path>` prints a page's content hash (identical to the SCHEMA §10.2 Python reference; a test
 compares them). Validation uses `Test-Json`, which cannot follow a `$ref` into another file
 ([research note §5](../raw/research/claude-code-hooks-skills.md)), so the checker merges the shared
 definitions from `common.schema.json` into each file schema before validating; the portal must do the
-same. A full run on the real repo took 0.68 s in the test run of 2026-10-09, 0.83 s including PowerShell start-up (target under 5 s;
-[evidence](../raw/evidence/phase-p0-planning/p0.17-pipeline-checks.txt)).
+same. A full run on the real repo took 0.68 s in the first test run of 2026-10-09
+([evidence](../raw/evidence/phase-p0-planning/p0.17-pipeline-checks.txt)), when the portal JSON was
+still nearly empty. With all portal text written it took 4 to 8 s, and its 5 s speed test failed (found
+by the v2 review). The checker now walks each file once without per-node function calls and runs each
+id pattern once per file over all its text joined together: a full run takes about 2.3 s including
+PowerShell start-up (measured 2026-10-09; the test output is in the review-fixes evidence under
+`raw/evidence/phase-p0-planning/portal-v2/`). The
+speed test's limit is 10 s, a third of the Stop hook's 30 s timeout, so a busy machine does not make it
+flaky while a real slowdown is still caught.
 
 ## 5. The Stop hook
 

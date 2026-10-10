@@ -42,19 +42,30 @@ non-specialist who does not remember internal ids. Write for him, not for Claude
 5. **Update refs.json.** Every id that appears in any text you wrote (bare like `adr-0007`, `P1`, `Q-221`,
    `p1.3`, a commit sha, or as a link `[words](ref:id)`) needs an entry in `refs.json`:
    `{id, kind, title, summary (1-3 plain sentences), status, related}`. Add `aliases` for short forms
-   (the phase `phase-p1-foundation` has alias `P1`). If the page's own title or status changed, update its
-   refs entry too.
+   (the phase `phase-p1-foundation` has alias `P1`). An explainer **never carries a `source`**: it is a copy,
+   and the checker compares it with its record instead (`MISMATCH`). So whenever you rewrite a record that
+   has an explainer, update the explainer in the same edit, by these rules:
+   - phase: title `"<short> <title>"`, same status, summary = the phase summary or `"Goal: <goal>. <summary>"`;
+   - task: title = the task title or `"<short> task: <title>"`, same status, summary = the task's chain;
+   - decision: title `"Decision <n>: <title>"`, same status, summary starts with the decision's summary;
+   - risk, part (component): same title, status and summary; layer: title = layer name, same summary;
+   - question: status `Open` / `Answered` / `Withdrawn`, summary starts with the question;
+   - research item: same title and status; group: title = group name.
 6. **Removed or renamed page** → delete its record (the checker reports ORPHAN otherwise) and update the
    refs entry (`status: "Replaced"` or remove it if nothing mentions it any more).
 7. **Check.** `pwsh tools/portal-sync-check.ps1` → must print `portal-sync: clean`. Fix every line it
-   reports; each message says what to do.
+   reports; each message says what to do. A `MISMATCH` line means a copy (an explainer, the Overview's
+   question count or list, a roadmap row, a phase's progress, a layer or group list) no longer says what
+   its record says: copy the words from the record named in the message. Never fix it by changing the
+   record to match an old copy.
 
 ## Which page goes where
 
 | Wiki page | Portal file | Record |
 |---|---|---|
-| `STATUS.md` | `overview.json` | the whole file (one source) |
-| `wiki/phases/phase-*.md` | `phases/<phase-id>.json` and `roadmap.json` | the whole phase file; one row in `roadmap.phases` |
+| `STATUS.md` | `overview.json` | the whole file (one source); when a task finishes, also its `status` and `progress` in the phase file and roadmap row |
+| `wiki/phases/phase-*.md` | `phases/<phase-id>.json` and `roadmap.json` | the whole phase file; one row in `roadmap.phases`; the explainers of the phase and its tasks (no source, see step 5) |
+| `wiki/architecture/ov-arch-system-overview.md`, `wiki/decisions/adr-0026-*.md` | `architecture.json` | the layers (first) and the groups (second), each with that page as its source |
 | `wiki/decisions/adr-*.md` | `decisions.json` | one item in `items` |
 | `wiki/risks/risk-*.md` | `risks.json` | one item in `items` |
 | `wiki/research/questions/rq-*.md` | `research.json` | one item in `questions` |
@@ -80,8 +91,10 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   app", not "Minimal container"). `one_line_goal` = what is true when it is done. `status` maps
   planned → "Not started", ready → "Ready to start", in-progress → "In progress", gate-review →
   "Waiting for your review", done → "Done", blocked → "Blocked". `progress` = tasks done / total, from
-  STATUS.md and the log (the phase page does not store progress). `step_order` = 3-8 short labels in the
-  order the work happens. `tasks[]` = one per page task: `title` (short, crisp), `chain`
+  STATUS.md and the log (the phase page does not store progress); `progress.done` must equal the number
+  of tasks whose `status` is `Done`. `step_order` = 3-8 short labels in the
+  order the work happens. `tasks[]` = one per page task: `title` (short, crisp), `status`
+  ("Done", "In progress", "Waiting for you" or "Not started", from STATUS.md and the log), `chain`
   (cause → action → why it matters), `check` (how we know it is done, plain), `script`
   (`scripts/verify/<task-id>-<slug>.ps1`, or `null` until that script exists). `test_gate.explanation` =
   a thought chain of the whole gate; `rows[]` = `{check, proves}`; `script` =
@@ -99,7 +112,9 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   realized → "Happened", tolerated → "Accepted".
 - **Research items**: `status` in plain words; hypotheses carry `prediction` (plain), experiments
   `phase`, metrics `unit`, questions the `question` itself.
-- **Component**: `group` per adr-0026 (application, benchmark, testing, research, or planning for the
+- **Component**: `ours` = `false` for parts someone else provides (Windows, WebView2, Chrome, Edge);
+  their `status` then says who provides them ("Provided by Microsoft"), never "Planned", and the portal
+  shows "Used from <phase>" instead of "Built in <phase>". `group` per adr-0026 (application, benchmark, testing, research, or planning for the
   plan portal itself); `layer` = the layer id it sits in (Application group only, else `null`);
   `connects[]` = `{to, what}` with `what` in plain words ("asks it whether a site is allowed").
   Keep `layers[].components` and `groups[].components` in step with the components' `layer`/`group`.
@@ -112,8 +127,10 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   `decisions[]` = `{what, by: "you"|"claude"}`; `approvals[]` = `{what, status}`; `commit` = the short sha or
   `null` (the sha needs a `refs.json` entry of kind `commit`).
 - **Overview** (`overview.json`, from STATUS.md): `where_we_are[]` = 3-6 rows `{item, state}`;
-  `next_action` in the owner's four-part format (below); `questions_for_you` = count of open questions
-  and up to 5 of the most pressing.
+  `next_action` in the owner's four-part format (below); `questions_for_you` = `open` (the number of open
+  items in `questions.json`) and `items`: the open questions asked **now** (the current approval wave),
+  at most 5, each with the same question text as in `questions.json`. The portal counts the "Questions for
+  you" row and the tab badge from this list, so do not add a `where_we_are` row for questions.
 
 ### The four-part next action (owner's rule)
 

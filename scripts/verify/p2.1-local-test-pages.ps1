@@ -5,17 +5,19 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P2 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) Server tests pass; each test page returns its documented status.
   Why            : Real websites change → a local server with fixed pages (redirects, pop-ups, cookies,
                    slow and error pages) → navigation tests give the same answer every run.
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p2.1-local-test-pages.ps1
-  Result         : NOT READY = exit 2 until P2; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P2 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P2" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     The fixture server is a Rust crate at tests/fixtures/server (axum or hyper; exact version pinned at P2
     start, UNVERIFIED[phase-p2-minimal-container]); 'cargo test --locked -p fixture-server' passes; each
     fixture URL returns the documented status code (curl -sI output saved). P6 workloads may reuse this

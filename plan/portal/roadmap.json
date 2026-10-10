@@ -45,7 +45,7 @@
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p0-planning.md",
-        "content_hash": "sha256:907c2e0e0a3f1bd0c0fd213fc73b20c1b2ea3762097c0b06bc7a23f4a27fa788"
+        "content_hash": "sha256:25fb17417769bb828836033533a471be1ce424e5f5f1da54b2fc12191792bca8"
       }
     },
     {
@@ -58,7 +58,7 @@
       "tasks_total": 17,
       "source": {
         "wiki_path": "wiki/phases/phase-p1-foundation.md",
-        "content_hash": "sha256:e1260372cd1fe4f8a416263cc7e4208317dcef06d3d1c0716e68eed82734e251"
+        "content_hash": "sha256:2bbdb7134d8db47aa021788ac43625c357502a9146f561f5919e4fa553bb7172"
       }
     },
     {

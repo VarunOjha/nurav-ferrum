@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P6 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) A dry run records the response and page size for each site; no results drawn
                    from it.
   Why            : Local pages may not reflect real use → pick a short list of public sites without login,
@@ -14,10 +14,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p6.3-real-websites.ps1
-  Result         : NOT READY = exit 2 until P6; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P6 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P6" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     List on the workload pages; a dry run records status codes and page sizes for each site (evidence), no
     results drawn from it.
 #>

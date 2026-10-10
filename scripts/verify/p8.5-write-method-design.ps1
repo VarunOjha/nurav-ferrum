@@ -5,17 +5,19 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P8 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) The sections build; every claim cites a source; you review them.
   Why            : Method and design do not depend on results → write method, architecture, tab-sleeping
                    design and background first → the paper moves on without waiting for data.
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p8.5-write-method-design.ps1
-  Result         : NOT READY = exit 2 until P8; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P8 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P8" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     Sections compile; every factual claim cites a wiki page, research note or reference; owner reviews.
 #>
 [CmdletBinding()]

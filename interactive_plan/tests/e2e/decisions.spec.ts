@@ -1,5 +1,5 @@
 // decisions.spec: the Decisions tab. Every decision is one row; its title opens a popup (what it
-// means, why, the catch, your approval state); replaced decisions are muted, say what replaced them,
+// means, why, the catch, one plain standing); replaced decisions are muted, say what replaced them,
 // and their popup opens the replacement on top. The risks we watch are listed highest first, each
 // with its own popup. Accessible (axe), phone width without sideways scrolling.
 import { expect, test } from "@playwright/test";
@@ -7,7 +7,7 @@ import { collectErrors, expectAccessible, sidewaysOverflow } from "./axe";
 import { portalJson } from "./helpers";
 
 interface Decisions {
-  items: { id: string; title: string; why: string; catch: string | null; status: string; replaced_by: string | null }[];
+  items: { id: string; title: string; why: string; catch: string | null; status: string; decided_by: string; replaced_by: string | null }[];
 }
 interface Risks {
   items: { id: string; title: string; likelihood: number; impact: number; mitigation: string }[];
@@ -23,7 +23,7 @@ test("one row per decision; replaced ones are muted and name their replacement",
   for (const d of decisions.items) {
     const row = page.locator(`[data-decision="${d.id}"]`);
     await expect(row.locator(".row-title")).toHaveText(d.title);
-    await expect(row).toContainText(d.status);
+    await expect(row).toHaveAttribute("data-status", d.status);
     if (d.replaced_by) {
       await expect(row).toHaveClass(/is-muted/);
       await expect(row.locator(`[data-ref-id="${d.replaced_by}"]`)).toBeVisible();
@@ -45,7 +45,12 @@ test("a decision opens in a popup; a replaced one opens its replacement on top",
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText(d.why);
   if (d.catch) await expect(dialog).toContainText("The catch");
-  await expect(dialog).toContainText(/Your approval: /);
+  // One plain standing instead of "Accepted / You decided / Not approved yet" (review 2026-10-09).
+  await expect(dialog).not.toContainText("Your approval:");
+  await expect(dialog.getByTestId("decision-standing")).toContainText("later replaced");
+  // No internal slug in the popup head; the short name instead.
+  await expect(dialog.locator(".phase-head")).not.toContainText(d.id);
+  await expect(dialog.locator(".phase-head")).toContainText(`Decision ${Number(d.id.slice(4))}`);
   await expectAccessible(page, `#detail-dialog-${d.id}`);
   await dialog.getByRole("button", { name: /^Open what replaced it/ }).click();
   const second = page.getByRole("dialog", { name: replacement.title });
@@ -80,4 +85,15 @@ test("phone width: no sideways scrolling", async ({ page }) => {
   await page.locator("[data-decision] .row-title").first().click();
   const box = await page.locator("dialog[open]").boundingBox();
   expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+});
+
+test("a decision you chose says in one sentence whether its page is signed off", async ({ page }) => {
+  await page.goto("/decisions");
+  const d = decisions.items.find((x) => x.status === "Accepted" && x.decided_by === "you")!;
+  await page.locator(`[data-decision="${d.id}"] .row-title`).click();
+  const dialog = page.getByRole("dialog", { name: d.title });
+  await expect(dialog.getByTestId("decision-standing")).toContainText(/^You chose this on \d+ \w+; /);
+  await expect(dialog.locator(".phase-head .chip")).toHaveText("Chosen by you");
+  await expect(page.locator(`[data-decision="${d.id}"] .row-side`)).toContainText("You chose");
+  await page.keyboard.press("Escape");
 });

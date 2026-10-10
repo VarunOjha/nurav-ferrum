@@ -13,8 +13,11 @@
   What it changes: nothing in the repo. cargo-deny may download the public security alert list.
   How long       : about 30 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p1.12-dependency-audit.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p1.12 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
@@ -25,7 +28,7 @@ Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
 Start-Check -Id 'p1.12' -Title 'Check dependency licences and alerts' -Phase 'phase-p1-foundation' `
     -Why 'we only use third-party code we may use and that has no known holes.'
 
-Invoke-Step 'Licence and alert rules file exists' { [void](Assert-RepoFile 'deny.toml' 'The licence and alert rules (deny.toml)'); 'deny.toml' }
+Invoke-Step 'Licence and alert rules file exists' { [void](Assert-RepoFile 'deny.toml' 'The licence and alert rules file'); 'deny.toml' }
 
 Invoke-Step 'Lock files are committed' {
     $missing = @(foreach ($f in 'Cargo.lock', 'interactive_plan/package-lock.json') {

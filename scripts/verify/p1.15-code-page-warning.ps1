@@ -13,8 +13,11 @@
   What it changes: nothing in the repo. The copy is made in your temp folder and deleted afterwards.
   How long       : about 10 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p1.15-code-page-warning.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p1.15 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
@@ -54,7 +57,7 @@ Invoke-Step 'Code-only commit warns; code-plus-page commit does not' {
 
 Invoke-Step 'The rulebook no longer marks this as unverified' {
     $t = Read-RepoText 'wiki/SCHEMA.md'
-    if ($t -match 'pre-commit hook or CI can enforce this is `UNVERIFIED\[phase-p1-foundation\]`') { Stop-Fail 'SCHEMA section 9.8 still tags the enforcement UNVERIFIED.' }
+    if ($t -match 'pre-commit hook or CI can enforce this is `UNVERIFIED\[phase-p1-foundation\]`') { Stop-Fail 'The rule book still says this warning is untested (SCHEMA section 9.8 still marks it as not checked yet).' }
     'SCHEMA section 9.8 updated'
 }
 

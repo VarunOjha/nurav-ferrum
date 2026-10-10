@@ -7,7 +7,7 @@
       "id": "phase-p1-foundation",
       "kind": "phase",
       "title": "P1 Foundation",
-      "summary": "Tools and repo ready; riskiest ideas tested.",
+      "summary": "Get the tools and repo ready, then test the riskiest assumptions with small throwaway experiments.",
       "status": "Not started",
       "related": [],
       "aliases": [
@@ -18,7 +18,7 @@
       "id": "p1.1",
       "kind": "task",
       "title": "Confirm the toolchain",
-      "summary": "Record the exact tool versions.",
+      "summary": "Tools installed → record exact versions → every later result names the tools it was built with.",
       "status": "Not started",
       "related": [
         "phase-p1-foundation"
@@ -27,8 +27,8 @@
     {
       "id": "adr-0007",
       "kind": "decision",
-      "title": "Decision 7: one window, many web views",
-      "summary": "Each website lives in its own sandboxed view.",
+      "title": "Decision 7: One window, many web views",
+      "summary": "Ferrum draws its own buttons in a trusted panel; each website lives in its own sandboxed view.",
       "status": "Accepted",
       "related": [
         "risk-r02"
@@ -38,7 +38,7 @@
       "id": "risk-r02",
       "kind": "risk",
       "title": "Multi-view feature may be unstable",
-      "summary": "Tested early in P1.",
+      "summary": "The feature that puts many web views in one window is experimental and could break.",
       "status": "Open",
       "related": [
         "adr-0007"
@@ -56,7 +56,7 @@
       "id": "comp-core",
       "kind": "component",
       "title": "Core library",
-      "summary": "Shared settings and types.",
+      "summary": "Settings, URL checks and shared types used by every engine part.",
       "status": "Planned",
       "related": []
     },
@@ -64,7 +64,7 @@
       "id": "Q-001",
       "kind": "question",
       "title": "Run tests on every change?",
-      "summary": "Asked in Claude Code on 8 Oct.",
+      "summary": "Should test scripts also run automatically on every change? Decides whether mistakes are caught on each change or only at the gate.",
       "status": "Open",
       "related": []
     },
@@ -73,6 +73,50 @@
       "kind": "commit",
       "title": "Fixture commit",
       "summary": "Saved the fixture pages.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "layer-base",
+      "kind": "layer",
+      "title": "Shared base",
+      "summary": "Settings, URL checks and shared types.",
+      "status": null,
+      "related": [
+        "comp-core"
+      ]
+    },
+    {
+      "id": "application",
+      "kind": "group",
+      "title": "Application",
+      "summary": "What people use.",
+      "status": null,
+      "related": [
+        "comp-core"
+      ]
+    },
+    {
+      "id": "benchmark",
+      "kind": "group",
+      "title": "Benchmark",
+      "summary": "Fair, repeated tests.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "testing",
+      "kind": "group",
+      "title": "Testing & quality",
+      "summary": "Proves each feature works.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "research",
+      "kind": "group",
+      "title": "Research & analysis",
+      "summary": "Turns numbers into the paper.",
       "status": null,
       "related": []
     }

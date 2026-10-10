@@ -11,7 +11,11 @@
       "components": [
         "comp-app-shell"
       ],
-      "language": "TypeScript"
+      "language": "TypeScript",
+      "source": {
+        "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
+        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+      }
     },
     {
       "id": "layer-websites",
@@ -20,7 +24,11 @@
       "trust": "untrusted",
       "components": [
         "comp-tab-content"
-      ]
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
+        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+      }
     },
     {
       "id": "layer-engine",
@@ -34,7 +42,11 @@
         "comp-telemetry",
         "comp-network-logger"
       ],
-      "language": "Rust"
+      "language": "Rust",
+      "source": {
+        "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
+        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+      }
     },
     {
       "id": "layer-base",
@@ -44,7 +56,11 @@
       "components": [
         "comp-core"
       ],
-      "language": "Rust"
+      "language": "Rust",
+      "source": {
+        "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
+        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+      }
     },
     {
       "id": "layer-webview2",
@@ -53,7 +69,11 @@
       "trust": "not ours",
       "components": [
         "comp-webview2-runtime"
-      ]
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
+        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+      }
     },
     {
       "id": "layer-windows",
@@ -62,7 +82,11 @@
       "trust": "not ours",
       "components": [
         "comp-windows-os"
-      ]
+      ],
+      "source": {
+        "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
+        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+      }
     }
   ],
   "groups": [
@@ -82,7 +106,11 @@
         "comp-core",
         "comp-webview2-runtime",
         "comp-windows-os"
-      ]
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0026-architecture-four-groups.md",
+        "content_hash": "sha256:268ab24b49163b53eca53a09d9b45245504a79a73fd44dcd07aa459899a7b734"
+      }
     },
     {
       "id": "benchmark",
@@ -93,14 +121,22 @@
         "comp-benchmark-harness",
         "comp-baseline-app",
         "comp-competitor-browsers"
-      ]
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0026-architecture-four-groups.md",
+        "content_hash": "sha256:268ab24b49163b53eca53a09d9b45245504a79a73fd44dcd07aa459899a7b734"
+      }
     },
     {
       "id": "testing",
       "name": "Testing & quality",
       "purpose": "Proves each feature works and stays working: unit, end-to-end and security tests, plus automatic checks on every change. No component of its own.",
       "flow": "change → tests + check scripts → green → commit",
-      "components": []
+      "components": [],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0026-architecture-four-groups.md",
+        "content_hash": "sha256:268ab24b49163b53eca53a09d9b45245504a79a73fd44dcd07aa459899a7b734"
+      }
     },
     {
       "id": "research",
@@ -109,7 +145,11 @@
       "flow": "raw results → statistics → figures → paper",
       "components": [
         "comp-research-analysis"
-      ]
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0026-architecture-four-groups.md",
+        "content_hash": "sha256:268ab24b49163b53eca53a09d9b45245504a79a73fd44dcd07aa459899a7b734"
+      }
     }
   ],
   "footnote": {
@@ -126,6 +166,7 @@
       "group": "application",
       "layer": "layer-controls",
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p2-minimal-container",
       "connects": [
         {
@@ -161,6 +202,7 @@
       "group": "application",
       "layer": "layer-websites",
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p2-minimal-container",
       "connects": [
         {
@@ -187,6 +229,7 @@
       "group": "application",
       "layer": "layer-engine",
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p2-minimal-container",
       "connects": [
         {
@@ -229,6 +272,7 @@
       "group": "application",
       "layer": "layer-engine",
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p2-minimal-container",
       "connects": [
         {
@@ -257,6 +301,7 @@
       "group": "application",
       "layer": "layer-engine",
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p7-lifecycle",
       "connects": [
         {
@@ -288,6 +333,7 @@
       "group": "application",
       "layer": "layer-engine",
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p5-telemetry",
       "connects": [
         {
@@ -322,6 +368,7 @@
       "group": "application",
       "layer": "layer-engine",
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p5-telemetry",
       "connects": [
         {
@@ -348,6 +395,7 @@
       "group": "application",
       "layer": "layer-base",
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p1-foundation",
       "connects": [],
       "related": [],
@@ -362,7 +410,8 @@
       "summary": "Microsoft's Chromium engine (the same one inside Edge), already installed on Windows. It draws every website and the browser controls. Not ours. Ferrum relies on its sandbox; that it protects as well as Chrome's is assumed, not checked yet (checked in P4).",
       "group": "application",
       "layer": "layer-webview2",
-      "status": "Planned",
+      "status": "Provided by Microsoft",
+      "ours": false,
       "phase": "phase-p1-foundation",
       "connects": [
         {
@@ -391,7 +440,8 @@
       "summary": "The operating system. Not ours. Gives memory and CPU readings per process, groups a test's processes for counting, and opens outside links in other apps. Which Windows low-memory signal to use is decided in P7.",
       "group": "application",
       "layer": "layer-windows",
-      "status": "Planned",
+      "status": "Provided by Microsoft",
+      "ours": false,
       "phase": "phase-p1-foundation",
       "connects": [],
       "related": [
@@ -410,6 +460,7 @@
       "group": "benchmark",
       "layer": null,
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p6-benchmark-harness",
       "connects": [
         {
@@ -450,6 +501,7 @@
       "group": "benchmark",
       "layer": null,
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p6-benchmark-harness",
       "connects": [
         {
@@ -469,7 +521,8 @@
       "summary": "The browsers Ferrum is compared with. Not ours. Run with their normal resource-saving features on, never switched off to favour Ferrum; their settings are recorded in every trial.",
       "group": "benchmark",
       "layer": null,
-      "status": "Planned",
+      "status": "Made by Google and Microsoft",
+      "ours": false,
       "phase": "phase-p6-benchmark-harness",
       "connects": [],
       "related": [
@@ -488,6 +541,7 @@
       "group": "research",
       "layer": null,
       "status": "Planned",
+      "ours": true,
       "phase": "phase-p6-benchmark-harness",
       "connects": [],
       "related": [],
@@ -503,12 +557,13 @@
       "group": "planning",
       "layer": null,
       "status": "Built and checked; read-only",
+      "ours": true,
       "phase": "phase-p0-planning",
       "connects": [],
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-interactive-plan.md",
-        "content_hash": "sha256:9fb4f2201e9d86a389789658f27bb0794b9141255aaeec41e2587eb1ade9540c"
+        "content_hash": "sha256:b0512e2f7babef6ab6b3d16f35fd74a1c0e225b97a65239c07f9a60455b88412"
       }
     }
   ]

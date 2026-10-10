@@ -207,6 +207,14 @@ yet (every approvable page is PENDING).**
   `ip-build-plan` are retired history (not approvable). Checks: `npm run verify` exit 0, P0 gate PASS, portal check
   clean, quick lint and lint:wiki 0 errors, mask scan 0 unmasked
   ([portal-verify.txt](wiki/raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt)).
+- p0.17 step "fix" (review fixes for portal v2): 30 review findings checked, 29 fixed, 1 rejected (withdrawn
+  questions already link to their replacement). One "Questions for you" list (the four first-wave questions) drives the
+  Overview row, the list and the tab badge; every task has a state; popups show titles and short names, never internal
+  slugs; a decision shows one plain standing; parts that are not ours say "Used from"; Architecture follows the mockup
+  (diagram plus "How to read this", connections in each part's popup); the Overview's start script opens in the script
+  popup. The portal check now also compares copies with their records (MISMATCH) and takes about 2.3 s; every check
+  script ends its header with a "For Claude" field and uses plain words before it. Q-008 corrected (the accessibility
+  checker was added before the owner answered). Details: the `correct`, `decide` and `code` log entries of this step.
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -217,7 +225,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "portal-verify" verified and committed 2026-10-09 (`ef5dcc5`); next the owner walkthrough of the portal)
+- task: p0.17 step "fix" (review fixes for portal v2), session s01, started 2026-10-09
+- intent: fix the 30 review findings on portal v2 (plain wording, one question count, per-task status, popups without internal ids, architecture side panel, cross-file checks and a faster portal checker, clearer check-script messages); then npm run verify, portal check, P0 gate, quick lint, lint:wiki, mask scan; evidence portal-v2/review-fixes.txt
+- planned paths: plan/portal/**, interactive_plan/{app,components,lib,tests,proxy.ts}, tools/portal-sync-check.ps1, tools/test-portal-sync-check.ps1, tools/fixtures/portal-sync/**, scripts/**, .claude/skills/wiki-to-portal/SKILL.md, wiki/phases/phase-p0-planning.md, wiki/phases/phase-p1-foundation.md, wiki/overview/ov-open-questions.md, wiki/operations/ops-portal-pipeline.md, wiki/architecture/components/comp-interactive-plan.md, wiki/raw/evidence/phase-p0-planning/portal-v2/review-fixes.txt, wiki/raw/MANIFEST.sha256
+- rollback: git restore --staged --worktree on the planned paths (all tracked except the new evidence file, which is deleted); HEAD ce5cad7
 
 ## Blockers
 
@@ -282,4 +293,4 @@ gate a phase and can be reviewed later.
 
 ## Last updated
 
-2026-10-09, session s01 (after p0.17 step "portal-verify", the final review of portal v2; next: your walkthrough of the portal). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+2026-10-09, session s01 (p0.17 step "fix": review fixes for portal v2; next: your walkthrough of the portal). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).

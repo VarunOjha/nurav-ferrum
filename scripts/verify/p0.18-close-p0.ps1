@@ -10,10 +10,13 @@
   What it changes: nothing. It only reads files.
   How long       : about 2 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.18-close-p0.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
-                   Until you approve the P0 exit it ends NOT READY (exit 2): that is expected.
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
+                   Until you approve the P0 exit it ends NOT READY: that is expected.
   Tell Claude    : nothing while it says NOT READY. Once you have approved the exit and it still is not PASS,
                    paste the lines and say "p0.18 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

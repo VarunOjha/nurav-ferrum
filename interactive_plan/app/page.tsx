@@ -9,7 +9,8 @@ import Ref from "@/components/portal/Ref";
 import RichText from "@/components/portal/RichText";
 import { resolveRef, tokenize, type RefData } from "@/lib/portal/refs";
 import { getPatterns, getPortal, getRefData } from "@/lib/portal/server";
-import { headline, latestLog, percentDone, phaseTone, shortDate } from "@/lib/portal/view";
+import { headline, latestLog, percentDone, phaseTone, questionsRow, shortDate } from "@/lib/portal/view";
+import { ScriptButton } from "@/components/portal/ScriptProvider";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Overview" };
@@ -72,6 +73,11 @@ export default async function OverviewPage() {
                       </td>
                     </tr>
                   ))}
+                  {/* Counted from the list on the right, so the row, the list and the tab badge always agree. */}
+                  <tr data-testid="questions-row">
+                    <th scope="row">Questions for you</th>
+                    <td>{questionsRow(overview.questions_for_you)}</td>
+                  </tr>
                   {latest[0] && (
                     <tr>
                       <th scope="row">Last update</th>
@@ -168,7 +174,13 @@ export default async function OverviewPage() {
               <div className="next-part-title">3 · The script</div>
               {next.script ? (
                 <div className="stack-8">
-                  <div className="mono small">{next.script.path}</div>
+                  <div className="row-between">
+                    <span className="mono small">{next.script.path}</span>
+                    {/* The owner reads the script before running it (owner feedback 2026-10-09). */}
+                    <ScriptButton path={next.script.path} className="secondary-btn">
+                      Read the script
+                    </ScriptButton>
+                  </div>
                   {next.script.parts.map((p, i) => (
                     <div key={i} className="stack-4">
                       <pre className="code-block code-sm">{p.code}</pre>

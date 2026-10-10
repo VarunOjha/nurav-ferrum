@@ -5,17 +5,21 @@
 
 .DESCRIPTION
   What it checks : research questions, predictions (hypotheses) and experiments link to each other in both
-                   directions (rule REF-RECIPROCAL); every experiment compares only the agreed product
-                   setups (cfg-...); no prediction claims data and no experiment page states results
-                   (rules HYP-NO-DATA, EXP-RESULTS). Number-looking warnings are listed, not failed: they
+                   directions; every experiment compares only the agreed product
+                   setups; no prediction claims data and no experiment page states results.
+                   Number-looking warnings are listed, not failed: they
                    are a rough heuristic and each one was reviewed in the wiki log.
   Why            : Ferrum is also a research project → nothing should be measured without a reason, and
                    no number may appear before an experiment produced it.
   What it changes: nothing. It only reads files (unless you add -SaveEvidence).
   How long       : about 6 seconds (it runs the wiki check of the plan app).
   How to run     : pwsh -NoProfile -File scripts/verify/p0.6-research-plan.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.6 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Wiki rules REF-RECIPROCAL, HYP-NO-DATA, EXP-RESULTS;
+                   product setups are the cfg-* pages.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

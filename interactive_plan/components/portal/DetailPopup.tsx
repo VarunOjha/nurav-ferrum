@@ -1,11 +1,11 @@
 /**
- * A medium popup for one item of a tab (a decision, a risk, a research item): what kind it is, its
- * title and status, a few labelled plain-language fields, and its related ids (each opens its
+ * A medium popup for one item of a tab (a decision, a risk, a research item, a part of the system):
+ * what kind it is (or its short name, such as "Decision 19"), its title and status, a few labelled plain-language fields, and its related ids (each opens its
  * explainer on top). Server component; Modal (client) opens and closes it. Opened with
  * <OpenModalButton target={detailDialogId(id)}>.
  */
 import { detailDialogId } from "@/lib/portal/dialogs";
-import { resolveRef } from "@/lib/portal/refs";
+import { friendlyId, resolveRef } from "@/lib/portal/refs";
 import { getRefData } from "@/lib/portal/server";
 import type { Tone } from "@/lib/portal/view";
 import Modal, { CloseModalButton } from "./Modal";
@@ -32,7 +32,7 @@ export default async function DetailPopup({
   kind: string;
   title: string;
   status: string;
-  tone: Tone;
+  tone: Tone | "you";
   /** Small facts under the title ("Decided by you · 8 Oct"). */
   meta?: React.ReactNode;
   fields: DetailField[];
@@ -48,8 +48,8 @@ export default async function DetailPopup({
       <div className="phase-head">
         <div className="phase-head-text">
           <div className="phase-head-meta">
-            <span className="eyebrow">{kind}</span>
-            <span className="mono small muted">{id}</span>
+            {/* The owner's short name ("Decision 19") when there is one, never the internal slug (review 2026-10-09). */}
+            <span className="eyebrow">{friendlyId(id) ?? kind}</span>
             <span className={`chip chip-${tone}`}>{status}</span>
           </div>
           <h2 id={titleId} className="detail-title">

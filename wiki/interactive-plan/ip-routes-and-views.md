@@ -34,10 +34,10 @@ so a page always shows the current files.
 
 | Route | Tab | Shows | Data |
 |---|---|---|---|
-| `/` | Overview | Where we are (headline and small table), questions for you, what happens next in the owner's four parts (where we are, why run something, the script, then tell Claude), phase progress cards, how references work, the latest three log entries | `overview.json`, `roadmap.json`, `phases/*.json`, `log.json` |
+| `/` | Overview | Where we are (headline and small table; its "Questions for you" row is counted from the list of questions asked now), questions for you, what happens next in the owner's four parts (where we are, why run something, the script with a button that opens it, then tell Claude), phase progress cards, how references work, the latest three log entries | `overview.json`, `roadmap.json`, `phases/*.json`, `log.json` |
 | `/roadmap` | Roadmap | The three stages (build, measure, publish), one compact row per phase (name, outcome in one line, status, tasks done), and "Same in every phase" | `roadmap.json`, `phases/*.json` |
-| `/architecture` | Architecture | Four group buttons (Application, Benchmark, Testing and quality, Research and analysis, [adr-0026](../decisions/adr-0026-architecture-four-groups.md)); for the application a layered diagram of the Rust app built from plain boxes, coloured by trust; for each group its purpose, a one-line flow and part cards with what each part talks to; cards for the other groups; a footnote for planning tooling | `architecture.json` |
-| `/decisions` | Decisions | One row per decision (number, title, one line, status, who decided and when); replaced ones muted with a link to what replaced them; then the risks, highest likelihood × impact first | `decisions.json`, `risks.json` |
+| `/architecture` | Architecture | Four group buttons (Application, Benchmark, Testing and quality, Research and analysis, [adr-0026](../decisions/adr-0026-architecture-four-groups.md)); for the application a layered diagram of the Rust app built from plain boxes, coloured by trust, with a "How to read this" side panel (colour key, purpose, one-line flow), as in the mockup; for each other group its purpose, a one-line flow and one short line per part; every box and part line opens the part popup; cards for the other groups; a footnote for planning tooling | `architecture.json` |
+| `/decisions` | Decisions | One row per decision (number, title, one line, one plain standing: who chose it, when, and whether its written page is signed off); replaced ones muted with a link to what replaced them; then the risks, highest likelihood × impact first | `decisions.json`, `risks.json` |
 | `/research` | Research | The core question, then short sections: questions we want to answer, what we expect to find, experiments, measurements, test pages and tasks | `research.json` |
 | `/questions` | Questions | Open questions first (ordered by the phase they hold up), then answered (with the owner's answer), then withdrawn | `questions.json` |
 | `/log` | Log | Entries newest first: what was done, what is next, a small table of decisions, approvals, and the commit; filter All / Has decisions / Has approvals | `log.json` |
@@ -58,10 +58,10 @@ so a page always shows the current files.
 
 | Popup | Opened by | Shows |
 |---|---|---|
-| Phase | a phase card, a phase name, or "Open the whole phase" in a phase explainer | Status, tasks done, approval labels; **step order** first; tasks table (id, title, what and why as a thought chain, how we check, check script button); test gate explained in one thought chain plus a check / proves table; the gate script's command and its own header shown as labelled fields; "Same in every phase" |
-| Reference | any id-shaped word or `[words](ref:id)` link | Kind, title, short explainer, status, related ids (open in the same popup, Back returns); a phase explainer offers the whole phase |
-| Detail | a decision, risk or research item | Kind, title, status, a few labelled plain fields, related ids by title |
-| Script | a check script button | The real `.ps1` text from `GET /api/script` and the command that runs it |
+| Phase | a phase card, a phase name, or "Open the whole phase" in a phase explainer | Status, tasks done, approval labels; **step order** first; tasks table (id and state, title, what and why as a thought chain, how we check, check script button); test gate explained in one thought chain plus a check / proves table; the gate script's one command and its own header shown as labelled fields (without its "How to run" and "For Claude" fields); "Same in every phase" |
+| Reference | any id-shaped word or `[words](ref:id)` link | Kind (or the short name the owner knows, such as "Decision 19"), title, short explainer, status, related items by title (open in the same popup, Back returns); a phase explainer offers the whole phase. Internal slugs such as `comp-…` or `layer-…` are never shown |
+| Detail | a decision, risk, research item or part of the system | Short name or kind, title, status, a few labelled plain fields, related items by title; a part also shows when it is built (or, for parts that are not ours, from when we use it) and what it talks to |
+| Script | a script button | The real `.ps1` text from `GET /api/script` and the command that runs it; check scripts say they print PASS, FAIL or NOT READY, other scripts (the start script) point to their own explanation |
 
 All popups use the native `<dialog>` with `showModal()`: the page behind is inert, Esc, the close button or a backdrop
 click closes the top popup only, and focus returns to the button that opened it. Popups stack (an id inside a phase

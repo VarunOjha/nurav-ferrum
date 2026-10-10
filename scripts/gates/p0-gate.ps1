@@ -6,27 +6,33 @@
 .DESCRIPTION
   What it checks, in four parts:
     1. The wiki check runs once (zero errors) and is shared with the task checks below.
-    2. The task checks p0.1 to p0.12 (each one re-verifies a finished task: starting documents, research
-       notes, rules, architecture, decisions, research plan, index and log, raw-file fingerprints, Node,
-       the plan app skeleton, the wiki reader, fingerprints).
+    2. The first twelve tasks are checked again, from saving your starting documents to the page
+       fingerprints: research notes, rules, architecture, decisions, research plan, index and log,
+       raw-file fingerprints, Node, the plan app skeleton and the wiki reader.
     3. The test-gate rows of the P0 page: style and type checks, unit tests, browser tests, production
-       build, fingerprint cross-check, wiki check. Together they also cover tasks p0.13 to p0.16, so those
-       task scripts are not run again here.
+       build, fingerprint cross-check and wiki check, plus the saved outputs of the first full run.
+       Together they cover the four portal-building tasks, so those task checks are not run again here.
     4. Housekeeping: the portal text is in step with the wiki, no real machine values are in any committed
        file, the tool tests pass, and every check script can be read by PowerShell.
-    Your part is listed as YOURS: the walkthrough, the open questions, your approvals (p0.17) and the exit
-    approval (p0.18). They never make this script fail; P0 ends only when you have done them.
-  Why            : the plan becomes the gatekeeper for every later phase → all its checks must pass in one run,
-                   with the output saved → you review and approve in Claude Code → only then does P1 start.
+    Steps only you can do are listed as YOURS: your walkthrough of the portal, the open questions, your
+    approvals of the P1 pages and your approval to end P0. They never make this script fail; P0 ends only
+    when you have done them.
+  Why            : every later phase builds on this plan → all its checks must pass in one run, with the
+                   output saved → you read the portal and approve in Claude Code → only then does P1 start.
   What it changes: nothing in the repo (tests use temporary copies; builds write ignored folders). With
-                   -SaveEvidence it writes the whole printout, masked, to
-                   wiki/raw/evidence/phase-p0-planning/p0-gate.txt (a time stamp is added if it exists).
+                   -SaveEvidence it also saves the whole printout, masked, as evidence.
   How long       : about 5 minutes (the browser tests take about 2).
-  How to run     : pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P0
-                   (close any plan app you started yourself first: the browser tests use port 3418)
-  Result         : PASS = exit 0 (your YOURS items may still be open), FAIL = exit 1, NOT READY = exit 2.
+  How to run     : pwsh -NoProfile -File scripts/gates/p0-gate.ps1
+                   (close any portal you started yourself first: the browser tests use port 3418)
+  Result         : PASS (every automatic check is fine; your own steps may still be open), FAIL (something
+                   is wrong) or NOT READY (something still waits).
   Tell Claude    : if it says PASS: "P0 gate passed" (and, when you are ready, your approvals).
                    If it says FAIL: "P0 gate failed", and paste the FAIL lines.
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (scripts/lib/Ferrum.Check.psm1). Part 2 runs
+                   the task scripts p0.1 to p0.12; part 3 covers p0.13 to p0.16 and asserts the p0.16
+                   evidence files; YOURS = p0.17 (approvals) and p0.18 (exit). -SaveEvidence writes
+                   wiki/raw/evidence/phase-p0-planning/p0-gate.txt (a time stamp is added if it exists).
+                   scripts/run-all-checks.ps1 -Phase P0 starts this same script.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
@@ -49,11 +55,11 @@ try {
     }
 
     # --- Part 2: the finished tasks, re-checked ------------------------------------------------------
-    Write-Section 'Part 2 - Task checks p0.1 to p0.12'
+    Write-Section 'Part 2 - The first twelve tasks, checked again'
     Invoke-TaskChecks -Phase 'phase-p0-planning' -Skip 'p0.13', 'p0.14', 'p0.15', 'p0.16', 'p0.17', 'p0.18'
 
     # --- Part 3: the test-gate rows of the P0 page ----------------------------------------------------
-    Write-Section 'Part 3 - Test gate (covers tasks p0.13 to p0.16)'
+    Write-Section 'Part 3 - Test gate (also covers the four portal-building tasks)'
     Invoke-Step 'Style and type checks' { [void](Assert-NpmScript 'typecheck'); [void](Assert-NpmScript 'lint'); 'typecheck and code style: exit 0' }
     Invoke-Step 'Unit tests' {
         $r = Assert-NpmScript 'test'
@@ -71,6 +77,14 @@ try {
         'the app, the rulebook program and PowerShell agree (task check p0.12)'
     }
     Invoke-Step 'Wiki check' { Assert-NoLintErrors -Report (Get-WikiLint); 'zero errors (part 1)' }
+    Invoke-Step 'Saved outputs of the first full run' {
+        # Task p0.16's second step: the outputs of the first full plan-app run are kept as evidence.
+        $dir = 'wiki/raw/evidence/phase-p0-planning/interactive-plan'
+        foreach ($f in 'IP-9-verify.txt', 'IP-9-perf.txt', 'playwright-report.zip', 'IP-10-final-lint.json') {
+            [void](Assert-RepoFile "$dir/$f" -What 'A saved output of the first full run')
+        }
+        'all four files are there (task check p0.16)'
+    }
     Add-YourStep 'Your walkthrough' 'Open the portal, look at every tab, and tell Claude what does not match the plan or is unclear.'
     Add-YourStep 'Open questions' 'Answer or defer each question Claude asks with the approval waves.'
 
@@ -105,4 +119,4 @@ try {
 finally { Clear-SharedWikiLint }
 
 Complete-Check -SaveEvidence:$SaveEvidence -EvidencePath 'wiki/raw/evidence/phase-p0-planning/p0-gate.txt' `
-    -WhenPassed 'All automatic P0 checks passed in one run.'
+    -WhenPassed 'All automatic P0 checks passed in one run.' -TellClaude 'P0 gate passed'

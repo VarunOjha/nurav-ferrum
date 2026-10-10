@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P7 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) Raw output saved; every crash or failed restore has a fix and a test.
   Why            : Some problems only show up over hours → run many background tabs for a long session
                    under each strategy, watching memory growth, crashes and restores → every bug found is
@@ -13,10 +13,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p7.8-long-running-test.ps1
-  Result         : NOT READY = exit 2 until P7; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P7 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P7" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     Soak run raw output saved; any crash or failed restore becomes a bug with a regression test before C2.
 #>
 [CmdletBinding()]

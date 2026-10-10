@@ -8,8 +8,8 @@
                    changes, outdated, changes requested, rejected, invalid), for reading the approvals file
                    and for the request gate all pass; the browser security tests show that requests from
                    other computers or other websites are refused and that the portal accepts reads only.
-                   Since adr-0023 Claude records approvals with tools/approvals_record.py, so that tool's
-                   tests run too. (The app's own approvals store and its write API were removed with the
+                   Since approvals are given in Claude Code, Claude records them with a small recorder
+                   program, so its tests run too. (The app's own approvals store and its write API were removed with the
                    read-only portal in task p0.17, 2026-10-09.)
   Why            : approvals must not be lost or forged → every state is tested, only Claude's recorder
                    writes them, and only this computer can reach the portal.
@@ -17,8 +17,11 @@
   How long       : about 1 minute.
   How to run     : pwsh -NoProfile -File scripts/verify/p0.14-approvals-store.ps1
                    (close any plan app you started yourself first: the tests use port 3418)
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.14 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Recorder: tools/approvals_record.py (adr-0023).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

@@ -1,5 +1,5 @@
 // Decisions tab: every decision as a short row; clicking its title opens a popup with what it means,
-// why, the catch and your approval state. Replaced decisions stay listed, muted, and point to what
+// why, the catch and one plain standing (who chose it, and whether you signed off its written page). Replaced decisions stay listed, muted, and point to what
 // replaced them. Below, the risks we watch, highest first, each with its own popup. Reads
 // decisions.json, risks.json, roadmap.json and plan/approvals.json (read-only labels).
 import type { Metadata } from "next";
@@ -10,7 +10,7 @@ import Ref from "@/components/portal/Ref";
 import RichText from "@/components/portal/RichText";
 import { detailDialogId } from "@/lib/portal/dialogs";
 import { getPortal } from "@/lib/portal/server";
-import { approvalLabel, decisionTone, firstSentence, riskTone, risksByScore, roadmapRow, shortDate } from "@/lib/portal/view";
+import { approvalLabel, decisionStanding, decisionTone, firstSentence, riskTone, risksByScore, roadmapRow } from "@/lib/portal/view";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Decisions" };
@@ -22,6 +22,8 @@ export default async function DecisionsPage() {
   const titleOf = new Map(items.map((d) => [d.id, d.title]));
   const riskList = risksByScore(risks);
   const phaseShort = (id: string) => roadmapRow(roadmap, id)?.short ?? id;
+  // Choosing a decision and signing off its written page are two steps; one plain standing says both.
+  const standing = new Map(items.map((d) => [d.id, decisionStanding(d, approvalLabel(approvals, d.id, d.source.content_hash))]));
 
   return (
     <div className="page">
@@ -57,10 +59,8 @@ export default async function DecisionsPage() {
                   )}
                 </div>
                 <div className="row-side">
-                  <span className={`chip chip-${decisionTone(d.status)}`}>{d.status}</span>
-                  <span className="small muted">
-                    {d.decided_by === "you" ? "You decided" : "Claude proposed"} · {shortDate(d.date)}
-                  </span>
+                  <span className={`chip chip-${decisionTone(d.status)}`}>{standing.get(d.id)!.chip}</span>
+                  <span className="small muted">{standing.get(d.id)!.short}</span>
                 </div>
               </li>
             );
@@ -125,14 +125,9 @@ export default async function DecisionsPage() {
           id={d.id}
           kind="Decision"
           title={d.title}
-          status={d.status}
+          status={standing.get(d.id)!.chip}
           tone={decisionTone(d.status)}
-          meta={
-            <>
-              {d.decided_by === "you" ? "You decided" : "Claude proposed"} · {shortDate(d.date)} · Your approval:{" "}
-              <strong>{approvalLabel(approvals, d.id, d.source.content_hash)}</strong>
-            </>
-          }
+          meta={<span data-testid="decision-standing">{standing.get(d.id)!.line}</span>}
           fields={[
             { label: "What it means", text: d.summary },
             { label: "Why", text: d.why },

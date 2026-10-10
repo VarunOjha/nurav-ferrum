@@ -6,14 +6,17 @@
 .DESCRIPTION
   What it checks : every planned part (component) has exactly one page whose id matches its file name,
                    and the wiki check finds no link between parts that crosses a trust level without
-                   being marked (rule TRUST-EDGE), and no duplicate or badly formed ids.
+                   being marked, and no duplicate or badly formed ids.
   Why            : the app has parts with different trust levels → marking every crossing makes the
                    security boundaries visible before any code exists.
   What it changes: nothing. It only reads files (unless you add -SaveEvidence).
   How long       : about 6 seconds (it runs the wiki check of the plan app).
   How to run     : pwsh -NoProfile -File scripts/verify/p0.4-architecture-pages.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.4 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Wiki rule: TRUST-EDGE.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

@@ -1,21 +1,25 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-  Check for task p1.10 (P1 Foundation): Add history-based wiki checks.
+  Check for task p1.10 (P1 Foundation): Re-confirm the history-based wiki checks.
 
 .DESCRIPTION
   What it checks : the wiki check's two history-based rules (a raw file was changed; a page changed without
                    its date being updated) are caught on small sample repositories in the plan app's tests;
                    the real wiki has zero errors; every raw file still matches its recorded fingerprint and
                    every raw file has one.
-                   Note: these rules were built early, in P0 (plan-app step 5), so this check can already pass.
+                   Note: these rules were already built in P0, so this check passes before P1 starts. That is
+                   expected: in P1 the task only re-runs it on the new history (one less real build task).
   Why            : raw files must never change and pages must stay dated → tampering or stale dates are caught
                    by the one existing wiki check, not a second checker.
   What it changes: nothing in the repo. The tests create temporary sample repositories and delete them.
   How long       : about 20 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p1.10-history-wiki-checks.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p1.10 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
@@ -23,7 +27,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
 
-Start-Check -Id 'p1.10' -Title 'Add history-based wiki checks' -Phase 'phase-p1-foundation' `
+Start-Check -Id 'p1.10' -Title 'Re-confirm the history-based wiki checks' -Phase 'phase-p1-foundation' `
     -Why 'raw-file tampering and stale page dates must be caught.'
 
 Invoke-Step 'Sample repositories trigger both history rules' {

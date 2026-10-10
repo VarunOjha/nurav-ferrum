@@ -168,7 +168,10 @@ function Complete-Check {
         [switch]$SaveEvidence,
         [string]$EvidencePath,
         [string]$NotReadyUntil,
-        [string]$WhenPassed
+        [string]$WhenPassed,
+        # The exact words to tell Claude when the script passes (gates: "P0 gate passed"), so the
+        # script's header and its last line say the same thing.
+        [string]$TellClaude
     )
     $s = $script:State
     $count = { param($w) @($s.Steps | Where-Object Result -eq $w).Count }
@@ -185,7 +188,8 @@ function Complete-Check {
     if ($code -eq 0) {
         Write-CheckLine ($(if ($WhenPassed) { $WhenPassed } else { 'Everything this script can check is fine.' }))
         if ($yours.Count) { Write-CheckLine ("Still yours to do by hand: " + (($yours | ForEach-Object Name) -join '; ') + '.') }
-        Write-CheckLine ('What to tell Claude: nothing is needed. If you ran it for a review, say "{0} check passed".' -f $s.Id)
+        if ($TellClaude) { Write-CheckLine ('What to tell Claude: "{0}".' -f $TellClaude) }
+        else { Write-CheckLine ('What to tell Claude: nothing is needed. If you ran it for a review, say "{0} check passed".' -f $s.Id) }
     }
     elseif ($code -eq 1) {
         $first = @($s.Steps | Where-Object Result -eq 'FAIL')[0]
@@ -485,9 +489,16 @@ function Assert-NoLintErrors {
 function Get-ApprovalStates {
     <#
       Effective approval state of every key in plan/approvals.json, computed by tools/approvals_check.py
-      (SCHEMA section 10.3). Keys not in the file are PENDING.
+      (SCHEMA section 10.3). Keys not in the file are PENDING. If the checker cannot read the file (for
+      example broken JSON), the step FAILS with that reason: it must not look like "waiting for you".
+      -Root runs the checker in another folder (the script self-test uses a temporary copy).
     #>
-    $r = Invoke-Native -FilePath 'python' -ArgumentList @('tools/approvals_check.py')
+    param([string]$Root = $script:RepoRoot)
+    $r = Invoke-Native -FilePath 'python' -ArgumentList @('tools/approvals_check.py') -WorkingDirectory $Root
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '(?m)^approvals\.json entries:') {
+        Stop-Fail ("The approvals file could not be read, so no approval can be checked (plan/approvals.json; " +
+            "tools/approvals_check.py ended with exit $($r.ExitCode)):`n" + (Get-Tail $r.Output 3))
+    }
     $map = @{}
     foreach ($line in $r.Output -split "`r?`n") {
         if ($line -match '^\s{2}(APPROVED_VOLATILE_DRIFT|APPROVED|STALE|PENDING|REJECTED|CHANGES_REQUESTED|INVALID)\s+(\S+)\s*$') { $map[$Matches[2]] = $Matches[1] }
@@ -501,15 +512,59 @@ function Get-ApprovalState {
     if ($States.ContainsKey($Key)) { $States[$Key] } else { 'PENDING' }
 }
 
+function Get-PlainPageNames {
+    <#
+      Plain names for approval keys, for messages the owner reads: "the rule book", "the P1 plan",
+      "9 decisions", "3 parts of the app". Titles come from the portal's explainers (plan/portal/refs.json);
+      a key without one keeps its id. Returns one short phrase.
+    #>
+    param([Parameter(Mandatory)][string[]]$Keys)
+    $refs = @{}
+    $refsPath = Get-RepoPath 'plan/portal/refs.json'
+    if (Test-Path -LiteralPath $refsPath) {
+        try { foreach ($r in (Get-Content -LiteralPath $refsPath -Raw -Encoding utf8 | ConvertFrom-Json -AsHashtable)['refs']) { $refs[$r['id']] = $r } }
+        catch { $refs = @{} }
+    }
+    $groups = [ordered]@{}
+    $single = [System.Collections.Generic.List[string]]::new()
+    foreach ($k in $Keys) {
+        $id = $k.Split('#')[0]
+        $exit = $k.EndsWith('#exit')
+        $kind = if ($refs.ContainsKey($id)) { $refs[$id]['kind'] } else { $null }
+        if ($id -eq 'schema') { $single.Add('the rule book'); continue }
+        if ($kind -eq 'phase') {
+            $short = @($refs[$id]['aliases'])[0]
+            $single.Add($(if ($exit) { "the end of $short" } else { "the $short plan" })); continue
+        }
+        $label = switch ($kind) {
+            'decision' { 'decision' } 'component' { 'part of the app' } 'experiment' { 'experiment' } default { $null }
+        }
+        if ($label) { if (-not $groups.Contains($label)) { $groups[$label] = 0 }; $groups[$label]++ ; continue }
+        $single.Add($(if ($refs.ContainsKey($id)) { "'$($refs[$id]['title'])'" } else { $k }))
+    }
+    foreach ($g in $groups.Keys) {
+        $n = $groups[$g]
+        $plural = if ($n -eq 1) { $g } elseif ($g -eq 'part of the app') { 'parts of the app' } else { "${g}s" }
+        $single.Add("$n $plural")
+    }
+    if ($single.Count -le 1) { return ($single -join '') }
+    return (($single | Select-Object -SkipLast 1) -join ', ') + ' and ' + $single[$single.Count - 1]
+}
+
 function Assert-Approved {
-    <# WAIT unless every key is APPROVED (or approved with only bookkeeping changes). #>
+    <#
+      WAIT unless every key is APPROVED (or approved with only bookkeeping changes). The message names the
+      pages in plain words; the exact keys and states go only into the saved evidence, for Claude.
+    #>
     param([Parameter(Mandatory)][string[]]$Keys, [string]$What = 'your approval')
     $states = Get-ApprovalStates
     $missing = @($Keys | Where-Object { (Get-ApprovalState $_ $states) -notin 'APPROVED', 'APPROVED_VOLATILE_DRIFT' })
     if ($missing.Count) {
-        Stop-Wait ("Waiting for {0} in Claude Code. Not approved yet: {1}." -f $What, (($missing | ForEach-Object { "$_ ($(Get-ApprovalState $_ $states))" }) -join ', '))
+        Add-LogText ("         For Claude, the keys not approved yet: " + (($missing | ForEach-Object { "$_ ($(Get-ApprovalState $_ $states))" }) -join ', '))
+        $count = if ($missing.Count -eq 1) { '1 page is' } else { "$($missing.Count) pages are" }
+        Stop-Wait ("Waiting for {0} in Claude Code. {1} not approved yet: {2}." -f $What, $count, (Get-PlainPageNames $missing))
     }
-    "Approved: $($Keys -join ', ')"
+    "Approved: $(Get-PlainPageNames $Keys)"
 }
 
 function Test-LogHeading {

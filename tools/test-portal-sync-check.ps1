@@ -202,6 +202,52 @@ try {
         Assert-True ($r.Out.Trim() -eq $expected) "checker '$($r.Out.Trim())' <> reference '$expected'"
     }
 
+    # --- Consistency between files (MISMATCH): copies that carry no source of their own ------------------
+    Test-Case 'MISMATCH: the Overview counts open questions differently from questions.json' {
+        $d = New-Fixture 'mismatch count'
+        Edit-Json (Join-Path $d 'plan/portal/overview.json') { param($j) $j['questions_for_you']['open'] = 5 }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', '/questions_for_you/open', 'says 5 open questions')
+    }
+
+    Test-Case 'MISMATCH: a question listed as waiting for you is already answered (its explainer too)' {
+        $d = New-Fixture 'mismatch answered'
+        Edit-Json (Join-Path $d 'plan/portal/questions.json') {
+            param($j) $j['items'][0]['status'] = 'answered'; $j['items'][0]['answer'] = 'Yes.'; $j['items'][0]['answered_on'] = '2026-10-09'
+        }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', 'listed as waiting for you', "explainer of 'Q-001' says 'Open'")
+    }
+
+    Test-Case 'MISMATCH: an explainer keeps an old status after its decision changed' {
+        $d = New-Fixture 'mismatch status'
+        Edit-Json (Join-Path $d 'plan/portal/refs.json') {
+            param($j) foreach ($r in $j['refs']) { if ($r['id'] -eq 'adr-0007') { $r['status'] = 'Proposed' } }
+        }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', "explainer of 'adr-0007' says 'Proposed'", 'decisions.json')
+    }
+
+    Test-Case 'MISMATCH: phase progress does not count the tasks marked Done' {
+        $d = New-Fixture 'mismatch progress'
+        Edit-Json (Join-Path $d 'plan/portal/phases/phase-p1-foundation.json') { param($j) $j['tasks'][0]['status'] = 'Done' }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', '/progress/done', '1 tasks are marked Done')
+    }
+
+    Test-Case 'MISMATCH: two log entries share one id' {
+        $d = New-Fixture 'mismatch log id'
+        Edit-Json (Join-Path $d 'plan/portal/log.json') {
+            param($j)
+            $copy = [ordered]@{}
+            foreach ($k in $j['entries'][0].Keys) { $copy[$k] = $j['entries'][0][$k] }
+            $j['entries'] = @($j['entries']) + $copy
+        }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', '/entries/1/id', 'already used')
+    }
+
+    Test-Case 'MISMATCH: a layer list disagrees with the layer its parts name' {
+        $d = New-Fixture 'mismatch layer'
+        Edit-Json (Join-Path $d 'plan/portal/architecture.json') { param($j) $j['layers'][0]['components'] = @() }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', '/layers/0/components')
+    }
+
     # --- Hook mode -----------------------------------------------------------------------------------
     Test-Case 'hook: switched off (no flag file) -> exit 0 even when stale' {
         $d = New-Fixture 'hook off'
@@ -241,12 +287,15 @@ try {
     }
 
     # --- Speed on the real repo ----------------------------------------------------------------------
-    Test-Case 'speed: a full check of the real repo takes under 5 seconds' {
+    # The Stop hook's timeout is 30 s (.claude/settings.json). A full check of the real repo took 2.2 to
+    # 2.4 s on 2026-10-09 after the single-pass rewrite (4 to 8 s before it). The limit is a third of the
+    # hook timeout, so a busy machine does not make this test flaky while a real slowdown is still caught.
+    Test-Case 'speed: a full check of the real repo takes under 10 seconds' {
         $sw = [Diagnostics.Stopwatch]::StartNew()
         $r = Invoke-Checker $Repo
         $sw.Stop()
         Assert-True ($r.Code -in 0, 1) "checker crashed: exit $($r.Code) $($r.Err)"
-        Assert-True ($sw.Elapsed.TotalSeconds -lt 5) "took $([math]::Round($sw.Elapsed.TotalSeconds, 2)) s"
+        Assert-True ($sw.Elapsed.TotalSeconds -lt 10) "took $([math]::Round($sw.Elapsed.TotalSeconds, 2)) s"
         Write-Output ("      real repo: {0:N2} s, exit {1}, {2}" -f $sw.Elapsed.TotalSeconds, $r.Code, ($r.Out.Trim() -split "`n")[-1])
     }
 }

@@ -16,9 +16,12 @@
   How long       : about 20 seconds (the first Rust build can take a minute).
   How to run     : pwsh -NoProfile -File scripts/verify/p1.1-toolchain.ps1
                    Claude, when doing p1.1:  pwsh -NoProfile -File scripts/verify/p1.1-toolchain.ps1 -SaveEvidence
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If a tool FAILS, paste its line and say "p1.1 check failed";
                    Claude installs what is missing (you only click the Windows admin prompt).
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

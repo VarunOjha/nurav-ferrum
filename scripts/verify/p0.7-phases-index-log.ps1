@@ -5,15 +5,18 @@
 
 .DESCRIPTION
   What it checks : the nine phase pages P0 to P8 exist in order; the index (wiki/index.md) lists every page
-                   once (rule INDEX-MISSING); every log heading in wiki/log.md has the agreed form
-                   "## [date] kind | title" (rule LOG-FORMAT); phase order is consistent (PHASE-ORDER).
+                   once; every log heading in wiki/log.md has the agreed form
+                   "## [date] kind | title"; the phases are in a consistent order.
   Why            : work spans nine phases and many sessions → a page per phase, an index of every page
                    and a running log let you and Claude find anything.
   What it changes: nothing. It only reads files (unless you add -SaveEvidence).
   How long       : about 6 seconds (it runs the wiki check of the plan app).
   How to run     : pwsh -NoProfile -File scripts/verify/p0.7-phases-index-log.ps1
-  Result         : PASS = exit 0, FAIL = exit 1, NOT READY = exit 2 (scripts/lib/Ferrum.Check.psm1).
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p0.7 check failed".
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). Wiki rules INDEX-MISSING, LOG-FORMAT, PHASE-ORDER.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)

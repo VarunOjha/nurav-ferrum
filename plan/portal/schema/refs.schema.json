@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "refs.schema.json",
   "title": "refs.json - an explainer for every id the portal can show",
-  "description": "Every id that appears anywhere in portal text (bare, or as [words](ref:id)) must be an id or an alias here (UNKNOWN-REF otherwise). The portal shows the title and summary in a popup.",
+  "description": "Every id that appears anywhere in portal text (bare, or as [words](ref:id)) must be an id or an alias here (UNKNOWN-REF otherwise). The portal shows the title and summary in a popup. Explainers carry no source of their own: the checker compares each one with the record of the same id (phase, task, decision, risk, question, research item, component, layer) and reports MISMATCH when its title, status or summary disagree.",
   "type": "object",
   "required": [
     "id",
@@ -87,9 +87,6 @@
             },
             "minItems": 0,
             "uniqueItems": true
-          },
-          "source": {
-            "$ref": "#/$defs/source"
           }
         },
         "additionalProperties": false

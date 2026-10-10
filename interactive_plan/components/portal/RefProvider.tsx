@@ -8,7 +8,7 @@
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { phaseDialogId } from "@/lib/portal/dialogs";
-import { KIND_LABEL, resolveRef, type RefData, type RefInfo } from "@/lib/portal/refs";
+import { friendlyId, popupKind, resolveRef, type RefData, type RefInfo } from "@/lib/portal/refs";
 import { openModal } from "./Modal";
 
 interface RefContextValue {
@@ -98,8 +98,9 @@ export default function RefProvider({
         <div className="ref-dialog-panel">
           <div className="ref-dialog-head">
             <div className="ref-dialog-kind">
-              {info ? KIND_LABEL[info.kind] : "Reference"}
-              {current !== undefined && <span className="ref-dialog-id">{current}</span>}
+              {/* Kind in words plus the short name the owner knows ("Decision 19", "P1"), never the internal slug. */}
+              {info ? popupKind(info).head : "Reference"}
+              {info && popupKind(info).extra && <span className="ref-dialog-id">{popupKind(info).extra}</span>}
             </div>
             <button type="button" className="icon-btn" aria-label="Close" onClick={close}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -133,7 +134,9 @@ export default function RefProvider({
                         <li key={rid}>
                           <button type="button" className="ref-related" data-ref-id={rid} onClick={() => open(rid)}>
                             <span className="ref-related-title">{r ? r.title : rid}</span>
-                            <span className="ref-related-id">{rid}</span>
+                            {r && friendlyId(r.id, r.kind) && !r.title.startsWith(friendlyId(r.id, r.kind)!) && (
+                              <span className="ref-related-id">{friendlyId(r.id, r.kind)}</span>
+                            )}
                           </button>
                         </li>
                       );

@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Status         : DRAFT. Its real checks are written when P7 starts; until then it only lists them and
-                   ends NOT READY (exit 2).
+                   ends NOT READY.
   What it checks : (planned) Each signal has tests with fake inputs and with a test page; its limits are
                    written down.
   Why            : Good decisions need inputs → measure last use, memory pressure, tab activity, cost to
@@ -14,10 +14,12 @@
   What it changes: nothing.
   How long       : under a second while it is a draft.
   How to run     : pwsh -NoProfile -File scripts/verify/p7.2-signals-sleep-decisions.ps1
-  Result         : NOT READY = exit 2 until P7; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  Result         : NOT READY until P7 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P7" is the expected result for now.
 
-  For Claude - the planned command, from the verify field of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
+                   page:
     Each provider has unit tests with mocked inputs and an integration test against a fixture (media
     fixture, download fixture, form fixture); limits recorded on comp-resource-manager.
 #>

@@ -6,8 +6,8 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { loadPortalUncached } from "@/lib/portal/load";
-import { runCommand } from "@/lib/portal/scriptCommand";
-import { MAX_SCRIPT_BYTES, headerParts, namedScripts, readNamedScript, scriptHeader } from "@/lib/portal/scripts";
+import { isCheckScript, runCommand } from "@/lib/portal/scriptCommand";
+import { MAX_SCRIPT_BYTES, headerParts, namedScripts, ownerHeaderParts, readNamedScript, scriptHeader } from "@/lib/portal/scripts";
 import { REPO_ROOT } from "./helpers";
 
 const temps: string[] = [];
@@ -139,5 +139,31 @@ describe("headerParts", () => {
       const parts = headerParts(header);
       expect(words(parts.map((p) => (p.label ? `${p.label} : ${p.text}` : p.text)).join(" ")), `p${n}`).toEqual(words(header));
     }
+  });
+});
+
+describe("one command and owner-facing header parts (review 2026-10-09)", () => {
+  it("ownerHeaderParts drops 'How to run' and 'For Claude'; the popup shows the command once", () => {
+    const header = ["Gate.", "", "Why            : because.", "How to run     : pwsh -File a.ps1", "For Claude     : exit codes 0, 1, 2."].join("\n");
+    expect(ownerHeaderParts(header).map((p) => p.label)).toEqual([null, "Why"]);
+  });
+
+  it("every real gate header names its own script as the one command, and the popup hides tool details", () => {
+    for (const n of [0, 1, 2, 3, 4, 5, 6, 7, 8]) {
+      const text = readFileSync(path.join(REPO_ROOT, "scripts", "gates", `p${n}-gate.ps1`), "utf8").replace(/\r\n/g, "\n");
+      const parts = headerParts(scriptHeader(text)!);
+      const run = parts.find((p) => p.label === "How to run");
+      expect(run?.text.split("\n")[0], `p${n}`).toBe(runCommand(`scripts/gates/p${n}-gate.ps1`));
+      const shown = ownerHeaderParts(scriptHeader(text)!).map((p) => p.text).join(" ");
+      expect(shown, `p${n}`).not.toMatch(/run-all-checks|exit [0-9]|\.psm1|approvals_check|p[0-8]\.[0-9]+ to p[0-8]\.[0-9]+/);
+    }
+  });
+
+  it("isCheckScript: task checks, gates and the gate runner, not the start script", () => {
+    expect(isCheckScript("scripts/verify/p0.1-starting-documents.ps1")).toBe(true);
+    expect(isCheckScript("scripts/gates/p0-gate.ps1")).toBe(true);
+    expect(isCheckScript("scripts/run-all-checks.ps1")).toBe(true);
+    expect(isCheckScript("scripts/start-portal.ps1")).toBe(false);
+    expect(isCheckScript("scripts/lib/Ferrum.Check.psm1")).toBe(false);
   });
 });

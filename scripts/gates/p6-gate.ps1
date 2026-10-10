@@ -5,20 +5,22 @@
 
 .DESCRIPTION
   Status         : DRAFT. The real gate is written when P6 starts; until then it only lists the planned
-                   checks and ends NOT READY (exit 2).
+                   checks and ends NOT READY.
   What it checks : (planned) every task check of P6, then: Code checks; Library check; Fair settings
                    report; Same input, same output; Noise check; Campaign data; Earlier features; Wiki
-                   check. Your own checks are listed as YOURS.
+                   check. Steps only you can do are listed as YOURS.
   Why            : Code and tests pass → settings are proven fair → test pages and analysis give the same
                    output every time → noise level known → you approve the predictions and check the PC →
                    first campaign data is complete → you approve. Only then does P7 start.
   What it changes: nothing (once real, -SaveEvidence saves the printout as masked evidence).
   How long       : under a second while it is a draft.
-  How to run     : pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P6
-  Result         : NOT READY = exit 2 until P6; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  How to run     : pwsh -NoProfile -File scripts/gates/p6-gate.ps1
+  Result         : NOT READY until P6 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P6" is the expected result for now.
 
-  For Claude - the planned automatic gate items, from the test_gate of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). scripts/run-all-checks.ps1 -Phase P6 starts this same
+                   script. The planned automatic gate items, from the test_gate of the phase page:
     - cargo fmt --all -- --check
     - cargo clippy --workspace --all-targets -- -D warnings
     - cargo test --workspace (orchestrator plan generation, Job Object integration)

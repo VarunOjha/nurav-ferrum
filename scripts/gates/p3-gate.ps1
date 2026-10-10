@@ -5,20 +5,22 @@
 
 .DESCRIPTION
   Status         : DRAFT. The real gate is written when P3 starts; until then it only lists the planned
-                   checks and ends NOT READY (exit 2).
+                   checks and ends NOT READY.
   What it checks : (planned) every task check of P3, then: Formatting and code warnings; Tests; Licences
                    and alerts; Shell checks; Release build; Integration suite; Earlier tests again; Wiki
-                   check. Your own checks are listed as YOURS.
+                   check. Steps only you can do are listed as YOURS.
   Why            : Tabs multiply every P2 behaviour → rerun P2's tests plus the new suite, and test
                    restore after a forced kill → you use it for a real working session → only then does
                    security work start in P4.
   What it changes: nothing (once real, -SaveEvidence saves the printout as masked evidence).
   How long       : under a second while it is a draft.
-  How to run     : pwsh -NoProfile -File scripts/run-all-checks.ps1 -Phase P3
-  Result         : NOT READY = exit 2 until P3; then PASS = 0, FAIL = 1 (scripts/lib/Ferrum.Check.psm1).
+  How to run     : pwsh -NoProfile -File scripts/gates/p3-gate.ps1
+  Result         : NOT READY until P3 starts (this is a draft); then PASS or FAIL.
   Tell Claude    : nothing. "Not ready until P3" is the expected result for now.
 
-  For Claude - the planned automatic gate items, from the test_gate of the phase page:
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
+                   scripts/lib/Ferrum.Check.psm1). scripts/run-all-checks.ps1 -Phase P3 starts this same
+                   script. The planned automatic gate items, from the test_gate of the phase page:
     - cargo fmt --all -- --check
     - cargo clippy --workspace --all-targets -- -D warnings
     - cargo test --workspace

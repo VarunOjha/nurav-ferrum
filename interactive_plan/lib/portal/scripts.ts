@@ -124,3 +124,17 @@ export function headerParts(header: string): HeaderPart[] {
   }
   return parts.map(({ label, text, indent }) => ({ label, text, indent }));
 }
+
+/** Header fields the phase popup leaves out: the command is shown once above it, and the "For Claude" notes are technical. */
+export const OWNER_HIDDEN_FIELDS: ReadonlySet<string> = new Set(["How to run", "For Claude"]);
+
+/**
+ * headerParts() without the fields in OWNER_HIDDEN_FIELDS: what the owner reads inline in the phase
+ * popup. "For Claude" is the last section of a header, so everything after it (lists of planned
+ * commands in draft scripts) is left out too; the full script popup still shows all of it.
+ */
+export function ownerHeaderParts(header: string): HeaderPart[] {
+  const parts = headerParts(header);
+  const cut = parts.findIndex((p) => p.label === "For Claude");
+  return (cut < 0 ? parts : parts.slice(0, cut)).filter((p) => p.label === null || !OWNER_HIDDEN_FIELDS.has(p.label));
+}

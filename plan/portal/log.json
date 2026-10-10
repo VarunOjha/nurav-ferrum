@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:bca0b9b66324e9f0206c0e9dd0dc457c8f99ab54c680bb618c00a300fae52f3c"
+    "content_hash": "sha256:5cfdd24210a0ea49dcdde96e086d8ee6d0841dcf42b09c43d33eb1dbf60a5a7e"
   },
   "entries": [
     {
@@ -831,6 +831,44 @@
         "## [2026-10-09] code | p0.17 portal final review: five visual fixes, start script, ip-* pages for v2",
         "## [2026-10-09] lint | p0.17 portal verify: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
         "## [2026-10-09] plan | p0.17 step \"portal-verify\" committed: portal v2 reviewed against the mockups, start script, ip-* pages for v2"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-portal-review-fixes",
+      "date": "2026-10-09",
+      "title": "Review fixes: clearer questions, task states, no internal ids in popups",
+      "done": "A review read the portal as you would and found 30 problems; Claude checked each one, fixed 29 and rejected 1 that was already right. The question count now agrees everywhere, each task shows its state, popups use names instead of internal ids, and the portal check also catches copies that went out of date. Every automatic check passed in one run, and the P0 gate passed.",
+      "next": "You walk through the portal and tell Claude what reads wrong or unclear. Then Claude asks your first approvals in Claude Code.",
+      "decisions": [
+        {
+          "what": "The questions asked now are one list; the Overview row and the tab badge are counted from it",
+          "by": "claude"
+        },
+        {
+          "what": "Every task shows its state: done, in progress, waiting for you or not started",
+          "by": "claude"
+        },
+        {
+          "what": "Popups show names such as 'Decision 19', never internal ids",
+          "by": "claude"
+        },
+        {
+          "what": "The accessibility question is reworded: Claude added the checker before you answered; keep it or remove it",
+          "by": "claude"
+        },
+        {
+          "what": "Check scripts keep technical notes in a 'For Claude' part; the rest is plain words",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-09] correct | Q-008: the accessibility checker was added before the owner answered",
+        "## [2026-10-09] decide | p0.17 review fixes: one question list, task states, no slugs in popups, cross-file checks, faster portal check",
+        "## [2026-10-09] code | p0.17 review fixes: portal, portal checker, check scripts",
+        "## [2026-10-09] lint | p0.17 review fixes: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked"
       ],
       "phase": "phase-p0-planning"
     }
