@@ -200,7 +200,7 @@ yet (every approvable page is PENDING).**
   portal JSON names (adr-0024 elaboration). Checks: `npm run verify` exit 0 (727 unit, 69 browser tests including axe
   on every tab in both themes), P0 gate, portal check clean, mask scan 0 unmasked
   ([p0.17-portal-views-checks.txt](wiki/raw/evidence/phase-p0-planning/p0.17-portal-views-checks.txt)).
-- p0.17 step "portal-verify" done: final review of portal v2. Screenshots of every tab and popup at 1440 and 390 pixels
+- p0.17 step "portal-verify" done (commit `ef5dcc5`): final review of portal v2. Screenshots of every tab and popup at 1440 and 390 pixels
   were compared with the mockups and five visual defects fixed (duplicate chip, punctuation wrapping, architecture card
   names, glance cards, phone-width task table and gate header). New `scripts/start-portal.ps1` starts the portal in one
   step (README explains it). The `ip-*` pages and comp-interactive-plan now describe v2; `ip-approvals-api` and
@@ -217,14 +217,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "portal-verify" (session s01, 2026-10-09)
-- intent: final review of portal v2: one green `npm run verify`, portal check, P0 gate, wiki checks, mask scan; screenshots of
-  every tab and popup compared with the mockups and visual defects fixed; `scripts/start-portal.ps1` and README; the `ip-*`
-  pages and comp-interactive-plan describe v2; masked evidence in `wiki/raw/evidence/phase-p0-planning/portal-v2/`
-- planned paths: interactive_plan/** (views, tests, README), scripts/start-portal.ps1, wiki/interactive-plan/ip-*.md,
-  wiki/architecture/components/comp-interactive-plan.md, plan/portal/*.json, wiki/raw/evidence/phase-p0-planning/portal-v2/,
-  wiki/raw/MANIFEST.sha256, wiki/index.md
-- rollback: `git checkout -- <path>` for edited files; delete only files this step created
+(empty: p0.17 step "portal-verify" verified and committed 2026-10-09 (`ef5dcc5`); next the owner walkthrough of the portal)
 
 ## Blockers
 

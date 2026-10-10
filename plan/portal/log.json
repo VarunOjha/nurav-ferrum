@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:460daa723cf2f3e4d30b5f36aab02aa1e5f9d7a167540bcda3364b1cf8ddb451"
+    "content_hash": "sha256:bca0b9b66324e9f0206c0e9dd0dc457c8f99ab54c680bb618c00a300fae52f3c"
   },
   "entries": [
     {
@@ -825,11 +825,12 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "ef5dcc5",
       "covers": [
         "## [2026-10-09] decide | portal final review: visual fixes, one start script, ip-* pages describe v2, two v1 pages retired",
         "## [2026-10-09] code | p0.17 portal final review: five visual fixes, start script, ip-* pages for v2",
-        "## [2026-10-09] lint | p0.17 portal verify: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked"
+        "## [2026-10-09] lint | p0.17 portal verify: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
+        "## [2026-10-09] plan | p0.17 step \"portal-verify\" committed: portal v2 reviewed against the mockups, start script, ip-* pages for v2"
       ],
       "phase": "phase-p0-planning"
     }

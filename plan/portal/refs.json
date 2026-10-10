@@ -4537,6 +4537,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "ef5dcc5",
+      "kind": "commit",
+      "title": "Commit: Portal reviewed against your mockups; one start script",
+      "summary": "Five layout problems found by comparing screenshots with your mockups were fixed, a PowerShell script now starts the portal in one step, and the design pages describe the new portal.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

@@ -739,3 +739,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-spec, ip-routes-and-views, ip-data-contract, ip-wiki-lint, ip-testing, ip-approvals-api, ip-build-plan, comp-interactive-plan, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt, raw/evidence/phase-p0-planning/portal-v2/p0-gate.txt]
 - result: Baseline before any change (HEAD 46fb685): npm run verify exit 0. Visual review: screenshots of the seven tabs at 1440 and 390 px, the P0 phase popup and a reference popup, read and compared with the mockups; five defects fixed and re-checked on new screenshots; no tab scrolls sideways at either width. Final state: cd interactive_plan && npm run verify exit 0 in one run (typecheck and eslint clean; 731 unit tests passed, 1 skipped (the link-escape test needs Windows Developer Mode); lint:wiki 0 errors, 34 warnings (unchanged), 2 info; build exit 0; 69 browser tests passed, including axe on all seven tabs in both themes; the end-of-run guard found the 22 protected files unchanged). npm run test:coverage exit 0, thresholds met (lib/portal 98.8% lines, 93.51% branches). P0 gate: PASS, 23 PASS and 4 YOURS in 216 s. scripts/start-portal.ps1: -CheckOnly exit 0; a full start on port 3422 answered HTTP 200, and a second run on the busy port only reported it and exited 0. Portal check clean (18 files, 252 records, 378 explainers); quick lint 202 files, 0 errors; check-script test PASS; Python tool tests 34 OK; mask scan 0 unmasked. One earlier gate run in this step failed at the Python tool tests because pages rewritten by a Python script had Windows line endings; all changed files were converted back to LF before the final run.
+
+## [2026-10-09] plan | p0.17 step "portal-verify" committed: portal v2 reviewed against the mockups, start script, ip-* pages for v2
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt, raw/evidence/phase-p0-planning/portal-v2/p0-gate.txt]
+- result: What was done → the portal was checked against the mockups at desktop and phone width and five layout problems were fixed; one script now starts it; the ip-* pages describe the new portal. STATUS: In-flight cleared, next action set (owner walkthrough with scripts/start-portal.ps1); a refs.json explainer was added for the new commit.
+- next: the owner walks through the portal and says what reads wrong or unclear; then Claude asks Approval Wave 1 in Claude Code
+- commit: ef5dcc5

@@ -5,7 +5,7 @@
   "summary": "We are finishing the plan (P0). The new read-only portal is built and reviewed, and you can start it with one script. Nothing is approved yet, and no Ferrum code exists yet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:79143b93e4ee64ddad5bfdafe58d810072624f821eaaba242df2d1efe6f93d02"
+    "content_hash": "sha256:668111099ca9462de19bebf405ec7441921846d281c14c641dd6332a93d0a91c"
   },
   "updated": "2026-10-09",
   "where_we_are": [
