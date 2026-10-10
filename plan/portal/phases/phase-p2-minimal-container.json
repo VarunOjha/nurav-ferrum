@@ -25,126 +25,126 @@
       "title": "Build local test pages",
       "chain": "Real websites change → a local server with fixed pages (redirects, pop-ups, cookies, slow and error pages) → navigation tests give the same answer every run.",
       "check": "Server tests pass; each test page returns its documented status.",
-      "script": null
+      "script": "scripts/verify/p2.1-local-test-pages.ps1"
     },
     {
       "id": "p2.2",
       "title": "Create the desktop app",
       "chain": "The design was fixed in P1 → create the app with the chosen Tauri version and hosting route → the shell window opens.",
       "check": "Release build succeeds; the window shows the shell (screenshot saved).",
-      "script": null
+      "script": "scripts/verify/p2.2-create-desktop-app.ps1"
     },
     {
       "id": "p2.3",
       "title": "Lock the bridge to the app",
       "chain": "Every web view can reach the app's command channel → grant permissions to the shell only, none to websites → a website cannot control Ferrum.",
       "check": "A test page tries app, plugin and event calls; every one is refused and logged.",
-      "script": null
+      "script": "scripts/verify/p2.3-lock-bridge-app.ps1"
     },
     {
       "id": "p2.4",
       "title": "Settings model",
       "chain": "Start page, navigation rules and data folder must be valid → typed settings with safe defaults → bad settings never crash or weaken the app.",
       "check": "Tests: valid file, missing file, bad address, non-HTTPS start page.",
-      "script": null
+      "script": "scripts/verify/p2.4-settings-model.ps1"
     },
     {
       "id": "p2.5",
       "title": "Clean up address-bar input",
       "chain": "People type anything → one tested function turns input into a safe address or refuses it → malformed input never navigates.",
       "check": "One test per input type (no scheme, http, foreign letters, IPv6, script, data and file links, junk) passes.",
-      "script": null
+      "script": "scripts/verify/p2.5-address-input.ps1"
     },
     {
       "id": "p2.6",
       "title": "Show a website and track it",
       "chain": "The shell must know where the page is → create the website view and report address and loading state → the address bar and spinner are always right.",
       "check": "A test visits two pages; the shell receives address and load events in order.",
-      "script": null
+      "script": "scripts/verify/p2.6-show-website.ps1"
     },
     {
       "id": "p2.7",
       "title": "Back, forward, refresh",
       "chain": "Basic browsing → use the method chosen in P1 and grey out buttons that cannot work → behaves like a normal browser.",
       "check": "A then B: back shows A, forward shows B, refresh reloads B; buttons match history.",
-      "script": null
+      "script": "scripts/verify/p2.7-back-forward-refresh.ps1"
     },
     {
       "id": "p2.8",
       "title": "Loading and error screens",
       "chain": "Pages are slow or fail → spinner and error panel drawn by the shell, never by loading the app's own pages into the website view → clear feedback without weakening security.",
       "check": "Slow, 404, 500 and unreachable tests each show the right state.",
-      "script": null
+      "script": "scripts/verify/p2.8-loading-error-screens.ps1"
     },
     {
       "id": "p2.9",
       "title": "Follow redirects correctly",
       "chain": "Sites redirect → show the final address and stop loops with an error → the address bar never lies.",
       "check": "Each redirect test shows the final address; the loop test ends in an error.",
-      "script": null
+      "script": "scripts/verify/p2.9-follow-redirects-correctly.ps1"
     },
     {
       "id": "p2.10",
       "title": "New windows and outside links",
       "chain": "Links open new windows or other apps such as mail → follow the setting, and ask before handing off to another app → nothing launches without your consent.",
       "check": "The new-window test follows the setting; the mail-link test asks and launches nothing without consent.",
-      "script": null
+      "script": "scripts/verify/p2.10-new-windows-links.ps1"
     },
     {
       "id": "p2.11",
       "title": "Keep cookies across restarts",
       "chain": "Logins should survive a restart → keep site data in a fixed local folder → you stay signed in.",
       "check": "A test sets a cookie, restarts the app, and the cookie comes back.",
-      "script": null
+      "script": "scripts/verify/p2.11-keep-cookies.ps1"
     },
     {
       "id": "p2.12",
       "title": "Developer tools only in test builds",
       "chain": "Developer tools expose page internals → enable them only in debug builds → the release app stays locked.",
       "check": "The release build cannot open them; the debug build can.",
-      "script": null
+      "script": "scripts/verify/p2.12-devtools-debug-only.ps1"
     },
     {
       "id": "p2.13",
       "title": "Google sign-in: offer the normal browser",
       "chain": "Google may refuse sign-in inside embedded views → detect its sign-in page and offer the system browser, never disguise the app → we respect Google's rules.",
       "check": "Test on recorded addresses; a test link shows the banner. No live Google login.",
-      "script": null
+      "script": "scripts/verify/p2.13-google-sign-in.ps1"
     },
     {
       "id": "p2.14",
       "title": "Structured logs, no crashes",
       "chain": "Problems need evidence → Machine-readable log lines and clear errors, no crashing on bad navigation → failures can be diagnosed.",
       "check": "Every log line can be read by a program; no crash entries.",
-      "script": null
+      "script": "scripts/verify/p2.14-structured-logs-crashes.ps1"
     },
     {
       "id": "p2.15",
       "title": "Quick whole-app tests",
       "chain": "Features interact → one suite drives shell and website view (Playwright if experiment 4 passed, otherwise Rust tests plus a manual list) → one command shows the first milestone works.",
       "check": "The suite command passes; output saved.",
-      "script": null
+      "script": "scripts/verify/p2.15-quick-whole-app.ps1"
     },
     {
       "id": "p2.16",
       "title": "Update docs and part pages",
       "chain": "Code changed → README, security notes, known limits and part pages updated with the verified commit → docs match reality.",
       "check": "Wiki check clean; shell, web-view manager and core pages marked built.",
-      "script": null
+      "script": "scripts/verify/p2.16-update-docs.ps1"
     },
     {
       "id": "p2.17",
       "title": "Literature batch 2",
       "chain": "Research runs alongside code → read on WebView2 and Chromium processes, page lifecycle and embedded-view resource studies → evidence for later experiments.",
       "check": "New dated notes; the reading log is updated; no unchecked citation.",
-      "script": null
+      "script": "scripts/verify/p2.17-literature-batch-2.ps1"
     },
     {
       "id": "p2.18",
       "title": "Run the gate; your review",
       "chain": "All tasks done → run every check and save the output → you try the release build and approve the first milestone.",
       "check": "All evidence saved; wiki clean; you approved the P2 exit.",
-      "script": null
+      "script": "scripts/verify/p2.18-run-gate-review.ps1"
     }
   ],
   "test_gate": {
@@ -187,7 +187,7 @@
         "proves": "You browsed five HTTPS sites, tried a mail link, a restart and going offline."
       }
     ],
-    "script": null
+    "script": "scripts/gates/p2-gate.ps1"
   },
   "related": [
     "adr-0007",

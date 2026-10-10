@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words, oldest first. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:3291e1bd856c12bfc2e01525f90ac0de190fba0a79d4d491b37cde714227c641"
+    "content_hash": "sha256:875ec11d5ce52fb6e8d3dff4125bc81e6a484db871b3e5cb55a6579dfed444da"
   },
   "entries": [
     {
@@ -696,6 +696,38 @@
         "## [2026-10-09] correct | stale \"approve in the plan app\" wording fixed on two phase pages, risk-r22 and adr-0001",
         "## [2026-10-09] lint | p0.17 content step: portal check clean, quick lint and lint:wiki 0 errors, mask scan 0 unmasked",
         "## [2026-10-09] plan | p0.17 step \"content\" committed: portal text for every page, end-of-turn check switched on"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-09-scripts",
+      "date": "2026-10-09",
+      "title": "Check scripts written for every task and every phase",
+      "done": "Claude wrote a PowerShell 7 check script for each of the 141 tasks and 9 phases, plus one shared helper. Each starts with a plain explanation. P0's scripts re-check the finished work, and the P0 gate passed in one run (about 4.5 minutes). P1's scripts are complete and fail for now, as expected, because P1 has not started. P2 to P8 have drafts that list their planned checks.",
+      "next": "Claude builds the new read-only portal from your chosen mockups; every task's script link now opens a real file.",
+      "decisions": [
+        {
+          "what": "Every check ends with one of five words: pass, fail, waiting, to do, or yours (a step only you can do)",
+          "by": "claude"
+        },
+        {
+          "what": "Your own steps never make a gate fail; a phase still ends only with your exit approval",
+          "by": "claude"
+        },
+        {
+          "what": "Scripts change nothing unless asked to save their output, which is masked first",
+          "by": "claude"
+        },
+        {
+          "what": "The P1 tool check fails for now: the licence checker is installed as part of P1 itself",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-09] decide | check scripts: names, result words and exit codes, owner steps in gates, drafts for P2-P8, report formats P1 needs",
+        "## [2026-10-09] lint | p0.17 scripts step: P0 gate PASS, P1 gate FAIL as expected, script test PASS, portal check clean"
       ],
       "phase": "phase-p0-planning"
     }

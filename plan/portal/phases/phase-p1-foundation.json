@@ -25,119 +25,119 @@
       "title": "Confirm and record the toolchain",
       "chain": "Rust 1.99, the C++ build tools, Node 24 and PowerShell 7 are already installed → confirm each works, record exact versions, add the licence checker → every later result names the tools it was built with.",
       "check": "Each tool prints its version; a tiny Rust test project builds and links; versions saved.",
-      "script": null
+      "script": "scripts/verify/p1.1-toolchain.ps1"
     },
     {
       "id": "p1.2",
       "title": "Record this computer's hardware",
       "chain": "Benchmark numbers depend on the machine → record CPU, memory, graphics, power plan and browser versions → results can be compared and repeated.",
       "check": "The inventory file holds every listed item; the web view version is re-read and compared with the one from 8 Oct.",
-      "script": null
+      "script": "scripts/verify/p1.2-machine-inventory.ps1"
     },
     {
       "id": "p1.3",
       "title": "Set ignore rules and licences",
       "chain": "Build output and local data must not reach git → ignore rules plus MIT and Apache licence files → a clean, legally clear repo.",
       "check": "Each build folder is ignored and plan snapshots are not; both licence files exist.",
-      "script": null
+      "script": "scripts/verify/p1.3-ignore-licences.ps1"
     },
     {
       "id": "p1.4",
       "title": "Create the empty Rust workspace",
       "chain": "Code needs a home → empty Rust libraries in the planned folders, with a pinned Rust version → every later task has a place to go.",
       "check": "Build, tests, formatting and code-warning checks all pass with no warnings.",
-      "script": null
+      "script": "scripts/verify/p1.4-rust-workspace.ps1"
     },
     {
       "id": "p1.17",
       "title": "Pin the Tauri and web-tool versions",
       "chain": "Generated templates change under us → pin Tauri's command-line tool, Vite and TypeScript exactly, and write the experiments by hand → experiments can be rerun identically.",
       "check": "Experiment 1's package file has exact versions; Tauri's version is saved; versions re-checked online first.",
-      "script": null
+      "script": "scripts/verify/p1.17-tauri-pins.ps1"
     },
     {
       "id": "p1.5",
       "title": "Experiment 1: several web views in one window",
       "chain": "Tauri's multi-view feature is experimental → build a throwaway app with three tab views and test resize, focus, overlap, blank pages and freezes → if it is unstable, the design changes before P2, not after.",
       "check": "Report has a pass/fail row per check, including which helper processes belong to the app; the experiment builds.",
-      "script": null
+      "script": "scripts/verify/p1.5-spike-multiwebview.ps1"
     },
     {
       "id": "p1.6",
       "title": "Experiment 2: a separate profile per site",
       "chain": "Per-site isolation needs a profile chosen when a view is created, and Tauri does not offer that → try four routes → pick one that keeps cookies apart, before tabs are built.",
       "check": "A route-by-criterion table; site A's cookie is absent in site B; at least two routes actually run.",
-      "script": null
+      "script": "scripts/verify/p1.6-spike-profiles.ps1"
     },
     {
       "id": "p1.7",
       "title": "Experiment 3: low-level WebView2 calls",
       "chain": "Suspend, memory limits and crash events are only reachable below Tauri → call each one through Tauri's escape hatch → we know which lifecycle and security features are possible.",
       "check": "Each call's result is logged; only one version of each Windows library; safety rules drafted for each call.",
-      "script": null
+      "script": "scripts/verify/p1.7-spike-raw-com.ps1"
     },
     {
       "id": "p1.8",
       "title": "Experiment 4: test robot drives the app",
       "chain": "Benchmarks drive browsers with Playwright through a debugging channel → connect to the experiment app, Chrome and Edge the same way → one fair harness for all.",
       "check": "The script exits cleanly, lists every view, reads paint timing on a local page, and lists what did not work.",
-      "script": null
+      "script": "scripts/verify/p1.8-spike-test-robot.ps1"
     },
     {
       "id": "p1.9",
       "title": "Decide the design from the experiments",
       "chain": "Four experiment verdicts → update the risks and propose decisions on profiles, back/forward and the benchmark path → you decide, then P2 and P3 are revised to match.",
       "check": "New decision pages proposed; each tested risk cites its report; you approved them in Claude Code.",
-      "script": null
+      "script": "scripts/verify/p1.9-design-freeze.ps1"
     },
     {
       "id": "p1.10",
       "title": "Add history-based wiki checks",
       "chain": "Raw files must never change and pages must stay dated → add git-history rules to the existing wiki check, no second checker → tampering or stale dates are caught.",
       "check": "Sample repos trigger both rules; the real wiki has zero errors; raw-file fingerprints all match.",
-      "script": null
+      "script": "scripts/verify/p1.10-history-wiki-checks.ps1"
     },
     {
       "id": "p1.11",
       "title": "Turn on automatic checks on GitHub",
       "chain": "Mistakes are cheaper caught at once → one GitHub workflow and one local script running the same checks → every change is tested the same way.",
       "check": "The local script passes; after you push, you report the GitHub result (Claude never pushes).",
-      "script": null
+      "script": "scripts/verify/p1.11-github-checks.ps1"
     },
     {
       "id": "p1.12",
       "title": "Check dependency licences and alerts",
       "chain": "Third-party code can carry unsuitable licences or known holes → a licence allowlist and a security-alert check, lock files committed → we only use what we may and should.",
       "check": "The licence and alert check passes; the plan-app audit is saved with each finding explained.",
-      "script": null
+      "script": "scripts/verify/p1.12-dependency-audit.ps1"
     },
     {
       "id": "p1.13",
       "title": "Start the public docs",
       "chain": "Readers need security, benchmark and reproducibility notes → short starter files linking to the wiki → documentation grows with the code.",
       "check": "Files exist and link to their wiki pages; no broken links.",
-      "script": null
+      "script": "scripts/verify/p1.13-public-docs.ps1"
     },
     {
       "id": "p1.14",
       "title": "Start the literature review",
       "chain": "A research claim needs prior work → write the search method and read the first batch, with checked sources → no novelty is claimed without evidence.",
       "check": "Method and reading-log pages exist; at least one new dated note; no unchecked citation.",
-      "script": null
+      "script": "scripts/verify/p1.14-literature-start.ps1"
     },
     {
       "id": "p1.15",
       "title": "Warn when code changes without its page",
       "chain": "Code and its wiki page must change together → a check that runs before each commit warns when they don't → the plan never drifts from the code.",
       "check": "In a test copy, a code-only commit warns and a code-plus-page commit passes.",
-      "script": null
+      "script": "scripts/verify/p1.15-code-page-warning.ps1"
     },
     {
       "id": "p1.16",
       "title": "Run the gate; your review",
       "chain": "All tasks done → run every check on one commit and save the output → you review the experiment evidence and approve the exit.",
       "check": "All evidence files exist; you approved the P1 exit.",
-      "script": null
+      "script": "scripts/verify/p1.16-gate-review.ps1"
     }
   ],
   "test_gate": {
@@ -176,7 +176,7 @@
         "proves": "You tried Alt+Tab focus and resizing, chose the profile route, and pushed or deferred GitHub checks."
       }
     ],
-    "script": null
+    "script": "scripts/gates/p1-gate.ps1"
   },
   "related": [
     "risk-r01",

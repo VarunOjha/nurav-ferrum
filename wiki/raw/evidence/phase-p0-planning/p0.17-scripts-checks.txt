@@ -1,0 +1,294 @@
+RAW EVIDENCE - p0.17 step "scripts": PowerShell 7 check scripts, phase-p0-planning, session s01
+Immutable raw evidence (SCHEMA 3.1). Captured 2026-10-09 by Claude from the repo root, PowerShell 7.6.6, on HEAD cb3bb34
+with the step's changes in the working tree (scripts/, plan/portal/phases/*.json, ops-portal-pipeline, STATUS). Saved through
+pwsh tools/mask.ps1 --stdin (adr-0027). Exit codes: 0 = PASS, 1 = FAIL, 2 = NOT READY (scripts/lib/Ferrum.Check.psm1).
+
+Contents:
+  1. P0 gate (pwsh scripts/run-all-checks.ps1 -Phase P0)                  -> P0 exit=0 secs=262
+  2. P0 task scripts p0.13 to p0.18, run one by one (the gate covers p0.13-p0.16 by its full test run)
+  3. P1 gate (pwsh scripts/run-all-checks.ps1 -Phase P1), expected to FAIL -> P1 exit=1 secs=67
+  4. Script test with drafts (pwsh scripts/test-check-scripts.ps1 -RunDrafts) -> scripts exit=0 secs=76
+  5. Housekeeping: mask scan, portal check, quick lint, lint:wiki, portal checker tests
+
+===== 1. P0 gate =====
+Running the P0 gate: scripts/gates/p0-gate.ps1
+Ferrum check P0-gate: Planning: end-of-phase gate
+Why: the plan app and the wiki must be fully checked before any Ferrum code is written.
+Run at 2026-10-09 21:51 on commit cb3bb34 (with uncommitted changes)
+------------------------------------------------------------------------
+
+Part 1 - Wiki check (run once, reused below)
+  PASS   Wiki check: zero errors (4 s)
+         202 pages: 0 errors, 34 warnings (each reviewed in the log)
+
+Part 2 - Task checks p0.1 to p0.12
+  PASS   Task p0.1: Save the starting documents
+         scripts/verify/p0.1-starting-documents.ps1: RESULT: PASS - p0.1 (2 PASS; 0 s)
+  PASS   Task p0.2: Write five research notes
+         scripts/verify/p0.2-research-notes.ps1: RESULT: PASS - p0.2 (3 PASS; 0 s)
+  PASS   Task p0.3: Write the wiki rules and live status (1 s)
+         scripts/verify/p0.3-wiki-rules.ps1: RESULT: PASS - p0.3 (3 PASS; 1 s)
+  PASS   Task p0.4: Describe the architecture and its parts
+         scripts/verify/p0.4-architecture-pages.ps1: RESULT: PASS - p0.4 (2 PASS; 0 s)
+  PASS   Task p0.5: Write the decisions and the risk register
+         scripts/verify/p0.5-decisions-risks.ps1: RESULT: PASS - p0.5 (3 PASS; 0 s)
+  PASS   Task p0.6: Write the research plan pages
+         scripts/verify/p0.6-research-plan.ps1: RESULT: PASS - p0.6 (2 PASS; 0 s)
+  PASS   Task p0.7: Write phase pages, index and log
+         scripts/verify/p0.7-phases-index-log.ps1: RESULT: PASS - p0.7 (3 PASS; 0 s)
+  PASS   Task p0.8: Check the whole wiki (1 s)
+         scripts/verify/p0.8-wiki-check.ps1: RESULT: PASS - p0.8 (4 PASS; 1 s)
+  PASS   Task p0.9: Install Node and record versions
+         scripts/verify/p0.9-node-toolchain.ps1: RESULT: PASS - p0.9 (4 PASS; 0 s)
+  PASS   Task p0.10: Create the plan app skeleton (25 s)
+         scripts/verify/p0.10-plan-app-skeleton.ps1: RESULT: PASS - p0.10 (6 PASS; 24 s)
+  PASS   Task p0.11: Teach the app to read the wiki (2 s)
+         scripts/verify/p0.11-wiki-reader.ps1: RESULT: PASS - p0.11 (2 PASS; 2 s)
+  PASS   Task p0.12: Fingerprint pages exactly like the reference (7 s)
+         scripts/verify/p0.12-fingerprints.ps1: RESULT: PASS - p0.12 (2 PASS; 7 s)
+
+Part 3 - Test gate (covers tasks p0.13 to p0.16)
+  PASS   Style and type checks (13 s)
+         typecheck and code style: exit 0
+  PASS   Unit tests (14 s)
+         Tests  881 passed (881)
+  PASS   Browser tests (production build, this computer only) (128 s)
+         144 passed (2.1m)
+  PASS   Production build (10 s)
+         npm run build: exit 0
+  PASS   Fingerprint cross-check (6 s)
+         the app, the rulebook program and PowerShell agree (task check p0.12)
+  PASS   Wiki check
+         zero errors (part 1)
+  YOURS  Your walkthrough
+         Open the portal, look at every tab, and tell Claude what does not match the plan or is unclear.
+  YOURS  Open questions
+         Answer or defer each question Claude asks with the approval waves.
+
+Part 4 - Housekeeping
+  PASS   Portal text is in step with the wiki (4 s)
+         portal-sync: clean - 18 files, 252 translated records, 375 refs
+  PASS   No real machine values in committed files (7 s)
+         mask scan: 574 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+  PASS   Tool tests pass (Python tools and the portal checker) (31 s)
+         Ran 34 tests in 5.105s (Python); test-portal-sync-check: 20 passed, 0 failed
+  PASS   Every check script can be read by PowerShell (1 s)
+         156 files parsed (scripts/ and tools/); 150 scripts linked from the portal files
+  YOURS  Your approvals (task p0.17)
+         Approve the P1 pages in Claude Code, wave by wave; Claude records each approval.
+  YOURS  Your exit approval (task p0.18)
+         When everything above passes and you are satisfied, tell Claude "I approve the P0 exit".
+------------------------------------------------------------------------
+RESULT: PASS - P0-gate (23 PASS, 4 YOURS; 261 s)
+All automatic P0 checks passed in one run.
+Still yours to do by hand: Your walkthrough; Open questions; Your approvals (task p0.17); Your exit approval (task p0.18).
+What to tell Claude: nothing is needed. If you ran it for a review, say "P0-gate check passed".
+
+===== 2. P0 task scripts p0.13 to p0.18 =====
+Ferrum check p0.13: Build the app's views and wiki check
+Why: the plan must be readable in views, and checked automatically.
+Run at 2026-10-09 21:58 on commit cb3bb34 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Browser tests open every view without errors (85 s)
+         browser tests: 81 passed (1.4m)
+  PASS   The wiki check runs and reports zero errors (5 s)
+         39 rules over 202 pages: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p0.13 (2 PASS; 90 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.13 check passed".
+p0.13-plan-app-views exit=0
+Ferrum check p0.14: Build the approvals store
+Why: approvals must not be lost or forged.
+Run at 2026-10-09 22:00 on commit cb3bb34 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Approval state, store and guard tests pass (10 s)
+         unit tests: Tests  157 passed (157)
+  PASS   Claude's approval recorder and checker pass their tests (4 s)
+         Ran 25 tests in 3.973s
+  PASS   Requests from other computers and websites are refused (26 s)
+         browser security tests: 15 passed (24.9s)
+------------------------------------------------------------------------
+RESULT: PASS - p0.14 (3 PASS; 41 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.14 check passed".
+p0.14-approvals-store exit=0
+Ferrum check p0.15: Build the approval screens
+Why: an approval must go out of date the moment its page changes.
+Run at 2026-10-09 22:00 on commit cb3bb34 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Editing an approved page turns its badge to outdated (25 s)
+         approval flow browser test: 7 passed (23.7s)
+------------------------------------------------------------------------
+RESULT: PASS - p0.15 (1 PASS; 25 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.15 check passed".
+p0.15-approval-screens exit=0
+Ferrum check p0.16: Run the full plan-app test gate
+Why: all checks together, in one run, prove the whole app works.
+Run at 2026-10-09 22:01 on commit cb3bb34 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   All plan-app checks pass in one run (npm run verify) (175 s)
+         unit: Tests  881 passed (881); browser: 144 passed (2.1m)
+  PASS   The saved outputs of the first full run exist
+         IP-9-verify.txt, IP-9-perf.txt, playwright-report.zip, IP-10-final-lint.json
+------------------------------------------------------------------------
+RESULT: PASS - p0.16 (2 PASS; 175 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.16 check passed".
+p0.16-plan-app-gate exit=0
+Ferrum check p0.17: Portal v2, then your review
+Why: you read the plan in plain words and approve it in Claude Code.
+Run at 2026-10-09 22:04 on commit cb3bb34 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Portal text is complete and up to date with the wiki (5 s)
+         portal-sync: clean - 18 files, 252 translated records, 375 refs
+  PASS   Every task and phase has a check script that PowerShell can read (1 s)
+         156 files parsed (scripts/ and tools/); 150 scripts linked from the portal files
+  WAIT   Your approvals of the pages P1 depends on are recorded
+         Waiting for your approval of the P1 pages in Claude Code. Not approved yet: schema (PENDING), phase-p1-foundation (PENDING), adr-0021 (PENDING), adr-0006 (PENDING), adr-0007 (PENDING), adr-0010 (PENDING), adr-0011 (PENDING), adr-0012 (PENDING), adr-0014 (PENDING), adr-0018 (PENDING), adr-0019 (PENDING), comp-core (PENDING), comp-webview2-runtime (PENDING), comp-windows-os (PENDING).
+------------------------------------------------------------------------
+RESULT: NOT READY - p0.17 (2 PASS, 1 WAIT; 6 s)
+Not finished yet, and nothing is broken. Waiting on: Your approvals of the pages P1 depends on are recorded.
+What to tell Claude: nothing, unless you expected this to be finished.
+p0.17-portal-v2 exit=2
+Ferrum check p0.18: Close P0
+Why: P1 may start only after you approve the P0 exit.
+Run at 2026-10-09 22:04 on commit cb3bb34 (with uncommitted changes)
+------------------------------------------------------------------------
+  WAIT   Your approval of the P0 exit is recorded
+         Waiting for your approval of the P0 exit in Claude Code. Not approved yet: phase-p0-planning#exit (PENDING).
+  WAIT   The log has a gate entry for P0
+         No "gate | phase-p0-planning" entry in wiki/log.md yet (Claude writes it at the P0 exit review).
+  WAIT   All work is committed locally
+         Uncommitted changes remain:
+          M plan/portal/phases/phase-p5-telemetry.json
+          M plan/portal/phases/phase-p6-benchmark-harness.json
+          M plan/portal/phases/phase-p7-lifecycle.json
+          M plan/portal/phases/phase-p8-research-paper.json
+          M wiki/operations/ops-portal-pipeline.md
+         ?? scripts/
+------------------------------------------------------------------------
+RESULT: NOT READY - p0.18 (3 WAIT; 0 s)
+Not finished yet, and nothing is broken. Waiting on: Your approval of the P0 exit is recorded; The log has a gate entry for P0; All work is committed locally.
+What to tell Claude: nothing, unless you expected this to be finished.
+p0.18-close-p0 exit=2
+
+===== 3. P1 gate (P1 has not started: FAIL expected) =====
+Running the P1 gate: scripts/gates/p1-gate.ps1
+Ferrum check P1-gate: Foundation: end-of-phase gate
+Why: P2 starts only on a project that builds cleanly and a design settled from evidence.
+Run at 2026-10-09 21:56 on commit cb3bb34 (with uncommitted changes)
+Note: P1 has not started yet, so FAIL or NOT READY results are expected.
+------------------------------------------------------------------------
+
+Part 1 - P1 was allowed to start
+  WAIT   Your approvals for P1 are recorded and no question blocks it
+         P1 has not been allowed to start yet: 19 approval(s) or question(s) still open (run: python tools/approvals_check.py --gate phase-p1-foundation).
+
+Part 2 - Task checks p1.1 to p1.17
+  PASS   Wiki check (run once, reused by the task checks) (5 s)
+         202 pages: 0 errors
+  FAIL   Task p1.1: Confirm and record the toolchain (2 s)
+         Failed at: Licence checker cargo-deny is installed; Versions saved as evidence (toolchain.txt)  (details: scripts/verify/p1.1-toolchain.ps1)
+  FAIL   Task p1.2: Record this computer's hardware
+         Failed at: The inventory file exists; It covers every listed item  (details: scripts/verify/p1.2-machine-inventory.ps1)
+  FAIL   Task p1.3: Set ignore rules and licences
+         Failed at: Build output and local data folders are ignored by git; Both licence files exist  (details: scripts/verify/p1.3-ignore-licences.ps1)
+  FAIL   Task p1.4: Create the empty Rust workspace
+         Failed at: Workspace file exists, resolver 2, spikes left out; Rust version pinned (rust-toolchain.toml); The planned empty libraries exist; Build passes; Tests pass; Formatting is consistent; No code warnings  (details: scripts/verify/p1.4-rust-workspace.ps1)
+  FAIL   Task p1.17: Pin the Tauri and web-tool versions
+         Failed at: Tauri tool, Vite and TypeScript are pinned exactly; Tauri tool's version is saved in the toolchain record  (details: scripts/verify/p1.17-tauri-pins.ps1)
+  FAIL   Task p1.5: Experiment 1: several web views in one window
+         Failed at: The report has a pass/fail row for every planned check; The experiment app builds  (details: scripts/verify/p1.5-spike-multiwebview.ps1)
+  FAIL   Task p1.6: Experiment 2: a separate profile per site
+         Failed at: The report compares all four routes on every criterion; At least two routes were really run, including (d)  (details: scripts/verify/p1.6-spike-profiles.ps1)
+  FAIL   Task p1.7: Experiment 3: low-level WebView2 calls
+         Failed at: Only one version of the 'webview2-com' library; Only one version of the 'windows' library; The report logs each call result and drafts safety rules  (details: scripts/verify/p1.7-spike-raw-com.ps1)
+  FAIL   Task p1.8: Experiment 4: test robot drives the app
+         Failed at: The robot listed every view it could see; The report reads paint timing and says what did not work  (details: scripts/verify/p1.8-spike-test-robot.ps1)
+  FAIL   Task p1.9: Decide the design from the experiments
+         Failed at: New decision pages cite the experiment reports; Each tested risk cites its experiment report; Your approval of the new decisions is recorded  (details: scripts/verify/p1.9-design-freeze.ps1)
+  PASS   Task p1.10: Add history-based wiki checks (4 s)
+         scripts/verify/p1.10-history-wiki-checks.ps1: RESULT: PASS - p1.10 (3 PASS; 3 s)
+  FAIL   Task p1.11: Turn on automatic checks on GitHub
+         Failed at: The GitHub workflow runs on Windows and lists every check; The local check script passes  (details: scripts/verify/p1.11-github-checks.ps1)
+  FAIL   Task p1.12: Check dependency licences and alerts (1 s)
+         Failed at: Licence and alert rules file exists; Lock files are committed; Licence and security alert check passes; Plan-app security audit saved, findings explained  (details: scripts/verify/p1.12-dependency-audit.ps1)
+  FAIL   Task p1.13: Start the public docs
+         Failed at: The starter documents exist; Each links to the wiki, and no link is broken  (details: scripts/verify/p1.13-public-docs.ps1)
+  FAIL   Task p1.14: Start the literature review
+         Failed at: Search-method and reading-log pages exist and are indexed; At least one new research note, dated and labelled  (details: scripts/verify/p1.14-literature-start.ps1)
+  FAIL   Task p1.15: Warn when code changes without its page
+         Failed at: Code-only commit warns; code-plus-page commit does not; The rulebook no longer marks this as unverified  (details: scripts/verify/p1.15-code-page-warning.ps1)
+
+Part 3 - Test gate on one commit
+  FAIL   Formatting and code warnings
+         The Rust workspace does not exist yet (no ./Cargo.toml), so this cannot run.
+  FAIL   Tests
+         The Rust workspace does not exist yet (no ./Cargo.toml), so this cannot run.
+  FAIL   Licences and alerts
+         The Rust workspace does not exist yet (no ./Cargo.toml), so this cannot run.
+  PASS   Wiki check (5 s)
+         lint: 0 errors, 34 warnings, 2 info (pages: 202)
+  PASS   Plan app checks (38 s)
+         style, types, unit tests and build: exit 0
+  FAIL   Local check script
+         The local check script is missing (scripts/ci-local.ps1).
+  FAIL   Test robot experiment
+         The test robot did not finish cleanly. Failed at: The robot runs again and finishes cleanly; The robot listed every view it could see; The report reads paint timing and says what did not work
+
+Part 4 - Your part, then the review step (task p1.16)
+  YOURS  Admin prompts
+         You confirmed the Windows admin prompts of the installs Claude ran, and each finished (or you reported the error).
+  YOURS  Experiment 1 by hand
+         You tried Alt+Tab keyboard focus and resizing the window of experiment 1 and told Claude the outcome.
+  YOURS  Design choice
+         You read the four experiment reports, chose the profile route and confirmed (or changed) the one-window design.
+  YOURS  GitHub
+         You pushed and reported the GitHub check result, or said "defer GitHub".
+  FAIL   Task p1.16: Run the gate; your review (1 s)
+         Failed at: Every evidence file of the P1 gate exists; The log has a gate entry for P1; Your approval of the P1 exit is recorded (waiting)  (details: scripts/verify/p1.16-gate-review.ps1)
+------------------------------------------------------------------------
+RESULT: FAIL - P1-gate (4 PASS, 21 FAIL, 1 WAIT, 4 YOURS; 66 s)
+This is expected: P1 has not started, so its work does not exist yet.
+What to tell Claude: nothing.
+
+===== 4. Script test with drafts =====
+Ferrum check scripts: The check scripts themselves
+Why: a broken check script must be caught before the day it is needed.
+Run at 2026-10-09 21:57 on commit cb3bb34 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Every PowerShell file parses without errors
+         156 files parsed (scripts/ and tools/)
+  PASS   Every check script follows the house rules
+         150 task and gate scripts
+  PASS   Every task and phase names an existing script with the agreed name
+         150 scripts linked from the portal files
+  PASS   Every draft script runs and ends NOT READY (75 s)
+         113 drafts: all exit 2 with 'Not ready until P<n>'
+------------------------------------------------------------------------
+RESULT: PASS - scripts (4 PASS; 76 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "scripts check passed".
+
+===== 5. Housekeeping =====
+$ pwsh tools/mask.ps1 --scan
+mask scan: 727 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+[exit 0]
+
+$ pwsh tools/portal-sync-check.ps1
+portal-sync: clean - 18 files, 252 translated records, 375 refs
+[exit 0]
+
+$ python tools/quick_lint.py
+202 files checked, 0 errors, 0 warnings
+[exit 0]
+
+$ npm run lint:wiki (interactive_plan)
+lint: 0 errors, 34 warnings, 2 info (pages: 202)
+      Tests  12 passed | 1 skipped (13)
+
+$ pwsh tools/test-portal-sync-check.ps1
+test-portal-sync-check: 20 passed, 0 failed
+[exit 0]

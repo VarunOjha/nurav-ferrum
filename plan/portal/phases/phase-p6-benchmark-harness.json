@@ -25,112 +25,112 @@
       "title": "Bare Tauri app to compare against",
       "chain": "We must show what Ferrum adds over plain Tauri → build a minimal app on the same Tauri and WebView2 versions with no Ferrum features → differences can be credited to Ferrum's design.",
       "check": "It builds and loads a test page; a version comparison with Ferrum shows only intended differences.",
-      "script": null
+      "script": "scripts/verify/p6.1-bare-tauri-app.ps1"
     },
     {
       "id": "p6.2",
       "title": "Ten local test workloads",
       "chain": "Results must not depend on live websites → build ten local workloads (simple page, heavy web app, huge page, scrolling, many navigations, video, graphics, several active tabs, many background tabs, close and restore) → every product sees exactly the same content.",
       "check": "Each workload has its page and an equivalence check; content is identical across two server starts.",
-      "script": null
+      "script": "scripts/verify/p6.2-local-workloads.ps1"
     },
     {
       "id": "p6.3",
       "title": "A few real websites as extras",
       "chain": "Local pages may not reflect real use → pick a short list of public sites without login, with the visit date recorded → a reality check, clearly labelled extra, never the main result.",
       "check": "A dry run records the response and page size for each site; no results drawn from it.",
-      "script": null
+      "script": "scripts/verify/p6.3-real-websites.ps1"
     },
     {
       "id": "p6.4",
       "title": "Fair settings for each product",
       "chain": "Chrome and Edge have built-in resource savers → record every relevant setting per product in versioned files, never switching their savers off just to help Ferrum → the comparison is fair and anyone can check it.",
       "check": "Every settings file passes a format check; a diff report shows only the documented differences.",
-      "script": null
+      "script": "scripts/verify/p6.4-fair-settings.ps1"
     },
     {
       "id": "p6.5",
       "title": "Test runner",
       "chain": "Trial order and leftovers can bias results → a Rust runner shuffles trials with a recorded seed, starts each product fresh with a clean profile, tracks all its processes, and records every trial including failures → runs are fair, resumable and complete.",
       "check": "The same seed gives the same plan; a test confirms child processes are tracked and failures recorded.",
-      "script": null
+      "script": "scripts/verify/p6.5-test-runner.ps1"
     },
     {
       "id": "p6.6",
       "title": "Scripts that drive each workload",
       "chain": "Each product must be driven the same way → one browser-automation script (Playwright) per workload, connecting to every product through the same debugging channel → differences come from the products, not the driver.",
       "check": "Each script runs once on each product, or the unsupported feature is named and recorded.",
-      "script": null
+      "script": "scripts/verify/p6.6-workload-scripts.ps1"
     },
     {
       "id": "p6.7",
       "title": "Record the setup and pin versions",
       "chain": "A silent browser update mid-campaign would spoil the data → record Windows build, product versions, power plan and background apps for each run, and pin browser versions → any change is caught and flagged.",
       "check": "A dry-run record has every field; a test flags a version change between two trials.",
-      "script": null
+      "script": "scripts/verify/p6.7-record-setup.ps1"
     },
     {
       "id": "p6.8",
       "title": "Smoothness measurement",
       "chain": "Smooth scrolling and animation matter to users → measure frame timing with a Windows tool (PresentMon) and long-frame data inside the page → smoothness can be compared, or marked unsupported for a product.",
       "check": "A scrolling dry run gives frame data for each product, or the product is marked unsupported.",
-      "script": null
+      "script": "scripts/verify/p6.8-smoothness-measurement.ps1"
     },
     {
       "id": "p6.9",
       "title": "Energy, only if it can be measured honestly",
       "chain": "Energy use is worth reporting but hard to measure → if you approve, a separate admin-level reader collects CPU energy counters (labelled modelled, CPU only), or a wall-power meter is used → otherwise energy is marked unsupported, never estimated.",
       "check": "A dry run gives energy samples with units, or the energy measurements show unsupported with the reason.",
-      "script": null
+      "script": "scripts/verify/p6.9-energy.ps1"
     },
     {
       "id": "p6.10",
       "title": "Statistics pipeline",
       "chain": "Numbers need honest statistics → a Python pipeline computes averages, spread, confidence ranges, effect sizes and corrections for many comparisons, plus plots → the analysis is repeatable to the byte.",
       "check": "Tests on made-up data with known answers pass; two runs give identical output.",
-      "script": null
+      "script": "scripts/verify/p6.10-statistics-pipeline.ps1"
     },
     {
       "id": "p6.11",
       "title": "Measure the noise level",
       "chain": "Some variation is just noise → run one product against itself (an A/A test) plus short pilots → we know the smallest real difference we can detect and set the trial count for each experiment.",
       "check": "A/A data saved; noise level reported; each experiment page states its trial count and why.",
-      "script": null
+      "script": "scripts/verify/p6.11-measure-noise-level.ps1"
     },
     {
       "id": "p6.12",
       "title": "Write predictions before testing",
       "chain": "Deciding what counts as success after seeing data is biased → write each prediction and its meaningful-difference threshold first, and you approve them → results cannot be bent to fit.",
       "check": "Every prediction is recorded and approved by you before the first campaign starts.",
-      "script": null
+      "script": "scripts/verify/p6.12-write-predictions-before.ps1"
     },
     {
       "id": "p6.13",
       "title": "First test campaign",
       "chain": "The bench is ready and checked → run the footprint, startup, page-load, smoothness, reliability, security-cost and isolation-cost experiments (and energy if supported) on Chrome, Edge, bare Tauri and Ferrum without sleeping → raw data for P8 and a reference for P7.",
       "check": "Each experiment has a complete raw-data folder with every trial and checksums; no results stated yet.",
-      "script": null
+      "script": "scripts/verify/p6.13-first-test-campaign.ps1"
     },
     {
       "id": "p6.14",
       "title": "Reproduction guides",
       "chain": "Others must be able to repeat our tests → write how-to guides for benchmarking and for reproducing a campaign on a clean PC → the research can be checked independently.",
       "check": "Following the guide on a fresh copy for one workload gives a valid run record.",
-      "script": null
+      "script": "scripts/verify/p6.14-reproduction-guides.ps1"
     },
     {
       "id": "p6.15",
       "title": "Reading: benchmarking and statistics",
       "chain": "Methods must follow good practice → read the literature on benchmark methods and performance statistics → the method pages cite it.",
       "check": "New research notes saved; method pages cite them.",
-      "script": null
+      "script": "scripts/verify/p6.15-reading-benchmarking-statistics.ps1"
     },
     {
       "id": "p6.16",
       "title": "Gate and your review",
       "chain": "All tasks done → the gate script runs every check and saves the evidence → you review the first campaign and approve; only then does P7 start.",
       "check": "All evidence files exist, the wiki check is clean, and you approve the end of P6.",
-      "script": null
+      "script": "scripts/verify/p6.16-gate-review.ps1"
     }
   ],
   "test_gate": {
@@ -181,7 +181,7 @@
         "proves": "Power plan, display and background apps are set as the guide says."
       }
     ],
-    "script": null
+    "script": "scripts/gates/p6-gate.ps1"
   },
   "related": [
     "phase-p5-telemetry",

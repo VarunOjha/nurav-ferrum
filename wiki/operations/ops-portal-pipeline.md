@@ -136,3 +136,36 @@ Claude-created file).
 - Precedence is unchanged (SCHEMA §3.4): the wiki wins; a disagreement is a defect of the JSON.
 - Changing the shape: edit the schema, `pipeline.json`, the skill's field guide, this page and the
   fixture together, run `pwsh tools/test-portal-sync-check.ps1`, and log a `decide` entry.
+
+## 7. Check scripts (written in task p0.17, 2026-10-09)
+
+One PowerShell 7 script per task and one gate script per phase ([ADR-0025](../decisions/adr-0025-check-scripts-powershell-7.md)),
+linked from the `script` fields of `plan/portal/phases/*.json`.
+
+| Path | What it is |
+|---|---|
+| `scripts/lib/Ferrum.Check.psm1` | Shared module: step results, summary, "what to tell Claude", exit codes, evidence saving through `tools/mask.ps1 --stdin` |
+| `scripts/verify/<task-id>-<slug>.ps1` | One per task (141). P0 and P1: real checks. P2-P8: drafts that list the planned checks as TODO steps |
+| `scripts/gates/p<N>-gate.ps1` | One per phase (9). A gate runs the task scripts of its phase, then the test-gate rows; manual rows are listed as YOURS |
+| `scripts/run-all-checks.ps1` | `-Phase P<N>` runs one gate; `-List` shows which gates are real and which are drafts |
+| `scripts/test-check-scripts.ps1` | Every `.ps1`/`.psm1` in `scripts/` and `tools/` parses; house rules; every JSON `script` field exists with the agreed name and no script is orphaned; `-RunDrafts` also runs every draft |
+
+Rules:
+
+- **Result words and exit codes** (the same in every script): PASS, FAIL, WAIT (waits for the owner or for
+  earlier work), TODO (planned check, later phase), YOURS (a manual step for the owner; never fails a script).
+  Exit 0 = everything checked passed (YOURS may remain), 1 = at least one FAIL, 2 = no FAIL but a WAIT or TODO.
+- Every script starts with `#Requires -Version 7.0`, a plain-language header (what it checks, why, what it
+  changes, how long, how to run, result, what to tell Claude), `Set-StrictMode -Version Latest` and
+  `$ErrorActionPreference = 'Stop'`. An unexpected error inside a step is reported as that step's FAIL,
+  never as a crash.
+- Scripts change nothing by default. `-SaveEvidence` writes the printout, masked, as a **new** file under
+  `wiki/raw/evidence/<phase-id>/` (a time stamp is added rather than overwrite a raw file); Claude adds
+  its MANIFEST line when committing it.
+- Tasks that wait for an owner approval end NOT READY (exit 2) until the approval is recorded
+  (for example p0.17, p0.18). A gate lists the owner's part as YOURS, so the P0 gate passes when every
+  automatic check passes; the phase still ends only with the owner's `#exit` approval.
+- When a phase starts, Claude turns its draft TODO steps into real `Invoke-Step` checks before its first
+  task is marked done; the planned command from the phase page's `verify` field is quoted in each draft's header.
+- After any change to a script or to a `script` field: `pwsh -NoProfile -File scripts/test-check-scripts.ps1`
+  and `pwsh tools/portal-sync-check.ps1` must both pass.
