@@ -590,7 +590,7 @@
       "kind": "task",
       "title": "P2 task: Settings model",
       "summary": "Start page, navigation rules and data folder must be valid → typed settings with safe defaults → bad settings never crash or weaken the app.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4619,6 +4619,14 @@
       "kind": "commit",
       "title": "Commit: Websites cannot reach the app's commands",
       "summary": "Claude locked the bridge between web pages and the app: only Ferrum's own shell may use it. A test page posing as a hostile website tried three kinds of calls and every one was refused, while the shel",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "a69fa57",
+      "kind": "commit",
+      "title": "Commit: Settings model written",
+      "summary": "Ferrum's settings now live in a checked TOML file: start page, how plain-http and other-app links are treated, Google sign-in by button, where new windows open, and the data folder. A typo or an unsaf",
       "status": null,
       "related": []
     }

@@ -1621,3 +1621,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/p2.3-ipc-selftest.json, raw/evidence/phase-p2-minimal-container/check-p2.3.txt]
 - result: build.rs declares the app commands (AppManifest), the only capability shell.json grants them to the shell web view with no remote section, app_ping is a harmless probe. Self-test FERRUM_SELFTEST=ipc: a hostile fixture page over HTTPS tried an app command and the event plugin listen and emit through the bridge; all three were refused by the ACL, and the shell positive control worked. The page loaded over HTTPS, so WebView2 trusts the local dev CA. p2.3 check PASS (3 of 3). The Ferrum-created content controller (adr-0029) joins this self-test in p2.6.
 - commit: 196e66a
+
+## [2026-10-11] code | p2.4 settings model in ferrum-core
+
+- session: s02
+- time: 18:36
+- pages: [phase-p2-minimal-container, comp-core]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.4.txt]
+- result: crates/core config module: the P2 subset of ov-arch-configuration in TOML (Q-214): start pages, http_policy, external_schemes, google_oauth (Q-109), new_window, data_dir; deny_unknown_fields; layered load (defaults, user file, experiment override); adr-0015 validation of start pages (https kept, http upgraded or warned, other schemes refused); config hash for later telemetry. 9 tests pass; p2.4 check PASS. comp-core last_verified_commit set (its interfaces already name config::Config, load, hash).
+- commit: a69fa57

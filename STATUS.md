@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.4 (core config): crates/core configuration model (start URL, navigation posture, data directory) with serde + toml, validation and defaults, unit tests; run scripts/verify/p2.4-*.ps1; update comp-core page (last_verified_commit or content if interfaces change)."
+next_action: "Task p2.5 (address-bar normalisation): pure function in crates/core (scheme-less input, http upgrade/warn, non-web schemes need confirmation, whitespace, IDN, IPv6, javascript:, data:, file:, malformed), table-driven tests; run scripts/verify/p2.5-*.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -75,6 +75,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.1 done (`e007c71`): fixture server over HTTPS, name-constrained dev CA installed (owner confirmed), 7 tests, curl probe.
 - p2.2 done (`2c96d06`): app skeleton with the shell toolbar; release build and window check PASS.
 - p2.3 done (`196e66a`): bridge locked to the shell; IPC refusal self-test PASS.
+- p2.4 done (`a69fa57`): settings model (TOML, adr-0015 validation), 9 tests.
 
 ## Done this session (s01)
 
@@ -286,7 +287,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.3 verified and committed 2026-10-11 as `196e66a`)
+(empty: p2.4 verified and committed 2026-10-11 as `a69fa57`)
 
 ## Blockers
 
@@ -322,11 +323,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 3 of 18 tasks done |
-| Next task | p2.4 the settings model |
+| Phase 2 | In progress: 4 of 18 tasks done |
+| Next task | p2.5 address-bar logic |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Ferrum needs settings (start page, navigation rules, data folder) → Claude writes them as checked Rust types read from config.toml → bad settings are caught with a clear message.
+**2. Why, and what it does.** Nothing for you to run now. People type all kinds of things into the address bar → Claude writes one tested function that turns input into a safe address (or a refusal) → nothing malformed or dangerous is ever loaded.
 
 **3. The script:** none for you.
 
@@ -341,4 +342,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 3 of 18 tasks done, last p2.3). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 4 of 18 tasks done, last p2.4). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

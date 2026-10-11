@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:bf1096d64d1186b0758462267bc75ee97e5331b83205f860a31d54c94a2a9f52"
+    "content_hash": "sha256:f499b5680d5ce6c00c9962bc961dc9cebc9720c0c696320c06e8c5b754b9028a"
   },
   "entries": [
     {
@@ -2305,6 +2305,26 @@
       "tags": [
         "isolation",
         "Tauri"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-4",
+      "date": "2026-10-11",
+      "time": "18:36",
+      "title": "Settings model written",
+      "done": "Ferrum's settings now live in a checked TOML file: start page, how plain-http and other-app links are treated, Google sign-in by button, where new windows open, and the data folder. A typo or an unsafe start page (like a file or script address) is refused with a clear message; nine tests cover it.",
+      "next": "Claude writes the address-bar logic (task p2.5).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "a69fa57",
+      "covers": [
+        "## [2026-10-11] code | p2.4 settings model in ferrum-core"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "toolchain",
+        "privacy"
       ]
     }
   ]

@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 3,
+    "done": 4,
     "total": 18
   },
   "step_order": [
@@ -59,7 +59,7 @@
       "what": "A typed settings model: start page, navigation rules and data folder, with safe defaults.",
       "why": "A typo in a settings file could otherwise crash the app at start or quietly open an unsafe start page.",
       "how": "Describe the settings as one typed structure in the core library; reading a file checks every field and fills anything missing with a safe default.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Start page, navigation rules and data folder must be valid → typed settings with safe defaults → bad settings never crash or weaken the app.",
       "check": "Tests: valid file, missing file, bad address, non-HTTPS start page.",
       "script": "scripts/verify/p2.4-settings-model.ps1"
