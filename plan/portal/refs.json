@@ -8,8 +8,8 @@
       "id": "phase-p0-planning",
       "kind": "phase",
       "title": "P0 Planning",
-      "summary": "Goal: Plan written, checked and approved by you; no app code yet. Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. The plain-language portal is built and reviewed; it waits for your walkthrough and your approvals.",
-      "status": "In progress",
+      "summary": "Goal: Plan written, checked and approved by you; no app code yet. Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. You walked through the portal, answered the first two rounds of questions, approved both rounds of pages and signed off planning on 11 Oct.",
+      "status": "Waiting for your review",
       "related": [],
       "aliases": [
         "P0"
@@ -200,7 +200,7 @@
       "kind": "task",
       "title": "P0 task: Portal v2, then your review",
       "summary": "You found v1 too technical → rebuild it as a read-only portal in plain words, fed by text Claude writes from the wiki → you review it and approve in Claude Code; Claude records each approval.",
-      "status": "Waiting for you",
+      "status": "Done",
       "related": [
         "phase-p0-planning"
       ]
@@ -1721,7 +1721,7 @@
       "id": "adr-0014",
       "kind": "decision",
       "title": "Decision 14: You review the result of every phase",
-      "summary": "At the end of each phase Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve the phase and then explicitly say go. You decided.",
+      "summary": "At the end of every phase, planning included, Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve the phase and then explicitly say go. You decided.",
       "status": "Accepted",
       "related": [
         "adr-0001",
@@ -1779,8 +1779,8 @@
       "id": "adr-0018",
       "kind": "decision",
       "title": "Decision 18: Repo folder is the project folder; Rust code in one workspace",
-      "summary": "The planned folder layout (app, libraries, benchmarks, analysis, paper) sits directly at the repo root, plus folders for the baseline app and the benchmark robot. Claude proposed; open to your veto.",
-      "status": "Proposed",
+      "summary": "The planned folder layout (app, libraries, benchmarks, analysis, paper) sits directly at the repo root, plus folders for the baseline app, the benchmark robot and the throwaway test builds (kept as evidence). You approved it on 11 Oct. Claude proposed; you approved.",
+      "status": "Accepted",
       "related": [
         "adr-0011",
         "adr-0006",
@@ -1794,8 +1794,8 @@
       "id": "adr-0019",
       "kind": "decision",
       "title": "Decision 19: Unsafe WebView2 code lives in one audited module",
-      "summary": "Features Tauri lacks (sleep, memory target, network events, crash detection) use raw WebView2 calls, all in one module behind a safe Rust interface, each added only when its phase needs it. Claude proposed; open to your veto.",
-      "status": "Proposed",
+      "summary": "Features Tauri lacks (sleep, memory target, network events, crash detection) use raw WebView2 calls, all in one module behind a safe Rust interface. Two small Windows modules for measuring memory and CPU may also use unsafe code, each with its own safety notes. You approved it on 11 Oct. Claude proposed; you approved.",
+      "status": "Accepted",
       "related": [
         "adr-0007",
         "adr-0008",
@@ -3449,16 +3449,16 @@
       "id": "Q-004",
       "kind": "question",
       "title": "Handoff file naming fix",
-      "summary": "Claude renamed its end-of-session notes so each file name starts with the note's id, as the wiki rules require. Keep the new names? Nothing changes for you. Saying yes, or approving the rule book in the first wave, closes this.",
-      "status": "Open",
+      "summary": "Claude renamed its end-of-session notes so each file name starts with the note's id, as the wiki rules require. Keep the new names? Answered 11 Oct: Yes: keep the new file names.",
+      "status": "Answered",
       "related": []
     },
     {
       "id": "Q-005",
       "kind": "question",
       "title": "Confirm the non-goals?",
-      "summary": "Do you confirm the proposed non-goals (no extensions, no sync or accounts, Windows 11 only, not a full browser) and moving split view to after P8? These are not in your brief, so they need your word. They fix the scope; asked in the first wave, before P0 ends.",
-      "status": "Open",
+      "summary": "Do you confirm the proposed non-goals (no extensions, no sync or accounts, Windows 11 only, not a full browser) and moving split view to after P8? Answered 11 Oct: Yes, for now: all the non-goals and moving split view to after the last phase. You may add bookmarks once the planned work is done.",
+      "status": "Answered",
       "related": []
     },
     {
@@ -3537,8 +3537,8 @@
       "id": "Q-106",
       "kind": "question",
       "title": "Approve the repository layout?",
-      "summary": "Do you approve the repository layout: the repo root is the project root, one Rust workspace, plus the extra folders other areas proposed? P1 creates the project skeleton from this layout, so P1 cannot start without it.",
-      "status": "Open",
+      "summary": "Do you approve the repository layout: the repo root is the project root, one Rust workspace, plus the extra folders other areas proposed? Answered 11 Oct: Yes: the layout as proposed, with the throwaway test builds kept as evidence.",
+      "status": "Answered",
       "related": [
         "phase-p1-foundation"
       ]
@@ -3557,8 +3557,8 @@
       "id": "Q-108",
       "kind": "question",
       "title": "End review for P0 and P1 too?",
-      "summary": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases? Decides whether you formally review P0 and P1 before the next phase starts. Your 10 Oct rule already makes Claude pause after P0 and wait for your go; this asks about the formal review. Asked in the first wave, before P0 ends.",
-      "status": "Open",
+      "summary": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases? Answered 11 Oct: Yes: the end-of-phase review with you applies to every phase, planning included.",
+      "status": "Answered",
       "related": []
     },
     {
@@ -3575,8 +3575,8 @@
       "id": "Q-110",
       "kind": "question",
       "title": "Approve a direct WebView2 module?",
-      "summary": "Do you approve one deliberate, audited module that talks to WebView2 directly using unsafe Rust code? Several needed features are reachable only this way. The decision is part of P1 and P2, so both wait on it.",
-      "status": "Open",
+      "summary": "Do you approve one deliberate, audited module that talks to WebView2 directly using unsafe Rust code? Answered 11 Oct: Yes: one carefully reviewed module for the direct WebView2 calls.",
+      "status": "Answered",
       "related": [
         "phase-p1-foundation",
         "phase-p2-minimal-container"
@@ -3788,8 +3788,8 @@
       "id": "Q-207",
       "kind": "question",
       "title": "Overview pages in research and risks folders?",
-      "summary": "The rule book lets a few summary pages stay in the research and risks folders instead of moving them. Keep that rule? Nothing changes for you: no page moves. Approving the rule book in the first wave keeps the rule and closes this; saying no means Claude moves those pages.",
-      "status": "Open",
+      "summary": "The rule book lets a few summary pages stay in the research and risks folders instead of moving them. Keep that rule? Answered 11 Oct: Yes: keep the rule. The summary pages stay where they are.",
+      "status": "Answered",
       "related": [
         "phase-p1-foundation"
       ]
@@ -3828,8 +3828,8 @@
       "id": "Q-211",
       "kind": "question",
       "title": "Where else may unsafe code live?",
-      "summary": "May unsafe code also live in two Windows helper modules for process measurement, each with its own safety notes, or should it all go in one Windows module? Measurement needs low-level Windows calls. This extends the unsafe-code decision that P1 and P2 wait on. Recommended: two extra modules.",
-      "status": "Open",
+      "summary": "May unsafe code also live in two Windows helper modules for process measurement, each with its own safety notes, or should it all go in one Windows module? Answered 11 Oct: Two small extra modules: one for measuring, one in the benchmark robot, each with its own safety notes.",
+      "status": "Answered",
       "related": [
         "phase-p1-foundation",
         "phase-p2-minimal-container"

@@ -2,13 +2,15 @@
 id: adr-0018
 type: decision
 title: "Repository root is the project root; Cargo workspace mirrors master prompt §12 layout"
-status: proposed
-updated: 2026-10-08
+status: accepted
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
   - raw/research/tauri-webview2-capabilities.md
+  - raw/owner/2026-10-11-s01-wave2-answers.md
+  - raw/owner/2026-10-11-s01-wave2-pages-approval.md
 related: [adr-0011, adr-0006, adr-0012, adr-0013, adr-0016, adr-0017, phase-p1-foundation, comp-core, comp-app-shell, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-benchmark-harness, comp-baseline-app, comp-research-analysis, comp-interactive-plan]
 approvable: true
 date: 2026-10-08
@@ -27,9 +29,9 @@ unverified:
     verify_in: phase-p1-foundation
 ---
 
-# ADR-0018 (proposed): The repository root is the project root; the Cargo workspace mirrors the master prompt §12 layout
+# ADR-0018: The repository root is the project root; the Cargo workspace mirrors the master prompt §12 layout
 
-> **Status: proposed (claude-proposed).** This is a default Claude suggested in session 1 ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), "Claude defaults proposed"). The owner has not approved it. It blocks the P1 scaffold (open question Q-106).
+> **Status: approved by the owner on 2026-10-11 (Approval Wave 2).** This is a default Claude suggested in session 1 ([raw/01-scoping-decisions.md](../raw/01-scoping-decisions.md), "Claude defaults proposed"). The owner answered Q-106 ("Yes, approve it", with `spikes/` kept as evidence) in [raw/owner/2026-10-11-s01-wave2-answers.md](../raw/owner/2026-10-11-s01-wave2-answers.md) and approved this page in [raw/owner/2026-10-11-s01-wave2-pages-approval.md](../raw/owner/2026-10-11-s01-wave2-pages-approval.md).
 
 ## Context
 
@@ -105,7 +107,7 @@ Placement details:
 
 ### Follow-ups
 
-- Owner: approve or reject (Q-106 in [ov-open-questions](../overview/ov-open-questions.md)). Then P1 scaffolds exactly this tree and records `cargo metadata` output as evidence.
+- Owner: approved on 2026-10-11 (Q-106 answered in [ov-open-questions](../overview/ov-open-questions.md)). P1 scaffolds exactly this tree and records `cargo metadata` output as evidence.
 - Component pages set `path` and `crate` to match.
 
 ### Related risks and phases

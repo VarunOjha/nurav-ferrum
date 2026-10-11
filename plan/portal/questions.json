@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:e3b3272ae96a6652f39fe72b9a006bc033cb60916cf2212cb21a2558e17a384c"
+    "content_hash": "sha256:480e20ff6a971f3ddd0d3c5b8eb9bdae500589a474cb17dc4af967e96e9e089f"
   },
   "items": [
     {
@@ -58,9 +58,9 @@
       "asked": "2026-10-08",
       "question": "Claude renamed its end-of-session notes so each file name starts with the note's id, as the wiki rules require. Keep the new names?",
       "why_it_matters": "Nothing changes for you. Saying yes, or approving the rule book in the first wave, closes this.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes: keep the new file names.",
+      "answered_on": "2026-10-11",
       "blocks": [],
       "category": "Process & approvals",
       "tags": [
@@ -73,9 +73,9 @@
       "asked": "2026-10-08",
       "question": "Do you confirm the proposed non-goals (no extensions, no sync or accounts, Windows 11 only, not a full browser) and moving split view to after P8?",
       "why_it_matters": "These are not in your brief, so they need your word. They fix the scope; asked in the first wave, before P0 ends.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes, for now: all the non-goals and moving split view to after the last phase. You may add bookmarks once the planned work is done.",
+      "answered_on": "2026-10-11",
       "blocks": [],
       "category": "The app",
       "tags": [
@@ -216,9 +216,9 @@
       "asked": "2026-10-08",
       "question": "Do you approve the repository layout: the repo root is the project root, one Rust workspace, plus the extra folders other areas proposed?",
       "why_it_matters": "P1 creates the project skeleton from this layout, so P1 cannot start without it.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes: the layout as proposed, with the throwaway test builds kept as evidence.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p1-foundation"
       ],
@@ -250,9 +250,9 @@
       "asked": "2026-10-08",
       "question": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases?",
       "why_it_matters": "Decides whether you formally review P0 and P1 before the next phase starts. Your 10 Oct rule already makes Claude pause after P0 and wait for your go; this asks about the formal review. Asked in the first wave, before P0 ends.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes: the end-of-phase review with you applies to every phase, planning included.",
+      "answered_on": "2026-10-11",
       "blocks": [],
       "category": "Process & approvals",
       "tags": [
@@ -282,9 +282,9 @@
       "asked": "2026-10-08",
       "question": "Do you approve one deliberate, audited module that talks to WebView2 directly using unsafe Rust code?",
       "why_it_matters": "Several needed features are reachable only this way. The decision is part of P1 and P2, so both wait on it.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes: one carefully reviewed module for the direct WebView2 calls.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p1-foundation",
         "phase-p2-minimal-container"
@@ -659,9 +659,9 @@
       "asked": "2026-10-08",
       "question": "The rule book lets a few summary pages stay in the research and risks folders instead of moving them. Keep that rule?",
       "why_it_matters": "Nothing changes for you: no page moves. Approving the rule book in the first wave keeps the rule and closes this; saying no means Claude moves those pages.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes: keep the rule. The summary pages stay where they are.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p1-foundation"
       ],
@@ -727,9 +727,9 @@
       "asked": "2026-10-08",
       "question": "May unsafe code also live in two Windows helper modules for process measurement, each with its own safety notes, or should it all go in one Windows module?",
       "why_it_matters": "Measurement needs low-level Windows calls. This extends the unsafe-code decision that P1 and P2 wait on. Recommended: two extra modules.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Two small extra modules: one for measuring, one in the benchmark robot, each with its own safety notes.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p1-foundation",
         "phase-p2-minimal-container"

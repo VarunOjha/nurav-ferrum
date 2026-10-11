@@ -3,11 +3,12 @@ id: adr-0014
 type: decision
 title: "Owner review checkpoint after every milestone (phase exit approval)"
 status: accepted
-updated: 2026-10-10
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/owner/2026-10-10-s01-q008-and-pause.md
+  - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
 related: [adr-0001, adr-0003, adr-0016, schema, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p8-research-paper, comp-interactive-plan]
 approvable: true
 date: 2026-10-08
@@ -69,7 +70,7 @@ and before building any next phase, whatever the answer to Q-108.
 
 Everything below in this section is Claude's elaboration of the owner's choice. Under SCHEMA §10.4 it binds implementation only after the owner approves this ADR (given in Claude Code and recorded in `plan/approvals.json`, adr-0023); until then it is a proposal.
 
-**Option B, applied to every phase, including P0 and P1, which have no milestone.** The recommended default is to apply it to those too, which is open question Q-108.
+**Option B, applied to every phase, including P0 and P1, which have no milestone.** The owner confirmed this on 2026-10-11: Q-108 answered yes ([raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md](../raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md)), and this ADR was approved in Approval Wave 1 the same day.
 
 At the end of each phase, Claude:
 

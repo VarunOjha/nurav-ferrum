@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8fb118d49503c87a7e4a876cc3875ec3f675851c9f7945c5f08b6f3d23f88d39"
+    "content_hash": "sha256:8b264745b1502462c57fa634116dbe056c9f701d5e6ec721eb729256d11e876b"
   },
   "entries": [
     {
@@ -1462,6 +1462,73 @@
       "tags": [
         "portal",
         "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-approvals",
+      "date": "2026-10-11",
+      "time": "01:48",
+      "title": "You answered the questions and approved both rounds of pages",
+      "done": "You answered seven questions: keep the summary-page rule and the note file names; the non-goals stand for now (bookmarks maybe after the planned work); every phase ends with your review; the folder layout; one audited module for direct WebView2 calls, plus two small Windows modules for measuring. Claude wrote your answers into the pages, then recorded your approval of 30 pages: the planning round (18) and the phase 1 round (12). Planning is marked ready for its final check.",
+      "next": "Claude runs the final planning check, then records your planning sign-off and pauses. Phase 1 does not start until you say go.",
+      "decisions": [
+        {
+          "what": "Keep the summary pages in the research and risks folders",
+          "by": "you"
+        },
+        {
+          "what": "Keep the note file names that start with their id",
+          "by": "you"
+        },
+        {
+          "what": "The non-goals and moving split view to after the last phase stand for now; bookmarks may be added after the planned work",
+          "by": "you"
+        },
+        {
+          "what": "Every phase, planning included, ends with your review",
+          "by": "you"
+        },
+        {
+          "what": "The folder layout as proposed, with the throwaway test builds kept",
+          "by": "you"
+        },
+        {
+          "what": "One audited module for direct WebView2 calls, plus two small Windows modules for measuring",
+          "by": "you"
+        },
+        {
+          "what": "Do the phase 1 round of questions and pages before closing planning, as the plan says",
+          "by": "you"
+        },
+        {
+          "what": "Your answers were written into the pages before the approvals were recorded, so no approval is out of date",
+          "by": "claude"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "The planning round: the rule book, the portal pages, the planning phase page, decisions 1 to 4, 14 and 23 to 27, and the portal itself (18 pages)",
+          "status": "Approved"
+        },
+        {
+          "what": "The phase 1 round: the phase 1 plan, decisions 6, 7, 10, 11, 12, 18, 19 and 21, and the core library, WebView2 and Windows parts (12 pages)",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] ingest | Owner answers to the Wave 1 and Wave 2 questions, the P0 sign-off and the approval of both waves",
+        "## [2026-10-11] plan | Owner answers written into the pages: Q-207, Q-004, Q-005, Q-108, Q-106, Q-110, Q-211 answered",
+        "## [2026-10-11] decide | adr-0018 and adr-0019 accepted by the owner",
+        "## [2026-10-11] approval | Approval Wave 1 approved: schema, the portal v2 ip pages, phase-p0-planning, adr-0001 to adr-0004, adr-0014, adr-0023 to adr-0027, comp-interactive-plan",
+        "## [2026-10-11] approval | Approval Wave 2 approved: the P1 dependency set",
+        "## [2026-10-11] gate | phase-p0-planning exit ready for review"
+      ],
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]

@@ -1157,3 +1157,51 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: What was done → the 11 review findings on the one list pattern were fixed and checked (Research status, Overview link, topics, weak-tag list, sort notes, kind links, the time line in the resume example, the "Asked now" chip, tag chips in opened cards, accessibility checks with cards open, Ref names) → the owner sees no repeated chips or filters, and the lists explain themselves. STATUS: In-flight cleared; next action unchanged in substance, now mentioning the review fixes. A refs.json explainer was added for the new commit.
 - next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear (and whether a "speed" or "reliability" tag should be added); then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
 - commit: b2557e0
+
+## [2026-10-11] ingest | Owner answers to the Wave 1 and Wave 2 questions, the P0 sign-off and the approval of both waves
+
+- session: s01
+- time: 01:48
+- pages: [ov-open-questions]
+- sources: [raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md, raw/owner/2026-10-11-s01-wave1-pages-approval.md, raw/owner/2026-10-11-s01-p0-exit-scope.md, raw/owner/2026-10-11-s01-wave2-answers.md, raw/owner/2026-10-11-s01-wave2-pages-approval.md]
+- result: Five raw owner files transcribed verbatim (index and MANIFEST lines added). Owner words: "1 yes 2 yes 3 yes for now. I may add bookmarks but after we are done. 3 yes 4 yes, it's a sign off. However, don't start next phase. Just mark the fact that phase0 and update all the documents needed"; then "Yes, approve them all (Recommended)" (Wave 1 pages); "Do the phase-1 round now" and "Yes, accept it (Recommended)" (manual lint report); Q-106 "Yes, approve it (Recommended)", Q-110 "Yes, one audited module (Recommended)", Q-211 "Two small extra modules (Recommended)"; finally "Approved all, mark it, don't start phase 1". Not a P1 go-ahead.
+
+## [2026-10-11] plan | Owner answers written into the pages: Q-207, Q-004, Q-005, Q-108, Q-106, Q-110, Q-211 answered
+
+- session: s01
+- time: 01:48
+- pages: [ov-open-questions, adr-0014, adr-0018, adr-0019, ov-project, ov-arch-webview2-integration, phase-p0-planning]
+- sources: [raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md, raw/owner/2026-10-11-s01-wave2-answers.md]
+- result: Seven questions set to answered with the owner's words, and the summary-by-gate table updated (schema and P1 entry no longer held by any question). adr-0014: Option B confirmed for every phase (Q-108). adr-0018: approved layout, spikes kept (Q-106). adr-0019: approved (Q-110) and Decision point 3 added, the two Windows unsafe modules telemetry::win and bench::win (Q-211 option a), with the continuous check widened to the three modules. ov-project: non-goals and split-view deferral confirmed; bookmarks noted as a possible addition after the planned phases (Q-005). ov-arch-webview2-integration: the proposal paragraph now records the owner's choice. phase-p0-planning: state on 2026-10-11 added. Portal JSON re-translated (questions, decisions 14, 18, 19, the P0 phase and roadmap row, explainers). These edits were made before the approvals below, so they stale nothing.
+- next: record the approvals, run the P0 gate on the exit commit, record the P0 sign-off
+
+## [2026-10-11] decide | adr-0018 and adr-0019 accepted by the owner
+
+- session: s01
+- time: 01:48
+- pages: [adr-0018, adr-0019]
+- sources: [raw/owner/2026-10-11-s01-wave2-answers.md, raw/owner/2026-10-11-s01-wave2-pages-approval.md]
+- result: Both claude-proposed ADRs set to status accepted (decided_by stays claude-proposed, SCHEMA §6.4); index rows updated.
+
+## [2026-10-11] approval | Approval Wave 1 approved: schema, the portal v2 ip pages, phase-p0-planning, adr-0001 to adr-0004, adr-0014, adr-0023 to adr-0027, comp-interactive-plan
+
+- session: s01
+- time: 01:48
+- pages: [schema, ip-spec, ip-routes-and-views, ip-data-contract, ip-wiki-lint, ip-testing, phase-p0-planning, adr-0001, adr-0002, adr-0003, adr-0004, adr-0014, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, comp-interactive-plan]
+- sources: [raw/owner/2026-10-11-s01-wave1-pages-approval.md]
+- result: 18 keys recorded with tools/approvals_record.py (schema with the CLAUDE.md bootstrap_hash); tools/approvals_check.py shows each APPROVED. Q-207 and Q-004 are closed (answered yes, and schema approved).
+
+## [2026-10-11] approval | Approval Wave 2 approved: the P1 dependency set
+
+- session: s01
+- time: 01:48
+- pages: [phase-p1-foundation, adr-0006, adr-0007, adr-0010, adr-0011, adr-0012, adr-0018, adr-0019, adr-0021, comp-core, comp-webview2-runtime, comp-windows-os]
+- sources: [raw/owner/2026-10-11-s01-wave2-pages-approval.md]
+- result: 12 keys recorded; tools/approvals_check.py shows 30 entries, all APPROVED. This approval is not a P1 go-ahead: the owner said "don't start phase 1".
+
+## [2026-10-11] gate | phase-p0-planning exit ready for review
+
+- session: s01
+- time: 01:48
+- pages: [phase-p0-planning]
+- result: Status set to gate-review. Manual items: the owner walked through portal v2 and its additions (2026-10-09 to 2026-10-11), answered or deferred the open questions (Waves 1 and 2 answered; the rest wait for their own waves, ops-approval-workflow §8), and accepted the manual lint report (raw/owner/2026-10-11-s01-p0-exit-scope.md). Next: scripts/gates/p0-gate.ps1 on the exit commit, then record phase-p0-planning#exit.

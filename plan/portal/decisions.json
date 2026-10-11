@@ -416,8 +416,8 @@
       "id": "adr-0014",
       "number": 14,
       "title": "You review the result of every phase",
-      "summary": "At the end of each phase Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve the phase and then explicitly say go.",
-      "why": "You asked to stop after each milestone for your review, and on 10 Oct to pause after the planning phase and before building the next phase.",
+      "summary": "At the end of every phase, planning included, Claude runs the tests, saves the output, writes a short report and stops. The next phase starts only after you approve the phase and then explicitly say go.",
+      "why": "You asked to stop after each milestone for your review, on 10 Oct to pause after the planning phase and before building the next phase, and on 11 Oct confirmed the review applies to every phase.",
       "catch": "Progress waits on your review time.",
       "status": "Accepted",
       "decided_by": "you",
@@ -440,7 +440,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0014-milestone-review-checkpoints.md",
-        "content_hash": "sha256:c981d024dd53e99968474093f9e84004cc4a922ba259e6e4fee8ac427143624a"
+        "content_hash": "sha256:4a03ab29cf8edfbdbfbfd4701073238a495c4dfe06c8eeb1ebacb9bd74f5e60c"
       }
     },
     {
@@ -537,10 +537,10 @@
       "id": "adr-0018",
       "number": 18,
       "title": "Repo folder is the project folder; Rust code in one workspace",
-      "summary": "The planned folder layout (app, libraries, benchmarks, analysis, paper) sits directly at the repo root, plus folders for the baseline app and the benchmark robot.",
+      "summary": "The planned folder layout (app, libraries, benchmarks, analysis, paper) sits directly at the repo root, plus folders for the baseline app, the benchmark robot and the throwaway test builds (kept as evidence). You approved it on 11 Oct.",
       "why": "Shorter Windows paths, and the wiki and plan sit beside the code.",
       "catch": "Slightly differs from the original drawing; that the tools build this layout is not checked yet (P1).",
-      "status": "Proposed",
+      "status": "Accepted",
       "decided_by": "claude",
       "date": "2026-10-08",
       "replaced_by": null,
@@ -561,17 +561,17 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0018-repo-root-cargo-workspace.md",
-        "content_hash": "sha256:a2449a7bbaad2acec8dd7c5facd18a23903f242f9e72bc1547e9b1ccac0a8743"
+        "content_hash": "sha256:5af406d9a19d84278d0fb51eb57ca2537998c5b0b113229a85615c943adea736"
       }
     },
     {
       "id": "adr-0019",
       "number": 19,
       "title": "Unsafe WebView2 code lives in one audited module",
-      "summary": "Features Tauri lacks (sleep, memory target, network events, crash detection) use raw WebView2 calls, all in one module behind a safe Rust interface, each added only when its phase needs it.",
+      "summary": "Features Tauri lacks (sleep, memory target, network events, crash detection) use raw WebView2 calls, all in one module behind a safe Rust interface. Two small Windows modules for measuring memory and CPU may also use unsafe code, each with its own safety notes. You approved it on 11 Oct.",
       "why": "Unsafe code must be documented and contained, and Tauri does not offer these features.",
       "catch": "More design work in P2; whether it coexists with Tauri's own handlers is not checked yet.",
-      "status": "Proposed",
+      "status": "Accepted",
       "decided_by": "claude",
       "date": "2026-10-08",
       "replaced_by": null,
@@ -596,7 +596,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0019-raw-webview2-com-boundary.md",
-        "content_hash": "sha256:5ccf68965d835b810e6d9dd16ce67fd6a011c83b1e90eab3a327dbb1805a80ca"
+        "content_hash": "sha256:8b762fe27fc5f741a4095e9ab054fe5eb5cef5b2cf4852636bbcba395648da69"
       }
     },
     {

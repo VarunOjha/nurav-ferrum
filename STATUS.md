@@ -12,12 +12,14 @@ sources:
   - raw/owner/2026-10-09-s01-plan-app-feedback.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
   - raw/owner/2026-10-10-s01-q008-and-pause.md
+  - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
+  - raw/owner/2026-10-11-s01-wave2-pages-approval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.17
-next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes, the browser design you chose, first under Architecture, with its review fixes: a readable close-up of the Ferrum panel on phones and the sample note right under the picture, and one list pattern on Log, Questions, Decisions, Risks and Research: cards that open on click with Open all, a Sort choice, search, filters, category and tag labels and page numbers; Questions start on the open ones, Risks are cards highest risk first, Research is one list of 70 with a Kind filter, with its review fixes). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+current_task: p0.18
+next_action: "Claude: run the P0 gate on the exit commit (portal stopped meanwhile, then restarted), save its evidence, record phase-p0-planning#exit from raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md, set the phase to done, write the handoff, then PAUSE. P1 does not start until the owner explicitly says go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,7 +242,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "lists-fixes" (review fixes for the one list pattern) verified and committed 2026-10-11 (`b2557e0`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.18 exit review (owner answered Q-207, Q-004, Q-005, Q-108, Q-106, Q-110, Q-211; approved Waves 1 and 2 and signed off P0 on 2026-10-11; owner said "don't start phase 1")
+- intent: (1) write the answers into the pages (adr-0018, adr-0019 with the Q-211 exception, adr-0014, ov-open-questions, ov-project-overview, ov-arch-webview2-integration, phase-p0-planning progress) and their portal JSON; commit; (2) run scripts/gates/p0-gate.ps1 -SaveEvidence in a scratch worktree of that commit; (3) approvals_record.py for the 30 Wave 1+2 keys, then phase-p0-planning#exit; ADR status flips; phase status done; (4) log, STATUS (paused, P1 not started), handoff; commit
+- planned paths: wiki/decisions/adr-0014-*.md, adr-0018-*.md, adr-0019-*.md, wiki/overview/ov-open-questions.md, wiki/overview/ov-project-overview.md, wiki/architecture/ov-arch-webview2-integration.md, wiki/phases/phase-p0-planning.md, plan/approvals.json, plan/portal/**, wiki/raw/owner/2026-10-11-s01-*.md (new), wiki/raw/evidence/phase-p0-planning/p0-gate*.txt (new), wiki/raw/MANIFEST.sha256, wiki/operations/handoffs/handoff-2026-10-11-s01.md (new)
+- rollback: `git restore` the planned paths; plan/approvals.json is new (delete only that file, which this step creates)
 
 ## Blockers
 
@@ -253,20 +258,21 @@ yet (every approvable page is PENDING).**
 | Index ids for upper-case evidence names (Q-219) | Quick lint reported 1 INDEX-MISSING error (IP-0-toolchain); paused the build before IP-1 | Owner | **Resolved 2026-10-08**: index lists evidence folders (adr-0020); quick lint 0 errors |
 | `sources` format on the real wiki (found by the IP-2 loader) | Holds p0.11 / IP-2: the real-wiki loader test reports 4 FM-MISSING errors | Owner / integrator | **Resolved 2026-10-09** (wave 0c items 1-3, Q-220): any wiki-relative path or https URL; raw research notes exempt; IP-2 gate passed |
 | Rust (rustup/cargo), MSVC Build Tools | Needed by P1 toolchain tasks; do not block P0 | Claude runs winget, owner clicks UAC (adr-0021) | **Installed** (observed 2026-10-09: Rust 1.99.0 stable-msvc, VS Build Tools 2022 17.14); versions are recorded as evidence in p1.1. cargo-deny not installed yet |
-| Owner approvals | Every phase entry gate; `plan/approvals.json` does not exist | Owner (in Claude Code), recorded by Claude (adr-0023) | Pending — asked after portal v2 is built (p0.17), wave by wave |
+| Owner approvals | Every phase entry gate | Owner (in Claude Code), recorded by Claude (adr-0023) | **Waves 1 and 2 approved 2026-10-11** (30 keys, all APPROVED in `plan/approvals.json`); Wave 3 is asked before P2 |
 | **First push to GitHub** | Old commits still contain the real IP addresses and user-folder path that were masked on 2026-10-09 | Owner ([Q-221](wiki/overview/ov-open-questions.md#q-221-rewrite-git-history-before-the-first-push-to-remove-real-machine-values)) | Open — **blocks the first push**: Claude asks the owner to approve a history rewrite before anything is pushed (adr-0027) |
 
 Exact install and verification commands: [wiki/operations/ops-environment-setup.md](wiki/operations/ops-environment-setup.md).
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **38 open** (newest: Q-221, history rewrite before the first push), 12 answered (Q-006, Q-007, Q-008, Q-101,
-Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003). Answer them by wave, not all at once, in Claude Code
-([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
+[ov-open-questions](wiki/overview/ov-open-questions.md): **32 open** (newest: Q-125, the title bar), 19 answered (Q-004, Q-005, Q-006, Q-007,
+Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003).
+Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
 - **Wave 0 (before the plan app):** done 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](wiki/raw/owner/2026-10-08-s01-wave0.md)).
-- **Wave 1 (P0 exit):** Q-207 and Q-004 (closed by approving `schema`), Q-005, Q-108.
-- **Wave 2 (P1 entry):** Q-106, Q-110, Q-211 (Q-218 answered 2026-10-08, adr-0021).
+- **Wave 1 (P0 exit):** done 2026-10-11 ([raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md](wiki/raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md)).
+- **Wave 2 (P1 entry):** done 2026-10-11 ([raw/owner/2026-10-11-s01-wave2-answers.md](wiki/raw/owner/2026-10-11-s01-wave2-answers.md)).
+- **Wave 3 (P2 entry, later):** Q-109, Q-202, Q-214. Q-125 (title bar) any time before P3. Q-221 before the first push.
 - Later waves: see the "Summary by gate" table on the register.
 
 ## Next action
@@ -326,11 +332,10 @@ small check.
 
 ## Pending owner approvals
 
-Nothing is approved yet. Every approvable page is **PENDING**. Approvals are given in Claude Code and recorded by
-Claude (adr-0023). The keys to approve, wave by wave, are in
-[ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves). Pages outside every
-phase dependency set (risks, metrics, workloads, hypotheses, research questions, narrative pages) never
-gate a phase and can be reviewed later.
+Approval Waves 1 and 2 are approved (2026-10-11, 30 keys, recorded with `tools/approvals_record.py`; `python tools/approvals_check.py`
+shows each APPROVED). Next is Wave 3 (the P2 dependency set), asked when the owner wants to move towards P2. The keys, wave by wave, are in
+[ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves). Pages outside every phase dependency set (risks,
+metrics, workloads, hypotheses, research questions, narrative pages) never gate a phase and can be reviewed later.
 
 ## Last updated
 

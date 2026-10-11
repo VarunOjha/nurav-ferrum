@@ -3,7 +3,7 @@ id: ov-project
 type: overview
 title: "Ferrum project overview: goals, scope, non-goals, success criteria"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -120,17 +120,19 @@ From the master prompt (binding):
   the dimension is marked unsupported (§7 Energy, §17).
 - Disabling Chrome or Edge resource-saving features merely to improve Ferrum's results (§8).
 
-Proposed by Claude, **not in the master prompt**, owner to confirm (Q-005):
+Proposed by Claude, **not in the master prompt**, confirmed by the owner on 2026-10-11 (Q-005: "yes for now. I may add bookmarks but after we are done", [raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md](../raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md)):
 
 - Browser extensions or an extension API.
 - Account sign-in, sync or cloud services operated by Ferrum.
 - Platforms other than Windows 11 x64 (the master prompt targets only this platform).
 - Replacing a full general-purpose browser (Ferrum is a web-application container).
 
-Proposed **deferral** of a master-prompt feature, owner to confirm (Q-005):
+**Deferral** of a master-prompt feature, confirmed by the owner on 2026-10-11 (Q-005):
 
 - Split view: deferred until after P8. Master prompt §4 lists "Split-view support in a later phase" and
   §16 assigns it to no milestone ([phase-p3-tabs-sessions](../phases/phase-p3-tabs-sessions.md), Out of scope).
+
+Possible later addition, noted by the owner (2026-10-11): **bookmarks**, only after the planned phases are done. Not in scope now.
 
 ## 6. Success criteria
 

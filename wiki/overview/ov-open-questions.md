@@ -16,6 +16,8 @@ sources:
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
   - raw/owner/2026-10-10-s01-q008-and-pause.md
+  - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
+  - raw/owner/2026-10-11-s01-wave2-answers.md
 related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability, adr-0028]
 approvable: false
 audience: owner
@@ -74,18 +76,18 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | Gate held | Open questions |
 |---|---|
 | Building `interactive_plan/` in P0 (comp-interactive-plan) | none (Q-006, Q-007, Q-103, Q-210 answered 2026-10-08) |
-| `schema` approval (part of every phase entry) | Q-207 |
-| P1 entry | Q-106, Q-110 (via adr-0019), Q-211 (via adr-0019) |
-| P2 entry | Q-109, Q-110 (via adr-0019), Q-202, Q-211 (via adr-0019), Q-214 |
+| `schema` approval (part of every phase entry) | none (Q-207 answered 2026-10-11) |
+| P1 entry | none (Q-106, Q-110, Q-211 answered 2026-10-11) |
+| P2 entry | Q-109, Q-202, Q-214 |
 | P3 entry | Q-107, Q-111, Q-209 |
 | P4 entry | Q-112, Q-113, Q-202, Q-212 |
 | P5 entry | Q-114, Q-115, Q-203 |
 | P6 entry (incl. exp-energy, exp-reliability) | Q-116, Q-117, Q-118, Q-119, Q-120, Q-121, Q-122, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
-| Exit reviews only, or not blocking | Q-004, Q-005, Q-105, Q-108, Q-215, Q-217 |
+| Exit reviews only, or not blocking | Q-105, Q-215, Q-217 |
 | The first push to GitHub (not a phase gate) | Q-221 |
-| Answered | Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-210, Q-216, Q-218, Q-219, Q-220 |
+| Answered | Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -115,8 +117,8 @@ The table is a convenience view; the `blocking` lines below are what the gate ch
 
 - asked: 2026-10-08
 - blocking: []
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md](../raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md), owner answer (2026-10-11): "yes" (keep the handoff file names `handoff-YYYY-MM-DD-sNN.md`); `schema` approved the same day.
 
 SCHEMA §4.1, §6.15 and §9.5 used to name handoff files `operations/handoffs/YYYY-MM-DD-sNN.md`, while
 their id is `handoff-YYYY-MM-DD-sNN` and SCHEMA §5.1 requires the file name to start with the id. The
@@ -128,8 +130,8 @@ Remaining step: the owner approves `schema` (Approval Wave 1), which closes this
 
 - asked: 2026-10-08
 - blocking: []
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md](../raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md), owner answer (2026-10-11): "yes for now. I may add bookmarks but after we are done" (all four non-goals and the split-view deferral confirmed; bookmarks noted as a possible later addition in ov-project).
 
 [ov-project](ov-project-overview.md) lists non-goals taken from the master prompt, plus a few proposed
 ones that the master prompt does not mention:
@@ -262,8 +264,8 @@ remote and pushes to it.
 
 - asked: 2026-10-08
 - blocking: [adr-0018, phase-p1-foundation]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s01-wave2-answers.md](../raw/owner/2026-10-11-s01-wave2-answers.md), owner answer (2026-10-11): "Yes, approve it (Recommended)" (layout as proposed, `spikes/` kept as evidence).
 
 Raised in adr-0018. It blocks the P1 scaffold. Approving it also approves these additions beyond the
 master prompt §12 layout, which other areas proposed
@@ -303,8 +305,8 @@ adr-0010 is in P1's dependency set and the spike must be able to run first.
 
 - asked: 2026-10-08
 - blocking: []
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md](../raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md), owner answer (2026-10-11): "yes" (the owner exit review applies to every phase, including P0 and P1; adr-0014).
 
 Raised in adr-0014. Should the milestone-exit review apply to every phase, including P0 and P1, which
 have no milestone? It holds only the P0 exit review.
@@ -330,8 +332,8 @@ sign-in flow and offer to open it in the system browser
 
 - asked: 2026-10-08
 - blocking: [adr-0019]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s01-wave2-answers.md](../raw/owner/2026-10-11-s01-wave2-answers.md), owner answer (2026-10-11): "Yes, one audited module (Recommended)".
 
 Raised in adr-0019. Several required features can be reached only through raw WebView2 COM, which means
 unsafe Rust. adr-0019 is now in the `decisions` of phase-p1-foundation (spike S3) and
@@ -632,8 +634,8 @@ section?
 
 - asked: 2026-10-08
 - blocking: [schema]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md](../raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md), owner answer (2026-10-11): "yes" (keep the rule: the `ov-research-*` pages and `ov-risk-register` stay where they are; SCHEMA §4.1 as amended); `schema` approved the same day.
 
 Research label R-Q14 ([ov-research-plan](../research/ov-research-plan.md)). SCHEMA §4.1 does not allow
 type `overview` under `wiki/research/` or `wiki/risks/`. Yet the research narrative pages
@@ -693,8 +695,8 @@ a Chromium build into the user profile. Recommended default: yes to both (Approv
 
 - asked: 2026-10-08
 - blocking: [adr-0019]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s01-wave2-answers.md](../raw/owner/2026-10-11-s01-wave2-answers.md), owner answer (2026-10-11): "Two small extra modules (Recommended)" (option a: `telemetry::win` and `bench::win`, each with its own `## Unsafe invariants`; written into adr-0019).
 
 adr-0019 confines all `unsafe` to the WebView2 COM module. The architecture also needs `unsafe` for Win32
 process and Job Object APIs in `telemetry::win` (comp-telemetry) and `bench::win`

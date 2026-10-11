@@ -2,8 +2,8 @@
 id: phase-p0-planning
 type: phase
 title: "P0 Planning: LLM wiki, interactive plan app, owner approval"
-status: in-progress
-updated: 2026-10-10
+status: gate-review
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -11,6 +11,8 @@ sources:
   - raw/research/nextjs-stack.md
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/owner/2026-10-10-s01-q008-and-pause.md
+  - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
+  - raw/owner/2026-10-11-s01-wave2-pages-approval.md
 related: [schema, phase-p1-foundation, comp-interactive-plan, ip-build-plan, ops-approval-workflow, ops-wiki-maintenance, adr-0001, adr-0002, adr-0003, adr-0014, adr-0016]
 approvable: true
 phase: phase-p0-planning
@@ -144,7 +146,7 @@ P0 creates the project's memory and its approval mechanism before any Ferrum cod
 
 1. **Wiki (p0.1 to p0.8).** Raw sources, research notes, schema, every planning page, index, log, root summaries, manual lint.
 2. **Plan app (p0.9 to p0.16).** A local-only Next.js app (`comp-interactive-plan`, adr-0016) that reads `wiki/` at runtime and writes approvals to `plan/approvals.json`. Stack recommendation and its open checks come from [raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) sections 5 and 6. That note labels its open checks "P1 (plan-app build phase)"; in this plan the plan app is built in P0, so those checks are verified here (see `unverified` above).
-3. **Portal v2 and owner approval (p0.17, p0.18).** After the owner found v1 too technical, Claude rebuilt the app as a read-only portal in plain language (adr-0023 to adr-0027). State on 2026-10-09: the portal is built, reviewed and fixed after a review pass; it waits for the owner's walkthrough. The owner then approves in Claude Code; Claude revises; P0 exits when the P1 dependency set is approved. Then Claude pauses: P1 starts only when the owner explicitly says so (owner directive 2026-10-10, [raw/owner/2026-10-10-s01-q008-and-pause.md](../raw/owner/2026-10-10-s01-q008-and-pause.md)).
+3. **Portal v2 and owner approval (p0.17, p0.18).** After the owner found v1 too technical, Claude rebuilt the app as a read-only portal in plain language (adr-0023 to adr-0027). State on 2026-10-09: the portal is built, reviewed and fixed after a review pass; it waits for the owner's walkthrough. The owner then approves in Claude Code; Claude revises; P0 exits when the P1 dependency set is approved. Then Claude pauses: P1 starts only when the owner explicitly says so (owner directive 2026-10-10, [raw/owner/2026-10-10-s01-q008-and-pause.md](../raw/owner/2026-10-10-s01-q008-and-pause.md)). State on 2026-10-11: the owner walked through the portal (and asked for Ref mode, the eight-column task table, the browser design and the shared list pattern, all built), answered the Wave 1 and Wave 2 questions, approved both waves and signed off P0 ([raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md](../raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md), [raw/owner/2026-10-11-s01-wave2-pages-approval.md](../raw/owner/2026-10-11-s01-wave2-pages-approval.md)), saying "don't start phase 1". P1 has not started.
 
 ## Out of scope
 

@@ -3,7 +3,7 @@ id: ov-arch-webview2-integration
 type: overview
 title: "Architecture: WebView2 integration layer (Tauri API vs wry vs raw COM) and unsafe-code policy"
 status: review
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/00-master-prompt.md
@@ -112,7 +112,7 @@ classDiagram
 
 ## 4. Unsafe-code policy (master prompt §15: *"Do not introduce unsafe Rust without documenting the need and invariants"*)
 
-This section implements adr-0019 (proposed, open question Q-110): all `unsafe` WebView2 COM lives in **one** module, `ferrum-webview-manager::webview2`. adr-0019 also says `#![deny(unsafe_code)]` applies in every other Ferrum crate. This page adds **one** narrow extension that adr-0019 does not cover: Win32 process and Job Object calls (not WebView2 COM) in `telemetry::win` and `bench::win`. The `windows` crate marks those calls `unsafe` as well. **PROPOSAL, for owner confirmation:** either (a) approve these two extra modules, or (b) move them into one Windows-platform module, which would need an amendment to adr-0019.
+This section implements adr-0019 (approved by the owner on 2026-10-11, Q-110 answered): all `unsafe` WebView2 COM lives in **one** module, `ferrum-webview-manager::webview2`. adr-0019 also says `#![deny(unsafe_code)]` applies in every other Ferrum crate. This page adds **one** narrow extension that adr-0019 does not cover: Win32 process and Job Object calls (not WebView2 COM) in `telemetry::win` and `bench::win`. The `windows` crate marks those calls `unsafe` as well. The owner chose (a) on 2026-10-11 (Q-211: "Two small extra modules"): these two extra modules are approved, each with its own `## Unsafe invariants` section, and adr-0019 now names them (Decision point 3).
 
 **Where `unsafe` may appear** (crate attribute policy):
 

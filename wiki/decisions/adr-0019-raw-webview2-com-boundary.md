@@ -2,12 +2,14 @@
 id: adr-0019
 type: decision
 title: "Raw WebView2 COM access confined to one audited module behind a safe Rust API"
-status: proposed
-updated: 2026-10-08
+status: accepted
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
+  - raw/owner/2026-10-11-s01-wave2-answers.md
+  - raw/owner/2026-10-11-s01-wave2-pages-approval.md
 related: [adr-0007, adr-0008, adr-0010, adr-0015, adr-0018, risk-r03, risk-r01, phase-p2-minimal-container, phase-p4-security, phase-p5-telemetry, phase-p7-lifecycle, comp-webview-manager, comp-webview2-runtime, comp-resource-manager, comp-network-logger, comp-security-engine]
 approvable: true
 date: 2026-10-08
@@ -24,9 +26,9 @@ unverified:
     verify_in: phase-p2-minimal-container
 ---
 
-# ADR-0019 (proposed): Raw WebView2 COM access is confined to one audited module behind a safe Rust API
+# ADR-0019: Raw WebView2 COM access is confined to one audited module behind a safe Rust API
 
-> **Status: proposed (claude-proposed).** This is a new decision. It is not in the owner's scoping answers. Research for P0 showed that several owner-required features are reachable **only** through raw WebView2 COM, so a deliberate boundary is needed before code exists. It needs owner approval. Open question Q-110.
+> **Status: approved by the owner on 2026-10-11 (Approval Wave 2).** Proposed by Claude: it was not in the owner's scoping answers. Research for P0 showed that several owner-required features are reachable **only** through raw WebView2 COM, so a deliberate boundary is needed before code exists. The owner answered Q-110 ("Yes, one audited module") and Q-211 ("Two small extra modules", point 3 of the Decision) in [raw/owner/2026-10-11-s01-wave2-answers.md](../raw/owner/2026-10-11-s01-wave2-answers.md) and approved this page in [raw/owner/2026-10-11-s01-wave2-pages-approval.md](../raw/owner/2026-10-11-s01-wave2-pages-approval.md).
 
 ## Context
 
@@ -66,13 +68,14 @@ Facts that constrain any design:
 
 **Option B.**
 
-1. All `unsafe` WebView2 COM code lives in one module. `#![deny(unsafe_code)]` is set in every other Ferrum crate.
+1. All `unsafe` WebView2 COM code lives in one module. `#![deny(unsafe_code)]` is set in every other Ferrum crate, except for the two Windows modules of point 3.
 2. The `comp-webview-manager` component page sets `unsafe_code: true` and carries the `## Unsafe invariants` section, as SCHEMA §6.2 requires. It covers:
    - thread affinity (main thread only);
    - handler-token ownership and removal on tab close;
    - no blocking in completion handlers;
    - interface availability checked via `cast` with graceful degradation when the runtime is too old;
    - the `TrySuspend` and `MemoryUsageTargetLevel` mutual-exclusion rule.
+3. **Two Windows-platform exceptions (owner answer to Q-211, option a, 2026-10-11).** Win32 process and Job Object calls for measurement are also `unsafe`. They live in exactly two more modules: `telemetry::win` (comp-telemetry) and `bench::win` (comp-benchmark-harness). Each is the only `unsafe` code in its crate (`unsafe_code` allowed on that module only, denied in the rest of the crate), and each component page carries its own `## Unsafe invariants` section (SCHEMA §6.2). No WebView2 COM call may move into them.
 3. The safe API exposes:
    - `suspend` / `resume` / `set_memory_target`;
    - `subscribe_network_events`, `subscribe_process_failed` and `subscribe_frame_navigation`;
@@ -100,7 +103,7 @@ Facts that constrain any design:
 
 ### Follow-ups
 
-- Owner: approve or reject (Q-110).
+- Owner: approved on 2026-10-11 (Q-110, Q-211 answered).
 - P2: implement the module skeleton with one capability (`ProcessFailed` → error state in the UI), plus a test that a renderer crash surfaces as an error page and not as a hang.
 
 ### Related risks and phases
@@ -112,7 +115,7 @@ Facts that constrain any design:
 
 - Reachability facts: [raw/research/tauri-webview2-capabilities.md](../raw/research/tauri-webview2-capabilities.md) §5, §6, §9.
 - Continuous check:
-  - `rg -n "unsafe" crates/ apps/` shows hits only inside the designated module;
+  - `rg -n "unsafe" crates/ apps/` shows hits only inside the three designated modules (the WebView2 COM module, `telemetry::win`, `bench::win`);
   - `cargo clippy` passes with `unsafe_code` denied elsewhere.
 
   Both run in CI from P2 on.

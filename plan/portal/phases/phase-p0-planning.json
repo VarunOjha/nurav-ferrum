@@ -3,10 +3,10 @@
   "short": "P0",
   "title": "Planning",
   "one_line_goal": "Plan written, checked and approved by you; no app code yet",
-  "summary": "Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. The plain-language portal is built and reviewed; it waits for your walkthrough and your approvals.",
-  "status": "In progress",
+  "summary": "Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. You walked through the portal, answered the first two rounds of questions, approved both rounds of pages and signed off planning on 11 Oct.",
+  "status": "Waiting for your review",
   "progress": {
-    "done": 16,
+    "done": 17,
     "total": 18
   },
   "step_order": [
@@ -202,7 +202,7 @@
       "what": "The read-only portal in plain words, then your walkthrough and your approvals.",
       "why": "You found the first version too technical. Without plain words you cannot judge the plan, and approving what you cannot read means little.",
       "how": "Claude writes plain-language text from the wiki for the portal. You read it and answer in Claude Code; Claude records each approval and revises.",
-      "status": "Waiting for you",
+      "status": "Done",
       "chain": "You found v1 too technical → rebuild it as a read-only portal in plain words, fed by text Claude writes from the wiki → you review it and approve in Claude Code; Claude records each approval.",
       "check": "The portal check reports clean; your approvals for the P1 pages are recorded.",
       "script": "scripts/verify/p0.17-portal-v2.ps1"
@@ -265,6 +265,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p0-planning.md",
-    "content_hash": "sha256:b7a97811eb0d2dbea91b22e2363a824fe335ce701093bb58af0c9f00734e93d3"
+    "content_hash": "sha256:85986d647535e439a0ba6d86f6a76b58255187c3a90219bd98dae281079cc106"
   }
 }

@@ -2,33 +2,30 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "We are finishing the plan (P0). The new read-only portal is built, reviewed and handed over to you; Claude cannot end a turn while its text is out of date. Nothing is approved yet, and no Ferrum code exists yet. After your P0 sign-off Claude pauses until you say go for P1.",
+  "summary": "Planning (P0) is almost closed: you answered the questions, approved 30 pages and signed off. Claude is running the final planning check before recording your sign-off. No Ferrum code exists yet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:e7ff9a0a092747fbfb7d912da36d041ab4425678b6659d2382020e535ee7043d"
+    "content_hash": "sha256:d62b449c55ef2d50ff83ce5bb929e1fcec47ec30b094fe71aead171cbdefdc60"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P0 Planning, in progress: 16 of 18 tasks done",
+      "state": "P0 Planning: waiting for its final check (17 of 18 tasks done)",
       "ref": "phase-p0-planning"
     },
     {
-      "item": "Plan portal (the site)",
-      "state": "Built, reviewed and checked: seven tabs and popups; start it with one PowerShell script"
-    },
-    {
-      "item": "Check scripts",
-      "state": "One per task and per phase; the P0 checks all pass; the P1 scripts are ready for you to read"
+      "item": "Phase 1",
+      "state": "Not started. It starts only when you explicitly say go",
+      "ref": "phase-p1-foundation"
     },
     {
       "item": "Approvals",
-      "state": "None yet. You give them in Claude Code, wave by wave; Claude records them"
+      "state": "Done for planning and for phase 1: 30 pages approved on 11 Oct"
     },
     {
-      "item": "Tools",
-      "state": "Node 24, PowerShell 7, Rust and the C++ build tools are installed; the licence checker (cargo-deny) is added in P1, which also records the versions"
+      "item": "Plan portal (the site)",
+      "state": "Built and checked: every list has cards, sort, search, filters and pages; start it with one PowerShell script"
     },
     {
       "item": "First upload to GitHub",
@@ -37,72 +34,27 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
-        "item": "Portal",
-        "state": "Built, reviewed and handed over; Ref button; eight-column tasks table; your browser design under Architecture; all five lists have cards that open on click, Sort, search, filters and pages, with their review fixes"
+        "item": "Planning",
+        "state": "Signed off by you; final check running"
       },
       {
-        "item": "Your walkthrough",
-        "state": "Now: read each tab and popup, including the P1 scripts"
+        "item": "Approvals",
+        "state": "30 pages approved, for planning and phase 1"
       },
       {
-        "item": "First approvals",
-        "state": "Next: Claude asks them in Claude Code, then your P0 sign-off"
-      },
-      {
-        "item": "After your P0 sign-off",
-        "state": "Claude pauses; P1 starts only when you explicitly say go"
+        "item": "Phase 1",
+        "state": "Paused until you say go"
       }
     ],
-    "why": "The portal is how you follow the project → you read it once end to end, including the P1 task and gate scripts → Claude fixes what reads unclear, asks your first approvals in chat, then your P0 sign-off → Claude pauses, and P1 starts only when you explicitly say go (your rule of 10 Oct). The script only starts the portal; it changes nothing in the plan.",
-    "script": {
-      "path": "scripts/start-portal.ps1",
-      "parts": [
-        {
-          "code": "pwsh -NoProfile -File scripts/start-portal.ps1",
-          "explains": "Run this in PowerShell 7 from the repo folder (if the portal already runs, stop it with Ctrl+C first). It builds the portal (about 1 minute), starts it on this computer only and opens http://127.0.0.1:3417/."
-        },
-        {
-          "code": "Roadmap → P1 → script buttons",
-          "explains": "In the portal, open P1 on the Roadmap and use the script buttons to read each task's check script and the gate script that decides when P1 is done."
-        },
-        {
-          "code": "Ref button (top bar)",
-          "explains": "For layout feedback: Ref outlines every block and names it, such as \"OV-3 · What happens next\". Click a name to copy it into your message; Esc turns it off."
-        },
-        {
-          "code": "Ctrl+C",
-          "explains": "Stops the portal when you are done. It only reads the plan, so nothing can change while it runs."
-        }
-      ]
-    },
-    "tell_claude": "\"The portal reads fine\", or which tab, popup or script reads wrong or unclear and why; for layout, paste the names Ref copied."
+    "why": "Nothing to run; Claude continues with the final planning check, then records your sign-off and pauses.",
+    "script": null,
+    "tell_claude": "Nothing yet; Claude reports when the check is done."
   },
   "questions_for_you": {
-    "open": 39,
-    "items": [
-      {
-        "id": "Q-207",
-        "question": "The rule book lets a few summary pages stay in the research and risks folders instead of moving them. Keep that rule?",
-        "asked": "2026-10-08"
-      },
-      {
-        "id": "Q-004",
-        "question": "Claude renamed its end-of-session notes so each file name starts with the note's id, as the wiki rules require. Keep the new names?",
-        "asked": "2026-10-08"
-      },
-      {
-        "id": "Q-005",
-        "question": "Do you confirm the proposed non-goals (no extensions, no sync or accounts, Windows 11 only, not a full browser) and moving split view to after P8?",
-        "asked": "2026-10-08"
-      },
-      {
-        "id": "Q-108",
-        "question": "Should the end-of-phase review with you apply to every phase, including P0 and P1, not only the milestone phases?",
-        "asked": "2026-10-08"
-      }
-    ]
+    "open": 32,
+    "items": []
   }
 }
