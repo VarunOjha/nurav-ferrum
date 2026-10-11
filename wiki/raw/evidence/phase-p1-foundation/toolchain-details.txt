@@ -1,0 +1,60 @@
+# p1.1 toolchain details (session s02, 2026-10-11 12:32 -0500)
+# Full outputs of the verification commands in phase-p1-foundation 'Toolchain'; companion of toolchain.txt
+
+$ rustup show
+Default host: x86_64-pc-windows-msvc
+rustup home:  <USERPROFILE>\.rustup
+
+installed toolchains
+--------------------
+stable-x86_64-pc-windows-msvc (active, default)
+
+active toolchain
+----------------
+name: stable-x86_64-pc-windows-msvc
+active because: it's the default toolchain
+installed targets:
+  x86_64-pc-windows-msvc
+
+$ rustc -Vv
+rustc 1.99.0 (b940084d7 2026-09-28)
+binary: rustc
+commit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4
+commit-date: 2026-09-28
+host: x86_64-pc-windows-msvc
+release: 1.99.0
+LLVM version: 23.1.1
+
+$ cargo -V
+cargo 1.99.0 (5f94df478 2026-08-27)
+
+$ cargo deny --version
+cargo-deny 0.20.2
+
+$ node --version
+v24.20.0
+
+$ npm --version
+11.19.0
+
+$ python --version
+Python 3.12.10
+
+$ git --version
+git version 2.52.0.windows.1
+
+$ pwsh --version
+PowerShell 7.6.6
+
+$ where.exe link.exe
+C:\Program Files\Git\usr\bin\link.exe
+
+# Which link.exe cargo uses: cargo build -v of a throw-away crate (in the temp folder) shows the linker cargo picks via the MSVC finder, not PATH
+$ cargo new --lib linkcheck-lib && cargo build   (scratch folder)
+   Compiling linkcheck-lib v0.1.0 (<SCRATCHPAD>\linkcheck-lib)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.20s
+
+$ cargo new --bin linkcheck && cargo rustc -- --print link-args   (first 200 characters: the linker path)
+"C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe" "/NOLOGO" "<USERPROFILE>\\AppData\\Local\\Temp\\claude\\C--Users
+
+Result: cargo calls the MSVC link.exe from the Build Tools (found by the MSVC finder), not the Git link.exe that is first on PATH.

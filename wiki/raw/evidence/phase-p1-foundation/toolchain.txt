@@ -1,0 +1,24 @@
+Ferrum check p1.1: Confirm and record the toolchain
+Why: every later result must name the exact tools it was built with.
+Run at 2026-10-11 12:32 on commit 3c80e72 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Rust 1.90 or newer, built for Windows with the Microsoft C++ tools
+         rustc 1.99.0 (x86_64-pc-windows-msvc)
+  PASS   cargo and rustup answer
+         cargo 1.99.0 (5f94df478 2026-08-27); active toolchain: stable-x86_64-pc-windows-msvc (default)
+  PASS   Microsoft C++ build tools are installed (found with vswhere)
+         Visual Studio Build Tools 2022 17.14.37710.0
+  PASS   Node 24 and npm
+         node v24.20.0; npm 11.19.0
+  PASS   Python, git and PowerShell 7
+         Python 3.12.10; git version 2.52.0.windows.1; PowerShell 7.6.6
+  PASS   Licence checker cargo-deny is installed
+         cargo-deny 0.20.2
+  PASS   A tiny Rust program builds and links
+         built, linked and ran (prints Hello, world!)
+  PASS   Versions saved as evidence (toolchain.txt)
+         this printout is saved now
+------------------------------------------------------------------------
+RESULT: PASS - p1.1 (8 PASS; 2 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.1 check passed".
