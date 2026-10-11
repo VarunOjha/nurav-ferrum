@@ -990,3 +990,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views, ip-testing, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/browser-design-checks.txt]
 - result: `npm run verify` exit 0 on the final files (typecheck, eslint, 783 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 36 warnings, 2 info, build, 107 browser tests passed incl. the five browser design tests, E2E guard: real files unchanged), in a scratch git worktree of HEAD with this step's files copied in (byte-identical), so the owner's portal on 3417 kept running; the worktree was deleted and its servers stopped. Screenshots of the Architecture view's Application group at 1440 and 390 px, portal light and dark, each with the picture also switched to the other palette, were read against the design file: one defect (raw link markup in a layer box), fixed and re-verified; no sideways scrolling; at 390 px the picture is small but whole. Quick lint 0 errors, portal check clean, portal-sync self-tests 29 passed, mask scan 0 unmasked.
+
+## [2026-10-10] plan | p0.17 step "browser-design" committed: the chosen browser look is in the Architecture view
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/owner/2026-10-10-s01-browser-ui-choice.md, raw/evidence/phase-p0-planning/portal-v2/browser-design-checks.txt]
+- result: What was done → the owner picked option A of the browser design and asked to add it to the plan portal → adr-0028 records his choice and the Architecture view shows the picture first, in light or dark, with the canvas link and a note that every value is a sample → he can see how Ferrum will look next to what it is made of. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause), now also naming the browser picture. A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear or what to change in the layout; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: d0ac1f3

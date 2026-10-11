@@ -17,7 +17,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes, and the browser design you chose, first under Architecture). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,10 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "browser-design" (owner picked option A, raw/owner/2026-10-10-s01-browser-ui-choice.md)
-- intent: record the browser UI choice as an owner decision (ADR) and show option A (light + dark) in the portal's Architecture view, Application group, with a link to the design canvas
-- planned paths: wiki/decisions/adr-*.md (new), wiki/architecture/**, wiki/index.md, wiki/raw/owner/2026-10-10-s01-browser-ui-*.md, wiki/raw/MANIFEST.sha256, plan/portal/*.json, interactive_plan/**, wiki/interactive-plan/ip-*.md, wiki/raw/evidence/phase-p0-planning/portal-v2/
-- rollback: git restore the planned paths; new raw transcripts are kept
+(empty: p0.17 step "browser-design" (owner picked option A; adr-0028; the picture is in the Architecture view) verified and committed 2026-10-10 (`d0ac1f3`); next the owner restarts the portal and continues the walkthrough)
 
 ## Blockers
 

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7fdb103949cca7f73049a05ea1c431cd64a799524d9f60a2af9c94c8798bd90f"
+    "content_hash": "sha256:c0e1e25daa054456d81399d4f4eca13042dde49a8b3c3c94cf4d9c7de0fad12a"
   },
   "entries": [
     {
@@ -1068,12 +1068,13 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "d0ac1f3",
       "covers": [
         "## [2026-10-10] ingest | Owner asks for a browser design and picks option A",
         "## [2026-10-10] decide | adr-0028: browser look, tabs on top and a Ferrum panel on the right (owner, option A)",
         "## [2026-10-10] code | p0.17 browser design: \"How the browser will look\" in the Architecture view",
-        "## [2026-10-10] lint | p0.17 browser design: npm run verify green, screenshots read in both themes at 1440 and 390 px"
+        "## [2026-10-10] lint | p0.17 browser design: npm run verify green, screenshots read in both themes at 1440 and 390 px",
+        "## [2026-10-10] plan | p0.17 step \"browser-design\" committed: the chosen browser look is in the Architecture view"
       ],
       "phase": "phase-p0-planning"
     }

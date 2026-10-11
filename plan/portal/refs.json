@@ -4243,6 +4243,17 @@
       ]
     },
     {
+      "id": "d0ac1f3",
+      "kind": "commit",
+      "title": "Commit: the browser look you chose is in the Architecture view",
+      "summary": "Records your choice of option A (tabs on top, Ferrum panel on the right) as a decision and shows its picture, light or dark, first in the Architecture view. All values in the picture are examples.",
+      "status": null,
+      "related": [
+        "adr-0028",
+        "phase-p0-planning"
+      ]
+    },
+    {
       "id": "adr-0028",
       "kind": "decision",
       "title": "Decision 28: Browser look: tabs on top, Ferrum panel on the right",
