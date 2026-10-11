@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: null
-next_action: "Task p1.4 (Cargo workspace): create root Cargo.toml (resolver 2, exclude spikes/*), crates/core, webview-manager, security, resource-manager, telemetry, network-logger as #![forbid(unsafe_code)] library stubs, rust-toolchain.toml pinned to 1.99.0, master prompt section 12 folders with README placeholders; run cargo build/test/fmt/clippy --locked and save evidence; run scripts/verify/p1.4-rust-workspace.ps1; commit p1.4."
+next_action: "Task p1.17 (Tauri CLI and frontend pins): re-check versions of tauri, wry, webview2-com, windows (crates.io) and @tauri-apps/cli, vite, typescript, playwright (npm); create spikes/s1-multiwebview/package.json with exact pins; save npx tauri --version as evidence; run scripts/verify/p1.17-tauri-pins.ps1; commit p1.17."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -46,6 +46,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.1 done (`29b7d81`): toolchain recorded ([toolchain.txt](wiki/raw/evidence/phase-p1-foundation/toolchain.txt), [toolchain-details.txt](wiki/raw/evidence/phase-p1-foundation/toolchain-details.txt)); cargo-deny 0.20.2 installed; cargo uses the MSVC linker.
 - p1.2 done (`c0142a5`): machine inventory saved ([environment.md](wiki/raw/evidence/phase-p1-foundation/environment.md)); Q-116 and Q-122 still open for the owner.
 - p1.3 done (`e4a193a`): ignore rules, `.gitattributes`, LICENSE-MIT, LICENSE-APACHE, README licence section.
+- p1.4 done (`de68d66`): Cargo workspace with six library stubs, rust-toolchain 1.99.0, section-12 folders; build/test/fmt/clippy clean.
 
 ## Done this session (s01)
 
@@ -257,7 +258,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p1.3 verified and committed 2026-10-11 as `e4a193a`)
+(empty: p1.4 verified and committed 2026-10-11 as `de68d66`)
 
 ## Blockers
 
@@ -293,11 +294,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 3 of 17 tasks done |
-| Next task | p1.4 empty Rust workspace |
+| Phase 1 | In progress: 4 of 17 tasks done |
+| Next task | p1.17 pin the Tauri and frontend tool versions |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude creates the Rust workspace with empty library parts and checks that it builds, tests, formats and lints cleanly.
+**2. Why, and what it does.** Nothing for you to run now. Claude re-checks the Tauri, Vite and TypeScript versions on the official registries and pins exact versions for the first experiment.
 
 **3. The script:** none for you.
 
@@ -312,4 +313,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 3 of 17 tasks done, last p1.3). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 4 of 17 tasks done, last p1.4). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

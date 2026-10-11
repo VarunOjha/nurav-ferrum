@@ -1341,3 +1341,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: .gitignore gained benchmarks/results/, *.etl and browser-profile folders (target/ already covers spikes/*/target/); .gitattributes gained binary types and CRLF for .cmd/.bat; LICENSE-APACHE from apache.org LICENSE-2.0.txt, LICENSE-MIT from opensource.org/license/mit (holder line "The Ferrum contributors", owner may change it); README licence section. scripts/verify/p1.3-ignore-licences.ps1 PASS (3 of 3); git check-ignore -v shows a rule for each build-output path; plan/snapshots/ stays tracked; no tracked file became ignored.
 - next: p1.4 Cargo workspace
 - commit: e4a193a
+
+## [2026-10-11] code | p1.4 empty Cargo workspace per adr-0018
+
+- session: s02
+- time: 12:39
+- pages: [phase-p1-foundation]
+- sources: [raw/evidence/phase-p1-foundation/p1.4-cargo-build.txt, raw/evidence/phase-p1-foundation/p1.4-cargo-test.txt, raw/evidence/phase-p1-foundation/p1.4-cargo-fmt.txt, raw/evidence/phase-p1-foundation/p1.4-cargo-clippy.txt]
+- result: Root Cargo.toml (resolver 2, exclude spikes/*, edition 2024, rust-version 1.90, MIT OR Apache-2.0, publish false, workspace lint unsafe_code forbid), Cargo.lock, rust-toolchain.toml pinned to 1.99.0 (rustup installed the named toolchain on first use). Six library stubs with #![forbid(unsafe_code)] and one test each (ferrum-core, -webview-manager, -security, -resource-manager, -telemetry, -network-logger as its own crate per comp-network-logger). Section-12 folders with README placeholders (docs/ in p1.13). cargo build, test (6 passed), fmt --check and clippy -D warnings all exit 0 (evidence p1.4-cargo-*.txt; the gate re-runs them as cargo-*.txt on one commit). scripts/verify/p1.4-rust-workspace.ps1 PASS (7 of 7). No component page changed: the stubs add no behaviour or interface (SCHEMA §9.8).
+- next: p1.17 Tauri CLI and frontend pins
+- commit: de68d66

@@ -410,7 +410,7 @@
       "kind": "task",
       "title": "P1 task: Create the empty Rust workspace",
       "summary": "Code needs a home → empty Rust libraries in the planned folders, with a pinned Rust version → every later task has a place to go.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4410,6 +4410,14 @@
       "kind": "commit",
       "title": "Commit: Ignore rules and licence files added",
       "summary": "Build output, benchmark results, trace files and browser profiles can no longer be saved to git by mistake. The two licence files (MIT and Apache 2.0) come from their official sources, and the README ",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "de68d66",
+      "kind": "commit",
+      "title": "Commit: Empty Rust project set up",
+      "summary": "The Rust workspace now exists with six empty library parts, one for each planned component, and a pinned Rust version. It builds, its 6 tiny tests pass, formatting is clean and the code checker finds ",
       "status": null,
       "related": []
     }

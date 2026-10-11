@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:aabc132a0462da5141d87223b60454edf2404a2f1628d7a689a56e8cc36ffdfb"
+    "content_hash": "sha256:bc2304fdf0122e36c3c038a52f9c454d26a93386dd78d03eb0949290d4dd5f51"
   },
   "entries": [
     {
@@ -1716,6 +1716,26 @@
       "tags": [
         "git",
         "licensing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-4",
+      "date": "2026-10-11",
+      "time": "12:39",
+      "title": "Empty Rust project set up",
+      "done": "The Rust workspace now exists with six empty library parts, one for each planned component, and a pinned Rust version. It builds, its 6 tiny tests pass, formatting is clean and the code checker finds no warnings. Empty folders for apps, benchmarks, experiments, analysis and research have short notes.",
+      "next": "Claude checks the current Tauri and test-tool versions and pins them for the experiments.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "de68d66",
+      "covers": [
+        "## [2026-10-11] code | p1.4 empty Cargo workspace per adr-0018"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Built",
+      "tags": [
+        "toolchain",
+        "testing"
       ]
     }
   ]

@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 3,
+    "done": 4,
     "total": 17
   },
   "step_order": [
@@ -59,7 +59,7 @@
       "what": "The empty Rust workspace: placeholder libraries in the planned folders and a pinned Rust version.",
       "why": "If the layout is not fixed now, each later task would invent its own, and parts would end up mixed together and hard to check one by one.",
       "how": "Create the workspace and its empty libraries in the agreed layout, keep the experiments outside it, then run build, tests, formatting and warning checks.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Code needs a home → empty Rust libraries in the planned folders, with a pinned Rust version → every later task has a place to go.",
       "check": "Build, tests, formatting and code-warning checks all pass with no warnings.",
       "script": "scripts/verify/p1.4-rust-workspace.ps1"
