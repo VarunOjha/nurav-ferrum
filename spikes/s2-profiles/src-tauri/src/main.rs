@@ -164,17 +164,16 @@ fn route_c(app: &AppHandle, port: u16, seen: &Seen) -> Value {
                             v["set_bounds"] = json!(hr(&unsafe { ctl.SetBounds(bounds) }));
                             v["set_visible"] = json!(hr(&unsafe { ctl.SetIsVisible(true) }));
                             v["browser_pid"] = json!(unsafe { browser_pid(&ctl) }.ok());
-                            if let Ok(core) = unsafe { ctl.CoreWebView2() } {
-                                if let Ok(c13) = core.cast::<ICoreWebView2_13>() {
-                                    if let Ok(profile) = unsafe { c13.Profile() } {
-                                        let mut p = windows::core::PWSTR::null();
-                                        let _ = unsafe { profile.ProfilePath(&mut p) };
-                                        v["profile_path"] = json!(webview2_com::take_pwstr(p));
-                                        let mut n = windows::core::PWSTR::null();
-                                        let _ = unsafe { profile.ProfileName(&mut n) };
-                                        v["profile_name_read_back"] = json!(webview2_com::take_pwstr(n));
-                                    }
-                                }
+                            if let Ok(core) = unsafe { ctl.CoreWebView2() }
+                                && let Ok(c13) = core.cast::<ICoreWebView2_13>()
+                                && let Ok(profile) = unsafe { c13.Profile() }
+                            {
+                                let mut p = windows::core::PWSTR::null();
+                                let _ = unsafe { profile.ProfilePath(&mut p) };
+                                v["profile_path"] = json!(webview2_com::take_pwstr(p));
+                                let mut n = windows::core::PWSTR::null();
+                                let _ = unsafe { profile.ProfileName(&mut n) };
+                                v["profile_name_read_back"] = json!(webview2_com::take_pwstr(n));
                             }
                             CONTROLLERS.with(|c| c.borrow_mut().push((name.clone(), ctl)));
                         }
