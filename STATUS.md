@@ -19,7 +19,7 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: null
+current_task: p1.5
 next_action: "Owner: run pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1 and report Alt+Tab focus, resize and shortcuts. Claude then writes spike-s1-multiwebview.md, closes the last four P1 claims (adr-0007, risk-r02, ov-arch-system-overview, comp-app-shell), asks the owner to re-approve the stale pages, and runs scripts/gates/p1-gate.ps1 -SaveEvidence."
 blocked_on: [adr-0002, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
 last_handoff: handoff-2026-10-09-s01
@@ -310,15 +310,22 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 15 of 17 tasks done |
-| Next task | your hand check of experiment 1 |
-| Your rule this session | Claude asks before any delete or kill command |
+| Phase 1 | 15 of 17 tasks done; your decisions recorded; end-of-phase cleanup done |
+| Still from you | The hand check of experiment 1, then re-approval of 8 changed pages and the phase 1 sign-off |
 
-**2. Why, and what it does.** Nothing for you to run now. Experiment 1 needs a person for two checks; then Claude writes its report, runs the end-of-phase check and asks for your sign-off.
+**2. Why, and what it does.** Experiment 1 passed every automatic check; only a person can judge keyboard focus after
+Alt+Tab and copy/paste in a tab. The script opens the throw-away app; you try it and close it with its X button. Nothing is
+installed or changed.
 
-**3. The script:** none for you.
+**3. The script** (PowerShell 7, from the repo folder):
 
-**4. What to tell Claude:** nothing; Claude asks when a step needs you.
+```powershell
+pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1
+```
+
+- It opens experiment 1 (a dark tab bar and three coloured tabs); the script ends when you close the window.
+
+**4. What to tell Claude:** what you saw, for example "Alt+Tab OK, resize OK, shortcuts OK", or what failed.
 
 ## Pending owner approvals
 

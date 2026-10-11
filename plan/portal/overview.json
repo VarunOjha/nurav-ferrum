@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 15 of 17 tasks done. Next: your hand check of experiment 1.",
+  "summary": "Phase 1 is nearly done: 15 of 17 tasks finished, your decisions are recorded and the end-of-phase cleanup is done. Left for you: a hand check of experiment 1, then re-approving 8 changed pages and signing off phase 1.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b40698afb585bfec3712d3a16e9f8174d6b491306a59c41a50c5cc63b8733af0"
+    "content_hash": "sha256:0cfdd450a049c33ddc12240f8d1480e1dc6af42b93e62c124798403e3c0467f9"
   },
   "updated": "2026-10-11",
   "where_we_are": [
@@ -34,20 +34,32 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 1",
         "state": "15 of 17 tasks done"
       },
       {
-        "item": "Next task",
-        "state": "your hand check of experiment 1"
+        "item": "Experiment 1",
+        "state": "Needs your hand check"
+      },
+      {
+        "item": "Then",
+        "state": "Re-approve 8 changed pages and sign off"
       }
     ],
-    "why": "Nothing to run. Experiment 1 needs a person for two checks; then Claude writes its report, runs the end-of-phase check and asks for your sign-off.",
-    "script": null,
-    "tell_claude": "Nothing for now. Claude asks when a step needs you."
+    "why": "Experiment 1 passed its automatic checks. Only a person can judge keyboard focus after Alt+Tab and copy/paste in a tab → the script opens the test app → you try it and close it with its X button. Nothing is installed or changed.",
+    "script": {
+      "path": "spikes/s1-multiwebview/run-manual.ps1",
+      "parts": [
+        {
+          "code": "pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1",
+          "explains": "Opens experiment 1 (a dark tab bar and three coloured tabs); the script ends when you close the window."
+        }
+      ]
+    },
+    "tell_claude": "What you saw, e.g. \"Alt+Tab OK, resize OK, shortcuts OK\", or what failed."
   },
   "questions_for_you": {
     "open": 29,
