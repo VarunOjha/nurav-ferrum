@@ -106,3 +106,5 @@ d4bd4124924da9d975a42bfcd617884a87960dba95f68cc92cfa9b43f7d40ac7  evidence/phase
 64f87d12841f9f60b96462aa348a00914193812291da88f30bf906d7d1b84b3b  evidence/phase-p1-foundation/spike-s2-profiles.md
 2f88671a7373300e5d5b906c274cc9509cbc878035164802ad95b5f91f1aeab7  evidence/phase-p1-foundation/spike-s2/s2-1.json
 59e8821d43f01f6a7b07b68bd50f0782db2b5d91fbe1c7df751af5f14d135769  evidence/phase-p1-foundation/check-p1.10.txt
+5fe1ba03737eca95229186226a45fd1623a9da9925863e150e196e2c099c8f4b  evidence/phase-p1-foundation/cargo-deny-p1.12.txt
+d1fe64dff4bb589fe637264a25f051091a23d29ab8afef9222a872c2176b180a  evidence/phase-p1-foundation/npm-audit.txt

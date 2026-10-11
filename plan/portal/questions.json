@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:576985c28e7e274b6170f5e735a21f4a5fcf933573dd706044fe0e042c71b19f"
+    "content_hash": "sha256:4d3898f186d2fc0c98f006d4ce01b52ca2eb1ba76bc2a85d56f0d3a1a8c9b8d2"
   },
   "items": [
     {
@@ -897,6 +897,24 @@
       "tags": [
         "git",
         "privacy"
+      ]
+    },
+    {
+      "id": "Q-222",
+      "asked": "2026-10-11",
+      "time": "13:21",
+      "question": "May the licence check allow MPL-2.0, a mild open-source licence used by five libraries that Tauri brings in?",
+      "why_it_matters": "Phase 2 builds the real app on Tauri, and its licence check fails without this. MPL-2.0 only asks that changes to those libraries' own files stay open; Ferrum's own licence is unaffected. Claude recommends allowing it for libraries only.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p2-minimal-container"
+      ],
+      "category": "Tools & setup",
+      "tags": [
+        "licensing",
+        "Tauri"
       ]
     }
   ]

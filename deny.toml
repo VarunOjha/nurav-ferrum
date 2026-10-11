@@ -1,0 +1,46 @@
+# cargo-deny configuration (P1 task p1.12; master prompt section 15, dependency auditing).
+# Run: cargo deny check   (cargo-deny 0.20.2, wiki/raw/evidence/phase-p1-foundation/toolchain.txt)
+# Ferrum is dual-licensed MIT OR Apache-2.0 (adr-0011). Only permissive licences that are compatible with
+# that are allowed. Adding any copyleft licence (MPL, LGPL, GPL, ...) is a licensing decision for the owner.
+
+[graph]
+targets = ["x86_64-pc-windows-msvc"]
+all-features = true
+
+[advisories]
+# RustSec advisory database: vulnerabilities, unsound and yanked crates fail the check.
+# An ignore entry needs an advisory id and a written reason (and a log entry in wiki/log.md).
+ignore = []
+
+[licenses]
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "Unicode-3.0",
+    "CC0-1.0",
+]
+confidence-threshold = 0.9
+unused-allowed-license = "allow"
+exceptions = []
+
+[licenses.private]
+# Ferrum's own crates are publish = false; they are checked like any other crate.
+ignore = false
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+allow-wildcard-paths = true
+deny = []
+skip = []
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

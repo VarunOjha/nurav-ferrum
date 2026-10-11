@@ -77,7 +77,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | Building `interactive_plan/` in P0 (comp-interactive-plan) | none (Q-006, Q-007, Q-103, Q-210 answered 2026-10-08) |
 | `schema` approval (part of every phase entry) | none (Q-207 answered 2026-10-11) |
 | P1 entry | none (Q-106, Q-110, Q-211 answered 2026-10-11) |
-| P2 entry | Q-109, Q-202, Q-214 |
+| P2 entry | Q-109, Q-202, Q-214, Q-222 |
 | P3 entry | Q-107, Q-111, Q-209 |
 | P4 entry | Q-112, Q-113, Q-202, Q-212 |
 | P5 entry | Q-114, Q-115, Q-203 |
@@ -851,3 +851,21 @@ replaced by names like `<LAN_IPV4_1>`), per the owner's choice "Mask files now, 
 **Question:** may Claude rewrite the local git history (for example with `git filter-repo --replace-text`, using
 the local map) so no commit contains them, before the first push? This changes every commit id, so it must
 happen before anything is pushed. It holds no phase gate (`blocking: []`); it holds the first push only.
+
+## Q-222 Allow the MPL-2.0 licence for libraries that Tauri brings in?
+
+- asked: 2026-10-11 13:21
+- blocking: [phase-p2-minimal-container]
+- status: open
+- answer: none yet.
+
+**Where we are:** P1 task p1.12 set up `cargo deny` with an allow list of permissive licences compatible with Ferrum's
+`MIT OR Apache-2.0` (adr-0011). The empty workspace passes. The same rules against spike S1's Tauri 2.12.3 tree reject
+five crates that declare `MPL-2.0`: cssparser, cssparser-macros, dtoa-short, option-ext, selectors
+([raw/evidence/phase-p1-foundation/cargo-deny-p1.12.txt](../raw/evidence/phase-p1-foundation/cargo-deny-p1.12.txt)).
+P2 builds the real Tauri app, so its `cargo deny check` would fail unless MPL-2.0 is allowed.
+
+**Question:** may `deny.toml` allow `MPL-2.0` (a file-level "weak copyleft" licence: changes to those libraries' own
+files must stay open; Ferrum's code and licence are unaffected), or should Ferrum avoid those libraries? Claude
+recommends allowing MPL-2.0 for dependencies only, because Tauri itself pulls them in. Whether the licences are
+compatible in law is not something Claude can certify; this is the owner's licensing call (CLAUDE.md §9).
