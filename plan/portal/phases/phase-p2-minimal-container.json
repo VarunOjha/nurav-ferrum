@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 2,
+    "done": 3,
     "total": 18
   },
   "step_order": [
@@ -48,7 +48,7 @@
       "what": "Permissions to the app's command channel for the shell only, none for websites.",
       "why": "Without this lock, any website you open could run Ferrum's own commands, for example to read your settings or open other pages.",
       "how": "Give the permissions only to the view named 'shell', give remote pages none at all, and let the build generate the permission list so nothing is added by hand.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Every web view can reach the app's command channel → grant permissions to the shell only, none to websites → a website cannot control Ferrum.",
       "check": "A test page tries app, plugin and event calls; every one is refused and logged.",
       "script": "scripts/verify/p2.3-lock-bridge-app.ps1"

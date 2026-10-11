@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 2 of 18 tasks done. Next: p2.3 lock down the bridge.",
+  "summary": "Phase 2 is in progress: 3 of 18 tasks done. Next: p2.4 the settings model.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:798c543b295708601c920f614559b1b8aca586e5cd18cb0d21e5c0bc84f21387"
+    "content_hash": "sha256:5537854e5aac1e38e46bd25edef2cd747b72e188ff4af9e0d8ae58b636a05842"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 2 of 18 tasks done",
+      "state": "P2 First working app: in progress, 3 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "2 of 18 tasks done"
+        "state": "3 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.3 lock down the bridge"
+        "state": "p2.4 the settings model"
       }
     ],
-    "why": "Nothing to run. Websites must never reach Ferrum's commands → Claude limits the bridge to the shell and tests that every call from a website is refused → the security floor holds from the first website loaded.",
+    "why": "Nothing to run. Ferrum needs settings (start page, navigation rules, data folder) → Claude writes them as checked Rust types read from config.toml → bad settings are caught with a clear message.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

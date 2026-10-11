@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5aa17cb3910aa4d61cd7e1d30a59ce0b62e336b9e79a2557d7a60000186e04c3"
+    "content_hash": "sha256:bf1096d64d1186b0758462267bc75ee97e5331b83205f860a31d54c94a2a9f52"
   },
   "entries": [
     {
@@ -2284,6 +2284,26 @@
       "category": "Built",
       "tags": [
         "look & feel",
+        "Tauri"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-3",
+      "date": "2026-10-11",
+      "time": "18:34",
+      "title": "Websites cannot reach the app's commands",
+      "done": "Claude locked the bridge between web pages and the app: only Ferrum's own shell may use it. A test page posing as a hostile website tried three kinds of calls and every one was refused, while the shell's own call still worked.",
+      "next": "Claude writes the settings model (task p2.4).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "196e66a",
+      "covers": [
+        "## [2026-10-11] code | p2.3 app bridge locked to the shell; IPC refusal self-test passes"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "isolation",
         "Tauri"
       ]
     }

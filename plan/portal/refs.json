@@ -580,7 +580,7 @@
       "kind": "task",
       "title": "P2 task: Lock the bridge to the app",
       "summary": "Every web view can reach the app's command channel → grant permissions to the shell only, none to websites → a website cannot control Ferrum.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4611,6 +4611,14 @@
       "kind": "commit",
       "title": "Commit: The real Ferrum app opens",
       "summary": "The first real Ferrum window now builds in release mode and opens with its toolbar: back, forward, reload and the address bar, in your chosen look (light or dark following Windows). The website area i",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "196e66a",
+      "kind": "commit",
+      "title": "Commit: Websites cannot reach the app's commands",
+      "summary": "Claude locked the bridge between web pages and the app: only Ferrum's own shell may use it. A test page posing as a hostile website tried three kinds of calls and every one was refused, while the shel",
       "status": null,
       "related": []
     }

@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.3 (capability lockdown): app ACL manifest at build time (tauri_build AppManifest), shell-only capability, and an integration test that loads a fixture page in a content web view and proves every app command, core plugin command and event call is rejected (or the bridge is absent, adr-0029), with the rejection logged."
+next_action: "Task p2.4 (core config): crates/core configuration model (start URL, navigation posture, data directory) with serde + toml, validation and defaults, unit tests; run scripts/verify/p2.4-*.ps1; update comp-core page (last_verified_commit or content if interfaces change)."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -74,6 +74,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - P2 entry passed: Wave 3 approved; Q-109, Q-202, Q-214 answered; phase-p2-minimal-container in progress.
 - p2.1 done (`e007c71`): fixture server over HTTPS, name-constrained dev CA installed (owner confirmed), 7 tests, curl probe.
 - p2.2 done (`2c96d06`): app skeleton with the shell toolbar; release build and window check PASS.
+- p2.3 done (`196e66a`): bridge locked to the shell; IPC refusal self-test PASS.
 
 ## Done this session (s01)
 
@@ -285,7 +286,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.2 verified and committed 2026-10-11 as `2c96d06`)
+(empty: p2.3 verified and committed 2026-10-11 as `196e66a`)
 
 ## Blockers
 
@@ -321,11 +322,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 2 of 18 tasks done |
-| Next task | p2.3 lock down the bridge |
+| Phase 2 | In progress: 3 of 18 tasks done |
+| Next task | p2.4 the settings model |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Websites must never reach Ferrum's commands → Claude limits the bridge to the shell and tests that every call from a website is refused → the security floor holds from the first website loaded.
+**2. Why, and what it does.** Nothing for you to run now. Ferrum needs settings (start page, navigation rules, data folder) → Claude writes them as checked Rust types read from config.toml → bad settings are caught with a clear message.
 
 **3. The script:** none for you.
 
@@ -340,4 +341,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 2 of 18 tasks done, last p2.2). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 3 of 18 tasks done, last p2.3). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

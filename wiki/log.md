@@ -1612,3 +1612,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.2.txt, raw/evidence/phase-p2-minimal-container/p2.2-window-check.png]
 - result: Tauri 2.12.3 app crate ferrum-desktop (workspace member, forbid unsafe), shell in vanilla TS + Vite with the adr-0028 toolbar (back, forward, reload, address bar), shell as a Tauri child web view in a 52 px band, strict CSP, capability shell.json for the shell web view only (no remote), FERRUM_EXIT_AFTER self-exit switch. Workspace lint unsafe_code now deny (crate roots keep forbid; adr-0019 module later); deny.toml allows MPL-2.0 (Q-222). Release build with the pinned Tauri CLI exit 0; p2.2 check PASS (window shows the toolbar, exits by itself); a first sampling bug in the check was fixed. comp-app-shell last_verified_commit set (volatile; its text already describes this).
 - commit: 2c96d06
+
+## [2026-10-11] code | p2.3 app bridge locked to the shell; IPC refusal self-test passes
+
+- session: s02
+- time: 18:34
+- pages: [phase-p2-minimal-container, comp-app-shell, comp-tab-content]
+- sources: [raw/evidence/phase-p2-minimal-container/p2.3-ipc-selftest.json, raw/evidence/phase-p2-minimal-container/check-p2.3.txt]
+- result: build.rs declares the app commands (AppManifest), the only capability shell.json grants them to the shell web view with no remote section, app_ping is a harmless probe. Self-test FERRUM_SELFTEST=ipc: a hostile fixture page over HTTPS tried an app command and the event plugin listen and emit through the bridge; all three were refused by the ACL, and the shell positive control worked. The page loaded over HTTPS, so WebView2 trusts the local dev CA. p2.3 check PASS (3 of 3). The Ferrum-created content controller (adr-0029) joins this self-test in p2.6.
+- commit: 196e66a
