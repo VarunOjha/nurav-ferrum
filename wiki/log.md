@@ -1214,3 +1214,35 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p0-planning/p0-gate.20261011-0204.txt]
 - result: pwsh scripts/gates/p0-gate.ps1 -SaveEvidence (owner's portal stopped for the run): 23 PASS, 1 FAIL, 4 YOURS in 829 s. All test-gate rows passed (typecheck and style, 873 unit tests, browser tests on the production build, build, fingerprint cross-check, wiki check, portal sync, mask scan, tool tests). The FAIL: task p0.8 found no fingerprint for evidence/phase-p0-planning/portal-v2/browse-fixes-checks.txt, because its MANIFEST line (written in c14d4b6) used the binary-mode marker " *" that the checker does not read; the hash itself is correct. Fix: MANIFEST is append-only, so the old line stays and a correct line for the same file is appended, plus the line for this run's evidence file. p0.8 alone now passes (77 raw files, all match). npm audit in interactive_plan: the same 5 high findings as before, all in development-only lint tooling (braces via micromatch, fast-glob, eslint-config-next); the offered fix downgrades eslint-config-next to 14.2.35 (breaking), so not applied.
 - next: commit, then run the P0 gate again on that commit
+
+## [2026-10-11] gate | phase-p0-planning exit gate run 2 on b5f7d40: PASS
+
+- session: s01
+- time: 02:19
+- pages: [phase-p0-planning]
+- sources: [raw/evidence/phase-p0-planning/p0-gate.20261011-0218.txt]
+- result: pwsh scripts/gates/p0-gate.ps1 -SaveEvidence on b5f7d40 (clean tree; owner's portal stopped for the run): RESULT PASS, 24 PASS, 4 YOURS, 745 s. Tasks p0.1 to p0.12 re-checked; test gate: typecheck and style exit 0, 873 unit tests passed (1 skipped), 233 browser tests passed on the production build bound to 127.0.0.1, build, fingerprint cross-check, wiki check 0 errors, saved first-run outputs present; housekeeping: portal sync clean, 0 unmasked values, tool tests pass, every check script parses. The four YOURS items are done by the owner: walkthrough (2026-10-09 to 2026-10-11), open questions answered or deferred to their waves, approvals of Waves 1 and 2, and the exit approval below. Exit criteria met: automated items passed on the exit commit with output saved; manual lint report 0 errors and accepted by the owner; Waves 1 and 2 APPROVED; no open question blocks the P1 dependency set.
+
+## [2026-10-11] approval | phase-p0-planning#exit approved: the owner signed off P0
+
+- session: s01
+- time: 02:19
+- pages: [phase-p0-planning]
+- sources: [raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md, raw/owner/2026-10-11-s01-wave2-pages-approval.md]
+- result: Recorded with tools/approvals_record.py after the gate passed (owner words: "it's a sign off. However, don't start next phase"; then "Approved all, mark it, don't start phase 1"). approvals_check: 31 entries; phase-p0-planning and its #exit show APPROVED_VOLATILE_DRIFT because only the status line changed (gate-review, then done).
+
+## [2026-10-11] gate | phase-p0-planning exit approved; P0 done; PAUSED before P1
+
+- session: s01
+- time: 02:19
+- pages: [phase-p0-planning, status-live]
+- result: phase-p0-planning status set to done (index row too). Per SCHEMA §9.7 exit-gate step 7 Claude now pauses: no P1 task, install, scaffold or spike until the owner explicitly says go in Claude Code (to be transcribed and logged as gate | phase-p1-foundation go-ahead given). The owner said "don't start phase 1". Milestone report for the owner: the s01 handoff (updated) and the chat report.
+- next: owner says go for P1 when ready; then Claude runs the P1 entry gate (SCHEMA §9.7) and starts with p1.1
+
+## [2026-10-11] handoff | s01 handoff updated: P0 done and signed off, paused before P1
+
+- session: s01
+- time: 02:20
+- pages: [handoff-2026-10-09-s01, status-live]
+- result: handoff-2026-10-09-s01 rewritten for the P0 exit (third version; one file per session). STATUS: phase-p0-planning done, current task none (paused before p1.1), next action in the four-part format: nothing to run, say go for P1 when ready.
+- next: owner's go-ahead for P1

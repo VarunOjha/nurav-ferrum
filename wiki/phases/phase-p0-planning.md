@@ -2,7 +2,7 @@
 id: phase-p0-planning
 type: phase
 title: "P0 Planning: LLM wiki, interactive plan app, owner approval"
-status: gate-review
+status: done
 updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md

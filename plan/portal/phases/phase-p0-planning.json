@@ -3,10 +3,10 @@
   "short": "P0",
   "title": "Planning",
   "one_line_goal": "Plan written, checked and approved by you; no app code yet",
-  "summary": "Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. You walked through the portal, answered the first two rounds of questions, approved both rounds of pages and signed off planning on 11 Oct.",
-  "status": "Waiting for your review",
+  "summary": "Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. You walked through the portal, answered the first two rounds of questions, approved 30 pages and signed off planning on 11 Oct, after the final check passed.",
+  "status": "Done",
   "progress": {
-    "done": 17,
+    "done": 18,
     "total": 18
   },
   "step_order": [
@@ -213,7 +213,7 @@
       "what": "The close of P0: your exit approval and the first local commit.",
       "why": "Moving straight on would start the real app before you have checked the plan. The pause keeps you in control of when building begins.",
       "how": "Mark the phase for review, record your exit approval and a gate log entry, commit locally (never push), then pause until your explicit go.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "All checks pass and the pages are approved → you approve the phase exit in Claude Code → Claude pauses; P1 starts only when you explicitly say go.",
       "check": "Exit approval recorded; a gate entry in the log; work committed locally; no P1 work before your go.",
       "script": "scripts/verify/p0.18-close-p0.ps1"
@@ -265,6 +265,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p0-planning.md",
-    "content_hash": "sha256:85986d647535e439a0ba6d86f6a76b58255187c3a90219bd98dae281079cc106"
+    "content_hash": "sha256:eb0cb8cfd15df7ae12c994078d55b3adcb5ade6956951dbc2af30898685da8d3"
   }
 }

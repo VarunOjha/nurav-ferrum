@@ -1,0 +1,277 @@
+Ferrum check P0-gate: Planning: end-of-phase gate
+Why: the plan app and the wiki must be fully checked before any Ferrum code is written.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+
+Part 1 - Wiki check (run once, reused below)
+  PASS   Wiki check: zero errors (6 s)
+         203 pages: 0 errors, 34 warnings (each reviewed in the log)
+
+Part 2 - The first twelve tasks, checked again
+    --- output of scripts/verify/p0.1-starting-documents.ps1 (exit 0) ---
+Ferrum check p0.1: Save the starting documents
+Why: the brief and scoping answers are the ground truth that every page cites.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   Both starting documents exist and are marked unchangeable
+         wiki/raw/00-master-prompt.md, wiki/raw/01-scoping-decisions.md
+  PASS   Their fingerprints still match the recorded ones
+         both match wiki/raw/MANIFEST.sha256
+------------------------------------------------------------------------
+RESULT: PASS - p0.1 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.1 check passed".
+    --- end of scripts/verify/p0.1-starting-documents.ps1 ---
+  PASS   Task p0.1: Save the starting documents
+         scripts/verify/p0.1-starting-documents.ps1: RESULT: PASS - p0.1 (2 PASS; 0 s)
+    --- output of scripts/verify/p0.2-research-notes.ps1 (exit 0) ---
+Ferrum check p0.2: Write five research notes
+Why: plans built from memory go stale; these notes hold the checked facts.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   The five notes exist, each with its header
+         5 notes: llm-wiki-pattern, tauri-webview2-capabilities, measurement-methodology, nextjs-stack, related-work-seed
+  PASS   Each note gives access dates and checked/uncertain labels
+         access dates and labels found in all five
+  PASS   No note changed since it was saved
+         all five match wiki/raw/MANIFEST.sha256
+------------------------------------------------------------------------
+RESULT: PASS - p0.2 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.2 check passed".
+    --- end of scripts/verify/p0.2-research-notes.ps1 ---
+  PASS   Task p0.2: Write five research notes (1 s)
+         scripts/verify/p0.2-research-notes.ps1: RESULT: PASS - p0.2 (3 PASS; 0 s)
+    --- output of scripts/verify/p0.3-wiki-rules.ps1 (exit 0) ---
+Ferrum check p0.3: Write the wiki rules and live status
+Why: one rulebook and one live status file let any session resume safely.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   The rulebook's own fingerprint program runs and agrees with this check
+         content fingerprint sha256:fd8513e418bb...
+  PASS   CLAUDE.md points to the rulebook
+         link found
+  PASS   STATUS.md has every field a new session needs
+         phase phase-p0-planning, task p0.18
+------------------------------------------------------------------------
+RESULT: PASS - p0.3 (3 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.3 check passed".
+    --- end of scripts/verify/p0.3-wiki-rules.ps1 ---
+  PASS   Task p0.3: Write the wiki rules and live status (1 s)
+         scripts/verify/p0.3-wiki-rules.ps1: RESULT: PASS - p0.3 (3 PASS; 1 s)
+    --- output of scripts/verify/p0.4-architecture-pages.ps1 (exit 0) ---
+Ferrum check p0.4: Describe the architecture and its parts
+Why: marking every trust crossing shows the security boundaries before any code.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   One page per part, id matching the file name
+         15 component pages
+  PASS   Wiki check: trust crossings marked, ids unique and well formed
+         rules TRUST-EDGE, ID-DUP, ID-PATTERN, REF-DANGLING: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p0.4 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.4 check passed".
+    --- end of scripts/verify/p0.4-architecture-pages.ps1 ---
+  PASS   Task p0.4: Describe the architecture and its parts
+         scripts/verify/p0.4-architecture-pages.ps1: RESULT: PASS - p0.4 (2 PASS; 0 s)
+    --- output of scripts/verify/p0.5-decisions-risks.ps1 (exit 0) ---
+Ferrum check p0.5: Write the decisions and the risk register
+Why: one page per decision and per risk keeps the reasons and dangers visible.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   Decisions 1 to 19 exist, one page each
+         19 pages
+  PASS   Every risk page has likelihood, impact, response, experiment and owning phase
+         25 risk pages
+  PASS   Wiki check: decision sections, replaced-decision chain and risk scores
+         ADR-CHAIN, ADR-SECTIONS, RISK-SCORE: none found
+------------------------------------------------------------------------
+RESULT: PASS - p0.5 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.5 check passed".
+    --- end of scripts/verify/p0.5-decisions-risks.ps1 ---
+  PASS   Task p0.5: Write the decisions and the risk register
+         scripts/verify/p0.5-decisions-risks.ps1: RESULT: PASS - p0.5 (3 PASS; 0 s)
+    --- output of scripts/verify/p0.6-research-plan.ps1 (exit 0) ---
+Ferrum check p0.6: Write the research plan pages
+Why: nothing is measured without a reason, and no number appears before data exists.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   Experiments compare only the agreed product setups
+         9 experiments
+  PASS   Wiki check: links agree both ways, no data claimed
+         REF-RECIPROCAL, HYP-NO-DATA, EXP-RESULTS: none; 23 number-looking warning(s), reviewed in the wiki log
+------------------------------------------------------------------------
+RESULT: PASS - p0.6 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.6 check passed".
+    --- end of scripts/verify/p0.6-research-plan.ps1 ---
+  PASS   Task p0.6: Write the research plan pages
+         scripts/verify/p0.6-research-plan.ps1: RESULT: PASS - p0.6 (2 PASS; 0 s)
+    --- output of scripts/verify/p0.7-phases-index-log.ps1 (exit 0) ---
+Ferrum check p0.7: Write phase pages, index and log
+Why: a page per phase, an index and a log let anyone find anything.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   Nine phase pages, P0 to P8, in order
+         phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper
+  PASS   Log headings have the agreed form
+         149 log entries
+  PASS   Wiki check: index complete, log and phase order correct
+         INDEX-MISSING, LOG-FORMAT, PHASE-ORDER: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p0.7 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.7 check passed".
+    --- end of scripts/verify/p0.7-phases-index-log.ps1 ---
+  PASS   Task p0.7: Write phase pages, index and log
+         scripts/verify/p0.7-phases-index-log.ps1: RESULT: PASS - p0.7 (3 PASS; 0 s)
+    --- output of scripts/verify/p0.8-wiki-check.ps1 (exit 0) ---
+Ferrum check p0.8: Check the whole wiki
+Why: a clean check and fingerprinted raw files give a tamper-evident base.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   Full wiki check: zero errors
+         203 pages: 0 errors, 34 warnings (reviewed in the log), 2 info
+  PASS   Quick Python check: zero errors
+         203 files checked, 0 errors, 0 warnings
+  PASS   Every raw file has a fingerprint, and all still match
+         77 raw files, all match
+  PASS   The first check report and a check log entry exist
+         wiki-lint-manual.md and a lint log entry
+------------------------------------------------------------------------
+RESULT: PASS - p0.8 (4 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.8 check passed".
+    --- end of scripts/verify/p0.8-wiki-check.ps1 ---
+  PASS   Task p0.8: Check the whole wiki (1 s)
+         scripts/verify/p0.8-wiki-check.ps1: RESULT: PASS - p0.8 (4 PASS; 1 s)
+    --- output of scripts/verify/p0.9-node-toolchain.ps1 (exit 0) ---
+Ferrum check p0.9: Install Node and record versions
+Why: exact tool versions make builds repeatable.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   Node.js is version 24
+         node v24.20.0
+  PASS   npm and git answer with their versions
+         npm 11.19.0; git version 2.52.0.windows.1
+  PASS   The saved version record exists and names Node 24
+         IP-0-toolchain.txt
+  PASS   Your Wave 0 answers were saved word for word
+         wiki/raw/owner/2026-10-08-s01-wave0.md
+------------------------------------------------------------------------
+RESULT: PASS - p0.9 (4 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.9 check passed".
+    --- end of scripts/verify/p0.9-node-toolchain.ps1 ---
+  PASS   Task p0.9: Install Node and record versions
+         scripts/verify/p0.9-node-toolchain.ps1: RESULT: PASS - p0.9 (4 PASS; 0 s)
+    --- output of scripts/verify/p0.10-plan-app-skeleton.ps1 (exit 0) ---
+Ferrum check p0.10: Create the plan app skeleton
+Why: exact versions and a green build give a stable base.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   Every direct library is pinned to an exact version
+         no ^ or ~ ranges in interactive_plan/package.json
+  PASS   Installed libraries show no conflicts
+         npm ls: no missing or conflicting packages
+  PASS   Type check passes (3 s)
+         npm run typecheck: exit 0
+  PASS   Code style check passes (9 s)
+         npm run lint: exit 0
+  PASS   Production build succeeds (6 s)
+         npm run build: exit 0
+  PASS   The three feasibility tests were recorded as passed
+         S1, S2, S3 PASS in IP-1-spikes.txt; IP-1-scaffold.txt present
+------------------------------------------------------------------------
+RESULT: PASS - p0.10 (6 PASS; 19 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.10 check passed".
+    --- end of scripts/verify/p0.10-plan-app-skeleton.ps1 ---
+  PASS   Task p0.10: Create the plan app skeleton (19 s)
+         scripts/verify/p0.10-plan-app-skeleton.ps1: RESULT: PASS - p0.10 (6 PASS; 19 s)
+    --- output of scripts/verify/p0.11-wiki-reader.ps1 (exit 0) ---
+Ferrum check p0.11: Teach the app to read the wiki
+Why: bad pages must be flagged, not shown wrongly.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   Wiki reader tests pass on the sample pages (2 s)
+         reader tests: Tests  422 passed (422)
+  PASS   The real wiki loads with zero header errors
+         FM-MISSING, FM-ENUM, FM-TYPE-DIR, FILE-ENCODING: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p0.11 (2 PASS; 2 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.11 check passed".
+    --- end of scripts/verify/p0.11-wiki-reader.ps1 ---
+  PASS   Task p0.11: Teach the app to read the wiki (2 s)
+         scripts/verify/p0.11-wiki-reader.ps1: RESULT: PASS - p0.11 (2 PASS; 2 s)
+    --- output of scripts/verify/p0.12-fingerprints.ps1 (exit 0) ---
+Ferrum check p0.12: Fingerprint pages exactly like the reference
+Why: a changed page must never keep an old approval.
+Run at 2026-10-11 02:06 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   The plan app's fingerprint tests pass (6 s)
+         test cases: Tests  42 passed (42)
+  PASS   Reference program and this check agree on every real page
+         198 files, identical fingerprints
+------------------------------------------------------------------------
+RESULT: PASS - p0.12 (2 PASS; 6 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.12 check passed".
+    --- end of scripts/verify/p0.12-fingerprints.ps1 ---
+  PASS   Task p0.12: Fingerprint pages exactly like the reference (7 s)
+         scripts/verify/p0.12-fingerprints.ps1: RESULT: PASS - p0.12 (2 PASS; 6 s)
+
+Part 3 - Test gate (also covers the four portal-building tasks)
+  PASS   Style and type checks (12 s)
+         typecheck and code style: exit 0
+  PASS   Unit tests (33 s)
+         Tests  873 passed | 1 skipped (874)
+  PASS   Browser tests (production build, this computer only) (528 s)
+         233 passed (8.8m)
+  PASS   Production build (8 s)
+         npm run build: exit 0
+Ferrum check p0.12: Fingerprint pages exactly like the reference
+Why: a changed page must never keep an old approval.
+Run at 2026-10-11 02:16 on commit b5f7d40
+------------------------------------------------------------------------
+  PASS   The plan app's fingerprint tests pass (8 s)
+         test cases: Tests  42 passed (42)
+  PASS   Reference program and this check agree on every real page
+         198 files, identical fingerprints
+------------------------------------------------------------------------
+RESULT: PASS - p0.12 (2 PASS; 9 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p0.12 check passed".
+  PASS   Fingerprint cross-check (10 s)
+         the app, the rulebook program and PowerShell agree (task check p0.12)
+  PASS   Wiki check
+         zero errors (part 1)
+  PASS   Saved outputs of the first full run
+         all four files are there (task check p0.16)
+  YOURS  Your walkthrough
+         Open the portal, look at every tab, and tell Claude what does not match the plan or is unclear.
+  YOURS  Open questions
+         Answer or defer each question Claude asks with the approval waves.
+
+Part 4 - Housekeeping
+  PASS   Portal text is in step with the wiki (4 s)
+         portal-sync: clean - 19 files, 169 translated records, 394 refs
+  PASS   No real machine values in committed files (7 s)
+         mask scan: 735 tracked files, 0 unmasked value group(s), 0 file(s) not checkable
+  PASS   Tool tests pass (Python tools and the portal checker) (97 s)
+         Ran 44 tests in 7.158s (Python); test-portal-sync-check: 52 passed, 0 failed
+  PASS   Every check script can be read by PowerShell (2 s)
+         157 files parsed (scripts/ and tools/); 150 scripts linked from the portal files
+  YOURS  Your approvals (task p0.17)
+         Approve the P1 pages in Claude Code, wave by wave; Claude records each approval.
+  YOURS  Your exit approval (task p0.18)
+         When everything above passes and you are satisfied, tell Claude "I approve the P0 exit".
+------------------------------------------------------------------------
+RESULT: PASS - P0-gate (24 PASS, 4 YOURS; 745 s)
+All automatic P0 checks passed in one run.
+Still yours to do by hand: Your walkthrough; Open questions; Your approvals (task p0.17); Your exit approval (task p0.18).
+What to tell Claude: "P0 gate passed".

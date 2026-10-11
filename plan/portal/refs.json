@@ -8,8 +8,8 @@
       "id": "phase-p0-planning",
       "kind": "phase",
       "title": "P0 Planning",
-      "summary": "Goal: Plan written, checked and approved by you; no app code yet. Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. You walked through the portal, answered the first two rounds of questions, approved both rounds of pages and signed off planning on 11 Oct.",
-      "status": "Waiting for your review",
+      "summary": "Goal: Plan written, checked and approved by you; no app code yet. Build the project's memory (the wiki) and a plan portal for you, before any Ferrum code. You walked through the portal, answered the first two rounds of questions, approved 30 pages and signed off planning on 11 Oct, after the final check passed.",
+      "status": "Done",
       "related": [],
       "aliases": [
         "P0"
@@ -210,7 +210,7 @@
       "kind": "task",
       "title": "P0 task: Close P0",
       "summary": "All checks pass and the pages are approved → you approve the phase exit in Claude Code → Claude pauses; P1 starts only when you explicitly say go.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p0-planning"
       ]

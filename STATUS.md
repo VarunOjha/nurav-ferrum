@@ -18,8 +18,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: p0.18
-next_action: "Claude: run the P0 gate on the exit commit (portal stopped meanwhile, then restarted), save its evidence, record phase-p0-planning#exit from raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md, set the phase to done, write the handoff, then PAUSE. P1 does not start until the owner explicitly says go."
+current_task: none (paused before p1.1)
+next_action: "PAUSED after P0 (done and signed off 2026-10-11). Claude starts no P1 work. Owner: when ready, say in Claude Code that P1 may start (for example \"Go ahead with phase 1\"). Claude then transcribes it to wiki/raw/owner/, logs gate | phase-p1-foundation go-ahead given, runs the P1 entry gate (SCHEMA §9.7, python tools/approvals_check.py) and starts task p1.1 (confirm and record the toolchain)."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -32,13 +32,16 @@ last_handoff: handoff-2026-10-09-s01
 
 ## Current phase
 
-**phase-p0-planning — in progress (session s01, 2026-10-08).** Planning only. No Ferrum application code
-(no Rust, no Tauri) may be written. The `interactive_plan/` Next.js app (owner directive 2 in
-[raw/01-scoping-decisions.md](wiki/raw/01-scoping-decisions.md)) is the planning tool, not Ferrum code.
+**phase-p0-planning — DONE (session s01, 2026-10-08 to 2026-10-11).** The owner signed off P0 on 2026-10-11
+(`phase-p0-planning#exit` APPROVED after the P0 gate passed on `b5f7d40`). **Claude is PAUSED**: phase-p1-foundation
+does not start until the owner explicitly says go in Claude Code (SCHEMA §9.7 exit-gate step 7; the owner said
+"don't start phase 1"). No Ferrum application code (no Rust, no Tauri) exists or may be written before that go.
 
-P0 state in one line: **the wiki is drafted, integrated and lint-clean (p0.8); Approval Wave 0 is answered
-and transcribed; the `interactive_plan/` app is scaffolded (IP-1) and has its wiki loader (IP-2), its hash/state/gate modules (IP-3), its approvals store + API (IP-4), its wiki lint + gate report (IP-5; `npm run lint:wiki` is now the normative lint, real wiki 0 errors) and its app shell, wiki browser, search and log views (IP-6), its dashboard, approvals inbox, phase detail, approve bar and lint view (IP-7) its architecture, roadmap, decisions, risks and research views (IP-8) and its accessibility, security and timing checks with a green `npm run verify` and coverage thresholds (IP-9) and its README, final lint and handoff (IP-10, the app build is complete); p0.17 (portal v2, after the owner found v1 too technical) has its rules, its wiki-to-portal pipeline, the plain-language portal text for every page and a PowerShell 7 check script for every task and phase (the P0 gate passes), and the new read-only portal is built and reviewed: all seven tabs of the approved mockups with phase, detail, reference and script popups, started with one script; the session handoff is written and the end-of-turn check is proven on; nothing is approved in `plan/approvals.json`
-yet (every approvable page is PENDING).**
+P0 in one line: **the wiki is written, checked and approved; the read-only plain-language portal
+(`interactive_plan/`) is built and checked (five browsable lists, Ref mode, the browser design); a PowerShell 7
+check script exists for every task and phase; the P0 gate passed (evidence
+[p0-gate.20261011-0218.txt](wiki/raw/evidence/phase-p0-planning/p0-gate.20261011-0218.txt)); Approval Waves 1 and 2
+and `phase-p0-planning#exit` are recorded in `plan/approvals.json`.**
 
 ## Done this session (s01)
 
@@ -232,6 +235,9 @@ yet (every approvable page is PENDING).**
   the planning phase and before building the next phase". The pause rule is now in CLAUDE.md §1, SCHEMA §9.7 (exit-gate
   step 7), ops-session-protocol, adr-0014, the P0 exit task and the P1 entry criteria: when a phase's gate passes Claude
   stops, reports and waits for the owner's sign-off **and** an explicit go-ahead before any work of the next phase.
+- 2026-10-11: owner answered Q-207, Q-004, Q-005, Q-108, Q-106, Q-110, Q-211; approved Waves 1 and 2 (30 keys);
+  P0 gate run 1 failed on one unreadable MANIFEST line (fixed by appending), run 2 passed on `b5f7d40`; P0 signed off
+  and set to done; Claude paused before P1 (owner: "don't start phase 1").
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -281,54 +287,27 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Plan portal (portal v2) | Built, reviewed and checked: seven tabs, popups for every id, read-only; new Ref button names every block for your layout feedback (restart the portal to get it) |
-| Check scripts | One per task and per phase; the P0 checks all pass; the P1 scripts are ready for your review |
-| End-of-turn check | On: Claude cannot end a turn while the portal text is out of date |
-| Approvals | None yet; you give them in Claude Code, Claude records them |
-| After your P0 sign-off | Claude pauses; P1 starts only when you say go (your rule of 10 Oct) |
+| P0 Planning | Done: 18 of 18 tasks; final check passed; signed off by you on 11 Oct |
+| Approvals | 30 pages approved on 11 Oct (planning round and phase 1 round), plus your P0 sign-off |
+| Phase 1 | Not started. Claude is paused until you say go |
+| Plan portal | Running and up to date; restart it any time with the script below |
 | First upload to GitHub | On hold until you answer the history-rewrite question (Q-221) |
 
-**2. Why, and what it does.** The portal is how you follow the project → you read it once end to end, including
-the P1 task and gate scripts → Claude fixes whatever reads unclear → then asks your first approvals in chat → your
-P0 sign-off closes the planning phase → Claude then pauses, and P1 starts only when you explicitly say go. The script only starts the portal; it changes nothing in
-the plan.
+**2. Why, and what it does.** Nothing has to run. Your rule of 10 Oct: after a phase ends, Claude stops until you
+say go → phase 1 begins only on your word → then Claude checks the entry conditions and starts with confirming the
+tools (installs need your clicks on Windows prompts). The script below only starts the portal if you want to read
+it; it changes nothing.
 
-**3. The script** (PowerShell 7, from the repo folder):
+**3. The script** (optional; PowerShell 7, from the repo folder):
 
 ```powershell
 pwsh -NoProfile -File scripts/start-portal.ps1
 ```
 
-- `pwsh -NoProfile` runs PowerShell 7 without your personal settings, so it behaves the same every time.
-- `scripts/start-portal.ps1` finds Node, installs the portal's packages the first time, builds the portal (about a
-  minute), starts it on this computer only (127.0.0.1) and opens http://127.0.0.1:3417/ in your browser.
-- Ctrl+C stops it. If the portal is already running, stop it with Ctrl+C and run the script again: it rebuilds, so
-  you get the new **Ref** button.
+- It finds Node, builds the portal, starts it on this computer only and opens http://127.0.0.1:3417/. Ctrl+C stops it.
 
-What to read: every tab; on the Roadmap, open P1 and read its tasks, the check script of each task (script button)
-and the gate script that decides when P1 is done.
-
-For layout feedback, click **Ref** in the top bar: every block gets an outline and a name such as
-"OV-3 · What happens next"; click a name to copy it and paste it into your message. Esc turns it off.
-
-**4. What to tell Claude afterwards:** "the portal reads fine", or which tab or popup reads wrong or unclear and
-why (for layout, with the names Ref mode copied).
-
-Then, in order:
-
-1. Claude fixes the wording you named (wiki and portal together).
-2. Claude asks the first-wave approvals and questions in chat (Q-207, Q-004, Q-005, Q-108) and records each answer
-   with `tools/approvals_record.py` ([ops-approval-workflow](wiki/operations/ops-approval-workflow.md)).
-3. Task p0.18 (P0 exit review): Claude re-runs `npm audit` in `interactive_plan/`, runs the P0 gate
-   (`pwsh -NoProfile -File scripts/gates/p0-gate.ps1`), then asks for your **P0 sign-off** in Claude Code.
-4. **PAUSE.** After your P0 sign-off Claude stops, reports, and waits. P1 does not start (no task, install or
-   project setup) until you explicitly say go in Claude Code; Claude records your words
-   ([your directive of 2026-10-10](wiki/raw/owner/2026-10-10-s01-q008-and-pause.md), SCHEMA §9.7 exit-gate step 7).
-5. Before the first push (any time later): Claude asks Q-221 (history rewrite); no push until answered.
-
-Still open for you (no action needed now): 5 known warnings in
-development-only tools, re-checked before P0 sign-off; one line-ending safety claim (risk-r22) still needs its own
-small check.
+**4. What to tell Claude:** "Go ahead with phase 1" when you want building to start. Optional any time: your
+answer on the title bar (Q-125, before P3) or on rewriting old commits (Q-221, before the first upload).
 
 ## Pending owner approvals
 
@@ -339,4 +318,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-10, session s01 (p0.17 step "q008-pause": Q-008 answered (keep the accessibility checker) and the pause-between-phases rule recorded; next: your walkthrough of the portal). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md).
+2026-10-11, session s01 (p0.18: Waves 1 and 2 approved, P0 gate passed on `b5f7d40`, P0 signed off; PAUSED before P1). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

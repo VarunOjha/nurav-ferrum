@@ -361,6 +361,18 @@
       "recorded_by": "claude",
       "owner_words": "wiki/raw/owner/2026-10-11-s01-wave2-pages-approval.md",
       "history": []
+    },
+    "phase-p0-planning#exit": {
+      "status": "approved",
+      "comment": "4 yes, it's a sign off. However, don't start next phase.",
+      "timestamp": "2026-10-11T02:18:50-05:00",
+      "path": "wiki/phases/phase-p0-planning.md",
+      "content_hash": "sha256:85986d647535e439a0ba6d86f6a76b58255187c3a90219bd98dae281079cc106",
+      "scope_hash": "sha256:ae0ccd22de3d17ec60320f4c35e1d22e7a8fe9ee5beb72925922ce7c33797c33",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md",
+      "history": []
     }
   }
 }

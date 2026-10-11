@@ -63,7 +63,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 
 ## Phases
 
-- [phase-p0-planning](phases/phase-p0-planning.md) | gate-review | P0 Planning: LLM wiki, interactive plan app, owner approval | 18 tasks; est. 4 sessions (planning estimate). P0 creates the project's memory and its approval mechanism before any Ferrum code exists.
+- [phase-p0-planning](phases/phase-p0-planning.md) | done | P0 Planning: LLM wiki, interactive plan app, owner approval | 18 tasks; est. 4 sessions (planning estimate). P0 creates the project's memory and its approval mechanism before any Ferrum code exists.
 - [phase-p1-foundation](phases/phase-p1-foundation.md) | planned | P1 Foundation: toolchain, repo scaffold, CI, de-risking spikes | 17 tasks; est. 6 sessions (planning estimate). P1 turns an empty repository into a working Rust workspace and, before any M1 design is frozen, runs four throwaway …
 - [phase-p2-minimal-container](phases/phase-p2-minimal-container.md) | planned | P2 Minimal container (Milestone M1): one shell, one content WebView, safe navigation | Milestone M1; 18 tasks; est. 4 sessions (planning estimate). P2 builds the smallest useful Ferrum: one window with a trusted shell WebView and one untrusted content WebView that …
 - [phase-p3-tabs-sessions](phases/phase-p3-tabs-sessions.md) | planned | P3 Tabs and sessions (Milestone M2): multi-tab, session restore, per-site settings | Milestone M2; 15 tasks; est. 5 sessions (planning estimate). P3 turns the single content WebView into a tab manager.

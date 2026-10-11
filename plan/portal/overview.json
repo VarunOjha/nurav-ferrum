@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is almost closed: you answered the questions, approved 30 pages and signed off. Claude is running the final planning check before recording your sign-off. No Ferrum code exists yet.",
+  "summary": "Planning (P0) is finished and signed off by you on 11 Oct. You approved 30 pages in two rounds. No Ferrum code exists yet. Claude is paused: phase 1 starts only when you explicitly say go.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:d62b449c55ef2d50ff83ce5bb929e1fcec47ec30b094fe71aead171cbdefdc60"
+    "content_hash": "sha256:52a27f24cc888ed27aff6aeaf154ad3be7f80feb4f2eda80989caa4398baaaa4"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P0 Planning: waiting for its final check (17 of 18 tasks done)",
+      "state": "P0 Planning: done, signed off by you on 11 Oct (18 of 18 tasks)",
       "ref": "phase-p0-planning"
     },
     {
@@ -34,11 +34,11 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Planning",
-        "state": "Signed off by you; final check running"
+        "state": "Done and signed off"
       },
       {
         "item": "Approvals",
@@ -49,9 +49,9 @@
         "state": "Paused until you say go"
       }
     ],
-    "why": "Nothing to run; Claude continues with the final planning check, then records your sign-off and pauses.",
+    "why": "Nothing to run. Claude is paused (your rule of 10 Oct): no tool installs, no project setup, no test builds. When you are ready, say go for phase 1 in Claude Code; Claude records your words and starts with confirming the tools. Optional any time: answer the title bar question, or the history-rewrite question before the first upload.",
     "script": null,
-    "tell_claude": "Nothing yet; Claude reports when the check is done."
+    "tell_claude": "\"Go ahead with phase 1\" when you want building to start. Until then nothing happens."
   },
   "questions_for_you": {
     "open": 32,

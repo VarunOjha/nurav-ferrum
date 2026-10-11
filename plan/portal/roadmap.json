@@ -40,12 +40,12 @@
       "short": "P0",
       "name": "Planning",
       "one_line_goal": "Plan written, checked and approved by you; no app code yet",
-      "status": "Waiting for your review",
-      "tasks_done": 17,
+      "status": "Done",
+      "tasks_done": 18,
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p0-planning.md",
-        "content_hash": "sha256:85986d647535e439a0ba6d86f6a76b58255187c3a90219bd98dae281079cc106"
+        "content_hash": "sha256:eb0cb8cfd15df7ae12c994078d55b3adcb5ade6956951dbc2af30898685da8d3"
       }
     },
     {
