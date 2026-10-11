@@ -1,0 +1,12 @@
+Ferrum check p2.4: Settings model
+Why: bad settings never crash or weaken the app.
+Run at 2026-10-11 18:36 on commit 40ed14a (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The core crate forbids unsafe code
+         #![forbid(unsafe_code)]
+  PASS   Settings tests pass, one per required case
+         7 required cases pass (test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s)
+------------------------------------------------------------------------
+RESULT: PASS - p2.4 (2 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.4 check passed".
