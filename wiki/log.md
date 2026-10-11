@@ -1205,3 +1205,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 01:48
 - pages: [phase-p0-planning]
 - result: Status set to gate-review. Manual items: the owner walked through portal v2 and its additions (2026-10-09 to 2026-10-11), answered or deferred the open questions (Waves 1 and 2 answered; the rest wait for their own waves, ops-approval-workflow §8), and accepted the manual lint report (raw/owner/2026-10-11-s01-p0-exit-scope.md). Next: scripts/gates/p0-gate.ps1 on the exit commit, then record phase-p0-planning#exit.
+
+## [2026-10-11] gate | phase-p0-planning exit gate run 1 on e446aa4: FAIL at p0.8 (one MANIFEST line unreadable)
+
+- session: s01
+- time: 02:05
+- pages: [phase-p0-planning]
+- sources: [raw/evidence/phase-p0-planning/p0-gate.20261011-0204.txt]
+- result: pwsh scripts/gates/p0-gate.ps1 -SaveEvidence (owner's portal stopped for the run): 23 PASS, 1 FAIL, 4 YOURS in 829 s. All test-gate rows passed (typecheck and style, 873 unit tests, browser tests on the production build, build, fingerprint cross-check, wiki check, portal sync, mask scan, tool tests). The FAIL: task p0.8 found no fingerprint for evidence/phase-p0-planning/portal-v2/browse-fixes-checks.txt, because its MANIFEST line (written in c14d4b6) used the binary-mode marker " *" that the checker does not read; the hash itself is correct. Fix: MANIFEST is append-only, so the old line stays and a correct line for the same file is appended, plus the line for this run's evidence file. p0.8 alone now passes (77 raw files, all match). npm audit in interactive_plan: the same 5 high findings as before, all in development-only lint tooling (braces via micromatch, fast-glob, eslint-config-next); the offered fix downgrades eslint-config-next to 14.2.35 (breaking), so not applied.
+- next: commit, then run the P0 gate again on that commit

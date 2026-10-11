@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8b264745b1502462c57fa634116dbe056c9f701d5e6ec721eb729256d11e876b"
+    "content_hash": "sha256:28a74687c7b12ee8cf4e24ac93bdb069797621450a9aef641b0c74ecbfe3f26d"
   },
   "entries": [
     {
@@ -1529,6 +1529,35 @@
       "tags": [
         "approvals",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p0-gate",
+      "date": "2026-10-11",
+      "time": "02:05",
+      "title": "Final planning check: one bookkeeping slip found and fixed",
+      "done": "The final planning check ran every test: all of them passed except one bookkeeping check. One line in the list of file fingerprints had a format the checker cannot read; its fingerprint was right. That list may only grow, so Claude added a correct line instead of changing the old one. The known warnings in development-only tools are unchanged.",
+      "next": "Claude runs the final check again; when it passes, Claude records your planning sign-off and pauses.",
+      "decisions": [
+        {
+          "what": "Keep the failed run's output as a record and add a correct fingerprint line, rather than edit the old line",
+          "by": "claude"
+        },
+        {
+          "what": "Leave the 5 warnings in development-only lint tools as they are: the offered fix is a breaking downgrade",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] gate | phase-p0-planning exit gate run 1 on e446aa4: FAIL at p0.8 (one MANIFEST line unreadable)"
+      ],
+      "phase": "phase-p0-planning",
+      "category": "Checked",
+      "tags": [
+        "check scripts",
+        "testing"
       ]
     }
   ]
