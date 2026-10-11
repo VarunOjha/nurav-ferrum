@@ -1,0 +1,101 @@
+# Ferrum CI (P1 task p1.11; plan: wiki/quality/qual-ci-plan.md, adr-0011).
+# Runs on GitHub's Windows runners after the owner pushes (Claude never pushes). The same steps run locally
+# with scripts/ci-local.ps1. CI never runs benchmarks. Third-party actions are pinned by full commit SHA.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  NODE_VERSION: "24.20.0"
+
+jobs:
+  rust:
+    name: rust (fmt, clippy, test, release build)
+    runs-on: windows-latest
+    steps:
+      - name: Allow long paths (risk-r22)
+        run: git config --global core.longpaths true
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Toolchain from rust-toolchain.toml
+        run: rustup show
+      - name: rust-fmt
+        run: cargo fmt --all -- --check
+      - name: rust-clippy
+        run: cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
+      - name: rust-test
+        run: cargo test --locked --workspace --all-targets
+      - name: rust-build
+        run: cargo build --locked --workspace --release
+      - name: repro-check (lockfile and toolchain file unchanged)
+        run: git diff --exit-code -- Cargo.lock rust-toolchain.toml
+
+  rust-deps:
+    name: rust-deps (cargo-deny)
+    runs-on: windows-latest
+    steps:
+      - name: Allow long paths (risk-r22)
+        run: git config --global core.longpaths true
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install cargo-deny 0.20.2
+        run: cargo install cargo-deny --locked --version 0.20.2
+      - name: cargo deny check
+        run: cargo deny check
+
+  plan-app:
+    name: plan-app (lint, typecheck, unit, build, e2e)
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: interactive_plan
+    steps:
+      - name: Allow long paths (risk-r22)
+        run: git config --global core.longpaths true
+        working-directory: .
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test
+      - run: npm run build
+      - name: Playwright browser for the e2e tests
+        run: npx playwright install chromium
+      - run: npm run test:e2e
+      - name: repro-check (lockfile unchanged)
+        run: git diff --exit-code -- package-lock.json
+
+  wiki:
+    name: wiki-lint, hash-parity, tools tests
+    runs-on: windows-latest
+    steps:
+      - name: Allow long paths (risk-r22)
+        run: git config --global core.longpaths true
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the git-backed lint rules (RAW-IMMUTABLE, STALE-UPDATED) read the history
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: npm ci
+        run: npm ci
+        working-directory: interactive_plan
+      - name: wiki-lint
+        run: npm run lint:wiki
+        working-directory: interactive_plan
+      - name: hash-parity (SCHEMA 10.2 Python reference vs TypeScript, shared vectors)
+        run: npx vitest run tests/unit/hash.vectors.test.ts
+        working-directory: interactive_plan
+      - name: tools unit tests (approvals, quick lint)
+        run: python -m unittest discover -s tools -p "test_*.py"
