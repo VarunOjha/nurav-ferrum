@@ -1312,3 +1312,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-11-s02-p1-go-ahead.md]
 - result: SCHEMA §9.7 entry checks. (1) phase-p0-planning done, phase-p0-planning#exit APPROVED, go-ahead given. (2) Dependency set (schema, phase-p1-foundation, adr-0006, adr-0007, adr-0010, adr-0011, adr-0012, adr-0014, adr-0018, adr-0019, adr-0021, comp-core, comp-webview2-runtime, comp-windows-os) all APPROVED. (3) No open question blocks an id in it (Q-106, Q-110, Q-218 answered). (4) The one CONTRADICTION in the set (adr-0010) is registered under Q-107. phase-p1-foundation set to in-progress (volatile key only; approval APPROVED_VOLATILE_DRIFT).
 - next: p1.1 confirm and record the toolchain
+
+## [2026-10-11] code | p1.1 toolchain confirmed and recorded; cargo-deny installed
+
+- session: s02
+- time: 12:34
+- pages: [phase-p1-foundation]
+- sources: [raw/evidence/phase-p1-foundation/toolchain.txt, raw/evidence/phase-p1-foundation/toolchain-details.txt]
+- result: cargo install cargo-deny --locked installed cargo-deny 0.20.2. scripts/verify/p1.1-toolchain.ps1 -SaveEvidence PASS (8 of 8): rustc 1.99.0 on x86_64-pc-windows-msvc, cargo 1.99.0, VS Build Tools 2022 17.14, node v24.20.0, npm 11.19.0, Python 3.12.10, git 2.52.0.windows.1, PowerShell 7.6.6. Nothing else had to be installed (no winget, no UAC prompt). Git's link.exe is first on PATH, but cargo rustc --print link-args shows cargo calls the MSVC 14.44.35207 link.exe, and throw-away --lib and --bin crates build. This settles the phase page's link.exe claim; the phase-page tags are closed at the exit gate (editing the page now would stale its approval). Note: cargo and rustc are not on the Claude Code Bash PATH; add $USERPROFILE/.cargo/bin.
+- next: p1.2 machine inventory
+- commit: 29b7d81

@@ -300,7 +300,7 @@
       "kind": "task",
       "title": "P1 task: Confirm and record the toolchain",
       "summary": "Rust 1.99, the C++ build tools, Node 24 and PowerShell 7 are already installed → confirm each works, record exact versions, add the licence checker → every later result names the tools it was built with.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4388,6 +4388,14 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "29b7d81",
+      "kind": "commit",
+      "title": "Commit: Tools confirmed and recorded",
+      "summary": "Tool versions for phase 1 saved, licence checker added.",
+      "status": null,
+      "related": []
     }
   ]
 }

@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. You gave the go for phase 1 on 11 Oct, and the entry check passed. Claude is now working through the phase 1 tasks, starting with the tools.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: the tools are confirmed. Next Claude records this computer's hardware.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:e8c66063b261073ac33a730a87bcde4ce731abf4e22e50792c9620240fd6552c"
+    "content_hash": "sha256:e62f6092fdc091fe2d44b73971bdcc2e3b2ab5af39b22507700e5c07ff23b05c"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 0 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 1 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "Started 11 Oct"
+        "state": "1 of 17 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Confirm and record the tools"
+        "state": "Record this computer's hardware"
       }
     ],
-    "why": "Nothing to run. Claude continues with the first task: tools are already installed → Claude adds the licence checker and records every version → later results can name the exact tools used.",
+    "why": "Nothing to run. Benchmark numbers depend on the machine → Claude records processor, memory, screens and browser versions → every later result can name the computer it ran on.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

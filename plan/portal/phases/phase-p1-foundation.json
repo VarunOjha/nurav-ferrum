@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 0,
+    "done": 1,
     "total": 17
   },
   "step_order": [
@@ -26,7 +26,7 @@
       "what": "Confirms the installed tools (Rust, C++ build tools, Node, PowerShell 7), records their versions and adds the licence checker.",
       "why": "If versions are not recorded, nobody can rebuild a result later or tell whether a tool update changed it, and a missing tool would only show up mid-build.",
       "how": "Save each tool's version to a file, install only what is missing (you click the Windows prompts) and build a tiny Rust project to prove linking works.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Rust 1.99, the C++ build tools, Node 24 and PowerShell 7 are already installed → confirm each works, record exact versions, add the licence checker → every later result names the tools it was built with.",
       "check": "Each tool prints its version; a tiny Rust test project builds and links; versions saved.",
       "script": "scripts/verify/p1.1-toolchain.ps1"

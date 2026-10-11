@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: null
-next_action: "Task p1.1 (confirm and record the toolchain): run pwsh -NoProfile -File scripts/verify/p1.1-toolchain.ps1 -SaveEvidence from the repo folder after cargo install cargo-deny --locked; then commit p1.1 and continue with p1.2 per wiki/phases/phase-p1-foundation.md step order."
+next_action: "Task p1.2 (machine inventory): write wiki/raw/evidence/phase-p1-foundation/environment.md from the PowerShell inventory commands on the phase page, then run pwsh -NoProfile -File scripts/verify/p1.2-machine-inventory.ps1; commit p1.2; continue in the phase page step order."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -43,6 +43,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 ## Done this session (s02)
 
 - Session start; go-ahead transcribed; P1 entry gate passed; `phase-p1-foundation` set to in-progress.
+- p1.1 done (`29b7d81`): toolchain recorded ([toolchain.txt](wiki/raw/evidence/phase-p1-foundation/toolchain.txt), [toolchain-details.txt](wiki/raw/evidence/phase-p1-foundation/toolchain-details.txt)); cargo-deny 0.20.2 installed; cargo uses the MSVC linker.
 
 ## Done this session (s01)
 
@@ -254,7 +255,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: session s02 opened and P1 entry gate passed 2026-10-11; p1.1 not started yet)
+(empty: p1.1 verified and committed 2026-10-11 as `29b7d81`)
 
 ## Blockers
 
@@ -290,19 +291,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| P0 Planning | Done and signed off (11 Oct) |
-| Phase 1 | In progress since 11 Oct, 12:25 (your go-ahead); 0 of 17 tasks done |
-| Approvals | All 31 current |
+| Phase 1 | In progress: 1 of 17 tasks done |
+| Next task | p1.2 record this computer's hardware |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude continues with task p1.1: it installs the licence
-checker cargo-deny, then runs `scripts/verify/p1.1-toolchain.ps1 -SaveEvidence`, which records every tool version
-and builds a tiny Rust program to prove the C++ linker works.
+**2. Why, and what it does.** Nothing for you to run now. Claude records the processor, memory, graphics, screens, power plan, Windows build and the browser and WebView2 versions.
 
 **3. The script:** none for you.
 
-**4. What to tell Claude:** nothing; Claude will ask when a step needs you (Windows prompts, manual spike checks,
-design choices, approvals).
+**4. What to tell Claude:** nothing; Claude asks when a step needs you.
 
 ## Pending owner approvals
 
@@ -313,4 +310,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 go-ahead given and entry gate passed; p1.1 next). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: p1.1 done). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

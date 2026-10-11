@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e8f5506b04c1fa23c30fddf0ccefb752d47041fa9bd717d23efced2cbe92ecda"
+    "content_hash": "sha256:d7d70dcdafb47a9d4091f43ed347180d5f01cd96af9cade882f7e71b6777eb54"
   },
   "entries": [
     {
@@ -1656,6 +1656,26 @@
       "tags": [
         "phases",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-1",
+      "date": "2026-10-11",
+      "time": "12:34",
+      "title": "Tools confirmed and recorded",
+      "done": "Every tool was already installed, so nothing needed your clicks. Claude added the licence checker, saved the exact version of each tool, and proved that Rust uses the right Microsoft linker (not the one Git puts first on the path).",
+      "next": "Claude records this computer's hardware and browser versions.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "29b7d81",
+      "covers": [
+        "## [2026-10-11] code | p1.1 toolchain confirmed and recorded; cargo-deny installed"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Set up",
+      "tags": [
+        "toolchain",
+        "testing"
       ]
     }
   ]
