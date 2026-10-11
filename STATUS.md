@@ -240,7 +240,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "browse" (search, filters, category and tag labels and 20-per-page lists on the Decisions and Log tabs, owner-approved plan) verified and committed 2026-10-10 (`3a19188`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 step "browse-fixes" (review fixes for the Decisions and Log search, filters and pages)
+- intent: keep focus on Previous/Next, offer only tags in use, warn when "Date from" is after "Date to", call the Decisions phase filter "Affects phase", hide a filter with one choice, close the tag list when focus leaves it, tidy a too-high page number in the address, shorter Log search hint, fix four decision labels (adr-0012, adr-0013, adr-0019, adr-0020) and the browse log entry's wording; tests, wiki pages and portal JSON updated
+- planned paths: interactive_plan/components/portal/browse/Browse.tsx, interactive_plan/lib/portal/{browse,browseTabs,taxonomy}.ts, interactive_plan/app/{decisions,log}/page.tsx, interactive_plan/tests/{unit,e2e}/*browse*, plan/portal/{decisions,log,overview,refs}.json, wiki/interactive-plan/ip-routes-and-views.md, wiki/raw/evidence/phase-p0-planning/portal-v2/browse-fixes-checks.txt, wiki/raw/MANIFEST.sha256
+- rollback: git checkout -- <those paths> (new evidence file: owner consent needed to delete)
 
 ## Blockers
 

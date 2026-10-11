@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:199384fa2239e22dac06167eebd440ed9afb701f40cc01508c3fd05e57408cfd"
+    "content_hash": "sha256:f07476aade2cc7aee333b656a4cdc32e5728e01a153c1b0f19b63752172b5bac"
   },
   "entries": [
     {
@@ -1302,7 +1302,7 @@
       "id": "log-2026-10-10-browse",
       "date": "2026-10-10",
       "title": "Decisions and log can now be searched, filtered and paged",
-      "done": "You asked for this and approved the plan. Every decision now has a topic and two tags, and every log entry a kind of work and two tags, from one fixed list. Both tabs have a search box, filters (topic, tags, phase, dates; for decisions also status and who decided), a results line, 20 per page with page numbers, and the view stays in the address. Clicking a tag shows everything with that tag. All checks pass.",
+      "done": "You asked for this and approved the plan. Every decision now has a category (its topic) and two tags, and every log entry a category (its kind of work) and two tags, from one fixed list. Both tabs have a search box, filters (category, tags, phase, dates; for decisions also status and who decided), a results line, 20 per page with page numbers, and the view stays in the address. Clicking a tag on a card adds that tag to the filter. All checks pass.",
       "next": "Restart the portal to see the new search and filters, then go on with your walkthrough using Ref.",
       "decisions": [
         {
@@ -1310,11 +1310,15 @@
           "by": "you"
         },
         {
-          "what": "20 per page with page numbers; filters for topic, tags, phase, dates, status and who decided",
+          "what": "20 per page with page numbers; filters for category, tags, phase, dates, status and who decided",
           "by": "you"
         },
         {
           "what": "Choosing several tags shows only items that have all of them",
+          "by": "claude"
+        },
+        {
+          "what": "A decision's phase is the phase it mainly affects, not the phase that wrote it (that would be P0 for almost all); the filter says \"Affects phase\"",
           "by": "claude"
         },
         {
@@ -1333,6 +1337,39 @@
       ],
       "phase": "phase-p0-planning",
       "category": "Built",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-10-browse-fixes",
+      "date": "2026-10-10",
+      "title": "Search and filters fixed after a review",
+      "done": "A review of the new search, filters and pages found 11 points; 10 are fixed and 1 is a note for you. The Tags list now offers only tags that some item has, so no tag gives an empty list. If \"Date from\" is after \"Date to\", the page now says so. Previous and Next keep the keyboard focus at the first and last page. On Decisions the phase filter is called \"Affects phase\", and four decisions got better labels. The Log hides its phase filter while every entry is P0. All checks pass.",
+      "next": "Restart the portal to see the fixes, then go on with your walkthrough using Ref. Note: in Ref mode the name LO-2 now marks only the Log's \"Show\" filter (decisions or approvals); the results count is LO-8.",
+      "decisions": [
+        {
+          "what": "The Tags list offers only the tags in use on that tab; the full list of 26 stays in one file",
+          "by": "claude"
+        },
+        {
+          "what": "A filter with only one choice is hidden until there is a real choice",
+          "by": "claude"
+        },
+        {
+          "what": "Decision 19 (unsafe WebView2 code in one module) mainly affects P2, and decision 13 (statistics in Python) P6",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] code | p0.17 browse review fixes: focus kept on Previous/Next, only tags in use, reversed-date hint, \"Affects phase\", four decision labels",
+        "## [2026-10-10] lint | p0.17 browse review fixes: npm run verify green, screenshots of Decisions and Log read at 1440 and 390 px"
+      ],
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
       "tags": [
         "portal",
         "look & feel"

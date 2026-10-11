@@ -5,6 +5,8 @@
 import { describe, expect, it } from "vitest";
 import {
   activeCount,
+  clampPage,
+  datesReversed,
   EMPTY_STATE,
   filterItems,
   isFiltered,
@@ -30,7 +32,7 @@ import {
 import { decisionExtras, decisionsBrowse, LOG_EXTRAS, logBrowse, phaseOptions } from "@/lib/portal/browseTabs";
 import type { Decisions, Log, Roadmap } from "@/lib/portal/schemas.gen";
 import { TaxonomyFile } from "@/lib/portal/schemas.gen";
-import { labelsOf, normalizeTaxonomy, offered } from "@/lib/portal/taxonomy";
+import { labelsOf, normalizeTaxonomy, offered, offeredInUse } from "@/lib/portal/taxonomy";
 
 const SPEC: BrowseSpec = {
   categories: ["The app", "Plan portal"],
@@ -206,6 +208,24 @@ describe("pages", () => {
     expect(resultsLine(pageInfo(0, 1), 28, true)).toBe("No matches (28 in all)");
     expect(resultsLine(pageInfo(0, 1), 0, false)).toBe("No matches");
   });
+
+  it("clampPage keeps the asked page inside the pages these items fill", () => {
+    const many = Array.from({ length: 28 }, (_, i) => item(`i${i}`));
+    expect(clampPage(state({ page: 99 }), many).page).toBe(2);
+    expect(clampPage(state({ page: 2 }), many).page).toBe(2);
+    const same = state({ page: 1 });
+    expect(clampPage(same, many)).toBe(same);
+    // Nothing matches: page 1.
+    expect(clampPage(state({ q: "zzz", page: 5 }), many).page).toBe(1);
+  });
+
+  it("datesReversed is true only when both dates are set and from is after to", () => {
+    expect(datesReversed(state({ from: "2026-10-10", to: "2026-10-08" }))).toBe(true);
+    expect(datesReversed(state({ from: "2026-10-08", to: "2026-10-10" }))).toBe(false);
+    expect(datesReversed(state({ from: "2026-10-08", to: "2026-10-08" }))).toBe(false);
+    expect(datesReversed(state({ from: "2026-10-10" }))).toBe(false);
+    expect(datesReversed(state({ to: "2026-10-08" }))).toBe(false);
+  });
 });
 
 describe("taxonomy", () => {
@@ -255,6 +275,15 @@ describe("taxonomy", () => {
       { name: "b", explains: null },
     ]);
     expect(offered([], ["z"])).toEqual([{ name: "z", explains: null }]);
+  });
+
+  it("offeredInUse keeps only the names in use, in the taxonomy's order; unknown ones come last", () => {
+    const list = ["tabs", "memory", "CPU", "portal"].map((name) => ({ name, explains: `About ${name}` }));
+    expect(offeredInUse(list, ["portal", null, "tabs", "portal"]).map((t) => t.name)).toEqual(["tabs", "portal"]);
+    expect(offeredInUse(list, ["CPU"])[0]).toEqual({ name: "CPU", explains: "About CPU" });
+    expect(offeredInUse(list, ["zebra", "memory"]).map((t) => t.name)).toEqual(["memory", "zebra"]);
+    expect(offeredInUse(null, ["b", "a"]).map((t) => t.name)).toEqual(["a", "b"]);
+    expect(offeredInUse(list, [])).toEqual([]);
   });
 });
 
@@ -318,6 +347,11 @@ describe("tab builders", () => {
     expect(b.spec.categories).toEqual(["The app", "Plan portal"]);
     expect(b.spec.tags).toEqual(["tabs", "memory", "CPU", "portal"]);
     expect(b.spec.phases).toEqual(["phase-p1-foundation"]);
+    // A tag no decision has is not offered (it would always give "No matches").
+    const one = decisionsBrowse({ items: [decision(1)] } as unknown as Decisions, tax, ROADMAP);
+    expect(one.spec.tags).toEqual(["tabs", "memory"]);
+    expect(one.tags.map((t) => t.name)).toEqual(["tabs", "memory"]);
+    expect(parseState("?tag=CPU", one.spec).tags).toEqual([]);
     expect(filterItems(b.items, parseState("?by=claude", b.spec)).map((i) => i.id)).toEqual(["adr-0002"]);
     expect(filterItems(b.items, parseState("?q=keeps+MEMORY&tag=tabs", b.spec)).map((i) => i.id)).toEqual(["adr-0001"]);
   });

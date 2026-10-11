@@ -157,22 +157,29 @@ relevance. Should be searchable, filterable.", [request and answers](../raw/owne
   category by kind of work (Built, Checked, Decided, Fixed, Planned, Set up) and exactly two tags; its phase was already
   there. The two category lists and the 26 tags live in one file, `plan/portal/taxonomy.json`, each with a plain one-line
   explanation ([ops-portal-pipeline](../operations/ops-portal-pipeline.md)). Claude assigns the labels when it writes a
-  record; the portal check refuses a label that is not on the lists.
-- **Cards** show the category chip and the two tag chips. Clicking a tag chip filters by that tag; clicking it again
-  turns that filter off.
+  record; the portal check refuses a label that is not on the lists. A decision's phase is the phase it mainly
+  affects (where its work lands), not the phase that wrote the page, which is P0 for almost all of them.
+- **Cards** show the category chip and the two tag chips. Clicking a tag chip adds that tag to the filter; clicking it
+  again takes it off.
 - **Search box:** not case-sensitive, accents ignored, every typed word must appear. Decisions search the title, the
   one-line meaning, the why and the catch; the log searches the title, what was done, what is next and the decisions.
 - **Filters:** category, tags (several can be ticked; an item must have every ticked tag, which the tag list says in
-  plain words), phase, date from and date to (both days included). Decisions also: status (Accepted, Proposed,
+  plain words; only the tags some item on that tab has are offered), phase (labelled "Affects phase" on Decisions),
+  date from and date to (both days included; each date box stops at the other's day, and if "Date from" is after
+  "Date to" the empty message says so instead of a bare "No matches"). A filter with fewer than two choices is not
+  shown (today the Log's phase, since every entry is P0); it appears by itself once there is a choice. The tag list
+  closes on Escape, on a click outside it and when keyboard focus leaves it. Decisions also: status (Accepted, Proposed,
   Replaced; Rejected only when one exists) and who decided (you or Claude). Log also: "Show" (all entries, has
   decisions, has approvals). On a phone the filters fold under a "Filters (n on)" button.
 - **Results line** ("Showing 21–28 of 28", or "Showing 1–5 of 5 (28 in all)" while a filter is on) and **Clear
   filters**. When nothing matches: "No matches" with a Clear filters button.
 - **Pages:** 20 cards per page, numbered page buttons with Previous and Next (long runs shorten to "1 … 4 5 6 … 12").
+  At the first and last page, Previous or Next is marked unavailable (`aria-disabled`) but keeps keyboard focus, so
+  the focus does not jump to the top of the page.
 - **The address keeps the view.** Search, filters and page are written into the address (`q`, `category`, `tag`,
   `phase`, `from`, `to`, `page`, plus `status`, `by` or `has`), replaced rather than added to the history, so a reload or
   a copied link opens the same view and Back still leaves the tab. Unknown values are dropped quietly and the address is
-  tidied up; any change of search or filter goes back to page 1; a page number past the end shows the last page;
+  tidied up; any change of search or filter goes back to page 1; a page number past the end shows the last page and the address is corrected to it;
   clicking the tab button starts the list afresh.
 - **Ref ids** (none renumbered): Decisions `DE-4` Search and filters, `DE-5` Results count, `DE-6` Page numbers, `DE-7`
   Category and tag chips; Log `LO-7` Search and filters, `LO-8` Results count, `LO-9` Page numbers, `LO-10` Category and

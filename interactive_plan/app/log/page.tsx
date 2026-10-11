@@ -37,7 +37,7 @@ export default async function LogPage() {
         categories={browse.categories}
         tags={browse.tags}
         phases={browse.phases}
-        searchHint="Search what was done and decided"
+        searchHint="Search the log"
         noun="entries"
         list={{ as: "div", className: "log-list", testId: "log-list" }}
         refs={{ filters: "LO-7", results: "LO-8", pages: "LO-9", extras: { has: "LO-2" } }}

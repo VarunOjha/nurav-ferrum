@@ -1,0 +1,114 @@
+# p0.17 browse review fixes: checks (2026-10-10, session s01)
+# Scratch git worktree of HEAD 55ae9f2 outside the repo, this step's changed files copied in; owner's portal on 3417 untouched.
+# Commands: npm run verify (full); then npx playwright test browse/log/decisions/ref-mode specs after the new log entry; screenshots on 127.0.0.1:3423.
+
+## npm run verify (summary lines)
+✓ Types generated successfully
+ Test Files  28 passed (28)
+      Tests  833 passed | 1 skipped (834)
+lint: 0 errors, 35 warnings, 2 info (pages: 203)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+✓ Compiled successfully in 6.8s
+E2E guard: 23 real files unchanged (approvals.json absent)
+  141 passed (5.0m)
+rc=0
+
+## new browser tests in this step (from the verify run)
+✓   31 [chromium] › tests\e2e\browse.spec.ts:133:9 › /decisions search, filters and pages › keyboard: focus stays on Previous when it takes you to the first page (1.1s)
+✓   32 [chromium] › tests\e2e\browse.spec.ts:148:9 › /decisions search, filters and pages › a page past the end shows the last page and the address is tidied to it (642ms)
+✓   34 [chromium] › tests\e2e\browse.spec.ts:174:9 › /decisions search, filters and pages › category, phase and tags filter the list; Clear filters shows everything again (2.7s)
+✓   36 [chromium] › tests\e2e\browse.spec.ts:224:9 › /decisions search, filters and pages › a 'Date from' after the 'Date to' says so instead of a bare "No matches" (942ms)
+✓   37 [chromium] › tests\e2e\browse.spec.ts:236:9 › /decisions search, filters and pages › the tag list closes when keyboard focus leaves it (1.2s)
+✓   47 [chromium] › tests\e2e\browse.spec.ts:133:9 › /log search, filters and pages › keyboard: focus stays on Previous when it takes you to the first page (1.0s)
+✓   48 [chromium] › tests\e2e\browse.spec.ts:148:9 › /log search, filters and pages › a page past the end shows the last page and the address is tidied to it (647ms)
+✓   50 [chromium] › tests\e2e\browse.spec.ts:174:9 › /log search, filters and pages › category, phase and tags filter the list; Clear filters shows everything again (1.7s)
+✓   52 [chromium] › tests\e2e\browse.spec.ts:224:9 › /log search, filters and pages › a 'Date from' after the 'Date to' says so instead of a bare "No matches" (749ms)
+✓   53 [chromium] › tests\e2e\browse.spec.ts:236:9 › /log search, filters and pages › the tag list closes when keyboard focus leaves it (1.1s)
+
+## browse, log, decisions and ref-mode browser tests after the new log entry (41 entries)
+E2E guard: 23 real files unchanged (approvals.json absent)
+  67 passed (2.9m)
+rc=0
+
+## screenshot report (scratch server 127.0.0.1:3423)
+[
+ {
+  "shot": "decisions-1440-light",
+  "overflow": 0,
+  "count": "Showing 1–20 of 28"
+ },
+ {
+  "shot": "log-1440-light",
+  "overflow": 0,
+  "count": "Showing 1–20 of 41"
+ },
+ {
+  "shot": "decisions-390-light",
+  "overflow": 0,
+  "count": "Showing 1–20 of 28"
+ },
+ {
+  "shot": "log-390-light",
+  "overflow": 0,
+  "count": "Showing 1–20 of 41"
+ },
+ {
+  "shot": "decisions-1440-dark",
+  "overflow": 0,
+  "count": "Showing 1–20 of 28"
+ },
+ {
+  "shot": "log-1440-dark",
+  "overflow": 0,
+  "count": "Showing 1–20 of 41"
+ },
+ {
+  "shot": "decisions-390-dark",
+  "overflow": 0,
+  "count": "Showing 1–20 of 28"
+ },
+ {
+  "shot": "log-390-dark",
+  "overflow": 0,
+  "count": "Showing 1–20 of 41"
+ },
+ {
+  "shot": "decisions-tags-open-1440-light",
+  "tagsOffered": 25
+ },
+ {
+  "shot": "log-tags-open-1440-light",
+  "tagsOffered": 13
+ },
+ {
+  "shot": "log-filters-open-390-light",
+  "hint": "Search the log",
+  "phaseLabel": null,
+  "overflow": 0
+ },
+ {
+  "shot": "decisions-filters-open-390-light",
+  "hint": "Search titles and text",
+  "phaseLabel": "Affects phase",
+  "overflow": 0
+ },
+ {
+  "shot": "decisions-dates-reversed-1440-light",
+  "why": "The 'Date from' day is after the 'Date to' day."
+ },
+ {
+  "shot": "decisions-dates-reversed-1440-dark",
+  "why": "The 'Date from' day is after the 'Date to' day."
+ },
+ {
+  "shot": "log-pages-prev-focused-1440-light",
+  "url99": "http://127.0.0.1:3423/log?page=99",
+  "prevFocusedAfterPage1": true
+ },
+ {
+  "shot": "log-page2-390-dark-full",
+  "overflow": 0
+ }
+]
+note: url99 was read before the page tidied the address; the browser test 'a page past the end ...' waits for it and passed (address becomes ?page=3).

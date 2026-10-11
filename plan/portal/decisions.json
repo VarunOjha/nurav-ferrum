@@ -362,7 +362,7 @@
       "category": "Research & benchmarks",
       "tags": [
         "benchmarks",
-        "testing"
+        "memory"
       ],
       "phase": "phase-p6-benchmark-harness",
       "related": [
@@ -398,7 +398,7 @@
         "statistics",
         "paper"
       ],
-      "phase": "phase-p8-research-paper",
+      "phase": "phase-p6-benchmark-harness",
       "related": [
         "adr-0012",
         "adr-0009",
@@ -580,7 +580,7 @@
         "WebView2",
         "Tauri"
       ],
-      "phase": "phase-p7-lifecycle",
+      "phase": "phase-p2-minimal-container",
       "related": [
         "adr-0007",
         "adr-0008",
@@ -613,7 +613,7 @@
       "category": "Process & approvals",
       "tags": [
         "wiki",
-        "testing"
+        "phases"
       ],
       "phase": "phase-p0-planning",
       "related": [

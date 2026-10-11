@@ -5,7 +5,7 @@
  */
 import type { Decisions, Log, Roadmap } from "./schemas.gen";
 import { searchText, type BrowseItem, type BrowseSpec, type ExtraFilter, type FilterOption } from "./browse";
-import { labelsOf, offered, type TaxonomyLists, type TaxonomyTerm } from "./taxonomy";
+import { labelsOf, offered, offeredInUse, type TaxonomyLists, type TaxonomyTerm } from "./taxonomy";
 
 export interface TabBrowse {
   items: BrowseItem[];
@@ -111,7 +111,8 @@ function build(
     categoryList,
     items.map((i) => i.category),
   );
-  const tags = offered(
+  // Only the tags in use on this tab: a tag nobody has would always give "No matches".
+  const tags = offeredInUse(
     tagList,
     items.flatMap((i) => i.tags),
   );

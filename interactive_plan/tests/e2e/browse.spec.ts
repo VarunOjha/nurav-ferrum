@@ -1,9 +1,11 @@
 // browse.spec: search, filters and pages on the Decisions and Log tabs (owner request 2026-10-10,
 // wiki/raw/owner/2026-10-10-s01-decisions-log-browse.md). For both tabs: 20 per page with numbered pages,
 // the search box narrows (every word must appear), each filter narrows, a tag chip filters by its tag,
-// the date range, the page address restores the view on reload and ignores unknown values, the empty
-// state clears, the tab button starts afresh, phone width folds the filters, and axe finds nothing in
-// the light and the dark theme. Expectations are computed from the same JSON the portal reads.
+// the date range (and a plain hint when "Date from" is after "Date to"), the page address restores the
+// view on reload, ignores unknown values and tidies a page past the end, the empty state clears, the tab
+// button starts afresh, focus stays on Previous at the first page, the tag list offers only tags in use
+// and closes when focus leaves it, phone width folds the filters, and axe finds nothing in the light
+// and the dark theme. Expectations are computed from the same JSON the portal reads.
 import { expect, test, type Page } from "@playwright/test";
 import { collectErrors, expectAccessible, sidewaysOverflow } from "./axe";
 import { portalJson } from "./helpers";
@@ -47,6 +49,8 @@ interface Tab {
   items: Labelled[];
   card: string;
   idAttr: string;
+  /** The phase filter's label on this tab. */
+  phaseLabel: string;
   /** The searchable text of an item, as the portal searches it. */
   text: (x: Labelled) => string;
 }
@@ -59,6 +63,7 @@ const TABS = [
     items: decisions,
     card: "li[data-decision]",
     idAttr: "data-decision",
+    phaseLabel: "Affects phase",
     text: (x) => {
       const d = x as Decision;
       return normalize([d.title, d.summary, d.why, d.catch ?? ""].join(" \n "));
@@ -71,6 +76,7 @@ const TABS = [
     items: entries,
     card: "article[data-entry]",
     idAttr: "data-entry",
+    phaseLabel: "Phase",
     text: (x) => {
       const e = x as Entry;
       return normalize([e.title, e.done, e.next ?? "", ...e.decisions.map((d) => d.what)].join(" \n "));
@@ -108,7 +114,7 @@ for (const tab of TABS) {
       await expect(count(page)).toHaveText(range(1, PAGE, N));
       expect(await shownIds(page)).toEqual(tab.items.slice(0, PAGE).map((x) => x.id));
       const nav = page.getByRole("navigation", { name: "Pages" });
-      await expect(nav.getByRole("button", { name: "Previous" })).toBeDisabled();
+      await expect(nav.getByRole("button", { name: "Previous" })).toHaveAttribute("aria-disabled", "true");
       await expect(nav.getByRole("button", { name: "Page 1" })).toHaveAttribute("aria-current", "page");
       const pages = Math.ceil(N / PAGE);
       await expect(nav.getByRole("button", { name: /^Page \d+$/ })).toHaveCount(Math.min(pages, 7));
@@ -118,10 +124,33 @@ for (const tab of TABS) {
       await expect(page).toHaveURL(new RegExp(`${tab.route}\\?page=2$`));
       expect(await shownIds(page)).toEqual(tab.items.slice(PAGE, 2 * PAGE).map((x) => x.id));
       await nav.getByRole("button", { name: `Page ${pages}` }).click();
-      await expect(nav.getByRole("button", { name: "Next" })).toBeDisabled();
+      await expect(nav.getByRole("button", { name: "Next" })).toHaveAttribute("aria-disabled", "true");
       await nav.getByRole("button", { name: "Previous" }).click();
       await expect(count(page)).toHaveText(range((pages - 2) * PAGE + 1, (pages - 1) * PAGE, N));
       expect(errors).toEqual([]);
+    });
+
+    test("keyboard: focus stays on Previous when it takes you to the first page", async ({ page }) => {
+      test.skip(N <= PAGE, "one page only");
+      await page.goto(`${tab.route}?page=2`);
+      const prev = page.getByRole("navigation", { name: "Pages" }).getByRole("button", { name: "Previous" });
+      await prev.focus();
+      await page.keyboard.press("Enter");
+      await expect(count(page)).toHaveText(range(1, PAGE, N));
+      await expect(prev).toHaveAttribute("aria-disabled", "true");
+      await expect(prev).toBeFocused();
+      // Pressed again at the first page, nothing happens and focus stays.
+      await page.keyboard.press("Enter");
+      await expect(count(page)).toHaveText(range(1, PAGE, N));
+      await expect(prev).toBeFocused();
+    });
+
+    test("a page past the end shows the last page and the address is tidied to it", async ({ page }) => {
+      test.skip(N <= PAGE, "one page only");
+      const pages = Math.ceil(N / PAGE);
+      await page.goto(`${tab.route}?page=99`);
+      await expect(count(page)).toHaveText(range((pages - 1) * PAGE + 1, N, N));
+      await expect(page).toHaveURL(new RegExp(`${tab.route}\\?page=${pages}$`));
     });
 
     test("the search narrows the list; every word must appear, in any case", async ({ page }) => {
@@ -153,16 +182,24 @@ for (const tab of TABS) {
       await page.getByTestId(`${tab.name}-clear`).click();
       await expect(count(page)).toHaveText(firstPageLine(N));
 
-      const phase = mostCommon(tab.items.map((x) => x.phase ?? ""));
-      await page.getByLabel("Phase", { exact: true }).selectOption(phase);
-      await expect(count(page)).toHaveText(firstPageLine(tab.items.filter((x) => x.phase === phase).length, N));
-      await page.getByLabel("Phase", { exact: true }).selectOption("");
+      // The phase filter shows only when there are at least two phases to choose from.
+      const phases = new Set(tab.items.map((x) => x.phase).filter(Boolean));
+      if (phases.size < 2) {
+        await expect(page.getByLabel(tab.phaseLabel, { exact: true })).toHaveCount(0);
+      } else {
+        const phase = mostCommon(tab.items.map((x) => x.phase ?? ""));
+        await page.getByLabel(tab.phaseLabel, { exact: true }).selectOption(phase);
+        await expect(count(page)).toHaveText(firstPageLine(tab.items.filter((x) => x.phase === phase).length, N));
+        await page.getByLabel(tab.phaseLabel, { exact: true }).selectOption("");
+      }
 
       // Two ticked tags: only items with both.
       const tag = mostCommon(tab.items.flatMap((x) => x.tags));
       const second = mostCommon(tab.items.filter((x) => x.tags.includes(tag)).flatMap((x) => x.tags.filter((t) => t !== tag)));
       await page.getByTestId(`${tab.name}-tags-button`).click();
       const group = page.getByRole("group", { name: /every tag you tick/ });
+      // Only the tags some item on this tab has are offered.
+      await expect(group.getByRole("checkbox")).toHaveCount(new Set(tab.items.flatMap((x) => x.tags)).size);
       await group.getByLabel(tag, { exact: true }).check();
       await expect(count(page)).toHaveText(firstPageLine(tab.items.filter((x) => x.tags.includes(tag)).length, N));
       await group.getByLabel(second, { exact: true }).check();
@@ -182,6 +219,34 @@ for (const tab of TABS) {
       await page.getByLabel("Date to", { exact: true }).fill(day);
       await expect(count(page)).toHaveText(firstPageLine(tab.items.filter((x) => x.date === day).length, N));
       await expect(page).toHaveURL(new RegExp(`\\?from=${day}&to=${day}$`));
+    });
+
+    test("a 'Date from' after the 'Date to' says so instead of a bare \"No matches\"", async ({ page }) => {
+      const dates = [...new Set(tab.items.map((x) => x.date))].sort();
+      const [early, late] = [dates[0], dates[dates.length - 1]];
+      test.skip(early === late, "one day only");
+      await page.goto(`${tab.route}?from=${late}&to=${early}`);
+      await expect(count(page)).toHaveText(`No matches (${N} in all)`);
+      await expect(page.getByTestId(`${tab.name}-empty-why`)).toHaveText("The 'Date from' day is after the 'Date to' day.");
+      // Each date box stops at the other's day.
+      await expect(page.getByLabel("Date to", { exact: true })).toHaveAttribute("min", late);
+      await expect(page.getByLabel("Date from", { exact: true })).toHaveAttribute("max", early);
+    });
+
+    test("the tag list closes when keyboard focus leaves it", async ({ page }) => {
+      await page.goto(tab.route);
+      await page.getByTestId(`${tab.name}-tags-button`).click();
+      const group = page.getByRole("group", { name: /every tag you tick/ });
+      await expect(group).toBeVisible();
+      const boxes = group.getByRole("checkbox");
+      await boxes.last().focus();
+      await page.keyboard.press("Tab");
+      await expect(group).toBeHidden();
+      // Moving between the boxes inside keeps it open.
+      await page.getByTestId(`${tab.name}-tags-button`).click();
+      await boxes.first().focus();
+      await page.keyboard.press("Tab");
+      await expect(group).toBeVisible();
     });
 
     test("a tag chip on a card filters by that tag; pressed again, it turns the filter off", async ({ page }) => {

@@ -7,10 +7,15 @@
  *
  * The logic lives in lib/portal/browse.ts (pure, unit-tested); this file only draws the controls.
  * On phones the filters fold under a "Filters" button; on wider screens they are always shown.
+ * A filter with fewer than two choices (today the Log's phase: every entry is P0) is not drawn; it
+ * appears by itself once there is a real choice. Previous and Next stay focusable at the ends
+ * (aria-disabled), so a keyboard user's focus does not jump to the top of the page.
  */
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   activeCount,
+  clampPage,
+  datesReversed,
   filterItems,
   isFiltered,
   isIsoDate,
@@ -64,6 +69,8 @@ export interface BrowseProps {
   categories: TaxonomyTerm[];
   tags: TaxonomyTerm[];
   phases: FilterOption[];
+  /** The phase filter's label (Decisions: "Affects phase"); "Phase" when not given. */
+  phaseLabel?: string;
   /** What the search box says before anything is typed. */
   searchHint: string;
   /** "decisions" / "entries": used in the empty-state text. */
@@ -85,7 +92,8 @@ export default function Browse(props: BrowseProps) {
   const id = (part: string) => `${name}-${part}`;
   const params = useSearchParams();
   const spKey = queryOf(new URLSearchParams(params.toString()));
-  const [state, setState] = useState<BrowseState>(() => parseState(spKey, spec));
+  // A page past the end (?page=99) shows the last page, and the address is tidied to say so.
+  const [state, setState] = useState<BrowseState>(() => clampPage(parseState(spKey, spec), items));
 
   const [filtersOpen, setFiltersOpen] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
@@ -126,12 +134,12 @@ export default function Browse(props: BrowseProps) {
       setPending(pending.slice(i + 1));
     } else {
       setPending([]);
-      const next = parseState(spKey, spec);
+      const next = clampPage(parseState(spKey, spec), items);
       if (stateToQuery(next, spec) !== stateToQuery(state, spec)) setState(next);
     }
   }
 
-  // The tag list closes on Escape and on a click outside it.
+  // The tag list closes on Escape, on a click outside it and when keyboard focus leaves it.
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       const d = tagsRef.current;
@@ -146,6 +154,7 @@ export default function Browse(props: BrowseProps) {
   const shown = pageSlice(matching, info);
   const filtered = isFiltered(state);
   const on = activeCount(state);
+  const reversed = datesReversed(state);
 
   const set = (patch: Partial<BrowseState>) => commit(update(state, patch));
 
@@ -236,14 +245,25 @@ export default function Browse(props: BrowseProps) {
               <span className="browse-label" aria-hidden="true">
                 Tags
               </span>
-              <details className="browse-tags" ref={tagsRef} onKeyDown={(e) => {
-                if (e.key === "Escape" && tagsRef.current?.open) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  tagsRef.current.open = false;
-                  tagsRef.current.querySelector("summary")?.focus();
-                }
-              }}>
+              <details
+                className="browse-tags"
+                ref={tagsRef}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape" && tagsRef.current?.open) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    tagsRef.current.open = false;
+                    tagsRef.current.querySelector("summary")?.focus();
+                  }
+                }}
+                onBlur={(e) => {
+                  // Focus moved to something outside the list (Tab or Shift+Tab): close it. A null target
+                  // (a click on plain text) is left to the click-outside handler above.
+                  const to = e.relatedTarget;
+                  const d = tagsRef.current;
+                  if (d?.open && to instanceof Node && !d.contains(to)) d.open = false;
+                }}
+              >
                 <summary className="browse-select browse-summary" data-testid={`${name}-tags-button`}>
                   <span className="sr-only">Tags: </span>
                   {tagSummary}
@@ -266,17 +286,19 @@ export default function Browse(props: BrowseProps) {
               </details>
             </div>
 
-            <div className="browse-field">
-              <label htmlFor={id("phase")}>Phase</label>
-              <select id={id("phase")} className="browse-select" value={state.phase ?? ""} onChange={(e) => set({ phase: e.target.value || null })}>
-                <option value="">Any phase</option>
-                {props.phases.map((p) => (
-                  <option key={p.value} value={p.value}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {props.phases.length > 1 && (
+              <div className="browse-field">
+                <label htmlFor={id("phase")}>{props.phaseLabel ?? "Phase"}</label>
+                <select id={id("phase")} className="browse-select" value={state.phase ?? ""} onChange={(e) => set({ phase: e.target.value || null })}>
+                  <option value="">Any phase</option>
+                  {props.phases.map((p) => (
+                    <option key={p.value} value={p.value}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="browse-field">
               <label htmlFor={id("from")}>Date from</label>
@@ -285,6 +307,7 @@ export default function Browse(props: BrowseProps) {
                 type="date"
                 className="browse-select browse-date"
                 value={state.from ?? ""}
+                max={state.to ?? undefined}
                 onChange={(e) => set({ from: isIsoDate(e.target.value) ? e.target.value : null })}
               />
             </div>
@@ -295,6 +318,7 @@ export default function Browse(props: BrowseProps) {
                 type="date"
                 className="browse-select browse-date"
                 value={state.to ?? ""}
+                min={state.from ?? undefined}
                 onChange={(e) => set({ to: isIsoDate(e.target.value) ? e.target.value : null })}
               />
             </div>
@@ -358,7 +382,9 @@ export default function Browse(props: BrowseProps) {
         {info.total === 0 ? (
           <div className="note browse-empty" data-testid={`${name}-empty`}>
             <p className="strong">No matches</p>
-            <p className="small text-2">No {props.noun} match this search and these filters.</p>
+            <p className="small text-2" data-testid={`${name}-empty-why`}>
+              {reversed ? "The 'Date from' day is after the 'Date to' day." : `No ${props.noun} match this search and these filters.`}
+            </p>
             <button type="button" className="secondary-btn" onClick={clear}>
               Clear filters
             </button>
@@ -374,7 +400,7 @@ export default function Browse(props: BrowseProps) {
         {info.pages > 1 && (
           <div className="browse-pages-wrap" {...ui(refs.pages)}>
             <nav aria-label="Pages" className="browse-pages" data-testid={`${name}-pages`}>
-              <button type="button" className="pill" disabled={info.page <= 1} onClick={() => goTo(info.page - 1)}>
+              <button type="button" className="pill" aria-disabled={info.page <= 1 ? "true" : undefined} onClick={() => info.page > 1 && goTo(info.page - 1)}>
                 Previous
               </button>
               <ul className="browse-page-list">
@@ -398,7 +424,12 @@ export default function Browse(props: BrowseProps) {
                   ),
                 )}
               </ul>
-              <button type="button" className="pill" disabled={info.page >= info.pages} onClick={() => goTo(info.page + 1)}>
+              <button
+                type="button"
+                className="pill"
+                aria-disabled={info.page >= info.pages ? "true" : undefined}
+                onClick={() => info.page < info.pages && goTo(info.page + 1)}
+              >
                 Next
               </button>
             </nav>

@@ -116,6 +116,11 @@ export function isFiltered(s: BrowseState): boolean {
   );
 }
 
+/** True when both dates are set and "Date from" is after "Date to" (nothing can match). */
+export function datesReversed(s: BrowseState): boolean {
+  return s.from !== null && s.to !== null && s.from > s.to;
+}
+
 /** How many filters are on (the search counts as one), for the "Filters (2 on)" button on phones. */
 export function activeCount(s: BrowseState): number {
   return (
@@ -242,6 +247,15 @@ export function pageInfo(total: number, page: number, size = PAGE_SIZE): PageInf
   if (total === 0) return { page: 1, pages: 1, start: 0, end: 0, total: 0 };
   const start = (p - 1) * size + 1;
   return { page: p, pages, start, end: Math.min(total, p * size), total };
+}
+
+/**
+ * The state with its page kept inside the pages that exist for these items, so an address asking for
+ * page 99 of 2 pages shows (and then says) page 2.
+ */
+export function clampPage<T extends BrowseItem>(s: BrowseState, items: readonly T[]): BrowseState {
+  const page = pageInfo(filterItems(items, s).length, s.page).page;
+  return page === s.page ? s : { ...s, page };
 }
 
 /** The items of one page. */

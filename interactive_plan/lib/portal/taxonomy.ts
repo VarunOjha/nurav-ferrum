@@ -73,3 +73,15 @@ export function offered(list: TaxonomyTerm[] | null | undefined, used: Iterable<
   const names = [...new Set([...used].filter((x): x is string => !!x))].sort((a, b) => a.localeCompare(b));
   return names.map((name) => ({ name, explains: null }));
 }
+
+/**
+ * Like `offered`, but only the names at least one item uses (in the taxonomy's order), so a filter never
+ * offers a choice that always gives "No matches". A name in use that the taxonomy lacks comes last.
+ */
+export function offeredInUse(list: TaxonomyTerm[] | null | undefined, used: Iterable<string | null>): TaxonomyTerm[] {
+  const inUse = new Set([...used].filter((x): x is string => !!x));
+  const out = offered(list, inUse).filter((t) => inUse.has(t.name));
+  const known = new Set(out.map((t) => t.name));
+  const extra = [...inUse].filter((n) => !known.has(n)).sort((a, b) => a.localeCompare(b));
+  return [...out, ...extra.map((name) => ({ name, explains: null }))];
+}

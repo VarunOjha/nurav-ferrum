@@ -1785,6 +1785,12 @@ section[tabindex="-1"]:focus {
   opacity: 0.55;
   cursor: default;
 }
+/* Previous / Next at the ends: still focusable (so keyboard focus stays put), shown as unavailable */
+.pill[aria-disabled="true"] {
+  color: var(--muted);
+  border-style: dashed;
+  cursor: default;
+}
 /* the category and tag chips of a decision or log entry */
 .label-chips {
   display: flex;

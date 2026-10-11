@@ -52,6 +52,7 @@ export default async function DecisionsPage() {
           categories={browse.categories}
           tags={browse.tags}
           phases={browse.phases}
+          phaseLabel="Affects phase"
           searchHint="Search titles and text"
           noun="decisions"
           list={{ as: "ul", className: "row-list", testId: "decision-list" }}

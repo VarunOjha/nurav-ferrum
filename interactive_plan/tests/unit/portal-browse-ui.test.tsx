@@ -14,10 +14,14 @@ vi.mock("next/navigation", () => ({
 }));
 
 const TAGS = ["memory", "CPU", "tabs", "portal"];
+const PHASES = [
+  { value: "phase-p0-planning", label: "P0 · Planning" },
+  { value: "phase-p1-foundation", label: "P1 · Foundation" },
+];
 const SPEC: BrowseSpec = {
   categories: ["Built", "Fixed"],
   tags: TAGS,
-  phases: ["phase-p0-planning"],
+  phases: PHASES.map((p) => p.value),
   extras: [
     {
       key: "has",
@@ -53,7 +57,7 @@ const CARDS = Object.fromEntries(
   ]),
 );
 
-function element() {
+function element(over: { phases?: typeof PHASES; phaseLabel?: string } = {}) {
   return (
     <Browse
       name="log"
@@ -62,7 +66,8 @@ function element() {
       cards={CARDS}
       categories={SPEC.categories.map((name) => ({ name, explains: null }))}
       tags={TAGS.map((name) => ({ name, explains: null }))}
-      phases={[{ value: "phase-p0-planning", label: "P0 · Planning" }]}
+      phases={over.phases ?? PHASES}
+      phaseLabel={over.phaseLabel}
       searchHint="Search"
       noun="entries"
       list={{ as: "div", className: "log-list", testId: "log-list" }}
@@ -70,7 +75,7 @@ function element() {
     />
   );
 }
-const renderBrowse = Object.assign(() => render(element()), { element });
+const renderBrowse = Object.assign((over: Parameters<typeof element>[0] = {}) => render(element(over)), { element });
 
 const shownIds = () => [...document.querySelectorAll("[data-entry]")].map((e) => e.getAttribute("data-entry"));
 const count = () => screen.getByTestId("log-count").textContent;
@@ -88,23 +93,38 @@ afterEach(() => {
 });
 
 describe("Browse", () => {
-  it("shows 20 per page with numbered pages; Previous and Next are disabled at the ends", () => {
+  it("shows 20 per page with numbered pages; Previous and Next are marked unavailable at the ends", () => {
     renderBrowse();
     expect(shownIds()).toHaveLength(20);
     expect(count()).toBe("Showing 1–20 of 28");
     const nav = screen.getByRole("navigation", { name: "Pages" });
     const prev = within(nav).getByRole("button", { name: "Previous" });
     const next = within(nav).getByRole("button", { name: "Next" });
-    expect(prev).toHaveProperty("disabled", true);
+    expect(prev.getAttribute("aria-disabled")).toBe("true");
+    expect(prev).toHaveProperty("disabled", false);
+    // Pressing it at the first page does nothing.
+    fireEvent.click(prev);
+    expect(count()).toBe("Showing 1–20 of 28");
     expect(within(nav).getByRole("button", { name: "Page 1" }).getAttribute("aria-current")).toBe("page");
     fireEvent.click(next);
     expect(shownIds()).toEqual(ITEMS.slice(20).map((i) => i.id));
     expect(count()).toBe("Showing 21–28 of 28");
     expect(within(nav).getByRole("button", { name: "Page 2" }).getAttribute("aria-current")).toBe("page");
-    expect(next).toHaveProperty("disabled", true);
+    expect(next.getAttribute("aria-disabled")).toBe("true");
     expect(window.location.search).toBe("?page=2");
     fireEvent.click(within(nav).getByRole("button", { name: "Page 1" }));
     expect(window.location.search).toBe("");
+  });
+
+  it("keyboard focus stays on Previous when it takes you to the first page", () => {
+    window.history.replaceState(null, "", "/log?page=2");
+    renderBrowse();
+    const prev = within(screen.getByRole("navigation", { name: "Pages" })).getByRole("button", { name: "Previous" });
+    prev.focus();
+    fireEvent.click(prev);
+    expect(count()).toBe("Showing 1–20 of 28");
+    expect(prev.getAttribute("aria-disabled")).toBe("true");
+    expect(document.activeElement).toBe(prev);
   });
 
   it("search: every word must appear; the page goes back to 1; the address keeps it", () => {
@@ -173,9 +193,49 @@ describe("Browse", () => {
     window.history.replaceState(null, "", "/log?tag=CPU&tag=bogus&category=Nope&from=2026-99-01&page=7");
     renderBrowse();
     expect(count()).toBe("Showing 1–14 of 14 (28 in all)");
-    // The address is rewritten without the unknown values.
-    expect(window.location.search).toBe("?tag=CPU&page=7");
+    // The address is rewritten without the unknown values, and page 7 of 1 becomes page 1.
+    expect(window.location.search).toBe("?tag=CPU");
     expect(screen.getByTestId("log-tags-button").textContent).toContain("CPU");
+  });
+
+  it("a page past the end shows the last page and the address says so", () => {
+    window.history.replaceState(null, "", "/log?page=99");
+    renderBrowse();
+    expect(count()).toBe("Showing 21–28 of 28");
+    expect(window.location.search).toBe("?page=2");
+  });
+
+  it("a 'Date from' after the 'Date to' says why nothing matches; the date boxes limit each other", () => {
+    renderBrowse();
+    fireEvent.change(screen.getByLabelText("Date from"), { target: { value: "2026-10-10" } });
+    expect(screen.getByLabelText("Date to").getAttribute("min")).toBe("2026-10-10");
+    fireEvent.change(screen.getByLabelText("Date to"), { target: { value: "2026-10-08" } });
+    expect(screen.getByLabelText("Date from").getAttribute("max")).toBe("2026-10-08");
+    expect(count()).toBe("No matches (28 in all)");
+    expect(screen.getByTestId("log-empty-why").textContent).toBe("The 'Date from' day is after the 'Date to' day.");
+    fireEvent.change(screen.getByLabelText("Date to"), { target: { value: "2026-10-12" } });
+    expect(shownIds()).toEqual(["e10", "e11", "e12"]);
+  });
+
+  it("the phase filter is hidden while there is only one phase, and can have its own label", () => {
+    renderBrowse({ phases: [PHASES[0]] });
+    expect(screen.queryByLabelText("Phase")).toBeNull();
+    cleanup();
+    renderBrowse({ phaseLabel: "Affects phase" });
+    expect(screen.getByLabelText("Affects phase")).toBeTruthy();
+  });
+
+  it("the tag list closes when keyboard focus moves out of it, not when it moves inside", () => {
+    renderBrowse();
+    const details = screen.getByTestId("log-tags-button").closest("details")!;
+    details.open = true;
+    const boxes = within(details).getAllByRole("checkbox");
+    fireEvent.blur(boxes[0], { relatedTarget: boxes[1] });
+    expect(details.open).toBe(true);
+    fireEvent.blur(boxes[0], { relatedTarget: null });
+    expect(details.open).toBe(true);
+    fireEvent.blur(boxes[1], { relatedTarget: screen.getByLabelText("Date from") });
+    expect(details.open).toBe(false);
   });
 
   it("a new address from outside (a link to the tab) starts again from it", () => {
