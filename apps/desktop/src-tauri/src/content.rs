@@ -15,7 +15,7 @@ use serde_json::{Value, json};
 use tauri::{AppHandle, Emitter, Manager, Runtime, Window};
 use windows::Win32::Foundation::RECT;
 
-use crate::TOOLBAR_H;
+use crate::band_height;
 
 /// WebView2 profile of the content view (one profile in P2; one per site in P3, adr-0029).
 pub const CONTENT_PROFILE: &str = "ferrum-default";
@@ -75,7 +75,7 @@ fn event_json(e: &TabEvent) -> Value {
 /// The content area in physical pixels relative to the window's client area.
 pub fn content_rect<R: Runtime>(window: &Window<R>) -> tauri::Result<RECT> {
     let size = window.inner_size()?;
-    let top = (TOOLBAR_H * window.scale_factor()?).round() as i32;
+    let top = (band_height(window.app_handle()) * window.scale_factor()?).round() as i32;
     Ok(RECT {
         left: 0,
         top,

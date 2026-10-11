@@ -22,6 +22,32 @@ use content::{AppConfig, ContentReady, EventLog, FocusState, ShellTitle};
 /// overlaps it (spike S1: child views are drawn on top).
 pub const TOOLBAR_H: f64 = 52.0;
 
+/// Extra height (logical px) the shell currently needs below the toolbar for an information bar (0 = none).
+/// The content view always starts below the whole shell band, so the two never overlap (spike S1).
+#[derive(Default)]
+pub struct ShellBand(pub std::sync::Mutex<f64>);
+
+/// Current height of the shell band in logical pixels.
+pub fn band_height<R: tauri::Runtime>(app: &tauri::AppHandle<R>) -> f64 {
+    TOOLBAR_H + *app.state::<ShellBand>().0.lock().unwrap()
+}
+
+/// The shell asks for room below the toolbar (an information bar), or gives it back with 0. At most 240 px.
+#[tauri::command]
+fn shell_layout(window: Window, band: tauri::State<'_, ShellBand>, extra: f64) {
+    *band.0.lock().unwrap() = extra.clamp(0.0, 240.0);
+    let w = window.clone();
+    let _ = window.run_on_main_thread(move || {
+        let _ = relayout(&w);
+    });
+}
+
+/// Closes Ferrum (the shell's quit action; the smoke tests use it to end the app cleanly instead of killing it).
+#[tauri::command]
+fn app_quit(app: tauri::AppHandle) {
+    app.exit(0);
+}
+
 /// Counts how often the shell reached the app through the bridge (positive control of the p2.3 test).
 #[derive(Default)]
 pub struct BridgeStats {
@@ -45,7 +71,7 @@ fn relayout(window: &Window) -> tauri::Result<()> {
     if let Some(shell) = window.app_handle().get_webview("shell") {
         shell.set_bounds(Rect {
             position: LogicalPosition::new(0.0, 0.0).into(),
-            size: LogicalSize::new(size.width, TOOLBAR_H).into(),
+            size: LogicalSize::new(size.width, band_height(window.app_handle())).into(),
         })?;
     }
     content::relayout(window);
@@ -83,12 +109,15 @@ fn load_config(app: &tauri::App) -> config::Loaded {
 fn main() {
     tauri::Builder::default()
         .manage(BridgeStats::default())
+        .manage(ShellBand::default())
         .manage(FocusState::default())
         .manage(EventLog::default())
         .manage(ShellTitle::default())
         .manage(ContentReady::default())
         .invoke_handler(tauri::generate_handler![
             app_ping,
+            app_quit,
+            shell_layout,
             content::tab_navigate,
             content::tab_back,
             content::tab_forward,
@@ -118,11 +147,17 @@ fn main() {
                 .inner_size()?
                 .to_logical::<f64>(window.scale_factor()?);
             let handle = app.handle().clone();
+            let mut shell = WebviewBuilder::new("shell", WebviewUrl::App("index.html".into()))
+                .on_document_title_changed(move |_wv, t| {
+                    *handle.state::<ShellTitle>().0.lock().unwrap() = t;
+                });
+            // A configured data folder (settings [storage] data_dir) holds the WebView2 data of the shell and, since
+            // the content view is created from the same environment (adr-0029), of the pages too (p2.11).
+            if let Some(dir) = app.state::<AppConfig>().0.config.storage.data_dir.clone() {
+                shell = shell.data_directory(dir);
+            }
             window.add_child(
-                WebviewBuilder::new("shell", WebviewUrl::App("index.html".into()))
-                    .on_document_title_changed(move |_wv, t| {
-                        *handle.state::<ShellTitle>().0.lock().unwrap() = t;
-                    }),
+                shell,
                 LogicalPosition::new(0.0, 0.0),
                 LogicalSize::new(size.width, TOOLBAR_H),
             )?;

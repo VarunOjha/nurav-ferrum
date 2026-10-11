@@ -109,6 +109,16 @@ pub const ROUTES: &[Route] = &[
         purpose: "tries Ferrum's app bridge (app command, event listen, event emit); reports in the title",
     },
     Route {
+        path: "/counted/a",
+        status: 200,
+        purpose: "counts its own requests per name; shows count:N (back/forward/reload tests)",
+    },
+    Route {
+        path: "/cookie/set-persistent",
+        status: 200,
+        purpose: "sets cookie keep=1 for one day (persistence across restarts)",
+    },
+    Route {
         path: "/status/500",
         status: 500,
         purpose: "server error page",
@@ -241,6 +251,47 @@ async fn ipc_probe() -> Html<String> {
     page("IPC probe", IPC_PROBE)
 }
 
+static COUNTS: std::sync::OnceLock<std::sync::Mutex<std::collections::HashMap<String, u64>>> =
+    std::sync::OnceLock::new();
+
+async fn counted(Path(name): Path<String>) -> Html<String> {
+    let n = {
+        let mut m = COUNTS.get_or_init(Default::default).lock().unwrap();
+        let c = m.entry(name.clone()).or_insert(0);
+        *c += 1;
+        *c
+    };
+    let safe: String = name.chars().filter(|c| c.is_ascii_alphanumeric()).collect();
+    page(
+        &format!("Counted {safe}"),
+        &format!("<p id=\"count\">count:{n}</p>"),
+    )
+}
+
+async fn cookie_set_persistent() -> Response {
+    let mut r = page(
+        "Persistent cookie set",
+        "<p>The cookie keep=1 was set for one day.</p>",
+    )
+    .into_response();
+    r.headers_mut().insert(
+        header::SET_COOKIE,
+        HeaderValue::from_static("keep=1; Path=/; Max-Age=86400; Secure; HttpOnly; SameSite=Lax"),
+    );
+    r
+}
+
+/// Set by [`serve`]: lets a test stop the server cleanly with `GET /__shutdown` (no kill needed).
+static SHUTDOWN: std::sync::OnceLock<axum_server::Handle<std::net::SocketAddr>> =
+    std::sync::OnceLock::new();
+
+async fn shutdown() -> Html<String> {
+    if let Some(h) = SHUTDOWN.get() {
+        h.graceful_shutdown(Some(Duration::from_secs(2)));
+    }
+    page("Stopping", "<p>The fixture server is stopping.</p>")
+}
+
 async fn status(Path(code): Path<u16>) -> Response {
     match code {
         404 => (
@@ -273,6 +324,9 @@ pub fn router() -> Router {
         .route("/cookie/read", get(cookie_read))
         .route("/slow", get(slow))
         .route("/ipc-probe", get(ipc_probe))
+        .route("/counted/{name}", get(counted))
+        .route("/cookie/set-persistent", get(cookie_set_persistent))
+        .route("/__shutdown", get(shutdown))
         .route("/status/{code}", get(status))
 }
 
@@ -284,6 +338,7 @@ pub async fn serve(
     exit_after: Option<Duration>,
 ) -> std::io::Result<()> {
     let handle = axum_server::Handle::new();
+    let _ = SHUTDOWN.set(handle.clone());
     if let Some(after) = exit_after {
         let h = handle.clone();
         tokio::spawn(async move {

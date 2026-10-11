@@ -1,0 +1,71 @@
+// Launches Ferrum for a smoke test and connects Playwright over CDP (adr-0031). Ferrum is closed with the shell's
+// app_quit command (and FERRUM_EXIT_AFTER as a safety net), never killed.
+import { spawn, type ChildProcess } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { chromium, type Browser, type Page } from "@playwright/test";
+import { ferrumExe, cdpPort, dataDir } from "./paths.ts";
+
+export type Ferrum = { proc: ChildProcess; browser: Browser; shell: Page; content: Page; data: string; quit: () => Promise<void> };
+
+/** Writes a settings file for the run and returns its path. */
+export function settings(data: string, extra = ""): string {
+  const p = path.join(data, "config.toml");
+  fs.writeFileSync(p, `[storage]\ndata_dir = ${JSON.stringify(data)}\n${extra}`);
+  return p;
+}
+
+async function waitCdp(ms: number): Promise<void> {
+  const end = Date.now() + ms;
+  while (Date.now() < end) {
+    try {
+      const r = await fetch(`http://127.0.0.1:${cdpPort}/json/version`);
+      if (r.ok) return;
+    } catch { /* not up yet */ }
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  throw new Error("Ferrum's CDP endpoint did not appear");
+}
+
+export async function launch(name: string, opts: { data?: string; extraSettings?: string; env?: Record<string, string> } = {}): Promise<Ferrum> {
+  const data = opts.data ?? dataDir(name);
+  const config = settings(data, opts.extraSettings ?? "");
+  const proc = spawn(ferrumExe, ["--config", config], {
+    env: {
+      ...process.env,
+      WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${cdpPort}`,
+      FERRUM_EXIT_AFTER: "600",
+      ...(opts.env ?? {}),
+    },
+    stdio: "ignore",
+  });
+  await waitCdp(30_000);
+  const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
+  const pages = async () => browser.contexts().flatMap((c) => c.pages());
+  let shell: Page | undefined;
+  let content: Page | undefined;
+  for (let i = 0; i < 80 && !(shell && content); i++) {
+    for (const p of await pages()) {
+      if (p.url().startsWith("http://tauri.localhost")) shell = p;
+      else content = p;
+    }
+    if (!(shell && content)) await new Promise((r) => setTimeout(r, 250));
+  }
+  if (!shell || !content) throw new Error("shell or content view not found over CDP");
+  const quit = async () => {
+    await shell!.evaluate(() => (window as any).__TAURI_INTERNALS__.invoke("app_quit")).catch(() => {});
+    await browser.close().catch(() => {}); // over CDP this only disconnects
+    await new Promise<void>((resolve) => {
+      if (proc.exitCode !== null) return resolve();
+      const t = setTimeout(resolve, 15_000);
+      proc.once("exit", () => { clearTimeout(t); resolve(); });
+    });
+  };
+  return { proc, browser, shell, content, data, quit };
+}
+
+/** Types into the shell's address bar and presses Enter. */
+export async function go(f: Ferrum, input: string): Promise<void> {
+  await f.shell.fill("#address", input);
+  await f.shell.press("#address", "Enter");
+}

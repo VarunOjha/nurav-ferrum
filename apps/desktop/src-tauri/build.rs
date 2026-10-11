@@ -8,6 +8,8 @@ fn main() {
     tauri_build::try_build(tauri_build::Attributes::new().app_manifest(
         tauri_build::AppManifest::new().commands(&[
             "app_ping",
+            "app_quit",
+            "shell_layout",
             "tab_navigate",
             "tab_back",
             "tab_forward",

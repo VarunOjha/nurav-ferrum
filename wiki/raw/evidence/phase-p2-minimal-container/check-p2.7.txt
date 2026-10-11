@@ -1,0 +1,13 @@
+Ferrum check p2.7: Back, forward, refresh
+Why: browsing works like a normal browser.
+Run at 2026-10-11 18:55 on commit 17bb392 (with uncommitted changes)
+------------------------------------------------------------------------
+Running 1 test using 1 worker
+  ✓  1 back-forward-refresh.spec.ts:13:1 › back, forward and refresh behave like a browser (515ms)
+  1 passed (2.9s)
+  PASS   Smoke test: A, B, back, forward, refresh; buttons follow the history (12 s)
+         back-forward-refresh: 1 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.7 (1 PASS; 12 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.7 check passed".
