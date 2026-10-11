@@ -1,0 +1,14 @@
+Ferrum check p1.10: Re-confirm the history-based wiki checks
+Why: raw-file tampering and stale page dates must be caught.
+Run at 2026-10-11 13:18 on commit f07f1a1 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Sample repositories trigger both history rules (6 s)
+         history rule tests: Tests  13 passed (13)
+  PASS   The real wiki has zero errors (12 s)
+         203 pages, 0 errors (RAW-IMMUTABLE and STALE-UPDATED included)
+  PASS   Every raw file has a fingerprint, and all still match
+         106 fingerprints match
+------------------------------------------------------------------------
+RESULT: PASS - p1.10 (3 PASS; 18 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.10 check passed".
