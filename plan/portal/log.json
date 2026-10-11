@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:2eb93e18e7602b98616abeb5d8a7d48cf8907e37ebc12cefc2f88a6b9669b731"
+    "content_hash": "sha256:eff5b203bcbccce77dfcd48ff8f285f9d0f328886b6ea1f0dfc5d7ba3a8741c7"
   },
   "entries": [
     {
@@ -2128,6 +2128,26 @@
       "tags": [
         "approvals",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-gate",
+      "date": "2026-10-11",
+      "time": "14:33",
+      "title": "Phase 1 end-of-phase check passed; waiting for your sign-off",
+      "done": "Claude ran the full phase 1 check on one saved state: every task check, formatting, code warnings, tests, licences, the wiki check, the plan app, the local copy of the GitHub checks and the test robot all passed. The results are saved. Your hand-check items are recorded.",
+      "next": "You review and sign off phase 1. Claude then stops; phase 2 starts only when you say go.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "314f849",
+      "covers": [
+        "## [2026-10-11] gate | phase-p1-foundation exit ready for review"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "testing"
       ]
     }
   ]

@@ -1530,3 +1530,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-11-s02-p1-reapproval.md]
 - result: Owner: "Re-approve all 9 (Recommended)". Recorded with tools/approvals_record.py (previous decisions kept in history). approvals_check: 34 entries, all APPROVED or APPROVED_VOLATILE_DRIFT; approvals_check --gate phase-p1-foundation: ENTRY GATE PASS. STATUS blocked_on cleared. Not the P1 sign-off.
 - next: pwsh -NoProfile -File scripts/gates/p1-gate.ps1 -SaveEvidence
+
+## [2026-10-11] gate | phase-p1-foundation exit ready for review
+
+- session: s02
+- time: 14:33
+- pages: [phase-p1-foundation, status-live]
+- sources: [raw/evidence/phase-p1-foundation/p1-gate.txt]
+- result: SCHEMA §9.7 exit steps 1 to 5. (1) scripts/gates/p1-gate.ps1 -SaveEvidence on 8cd0461: every automated item passed (cargo fmt, clippy -D warnings, cargo test, cargo deny, lint:wiki 0 errors, plan app lint/typecheck/test/build, ci-local.ps1, S4 robot), evidence committed in 314f849. (2) Every test_gate.evidence file exists. (3) Manual items recorded in raw/owner/: no admin (UAC) prompt was needed in P1 (nothing had to be installed with elevation); S1 hand checks done (Alt+Tab focus a known issue, fix in P2); profile route chosen and the one-window model confirmed (adr-0029); GitHub deferred by the owner. (4) Lint clean; no P1-targeted claim remains. (5) phase-p1-foundation set to gate-review (volatile key). 16 of 17 tasks done; p1.16 waits for the owner's approval of phase-p1-foundation#exit. Claude now pauses (owner's rule of 2026-10-10).
+- next: owner reviews and signs off P1 (phase-p1-foundation#exit); P2 does not start without an explicit go

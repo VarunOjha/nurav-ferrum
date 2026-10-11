@@ -53,12 +53,12 @@
       "short": "P1",
       "name": "Foundation",
       "one_line_goal": "Tools confirmed, empty project builds, riskiest ideas tested",
-      "status": "In progress",
+      "status": "Waiting for your review",
       "tasks_done": 16,
       "tasks_total": 17,
       "source": {
         "wiki_path": "wiki/phases/phase-p1-foundation.md",
-        "content_hash": "sha256:58def950182027f4eb552bb18c11568a836e877b52e992083ed6e264f1e2eeb6"
+        "content_hash": "sha256:be0da62cc927c2f7486f3d811d0314fcb366654677ce4935b545d6ce07dca970"
       }
     },
     {

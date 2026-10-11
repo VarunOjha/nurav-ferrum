@@ -4,7 +4,7 @@
   "title": "Foundation",
   "one_line_goal": "Tools confirmed, empty project builds, riskiest ideas tested",
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
-  "status": "In progress",
+  "status": "Waiting for your review",
   "progress": {
     "done": 16,
     "total": 17
@@ -202,7 +202,7 @@
       "what": "One run of every P1 check on a single commit, with the output saved, then your review.",
       "why": "This is your chance to change course cheaply. Once real app code starts, changing the design costs much more.",
       "how": "Run all automated checks, save each output, run the wiki check and mark the phase for review; you approve the exit in Claude Code.",
-      "status": "Not started",
+      "status": "Waiting for you",
       "chain": "All tasks done → run every check on one commit and save the output → you review the experiment evidence and approve the exit.",
       "check": "All evidence files exist; you approved the P1 exit.",
       "script": "scripts/verify/p1.16-gate-review.ps1"
@@ -256,6 +256,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p1-foundation.md",
-    "content_hash": "sha256:58def950182027f4eb552bb18c11568a836e877b52e992083ed6e264f1e2eeb6"
+    "content_hash": "sha256:be0da62cc927c2f7486f3d811d0314fcb366654677ce4935b545d6ce07dca970"
   }
 }

@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 16 of 17 tasks done. Next: re-approve 9 changed pages, then the end-of-phase check.",
+  "summary": "Phase 1's end-of-phase check passed: every automatic check is green and your hand checks are recorded. Phase 1 now waits for your sign-off; after it, Claude pauses until you say go for phase 2.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:f856cfeb878daf0bd031a64992c2b159b6755fb518e34338376d89c47dae09aa"
+    "content_hash": "sha256:44555997614048f38791fe8a1fcb377cdea4c3fac6b7475780dca74a2de7f3de"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 16 of 17 tasks done",
+      "state": "P1 Foundation: waiting for your sign-off (16 of 17 tasks done)",
       "ref": "phase-p1-foundation"
     },
     {
@@ -34,20 +34,24 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
-        "item": "Phase 1",
-        "state": "16 of 17 tasks done"
+        "item": "End-of-phase check",
+        "state": "Passed"
       },
       {
-        "item": "Next task",
-        "state": "re-approve 9 changed pages, then the end-of-phase check"
+        "item": "Known issue",
+        "state": "Keyboard after Alt+Tab, fix in P2"
+      },
+      {
+        "item": "Next",
+        "state": "Your sign-off"
       }
     ],
-    "why": "Nothing to run. The end-of-phase check first confirms every phase 1 page is approved; 9 pages changed during the cleanup, so they need your re-approval first.",
+    "why": "Nothing to run. Your sign-off closes phase 1; then Claude stops until you explicitly say go for phase 2.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude asks when a step needs you."
+    "tell_claude": "\"Sign off phase 1\", or what you want changed first."
   },
   "questions_for_you": {
     "open": 29,

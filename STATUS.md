@@ -2,7 +2,7 @@
 id: status-live
 type: status
 title: "Ferrum live status and next action"
-status: active
+status: awaiting-owner
 updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: p1.16
-next_action: "Task p1.16: run pwsh -NoProfile -File scripts/gates/p1-gate.ps1 -SaveEvidence; commit the evidence; set phase-p1-foundation to gate-review; ask the owner for phase-p1-foundation#exit."
+next_action: "Owner: review P1 and say whether to sign off (phase-p1-foundation#exit). Claude then records it, sets the phase done and pauses; P2 needs a separate explicit go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -64,6 +64,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.15 done (`b570056`): hook check PASS 2 of 2 after the SCHEMA §9.8 update.
 - p1.5 done (`af70134`): S1 report with hand checks; Alt+Tab focus is a known issue (fix in P2); last P1 claims closed.
 - Owner re-approved the 9 pages changed by the claim closures ([raw/owner/2026-10-11-s02-p1-reapproval.md](wiki/raw/owner/2026-10-11-s02-p1-reapproval.md)); entry gate PASS.
+- p1.16: P1 gate run (`314f849`): all automatic checks pass; phase-p1-foundation set to gate-review; waiting for the owner's sign-off.
 
 ## Done this session (s01)
 
@@ -275,10 +276,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.16 exit gate
-- intent: run pwsh -NoProfile -File scripts/gates/p1-gate.ps1 -SaveEvidence (saves p1-gate.txt and cargo-fmt/clippy/test/deny, wiki-lint, ci-local evidence); add MANIFEST lines; set phase status gate-review; ask the owner for phase-p1-foundation#exit
-- paths: wiki/raw/evidence/phase-p1-foundation/*.txt (gate outputs), wiki/raw/MANIFEST.sha256, wiki/phases/phase-p1-foundation.md (status only)
-- rollback: evidence files new and Claude-created
+(empty: P1 gate evidence committed `314f849`; phase-p1-foundation in gate-review; waiting for the owner's sign-off)
 
 ## Blockers
 
@@ -314,15 +312,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 16 of 17 tasks done |
-| Next task | re-approve 9 changed pages, then the end-of-phase check |
-| Your rule this session | Claude asks before any delete or kill command |
+| Phase 1 | 16 of 17 tasks done; the end-of-phase check passed (all automatic checks) |
+| Experiments | All four done; one known issue (keyboard after Alt+Tab, fix in P2) |
+| Approvals | All current |
+| Next | Your phase 1 sign-off; then Claude pauses until you say go for phase 2 |
 
-**2. Why, and what it does.** Nothing for you to run now. The end-of-phase check first confirms every phase 1 page is approved; 9 pages changed during the cleanup, so they need your re-approval first.
+**2. Why, and what it does.** Nothing to run. Your sign-off closes phase 1 (rule of 10 Oct: Claude then stops and waits).
 
-**3. The script:** none for you.
+**3. The script:** none.
 
-**4. What to tell Claude:** nothing; Claude asks when a step needs you.
+**4. What to tell Claude:** "Sign off phase 1", or what you want changed first. Phase 2 starts only on a separate, explicit go.
 
 ## Pending owner approvals
 
@@ -333,4 +332,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 16 of 17 tasks done, last p1.5). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 gate passed on 8cd0461; waiting for the owner's sign-off). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

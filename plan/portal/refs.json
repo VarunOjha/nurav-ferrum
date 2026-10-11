@@ -20,7 +20,7 @@
       "kind": "phase",
       "title": "P1 Foundation",
       "summary": "Goal: Tools confirmed, empty project builds, riskiest ideas tested. Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
-      "status": "In progress",
+      "status": "Waiting for your review",
       "related": [],
       "aliases": [
         "P1"
@@ -370,7 +370,7 @@
       "kind": "task",
       "title": "P1 task: Run the gate; your review",
       "summary": "All tasks done → run every check on one commit and save the output → you review the experiment evidence and approve the exit.",
-      "status": "Not started",
+      "status": "Waiting for you",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4587,6 +4587,14 @@
       "kind": "commit",
       "title": "Commit: Experiment 1 finished with your hand check",
       "summary": "You confirmed copy, paste, undo, resizing and maximising work. After Alt+Tab the keyboard only reaches the page after a click: a known Tauri problem, recorded as an issue to fix in phase 2, as you ask",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "314f849",
+      "kind": "commit",
+      "title": "Commit: Phase 1 end-of-phase check passed",
+      "summary": "The saved results of the full phase 1 check.",
       "status": null,
       "related": []
     }
