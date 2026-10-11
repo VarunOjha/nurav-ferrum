@@ -1,0 +1,14 @@
+Ferrum check p2.5: Clean up address-bar input
+Why: malformed input never navigates.
+Run at 2026-10-11 18:39 on commit 6840e10 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The case table covers every input class
+         14 classes, 36 cases
+  PASS   The function is pure (no file, network or clock use)
+         no I/O in address.rs
+  PASS   Tests pass: every case, and malformed input never navigates
+         every_input_class ok; malformed_never_navigates ok
+------------------------------------------------------------------------
+RESULT: PASS - p2.5 (3 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.5 check passed".
