@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8a9f8ec1066507c5c825c522a31dbd58126d776f8143c459b0947745c43acf13"
+    "content_hash": "sha256:4a1fad7832791720b126ac8bc13e96b9717291d0b45a3587fa77fa28546bc3d9"
   },
   "entries": [
     {
@@ -1515,7 +1515,7 @@
           "status": "Approved"
         }
       ],
-      "commit": null,
+      "commit": "e446aa4",
       "covers": [
         "## [2026-10-11] ingest | Owner answers to the Wave 1 and Wave 2 questions, the P0 sign-off and the approval of both waves",
         "## [2026-10-11] plan | Owner answers written into the pages: Q-207, Q-004, Q-005, Q-108, Q-106, Q-110, Q-211 answered",
@@ -1549,7 +1549,7 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "b5f7d40",
       "covers": [
         "## [2026-10-11] gate | phase-p0-planning exit gate run 1 on e446aa4: FAIL at p0.8 (one MANIFEST line unreadable)"
       ],
@@ -1579,12 +1579,13 @@
           "status": "Approved"
         }
       ],
-      "commit": null,
+      "commit": "f975531",
       "covers": [
         "## [2026-10-11] gate | phase-p0-planning exit gate run 2 on b5f7d40: PASS",
         "## [2026-10-11] approval | phase-p0-planning#exit approved: the owner signed off P0",
         "## [2026-10-11] gate | phase-p0-planning exit approved; P0 done; PAUSED before P1",
-        "## [2026-10-11] handoff | s01 handoff updated: P0 done and signed off, paused before P1"
+        "## [2026-10-11] handoff | s01 handoff updated: P0 done and signed off, paused before P1",
+        "## [2026-10-11] plan | p0.18 P0 exit committed: answers, approvals, gate pass, sign-off; paused"
       ],
       "phase": "phase-p0-planning",
       "category": "Checked",

@@ -4338,6 +4338,36 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "e446aa4",
+      "kind": "commit",
+      "title": "Commit: your answers and approvals recorded",
+      "summary": "Your answers to seven questions written into the pages, then your approval of 30 pages (the planning round and the phase 1 round) recorded.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "b5f7d40",
+      "kind": "commit",
+      "title": "Commit: fingerprint list fixed after the first final check",
+      "summary": "The first final planning check failed on one unreadable line in the list of file fingerprints; a correct line was added and the run's output saved.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "f975531",
+      "kind": "commit",
+      "title": "Commit: planning done and signed off",
+      "summary": "The final planning check passed; your planning sign-off was recorded, planning was marked done, and Claude paused before phase 1.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

@@ -248,10 +248,7 @@ and `phase-p0-planning#exit` are recorded in `plan/approvals.json`.**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.18 exit review (owner answered Q-207, Q-004, Q-005, Q-108, Q-106, Q-110, Q-211; approved Waves 1 and 2 and signed off P0 on 2026-10-11; owner said "don't start phase 1")
-- intent: (1) write the answers into the pages (adr-0018, adr-0019 with the Q-211 exception, adr-0014, ov-open-questions, ov-project-overview, ov-arch-webview2-integration, phase-p0-planning progress) and their portal JSON; commit; (2) run scripts/gates/p0-gate.ps1 -SaveEvidence in a scratch worktree of that commit; (3) approvals_record.py for the 30 Wave 1+2 keys, then phase-p0-planning#exit; ADR status flips; phase status done; (4) log, STATUS (paused, P1 not started), handoff; commit
-- planned paths: wiki/decisions/adr-0014-*.md, adr-0018-*.md, adr-0019-*.md, wiki/overview/ov-open-questions.md, wiki/overview/ov-project-overview.md, wiki/architecture/ov-arch-webview2-integration.md, wiki/phases/phase-p0-planning.md, plan/approvals.json, plan/portal/**, wiki/raw/owner/2026-10-11-s01-*.md (new), wiki/raw/evidence/phase-p0-planning/p0-gate*.txt (new), wiki/raw/MANIFEST.sha256, wiki/operations/handoffs/handoff-2026-10-11-s01.md (new)
-- rollback: `git restore` the planned paths; plan/approvals.json is new (delete only that file, which this step creates)
+(empty: p0.18 P0 exit verified and committed 2026-10-11 (`e446aa4` answers and approvals, `b5f7d40` MANIFEST fix and gate run 1, `f975531` gate pass, sign-off, phase done); Claude is PAUSED before P1 until the owner says go)
 
 ## Blockers
 

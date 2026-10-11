@@ -5,7 +5,7 @@
   "summary": "Planning (P0) is finished and signed off by you on 11 Oct. You approved 30 pages in two rounds. No Ferrum code exists yet. Claude is paused: phase 1 starts only when you explicitly say go.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:52a27f24cc888ed27aff6aeaf154ad3be7f80feb4f2eda80989caa4398baaaa4"
+    "content_hash": "sha256:ddbb72695a41a541bcc2095d551bda59f43ee3bad6076b5afd35a14abebff38b"
   },
   "updated": "2026-10-11",
   "where_we_are": [

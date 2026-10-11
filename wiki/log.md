@@ -1246,3 +1246,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [handoff-2026-10-09-s01, status-live]
 - result: handoff-2026-10-09-s01 rewritten for the P0 exit (third version; one file per session). STATUS: phase-p0-planning done, current task none (paused before p1.1), next action in the four-part format: nothing to run, say go for P1 when ready.
 - next: owner's go-ahead for P1
+
+## [2026-10-11] plan | p0.18 P0 exit committed: answers, approvals, gate pass, sign-off; paused
+
+- session: s01
+- time: 02:22
+- pages: [status-live]
+- result: Task commits e446aa4 (answers written into pages, Waves 1 and 2 recorded), b5f7d40 (MANIFEST line appended, gate run 1 saved) and f975531 (gate run 2 PASS, phase-p0-planning#exit recorded, phase done, handoff). scripts/verify/p0.17-portal-v2.ps1 PASS and scripts/verify/p0.18-close-p0.ps1 PASS after f975531. STATUS In-flight cleared; next action: paused until the owner says go for P1. Commit explainers added to refs.json.
+- next: owner's go-ahead for P1
+- commit: f975531
