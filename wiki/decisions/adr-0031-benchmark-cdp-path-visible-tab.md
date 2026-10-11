@@ -2,7 +2,7 @@
 id: adr-0031
 type: decision
 title: "Benchmarks drive Ferrum, Chrome and Edge through the same Playwright CDP path, on the visible tab only"
-status: proposed
+status: accepted
 updated: 2026-10-11
 sources:
   - raw/evidence/phase-p1-foundation/spike-s4-playwright-cdp.md

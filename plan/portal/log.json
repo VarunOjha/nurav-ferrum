@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7ea0732b972c707746e4da1174c0467451dbbbf02d4c39d3068426d6aa028677"
+    "content_hash": "sha256:96cb37ffb38add365d79a07a4dc1db0a1795775ad9393fb3360824ff8222c507"
   },
   "entries": [
     {
@@ -1982,6 +1982,56 @@
       "tags": [
         "web views",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-batch",
+      "date": "2026-10-11",
+      "time": "13:50",
+      "title": "You approved the design and answered four questions",
+      "done": "You approved the three design proposals (tab views with a profile per site, back/forward through the browser, one test-robot path), allowed the MPL-2.0 licence for libraries, put GitHub off for now, and confirmed this PC as the benchmark machine without a power meter.",
+      "next": "Your hand check of experiment 1; meanwhile Claude does the end-of-phase cleanup.",
+      "decisions": [
+        {
+          "what": "Approve the three design proposals; the one-window design is confirmed",
+          "by": "you"
+        },
+        {
+          "what": "Allow MPL-2.0 for libraries",
+          "by": "you"
+        },
+        {
+          "what": "Defer GitHub for now",
+          "by": "you"
+        },
+        {
+          "what": "This PC is the benchmark machine; no power meter",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Tab views with a profile per site (decision 29)",
+          "status": "Approved"
+        },
+        {
+          "what": "Back and forward through the browser (decision 30)",
+          "status": "Approved"
+        },
+        {
+          "what": "One test-robot path, visible tab only (decision 31)",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] approval | adr-0029, adr-0030, adr-0031 approved; Q-107, Q-116, Q-122, Q-222 answered; GitHub deferred"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "web views"
       ]
     }
   ]

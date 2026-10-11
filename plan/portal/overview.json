@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 1 is nearly done: 12 of 17 tasks finished, all four experiments ran, and Claude proposed three design decisions. Now it needs you: a hand check of experiment 1, your decisions, and a few answers.",
+  "summary": "Phase 1 is nearly done: 14 of 17 tasks finished. You approved the design and answered four questions. One hand check of experiment 1 is left for you; Claude is doing the end-of-phase cleanup.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:77914d15276026819d05f6bdb472ce8f1884d694acbf3bc587a5aa5f65db21de"
+    "content_hash": "sha256:c7fcbd24cbb5f804a4a7938c0b8d8e8527a80d04c7e249c70fc00483de62b7ad"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: 12 of 17 tasks done, waiting for you",
+      "state": "P1 Foundation: 14 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -37,16 +37,12 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "Experiments",
-        "state": "All four ran; experiment 1 needs your hand check"
+        "item": "Your decisions",
+        "state": "Recorded"
       },
       {
-        "item": "Design proposals",
-        "state": "Three proposals wait for your decision"
-      },
-      {
-        "item": "Questions",
-        "state": "Licence, benchmark machine, power meter, GitHub"
+        "item": "Experiment 1",
+        "state": "Needs your hand check"
       }
     ],
     "why": "Experiment 1 passed its automatic checks. Only a person can judge keyboard focus after Alt+Tab and copy/paste in a tab → the script opens the test app → you try it and close it with its X button. Nothing is installed or changed.",
@@ -59,26 +55,11 @@
         }
       ]
     },
-    "tell_claude": "What you saw, e.g. \"Alt+Tab focus OK, resize OK, shortcuts OK\" (or what failed), then answer Claude's questions in chat."
+    "tell_claude": "What you saw, e.g. \"Alt+Tab OK, resize OK, shortcuts OK\", or what failed."
   },
   "questions_for_you": {
-    "open": 33,
+    "open": 29,
     "items": [
-      {
-        "id": "Q-222",
-        "question": "May the licence check allow MPL-2.0, a mild open-source licence used by five libraries that Tauri brings in?",
-        "asked": "2026-10-11"
-      },
-      {
-        "id": "Q-116",
-        "question": "What is the exact CPU model and RAM of the benchmark machine?",
-        "asked": "2026-10-08"
-      },
-      {
-        "id": "Q-122",
-        "question": "Do you have a wall-power meter?",
-        "asked": "2026-10-08"
-      },
       {
         "id": "Q-221",
         "question": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path?",

@@ -77,16 +77,16 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | Building `interactive_plan/` in P0 (comp-interactive-plan) | none (Q-006, Q-007, Q-103, Q-210 answered 2026-10-08) |
 | `schema` approval (part of every phase entry) | none (Q-207 answered 2026-10-11) |
 | P1 entry | none (Q-106, Q-110, Q-211 answered 2026-10-11) |
-| P2 entry | Q-109, Q-202, Q-214, Q-222 |
-| P3 entry | Q-107, Q-111, Q-209 |
+| P2 entry | Q-109, Q-202, Q-214 |
+| P3 entry | Q-111, Q-209 |
 | P4 entry | Q-112, Q-113, Q-202, Q-212 |
 | P5 entry | Q-114, Q-115, Q-203 |
-| P6 entry (incl. exp-energy, exp-reliability) | Q-116, Q-117, Q-118, Q-119, Q-120, Q-121, Q-122, Q-123, Q-201, Q-204, Q-205, Q-213 |
+| P6 entry (incl. exp-energy, exp-reliability) | Q-117, Q-118, Q-119, Q-120, Q-121, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
 | Exit reviews only, or not blocking | Q-105, Q-215, Q-217 |
 | The first push to GitHub (not a phase gate) | Q-221 |
-| Answered | Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
+| Answered | Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -282,8 +282,8 @@ master prompt §12 layout, which other areas proposed
 
 - asked: 2026-10-08
 - blocking: [phase-p3-tabs-sessions]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s02-p1-design-and-questions.md](../raw/owner/2026-10-11-s02-p1-design-and-questions.md), owner answer (2026-10-11): "Approve all three (Recommended)", approving [adr-0029](../decisions/adr-0029-profile-route-raw-com-tab-controllers.md): route (c), tab controllers Ferrum creates from Tauri's environment with a profile name per site (spike S2).
 
 Raised in adr-0010 (risk-r01; the risk id is informational and is not listed in `blocking`, because risks
 are in no dependency set). Tauri 2.12.1 does not pass a profile name through to wry when it creates a WebView.
@@ -401,8 +401,8 @@ LoAF for responsiveness. The paper states that TTI was not measured, and why.
 
 - asked: 2026-10-08
 - blocking: [exp-energy]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s02-p1-design-and-questions.md](../raw/owner/2026-10-11-s02-p1-design-and-questions.md), owner answer (2026-10-11): "Yes this PC; no power meter": the benchmark machine is this computer (AMD Ryzen 7 6800H, 8 cores / 16 threads, 4 x 8 GiB modules; [environment.md](../raw/evidence/phase-p1-foundation/environment.md)).
 
 Raised in adr-0009 (research label R-Q6). The AMD generation determines what the energy counters can
 support ([raw/research/measurement-methodology.md](../raw/research/measurement-methodology.md)).
@@ -495,8 +495,8 @@ Raised in adr-0013, which proposes a venv with exact pins.
 
 - asked: 2026-10-08
 - blocking: [exp-energy]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s02-p1-design-and-questions.md](../raw/owner/2026-10-11-s02-p1-design-and-questions.md), owner answer (2026-10-11): "Yes this PC; no power meter": no wall-power meter is available.
 
 Raised in adr-0009 (research label R-Q4). Without a meter, energy is either reported only as modelled
 CPU-package energy or marked unsupported
@@ -856,8 +856,8 @@ happen before anything is pushed. It holds no phase gate (`blocking: []`); it ho
 
 - asked: 2026-10-11 13:21
 - blocking: [phase-p2-minimal-container]
-- status: open
-- answer: none yet.
+- status: answered
+- answer: [raw/owner/2026-10-11-s02-p1-design-and-questions.md](../raw/owner/2026-10-11-s02-p1-design-and-questions.md), owner answer (2026-10-11): "Allow MPL-2.0 for libraries (Recommended)": `deny.toml` may allow MPL-2.0 for dependencies; added when P2 first needs it.
 
 **Where we are:** P1 task p1.12 set up `cargo deny` with an allow list of permissive licences compatible with Ferrum's
 `MIT OR Apache-2.0` (adr-0011). The empty workspace passes. The same rules against spike S1's Tauri 2.12.3 tree reject

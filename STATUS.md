@@ -19,8 +19,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: p1.9
-next_action: "Owner batch: owner runs pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1 and reports Alt+Tab focus, resize and shortcuts; owner decides adr-0029, adr-0030, adr-0031, Q-222, Q-116, Q-122, GitHub push or defer, hook install, MIT holder line. Then Claude: transcribe to wiki/raw/owner/, record approvals with tools/approvals_record.py, write the S1 report, close all P1-targeted claims, run scripts/gates/p1-gate.ps1 -SaveEvidence."
+current_task: p1.5
+next_action: "Owner: run pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1 and report Alt+Tab focus, resize and shortcuts. Claude meanwhile: close every UNVERIFIED[phase-p1-foundation] claim (verify with evidence, re-target with a logged reason, or delete), including SCHEMA §9.8 for p1.15; then write the S1 report from the owner's result and run scripts/gates/p1-gate.ps1 -SaveEvidence."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -59,6 +59,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.11 committed (`5b6113c`): ci.yml and scripts/ci-local.ps1; local run 14 of 14 PASS; owner pushes or defers GitHub.
 - p1.14 done (`058ca1a`): literature protocol, reading log, batch 1 (4 primary sources).
 - p1.9 proposals committed (`82fe00a`): adr-0029, adr-0030, adr-0031 proposed; risks r01, r02, r03, r05, r06 updated; P2 revised. Owner decides.
+- Owner batch recorded ([raw/owner/2026-10-11-s02-p1-design-and-questions.md](wiki/raw/owner/2026-10-11-s02-p1-design-and-questions.md)): adr-0029, adr-0030, adr-0031 approved and accepted; Q-107, Q-116, Q-122, Q-222 answered; GitHub deferred. p1.9 and p1.11 done.
 
 ## Done this session (s01)
 
@@ -270,7 +271,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: owner batch pending: p1.5 (S1 hand checks), p1.9 (approve adr-0029, adr-0030, adr-0031), p1.11 (GitHub push or defer); p1.15 and p1.16 wait for the exit-gate claim closure
+- task: p1.5 waits for the owner's S1 hand-check result; next: exit-gate preparation (close every P1-targeted claim, SCHEMA §9.8 line for p1.15), then p1.16
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -291,7 +292,7 @@ Exact install and verification commands: [wiki/operations/ops-environment-setup.
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **33 open** (newest: Q-222, the MPL-2.0 licence), 19 answered (Q-004, Q-005, Q-006, Q-007,
+[ov-open-questions](wiki/overview/ov-open-questions.md): **29 open** (newest: Q-222, the MPL-2.0 licence), 23 answered (Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
 Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003).
 Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
@@ -307,14 +308,13 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | 12 of 17 tasks done; the rest wait for you or for the end-of-phase cleanup |
-| Experiments | All four ran; experiment 1 needs your hand checks |
-| Design proposals | adr-0029, adr-0030, adr-0031 proposed; your decision |
-| Questions | Q-222 (MPL-2.0 licence), Q-116 (benchmark machine), Q-122 (power meter), GitHub push or defer |
+| Phase 1 | 14 of 17 tasks done |
+| Your decisions | Recorded: three design decisions approved, MPL-2.0 allowed, GitHub deferred, this PC is the benchmark machine |
+| Still from you | The hand check of experiment 1 |
 
-**2. Why, and what it does.** Experiment 1 passed every automatic check. Two things only a person can judge remain:
-keyboard focus after Alt+Tab, and copy/paste shortcuts in a tab. The script opens the throw-away app; you try those,
-resize the window, and close it with its X button. Nothing is installed or changed.
+**2. Why, and what it does.** Experiment 1 passed every automatic check; only a person can judge keyboard focus after
+Alt+Tab and copy/paste in a tab. The script opens the throw-away app; you try it and close it with its X button. Nothing is
+installed or changed.
 
 **3. The script** (PowerShell 7, from the repo folder):
 
@@ -322,10 +322,9 @@ resize the window, and close it with its X button. Nothing is installed or chang
 pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1
 ```
 
-- It opens experiment 1: a dark tab bar and three coloured tabs. When you close the window, the script ends.
+- It opens experiment 1 (a dark tab bar and three coloured tabs); the script ends when you close the window.
 
-**4. What to tell Claude:** what you saw, for example "Alt+Tab focus OK, resize OK, shortcuts OK", or what failed;
-then answer the decision questions Claude asks in chat.
+**4. What to tell Claude:** what you saw, for example "Alt+Tab OK, resize OK, shortcuts OK", or what failed.
 
 ## Pending owner approvals
 
@@ -336,4 +335,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1: 12 of 17 tasks done; waiting for the owner batch). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1: 14 of 17 tasks done; owner decisions recorded; S1 hand check pending). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

@@ -320,7 +320,7 @@
       "kind": "task",
       "title": "P1 task: Turn on automatic checks on GitHub",
       "summary": "Mistakes are cheaper caught at once → one GitHub workflow and one local script running the same checks → every change is tested the same way.",
-      "status": "Waiting for you",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -460,7 +460,7 @@
       "kind": "task",
       "title": "P1 task: Decide the design from the experiments",
       "summary": "Four experiment verdicts → update the risks and propose decisions on profiles, back/forward and the benchmark path → you decide, then P2 and P3 are revised to match.",
-      "status": "Waiting for you",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -3548,7 +3548,7 @@
       "kind": "question",
       "title": "How to build per-site profiles?",
       "summary": "How should Ferrum give each website its own WebView2 profile, given that Tauri cannot pass a profile name through yet? Per-site profiles are central to isolation. Recommended: wait for Tauri, else patch it; direct WebView2 calls only as a last resort. A P1 test informs it; P3 waits on it.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -3637,7 +3637,7 @@
       "kind": "question",
       "title": "Benchmark machine CPU and RAM",
       "summary": "What is the exact CPU model and RAM of the benchmark machine? The CPU generation decides which energy counters work. The energy experiment in P6 waits on it.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p6-benchmark-harness"
       ]
@@ -3697,7 +3697,7 @@
       "kind": "question",
       "title": "Wall-power meter available?",
       "summary": "Do you have a wall-power meter? Without one, energy is only estimated from CPU counters or marked unsupported. The energy experiment waits on it.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p6-benchmark-harness"
       ]
@@ -4482,7 +4482,7 @@
       "kind": "question",
       "title": "Allow the MPL-2.0 licence for libraries Tauri brings in?",
       "summary": "May the licence check allow MPL-2.0, a mild open-source licence used by five libraries that Tauri brings in? Holds up phase 2.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4531,8 +4531,8 @@
       "id": "adr-0029",
       "kind": "decision",
       "title": "Decision 29: Ferrum creates the tab views itself, one profile per site",
-      "summary": "Each tab is a web view Ferrum creates with the engine's own call, using Tauri's environment and a profile name per site; the shell stays a normal Tauri view. Proposed by Claude from experiment 2; you decide.",
-      "status": "Proposed",
+      "summary": "Each tab is a web view Ferrum creates with the engine's own call, using Tauri's environment and a profile name per site; the shell stays a normal Tauri view. You approved it on 11 Oct.",
+      "status": "Accepted",
       "related": [
         "adr-0007",
         "adr-0010",
@@ -4545,8 +4545,8 @@
       "id": "adr-0030",
       "kind": "decision",
       "title": "Decision 30: Back and forward ask the browser, not the page",
-      "summary": "The back and forward buttons use the engine's own history calls and its \"history changed\" signal. Proposed by Claude from experiment 3; you decide.",
-      "status": "Proposed",
+      "summary": "The back and forward buttons use the engine's own history calls and its \"history changed\" signal. You approved it on 11 Oct.",
+      "status": "Accepted",
       "related": [
         "adr-0029",
         "adr-0019",
@@ -4557,8 +4557,8 @@
       "id": "adr-0031",
       "kind": "decision",
       "title": "Decision 31: One test robot path for every browser, visible tab only",
-      "summary": "Benchmarks drive Ferrum, Chrome and Edge with the same Playwright code over the debugging channel, measure only the tab on screen, and group each product's processes with a Windows job. Proposed by Claude from experiments 1 and 4; you decide.",
-      "status": "Proposed",
+      "summary": "Benchmarks drive Ferrum, Chrome and Edge with the same Playwright code over the debugging channel, measure only the tab on screen, and group each product's processes with a Windows job. You approved it on 11 Oct.",
+      "status": "Accepted",
       "related": [
         "adr-0012",
         "risk-r05",

@@ -2,7 +2,7 @@
 id: adr-0029
 type: decision
 title: "Tab web views are WebView2 controllers Ferrum creates itself, one profile per site, from Tauri's environment"
-status: proposed
+status: accepted
 updated: 2026-10-11
 sources:
   - raw/evidence/phase-p1-foundation/spike-s2-profiles.md

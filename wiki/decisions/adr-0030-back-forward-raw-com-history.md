@@ -2,7 +2,7 @@
 id: adr-0030
 type: decision
 title: "Back and forward use the tab controller's own history calls (CanGoBack, GoBack, HistoryChanged)"
-status: proposed
+status: accepted
 updated: 2026-10-11
 sources:
   - raw/evidence/phase-p1-foundation/spike-s3/s3-2.json

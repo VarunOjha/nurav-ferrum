@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:4d3898f186d2fc0c98f006d4ce01b52ca2eb1ba76bc2a85d56f0d3a1a8c9b8d2"
+    "content_hash": "sha256:d16fb59a10e8ee7eacbf0e8c3df93388ca1ece3561669b296274c3c13e585283"
   },
   "items": [
     {
@@ -233,9 +233,9 @@
       "asked": "2026-10-08",
       "question": "How should Ferrum give each website its own WebView2 profile, given that Tauri cannot pass a profile name through yet?",
       "why_it_matters": "Per-site profiles are central to isolation. Recommended: wait for Tauri, else patch it; direct WebView2 calls only as a last resort. A P1 test informs it; P3 waits on it.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "You approved the proposal that Ferrum creates each tab view itself with a profile per site (one shared browser).",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p3-tabs-sessions"
       ],
@@ -385,9 +385,9 @@
       "asked": "2026-10-08",
       "question": "What is the exact CPU model and RAM of the benchmark machine?",
       "why_it_matters": "The CPU generation decides which energy counters work. The energy experiment in P6 waits on it.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes: this computer (AMD Ryzen 7 6800H) is the benchmark machine.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p6-benchmark-harness"
       ],
@@ -487,9 +487,9 @@
       "asked": "2026-10-08",
       "question": "Do you have a wall-power meter?",
       "why_it_matters": "Without one, energy is only estimated from CPU counters or marked unsupported. The energy experiment waits on it.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "No wall-power meter is available.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p6-benchmark-harness"
       ],
@@ -905,9 +905,9 @@
       "time": "13:21",
       "question": "May the licence check allow MPL-2.0, a mild open-source licence used by five libraries that Tauri brings in?",
       "why_it_matters": "Phase 2 builds the real app on Tauri, and its licence check fails without this. MPL-2.0 only asks that changes to those libraries' own files stay open; Ferrum's own licence is unaffected. Claude recommends allowing it for libraries only.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes: the licence check may allow MPL-2.0 for libraries; added when phase 2 needs it.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p2-minimal-container"
       ],

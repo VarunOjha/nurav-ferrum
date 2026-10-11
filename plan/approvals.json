@@ -397,6 +397,42 @@
           "owner_words": "wiki/raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md"
         }
       ]
+    },
+    "adr-0029": {
+      "status": "approved",
+      "comment": "Approve all three (Recommended)",
+      "timestamp": "2026-10-11T13:49:47-05:00",
+      "path": "wiki/decisions/adr-0029-profile-route-raw-com-tab-controllers.md",
+      "content_hash": "sha256:2c75fa767dccd63354f6ed1ee79fc64505d0d2f1cb2ad4d1ea3538cc8887fc69",
+      "scope_hash": "sha256:de2d0a10847c6322743a6e018a552f73ed12809678d495ca32b5c4ebdc78f22e",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-design-and-questions.md",
+      "history": []
+    },
+    "adr-0030": {
+      "status": "approved",
+      "comment": "Approve all three (Recommended)",
+      "timestamp": "2026-10-11T13:49:48-05:00",
+      "path": "wiki/decisions/adr-0030-back-forward-raw-com-history.md",
+      "content_hash": "sha256:b6d4e2ac07bbbb829c8f87308272a4ab2ee164d534de40e2838ce144337431f5",
+      "scope_hash": "sha256:e22a19cab5b91239630da45f8d1812f47aa9cb075ed1426ec5ff72a895ec5b57",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-design-and-questions.md",
+      "history": []
+    },
+    "adr-0031": {
+      "status": "approved",
+      "comment": "Approve all three (Recommended)",
+      "timestamp": "2026-10-11T13:49:48-05:00",
+      "path": "wiki/decisions/adr-0031-benchmark-cdp-path-visible-tab.md",
+      "content_hash": "sha256:110eb8e0d171a0ab2c5901c30fb3eec74a0ada990a2fbc8de1af804e15ce663e",
+      "scope_hash": "sha256:360b58663075a294a198713d2c730922afce9ada4c064bf8b64e48b08bbcfd4a",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-design-and-questions.md",
+      "history": []
     }
   }
 }

@@ -1477,3 +1477,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Proposed adr-0029 (tab web views are controllers Ferrum creates from Tauri's environment, one profile per site; refines how adr-0007 is built; would answer Q-107), adr-0030 (back/forward through CanGoBack/GoBack/GoForward and HistoryChanged; spike S3 history step, s3-2.json), adr-0031 (one Playwright CDP harness for all products, visible tab only, Job Object attribution). Five risks set to mitigating with spike results; their P1 claims closed or re-targeted (risk-r01 absence claim to P3). P2 page revised to the proposals (no P2 approval existed yet). No approved page was edited. Next: one owner batch (S1 hand checks, the three ADRs, Q-222, GitHub, Q-116, Q-122, hook install, MIT holder line), then the exit-gate claim closure.
 - next: owner batch in chat
 - commit: 82fe00a
+
+## [2026-10-11] approval | adr-0029, adr-0030, adr-0031 approved; Q-107, Q-116, Q-122, Q-222 answered; GitHub deferred
+
+- session: s02
+- time: 13:50
+- pages: [adr-0029, adr-0030, adr-0031, ov-open-questions]
+- sources: [raw/owner/2026-10-11-s02-p1-design-and-questions.md]
+- result: Owner: "Approve all three (Recommended)", "Allow MPL-2.0 for libraries (Recommended)", "Defer GitHub for now (Recommended)", "Yes this PC; no power meter". Recorded with tools/approvals_record.py (34 entries); the three ADRs set to accepted (volatile key, state APPROVED_VOLATILE_DRIFT). The one-window model (adr-0007) is confirmed. Questions answered: Q-107 (by adr-0029), Q-116 (this PC), Q-122 (no meter), Q-222 (MPL-2.0 allowed for libraries). The p1.11 GitHub step is deferred by the owner. Still open in this batch: the spike S1 hand checks.
+- next: owner's S1 hand-check result; meanwhile Claude closes the remaining P1-targeted claims for the exit gate
