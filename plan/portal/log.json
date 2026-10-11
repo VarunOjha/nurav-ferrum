@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:c3db311326a58986e8084d37780727170cd537bf845db2c54cfd3594e1f59529"
+    "content_hash": "sha256:8fb118d49503c87a7e4a876cc3875ec3f675851c9f7945c5f08b6f3d23f88d39"
   },
   "entries": [
     {
@@ -1451,10 +1451,11 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "b2557e0",
       "covers": [
         "## [2026-10-11] code | p0.17 lists-fixes: review fixes for the one list pattern",
-        "## [2026-10-11] lint | p0.17 lists-fixes: npm run verify green in a scratch clone; fresh screenshots of the five lists and of each fix"
+        "## [2026-10-11] lint | p0.17 lists-fixes: npm run verify green in a scratch clone; fresh screenshots of the five lists and of each fix",
+        "## [2026-10-11] plan | p0.17 step \"lists-fixes\" committed: the lists review is fixed"
       ],
       "phase": "phase-p0-planning",
       "category": "Fixed",

@@ -1147,3 +1147,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views, ip-testing, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/lists-fixes-checks.txt]
 - result: Scratch clone outside the repo (git clone, working-tree diff applied, node_modules copied, core.longpaths via env only): typecheck, eslint, 873 unit tests passed and 1 skipped, lint:wiki 0 errors, build, 233 browser tests passed (23 new), E2E guard: real files unchanged. 33 screenshots on port 3449 read: no sideways scrolling anywhere; Research has no Status filter and the opened card says the status; the Overview link reads "See the open questions →"; the sort notes read right; the chosen kind is filled and keeps search and sort; "Asked now" stands apart in both themes; opened cards show "Filter by tag:" and no repeated category. Clone deleted, its server stopped, the owner's portal on 3417 kept running, .git/config unchanged. Repo: vitest 873 passed; lint:wiki 0 errors, 34 warnings after the updated-date fix; quick lint 0 errors, 0 warnings; python tool tests 19 OK; portal-sync self-tests 52 passed; mask scan 0.
+
+## [2026-10-11] plan | p0.17 step "lists-fixes" committed: the lists review is fixed
+
+- session: s01
+- time: 00:52
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/lists-fixes-checks.txt]
+- result: What was done → the 11 review findings on the one list pattern were fixed and checked (Research status, Overview link, topics, weak-tag list, sort notes, kind links, the time line in the resume example, the "Asked now" chip, tag chips in opened cards, accessibility checks with cards open, Ref names) → the owner sees no repeated chips or filters, and the lists explain themselves. STATUS: In-flight cleared; next action unchanged in substance, now mentioning the review fixes. A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear (and whether a "speed" or "reliability" tag should be added); then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: b2557e0

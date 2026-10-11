@@ -4328,6 +4328,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "b2557e0",
+      "kind": "commit",
+      "title": "Commit: review fixes for the lists",
+      "summary": "Fixes from a review of the new lists: Research no longer repeats its kind as a status, kind links keep your search, lists without dates explain Newest and Oldest first, \"Asked now\" stands out, and opened cards show only the tag filter chips.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }
