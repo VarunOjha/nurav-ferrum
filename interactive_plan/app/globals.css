@@ -1583,10 +1583,6 @@ section[tabindex="-1"]:focus {
   flex-direction: column;
   gap: 20px;
 }
-.log-list[data-filter="decisions"] > article:not([data-has-decisions]),
-.log-list[data-filter="approvals"] > article:not([data-has-approvals]) {
-  display: none;
-}
 
 /* ---------- search, filters and pages (Decisions and Log, components/portal/browse) ---------- */
 .browse-bar {
@@ -1790,6 +1786,131 @@ section[tabindex="-1"]:focus {
   color: var(--muted);
   border-style: dashed;
   cursor: default;
+}
+/* results row tools: Sort dropdown and Open all / Close all (every list) */
+.browse-results-count {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+  min-width: 0;
+}
+.browse-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+}
+.browse-sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.browse-sort-select {
+  width: auto;
+  height: 34px;
+}
+.browse-openall-btn {
+  white-space: nowrap;
+  padding: 6px 12px;
+}
+
+/* cards that open on click (native details/summary), one per item of a list */
+.acc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.acc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-width: 0;
+}
+.acc-card.is-muted {
+  background: var(--surface-2);
+}
+.acc-summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
+  row-gap: 6px;
+  padding: 14px 18px;
+  border-radius: 12px;
+}
+.acc-summary::-webkit-details-marker {
+  display: none;
+}
+.acc-summary::marker {
+  content: "";
+}
+.acc-summary:hover .acc-title {
+  color: var(--link);
+}
+.acc-title {
+  grid-column: 1;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.is-muted .acc-title {
+  color: var(--muted);
+}
+.acc-meta {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+  min-width: 0;
+}
+.acc-chevron {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+.acc[open] > .acc-summary .acc-chevron {
+  transform: rotate(180deg);
+}
+.acc[open] > .acc-summary {
+  border-bottom: 1px solid var(--line);
+  border-radius: 12px 12px 0 0;
+}
+.acc-body {
+  padding: 16px 18px 18px;
+  min-width: 0;
+}
+.acc-body p {
+  margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .acc-chevron {
+    transition: none;
+  }
+}
+@media (max-width: 640px) {
+  .acc-summary {
+    padding: 12px 14px;
+  }
+  .acc-body {
+    padding: 14px;
+  }
+  .browse-results {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .browse-tools {
+    justify-content: space-between;
+  }
 }
 /* the category and tag chips of a decision or log entry */
 .label-chips {

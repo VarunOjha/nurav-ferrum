@@ -4,12 +4,13 @@
   "summary": "Questions asked in Claude Code, newest last.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:af73a287114003f1cd7a40a84013c7b02f2ed3102bb2b37b9cbc726cb2c80dff"
+    "content_hash": "sha256:301eaefb1993d6e51c3bfca5ad33b97602775c7a325c18ee19a0872a60df61d8"
   },
   "items": [
     {
       "id": "Q-001",
       "asked": "2026-10-08",
+      "time": "21:41",
       "question": "Should test scripts also run automatically on every change?",
       "why_it_matters": "Decides whether mistakes are caught on each change or only at the gate.",
       "status": "open",
@@ -17,6 +18,11 @@
       "answered_on": null,
       "blocks": [
         "phase-p1-foundation"
+      ],
+      "category": "Tools & setup",
+      "tags": [
+        "testing",
+        "check scripts"
       ]
     }
   ]

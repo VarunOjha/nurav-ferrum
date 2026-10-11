@@ -39,7 +39,8 @@ other page.
 
 Each question has its own section (SCHEMA §6.1) with these fields:
 
-- `asked`: the date it was raised in the wiki.
+- `asked`: the date it was raised in the wiki. From 2026-10-10 on it also holds the local time on a 24-hour clock
+  (`- asked: 2026-10-10 21:41`), read from the real clock. Older questions keep the date only.
 - `blocking`: the ids whose entry gate the question holds up. An open question that blocks an id in a
   phase's dependency set blocks that phase (SCHEMA §9.7).
 - `status`: open, answered or withdrawn.

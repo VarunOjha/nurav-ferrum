@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e53a8c3c4a59d61def2832897ceba33361aeaca1eec8669359a9a14d4b45d3ac"
+    "content_hash": "sha256:6062c1e2e9ccf2c7cd2135997c66651b0dd21957659c24529f4fae1032fa663f"
   },
   "entries": [
     {
@@ -1371,6 +1371,50 @@
       ],
       "phase": "phase-p0-planning",
       "category": "Fixed",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-lists",
+      "date": "2026-10-11",
+      "time": "00:11",
+      "title": "Every list now works the same way: cards, sort, search, filters, pages",
+      "done": "One pattern now covers Log, Questions, Decisions, Risks and Research. A card shows one line and opens on click; \"Open all\" opens the page. Every list has Sort, search, filters and 20 per page. Questions start on the open ones. Risks are cards, highest risk first. Research is one list of 70 with a Kind filter. Questions, risks and research items got a category and two tags. New entries record the time of day. All checks pass.",
+      "next": "Restart the portal to see the new lists and go on with your walkthrough. Some items fit fewer than two tags well (no tag for speed or reliability); say if you want such a tag added.",
+      "decisions": [
+        {
+          "what": "A card's details now open inside the card; the separate pop-up for a decision, risk or research item is gone (parts of the system keep theirs)",
+          "by": "claude"
+        },
+        {
+          "what": "Clear filters on Questions shows every question, not only the open ones",
+          "by": "claude"
+        },
+        {
+          "what": "The Category and Tags filters offer only the choices in use on that list",
+          "by": "claude"
+        },
+        {
+          "what": "No new tags were added; items where fewer than two tags fit well are listed for you instead",
+          "by": "claude"
+        },
+        {
+          "what": "Old log entries and questions keep the date only; no time was guessed for them",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] ingest | Owner asks for one list pattern: cards that open on click, sort, and the same for questions, risks and research",
+        "## [2026-10-11] plan | Owner approves the \"same pattern for every list\" plan: \"Approved\"",
+        "## [2026-10-11] code | p0.17 lists: one list pattern for log, questions, decisions, risks and research",
+        "## [2026-10-11] lint | p0.17 lists: npm run verify green in a scratch copy; screenshots of all five lists read at 1440 and 390 px in both themes"
+      ],
+      "phase": "phase-p0-planning",
+      "category": "Built",
       "tags": [
         "portal",
         "look & feel"

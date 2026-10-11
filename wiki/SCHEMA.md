@@ -214,7 +214,7 @@ Project overview, vision, architecture narrative, trust-boundary map, open quest
 - OPTIONAL: `audience: owner|claude|both`
 - Body SHOULD contain at least one mermaid diagram when it describes structure
 
-The open-questions page is `ov-open-questions` at `overview/ov-open-questions.md`. It holds one `##` section per question: `## Q-<NNN> <title>`, with `asked:` date, `blocking:` [ids], `status: open|answered|withdrawn`, and the answer link into `raw/owner/`.
+The open-questions page is `ov-open-questions` at `overview/ov-open-questions.md`. It holds one `##` section per question: `## Q-<NNN> <title>`, with `asked:` date (from 2026-10-10 on followed by the 24-hour local time, `asked: 2026-10-10 21:41`), `blocking:` [ids], `status: open|answered|withdrawn`, and the answer link into `raw/owner/`.
 
 ### 6.2 `component`
 
@@ -518,7 +518,7 @@ Run at the end of every session (inside HANDOFF), at every phase gate, and after
 | `APPROVAL-STALE` | info (warn when the page belongs to the current/next phase's dependency set) | Approval whose hash no longer matches (§10.3) |
 | `CONTRADICTION` | warn | Open `> **CONTRADICTION:**` blockquotes. Also, as a semantic pass (LLM review, not regex): claims that disagree between pages, or with an accepted ADR or a raw source |
 | `SCHEMA-SPLIT` | error | `CLAUDE.md` restates a rule differently from this file |
-| `LOG-FORMAT` | error | A `log.md` heading does not match the §12 regex, entries are out of date order, or a body bullet uses a key outside §12 |
+| `LOG-FORMAT` | error | A `log.md` heading does not match the §12 regex, entries are out of date order, a body bullet uses a key outside §12, or a `- time:` value is not `HH:MM` |
 | `Q-FORMAT` | error | An `ov-open-questions` section lacks `- status:` or has an unparsable `- blocking:` list. The checker then treats that question as **open and blocking every phase** (fail closed) |
 | `Q-BLOCK-UNGATED` | warn | A `Q-NNN` `blocking` id is in no phase's dependency set (e.g. a risk id), so it gates nothing; list the phase id instead |
 | `PHASE-DONE-NO-EXIT` | warn | A phase has `status: done` but key `<phase-id>#exit` is not APPROVED |
@@ -715,7 +715,8 @@ Every implementation (the Python tools and the TypeScript lint) MUST produce ide
   - `plan` = creating or editing planning pages that is not covered by another op.
   - `schema` = a change to this file or to CLAUDE.md.
   - `approval` = an approval change observed in approvals.json.
-- Body: bullet lines with these keys, each optional but in this order: `- session: sNN`, `- pages: [ids]`, `- sources: [paths]`, `- result: …`, `- stales: [ids]`, `- next: …`, `- commit: <sha>`.
+- Body: bullet lines with these keys, each optional but in this order: `- session: sNN`, `- time: HH:MM`, `- pages: [ids]`, `- sources: [paths]`, `- result: …`, `- stales: [ids]`, `- next: …`, `- commit: <sha>`.
+- `time` (owner plan of 2026-10-10) is the local time of day on a 24-hour clock, read from the real clock when the entry is written (e.g. `- time: 21:41`). Every entry written after the rule was added carries it; entries written before it are never back-filled. A value that is not `HH:MM` (00:00 to 23:59) is a `LOG-FORMAT` error.
 - The last 5 entries: `grep "^## \[" wiki/log.md | tail -5` (Git Bash).
 
 ## 13. Link conventions

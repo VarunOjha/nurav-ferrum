@@ -39,7 +39,9 @@
           "status",
           "answer",
           "answered_on",
-          "blocks"
+          "blocks",
+          "category",
+          "tags"
         ],
         "properties": {
           "id": {
@@ -83,7 +85,19 @@
             "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
           },
           "blocks": {
-            "$ref": "#/$defs/id_list"
+            "$ref": "#/$defs/id_list",
+            "description": "The phases this question holds up (the portal's 'Holds up phase' filter)."
+          },
+          "time": {
+            "$ref": "#/$defs/time",
+            "description": "Time of day the question was asked, from the 'asked' line on the questions page. Only for questions asked from 2026-10-10 on."
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "One topic from 'decision_categories' in taxonomy.json (questions, risks and decisions share the same topics)."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
           }
         },
         "additionalProperties": false

@@ -8,7 +8,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { ApprovalsRead } from "@/lib/approvals/file";
 import { describeIssues, loadPortal, loadPortalUncached, readPortalFile } from "@/lib/portal/load";
 import { OverviewFile } from "@/lib/portal/schemas.gen";
-import { approvalLabel, headline, latestLog, percentDone, phaseTone, roadmapRow, shortDate } from "@/lib/portal/view";
+import { approvalLabel, dateTime, headline, latestLog, percentDone, phaseTone, roadmapRow, shortDate } from "@/lib/portal/view";
 import { isActiveTab, TABS } from "@/lib/portal/tabs";
 import { REPO_ROOT } from "./helpers";
 
@@ -104,6 +104,10 @@ describe("view helpers", () => {
     expect(shortDate("2026-01-31")).toBe("31 Jan");
     expect(shortDate("2026-13-01")).toBe("2026-13-01");
     expect(shortDate("soon")).toBe("soon");
+    // The time of day follows the date when known (owner's plan of 2026-10-10).
+    expect(dateTime("2026-10-10", "21:41")).toBe("10 Oct 21:41");
+    expect(dateTime("2026-10-08", null)).toBe("8 Oct");
+    expect(dateTime("2026-10-08", undefined)).toBe("8 Oct");
     expect(percentDone(16, 18)).toBe(89);
     expect(percentDone(3, 0)).toBe(0);
     expect(percentDone(3, null)).toBe(0);

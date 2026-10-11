@@ -14,7 +14,7 @@ import { clearWikiCache } from "@/lib/wiki/load";
 import { BROKEN_WIKI, MINI_STATUS, MINI_WIKI, REPO_ROOT } from "./helpers";
 
 /** The SCHEMA §9.3 codes tools/quick_lint.py checks (its docstring). */
-const PY_CODES = ["FILE-ENCODING", "FM-MISSING", "FM-ENUM", "FM-TYPE-DIR", "ID-PATTERN", "ID-DUP", "REF-DANGLING", "UNV-NOPHASE", "INDEX-MISSING"];
+const PY_CODES = ["FILE-ENCODING", "FM-MISSING", "FM-ENUM", "FM-TYPE-DIR", "ID-PATTERN", "ID-DUP", "REF-DANGLING", "UNV-NOPHASE", "INDEX-MISSING", "LOG-FORMAT"];
 
 /**
  * Known differences (decided 2026-10-09, IP-5): the stdlib Python fallback has no YAML parser and

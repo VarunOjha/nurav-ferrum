@@ -12,6 +12,11 @@
       "mitigation": "Test it in a throwaway app during P1, before building on it.",
       "phase": "phase-p1-foundation",
       "status": "Open",
+      "category": "The app",
+      "tags": [
+        "web views",
+        "Tauri"
+      ],
       "related": [
         "adr-0007"
       ],

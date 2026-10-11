@@ -9,10 +9,11 @@
  * - a small bar offers "List all" (the Layout map popup: every id and name) and "Turn off";
  * - Esc (with no popup open) or the Ref button turns it off.
  * The labels are plain DOM buttons added next to React's own children and removed when the mode ends;
- * a MutationObserver adds them to blocks that appear later (a tab change, a popup's new content, a log
- * filter). The labels and outlines take no layout space (app/globals.css), so the owner sees the real
- * layout. Blocks that repeat without their own suffix (log entries) are labelled once: on the first one
- * that is visible now; the others get `data-ui-dup`. The header pieces show only their id (the full
+ * a MutationObserver adds them to blocks that appear later (a tab change, a popup's new content, a new
+ * page of a list, a card that opens). The labels and outlines take no layout space (app/globals.css), so the owner sees the real
+ * layout. Blocks that repeat without their own suffix (list cards and their parts) are labelled once:
+ * on the first one that is visible now (the parts of a closed card are not); the others get
+ * `data-ui-dup`. The header pieces show only their id (the full
  * name is in the tooltip and the accessible name), so the header keeps its one-row arrangement.
  * The bar lives in a small host element that moves into the topmost open popup, because a modal popup
  * makes the rest of the page inert (not into the Layout map, which is a list, not a part of the page);
@@ -78,6 +79,14 @@ function contextOf(block: HTMLElement, ref: UiRefId): string {
   const ctx = dialog?.getAttribute("data-ui-context");
   if (ctx) return ctx;
   return scopeLabel(ref);
+}
+
+/** True for a block inside a closed <details> (a list card's details), outside its <summary>: not shown now. */
+function inClosedCard(el: HTMLElement): boolean {
+  for (let d = el.closest("details"); d; d = d.parentElement?.closest("details") ?? null) {
+    if (!d.open && !el.closest("summary")?.parentElement?.isSameNode(d)) return true;
+  }
+  return false;
 }
 
 /** The first element inside `root` that can take focus and stays after Ref mode ends, or null. */
@@ -202,7 +211,7 @@ export default function RefMode() {
         if (!label) continue;
         // The same id more than once (log entries): label only the first one that is visible now.
         const key = `${label.id}|${el.closest("dialog")?.id ?? ""}`;
-        const visible = el.getClientRects().length > 0;
+        const visible = el.getClientRects().length > 0 && !inClosedCard(el);
         const dup = !visible || seen.has(key);
         if (!dup) seen.add(key);
         if (dup !== el.hasAttribute("data-ui-dup")) el.toggleAttribute("data-ui-dup", dup);
@@ -246,8 +255,9 @@ export default function RefMode() {
     });
     scan();
     placeBar();
-    // "open": popups. "data-filter", "hidden": the log filter and the group switcher hide blocks.
-    mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["open", "data-filter", "hidden"] });
+    // "open": popups, and list cards that open on click (their parts show only while open).
+    // "hidden": the group switcher hides blocks. Paging a list replaces its cards (childList).
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["open", "hidden"] });
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape" || e.defaultPrevented) return;

@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseFrontmatterBytes } from "@/lib/wiki/frontmatter";
-import { inlineList, LOG_HEADING, parseLog } from "@/lib/wiki/log";
+import { inlineList, LOG_BULLET_KEYS, LOG_HEADING, parseLog } from "@/lib/wiki/log";
 import { codes, REAL_WIKI } from "./helpers";
 
 describe("LOG_HEADING (SCHEMA §12)", () => {
@@ -81,6 +81,25 @@ describe("parseLog", () => {
   it("a top-level bullet key outside SCHEMA §12 -> LOG-FORMAT", () => {
     const r = parseLog("## [2026-10-01] plan | a\n\n- note: x\n- Session: y\n- plain bullet without key\n");
     expect(codes(r.findings)).toEqual(["LOG-FORMAT", "LOG-FORMAT"]);
+  });
+
+  it("the optional `- time: HH:MM` bullet (owner's plan of 2026-10-10) is read; a bad value -> LOG-FORMAT", () => {
+    const ok = parseLog("## [2026-10-10] plan | a\n\n- session: s01\n- time: 21:41\n- result: done\n## [2026-10-10] plan | b\n\n- time: 00:05\n");
+    expect(ok.findings).toEqual([]);
+    expect(ok.entries.map((e) => e.time)).toEqual(["21:41", "00:05"]);
+    // Older entries have no time and stay valid.
+    expect(parseLog("## [2026-10-08] plan | old\n\n- session: s01\n").entries[0].time).toBeUndefined();
+    for (const bad of ["9:41", "24:00", "21:60", "21:41:00", "9pm", ""]) {
+      const r = parseLog(`## [2026-10-10] plan | a\n\n- time: ${bad}\n`, "wiki/log.md", 5);
+      expect(codes(r.findings), bad).toEqual(["LOG-FORMAT"]);
+      expect(r.findings[0].message, bad).toMatch(/24-hour time written HH:MM/);
+      expect(r.findings[0].line, bad).toBe(7);
+      expect(r.entries[0].time, bad).toBeUndefined();
+    }
+  });
+
+  it("LOG_BULLET_KEYS lists `time` right after `session` (SCHEMA §12)", () => {
+    expect(LOG_BULLET_KEYS).toEqual(["session", "time", "pages", "sources", "result", "stales", "next", "commit"]);
   });
 
   it("headings inside fenced code are ignored; other ## headings end an entry", () => {

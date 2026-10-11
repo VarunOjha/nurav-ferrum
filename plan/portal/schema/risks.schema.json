@@ -37,7 +37,9 @@
           "phase",
           "status",
           "related",
-          "source"
+          "source",
+          "category",
+          "tags"
         ],
         "properties": {
           "id": {
@@ -64,7 +66,8 @@
             "$ref": "#/$defs/short_text"
           },
           "phase": {
-            "$ref": "#/$defs/phase_id"
+            "$ref": "#/$defs/phase_id",
+            "description": "The phase that handles this risk (the page's owner_phase)."
           },
           "status": {
             "enum": [
@@ -80,6 +83,13 @@
           },
           "source": {
             "$ref": "#/$defs/source"
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "One topic from 'decision_categories' in taxonomy.json (questions, risks and decisions share the same topics)."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
           }
         },
         "additionalProperties": false

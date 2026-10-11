@@ -1086,3 +1086,37 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: What was done → a review of the new search, filters and pages raised 11 points → 10 were fixed (focus kept on Previous and Next, only tags in use offered, a plain message for a reversed date range, "Affects phase" on Decisions, a one-choice filter hidden, the tag list closing when focus leaves, a too-high page number corrected, a shorter Log search hint, four decision labels and the browse log entry's wording) and the Ref name change of LO-2 is noted for the owner → the owner finds things without dead ends or confusing labels. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause), now naming the review fixes. A refs.json explainer was added for the new commit.
 - next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
 - commit: c14d4b6
+
+## [2026-10-11] ingest | Owner asks for one list pattern: cards that open on click, sort, and the same for questions, risks and research
+
+- session: s01
+- time: 00:11
+- pages: [ip-routes-and-views, ip-testing, ops-portal-pipeline, ops-wiki-maintenance, ov-open-questions, schema, ip-spec, index]
+- sources: [raw/owner/2026-10-10-s01-browse-v2-request.md, raw/owner/2026-10-10-s01-browse-v2-answers-1.md, raw/owner/2026-10-10-s01-browse-v2-answers-2.md, raw/owner/2026-10-10-s01-browse-v2-answers-3.md]
+- result: Four raw files appended to MANIFEST.sha256 and listed in index.md. The owner wrote: "Make log entry cards accordian, add option to sort in asc, desc. I think you are already storing time. Btw, similar feedback for questions too." His answers in three rounds: the pattern also on Decisions, Risks and Research; add the time of day from now on (old entries keep the date); all cards closed with Open all; newest first by default; questions and risks use the six decision topics; Research becomes one list with its kind as category; Questions start on Open; extra sorts (highest risk first, by number, by phase, A to Z); Risks start highest risk first and Research by phase; the unused LogFilter.tsx and its two style rules may be deleted. Wiki: ip-routes-and-views §6 now describes the one list pattern for all five lists (route rows, detail popup, IT prefix updated); ip-testing, ops-portal-pipeline (labels for questions, risks and research; the time rule; BAD-LABEL and MISMATCH rows), ops-wiki-maintenance (time rule in the ground rules; §5 copy of tools/quick_lint.py synced), ov-open-questions (`asked` may carry the time), SCHEMA §6.1 and the §9.3 LOG-FORMAT row (time), ip-spec (component tree). The written-ahead SCHEMA §12 `- time: HH:MM` line is part of this step.
+- stales: [schema, ip-routes-and-views, ip-testing, ov-open-questions, ip-spec] (no approvals exist yet, so nothing is actually stale)
+
+## [2026-10-11] plan | Owner approves the "same pattern for every list" plan: "Approved"
+
+- session: s01
+- time: 00:11
+- pages: [ip-routes-and-views, status-live]
+- sources: [raw/owner/2026-10-10-s01-browse-v2-approval.md]
+- result: Raw file appended to MANIFEST.sha256 and listed in index.md. The owner's words: "Approved". The plan: one pattern for Log (41), Questions (54), Decisions (28), Risks (25) and Research (70): cards closed at first with Open all / Close all, search, filters (a filter with one choice hidden), Sort, 20 per page, the view in the address (open cards not); time of day from now on; labels for questions, risks and research from the existing 26 tags; delete LogFilter.tsx; new Ref ids, none renumbered. Built by two agents (data and labels; screens), integrated and checked by Claude.
+
+## [2026-10-11] code | p0.17 lists: one list pattern for log, questions, decisions, risks and research
+
+- session: s01
+- time: 00:11
+- pages: [ip-routes-and-views, ip-testing, ops-portal-pipeline, ops-wiki-maintenance, ov-open-questions, schema]
+- sources: [raw/owner/2026-10-10-s01-browse-v2-approval.md]
+- result: Planning tooling only, no Ferrum code. Data: questions.json, risks.json and research.json items carry `category` and exactly 2 `tags` (research also `phase`); taxonomy.json gains `research_categories` (Research question, Prediction, Experiment, Measure, Test site); questions.json reordered to the order of the questions page so same-day ties follow it, summary reworded ("newest first; the list starts on the open ones"); optional `time` (HH:MM) on log entries and questions; schemas, tools/portal-sync-check.ps1 (BAD-LABEL for the new kinds, MISMATCH for a time that differs from the wiki), 13 new checker tests, tools/quick_lint.py and lib/wiki/log.ts accept `- time:` and report a bad value as LOG-FORMAT (lint-parity list updated). Screens: lib/portal/browse.ts (six sorts with written-order ties, a filter that starts on a value, optional date range, several phases per item, address prefix `risk-`), lib/portal/browseTabs.ts (`TAB_CONFIG` per list), Browse.tsx with native accordion cards, Sort and Open all, new CardLine.tsx and CardParts.tsx; Questions one list starting on Open; Risks table now cards ("Risk L × I = S"); Research one list of 70 with a Kind filter; decision, risk and research popups replaced by the opened card; LogFilter.tsx and its 2 CSS rules deleted (owner allowed it). Ref ids: new DE-8 to DE-17, RE-8 to RE-15, QU-7 to QU-12, LO-11, LO-12; changed DE-3, RE-2, QU-6, LO-3, DE-5, LO-8, DE-7, LO-10; retired RE-3 to RE-7, QU-2 to QU-5.
+- stales: [ip-routes-and-views, ip-testing, ov-open-questions, schema] (no approvals exist yet, so nothing is actually stale)
+
+## [2026-10-11] lint | p0.17 lists: npm run verify green in a scratch copy; screenshots of all five lists read at 1440 and 390 px in both themes
+
+- session: s01
+- time: 00:11
+- pages: [ip-routes-and-views, ip-testing, status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/lists-checks.txt]
+- result: In a scratch copy outside the repo (own npm ci, e2e port 3448): typecheck, eslint, 868 unit tests passed and 1 skipped; lint:wiki first failed with 1 error: the copy has no .git, so the lint checked the MANIFEST format and flagged line 64 (an existing ` *` marker from c14d4b6); with that line changed in the copy only, 0 errors, 34 warnings, 4 info (in the repo, with git, the line stays as committed and lint:wiki is 0 errors); build; 210 browser tests passed; E2E guard: real files unchanged. 36 screenshots on port 3449 (all five lists at 1440 and 390 px, light and dark; a card opened; Open all; Oldest first, By number, risk A to Z; Questions on Any; Research filtered to Experiment and Measure) were read: no sideways scrolling, counts right (Questions "1–20 of 39 (54 in all)" on Open, 54 on Any; Research 9 experiments, 27 measures), no defects found. Scratch copy deleted, its server stopped, the owner's portal on 3417 kept running, `.git/config` unchanged. Repo: quick lint 0 errors, 0 warnings; python tool tests 19 OK; portal-sync self-tests 52 passed; portal check clean; mask scan 0.

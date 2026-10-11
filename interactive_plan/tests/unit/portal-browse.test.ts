@@ -1,38 +1,67 @@
-// Search, filters and pages of the Decisions and Log tabs (owner request 2026-10-10,
-// wiki/raw/owner/2026-10-10-s01-decisions-log-browse.md): the pure logic in lib/portal/browse.ts,
-// the tab builders in lib/portal/browseTabs.ts and the taxonomy reader in lib/portal/taxonomy.ts.
-// Uses small fixtures, not the real plan/portal files, so it does not depend on the labels being filled in.
+// Search, filters, sort and pages of every list (owner requests 2026-10-10,
+// wiki/raw/owner/2026-10-10-s01-decisions-log-browse.md and 2026-10-10-s01-browse-v2-*.md): the pure
+// logic in lib/portal/browse.ts, the tab builders and per-tab rules in lib/portal/browseTabs.ts and the
+// taxonomy reader in lib/portal/taxonomy.ts. Uses small fixtures, not the real plan/portal files, so it
+// does not depend on the labels being filled in.
 import { describe, expect, it } from "vitest";
 import {
   activeCount,
+  ANY,
   clampPage,
+  clearedState,
+  compareIds,
   datesReversed,
-  EMPTY_STATE,
+  extraValue,
   filterItems,
+  initialState,
+  isClockTime,
   isFiltered,
   isIsoDate,
   matches,
+  mergeQuery,
   normalize,
+  ownPart,
+  ownsKey,
   PAGE_SIZE,
   pageInfo,
   pageNumbers,
   pageSlice,
+  paramKey,
   parseState,
+  phaseRank,
   resultsLine,
   searchText,
   searchWords,
+  sortItems,
+  SORTS,
   stateToQuery,
   update,
+  visibleItems,
+  withExtra,
   withoutTag,
   withTag,
   type BrowseItem,
   type BrowseSpec,
   type BrowseState,
+  type ExtraFilter,
 } from "@/lib/portal/browse";
-import { decisionExtras, decisionsBrowse, LOG_EXTRAS, logBrowse, phaseOptions } from "@/lib/portal/browseTabs";
-import type { Decisions, Log, Roadmap } from "@/lib/portal/schemas.gen";
+import {
+  decisionExtras,
+  decisionsBrowse,
+  LOG_EXTRAS,
+  logBrowse,
+  phaseOptions,
+  QUESTION_EXTRAS,
+  questionsBrowse,
+  researchBrowse,
+  researchDetail,
+  researchRows,
+  risksBrowse,
+  TAB_CONFIG,
+} from "@/lib/portal/browseTabs";
+import type { Decisions, Log, Questions, Research, Risks, Roadmap } from "@/lib/portal/schemas.gen";
 import { TaxonomyFile } from "@/lib/portal/schemas.gen";
-import { labelsOf, normalizeTaxonomy, offered, offeredInUse } from "@/lib/portal/taxonomy";
+import { labelsOf, normalizeTaxonomy, offered, offeredInUse, RESEARCH_KINDS, timeOf } from "@/lib/portal/taxonomy";
 
 const SPEC: BrowseSpec = {
   categories: ["The app", "Plan portal"],
@@ -49,13 +78,44 @@ const SPEC: BrowseSpec = {
       ],
     },
   ],
+  sorts: ["newest", "oldest", "phase", "az", "number"],
+  defaultSort: "newest",
+  dates: true,
+  phaseOrder: ["phase-p0-planning", "phase-p1-foundation", "phase-p2-minimal-container"],
 };
 
+/** A status filter that starts on "open", as on the Questions tab. */
+const STATUS_DEFAULT: ExtraFilter = {
+  key: "status",
+  label: "Status",
+  anyLabel: "Any status",
+  defaultValue: "open",
+  options: [
+    { value: "open", label: "Open" },
+    { value: "answered", label: "Answered" },
+  ],
+};
+const Q_SPEC: BrowseSpec = { ...SPEC, extras: [STATUS_DEFAULT], sorts: ["newest", "oldest"] };
+
 function item(id: string, over: Partial<BrowseItem> = {}): BrowseItem {
-  return { id, text: searchText(`Item ${id}`), category: "The app", tags: ["tabs", "memory"], phase: "phase-p0-planning", date: "2026-10-09", facets: { status: ["Accepted"] }, ...over };
+  return {
+    id,
+    text: searchText(`Item ${id}`),
+    title: `Item ${id}`,
+    category: "The app",
+    tags: ["tabs", "memory"],
+    phases: ["phase-p0-planning"],
+    date: "2026-10-09",
+    time: null,
+    order: 0,
+    facets: { status: ["Accepted"] },
+    ...over,
+  };
 }
 
-const state = (over: Partial<BrowseState> = {}): BrowseState => ({ ...EMPTY_STATE, ...over });
+const EMPTY: BrowseState = initialState(SPEC);
+const state = (over: Partial<BrowseState> = {}): BrowseState => ({ ...EMPTY, ...over });
+const ids = (list: readonly { id: string }[]) => list.map((i) => i.id);
 
 describe("text and words", () => {
   it("normalize drops link markup, case, accents and extra spaces", () => {
@@ -77,6 +137,11 @@ describe("text and words", () => {
     expect(isIsoDate("2026-02-30")).toBe(false);
     expect(isIsoDate("2026-13-01")).toBe(false);
     expect(isIsoDate("9 Oct")).toBe(false);
+  });
+
+  it("isClockTime accepts only 24-hour HH:MM times", () => {
+    for (const t of ["00:00", "09:05", "21:41", "23:59"]) expect(isClockTime(t), t).toBe(true);
+    for (const t of ["24:00", "9:05", "21:60", "21:41:00", "", "noon"]) expect(isClockTime(t), t).toBe(false);
   });
 });
 
@@ -101,20 +166,38 @@ describe("matching", () => {
     expect(matches(x, state({ to: "2026-10-08" }))).toBe(false);
     expect(matches(x, state({ extra: { status: "Accepted" } }))).toBe(true);
     expect(matches(x, state({ extra: { status: "Proposed" } }))).toBe(false);
+    expect(matches(x, state({ extra: { status: ANY } }))).toBe(true);
     expect(matches(item("y", { facets: {} }), state({ extra: { status: "Accepted" } }))).toBe(false);
+  });
+
+  it("a question that holds up several phases matches each; no phase never matches a phase", () => {
+    const two = item("two", { phases: ["phase-p1-foundation", "phase-p2-minimal-container"] });
+    expect(matches(two, state({ phase: "phase-p2-minimal-container" }))).toBe(true);
+    expect(matches(two, state({ phase: "phase-p1-foundation" }))).toBe(true);
+    expect(matches(item("none", { phases: [] }), state({ phase: "phase-p0-planning" }))).toBe(false);
+  });
+
+  it("an item without a date never passes a date filter", () => {
+    expect(matches(item("nodate", { date: null }), state({ from: "2026-01-01" }))).toBe(false);
+    expect(matches(item("nodate", { date: null }), state())).toBe(true);
   });
 
   it("filterItems keeps the original order", () => {
     const list = [item("1", { category: "Plan portal" }), item("2"), item("3", { category: "Plan portal" })];
-    expect(filterItems(list, state({ category: "Plan portal" })).map((i) => i.id)).toEqual(["1", "3"]);
+    expect(ids(filterItems(list, state({ category: "Plan portal" })))).toEqual(["1", "3"]);
   });
 
-  it("isFiltered and activeCount ignore the page number", () => {
+  it("isFiltered and activeCount ignore the page number and the sort", () => {
     expect(isFiltered(state({ page: 3 }))).toBe(false);
+    expect(isFiltered(state({ sort: "az" }))).toBe(false);
     expect(isFiltered(state({ q: "   " }))).toBe(false);
     expect(isFiltered(state({ q: "x" }))).toBe(true);
     expect(isFiltered(state({ to: "2026-10-01" }))).toBe(true);
     expect(isFiltered(state({ extra: { status: "Accepted" } }))).toBe(true);
+    // A filter on "any" does not narrow; a starting value ("Open") does.
+    expect(isFiltered(state({ extra: { status: ANY } }))).toBe(false);
+    expect(isFiltered(initialState(Q_SPEC))).toBe(true);
+    expect(activeCount(initialState(Q_SPEC))).toBe(1);
     expect(activeCount(state({ q: "x", category: "The app", tags: ["tabs", "CPU"], phase: "p", from: "2026-01-01", to: "2026-02-01", extra: { status: "Accepted" } }))).toBe(8);
     expect(activeCount(state())).toBe(0);
   });
@@ -122,7 +205,7 @@ describe("matching", () => {
 
 describe("address (URL query)", () => {
   it("parses every known key", () => {
-    const s = parseState("?q=tab+sleep&category=The+app&tag=memory&tag=tabs&phase=phase-p1-foundation&from=2026-10-01&to=2026-10-09&status=Proposed&page=2", SPEC);
+    const s = parseState("?q=tab+sleep&category=The+app&tag=memory&tag=tabs&phase=phase-p1-foundation&from=2026-10-01&to=2026-10-09&status=Proposed&sort=az&page=2", SPEC);
     expect(s).toEqual({
       q: "tab sleep",
       category: "The app",
@@ -131,13 +214,14 @@ describe("address (URL query)", () => {
       from: "2026-10-01",
       to: "2026-10-09",
       extra: { status: "Proposed" },
+      sort: "az",
       page: 2,
     });
   });
 
   it("ignores unknown keys and values outside the lists", () => {
-    const s = parseState("?category=Nope&tag=nope&tag=CPU&tag=CPU&phase=phase-p9-x&from=2026-02-30&to=yesterday&status=Maybe&page=0&foo=bar", SPEC);
-    expect(s).toEqual({ ...EMPTY_STATE, tags: ["CPU"] });
+    const s = parseState("?category=Nope&tag=nope&tag=CPU&tag=CPU&phase=phase-p9-x&from=2026-02-30&to=yesterday&status=Maybe&sort=up&page=0&foo=bar", SPEC);
+    expect(s).toEqual({ ...EMPTY, tags: ["CPU"] });
     expect(parseState("?page=-1", SPEC).page).toBe(1);
     expect(parseState("?page=abc", SPEC).page).toBe(1);
     expect(parseState("?page=1.5", SPEC).page).toBe(1);
@@ -148,10 +232,161 @@ describe("address (URL query)", () => {
   it("writes a short, stable address and reads it back", () => {
     expect(stateToQuery(state(), SPEC)).toBe("");
     expect(stateToQuery(state({ page: 1, q: "  " }), SPEC)).toBe("");
-    const s = state({ q: " memory  saving ", category: "The app", tags: ["tabs", "CPU"], phase: "phase-p0-planning", from: "2026-10-01", to: "2026-10-10", extra: { status: "Accepted", unknown: "x" }, page: 2 });
+    const s = state({ q: " memory  saving ", category: "The app", tags: ["tabs", "CPU"], phase: "phase-p0-planning", from: "2026-10-01", to: "2026-10-10", extra: { status: "Accepted", unknown: "x" }, sort: "oldest", page: 2 });
     const q = stateToQuery(s, SPEC);
-    expect(q).toBe("?q=memory+saving&category=The+app&tag=tabs&tag=CPU&phase=phase-p0-planning&from=2026-10-01&to=2026-10-10&status=Accepted&page=2");
+    expect(q).toBe("?q=memory+saving&category=The+app&tag=tabs&tag=CPU&phase=phase-p0-planning&from=2026-10-01&to=2026-10-10&status=Accepted&sort=oldest&page=2");
     expect(stateToQuery(parseState(q, SPEC), SPEC)).toBe(q);
+  });
+
+  it("sort: a known choice of this tab is read and written; the starting order is left out", () => {
+    expect(parseState("", SPEC).sort).toBe("newest");
+    expect(parseState("?sort=oldest", SPEC).sort).toBe("oldest");
+    expect(parseState("?sort=number", SPEC).sort).toBe("number");
+    // "risk" exists, but not on this tab; unknown values are ignored.
+    expect(parseState("?sort=risk", SPEC).sort).toBe("newest");
+    expect(parseState("?sort=sideways", SPEC).sort).toBe("newest");
+    expect(stateToQuery(state({ sort: "newest" }), SPEC)).toBe("");
+    expect(stateToQuery(state({ sort: "az", page: 2 }), SPEC)).toBe("?sort=az&page=2");
+    const byPhase: BrowseSpec = { ...SPEC, sorts: ["phase", "newest"], defaultSort: "phase" };
+    expect(parseState("", byPhase).sort).toBe("phase");
+    expect(stateToQuery({ ...state(), sort: "phase" }, byPhase)).toBe("");
+    expect(stateToQuery({ ...state(), sort: "newest" }, byPhase)).toBe("?sort=newest");
+  });
+
+  it("a filter with a starting value: absent means the start (Open), status=any means Any", () => {
+    expect(initialState(Q_SPEC).extra).toEqual({ status: "open" });
+    expect(parseState("", Q_SPEC).extra).toEqual({ status: "open" });
+    expect(parseState("?status=answered", Q_SPEC).extra).toEqual({ status: "answered" });
+    expect(parseState("?status=any", Q_SPEC).extra).toEqual({ status: ANY });
+    expect(parseState("?status=maybe", Q_SPEC).extra).toEqual({ status: "open" });
+    expect(stateToQuery(parseState("", Q_SPEC), Q_SPEC)).toBe("");
+    expect(stateToQuery(parseState("?status=any", Q_SPEC), Q_SPEC)).toBe("?status=any");
+    expect(stateToQuery(parseState("?status=answered", Q_SPEC), Q_SPEC)).toBe("?status=answered");
+    // The dropdown shows "" for any; choosing "" writes status=any; choosing Open again empties the address.
+    const s0 = parseState("", Q_SPEC);
+    expect(extraValue(s0, STATUS_DEFAULT)).toBe("open");
+    const any = withExtra(s0, STATUS_DEFAULT, "");
+    expect(any.extra.status).toBe(ANY);
+    expect(extraValue(any, STATUS_DEFAULT)).toBe("");
+    expect(stateToQuery(any, Q_SPEC)).toBe("?status=any");
+    expect(stateToQuery(withExtra(any, STATUS_DEFAULT, "open"), Q_SPEC)).toBe("");
+    // Without a starting value, "" removes the key.
+    expect(withExtra(state({ extra: { status: "Accepted" }, page: 3 }), SPEC.extras[0], "")).toMatchObject({ extra: {}, page: 1 });
+  });
+
+  it("Clear filters: no search, every filter on any (also a starting one), the sort stays, page 1", () => {
+    const s = parseState("?q=x&tag=CPU&status=answered&sort=oldest&page=2", Q_SPEC);
+    const c = clearedState(s, Q_SPEC);
+    expect(c).toEqual({ ...initialState(Q_SPEC), extra: { status: ANY }, sort: "oldest" });
+    expect(isFiltered(c)).toBe(false);
+    expect(stateToQuery(c, Q_SPEC)).toBe("?status=any&sort=oldest");
+    expect(clearedState(state({ q: "x", tags: ["CPU"] }), SPEC)).toEqual(EMPTY);
+  });
+
+  it("dates are not read or written on a tab without them", () => {
+    const noDates = { ...SPEC, dates: false };
+    expect(parseState("?from=2026-10-01&to=2026-10-09", noDates)).toMatchObject({ from: null, to: null });
+    expect(stateToQuery(state({ from: "2026-10-01" }), noDates)).toBe("");
+  });
+
+  it("a prefix keeps two lists apart in one address (Decisions and Risks)", () => {
+    const risk: BrowseSpec = { ...SPEC, prefix: "risk-", sorts: ["risk", "az"], defaultSort: "risk" };
+    expect(paramKey(risk, "q")).toBe("risk-q");
+    expect(paramKey(SPEC, "q")).toBe("q");
+    expect(ownsKey(risk, "risk-page")).toBe(true);
+    expect(ownsKey(risk, "page")).toBe(false);
+    expect(ownsKey(SPEC, "page")).toBe(true);
+    expect(ownsKey(SPEC, "foo")).toBe(true); // an unknown plain key is tidied by the list without a prefix
+    expect(ownsKey(SPEC, "risk-page")).toBe(false);
+    const both = "?q=memory&risk-q=leak&risk-sort=az&risk-page=2&page=1";
+    expect(parseState(both, SPEC)).toMatchObject({ q: "memory", sort: "newest", page: 1 });
+    expect(parseState(both, risk)).toMatchObject({ q: "leak", sort: "az", page: 2 });
+    expect(stateToQuery(parseState(both, risk), risk)).toBe("?risk-q=leak&risk-sort=az&risk-page=2");
+    expect(ownPart(both, risk)).toBe("?risk-q=leak&risk-sort=az&risk-page=2");
+    expect(ownPart(both, SPEC)).toBe("?q=memory&page=1");
+    // Writing one list keeps the other list's part as it is.
+    expect(mergeQuery(both, "?q=tabs", SPEC)).toBe("?risk-q=leak&risk-sort=az&risk-page=2&q=tabs");
+    expect(mergeQuery(both, "", risk)).toBe("?q=memory&page=1");
+    expect(mergeQuery("", "", SPEC)).toBe("");
+  });
+});
+
+describe("sort", () => {
+  // Written order a..f over two days; some carry a time of day.
+  const list: BrowseItem[] = [
+    item("a", { order: 0, date: "2026-10-08", title: "Zebra", phases: ["phase-p1-foundation"], number: 3 }),
+    item("b", { order: 1, date: "2026-10-08", title: "apple", phases: [], number: 1 }),
+    item("c", { order: 2, date: "2026-10-10", title: "Mango", phases: ["phase-p0-planning"], number: 2 }),
+    item("d", { order: 3, date: "2026-10-10", time: "09:30", title: "banana", phases: ["phase-p2-minimal-container", "phase-p0-planning"], number: null }),
+    item("e", { order: 4, date: "2026-10-10", time: "21:41", title: "Cherry", phases: ["phase-p9-unknown"] }),
+    item("f", { order: 5, date: "2026-10-10", time: "08:00", title: "apple", phases: ["phase-p1-foundation"] }),
+  ];
+
+  it("Newest first: newest day first; timed ones by time, then the untimed ones in reverse written order", () => {
+    expect(ids(sortItems(list, "newest"))).toEqual(["e", "d", "f", "c", "b", "a"]);
+  });
+
+  it("Oldest first: the exact reverse", () => {
+    expect(ids(sortItems(list, "oldest"))).toEqual(["a", "b", "c", "f", "d", "e"]);
+  });
+
+  it("same date and time keep their written order (newest first reverses it); the id breaks a full tie", () => {
+    const same = [item("q2", { order: 0 }), item("q1", { order: 1 }), item("q3", { order: 2 })];
+    expect(ids(sortItems(same, "oldest"))).toEqual(["q2", "q1", "q3"]);
+    expect(ids(sortItems(same, "newest"))).toEqual(["q3", "q1", "q2"]);
+    const timed = [item("t1", { order: 0, time: "10:00" }), item("t2", { order: 1, time: "10:00" })];
+    expect(ids(sortItems(timed, "newest"))).toEqual(["t2", "t1"]);
+    const tie = [item("x-10", { order: 0 }), item("x-9", { order: 0 })];
+    expect(ids(sortItems(tie, "oldest"))).toEqual(["x-9", "x-10"]);
+  });
+
+  it("items without dates (Risks, Research): newest first is the written order reversed", () => {
+    const noDate = [item("r1", { date: null, order: 0 }), item("r2", { date: null, order: 1 })];
+    expect(ids(sortItems(noDate, "newest"))).toEqual(["r2", "r1"]);
+    expect(ids(sortItems(noDate, "oldest"))).toEqual(["r1", "r2"]);
+  });
+
+  it("By phase: roadmap order by the earliest phase, unknown phases after known ones, no phase last; ties in written order", () => {
+    expect(ids(sortItems(list, "phase", SPEC.phaseOrder))).toEqual(["c", "d", "a", "f", "e", "b"]);
+    expect(phaseRank({ phases: [] }, SPEC.phaseOrder)).toBe(Number.POSITIVE_INFINITY);
+    expect(phaseRank({ phases: ["phase-p2-minimal-container", "phase-p0-planning"] }, SPEC.phaseOrder)).toBe(0);
+    expect(phaseRank({ phases: ["phase-p9-unknown"] }, SPEC.phaseOrder)).toBe(3);
+  });
+
+  it("A to Z by title: ignores case, reads numbers as numbers, the id breaks ties", () => {
+    expect(ids(sortItems(list, "az"))).toEqual(["b", "f", "d", "e", "c", "a"]);
+    const nums = [item("n1", { title: "Step 10" }), item("n2", { title: "Step 9" })];
+    expect(ids(sortItems(nums, "az"))).toEqual(["n2", "n1"]);
+  });
+
+  it("By number: smallest first, items without a number last", () => {
+    expect(ids(sortItems(list.slice(0, 4), "number"))).toEqual(["b", "c", "a", "d"]);
+  });
+
+  it("Highest risk first: likelihood × impact, highest first; ties by id as people read it", () => {
+    const risks = [item("risk-r10", { score: 12 }), item("risk-r2", { score: 12 }), item("risk-r01", { score: 20 }), item("risk-r05", { score: 4 })];
+    expect(ids(sortItems(risks, "risk"))).toEqual(["risk-r01", "risk-r2", "risk-r10", "risk-r05"]);
+  });
+
+  it("compareIds reads numbers inside ids as numbers", () => {
+    expect(["Q-10", "Q-9", "Q-100"].sort(compareIds)).toEqual(["Q-9", "Q-10", "Q-100"]);
+  });
+
+  it("visibleItems filters, then sorts; it never changes the input", () => {
+    const copy = [...list];
+    expect(ids(visibleItems(list, state({ sort: "oldest", from: "2026-10-10" }), SPEC))).toEqual(["c", "f", "d", "e"]);
+    expect(list).toEqual(copy);
+  });
+
+  it("every sort key has a plain label", () => {
+    expect(SORTS).toEqual({
+      newest: "Newest first",
+      oldest: "Oldest first",
+      phase: "By phase",
+      az: "A to Z by title",
+      number: "By number",
+      risk: "Highest risk first",
+    });
   });
 });
 
@@ -159,6 +394,7 @@ describe("changes go back to page 1", () => {
   it("update resets the page unless the page itself changes", () => {
     const s = state({ page: 3 });
     expect(update(s, { q: "x" }).page).toBe(1);
+    expect(update(s, { sort: "az" }).page).toBe(1);
     expect(update(s, { page: 2 }).page).toBe(2);
   });
 
@@ -229,7 +465,11 @@ describe("pages", () => {
 });
 
 describe("taxonomy", () => {
-  it("reads plain names and { name, explains } records alike, drops repeats", () => {
+  it("reads plain names and { name, explains } records alike, drops repeats; optional lists fall back", () => {
+    const topics = [
+      { name: "The app", explains: null },
+      { name: "Plan portal", explains: "The read-only portal" },
+    ];
     expect(
       normalizeTaxonomy({
         decision_categories: ["The app", { name: "Plan portal", explains: "The read-only portal" }, "The app"],
@@ -237,25 +477,45 @@ describe("taxonomy", () => {
         tags: ["memory", { name: "CPU", explains: null }],
       }),
     ).toEqual({
-      decisionCategories: [
-        { name: "The app", explains: null },
-        { name: "Plan portal", explains: "The read-only portal" },
-      ],
+      decisionCategories: topics,
       logCategories: [{ name: "Built", explains: null }],
       tags: [
         { name: "memory", explains: null },
         { name: "CPU", explains: null },
       ],
+      // Not in the file: questions and risks use the decision topics, research its five kinds.
+      questionCategories: topics,
+      riskCategories: topics,
+      researchCategories: Object.values(RESEARCH_KINDS).map((name) => ({ name, explains: null })),
     });
     expect(normalizeTaxonomy(null)).toBeNull();
+  });
+
+  it("reads the optional question, risk and research lists when the file has them", () => {
+    const t = normalizeTaxonomy({
+      decision_categories: ["The app"],
+      log_categories: ["Built"],
+      tags: ["memory", "CPU"],
+      question_categories: ["Asked"],
+      risk_categories: [],
+      research_categories: [{ name: "Measure", explains: "One number we record." }],
+    })!;
+    expect(t.questionCategories.map((c) => c.name)).toEqual(["Asked"]);
+    expect(t.riskCategories.map((c) => c.name)).toEqual(["The app"]); // an empty list: the fallback
+    expect(t.researchCategories).toEqual([{ name: "Measure", explains: "One number we record." }]);
+  });
+
+  it("the research kinds are the owner's plain words", () => {
+    expect(Object.values(RESEARCH_KINDS)).toEqual(["Research question", "Prediction", "Experiment", "Measure", "Test site"]);
   });
 
   it("the generated schema checks taxonomy.json: names with explanations, no empty list", () => {
     const head = { id: "taxonomy", title: "Categories and tags", summary: "The fixed lists." };
     const entry = (name: string) => ({ name, explains: `What ${name} covers.` });
-    expect(TaxonomyFile.safeParse({ ...head, decision_categories: [entry("The app")], log_categories: [entry("Built")], tags: [entry("memory"), entry("CPU")] }).success).toBe(true);
-    expect(TaxonomyFile.safeParse({ ...head, decision_categories: [], log_categories: [entry("Built")], tags: [entry("memory"), entry("CPU")] }).success).toBe(false);
-    expect(TaxonomyFile.safeParse({ ...head, decision_categories: [entry("a\nb")], log_categories: [entry("Built")], tags: [entry("memory"), entry("CPU")] }).success).toBe(false);
+    const rest = { log_categories: [entry("Built")], research_categories: [entry("Measure")], tags: [entry("memory"), entry("CPU")] };
+    expect(TaxonomyFile.safeParse({ ...head, decision_categories: [entry("The app")], ...rest }).success).toBe(true);
+    expect(TaxonomyFile.safeParse({ ...head, decision_categories: [], ...rest }).success).toBe(false);
+    expect(TaxonomyFile.safeParse({ ...head, decision_categories: [entry("a\nb")], ...rest }).success).toBe(false);
   });
 
   it("labelsOf reads category, tags and phase, and tolerates missing or odd fields", () => {
@@ -266,6 +526,14 @@ describe("taxonomy", () => {
     });
     expect(labelsOf({})).toEqual({ category: null, tags: [], phase: null });
     expect(labelsOf({ category: 5, tags: "memory", phase: "" })).toEqual({ category: null, tags: [], phase: null });
+  });
+
+  it("timeOf reads a valid HH:MM time and ignores anything else", () => {
+    expect(timeOf({ time: "21:41" })).toBe("21:41");
+    expect(timeOf({ time: "9:41" })).toBeNull();
+    expect(timeOf({ time: "25:00" })).toBeNull();
+    expect(timeOf({ time: 2141 })).toBeNull();
+    expect(timeOf({})).toBeNull();
   });
 
   it("offered uses the taxonomy list, else the names in use (sorted)", () => {
@@ -292,8 +560,15 @@ const ROADMAP = {
   phases: [
     { id: "phase-p0-planning", short: "P0", name: "Planning" },
     { id: "phase-p1-foundation", short: "P1", name: "Foundation" },
+    { id: "phase-p5-benchmark", short: "P5", name: "Benchmark" },
   ],
 } as unknown as Roadmap;
+const TAX = normalizeTaxonomy({
+  decision_categories: ["The app", "Plan portal", "Security & privacy"],
+  log_categories: ["Built", "Fixed"],
+  research_categories: Object.values(RESEARCH_KINDS),
+  tags: ["tabs", "memory", "CPU", "portal", "testing"],
+});
 
 function decision(n: number, over: Record<string, unknown> = {}): Decisions["items"][number] {
   return {
@@ -316,7 +591,50 @@ function decision(n: number, over: Record<string, unknown> = {}): Decisions["ite
   } as Decisions["items"][number];
 }
 
-describe("tab builders", () => {
+function question(id: string, over: Record<string, unknown> = {}): Questions["items"][number] {
+  return {
+    id,
+    asked: "2026-10-08",
+    question: `Question ${id}?`,
+    why_it_matters: "It holds up the start",
+    status: "open",
+    answer: null,
+    answered_on: null,
+    blocks: [],
+    category: "The app",
+    tags: ["tabs", "memory"],
+    ...over,
+  } as Questions["items"][number];
+}
+
+function risk(n: number, likelihood: number, impact: number, over: Record<string, unknown> = {}): Risks["items"][number] {
+  return {
+    id: `risk-r${String(n).padStart(2, "0")}`,
+    title: `Risk ${n}`,
+    summary: "Something could break",
+    likelihood,
+    impact,
+    mitigation: "We test it early",
+    phase: "phase-p1-foundation",
+    status: "Open",
+    related: [],
+    source: SOURCE,
+    category: "Security & privacy",
+    tags: ["CPU", "testing"],
+    ...over,
+  } as Risks["items"][number];
+}
+
+describe("per-tab rules", () => {
+  it("each tab has its sort choices and starting order (owner's answers of 2026-10-10)", () => {
+    expect(TAB_CONFIG.log).toMatchObject({ sorts: ["newest", "oldest", "phase", "az"], defaultSort: "newest", dates: true });
+    expect(TAB_CONFIG.questions).toMatchObject({ sorts: ["newest", "oldest", "phase", "az"], defaultSort: "newest", dates: true });
+    expect(TAB_CONFIG.decisions).toMatchObject({ sorts: ["newest", "oldest", "phase", "az", "number"], defaultSort: "newest", dates: true });
+    expect(TAB_CONFIG.risks).toMatchObject({ sorts: ["risk", "newest", "oldest", "phase", "az"], defaultSort: "risk", dates: false, prefix: "risk-" });
+    expect(TAB_CONFIG.research).toMatchObject({ sorts: ["phase", "newest", "oldest", "az"], defaultSort: "phase", dates: false });
+    for (const cfg of Object.values(TAB_CONFIG)) expect(cfg.sorts).toContain(cfg.defaultSort);
+  });
+
   it("phaseOptions lists used phases in roadmap order, unknown ones last", () => {
     expect(phaseOptions(["phase-p1-foundation", null, "phase-p0-planning", "phase-p8-x", "phase-p1-foundation"], ROADMAP)).toEqual([
       { value: "phase-p0-planning", label: "P0 · Planning" },
@@ -337,23 +655,45 @@ describe("tab builders", () => {
     ]);
   });
 
-  it("decisionsBrowse: items carry labels, facets and searchable text; lists come from the taxonomy", () => {
-    const decisions = { items: [decision(1), decision(2, { catch: "Costs CPU", decided_by: "claude", status: "Proposed", category: "Plan portal", tags: ["portal", "CPU"] })] } as unknown as Decisions;
-    const tax = normalizeTaxonomy({ decision_categories: ["The app", "Plan portal"], log_categories: ["Built"], tags: ["tabs", "memory", "CPU", "portal"] });
-    const b = decisionsBrowse(decisions, tax, ROADMAP);
-    expect(b.items[1]).toMatchObject({ id: "adr-0002", category: "Plan portal", tags: ["portal", "CPU"], phase: "phase-p1-foundation", facets: { status: ["Proposed"], by: ["claude"] } });
+  it("decisionsBrowse: items carry labels, number, facets and searchable text; newest first by default, By number on offer", () => {
+    const decisions = {
+      items: [
+        decision(1),
+        decision(2, { catch: "Costs CPU", decided_by: "claude", status: "Proposed", category: "Plan portal", tags: ["portal", "CPU"], date: "2026-10-09" }),
+        decision(3, { date: "2026-10-08" }),
+      ],
+    } as unknown as Decisions;
+    const b = decisionsBrowse(decisions, TAX, ROADMAP);
+    expect(b.items[1]).toMatchObject({
+      id: "adr-0002",
+      title: "Decision 2",
+      category: "Plan portal",
+      tags: ["portal", "CPU"],
+      phases: ["phase-p1-foundation"],
+      date: "2026-10-09",
+      time: null,
+      order: 1,
+      number: 2,
+      facets: { status: ["Proposed"], by: ["claude"] },
+    });
     expect(b.items[0].text).toContain("the portal"); // link markup dropped
     expect(b.items[1].text).toContain("costs cpu"); // the catch is searched
+    // Only the categories and tags in use are offered.
     expect(b.spec.categories).toEqual(["The app", "Plan portal"]);
     expect(b.spec.tags).toEqual(["tabs", "memory", "CPU", "portal"]);
     expect(b.spec.phases).toEqual(["phase-p1-foundation"]);
-    // A tag no decision has is not offered (it would always give "No matches").
-    const one = decisionsBrowse({ items: [decision(1)] } as unknown as Decisions, tax, ROADMAP);
+    expect(b.spec).toMatchObject({ defaultSort: "newest", dates: true, phaseOrder: ["phase-p0-planning", "phase-p1-foundation", "phase-p5-benchmark"] });
+    expect(b.sorts.map((s) => s.label)).toEqual(["Newest first", "Oldest first", "By phase", "A to Z by title", "By number"]);
+    // Newest first: 9 Oct, then the two of 8 Oct in reverse written order.
+    expect(ids(visibleItems(b.items, parseState("", b.spec), b.spec))).toEqual(["adr-0002", "adr-0003", "adr-0001"]);
+    expect(ids(visibleItems(b.items, parseState("?sort=number", b.spec), b.spec))).toEqual(["adr-0001", "adr-0002", "adr-0003"]);
+    const one = decisionsBrowse({ items: [decision(1)] } as unknown as Decisions, TAX, ROADMAP);
     expect(one.spec.tags).toEqual(["tabs", "memory"]);
-    expect(one.tags.map((t) => t.name)).toEqual(["tabs", "memory"]);
     expect(parseState("?tag=CPU", one.spec).tags).toEqual([]);
-    expect(filterItems(b.items, parseState("?by=claude", b.spec)).map((i) => i.id)).toEqual(["adr-0002"]);
-    expect(filterItems(b.items, parseState("?q=keeps+MEMORY&tag=tabs", b.spec)).map((i) => i.id)).toEqual(["adr-0001"]);
+    // One day only: no date range.
+    expect(one.spec.dates).toBe(false);
+    expect(ids(filterItems(b.items, parseState("?by=claude", b.spec)))).toEqual(["adr-0002"]);
+    expect(ids(filterItems(b.items, parseState("?q=keeps+MEMORY&tag=tabs", b.spec)))).toEqual(["adr-0001", "adr-0003"]);
   });
 
   it("decisionsBrowse without a taxonomy offers the names in use; no file gives an empty list", () => {
@@ -363,7 +703,7 @@ describe("tab builders", () => {
     expect(decisionsBrowse(null, null, null).items).toEqual([]);
   });
 
-  it("logBrowse: has decisions / has approvals, search over title, done, next and decisions", () => {
+  it("logBrowse: file order, time of day, has decisions / has approvals, search over title, done, next and decisions", () => {
     const entry = (id: string, over: Partial<Log["entries"][number]> & Record<string, unknown> = {}) =>
       ({
         id,
@@ -383,16 +723,85 @@ describe("tab builders", () => {
     const entries = [
       entry("a", { decisions: [{ what: "Use a blocklist", by: "you" }] }),
       entry("b", { approvals: [{ what: "schema", status: "Approved" }], next: "Measure memory" }),
-      entry("c", { category: "Fixed" }),
+      entry("c", { category: "Fixed", date: "2026-10-10", time: "21:41" }),
     ];
-    const b = logBrowse(entries, null, ROADMAP);
+    const b = logBrowse(entries, TAX, ROADMAP);
     expect(b.spec.extras).toBe(LOG_EXTRAS);
+    expect(b.items.map((i) => i.order)).toEqual([0, 1, 2]);
+    expect(b.items[2].time).toBe("21:41");
     expect(b.items.map((i) => i.facets.has)).toEqual([["decisions"], ["approvals"], []]);
-    expect(filterItems(b.items, parseState("?has=decisions", b.spec)).map((i) => i.id)).toEqual(["a"]);
-    expect(filterItems(b.items, parseState("?has=approvals", b.spec)).map((i) => i.id)).toEqual(["b"]);
-    expect(filterItems(b.items, parseState("?q=blocklist", b.spec)).map((i) => i.id)).toEqual(["a"]);
-    expect(filterItems(b.items, parseState("?q=measure", b.spec)).map((i) => i.id)).toEqual(["b"]);
-    expect(filterItems(b.items, parseState("?category=Fixed", b.spec)).map((i) => i.id)).toEqual(["c"]);
+    expect(ids(visibleItems(b.items, parseState("", b.spec), b.spec))).toEqual(["c", "b", "a"]);
+    expect(ids(visibleItems(b.items, parseState("?sort=oldest", b.spec), b.spec))).toEqual(["a", "b", "c"]);
+    expect(ids(filterItems(b.items, parseState("?has=decisions", b.spec)))).toEqual(["a"]);
+    expect(ids(filterItems(b.items, parseState("?has=approvals", b.spec)))).toEqual(["b"]);
+    expect(ids(filterItems(b.items, parseState("?q=blocklist", b.spec)))).toEqual(["a"]);
+    expect(ids(filterItems(b.items, parseState("?q=measure", b.spec)))).toEqual(["b"]);
+    expect(ids(filterItems(b.items, parseState("?category=Fixed", b.spec)))).toEqual(["c"]);
     expect(b.phases).toEqual([{ value: "phase-p0-planning", label: "P0 · Planning" }]);
+  });
+
+  it("questionsBrowse: starts on Open, newest first; Any shows all; the phase is what it holds up; the id is searched", () => {
+    const q = {
+      items: [
+        question("Q-125", { blocks: ["phase-p1-foundation"] }),
+        question("Q-221", { status: "answered", answer: "Yes", answered_on: "2026-10-09" }),
+        question("Q-207", { asked: "2026-10-10", time: "09:15", blocks: ["phase-p1-foundation", "phase-p5-benchmark"], category: "Plan portal" }),
+        question("Q-004", { status: "withdrawn" }),
+      ],
+    } as unknown as Questions;
+    const b = questionsBrowse(q, TAX, ROADMAP);
+    expect(b.spec.extras).toBe(QUESTION_EXTRAS);
+    expect(QUESTION_EXTRAS[0]).toMatchObject({ key: "status", defaultValue: "open" });
+    expect(b.spec.categories).toEqual(["The app", "Plan portal"]); // the decision topics in use
+    expect(b.items[2]).toMatchObject({ phases: ["phase-p1-foundation", "phase-p5-benchmark"], date: "2026-10-10", time: "09:15" });
+    const start = parseState("", b.spec);
+    expect(ids(visibleItems(b.items, start, b.spec))).toEqual(["Q-207", "Q-125"]);
+    expect(ids(visibleItems(b.items, parseState("?status=any", b.spec), b.spec))).toEqual(["Q-207", "Q-004", "Q-221", "Q-125"]);
+    expect(ids(visibleItems(b.items, parseState("?status=answered", b.spec), b.spec))).toEqual(["Q-221"]);
+    expect(ids(visibleItems(b.items, parseState("?phase=phase-p5-benchmark", b.spec), b.spec))).toEqual(["Q-207"]);
+    expect(ids(filterItems(b.items, parseState("?q=q-221&status=any", b.spec)))).toEqual(["Q-221"]);
+    expect(b.phases.map((p) => p.value)).toEqual(["phase-p1-foundation", "phase-p5-benchmark"]);
+  });
+
+  it("risksBrowse: score, handled-in phase, status filter in use, no dates, highest risk first with ties by id", () => {
+    const risks = { items: [risk(3, 2, 2), risk(10, 4, 3, { status: "Being reduced" }), risk(2, 3, 4), risk(1, 5, 5, { phase: "phase-p5-benchmark" })] } as unknown as Risks;
+    const b = risksBrowse(risks, TAX, ROADMAP);
+    expect(b.items.map((i) => i.score)).toEqual([4, 12, 12, 25]);
+    expect(b.spec).toMatchObject({ dates: false, defaultSort: "risk", prefix: "risk-" });
+    expect(b.spec.extras[0].options.map((o) => o.value)).toEqual(["Open", "Being reduced"]);
+    expect(ids(visibleItems(b.items, parseState("", b.spec), b.spec))).toEqual(["risk-r01", "risk-r02", "risk-r10", "risk-r03"]);
+    expect(ids(visibleItems(b.items, parseState("?risk-status=Being+reduced", b.spec), b.spec))).toEqual(["risk-r10"]);
+    expect(ids(visibleItems(b.items, parseState("?risk-phase=phase-p5-benchmark", b.spec), b.spec))).toEqual(["risk-r01"]);
+    // The Decisions list's keys do not reach the risks.
+    expect(parseState("?status=Open&q=nothing", b.spec)).toEqual(initialState(b.spec));
+    expect(b.sorts[0]).toEqual({ value: "risk", label: "Highest risk first" });
+  });
+
+  it("researchBrowse: 5 lists become one, kind as category, phase order first", () => {
+    const base = { summary: "Details", status: "Planned", related: [], source: SOURCE, tags: ["memory", "CPU"] };
+    const r = {
+      questions: [{ ...base, id: "rq-01", title: "Does sleeping save memory", question: "Does it?", phase: "phase-p5-benchmark", category: "Research question" }],
+      hypotheses: [{ ...base, id: "hyp-01", title: "It saves a lot", prediction: "Half the memory", phase: "phase-p5-benchmark" }],
+      experiments: [{ ...base, id: "exp-memory", title: "Memory test", phase: "phase-p1-foundation", status: "Designed" }],
+      metrics: [{ ...base, id: "metric-ram", title: "Working set", unit: "MB" }],
+      workloads: [{ ...base, id: "wl-news", title: "A news site", phase: "phase-p0-planning" }],
+    } as unknown as Research;
+    const rows = researchRows(r);
+    expect(rows.map((x) => x.kind)).toEqual(["questions", "hypotheses", "experiments", "metrics", "workloads"]);
+    expect(researchDetail(rows[0])).toBe("Does it?");
+    expect(researchDetail(rows[1])).toBe("Half the memory");
+    expect(researchDetail(rows[3])).toBe("Unit: MB");
+    expect(researchDetail(rows[4])).toBeNull();
+    const b = researchBrowse(r, TAX, ROADMAP);
+    // The item's own category when it has one, else its kind.
+    expect(b.items.map((i) => i.category)).toEqual(["Research question", "Prediction", "Experiment", "Measure", "Test site"]);
+    expect(b.spec).toMatchObject({ dates: false, defaultSort: "phase" });
+    expect(b.spec.categories).toEqual(["Research question", "Prediction", "Experiment", "Measure", "Test site"]);
+    expect(b.spec.extras[0].options.map((o) => o.value)).toEqual(["Designed", "Planned"]);
+    // By phase: P0, P1, then the two P5 items in written order, then the one without a phase.
+    expect(ids(visibleItems(b.items, parseState("", b.spec), b.spec))).toEqual(["wl-news", "exp-memory", "rq-01", "hyp-01", "metric-ram"]);
+    expect(ids(filterItems(b.items, parseState("?category=Measure", b.spec)))).toEqual(["metric-ram"]);
+    expect(ids(filterItems(b.items, parseState("?q=prediction", b.spec)))).toEqual(["hyp-01"]); // the kind is searched
+    expect(researchBrowse(null, null, null).items).toEqual([]);
   });
 });

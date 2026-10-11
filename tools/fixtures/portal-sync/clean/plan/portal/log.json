@@ -4,12 +4,13 @@
   "summary": "What happened, in plain words.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:3321c4ae9d99903fc9f3ac7ebf409c3493a9534fdb910761ab1b29556f13a78c"
+    "content_hash": "sha256:a7d7ea82b6e03267e3c669954f91075565dec3bf926debe474fa1c813d8b2f02"
   },
   "entries": [
     {
       "id": "log-2026-10-09-1",
       "date": "2026-10-09",
+      "time": "09:15",
       "title": "Fixture work done",
       "done": "Wrote the fixture pages and saved them.",
       "next": "Run the checker.",

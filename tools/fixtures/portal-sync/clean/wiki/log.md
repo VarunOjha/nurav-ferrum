@@ -7,6 +7,7 @@ type: log
 
 ## [2026-10-08] plan | fixture first entry
 
+- time: 09:15
 - result: one
 
 ## [2026-10-09] code | fixture second entry

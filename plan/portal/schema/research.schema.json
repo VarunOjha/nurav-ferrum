@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "research.schema.json",
   "title": "research.json - questions, hypotheses, experiments, metrics, workloads",
-  "description": "One item per page under wiki/research/{questions,hypotheses,experiments,metrics,workloads}/. The narrative ov-research-* pages are not translated.",
+  "description": "One item per page under wiki/research/{questions,hypotheses,experiments,metrics,workloads}/. The narrative ov-research-* pages are not translated. The portal shows all five lists as one list; 'category' says which kind each item is.",
   "type": "object",
   "required": [
     "id",
@@ -38,7 +38,10 @@
           "status",
           "related",
           "source",
-          "question"
+          "question",
+          "category",
+          "tags",
+          "phase"
         ],
         "properties": {
           "id": {
@@ -65,6 +68,17 @@
             "minLength": 1,
             "maxLength": 200,
             "pattern": "^[^\\n]+$"
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "The kind of item, from 'research_categories' in taxonomy.json. Always 'Research question' in this list (checked by tools/portal-sync-check.ps1, BAD-LABEL)."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
+          },
+          "phase": {
+            "$ref": "#/$defs/phase_id",
+            "description": "The page's frontmatter phase: the phase where this item is built, measured or answered."
           }
         },
         "additionalProperties": false
@@ -82,7 +96,10 @@
           "status",
           "related",
           "source",
-          "prediction"
+          "prediction",
+          "category",
+          "tags",
+          "phase"
         ],
         "properties": {
           "id": {
@@ -106,6 +123,17 @@
           },
           "prediction": {
             "$ref": "#/$defs/short_text"
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "The kind of item, from 'research_categories' in taxonomy.json. Always 'Prediction' in this list (checked by tools/portal-sync-check.ps1, BAD-LABEL)."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
+          },
+          "phase": {
+            "$ref": "#/$defs/phase_id",
+            "description": "The page's frontmatter phase: the phase where this item is built, measured or answered."
           }
         },
         "additionalProperties": false
@@ -123,7 +151,9 @@
           "status",
           "related",
           "source",
-          "phase"
+          "phase",
+          "category",
+          "tags"
         ],
         "properties": {
           "id": {
@@ -146,7 +176,15 @@
             "$ref": "#/$defs/source"
           },
           "phase": {
-            "$ref": "#/$defs/phase_id"
+            "$ref": "#/$defs/phase_id",
+            "description": "The page's frontmatter phase: the phase where this item is built, measured or answered."
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "The kind of item, from 'research_categories' in taxonomy.json. Always 'Experiment' in this list (checked by tools/portal-sync-check.ps1, BAD-LABEL)."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
           }
         },
         "additionalProperties": false
@@ -164,7 +202,10 @@
           "status",
           "related",
           "source",
-          "unit"
+          "unit",
+          "category",
+          "tags",
+          "phase"
         ],
         "properties": {
           "id": {
@@ -191,6 +232,17 @@
             "minLength": 1,
             "maxLength": 20,
             "pattern": "^[^\\n]+$"
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "The kind of item, from 'research_categories' in taxonomy.json. Always 'Measure' in this list (checked by tools/portal-sync-check.ps1, BAD-LABEL)."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
+          },
+          "phase": {
+            "$ref": "#/$defs/phase_id",
+            "description": "The page's frontmatter phase: the phase where this item is built, measured or answered."
           }
         },
         "additionalProperties": false
@@ -207,7 +259,10 @@
           "summary",
           "status",
           "related",
-          "source"
+          "source",
+          "category",
+          "tags",
+          "phase"
         ],
         "properties": {
           "id": {
@@ -228,6 +283,17 @@
           },
           "source": {
             "$ref": "#/$defs/source"
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "The kind of item, from 'research_categories' in taxonomy.json. Always 'Test site' in this list (checked by tools/portal-sync-check.ps1, BAD-LABEL)."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
+          },
+          "phase": {
+            "$ref": "#/$defs/phase_id",
+            "description": "The page's frontmatter phase: the phase where this item is built, measured or answered."
           }
         },
         "additionalProperties": false

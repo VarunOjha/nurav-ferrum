@@ -1,7 +1,7 @@
 ---
 name: wiki-to-portal
 description: Translate a changed wiki page (anything under wiki/, plus STATUS.md) into its plain-language JSON record in plan/portal/, the only thing the owner's read-only plan portal shows (adr-0024). Use it in the SAME edit as every wiki or STATUS.md change, before ending the turn, then run pwsh tools/portal-sync-check.ps1 until it is clean.
-when_to_use: After editing, creating or removing any wiki page, appending to wiki/log.md, editing wiki/overview/ov-open-questions.md or STATUS.md; when the Stop hook or tools/portal-sync-check.ps1 reports STALE, MISSING, UNCOVERED, ORPHAN, BAD-SHAPE, UNKNOWN-REF, MISSING-SCRIPT, MISMATCH or BAD-LABEL; when labelling a decision or log entry with its category and tags (plan/portal/taxonomy.json); when asked to "update the portal" or "write the portal JSON".
+when_to_use: After editing, creating or removing any wiki page, appending to wiki/log.md, editing wiki/overview/ov-open-questions.md or STATUS.md; when the Stop hook or tools/portal-sync-check.ps1 reports STALE, MISSING, UNCOVERED, ORPHAN, BAD-SHAPE, UNKNOWN-REF, MISSING-SCRIPT, MISMATCH or BAD-LABEL; when labelling a decision, log entry, question, risk or research item with its category and tags (plan/portal/taxonomy.json); when writing a new wiki log entry or a new question (they carry the time of day); when asked to "update the portal" or "write the portal JSON".
 allowed-tools: Bash(pwsh tools/portal-sync-check.ps1*)
 ---
 
@@ -128,9 +128,13 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   project is run.
 - **Risk**: `likelihood`/`impact` copied from the page (1-5); `mitigation` = what we do about it;
   `phase` = owner_phase; `status` open → "Open", mitigating → "Being reduced", resolved → "Resolved",
-  realized → "Happened", tolerated → "Accepted".
-- **Research items**: `status` in plain words; hypotheses carry `prediction` (plain), experiments
-  `phase`, metrics `unit`, questions the `question` itself.
+  realized → "Happened", tolerated → "Accepted". Plus `category` (one of `decision_categories`) and
+  `tags` (2), see "Labels" below.
+- **Research items**: `status` in plain words; hypotheses carry `prediction` (plain), metrics `unit`,
+  questions the `question` itself. Every item has `phase` = the page's frontmatter `phase`, `category` =
+  its kind (one of `research_categories`, fixed by the list it sits in: `questions` → Research question,
+  `hypotheses` → Prediction, `experiments` → Experiment, `metrics` → Measure, `workloads` → Test site)
+  and `tags` (2). The portal shows the five lists as one list.
 - **Component**: `ours` = `false` for parts someone else provides (Windows, WebView2, Chrome, Edge);
   their `status` then says who provides them ("Provided by Microsoft"), never "Planned", and the portal
   shows "Used from <phase>" instead of "Built in <phase>". `group` per adr-0026 (application, benchmark, testing, research, or planning for the
@@ -139,25 +143,33 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   Keep `layers[].components` and `groups[].components` in step with the components' `layer`/`group`.
 - **Questions** (`questions.json`): one item per `## Q-NNN`: `asked`, `question` (one plain sentence
   ending in "?"), `why_it_matters`, `status` open | answered | withdrawn, `answer` (plain summary of the
-  owner's words, or `null`), `answered_on`, `blocks` (phase ids it holds; `[]` if none).
+  owner's words, or `null`), `answered_on`, `blocks` (phase ids it holds; `[]` if none; the portal's
+  "Holds up phase" filter), `category` (one of `decision_categories`) and `tags` (2), and `time` only
+  when the `- asked:` line has one (see "Time of day" below). Keep the items in the order of the
+  sections on the questions page: same-day questions sort by that order.
 - **Log** (`log.json`): one entry per piece of work the owner would recognise; it may group several wiki
   log entries (list each exact heading in `covers`). `title` = what happened ("You reviewed portal v1 —
   redesign started"); `done` = what was done; `next` = what happens next (or `null`);
   `decisions[]` = `{what, by: "you"|"claude"}`; `approvals[]` = `{what, status}`; `commit` = the short sha or
   `null` (the sha needs a `refs.json` entry of kind `commit`); `phase` = the phase the work belongs to;
-  `category` = the kind of work (one of `log_categories`) and `tags` (2), see "Labels" below.
+  `category` = the kind of work (one of `log_categories`) and `tags` (2), see "Labels" below; `time` only
+  when the **first** wiki entry in `covers` has a `- time:` line (see "Time of day" below). Keep entries in
+  the order they were written: same-day entries sort by that order.
 
 ### Labels: category and tags (owner's plan of 2026-10-10)
 
-Decisions and log entries are sorted with labels so the owner can filter and search them. The lists
-live in **one** place, `plan/portal/taxonomy.json` (`decision_categories`, `log_categories`, `tags`,
-each `{name, explains}`); the schemas do not repeat them.
+Decisions, log entries, questions, risks and research items are sorted with labels so the owner can
+filter and search them. The lists live in **one** place, `plan/portal/taxonomy.json`
+(`decision_categories`, `log_categories`, `research_categories`, `tags`, each `{name, explains}`); the
+schemas do not repeat them.
 
-- Every decision gets exactly one `category` from `decision_categories` (Process & approvals, The app,
-  Security & privacy, Research & benchmarks, Tools & setup, Plan portal), two different `tags` and a
-  `phase`. Every log entry gets one `category` from `log_categories` (Built, Checked, Decided, Fixed,
-  Planned, Set up) and two different `tags`. The two category lists are separate: "The app" is not a log
-  category.
+- Every decision, question and risk gets exactly one `category` from `decision_categories` (Process &
+  approvals, The app, Security & privacy, Research & benchmarks, Tools & setup, Plan portal) and two
+  different `tags`; a decision and a risk also have a `phase`. Every log entry gets one `category` from
+  `log_categories` (Built, Checked, Decided, Fixed, Planned, Set up) and two different `tags`. Every
+  research item gets its kind from `research_categories` (Research question, Prediction, Experiment,
+  Measure, Test site), two different `tags` and its `phase`. The lists are separate: "The app" is not a
+  log category, "Built" is not a question topic.
 - Labels are the portal's classification, not facts of the wiki page: Claude assigns them when it
   writes or re-translates the record, choosing from `taxonomy.json` only. They do not change the
   record's `source.content_hash`, and the ADR frontmatter `tags` (free kebab-case words) are not copied.
@@ -169,13 +181,29 @@ each `{name, explains}`); the schemas do not repeat them.
   `taxonomy.json` (name plus a one-line plain explanation), and note it in the log with the owner's
   reason. Never rename or remove a name still used by a record.
 - `pwsh tools/portal-sync-check.ps1` reports **BAD-LABEL** for a missing or unknown category, a number
-  of tags other than 2, an unknown tag, the same tag twice, a name listed twice in `taxonomy.json`, or a
-  `phase` with no `phases/<id>.json`.
+  of tags other than 2, an unknown tag, the same tag twice, a name listed twice in `taxonomy.json`, a
+  research kind that does not fit its list, or a `phase` with no `phases/<id>.json` (or no `phase` on a
+  decision, risk or research item).
 - **Overview** (`overview.json`, from STATUS.md): `where_we_are[]` = 3-6 rows `{item, state}`;
   `next_action` in the owner's four-part format (below); `questions_for_you` = `open` (the number of open
   items in `questions.json`) and `items`: the open questions asked **now** (the current approval wave),
   at most 5, each with the same question text as in `questions.json`. The portal counts the "Questions for
   you" row and the tab badge from this list, so do not add a `where_we_are` row for questions.
+
+### Time of day (owner's plan of 2026-10-10)
+
+New log entries and new questions record the time of day, so same-day items sort correctly.
+
+- **Wiki log entry:** add the body line `- time: HH:MM` right after `- session:` (SCHEMA §12), 24-hour
+  local time, read from the real clock when the entry is written: `date +%H:%M` (Git Bash). Never guess
+  or round a time, and never add a time to an entry written before the rule (no back-filling).
+- **New question:** write the time after the date on its `asked` line on the questions page:
+  `- asked: 2026-10-10 21:41` (same clock). Older questions keep the date only.
+- **Portal JSON:** copy the time into `time` (`"21:41"`) on the `log.json` entry whose **first** covered
+  wiki entry has it, and on the question's item; leave `time` out when the wiki has none. The checker
+  reports **MISMATCH** when the JSON time and the wiki time differ (or one is missing), **BAD-SHAPE** for
+  a value that is not `HH:MM`, and `python tools/quick_lint.py` reports **LOG-FORMAT** for a bad
+  `- time:` line in `wiki/log.md`.
 
 ### The four-part next action (owner's rule)
 

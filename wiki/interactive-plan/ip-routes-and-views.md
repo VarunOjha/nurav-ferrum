@@ -16,6 +16,11 @@ sources:
   - raw/owner/2026-10-10-s01-browser-ui-choice.md
   - raw/owner/2026-10-10-s01-decisions-log-browse.md
   - raw/owner/2026-10-10-s01-decisions-log-browse-approval.md
+  - raw/owner/2026-10-10-s01-browse-v2-request.md
+  - raw/owner/2026-10-10-s01-browse-v2-answers-1.md
+  - raw/owner/2026-10-10-s01-browse-v2-answers-2.md
+  - raw/owner/2026-10-10-s01-browse-v2-answers-3.md
+  - raw/owner/2026-10-10-s01-browse-v2-approval.md
 related: [adr-0028, ip-spec, ip-data-contract, ip-testing, comp-interactive-plan, adr-0023, adr-0024, adr-0025, adr-0026, ops-portal-pipeline, adr-0014, schema]
 approvable: true
 phase: phase-p0-planning
@@ -32,7 +37,7 @@ tags: [interactive-plan, ui, routes, accessibility, portal]
 > approvals inbox, lint page, phase pages) is in git history.
 
 Every tab is a **server component** that reads the portal JSON through `lib/portal/` ([ip-data-contract](ip-data-contract.md));
-small **client components** handle only interaction (popups, theme, group switcher, log filter, Ref mode). Every route is dynamic,
+small **client components** handle only interaction (popups, theme, group switcher, the shared list controls, Ref mode). Every route is dynamic,
 so a page always shows the current files.
 
 ## 1. Route map
@@ -42,10 +47,10 @@ so a page always shows the current files.
 | `/` | Overview | Where we are (headline and small table; its "Questions for you" row is counted from the list of questions asked now), questions for you, what happens next in the owner's four parts (where we are, why run something, the script with a button that opens it, then tell Claude), phase progress cards, how references work, the latest three log entries | `overview.json`, `roadmap.json`, `phases/*.json`, `log.json` |
 | `/roadmap` | Roadmap | The three stages (build, measure, publish), one compact row per phase (name, outcome in one line, status, tasks done), and "Same in every phase" | `roadmap.json`, `phases/*.json` |
 | `/architecture` | Architecture | Four group buttons (Application, Benchmark, Testing and quality, Research and analysis, [adr-0026](../decisions/adr-0026-architecture-four-groups.md)); for the application first "How the browser will look" (`AR-9`, only when `browser_design` is present): a static picture of the chosen design ([adr-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md), option A) drawn at 1440 × 900 and scaled to the card, with a Light / Dark switch that starts on the portal's theme, one image with a summary for screen readers and nothing inside it focusable, a small "Sample values" tag in its corner and the note that every value is a sample directly under it (the drawing stays hidden until it has measured its width, so it never shows at a wrong size); on narrow screens (900 px or less) a close-up of the Ferrum panel follows, drawn at its design size 352 × 802 and scaled to the column so its words stay readable (also one labelled image with the tag); then the callouts, a link to the design canvas (new tab) and "Why we chose it", which opens the decision's explainer; then a layered diagram of the Rust app built from plain boxes, coloured by trust, with a "How to read this" side panel (colour key, purpose, one-line flow), as in the mockup; for each other group its purpose, a one-line flow and one short line per part; every box and part line opens the part popup; cards for the other groups; a footnote for planning tooling | `architecture.json` |
-| `/decisions` | Decisions | Search and filters, a results line and page numbers (§6); one row per decision (number, title, one line, one plain standing: who chose it, when, and whether its written page is signed off, plus its category chip and two tag chips); replaced ones muted with a link to what replaced them; then the risks, highest likelihood × impact first (the risks table has no search or pages: the owner did not ask for it) | `decisions.json`, `taxonomy.json`, `risks.json` |
-| `/research` | Research | The core question, then short sections: questions we want to answer, what we expect to find, experiments, measurements, test pages and tasks | `research.json` |
-| `/questions` | Questions | Open questions first (ordered by the phase they hold up), then answered (with the owner's answer), then withdrawn | `questions.json` |
-| `/log` | Log | Search and filters, a results line and page numbers (§6); entries newest first: what was done, what is next, a small table of decisions, approvals, the commit, and a category chip and two tag chips; the old All / Has decisions / Has approvals pills are now the "Show" choice among the filters | `log.json`, `taxonomy.json` |
+| `/decisions` | Decisions | Two lists with the shared list controls (§6): the decisions (start newest first; extra sort "By number"; the closed line of a card shows the title, the date, the plain standing, the category chip and two tag chips; opened, it shows the meaning, why, the catch, who chose it and whether its written page is signed off; replaced ones muted with a link to what replaced them), then "Risks we watch" (start highest risk first; each card shows "Risk L × I = S", a category by topic, two tags, the phase that handles it; a status filter; its choices in the address start with `risk-`) | `decisions.json`, `taxonomy.json`, `risks.json` |
+| `/research` | Research | The core question, kind links (each one filters the list by its kind), then one list of all 70 research items with the shared list controls (§6): category = kind (Research question, Prediction, Experiment, Measure, Test site), starts in phase order; the rest of the tab stays | `research.json`, `taxonomy.json` |
+| `/questions` | Questions | One list with the shared list controls (§6); the Status filter starts on Open when the address names no status, and "Any status" shows all; starts newest first (date asked, then the written order); "Asked now" chip; phase filter "Holds up phase"; category by topic; an answered question shows the owner's answer | `questions.json`, `taxonomy.json` |
+| `/log` | Log | One list with the shared list controls (§6), newest first: what was done, what is next, a small table of decisions, approvals, the commit, the category chip and two tag chips; extra filter "Show" (all entries, has decisions, has approvals) | `log.json`, `taxonomy.json` |
 | `/api/script?path=…` | (popup data) | The text of one check script, `text/plain`, read-only | the scripts the portal JSON names |
 | anything else | 404 | "Page not found" inside the portal frame | none |
 
@@ -65,7 +70,7 @@ so a page always shows the current files.
 |---|---|---|
 | Phase | a phase card, a phase name, or "Open the whole phase" in a phase explainer | Status, tasks done, approval labels; **step order** first; tasks table with eight columns in this order: Id, Title, What (what the task does or produces), Why (why it matters), How (the approach), Logic (the thought chain, exactly three steps, one per line; a screen reader hears "then" and "so" instead of the arrows), Check script (the script button, or "Not written yet", with the plain "how we check" line under it), State (the status in words) ([owner request 2026-10-10](../raw/owner/2026-10-10-s01-task-table-columns.md)); Why says what the Logic column does not (what goes wrong without the task) and How says the method, not the proof in the check line (review 2026-10-10); the table fits a 1280 px window and scrolls sideways inside its own area ("Tasks table") only on narrower windows; test gate explained in one thought chain plus a check / proves table; the gate script's one command and its own header shown as labelled fields (without its "How to run" and "For Claude" fields); "Same in every phase" |
 | Reference | any id-shaped word or `[words](ref:id)` link | Kind (or the short name the owner knows, such as "Decision 19"), title, short explainer, status, related items by title (open in the same popup, Back returns); a phase explainer offers the whole phase. Internal slugs such as `comp-…` or `layer-…` are never shown |
-| Detail | a decision, risk, research item or part of the system | Short name or kind, title, status, a few labelled plain fields, related items by title; a part also shows when it is built (or, for parts that are not ours, from when we use it) and what it talks to |
+| Detail | a part of the system (Architecture tab); since 2026-10-10 decisions, risks and research items show their details inside their opened card instead | Short name or kind, title, status, a few labelled plain fields, related items by title; a part also shows when it is built (or, for parts that are not ours, from when we use it) and what it talks to |
 | Script | a script button | The real `.ps1` text from `GET /api/script` and the command that runs it; check scripts say they print PASS, FAIL or NOT READY, other scripts (the start script) point to their own explanation |
 
 All popups use the native `<dialog>` with `showModal()`: the page behind is inert, Esc, the close button or a backdrop
@@ -133,7 +138,7 @@ saying where it lives:
 |---|---|---|---|
 | `HD` | top bar (every tab) | `LO` | Log tab |
 | `OV` | Overview tab | `PH` | phase popup |
-| `RM` | Roadmap tab | `IT` | item popup (a decision, risk, research item or part) |
+| `RM` | Roadmap tab | `IT` | item popup (a part of the system) |
 | `AR` | Architecture tab | `RF` | reference popup |
 | `DE` | Decisions tab | `SC` | script popup |
 | `RE` | Research tab | `QU` | Questions tab |
@@ -146,45 +151,69 @@ takes the next free number of its prefix; ids are never renumbered. A marked ele
 button (never a list, table, row, link or button: wrap those in a `<div>`). The unit test `ui-refs.test.ts` checks the
 registry and its use ([ip-testing](ip-testing.md)).
 
-## 6. Search, filters and pages on Decisions and Log
+## 6. One list pattern: Log, Questions, Decisions, Risks and Research
 
-Added 2026-10-10 at the owner's request ("Decisions and logs should be paginated, should show category and 2 tags of
-relevance. Should be searchable, filterable.", [request and answers](../raw/owner/2026-10-10-s01-decisions-log-browse.md);
-"Approved the plan", [approval](../raw/owner/2026-10-10-s01-decisions-log-browse-approval.md)).
+First added 2026-10-10 for Decisions and Log at the owner's request ("Decisions and logs should be paginated, should show
+category and 2 tags of relevance. Should be searchable, filterable.", [request and answers](../raw/owner/2026-10-10-s01-decisions-log-browse.md);
+"Approved the plan", [approval](../raw/owner/2026-10-10-s01-decisions-log-browse-approval.md)). Extended the same day to
+all five lists, with cards that open on click and a Sort choice ("Make log entry cards accordian, add option to sort in
+asc, desc. … similar feedback for questions too", [request](../raw/owner/2026-10-10-s01-browse-v2-request.md),
+answers [1](../raw/owner/2026-10-10-s01-browse-v2-answers-1.md), [2](../raw/owner/2026-10-10-s01-browse-v2-answers-2.md),
+[3](../raw/owner/2026-10-10-s01-browse-v2-answers-3.md); "Approved", [approval](../raw/owner/2026-10-10-s01-browse-v2-approval.md)).
 
-- **Labels.** Every decision has one category by topic (Process & approvals, The app, Security & privacy, Research &
-  benchmarks, Tools & setup, Plan portal), exactly two tags and the phase it mainly affects. Every log entry has one
-  category by kind of work (Built, Checked, Decided, Fixed, Planned, Set up) and exactly two tags; its phase was already
-  there. The two category lists and the 26 tags live in one file, `plan/portal/taxonomy.json`, each with a plain one-line
-  explanation ([ops-portal-pipeline](../operations/ops-portal-pipeline.md)). Claude assigns the labels when it writes a
-  record; the portal check refuses a label that is not on the lists. A decision's phase is the phase it mainly
-  affects (where its work lands), not the phase that wrote the page, which is P0 for almost all of them.
-- **Cards** show the category chip and the two tag chips. Clicking a tag chip adds that tag to the filter; clicking it
-  again takes it off.
-- **Search box:** not case-sensitive, accents ignored, every typed word must appear. Decisions search the title, the
-  one-line meaning, the why and the catch; the log searches the title, what was done, what is next and the decisions.
-- **Filters:** category, tags (several can be ticked; an item must have every ticked tag, which the tag list says in
-  plain words; only the tags some item on that tab has are offered), phase (labelled "Affects phase" on Decisions),
-  date from and date to (both days included; each date box stops at the other's day, and if "Date from" is after
-  "Date to" the empty message says so instead of a bare "No matches"). A filter with fewer than two choices is not
-  shown (today the Log's phase, since every entry is P0); it appears by itself once there is a choice. The tag list
-  closes on Escape, on a click outside it and when keyboard focus leaves it. Decisions also: status (Accepted, Proposed,
-  Replaced; Rejected only when one exists) and who decided (you or Claude). Log also: "Show" (all entries, has
-  decisions, has approvals). On a phone the filters fold under a "Filters (n on)" button.
+| List | Items | Category | Starts in order | Extra sort | Extra filters | Date range |
+|---|---|---|---|---|---|---|
+| Log | 41 | kind of work | Newest first | – | Show (has decisions, has approvals) | yes |
+| Questions | 54 | topic | Newest first | – | Status (starts on Open), "Holds up phase" | yes |
+| Decisions | 28 | topic | Newest first | By number | Status, who decided | yes |
+| Risks | 25 | topic | Highest risk first | Highest risk first | Status | no |
+| Research | 70 | kind (Research question, Prediction, Experiment, Measure, Test site) | By phase | – | – | no |
+
+- **Labels.** Every decision, log entry, question, risk and research item has one category and exactly two tags from
+  the 26 in `plan/portal/taxonomy.json`, each with a plain one-line explanation ([ops-portal-pipeline](../operations/ops-portal-pipeline.md)).
+  Decisions, questions and risks share the six topics (Process & approvals, The app, Security & privacy, Research &
+  benchmarks, Tools & setup, Plan portal); log entries use kinds of work (Built, Checked, Decided, Fixed, Planned, Set
+  up); research items use their kind. Claude assigns the labels when it writes a record; the portal check refuses a
+  label that is not on the lists. A decision's phase is the phase it mainly affects; a risk's is the phase that handles
+  it; a question's is the phase or phases it holds up; a research item's is the phase on its page.
+- **Cards are closed at first** (native `<details>` and `<summary>`). The closed line shows the title, the date (with
+  the time of day when known), the status, the category chip and two tag chips, with no buttons inside it. Clicking it
+  opens the details (every field the card showed before). Tag chips that filter sit in the opened card: clicking one
+  adds that tag to the filter, clicking again takes it off. One **Open all / Close all** button per list acts on the
+  page shown. Which cards are open is not kept in the address.
+- **Sort** dropdown on every list: Newest first, Oldest first, By phase (P0 to P8, items without a phase last), A to Z by
+  title, plus the extras in the table. Highest risk first = likelihood × impact, ties by id. Items of the same date (and
+  time) keep their written order (the order in `log.json`; for questions the order in `questions.json`); Newest first
+  reverses it; the id breaks any remaining tie.
+- **Time of day** (from 2026-10-10 on): a log entry or question may carry `time` ("HH:MM", 24-hour local); the card
+  shows it after the date. Older items keep the date only (SCHEMA §12).
+- **Search box:** not case-sensitive, accents ignored, every typed word must appear.
+- **Filters:** category, tags (several can be ticked; an item must have every ticked tag; only the categories and tags
+  in use on that list are offered), phase, status, the date range where the dates differ, and the extras in the table.
+  A filter with fewer than two choices is not shown. On Questions the Status filter starts on Open when the address
+  names no status; "Any status" shows every question, and so does Clear filters. The tag list closes on Escape, on a
+  click outside it and when keyboard focus leaves it. On a phone the filters fold under a "Filters (n on)" button.
 - **Results line** ("Showing 21–28 of 28", or "Showing 1–5 of 5 (28 in all)" while a filter is on) and **Clear
   filters**. When nothing matches: "No matches" with a Clear filters button.
 - **Pages:** 20 cards per page, numbered page buttons with Previous and Next (long runs shorten to "1 … 4 5 6 … 12").
-  At the first and last page, Previous or Next is marked unavailable (`aria-disabled`) but keeps keyboard focus, so
-  the focus does not jump to the top of the page.
-- **The address keeps the view.** Search, filters and page are written into the address (`q`, `category`, `tag`,
-  `phase`, `from`, `to`, `page`, plus `status`, `by` or `has`), replaced rather than added to the history, so a reload or
-  a copied link opens the same view and Back still leaves the tab. Unknown values are dropped quietly and the address is
-  tidied up; any change of search or filter goes back to page 1; a page number past the end shows the last page and the address is corrected to it;
-  clicking the tab button starts the list afresh.
-- **Ref ids** (none renumbered): Decisions `DE-4` Search and filters, `DE-5` Results count, `DE-6` Page numbers, `DE-7`
-  Category and tag chips; Log `LO-7` Search and filters, `LO-8` Results count, `LO-9` Page numbers, `LO-10` Category and
-  tag chips. `LO-2` now marks the "Show" choice and is named "Decisions or approvals filter" (its count moved to `LO-8`).
-- **Code:** the pure rules are in `interactive_plan/lib/portal/browse.ts` (address and choice, matching, page slices,
-  results line), the per-tab items and filters in `lib/portal/browseTabs.ts`, the lists in `lib/portal/taxonomy.ts`; the
-  controls are one client component, `components/portal/browse/Browse.tsx`, shared by both tabs. The server still
-  renders every card; the component shows the ones that match.
+  At the first and last page, Previous or Next is marked unavailable (`aria-disabled`) but keeps keyboard focus.
+- **The address keeps the view.** Search, filters, sort and page are written into the address (`q`, `category`, `tag`,
+  `phase`, `from`, `to`, `sort`, `page`, plus `status`, `by` or `has`; the risk list on the Decisions tab uses the same
+  keys with `risk-` in front), replaced rather than added to the history, so a reload or a copied link opens the same
+  view. Unknown values are dropped quietly; any change of search, filter or sort goes back to page 1; a page number past
+  the end shows the last page. The Overview's "Questions for you" link opens Questions on Open.
+- **Ref ids** (none renumbered). Decisions: `DE-4` to `DE-7` (search and filters, results count, page numbers, chips),
+  `DE-8` sort, `DE-9` Open all, `DE-10` card; risks `DE-11` search and filters, `DE-12` results count, `DE-13` page
+  numbers, `DE-14` sort, `DE-15` Open all, `DE-16` card, `DE-17` chips; `DE-3` is now "Risks we watch" (cards).
+  Research: `RE-2` is now "Kind links"; `RE-8` list, `RE-9` search and filters, `RE-10` results count, `RE-11` page
+  numbers, `RE-12` sort, `RE-13` Open all, `RE-14` card, `RE-15` chips; `RE-3` to `RE-7` retired. Questions: `QU-7`
+  search and filters, `QU-8` results count, `QU-9` page numbers, `QU-10` sort, `QU-11` Open all, `QU-12` chips; `QU-6`
+  is now a card that opens on click; `QU-2` to `QU-5` retired. Log: `LO-7` to `LO-10` as before (`LO-10` now inside the
+  opened card), `LO-11` sort, `LO-12` Open all; `LO-3` is now a card that opens on click. Every results-count block
+  covers only the count and Clear filters. In Ref mode, parts inside a closed card count as not visible.
+- **Code:** the pure rules (address, sort, matching, page slices, results line) are in
+  `interactive_plan/lib/portal/browse.ts`; the per-list rules (`TAB_CONFIG`) and item builders in
+  `lib/portal/browseTabs.ts`; the label lists in `lib/portal/taxonomy.ts`; the controls are one client component,
+  `components/portal/browse/Browse.tsx`, with `CardLine.tsx` (the closed line) and `CardParts.tsx`, shared by all five
+  lists. The unused `LogFilter.tsx` and its two style rules were deleted (owner allowed it). The server still renders
+  every card; the component shows the ones that match.

@@ -5,7 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { detailDialogId, phaseDialogId } from "@/lib/portal/dialogs";
 import { loadPortalUncached } from "@/lib/portal/load";
-import type { Architecture, Log, Questions, Risks, Roadmap } from "@/lib/portal/schemas.gen";
+import type { Architecture, Roadmap } from "@/lib/portal/schemas.gen";
 import {
   decisionStanding,
   decisionTone,
@@ -16,10 +16,7 @@ import {
   plainText,
   layerRows,
   layerShortName,
-  newestFirst,
-  questionsByStatus,
   riskScore,
-  risksByScore,
   riskTone,
   stageRange,
   tasksLabel,
@@ -48,33 +45,14 @@ describe("roadmap helpers", () => {
 });
 
 describe("log, questions and labels", () => {
-  it("newestFirst orders by date, later entries first on the same day", () => {
-    const e = (id: string, date: string) => ({ id, date }) as Log["entries"][number];
-    const log = { entries: [e("a", "2026-10-08"), e("b", "2026-10-09"), e("c", "2026-10-09")] } as Log;
-    expect(newestFirst(log).map((x) => x.id)).toEqual(["c", "b", "a"]);
-    expect(newestFirst(null)).toEqual([]);
-  });
-  it("questionsByStatus puts open first and keeps file order inside a group", () => {
-    const q = (id: string, status: Questions["items"][number]["status"]) => ({ id, status }) as Questions["items"][number];
-    const groups = questionsByStatus({ items: [q("Q-001", "answered"), q("Q-002", "open"), q("Q-003", "withdrawn"), q("Q-004", "open")] } as Questions);
-    expect(groups.map((g) => [g.label, g.items.map((i) => i.id)])).toEqual([
-      ["Open", ["Q-002", "Q-004"]],
-      ["Answered", ["Q-001"]],
-      ["Withdrawn", ["Q-003"]],
-    ]);
-    expect(questionsByStatus(null).every((g) => g.items.length === 0)).toBe(true);
-  });
   it("whoLabel, decisionTone, riskTone", () => {
     expect([whoLabel("you"), whoLabel("claude")]).toEqual(["You", "Claude"]);
     expect((["Accepted", "Proposed", "Replaced", "Rejected"] as const).map(decisionTone)).toEqual(["done", "now", "later", "later"]);
     expect((["Open", "Being reduced", "Resolved", "Happened", "Accepted"] as const).map(riskTone)).toEqual(["later", "now", "done", "blocked", "done"]);
   });
-  it("risksByScore sorts by likelihood × impact, ties in file order", () => {
-    const r = (id: string, likelihood: number, impact: number) => ({ id, likelihood, impact }) as Risks["items"][number];
-    const risks = { items: [r("risk-r01", 2, 2), r("risk-r02", 4, 4), r("risk-r03", 1, 4), r("risk-r04", 4, 4)] } as Risks;
-    expect(risksByScore(risks).map((x) => x.id)).toEqual(["risk-r02", "risk-r04", "risk-r01", "risk-r03"]);
+  it("riskScore is likelihood × impact (the list order lives in lib/portal/browseTabs.ts)", () => {
     expect(riskScore({ likelihood: 3, impact: 5 })).toBe(15);
-    expect(risksByScore(null)).toEqual([]);
+    expect(riskScore({ likelihood: 1, impact: 1 })).toBe(1);
   });
   it("plainText keeps a link's words and drops its markup", () => {
     expect(plainText("a Ferrum panel ([the look you chose](ref:adr-0028)). Next")).toBe("a Ferrum panel (the look you chose). Next");

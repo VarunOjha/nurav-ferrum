@@ -24,13 +24,17 @@ export type LogOp = (typeof LOG_OPS)[number];
 export const LOG_HEADING =
   /^## \[(\d{4}-\d{2}-\d{2})\] (ingest|query|lint|decide|handoff|resume|gate|code|approval|schema|correct|plan) \| (.+)$/;
 /** SCHEMA §12 body bullet keys, in their prescribed order. */
-export const LOG_BULLET_KEYS = ["session", "pages", "sources", "result", "stales", "next", "commit"] as const;
+export const LOG_BULLET_KEYS = ["session", "time", "pages", "sources", "result", "stales", "next", "commit"] as const;
+/** The optional `- time: HH:MM` bullet (24-hour local clock; owner's plan of 2026-10-10). */
+export const LOG_TIME = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
 
 export interface LogEntry {
   date: string;
   op: LogOp;
   title: string;
   session?: string;
+  /** Time of day "HH:MM" (24-hour local clock), recorded from 2026-10-10 on; absent on older entries. */
+  time?: string;
   pages: string[];
   sources: string[];
   result?: string;
@@ -68,6 +72,7 @@ export function inlineList(v: string): { items: string[]; note: string | null } 
  * - a line starting `## [` that fails the heading regex
  * - an entry dated earlier than the entry before it (out of chronological order)
  * - a top-level `- key:` bullet whose key is not one of the §12 keys
+ * - a `- time:` bullet whose value is not a 24-hour "HH:MM" time
  */
 export function parseLog(
   body: string,
@@ -122,6 +127,15 @@ export function parseLog(
     switch (key) {
       case "session":
         entry.session = val;
+        break;
+      case "time":
+        if (LOG_TIME.test(val)) entry.time = val;
+        else
+          findings.push(
+            finding("LOG-FORMAT", repoPath, `time \`${val}\` is not a 24-hour time written HH:MM (for example 21:41)`, {
+              line: fileLine,
+            }),
+          );
         break;
       case "pages": {
         const l = inlineList(val);

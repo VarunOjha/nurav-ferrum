@@ -178,7 +178,7 @@ interactive_plan/
 ├── app/          layout.tsx (top tabs, phase popups), page.tsx (Overview), roadmap/ architecture/ decisions/
 │                 research/ questions/ log/, api/script/route.ts, not-found.tsx, globals.css, fonts.ts
 ├── components/   portal/ (Modal, PhasePopup, DetailPopup, Ref, RefProvider, RichText, ScriptProvider,
-│                 GroupSwitcher, LogFilter, TopNav, ...), ThemeToggle
+│                 GroupSwitcher, TopNav, browse/, ...), ThemeToggle
 ├── lib/          portal/ (load, schemas.gen, refs, scripts, view, tabs, dialogs), config.ts, security/,
 │                 wiki/ + lint/ + approvals/ (command-line wiki check and approval-file reader)
 ├── scripts/      serve.mjs, gen-portal-schemas.mjs, with-env.mjs

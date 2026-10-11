@@ -1,203 +1,144 @@
-// Research tab: the research plan in short sections (questions, predictions, experiments,
-// measurements, test pages). Each item shows one line; its title opens a popup with the details, and
-// every id inside opens its explainer (owner feedback 2026-10-09: "Whole research section tooo
-// verbose"). Nothing is measured yet, and the text says so. Reads research.json and roadmap.json.
+// Research tab: the research plan as one list of cards ("one pattern for every list", owner's plan of
+// 2026-10-10): the questions we want to answer, our predictions, the experiments, the measures and the
+// test sites, 70 items in all, in phase order. The kind is each item's category; the links under the
+// heading show one kind. A card is closed at first and shows one line: the title, its phase, its status,
+// its kind and two tags; a click opens the details, and every id inside opens its explainer. Search,
+// filters, a Sort dropdown, "Open all" and 20 per page; the choice stays in the page address. Nothing is
+// measured yet, and the text says so. Reads research.json, taxonomy.json, roadmap.json and refs.json.
 import type { Metadata } from "next";
-import DetailPopup, { type DetailField } from "@/components/portal/DetailPopup";
-import { OpenModalButton } from "@/components/portal/Modal";
+import Link from "next/link";
+import Browse, { type BrowseCard } from "@/components/portal/browse/Browse";
+import CardLine from "@/components/portal/browse/CardLine";
+import { CardFields, CardRelated, type CardField } from "@/components/portal/browse/CardParts";
+import LabelChips from "@/components/portal/browse/LabelChips";
 import PageHead from "@/components/portal/PageHead";
 import Ref from "@/components/portal/Ref";
-import RichText from "@/components/portal/RichText";
-import { detailDialogId } from "@/lib/portal/dialogs";
-import type { Research } from "@/lib/portal/schemas.gen";
-import { getPortal } from "@/lib/portal/server";
+import { researchBrowse, researchRows, type ResearchRow } from "@/lib/portal/browseTabs";
+import { resolveRef } from "@/lib/portal/refs";
+import { getPortal, getRefData } from "@/lib/portal/server";
+import { labelsOf, normalizeTaxonomy } from "@/lib/portal/taxonomy";
+import { ui } from "@/lib/portal/uiRefs";
 import { roadmapRow } from "@/lib/portal/view";
-import { ui, type UiRefId } from "@/lib/portal/uiRefs";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Research" };
 
-interface Item {
-  id: string;
-  title: string;
-  summary: string;
-  status: string;
-  related: string[];
-}
-
-interface Section<T extends Item> {
-  key: string;
-  /** Its Ref-mode id (lib/portal/uiRefs.ts). */
-  uiRef: UiRefId;
-  title: string;
-  intro: string;
-  kind: string;
-  items: T[];
-  /** One extra line under the title in the list (optional). */
-  line?: (i: T) => string | null;
-  /** Small text on the right of the row (optional). */
-  side?: (i: T) => React.ReactNode;
-  fields: (i: T) => DetailField[];
-  meta?: (i: T) => React.ReactNode;
-  compact?: boolean;
-}
-
-function ItemTitle({ item, kind }: { item: Item; kind: string }) {
-  return (
-    <OpenModalButton target={detailDialogId(item.id)} className="link-btn row-title" label={`${item.title}: open the ${kind.toLowerCase()}`}>
-      {item.title}
-    </OpenModalButton>
-  );
-}
-
-function SectionView<T extends Item>({ s }: { s: Section<T> }) {
-  return (
-    <section id={s.key} aria-labelledby={`${s.key}-title`} className="stack-12 research-section" data-section={s.key} tabIndex={-1} {...ui(s.uiRef)}>
-      <div className="stack-4">
-        <h2 id={`${s.key}-title`} className="h2">
-          {s.title} ({s.items.length})
-        </h2>
-        <p className="small text-2 lh">{s.intro}</p>
-      </div>
-      {s.compact ? (
-        <ul className="tile-grid">
-          {s.items.map((i) => (
-            <li key={i.id} className="tile" data-item={i.id}>
-              <ItemTitle item={i} kind={s.kind} />
-              {s.side && <span className="small muted">{s.side(i)}</span>}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <ul className="row-list">
-          {s.items.map((i) => {
-            const line = s.line?.(i) ?? null;
-            return (
-              <li key={i.id} className="row-item" data-item={i.id}>
-                <div className="stack-4 row-main">
-                  <ItemTitle item={i} kind={s.kind} />
-                  {line && (
-                    <span className="small text-2">
-                      <RichText text={line} />
-                    </span>
-                  )}
-                </div>
-                <div className="row-side">
-                  {s.side && <span className="small muted">{s.side(i)}</span>}
-                  <span className="chip chip-later">{i.status}</span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </section>
-  );
-}
-
-function Popups<T extends Item>({ s }: { s: Section<T> }) {
-  return (
-    <>
-      {s.items.map((i) => (
-        <DetailPopup key={i.id} id={i.id} kind={s.kind} title={i.title} status={i.status} tone="later" meta={s.meta?.(i)} fields={s.fields(i)} related={i.related} />
-      ))}
-    </>
-  );
+/** What each kind of item shows when its card opens. */
+function fieldsOf(row: ResearchRow): CardField[] {
+  const i = row.item as { summary: string; question?: string; prediction?: string };
+  switch (row.kind) {
+    case "questions":
+      return [
+        { label: "The question", text: i.question ?? "" },
+        { label: "How we answer it", text: i.summary },
+      ];
+    case "hypotheses":
+      return [
+        { label: "We expect", text: i.prediction ?? "" },
+        { label: "What counts", text: i.summary },
+      ];
+    case "experiments":
+      return [{ label: "What we run, compare and measure", text: i.summary }];
+    case "metrics":
+      return [{ label: "What it measures", text: i.summary }];
+    case "workloads":
+      return [{ label: "What it is", text: i.summary }];
+  }
 }
 
 export default async function ResearchPage() {
-  const { files } = await getPortal();
-  const r: Research | null = files.research;
+  const [{ files }, refData] = await Promise.all([getPortal(), getRefData()]);
+  const r = files.research;
+  const rows = researchRows(r);
+  const browse = researchBrowse(r, normalizeTaxonomy(files.taxonomy), files.roadmap);
+  const categoryOf = new Map(browse.items.map((i) => [i.id, i.category]));
+  const refTitle = (id: string) => resolveRef(refData, id)?.title ?? id;
   const phaseLabel = (id: string) => {
     const row = roadmapRow(files.roadmap, id);
     return row ? `${row.short} · ${row.name}` : id;
   };
+  const phaseShort = (id: string) => roadmapRow(files.roadmap, id)?.short ?? id;
+  // The kind links: how many items of each kind, each opening the list on that kind.
+  const kinds = browse.categories.map((c) => ({ kind: c.name, count: browse.items.filter((i) => i.category === c.name).length }));
 
-  const questions: Section<Research["questions"][number]> = {
-    key: "questions",
-    uiRef: "RE-3",
-    title: "Questions we want to answer",
-    intro: "The research questions. Each one is answered by the experiments below, once there is data.",
-    kind: "Research question",
-    items: r?.questions ?? [],
-    line: (i) => i.question,
-    fields: (i) => [
-      { label: "The question", text: i.question },
-      { label: "How we answer it", text: i.summary },
-    ],
-  };
-  const hypotheses: Section<Research["hypotheses"][number]> = {
-    key: "predictions",
-    uiRef: "RE-4",
-    title: "What we expect to find",
-    intro: "Our predictions, written down before any test runs.",
-    kind: "Prediction",
-    items: r?.hypotheses ?? [],
-    fields: (i) => [
-      { label: "We expect", text: i.prediction },
-      { label: "What counts", text: i.summary },
-    ],
-  };
-  const experiments: Section<Research["experiments"][number]> = {
-    key: "experiments",
-    uiRef: "RE-5",
-    title: "Experiments",
-    intro: "The tests that will produce the data. None has run yet.",
-    kind: "Experiment",
-    items: r?.experiments ?? [],
-    side: (i) => (
-      <Ref id={i.phase} variant="inline">
-        {phaseLabel(i.phase)}
-      </Ref>
-    ),
-    meta: (i) => <>Runs in {phaseLabel(i.phase)}</>,
-    fields: (i) => [{ label: "What we run, compare and measure", text: i.summary }],
-  };
-  const metrics: Section<Research["metrics"][number]> = {
-    key: "measurements",
-    uiRef: "RE-6",
-    title: "Measurements",
-    intro: "What we record in each test. Click one to see exactly what it means.",
-    kind: "Measurement",
-    items: r?.metrics ?? [],
-    compact: true,
-    side: (i) => i.unit,
-    meta: (i) => <>Unit: {i.unit}</>,
-    fields: (i) => [{ label: "What it measures", text: i.summary }],
-  };
-  const workloads: Section<Research["workloads"][number]> = {
-    key: "test-pages",
-    uiRef: "RE-7",
-    title: "Test pages and tasks",
-    intro: "The same pages and tasks run on every browser, so the comparison is fair.",
-    kind: "Test workload",
-    items: r?.workloads ?? [],
-    compact: true,
-    fields: (i) => [{ label: "What it is", text: i.summary }],
-  };
-  const nav = [questions, hypotheses, experiments, metrics, workloads].map((s) => ({ key: s.key, title: s.title, count: s.items.length }));
+  const cards: Record<string, BrowseCard> = Object.fromEntries(
+    rows.map((row) => {
+      const item = row.item;
+      const labels = labelsOf(item);
+      const unit = (item as { unit?: string }).unit;
+      const card: BrowseCard = {
+        attrs: { "data-item": item.id, "data-kind": row.kind },
+        summary: (
+          <CardLine
+            title={item.title}
+            level={3}
+            when={labels.phase ? `Phase ${phaseShort(labels.phase)}` : null}
+            status={{ label: item.status, tone: "later" }}
+            category={categoryOf.get(item.id) ?? null}
+            tags={labels.tags}
+          />
+        ),
+        body: (
+          <div className="stack-12">
+            {(labels.phase || unit) && (
+              <p className="small text-2" data-testid="research-meta">
+                {labels.phase && (
+                  <>
+                    {row.kind === "experiments" ? "Runs in" : "Phase"}{" "}
+                    <Ref id={labels.phase} variant="inline">
+                      {phaseLabel(labels.phase)}
+                    </Ref>
+                  </>
+                )}
+                {labels.phase && unit && " · "}
+                {unit && <>Unit: {unit}</>}
+              </p>
+            )}
+            <CardFields fields={fieldsOf(row)} />
+            <CardRelated ids={item.related} title={refTitle} />
+            <LabelChips category={categoryOf.get(item.id) ?? null} tags={labels.tags} uiRef="RE-15" />
+          </div>
+        ),
+      };
+      return [item.id, card];
+    }),
+  );
 
   return (
     <div className="page">
       <PageHead title="Research" summary={r?.summary ?? null} uiRef="RE-1">
-        <nav aria-label="Research sections" className="pill-row" {...ui("RE-2")}>
-          {nav.map((s) => (
-            <a key={s.key} href={`#${s.key}`} className="pill">
-              {s.title} ({s.count})
-            </a>
+        <nav aria-label="Research kinds" className="pill-row" {...ui("RE-2")}>
+          {kinds.map((k) => (
+            <Link key={k.kind} href={`/research?category=${encodeURIComponent(k.kind)}`} className="pill" scroll={false}>
+              {k.kind} ({k.count})
+            </Link>
           ))}
         </nav>
       </PageHead>
-      <SectionView s={questions} />
-      <SectionView s={hypotheses} />
-      <SectionView s={experiments} />
-      <SectionView s={metrics} />
-      <SectionView s={workloads} />
-      <Popups s={questions} />
-      <Popups s={hypotheses} />
-      <Popups s={experiments} />
-      <Popups s={metrics} />
-      <Popups s={workloads} />
+      <section aria-labelledby="research-title" className="stack-12" {...ui("RE-8")}>
+        <div className="row-between">
+          <h2 id="research-title" className="h2">
+            Research plan ({rows.length})
+          </h2>
+          <span className="small muted">Click an item to open it</span>
+        </div>
+        <Browse
+          name="research"
+          spec={browse.spec}
+          items={browse.items}
+          categories={browse.categories}
+          tags={browse.tags}
+          phases={browse.phases}
+          sorts={browse.sorts}
+          categoryLabel="Kind"
+          searchHint="Search research"
+          noun="items"
+          listTestId="research-list"
+          cardRef="RE-14"
+          refs={{ filters: "RE-9", results: "RE-10", pages: "RE-11", sort: "RE-12", openAll: "RE-13" }}
+          cards={cards}
+        />
+      </section>
     </div>
   );
 }

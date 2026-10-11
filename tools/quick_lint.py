@@ -2,7 +2,8 @@
 """Ferrum quick wiki lint (read-only, stdlib only). Run from the repo root.
 Covers the SCHEMA §9.3 subset needed at HANDOFF: FILE-ENCODING, FM-MISSING, FM-ENUM, FM-TYPE-DIR,
 ID-PATTERN, ID-DUP, REF-DANGLING (frontmatter ids + relative body links), UNV-NOPHASE, INDEX-MISSING
-(raw evidence/bench files per first-level folder, SCHEMA §11 / adr-0020).
+(raw evidence/bench files per first-level folder, SCHEMA §11 / adr-0020), LOG-FORMAT (wiki/log.md: §12
+heading regex, date order, body keys, and a `- time:` value must be HH:MM).
 Not covered (do by hand or with the plan app's lint): REF-RECIPROCAL, ORPHAN, STALE-UPDATED, ADR-CHAIN,
 PHASE-ORDER, TRUST-EDGE, UNV-PASTDUE, INT-NUMBER-NOSRC, HYP-NO-DATA, RAW-IMMUTABLE, APPROVAL-STALE."""
 import glob, os, re, sys
@@ -140,6 +141,29 @@ for f, (fm, body) in docs.items():
             continue
         if not os.path.exists(os.path.normpath(os.path.join(os.path.dirname(f), link))):
             E('REF-DANGLING', f, f'body link {m.group(1)}')
+
+LOGHEAD = re.compile(r'^## \[(\d{4}-\d{2}-\d{2})\] (ingest|query|lint|decide|handoff|resume|gate|code|approval|schema|correct|plan) \| (.+)$')
+LOGKEYS = ['session', 'time', 'pages', 'sources', 'result', 'stales', 'next', 'commit']  # SCHEMA §12
+if 'wiki/log.md' in docs:  # LOG-FORMAT, as the TS lint (lib/wiki/log.ts) plus the time value
+    prev, cur = None, False
+    for line in re.sub(r'(?ms)^(```|~~~).*?^\1[^\n]*$', lambda m: re.sub(r'[^\n]', '', m.group(0)), docs['wiki/log.md'][1]).split('\n'):
+        if line.startswith('## '):
+            m = LOGHEAD.match(line)
+            cur = bool(m)
+            if m:
+                if prev and m.group(1) < prev:
+                    E('LOG-FORMAT', 'wiki/log.md', f'entry dated {m.group(1)} follows an entry dated {prev}')
+                prev = m.group(1)
+            elif line.startswith('## ['):
+                E('LOG-FORMAT', 'wiki/log.md', f'heading does not match the SCHEMA §12 regex: {line}')
+            continue
+        b = re.match(r'^- ([A-Za-z_][\w-]*):(?:\s+(.*))?$', line) if cur else None
+        if not b:
+            continue
+        if b.group(1) not in LOGKEYS:
+            E('LOG-FORMAT', 'wiki/log.md', f'bullet key {b.group(1)!r} is not one of {", ".join(LOGKEYS)}')
+        elif b.group(1) == 'time' and not re.fullmatch(r'([01]\d|2[0-3]):[0-5]\d', (b.group(2) or '').strip()):
+            E('LOG-FORMAT', 'wiki/log.md', f'time {(b.group(2) or "").strip()!r} is not HH:MM (24-hour, 00:00 to 23:59)')
 
 if os.path.exists('wiki/index.md'):
     idx = open('wiki/index.md', encoding='utf-8').read()

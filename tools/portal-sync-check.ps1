@@ -19,10 +19,13 @@
                    research item, part or layer; the Overview's open-question count and list follow
                    questions.json; a phase's progress counts its tasks marked Done; roadmap rows follow
                    the phase files; layer and group lists follow each part's own layer and group; each
-                   log entry id is used once                                                   (MISMATCH)
-    7. Labels    - every decision and log entry has one category and two different tags from
-                   the single list in plan/portal/taxonomy.json; a decision names a phase the
-                   portal has a file for                                                       (BAD-LABEL)
+                   log entry id is used once; a log entry's or question's time of day follows the
+                   '- time:' or '- asked:' line on its wiki page                               (MISMATCH)
+    7. Labels    - every decision, log entry, question, risk and research item has one category
+                   and two different tags from the single list in plan/portal/taxonomy.json
+                   (decisions, questions and risks share the topics; a research item's category
+                   is its kind and must fit its list); a decision, risk or research item names a
+                   phase the portal has a file for                                             (BAD-LABEL)
   The rules (which pages, which files, which id shapes) live in plan/portal/pipeline.json.
 
   Exit codes: 0 = clean, 1 = problems found (or the config is broken).
@@ -372,17 +375,19 @@ function Get-PortalMismatches($Docs, $RefsById, [string]$RefsFile) {
     return , $out
 }
 
-# Labels (BAD-LABEL). Decisions and log entries carry one category and two tags, chosen from the single
-# list in taxonomy.json (the owner's plan of 2026-10-10). The schemas only say "a short name" and "two
-# different names", so the list lives in one place; this check holds the records to it. A decision also
-# names the phase it mainly affects, and a log entry may name one: it must be a phase the portal has a file
-# for. Returns a list of @{ Where; Message }.
+# Labels (BAD-LABEL). Decisions, log entries, questions, risks and research items carry one category and
+# two tags, chosen from the single list in taxonomy.json (the owner's plans of 2026-10-10). The schemas
+# only say "a short name" and "two different names", so the list lives in one place; this check holds the
+# records to it. Decisions, questions and risks use the same topics ('decision_categories'); a research
+# item's category is its kind ('research_categories') and must match the list it sits in. A decision, a
+# risk and a research item name a phase, and a log entry may name one: it must be a phase the portal has a
+# file for. Returns a list of @{ Where; Message }.
 function Get-LabelProblems($Docs, [string]$TaxFile) {
     $out = [System.Collections.Generic.List[object]]::new()
     if (-not $Docs.Contains($TaxFile) -or $Docs[$TaxFile] -isnot [System.Collections.IDictionary]) { return , $out }  # MISSING-FILE / BAD-JSON already said why
     $tax = $Docs[$TaxFile]
     $lists = @{}
-    foreach ($ln in 'decision_categories', 'log_categories', 'tags') {
+    foreach ($ln in 'decision_categories', 'log_categories', 'research_categories', 'tags') {
         $set = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
         $i = 0
         foreach ($t in @($tax[$ln])) {
@@ -450,6 +455,102 @@ function Get-LabelProblems($Docs, [string]$TaxFile) {
         $i = 0
         foreach ($e in @($log['entries'])) {
             if ($e -is [System.Collections.IDictionary]) { Test-Labels $e "plan/portal/log.json at /entries/$i" "Log entry $($e['id'])" 'log_categories' $false }
+            $i++
+        }
+    }
+    # Questions and risks: the same six topics as decisions. A question names the phases it holds up in
+    # 'blocks' instead of one 'phase'; a risk names the phase that handles it.
+    $questions = if ($Docs.Contains('questions.json')) { $Docs['questions.json'] } else { $null }
+    if ($questions -is [System.Collections.IDictionary]) {
+        $i = 0
+        foreach ($q in @($questions['items'])) {
+            if ($q -is [System.Collections.IDictionary]) { Test-Labels $q "plan/portal/questions.json at /items/$i" "Question $($q['id'])" 'decision_categories' $false }
+            $i++
+        }
+    }
+    $risks = if ($Docs.Contains('risks.json')) { $Docs['risks.json'] } else { $null }
+    if ($risks -is [System.Collections.IDictionary]) {
+        $i = 0
+        foreach ($r in @($risks['items'])) {
+            if ($r -is [System.Collections.IDictionary]) { Test-Labels $r "plan/portal/risks.json at /items/$i" "Risk $($r['id'])" 'decision_categories' $true }
+            $i++
+        }
+    }
+    # Research: five lists shown as one; the category is the kind, so it must fit the list it sits in.
+    $research = if ($Docs.Contains('research.json')) { $Docs['research.json'] } else { $null }
+    if ($research -is [System.Collections.IDictionary]) {
+        $kinds = [ordered]@{ questions = 'Research question'; hypotheses = 'Prediction'; experiments = 'Experiment'; metrics = 'Measure'; workloads = 'Test site' }
+        foreach ($sec in $kinds.Keys) {
+            if (-not $research.Contains($sec)) { continue }
+            $i = 0
+            foreach ($r in @($research[$sec])) {
+                if ($r -is [System.Collections.IDictionary]) {
+                    $where = "plan/portal/research.json at /$sec/$i"
+                    $what = "Research item $($r['id'])"
+                    Test-Labels $r $where $what 'research_categories' $true
+                    if ($r.Contains('category') -and $r['category'] -is [string] -and $lists['research_categories'].Contains($r['category']) -and $r['category'] -cne $kinds[$sec]) {
+                        $out.Add(@{ Where = "$where/category"; Message = "$what sits in the '$sec' list, so its category must be '$($kinds[$sec])', not '$($r['category'])'." })
+                    }
+                }
+                $i++
+            }
+        }
+    }
+    return , $out
+}
+
+# Time of day (MISMATCH). From 2026-10-10 on, a wiki log entry may carry a '- time: HH:MM' line (SCHEMA §12)
+# and a question's '- asked:' line may end in a time ('- asked: 2026-10-10 21:41'). The portal copies it into
+# 'time'. A log.json entry takes the time of the first wiki entry it covers; a question takes the time of
+# its own section. Times are never invented: no time on the wiki page means no 'time' in the JSON.
+# Returns a list of @{ Where; Message }.
+function Get-TimeMismatches($Docs, [string]$Root, $Config) {
+    $out = [System.Collections.Generic.List[object]]::new()
+    $timeRx = [regex]::new('^- time:\s*(.*?)\s*$')
+    $askedRx = [regex]::new('^- asked:\s*\S+(?:\s+(\S+))?\s*$')
+    foreach ($rule in @($Config['sections'])) {
+        $pageFull = Join-Path $Root $rule['page']
+        if (-not (Test-Path -LiteralPath $pageFull -PathType Leaf)) { continue }
+        $doc = if ($Docs.Contains($rule['into'])) { $Docs[$rule['into']] } else { $null }
+        if ($doc -isnot [System.Collections.IDictionary]) { continue }
+        $isLog = $rule['field'] -eq 'covers'
+        $headRx = [regex]::new($rule['heading'])
+        $times = @{}          # captured heading text -> time string ('' when the section has none)
+        $cur = $null
+        foreach ($line in [IO.File]::ReadAllLines($pageFull)) {
+            $m = $headRx.Match($line)
+            if ($m.Success) {
+                $cur = $m.Groups[1].Value
+                if (-not $times.ContainsKey($cur)) { $times[$cur] = '' }
+                continue
+            }
+            if ($line.StartsWith('#')) { $cur = $null; continue }
+            if ($null -eq $cur) { continue }
+            $tm = if ($isLog) { $timeRx.Match($line) } else { $askedRx.Match($line) }
+            if ($tm.Success -and $tm.Groups[1].Success -and $times[$cur] -eq '') { $times[$cur] = $tm.Groups[1].Value }
+        }
+        $listKey = if ($doc.Contains('entries')) { 'entries' } else { 'items' }
+        if (-not $doc.Contains($listKey)) { continue }
+        $i = 0
+        foreach ($rec in @($doc[$listKey])) {
+            if ($rec -isnot [System.Collections.IDictionary]) { $i++; continue }
+            $key = $null
+            if ($isLog) {
+                if ($rec.Contains('covers') -and $rec['covers'] -is [System.Collections.IList] -and $rec['covers'].Count -gt 0) { $key = [string]$rec['covers'][0] }
+            }
+            elseif ($rec.Contains($rule['field']) -and $rec[$rule['field']] -is [string]) { $key = $rec[$rule['field']] }
+            if ($null -eq $key -or -not $times.ContainsKey($key)) { $i++; continue }   # the coverage checks say why
+            $wikiTime = $times[$key]
+            $jsonTime = if ($rec.Contains('time') -and $null -ne $rec['time']) { [string]$rec['time'] } else { '' }
+            if ($wikiTime -cne $jsonTime) {
+                $where = "plan/portal/$($rule['into']) at /$listKey/$i/time"
+                $what = if ($isLog) { "Log entry $($rec['id'])" } else { "Question $($rec['id'])" }
+                $src = if ($isLog) { "'$key' in $($rule['page'])" } else { "$key in $($rule['page'])" }
+                $msg = if ($wikiTime -eq '') { "$what shows the time '$jsonTime', but $src has no time. Remove 'time'; times are never invented." }
+                elseif ($jsonTime -eq '') { "$what has no time, but $src says $wikiTime. Copy it into 'time'." }
+                else { "$what shows the time '$jsonTime', but $src says $wikiTime." }
+                $out.Add(@{ Where = $where; Message = $msg })
+            }
             $i++
         }
     }
@@ -614,8 +715,9 @@ function Invoke-PortalSyncCheck {
     # A refs.json explainer, the Overview's question count and a phase's progress are copies of another
     # record. They carry no source of their own, so freshness (2) cannot see them; these checks can.
     foreach ($m in (Get-PortalMismatches $docs $refsById $refsFile)) { Add-Problem 'MISMATCH' $m.Where $m.Message }
+    foreach ($m in (Get-TimeMismatches $docs $Root $config)) { Add-Problem 'MISMATCH' $m.Where $m.Message }
 
-    # 7. Labels: one category and two tags from taxonomy.json on every decision and log entry ---------
+    # 7. Labels: one category and two tags from taxonomy.json on every labelled record ----------------
     $taxFile = if ($config.Contains('taxonomy_file')) { [string]$config['taxonomy_file'] } else { 'taxonomy.json' }
     foreach ($m in (Get-LabelProblems $docs $taxFile)) { Add-Problem 'BAD-LABEL' $m.Where $m.Message }
 

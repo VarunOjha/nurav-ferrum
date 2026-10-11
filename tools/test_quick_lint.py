@@ -113,6 +113,45 @@ class QuickLintFixture(unittest.TestCase):
         self.assertIn('raw file or folder 2026-10-08-s01-x not listed', out)
 
 
+LOG_FM = ('---\nid: log\ntype: log\ntitle: "Log"\nstatus: active\nupdated: 2026-10-10\n'
+          'sources: []\nrelated: []\napprovable: false\n---\n\n# Log\n\n')
+LOG_LINE = '- [log](log.md) | active | Log | Append-only log\n'
+
+
+class QuickLintLogFormat(QuickLintFixture):
+    """LOG-FORMAT on wiki/log.md (SCHEMA §12), including the optional `- time: HH:MM` line (2026-10-10)."""
+
+    def log(self, body):
+        self.index('master', 'owner', 'evidence', 'bench', extra=LOG_LINE)
+        self.write('wiki/log.md', LOG_FM + body)
+        return run_lint(self.d)
+
+    def test_valid_time_is_accepted(self):
+        n, out = self.log('## [2026-10-10] plan | with a time\n\n- session: s01\n- time: 21:41\n- result: ok\n\n'
+                          '## [2026-10-10] plan | midnight and no time\n\n- time: 00:00\n\n'
+                          '## [2026-10-10] plan | old style, no time\n\n- session: s01\n')
+        self.assertEqual(n, 0, out)
+
+    def test_bad_time_is_an_error(self):
+        n, out = self.log('## [2026-10-10] plan | one digit hour\n\n- time: 9:15\n\n'
+                          '## [2026-10-10] plan | hour 24\n\n- time: 24:00\n\n'
+                          '## [2026-10-10] plan | seconds\n\n- time: 21:41:05\n\n'
+                          '## [2026-10-10] plan | empty\n\n- time:\n')
+        self.assertEqual(n, 4, out)
+        for v in ("'9:15'", "'24:00'", "'21:41:05'", "''"):
+            self.assertIn(f'time {v} is not HH:MM', out)
+
+    def test_heading_order_and_unknown_key_are_errors(self):
+        n, out = self.log('## [2026-10-10] plan | later\n\n- session: s01\n\n'
+                          '## [2026-10-09] plan | earlier\n\n- clock: 21:41\n\n'
+                          '## [2026-10-10] build | unknown op\n\n'
+                          '```text\n## [not a heading] inside a fence\n- time: nope\n```\n')
+        self.assertEqual(n, 3, out)
+        self.assertIn('entry dated 2026-10-09 follows an entry dated 2026-10-10', out)
+        self.assertIn("bullet key 'clock' is not one of", out)
+        self.assertIn('heading does not match the SCHEMA §12 regex', out)
+
+
 class QuickLintRepo(unittest.TestCase):
     def test_script_equals_embedded_block(self):
         with open(DOC, encoding='utf-8', newline='') as f:

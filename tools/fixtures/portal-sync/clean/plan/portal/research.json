@@ -8,6 +8,12 @@
       "title": "Memory footprint",
       "summary": "Does Ferrum use less memory than a browser for the same sites?",
       "status": "Open",
+      "category": "Research question",
+      "tags": [
+        "memory",
+        "benchmarks"
+      ],
+      "phase": "phase-p1-foundation",
       "related": [],
       "question": "Does Ferrum use less memory than Chrome or Edge for the same work?",
       "source": {

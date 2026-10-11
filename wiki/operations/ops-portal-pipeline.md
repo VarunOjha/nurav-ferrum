@@ -11,6 +11,8 @@ sources:
   - raw/research/claude-code-hooks-skills.md
   - raw/owner/2026-10-10-s01-decisions-log-browse.md
   - raw/owner/2026-10-10-s01-decisions-log-browse-approval.md
+  - raw/owner/2026-10-10-s01-browse-v2-answers-2.md
+  - raw/owner/2026-10-10-s01-browse-v2-approval.md
   - SCHEMA.md
 related: [adr-0024, adr-0028, adr-0025, adr-0026, adr-0023, schema, comp-interactive-plan, ops-wiki-maintenance, ops-git-conventions, phase-p0-planning]
 approvable: false
@@ -53,7 +55,7 @@ flowchart LR
 | `plan/portal/architecture.json` | Layers of the Rust app, the four groups ([ADR-0026](../decisions/adr-0026-architecture-four-groups.md)), every component, and the optional `browser_design` block (how the browser will look, [ADR-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md); its `decision` must be an item in `decisions.json`) |
 | `plan/portal/questions.json` | The questions log (one item per `Q-NNN` in [ov-open-questions](../overview/ov-open-questions.md)) |
 | `plan/portal/log.json` | The plain-language log; each entry lists the wiki log headings it covers and carries a category and two tags |
-| `plan/portal/taxonomy.json` | The single source of the label lists (owner's plan of 2026-10-10): `decision_categories` (by topic), `log_categories` (by kind of work) and the 26 `tags`, each `{name, explains}` with a plain one-line explanation |
+| `plan/portal/taxonomy.json` | The single source of the label lists (owner's plan of 2026-10-10): `decision_categories` (by topic, also used by questions and risks), `log_categories` (by kind of work), `research_categories` (the five kinds of research item: Research question, Prediction, Experiment, Measure, Test site) and the 26 `tags`, each `{name, explains}` with a plain one-line explanation |
 | `plan/portal/refs.json` | An explainer (kind, title, 1-3 sentences, status, related ids) for every id the portal can show, so any id opens a popup |
 | `plan/portal/schema/*.schema.json` | JSON Schema (draft 2020-12) per file; shared definitions in `common.schema.json` |
 | `plan/portal/pipeline.json` | Machine-readable rules: file → schema, page → file, section coverage, id patterns, keys that are not text |
@@ -90,9 +92,16 @@ flowchart LR
 - **Labels** ([owner request](../raw/owner/2026-10-10-s01-decisions-log-browse.md), [approval](../raw/owner/2026-10-10-s01-decisions-log-browse-approval.md)):
   every decision carries `category` (one of `decision_categories`), `tags` (exactly 2 different names from `tags`) and
   `phase` (the phase the decision mainly affects; for decisions about how the project is run, the page's own phase);
-  every log entry carries `category` (one of `log_categories`) and 2 `tags` next to its `phase`. Labels are the portal's
+  every log entry carries `category` (one of `log_categories`) and 2 `tags` next to its `phase`. Since the owner's
+  "one list pattern" plan ([approval](../raw/owner/2026-10-10-s01-browse-v2-approval.md)) every question and risk also
+  carries `category` (one of `decision_categories`) and 2 `tags`, and every research item carries `category` (its kind,
+  one of `research_categories`, matching the list it sits in), 2 `tags` and `phase` (the phase on its page). Labels are the portal's
   sorting, not facts of the page, so they do not change `content_hash`. A new tag or category is added only on purpose,
   in `taxonomy.json`, and noted in the log. How to choose them: the wiki-to-portal skill, "Labels".
+- **Time of day** (from 2026-10-10 on): a `log.json` entry and a `questions.json` item may carry `time` (`HH:MM`,
+  24-hour local). It is copied, never invented: a log entry takes the `- time:` line of the first wiki heading it
+  covers (SCHEMA §12), a question the time on its `- asked: YYYY-MM-DD HH:MM` line. Older items have no time and are
+  not back-filled.
 - Ids in prose are written as links with words, `[one window, many web views](ref:adr-0007)`; the
   portal turns them into popups. Anything that looks like an id (patterns in `pipeline.json`) must
   resolve in `refs.json`, including phase short names `P0`-`P8` (aliases) and commit shas.
@@ -118,8 +127,8 @@ flowchart LR
 | `UNKNOWN-REF` | An id written in portal text has no explainer in `refs.json` |
 | `DUP-ID` | `refs.json` explains the same id or alias twice |
 | `MISSING-SCRIPT` | A check-script path in the JSON does not exist |
-| `BAD-LABEL` | A decision or log entry has a missing or unknown category (or one from the other list), a number of tags other than 2, an unknown or repeated tag, or a phase with no phase file; or `taxonomy.json` lists a name twice |
-| `MISMATCH` | A copy disagrees with its record (an explainer's title, status or summary; the Overview's question count or list; a phase's progress; a roadmap row; a layer or group list) |
+| `BAD-LABEL` | A decision, log entry, question, risk or research item has a missing or unknown category (or one from another list; for research, a kind that does not match its list), a number of tags other than 2, an unknown or repeated tag, or a phase with no phase file; or `taxonomy.json` lists a name twice |
+| `MISMATCH` | A copy disagrees with its record (a `time` that differs from the wiki or that the wiki does not have; an explainer's title, status or summary; the Overview's question count or list; a phase's progress; a roadmap row; a layer or group list) |
 
 `-Hash <path>` prints a page's content hash (identical to the SCHEMA §10.2 Python reference; a test
 compares them). Validation uses `Test-Json`, which cannot follow a `$ref` into another file

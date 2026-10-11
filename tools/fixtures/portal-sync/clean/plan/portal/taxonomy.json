@@ -2,7 +2,7 @@
   "$schema": "schema/taxonomy.schema.json",
   "id": "taxonomy",
   "title": "Labels",
-  "summary": "The fixed lists of categories and tags used to sort decisions and log entries. A new tag is added only on purpose, here, and noted in the log.",
+  "summary": "The fixed lists of categories and tags used to sort the lists. Decisions, questions and risks share the same topics; log entries and research items have their own kinds. A new tag is added only on purpose, here, and noted in the log.",
   "decision_categories": [
     { "name": "Process & approvals", "explains": "How the work is run: phases, sign-offs, the wiki, sessions and handoffs." },
     { "name": "The app", "explains": "What the Ferrum browser itself does and how it looks." },
@@ -18,6 +18,13 @@
     { "name": "Fixed", "explains": "Problems found earlier, often by a review, were put right." },
     { "name": "Planned", "explains": "Research, rules or plan pages were written before building." },
     { "name": "Set up", "explains": "Tools were installed or a project was created, ready for work." }
+  ],
+  "research_categories": [
+    { "name": "Research question", "explains": "A question the measurements must answer." },
+    { "name": "Prediction", "explains": "What we expect a test to show, written down before any data exists." },
+    { "name": "Experiment", "explains": "A planned test run: what runs, which browsers are compared and what is measured." },
+    { "name": "Measure", "explains": "One number we record, such as memory, start-up time or energy, and exactly how." },
+    { "name": "Test site", "explains": "A page or task the browsers run during a test, such as a long article or 20 background tabs." }
   ],
   "tags": [
     { "name": "tabs", "explains": "Browser tabs: opening, closing and switching them." },

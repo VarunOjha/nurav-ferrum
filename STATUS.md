@@ -240,7 +240,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "browse-fixes" (review fixes for the Decisions and Log search, filters and pages) verified and committed 2026-10-10 (`c14d4b6`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 step "lists" (owner-approved 2026-10-10: one list pattern for Log, Questions, Decisions, Risks, Research: accordion cards, sort, search, filters, category + 2 tags, pages; time of day from now on; delete unused LogFilter.tsx)
+- intent: build per [raw/owner/2026-10-10-s01-browse-v2-approval.md](wiki/raw/owner/2026-10-10-s01-browse-v2-approval.md); verify in a scratch copy; commit feat + checkpoint, then review fixes + checkpoint
+- planned paths: plan/portal/{questions,risks,research,decisions,log,taxonomy,refs,pipeline}.json, plan/portal/schema/**, tools/portal-sync-check.ps1, tools/test-portal-sync-check.ps1, tools/fixtures/portal-sync/**, tools/quick_lint.py (time line), .claude/skills/wiki-to-portal/SKILL.md, wiki/SCHEMA.md (§12 time line), wiki/operations/ops-wiki-maintenance.md, wiki/operations/ops-portal-pipeline.md, wiki/interactive-plan/ip-*.md, wiki/overview/ov-open-questions.md (time rule note only), interactive_plan/** (incl. deleting components/portal/LogFilter.tsx, owner-allowed), wiki/raw/owner/2026-10-10-s01-browse-v2-*.md (new), wiki/raw/evidence/phase-p0-planning/portal-v2/lists-*.txt, MANIFEST.sha256
+- rollback: `git restore` the planned paths (and `git clean` only for files this step created)
 
 ## Blockers
 

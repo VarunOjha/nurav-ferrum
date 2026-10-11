@@ -18,7 +18,7 @@ interface Architecture {
   browser_design?: unknown;
 }
 interface Log {
-  entries: { id: string; date: string; decisions: unknown[]; approvals: unknown[] }[];
+  entries: { id: string; date: string; time?: string; decisions: unknown[]; approvals: unknown[] }[];
 }
 interface Phase {
   short: string;
@@ -31,12 +31,18 @@ const arch = portalJson<Architecture>("architecture.json");
 const log = portalJson<Log>("log.json");
 const p0 = portalJson<Phase>(`phases/${roadmap.phases[0].id}.json`);
 const decisionCount = portalJson<{ items: unknown[] }>("decisions.json").items.length;
-/** The log entries on the first page of the Log tab (newest first, 20 per page). */
-const logFirstPage = [...log.entries]
+const riskCount = portalJson<{ items: unknown[] }>("risks.json").items.length;
+const openQuestions = portalJson<{ items: { status: string }[] }>("questions.json").items.filter((q) => q.status === "open").length;
+/** Newest first (date, then time, then file order, reversed), as the Log tab starts. */
+const logNewest = [...log.entries]
   .map((e, i) => ({ e, i }))
-  .sort((a, b) => (a.e.date === b.e.date ? b.i - a.i : a.e.date < b.e.date ? 1 : -1))
-  .map((x) => x.e)
-  .slice(0, 20);
+  .sort((a, b) => {
+    if (a.e.date !== b.e.date) return a.e.date < b.e.date ? 1 : -1;
+    const [ta, tb] = [a.e.time ?? "", b.e.time ?? ""];
+    if (ta !== tb) return ta < tb ? 1 : -1;
+    return b.i - a.i;
+  })
+  .map((x) => x.e);
 const HEADER = ["HD-1", "HD-2", "HD-3", "HD-4", "HD-5"];
 const name = (id: string) => (UI_REFS as Record<string, { name: string }>)[id].name;
 
@@ -60,23 +66,33 @@ const TABS: { route: string; ids: string[] }[] = [
       ...(arch.browser_design ? ["AR-9", "AR-9.1", "AR-9.2", "AR-9.3"] : []),
     ],
   },
-  { route: "/decisions", ids: ["DE-1", "DE-2", "DE-3", "DE-4", "DE-5", ...(decisionCount > 20 ? ["DE-6"] : []), "DE-7"] },
-  { route: "/research", ids: ["RE-1", "RE-2", "RE-3", "RE-4", "RE-5", "RE-6", "RE-7"] },
-  { route: "/questions", ids: ["QU-1", "QU-2", "QU-3", "QU-4", "QU-5", "QU-6"] },
+  // The list cards are closed at first: the parts inside a card (chips, done/next, tables, footer) get
+  // their labels once it opens (tested below).
+  {
+    route: "/decisions",
+    ids: [
+      "DE-1",
+      "DE-2",
+      "DE-3",
+      "DE-4",
+      "DE-5",
+      ...(decisionCount > 20 ? ["DE-6"] : []),
+      "DE-8",
+      "DE-9",
+      "DE-10",
+      "DE-11",
+      "DE-12",
+      ...(riskCount > 20 ? ["DE-13"] : []),
+      "DE-14",
+      "DE-15",
+      "DE-16",
+    ],
+  },
+  { route: "/research", ids: ["RE-1", "RE-2", "RE-8", "RE-9", "RE-10", "RE-11", "RE-12", "RE-13", "RE-14"] },
+  { route: "/questions", ids: ["QU-1", "QU-6", "QU-7", "QU-8", ...(openQuestions > 20 ? ["QU-9"] : []), "QU-10", "QU-11"] },
   {
     route: "/log",
-    ids: [
-      "LO-1",
-      "LO-2",
-      "LO-3",
-      "LO-4",
-      "LO-6",
-      "LO-7",
-      "LO-8",
-      ...(log.entries.length > 20 ? ["LO-9"] : []),
-      "LO-10",
-      ...(logFirstPage.some((e) => e.decisions.length + e.approvals.length > 0) ? ["LO-5"] : []),
-    ],
+    ids: ["LO-1", "LO-2", "LO-3", "LO-7", "LO-8", ...(log.entries.length > 20 ? ["LO-9"] : []), "LO-11", "LO-12"],
   },
 ];
 
@@ -212,8 +228,9 @@ test.describe("Ref mode", () => {
     expect(refIds.every((id) => id.startsWith("RF-"))).toBe(true);
     await page.keyboard.press("Escape");
 
-    await page.goto("/decisions");
-    await page.getByTestId("decision-list").getByRole("button").first().click();
+    // The item popup: a part of the system (decisions, risks and research open in place since 2026-10-10).
+    await page.goto("/architecture");
+    await page.locator("main button.ref-box").first().click();
     const item = page.locator("dialog.detail-modal[open]");
     await expect(item).toBeVisible();
     expect(await visibleIds(item)).toEqual(expect.arrayContaining(["IT-1", "IT-2"]));
@@ -411,28 +428,40 @@ test.describe("Ref mode", () => {
     expect(m.bottom).toBeLessThanOrEqual(m.height);
   });
 
-  test("the log labels the first entry the filter and the page leave visible", async ({ page }) => {
+  test("list cards: the first card shown carries the card label; an open card labels its parts once", async ({ page }) => {
     await page.goto("/log");
     await turnOn(page);
-    type Entry = Log["entries"][number];
-    const filters: { name: string; has: (e: Entry) => boolean; page?: number }[] = [
-      { name: "All entries", has: () => true },
-      ...(log.entries.length > 20 ? [{ name: "All entries", has: () => true, page: 2 }] : []),
-      { name: "Has decisions", has: (e) => e.decisions.length > 0 },
-      { name: "Has approvals", has: (e) => e.approvals.length > 0 },
-    ];
-    for (const f of filters) {
-      await page.getByLabel("Show", { exact: true }).selectOption({ label: f.name });
-      if (f.page) await page.getByRole("navigation", { name: "Pages" }).getByRole("button", { name: `Page ${f.page}` }).click();
-      if (!log.entries.some(f.has)) continue;
+    const list = page.getByTestId("log-list");
+    // Closed cards: only the card label, on the first card.
+    await expect(chip(page, "LO-3").locator("visible=true")).toHaveCount(1);
+    for (const id of ["LO-4", "LO-6", "LO-10"]) await expect(chip(page, id).locator("visible=true"), id).toHaveCount(0);
+    const labelled = () => page.locator('li[data-ui-ref="LO-3"]:not([data-ui-dup])').getAttribute("data-entry");
+    expect(await labelled()).toBe(logNewest[0].id);
+    // Opening the second card labels its parts (the first visible ones).
+    const second = list.locator("li[data-entry]").nth(1);
+    await second.locator("summary").click();
+    await expect(chip(second, "LO-4")).toBeVisible();
+    await expect(chip(second, "LO-6")).toBeVisible();
+    await expect(chip(second, "LO-10")).toBeVisible();
+    // Open all: each part label still appears once, on the first card now.
+    await page.getByTestId("log-open-all").click();
+    await expect(chip(list.locator("li[data-entry]").first(), "LO-4")).toBeVisible();
+    const ids = await visibleIds(page);
+    for (const id of ["LO-3", "LO-4", "LO-6", "LO-10"]) expect(ids.filter((x) => x === id), id).toHaveLength(1);
+    if (logNewest.slice(0, 20).some((e) => e.decisions.length + e.approvals.length > 0)) expect(ids).toContain("LO-5");
+    // Another page: the card label moves to its first card.
+    if (log.entries.length > 20) {
+      await page.getByRole("navigation", { name: "Pages of the entries" }).getByRole("button", { name: "Page 2" }).click();
       await expect(chip(page, "LO-3").locator("visible=true")).toHaveCount(1);
-      const ids = await visibleIds(page);
-      for (const id of ["LO-3", "LO-4", "LO-6"]) expect(ids.filter((x) => x === id), `${f.name} ${id}`).toHaveLength(1);
-      if (f.name !== "All entries") expect(ids, f.name).toContain("LO-5");
-      const labelled = await page.locator('article[data-ui-ref="LO-3"]:not([data-ui-dup])').getAttribute("data-entry");
-      const firstVisible = await page.locator("article.log-entry:visible").first().getAttribute("data-entry");
-      expect(labelled, f.name).toBe(firstVisible);
+      await expect.poll(labelled).toBe(logNewest[20].id);
     }
+    // Every list behaves the same: the first card of each list on the Decisions tab.
+    await page.goto("/decisions");
+    await expect(chip(page, "DE-10").locator("visible=true")).toHaveCount(1);
+    await expect(chip(page, "DE-16").locator("visible=true")).toHaveCount(1);
+    await page.getByTestId("risks-open-all").click();
+    await expect(chip(page, "DE-17").locator("visible=true")).toHaveCount(1);
+    await expect(chip(page, "DE-7").locator("visible=true")).toHaveCount(0);
   });
 
   test("an old Copied message does not follow the bar into a new popup", async ({ page, context }) => {

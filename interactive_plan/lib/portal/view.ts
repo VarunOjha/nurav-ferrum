@@ -2,7 +2,7 @@
  * Small pure helpers the portal pages share (formatting and plain-word labels). No file access.
  */
 import type { ApprovalsRead } from "../approvals/file";
-import type { Architecture, Decisions, Log, Phase, Questions, Risks, Roadmap } from "./schemas.gen";
+import type { Architecture, Decisions, Log, Phase, Risks, Roadmap } from "./schemas.gen";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -12,6 +12,14 @@ export function shortDate(iso: string): string {
   if (!m) return iso;
   const month = MONTHS[Number(m[2]) - 1];
   return month ? `${Number(m[3])} ${month}` : iso;
+}
+
+/**
+ * A card's date with its time of day when known: "10 Oct" or "10 Oct 21:41" (owner's plan of
+ * 2026-10-10: new log entries and questions store a 24-hour local time; older ones keep the date only).
+ */
+export function dateTime(iso: string, time: string | null | undefined): string {
+  return time ? `${shortDate(iso)} ${time}` : shortDate(iso);
 }
 
 export type Tone = "done" | "now" | "later" | "blocked";
@@ -193,24 +201,6 @@ export function tasksLabel(done: number, total: number | null): string {
   return `${done} / ${total === null ? "—" : total}`;
 }
 
-/** Every log entry, newest first (same order rule as latestLog). */
-export function newestFirst(log: Log | null): Log["entries"] {
-  return latestLog(log, Number.POSITIVE_INFINITY);
-}
-
-export type QuestionStatus = Questions["items"][number]["status"];
-
-/** Question groups in the order the Questions tab shows them: open first. File order is kept inside a group. */
-export const QUESTION_GROUPS: readonly { status: QuestionStatus; label: string }[] = [
-  { status: "open", label: "Open" },
-  { status: "answered", label: "Answered" },
-  { status: "withdrawn", label: "Withdrawn" },
-];
-
-export function questionsByStatus(q: Questions | null): { status: QuestionStatus; label: string; items: Questions["items"] }[] {
-  return QUESTION_GROUPS.map((g) => ({ ...g, items: (q?.items ?? []).filter((i) => i.status === g.status) }));
-}
-
 /** "You" or "Claude" for a `who` value. */
 export function whoLabel(who: "you" | "claude"): string {
   return who === "you" ? "You" : "Claude";
@@ -243,13 +233,9 @@ export function riskTone(status: Risks["items"][number]["status"]): Tone {
   }
 }
 
-/** Likelihood × impact (1-25), the order the Risks list uses (highest first, then file order). */
+/** Likelihood × impact (1-25): "Risk 4 × 5 = 20" and the Risks list's "Highest risk first" (lib/portal/browseTabs.ts). */
 export function riskScore(r: Pick<Risks["items"][number], "likelihood" | "impact">): number {
   return r.likelihood * r.impact;
-}
-
-export function risksByScore(risks: Risks | null): Risks["items"] {
-  return [...(risks?.items ?? [])].map((r, i) => ({ r, i })).sort((a, b) => riskScore(b.r) - riskScore(a.r) || a.i - b.i).map((x) => x.r);
 }
 
 /**

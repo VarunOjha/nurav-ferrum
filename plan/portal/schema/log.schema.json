@@ -51,6 +51,10 @@
           "date": {
             "$ref": "#/$defs/date"
           },
+          "time": {
+            "$ref": "#/$defs/time",
+            "description": "Time of day of the first wiki log entry this entry covers, from its '- time: HH:MM' line (SCHEMA §12). Only for entries written from 2026-10-10 on."
+          },
           "title": {
             "$ref": "#/$defs/title"
           },

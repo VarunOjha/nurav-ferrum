@@ -1,54 +1,60 @@
-// questions.spec: the Questions tab, a log-like list: open questions first (in file order, which is
-// the order of the phase they hold up), then answered, then withdrawn. Each shows why it matters,
-// your answer when there is one, and the phases it holds up; the question id opens its explainer.
-// Accessible (axe), phone width without sideways scrolling.
+// questions.spec: the Questions tab ("one pattern for every list", owner's plan of 2026-10-10). It
+// starts on the open questions, newest first (date asked, then time when known, then the order of the
+// questions page, reversed). Opened, a card shows its id (which opens its explainer), the phases it
+// holds up, why it matters and your answer. Accessible (axe), phone width without sideways scrolling.
+// Status, search, filters, sort and pages are tested in browse.spec.ts.
 import { expect, test } from "@playwright/test";
 import { collectErrors, expectAccessible, sidewaysOverflow } from "./axe";
 import { portalJson } from "./helpers";
 
 interface Questions {
-  items: { id: string; question: string; status: "open" | "answered" | "withdrawn"; answer: string | null; blocks: string[] }[];
+  items: { id: string; asked: string; time?: string; question: string; status: "open" | "answered" | "withdrawn"; answer: string | null; blocks: string[] }[];
 }
 const questions = portalJson<Questions>("questions.json");
+const openNewest = questions.items
+  .map((q, i) => ({ q, i }))
+  .filter((x) => x.q.status === "open")
+  .sort((a, b) => {
+    if (a.q.asked !== b.q.asked) return a.q.asked < b.q.asked ? 1 : -1;
+    const [ta, tb] = [a.q.time ?? "", b.q.time ?? ""];
+    if (ta !== tb) return ta < tb ? 1 : -1;
+    return b.i - a.i;
+  })
+  .map((x) => x.q);
 
-test("open questions come first, then answered, then withdrawn", async ({ page }) => {
+test("open questions first, newest first, 20 per page", async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto("/questions");
-  const shown = await page.locator("[data-question]").evaluateAll((els) => els.map((e) => e.getAttribute("data-question")!));
-  const expected = (["open", "answered", "withdrawn"] as const).flatMap((s) => questions.items.filter((q) => q.status === s).map((q) => q.id));
-  expect(shown).toEqual(expected);
-  await expect(page.locator("section[data-group] > h2")).toHaveText([/^Open \(\d+\)$/, /^Answered \(\d+\)$/, /^Withdrawn \(\d+\)$/]);
+  const shown = await page.locator("li[data-question]").evaluateAll((els) => els.map((e) => e.getAttribute("data-question")!));
+  expect(shown).toEqual(openNewest.slice(0, 20).map((q) => q.id));
   await expectAccessible(page);
   expect(errors).toEqual([]);
 });
 
-test("an answered question shows your answer; the id opens its explainer", async ({ page }) => {
+test("an opened question shows why it matters and what it holds up; the id opens its explainer", async ({ page }) => {
   await page.goto("/questions");
-  const answered = questions.items.find((q) => q.status === "answered" && q.answer);
-  if (answered) await expect(page.locator(`[data-question="${answered.id}"] .answer`)).toBeVisible();
-  const blocking = questions.items.find((q) => q.status === "open" && q.blocks.length > 0);
-  if (blocking) await expect(page.locator(`[data-question="${blocking.id}"]`)).toContainText("Holds up:");
-  const q = questions.items[0];
-  await page.locator(`[data-question="${q.id}"] [data-ref-id="${q.id}"]`).click();
+  // A question that holds up a phase when one is on the first page, else the newest open one.
+  const q = openNewest.slice(0, 20).find((x) => x.blocks.length > 0) ?? openNewest[0];
+  const card = page.locator(`[data-question="${q.id}"]`);
+  await card.locator("summary").click();
+  await expect(card.locator(".acc-body")).toContainText("Why it matters");
+  if (q.blocks.length > 0) await expect(card.locator(".acc-body")).toContainText("Holds up:");
+  await card.locator(`.acc-body [data-ref-id="${q.id}"]`).click();
   await expect(page.getByTestId("ref-dialog")).toBeVisible();
   await page.keyboard.press("Escape");
+  const answered = questions.items.find((x) => x.status === "answered" && x.answer);
+  if (answered) {
+    await page.goto("/questions?status=answered");
+    const a = page.locator(`[data-question="${answered.id}"]`);
+    await a.locator("summary").click();
+    await expect(a.locator(".answer")).toBeVisible();
+  }
 });
 
-test("phone width: no sideways scrolling", async ({ page }) => {
+test("phone width: no sideways scrolling, also with every card open", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/questions");
   expect(await sidewaysOverflow(page)).toBeLessThanOrEqual(0);
-});
-
-test("a withdrawn question links to the question that replaced it (review 2026-10-09)", async ({ page }) => {
-  await page.goto("/questions");
-  for (const [id, to] of [["Q-001", "Q-117"], ["Q-002", "Q-118"], ["Q-003", "Q-119"]] as const) {
-    const card = page.locator(`[data-question="${id}"]`);
-    const link = card.locator(`.lh [data-ref-id="${to}"]`);
-    await expect(link).toBeVisible();
-    await link.click();
-    await expect(page.getByTestId("ref-dialog")).toBeVisible();
-    await expect(page.getByTestId("ref-dialog")).toContainText(to);
-    await page.keyboard.press("Escape");
-  }
+  await page.getByTestId("questions-open-all").click();
+  expect(await sidewaysOverflow(page)).toBeLessThanOrEqual(0);
 });

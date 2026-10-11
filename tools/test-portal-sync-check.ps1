@@ -331,6 +331,93 @@ try {
         Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "'wiki' is listed twice in tags")
     }
 
+    # --- Labels on questions, risks and research items (owner plan of 2026-10-10) ------------------------
+    Test-Case 'BAD-LABEL: a question with no category or tags' {
+        $d = New-Fixture 'label question none'
+        Edit-Json (Join-Path $d 'plan/portal/questions.json') { param($j) $j['items'][0].Remove('category'); $j['items'][0].Remove('tags') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', '/items/0/category', 'Question Q-001 has no category', 'Question Q-001 has no tags', 'BAD-SHAPE')
+    }
+
+    Test-Case 'BAD-LABEL: a question with a log category (questions use the decision topics)' {
+        $d = New-Fixture 'label question wrong list'
+        Edit-Json (Join-Path $d 'plan/portal/questions.json') { param($j) $j['items'][0]['category'] = 'Built' }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "Question Q-001 has the category 'Built', which is not in 'decision_categories'")
+    }
+
+    Test-Case 'BAD-LABEL: a risk with one tag, a research item with three' {
+        $d = New-Fixture 'label risk research count'
+        Edit-Json (Join-Path $d 'plan/portal/risks.json') { param($j) $j['items'][0]['tags'] = @('Tauri') }
+        Edit-Json (Join-Path $d 'plan/portal/research.json') { param($j) $j['questions'][0]['tags'] = @('memory', 'CPU', 'benchmarks') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', 'Risk risk-r02 has 1 tags', 'Research item rq-01 has 3 tags')
+    }
+
+    Test-Case 'BAD-LABEL: a risk with an unknown tag, a question with the same tag twice' {
+        $d = New-Fixture 'label risk question tags'
+        Edit-Json (Join-Path $d 'plan/portal/risks.json') { param($j) $j['items'][0]['tags'] = @('Tauri', 'reliability') }
+        Edit-Json (Join-Path $d 'plan/portal/questions.json') { param($j) $j['items'][0]['tags'] = @('testing', 'testing') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "Risk risk-r02 has the tag 'reliability', which is not in 'tags'", "Question Q-001 has the tag 'testing' twice")
+    }
+
+    Test-Case 'BAD-LABEL: a risk with an unknown category' {
+        $d = New-Fixture 'label risk category'
+        Edit-Json (Join-Path $d 'plan/portal/risks.json') { param($j) $j['items'][0]['category'] = 'Danger' }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "Risk risk-r02 has the category 'Danger', which is not in 'decision_categories'")
+    }
+
+    Test-Case 'BAD-LABEL: a research item whose kind does not fit its list' {
+        $d = New-Fixture 'label research kind'
+        Edit-Json (Join-Path $d 'plan/portal/research.json') { param($j) $j['questions'][0]['category'] = 'Measure' }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', '/questions/0/category', "sits in the 'questions' list, so its category must be 'Research question', not 'Measure'")
+    }
+
+    Test-Case 'BAD-LABEL: a research item with a decision topic as its category' {
+        $d = New-Fixture 'label research topic'
+        Edit-Json (Join-Path $d 'plan/portal/research.json') { param($j) $j['questions'][0]['category'] = 'The app' }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "Research item rq-01 has the category 'The app', which is not in 'research_categories'")
+    }
+
+    Test-Case 'BAD-LABEL: a research item with no phase, a risk with a phase that has no file' {
+        $d = New-Fixture 'label research risk phase'
+        Edit-Json (Join-Path $d 'plan/portal/research.json') { param($j) $j['questions'][0].Remove('phase') }
+        Edit-Json (Join-Path $d 'plan/portal/risks.json') { param($j) $j['items'][0]['phase'] = 'phase-p9-nope' }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', 'Research item rq-01 does not say which phase', "Risk risk-r02 names the phase 'phase-p9-nope'")
+    }
+
+    Test-Case 'BAD-SHAPE: taxonomy.json without the research kinds' {
+        $d = New-Fixture 'label taxonomy research'
+        Edit-Json (Join-Path $d 'plan/portal/taxonomy.json') { param($j) $j.Remove('research_categories') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-SHAPE', 'taxonomy.json', 'research_categories', 'BAD-LABEL')
+    }
+
+    # --- Time of day (optional, HH:MM, from 2026-10-10 on) ---------------------------------------------
+    Test-Case 'BAD-SHAPE: a time of day that is not HH:MM (log entry 9:15, question 24:00)' {
+        $d = New-Fixture 'time format'
+        Edit-Json (Join-Path $d 'plan/portal/log.json') { param($j) $j['entries'][0]['time'] = '9:15' }
+        Edit-Json (Join-Path $d 'plan/portal/questions.json') { param($j) $j['items'][0]['time'] = '24:00' }
+        $r = Invoke-Checker $d
+        Assert-Result $r 1 @('BAD-SHAPE', 'log.json', 'questions.json')
+        Assert-True ($r.Out.Contains('/entries/0/time') -and $r.Out.Contains('/items/0/time')) "expected both time fields named. Output:`n$($r.Out)"
+    }
+
+    Test-Case 'MISMATCH: a log entry time that differs from its wiki "- time:" line' {
+        $d = New-Fixture 'time log differs'
+        Edit-Json (Join-Path $d 'plan/portal/log.json') { param($j) $j['entries'][0]['time'] = '09:16' }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', '/entries/0/time', "shows the time '09:16'", 'says 09:15')
+    }
+
+    Test-Case 'MISMATCH: a question without the time its "- asked:" line has' {
+        $d = New-Fixture 'time question missing'
+        Edit-Json (Join-Path $d 'plan/portal/questions.json') { param($j) $j['items'][0].Remove('time') }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', '/items/0/time', 'Question Q-001 has no time', 'says 21:41', "Copy it into 'time'")
+    }
+
+    Test-Case 'MISMATCH: a time in the JSON that the wiki page does not have (never invented)' {
+        $d = New-Fixture 'time invented'
+        $log = Join-Path $d 'wiki/log.md'
+        [IO.File]::WriteAllText($log, ([IO.File]::ReadAllText($log) -replace '- time: 09:15\n', ''))
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', "shows the time '09:15'", 'has no time', 'never invented')
+    }
+
     Test-Case 'MISSING-FILE: taxonomy.json removed' {
         $d = New-Fixture 'label taxonomy missing'
         Remove-Item -LiteralPath (Join-Path $d 'plan/portal/taxonomy.json')

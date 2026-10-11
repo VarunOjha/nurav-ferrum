@@ -125,34 +125,55 @@ export const UI_REFS = {
   // Decisions
   "DE-1": { name: "Page heading" },
   "DE-2": { name: "Decision list" },
-  "DE-3": { name: "Risks table" },
+  // Since 2026-10-10 ("one pattern for every list") the risks are cards with search, filters and sort.
+  "DE-3": { name: "Risks we watch" },
   "DE-4": { name: "Search and filters" },
   "DE-5": { name: "Results count" },
   "DE-6": { name: "Page numbers" },
   "DE-7": { name: "Category and tag chips" },
+  "DE-8": { name: "Decision sort order" },
+  "DE-9": { name: "Decision Open all button" },
+  "DE-10": { name: "Decision card (all look the same)" },
+  "DE-11": { name: "Risk search and filters" },
+  "DE-12": { name: "Risk results count" },
+  "DE-13": { name: "Risk page numbers" },
+  "DE-14": { name: "Risk sort order" },
+  "DE-15": { name: "Risk Open all button" },
+  "DE-16": { name: "Risk card (all look the same)" },
+  "DE-17": { name: "Risk category and tag chips" },
 
   // Research
   "RE-1": { name: "Page heading" },
-  "RE-2": { name: "Section links" },
-  "RE-3": { name: "Questions we want to answer" },
-  "RE-4": { name: "What we expect to find" },
-  "RE-5": { name: "Experiments" },
-  "RE-6": { name: "Measurements" },
-  "RE-7": { name: "Test pages and tasks" },
+  // Since 2026-10-10 each link shows one kind in the list below (it used to jump to a section).
+  "RE-2": { name: "Kind links" },
+  // RE-3 to RE-7 (the five sections) are retired: the 70 items are one list since 2026-10-10.
+  "RE-8": { name: "Research list" },
+  "RE-9": { name: "Search and filters" },
+  "RE-10": { name: "Results count" },
+  "RE-11": { name: "Page numbers" },
+  "RE-12": { name: "Sort order" },
+  "RE-13": { name: "Open all button" },
+  "RE-14": { name: "Research item card (all look the same)" },
+  "RE-15": { name: "Category and tag chips" },
 
   // Questions
   "QU-1": { name: "Page heading" },
-  "QU-2": { name: "Group links" },
-  "QU-3": { name: "Open questions" },
-  "QU-4": { name: "Answered questions" },
-  "QU-5": { name: "Withdrawn questions" },
+  // QU-2 to QU-5 (group links and the Open, Answered, Withdrawn groups) are retired: one list with a
+  // Status filter since 2026-10-10.
   "QU-6": { name: "Question card (all look the same)" },
+  "QU-7": { name: "Search and filters" },
+  "QU-8": { name: "Results count" },
+  "QU-9": { name: "Page numbers" },
+  "QU-10": { name: "Sort order" },
+  "QU-11": { name: "Open all button" },
+  "QU-12": { name: "Category and tag chips" },
 
   // Log
   "LO-1": { name: "Page heading" },
   // Since 2026-10-10 the "has decisions / has approvals" choice inside the search and filters (LO-7);
   // the count moved to LO-8.
   "LO-2": { name: "Decisions or approvals filter" },
+  // Since 2026-10-10 a card that opens on click.
   "LO-3": { name: "Log entry (all look the same)" },
   "LO-4": { name: "What was done, what's next" },
   "LO-5": { name: "Decisions and approvals tables" },
@@ -161,6 +182,8 @@ export const UI_REFS = {
   "LO-8": { name: "Results count" },
   "LO-9": { name: "Page numbers" },
   "LO-10": { name: "Category and tag chips" },
+  "LO-11": { name: "Sort order" },
+  "LO-12": { name: "Open all button" },
 
   // Phase popup (opens from a phase card, a phase name or a phase id)
   "PH-1": { name: "Popup header" },

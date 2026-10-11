@@ -63,6 +63,11 @@
       "type": "string",
       "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
     },
+    "time": {
+      "type": "string",
+      "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+      "description": "Time of day, 24-hour local clock, 'HH:MM' (for example 21:41). Optional; recorded only from 2026-10-10 on, from the real clock. Older items keep the date only and are never back-filled."
+    },
     "commit": {
       "type": "string",
       "pattern": "^[0-9a-f]{7,40}$"

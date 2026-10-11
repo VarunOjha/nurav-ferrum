@@ -13,6 +13,11 @@
       "mitigation": "Test two workarounds in P1 (a patched Tauri, or low-level code) with a cookie-leak test; you settle the route before P3 starts.",
       "phase": "phase-p1-foundation",
       "status": "Open",
+      "category": "Security & privacy",
+      "tags": [
+        "isolation",
+        "Tauri"
+      ],
       "related": [
         "phase-p1-foundation",
         "phase-p3-tabs-sessions",
@@ -36,6 +41,11 @@
       "mitigation": "Pin the exact Tauri version, create tabs off the main thread, keep controls off the page area, and keep a test per known bug. Tested first in P1.",
       "phase": "phase-p1-foundation",
       "status": "Open",
+      "category": "The app",
+      "tags": [
+        "web views",
+        "Tauri"
+      ],
       "related": [
         "phase-p1-foundation",
         "phase-p2-minimal-container",
@@ -59,6 +69,11 @@
       "mitigation": "One small documented module with a safe interface; treat 'sleep failed' as normal; keep sleep and discard as separate states. Tried in P1.",
       "phase": "phase-p7-lifecycle",
       "status": "Open",
+      "category": "The app",
+      "tags": [
+        "tab sleeping",
+        "WebView2"
+      ],
       "related": [
         "phase-p1-foundation",
         "phase-p7-lifecycle",
@@ -80,6 +95,11 @@
       "mitigation": "Label every reading as a CPU-chip estimate; system energy only with a wall meter; never the unsafe WinRing0 driver; any driver only with your approval.",
       "phase": "phase-p6-benchmark-harness",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "CPU",
+        "benchmarks"
+      ],
       "related": [
         "phase-p6-benchmark-harness",
         "phase-p5-telemetry",
@@ -101,6 +121,11 @@
       "mitigation": "Start each browser in its own tracked process group; count private memory only; cross-check the process list two ways; fail any trial with a stray process.",
       "phase": "phase-p5-telemetry",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "memory",
+        "benchmarks"
+      ],
       "related": [
         "phase-p5-telemetry",
         "phase-p6-benchmark-harness",
@@ -122,6 +147,11 @@
       "mitigation": "Drive every browser the same way; measure resources from Rust, not Playwright; measure the channel's own effect; enable it only in benchmark builds.",
       "phase": "phase-p6-benchmark-harness",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "WebView2"
+      ],
       "related": [
         "phase-p5-telemetry",
         "phase-p6-benchmark-harness",
@@ -144,6 +174,11 @@
       "mitigation": "Ferrum's own filter refuses unreadable addresses, watches frames through low-level hooks, always handles pop-ups and downloads, and is tested with bad addresses.",
       "phase": "phase-p4-security",
       "status": "Open",
+      "category": "Security & privacy",
+      "tags": [
+        "blocklist",
+        "Tauri"
+      ],
       "related": [
         "phase-p4-security",
         "phase-p2-minimal-container",
@@ -164,6 +199,11 @@
       "mitigation": "Build it on WebView2's response event; keep the metadata-only format with tests; never log content; keep logs out of git; measure its cost first.",
       "phase": "phase-p5-telemetry",
       "status": "Open",
+      "category": "Security & privacy",
+      "tags": [
+        "network log",
+        "WebView2"
+      ],
       "related": [
         "phase-p5-telemetry",
         "adr-0008",
@@ -184,6 +224,11 @@
       "mitigation": "Build one settings set at start-up and reuse it everywhere; apply benchmark flags to the whole app; test that a mismatch is rejected early.",
       "phase": "phase-p3-tabs-sessions",
       "status": "Open",
+      "category": "The app",
+      "tags": [
+        "web views",
+        "WebView2"
+      ],
       "related": [
         "phase-p3-tabs-sessions",
         "phase-p6-benchmark-harness",
@@ -206,6 +251,11 @@
       "mitigation": "Never disguise Ferrum to get around it; offer 'open in your normal browser'; document it; pick benchmark sites that need no Google login.",
       "phase": "phase-p2-minimal-container",
       "status": "Open",
+      "category": "The app",
+      "tags": [
+        "web views",
+        "WebView2"
+      ],
       "related": [
         "phase-p2-minimal-container",
         "phase-p3-tabs-sessions",
@@ -227,6 +277,11 @@
       "mitigation": "Record exact versions in every trial; stop a run if one changes; run in short windows with updates paused; keep the exact installers used.",
       "phase": "phase-p6-benchmark-harness",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "WebView2"
+      ],
       "related": [
         "phase-p6-benchmark-harness",
         "phase-p7-lifecycle",
@@ -249,6 +304,11 @@
       "mitigation": "A recorded checklist before each run; fixed window state; cool-down between trials; products in random order; same-vs-same tests to measure the noise.",
       "phase": "phase-p6-benchmark-harness",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "statistics"
+      ],
       "related": [
         "phase-p6-benchmark-harness",
         "phase-p5-telemetry",
@@ -270,6 +330,11 @@
       "mitigation": "If you agree, measure as-shipped and a matched setup; set and record every such setting per trial; justify and report anything switched off.",
       "phase": "phase-p6-benchmark-harness",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "tab sleeping"
+      ],
       "related": [
         "phase-p6-benchmark-harness",
         "phase-p8-research-paper",
@@ -290,6 +355,11 @@
       "mitigation": "Fix the main measures and analysis before collecting data; validate tools with same-vs-same tests; instrument every browser alike; analyse every run.",
       "phase": "phase-p6-benchmark-harness",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "statistics"
+      ],
       "related": [
         "phase-p6-benchmark-harness",
         "phase-p5-telemetry",
@@ -316,6 +386,11 @@
       "mitigation": "After every task: update the status page and log, commit locally. Keep tasks small, write handoff notes early, check status against git on restart.",
       "phase": "phase-p1-foundation",
       "status": "Being reduced",
+      "category": "Process & approvals",
+      "tags": [
+        "sessions",
+        "git"
+      ],
       "related": [
         "phase-p0-planning",
         "phase-p1-foundation",
@@ -338,6 +413,11 @@
       "mitigation": "Freeze each phase's work list when you approve it; new ideas go to a backlog or a decision you approve; compare effort to the estimate at each review.",
       "phase": "phase-p0-planning",
       "status": "Open",
+      "category": "Process & approvals",
+      "tags": [
+        "phases",
+        "approvals"
+      ],
       "related": [
         "phase-p0-planning",
         "adr-0004",
@@ -362,6 +442,11 @@
       "mitigation": "A systematic literature review in P8 before any novelty claim; claim only what it supports; report null results honestly.",
       "phase": "phase-p8-research-paper",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "paper",
+        "tab sleeping"
+      ],
       "related": [
         "phase-p8-research-paper",
         "phase-p7-lifecycle",
@@ -383,6 +468,11 @@
       "mitigation": "One module behind a safe interface; every unsafe block documented; handlers that remove themselves; leak and crash tests; checklist review of each change.",
       "phase": "phase-p1-foundation",
       "status": "Open",
+      "category": "The app",
+      "tags": [
+        "WebView2",
+        "testing"
+      ],
       "related": [
         "phase-p1-foundation",
         "phase-p4-security",
@@ -406,6 +496,11 @@
       "mitigation": "Commands only for the trusted controls, never for websites; tabs blocked from Ferrum's own pages; security tests from P2, fully in P4, and on every upgrade.",
       "phase": "phase-p4-security",
       "status": "Open",
+      "category": "Security & privacy",
+      "tags": [
+        "isolation",
+        "Tauri"
+      ],
       "related": [
         "phase-p4-security",
         "phase-p2-minimal-container",
@@ -429,6 +524,11 @@
       "mitigation": "Pin exact versions and commit lock files; record installed versions in P1; upgrade only as a planned task that re-runs all tests; audit dependencies.",
       "phase": "phase-p1-foundation",
       "status": "Open",
+      "category": "Tools & setup",
+      "tags": [
+        "toolchain",
+        "testing"
+      ],
       "related": [
         "phase-p1-foundation",
         "phase-p0-planning",
@@ -453,6 +553,11 @@
       "mitigation": "State the one-machine scope in every result; record full hardware details; publish tools and raw data; add a second machine only if you have one.",
       "phase": "phase-p8-research-paper",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "paper"
+      ],
       "related": [
         "phase-p8-research-paper",
         "phase-p6-benchmark-harness",
@@ -475,6 +580,11 @@
       "mitigation": "Claude records an approval only after saving your words, through one tested script that stores page fingerprints and writes safely; all logged and in git.",
       "phase": "phase-p0-planning",
       "status": "Open",
+      "category": "Process & approvals",
+      "tags": [
+        "approvals",
+        "phases"
+      ],
       "related": [
         "phase-p0-planning",
         "adr-0023",
@@ -498,6 +608,11 @@
       "mitigation": "Exempt tabs with media, downloads, camera or mic, unsaved input, or your exclusions; prefer sleep over discard; adaptive policy off by default; safety tests in P7.",
       "phase": "phase-p7-lifecycle",
       "status": "Open",
+      "category": "The app",
+      "tags": [
+        "tab sleeping",
+        "tabs"
+      ],
       "related": [
         "phase-p7-lifecycle",
         "risk-r03",
@@ -517,6 +632,11 @@
       "mitigation": "One review packet per gate showing what changed; batch edits so pages go stale once per round; keep doing independent work; ask questions early.",
       "phase": "phase-p0-planning",
       "status": "Open",
+      "category": "Process & approvals",
+      "tags": [
+        "approvals",
+        "phases"
+      ],
       "related": [
         "phase-p0-planning",
         "adr-0014",
@@ -538,6 +658,11 @@
       "mitigation": "Size runs from the measured noise; fix main measures and thresholds in advance; correct for many comparisons; report confidence ranges and effect sizes.",
       "phase": "phase-p6-benchmark-harness",
       "status": "Open",
+      "category": "Research & benchmarks",
+      "tags": [
+        "statistics",
+        "benchmarks"
+      ],
       "related": [
         "phase-p6-benchmark-harness",
         "phase-p7-lifecycle",
