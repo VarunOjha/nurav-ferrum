@@ -1521,3 +1521,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md, raw/owner/2026-10-11-s02-s1-hand-checks.md]
 - result: Owner hand checks: Ctrl+A/C/V/Z work in a tab; resize, maximise and minimise work; after Alt+Tab back, typing reaches the tab only after a click (Tauri issue 13466 seen); owner: known issue, fix later. S1 report written (9 PASS, 1 FAIL as a known issue). The last four P1-targeted claims closed (adr-0007, risk-r02, ov-arch-system-overview, comp-app-shell); the focus fix is now a P2 claim, custom-title-bar resize a P3 claim. p1.5 check PASS. Stales adr-0007 (re-approval with the other 8 pages).
 - commit: af70134
+
+## [2026-10-11] approval | nine pages re-approved after the P1 claim closures
+
+- session: s02
+- time: 14:25
+- pages: [adr-0002, adr-0006, adr-0007, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
+- sources: [raw/owner/2026-10-11-s02-p1-reapproval.md]
+- result: Owner: "Re-approve all 9 (Recommended)". Recorded with tools/approvals_record.py (previous decisions kept in history). approvals_check: 34 entries, all APPROVED or APPROVED_VOLATILE_DRIFT; approvals_check --gate phase-p1-foundation: ENTRY GATE PASS. STATUS blocked_on cleared. Not the P1 sign-off.
+- next: pwsh -NoProfile -File scripts/gates/p1-gate.ps1 -SaveEvidence

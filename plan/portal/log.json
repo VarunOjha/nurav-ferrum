@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:62488ded3f02cd8fe1efc853cbd46de179567df6f435449e5ff2f876c7f65a3e"
+    "content_hash": "sha256:2eb93e18e7602b98616abeb5d8a7d48cf8907e37ebc12cefc2f88a6b9669b731"
   },
   "entries": [
     {
@@ -2098,6 +2098,36 @@
       "tags": [
         "web views",
         "Tauri"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-reapproval",
+      "date": "2026-10-11",
+      "time": "14:25",
+      "title": "You re-approved the 9 cleaned-up pages",
+      "done": "You re-approved the six decisions, the phase 1 plan and the rulebook that changed during the cleanup. All approvals are current again and phase 1's entry check passes.",
+      "next": "Claude runs the end-of-phase check and shows you the results for sign-off.",
+      "decisions": [
+        {
+          "what": "Re-approve the 9 pages changed by the cleanup",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Decisions 2, 6, 7, 10, 11, 18, 21, the phase 1 plan and the rulebook",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] approval | nine pages re-approved after the P1 claim closures"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]

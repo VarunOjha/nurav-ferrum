@@ -19,9 +19,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: null
-next_action: "Owner: re-approve adr-0002, adr-0006, adr-0007, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema (changed only by the P1 claim closures). Then Claude records it and runs pwsh -NoProfile -File scripts/gates/p1-gate.ps1 -SaveEvidence, then asks for the phase-p1-foundation#exit sign-off."
-blocked_on: [adr-0002, adr-0006, adr-0007, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
+current_task: p1.16
+next_action: "Task p1.16: run pwsh -NoProfile -File scripts/gates/p1-gate.ps1 -SaveEvidence; commit the evidence; set phase-p1-foundation to gate-review; ask the owner for phase-p1-foundation#exit."
+blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
 
@@ -63,6 +63,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - P1 exit preparation: every P1-targeted claim closed on 25 pages except four that wait for the S1 hand check; 8 approvals stale by design (re-approval with the sign-off).
 - p1.15 done (`b570056`): hook check PASS 2 of 2 after the SCHEMA §9.8 update.
 - p1.5 done (`af70134`): S1 report with hand checks; Alt+Tab focus is a known issue (fix in P2); last P1 claims closed.
+- Owner re-approved the 9 pages changed by the claim closures ([raw/owner/2026-10-11-s02-p1-reapproval.md](wiki/raw/owner/2026-10-11-s02-p1-reapproval.md)); entry gate PASS.
 
 ## Done this session (s01)
 
@@ -274,8 +275,10 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.16 exit gate: waits for the owner to re-approve 9 pages changed by the claim closures
-- rollback: nothing uncommitted
+- task: p1.16 exit gate
+- intent: run pwsh -NoProfile -File scripts/gates/p1-gate.ps1 -SaveEvidence (saves p1-gate.txt and cargo-fmt/clippy/test/deny, wiki-lint, ci-local evidence); add MANIFEST lines; set phase status gate-review; ask the owner for phase-p1-foundation#exit
+- paths: wiki/raw/evidence/phase-p1-foundation/*.txt (gate outputs), wiki/raw/MANIFEST.sha256, wiki/phases/phase-p1-foundation.md (status only)
+- rollback: evidence files new and Claude-created
 
 ## Blockers
 
