@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8af3ff813fc73ff55b3caa09e691724a83f614ff6b436e72d7db2fe3ccb0e516"
+    "content_hash": "sha256:af0e1781307953071dfbb067f01865ecc44ba5813a1c3802ac906b97eeff237d"
   },
   "entries": [
     {
@@ -1909,7 +1909,8 @@
       "approvals": [],
       "commit": "898fd14",
       "covers": [
-        "## [2026-10-11] code | p1.15 pre-commit hook written and tested in a temporary clone; SCHEMA tag closed at the exit gate"
+        "## [2026-10-11] code | p1.15 pre-commit hook written and tested in a temporary clone; SCHEMA tag closed at the exit gate",
+        "## [2026-10-11] correct | p1.15 code entry: tag keyword put in backticks (lint UNV-NOPHASE)"
       ],
       "phase": "phase-p1-foundation",
       "category": "Built",
