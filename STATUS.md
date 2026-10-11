@@ -17,7 +17,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes, and the browser design you chose, first under Architecture). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes, and the browser design you chose, first under Architecture, with its review fixes: a readable close-up of the Ferrum panel on phones and the sample note right under the picture). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,11 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 (step "browser-design-fixes": review fixes for the browser design in the Architecture view)
-- intent: fix the 10 review findings: title-bar clash (new open question + ADR/app-shell lines), plain wording and full related list in the adr-0028 portal record, owner-feeling wording, move Claude's proposals into the elaboration block, readable panel on phones, sample note next to the picture, no wrong-scale flash, 1280 px screenshots, evidence note on the frozen design copy
-- planned paths: wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md, wiki/architecture/components/comp-app-shell.md, wiki/overview/ov-open-questions.md, plan/portal/decisions.json, plan/portal/architecture.json, plan/portal/questions.json, plan/portal/overview.json, plan/portal/refs.json, interactive_plan/components/portal/BrowserMockup.tsx, interactive_plan/app/architecture/page.tsx, interactive_plan/app/globals.css, interactive_plan tests, wiki/raw/evidence/phase-p0-planning/portal-v2/browser-design-fixes-checks.txt (new), wiki/index.md, wiki/raw/MANIFEST.sha256
-- rollback: git checkout -- <planned paths>; delete the new evidence file
-- state: started 2026-10-10
+(empty: p0.17 step "browser-design-fixes" (10 review fixes to the browser design in the Architecture view; new open question Q-125 on the title bar) verified and committed 2026-10-10 (`2666df3`); next the owner restarts the portal and continues the walkthrough)
 
 ## Blockers
 

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:72b51299f30eed87bd2cb87c39beffa8d0276d31759b7ac36ad8446381b0563e"
+    "content_hash": "sha256:e5a09c6b8351fcb301c3b18c1aeb9de5d29fd162faa3a1587249658aaee94f9a"
   },
   "entries": [
     {
@@ -1095,10 +1095,11 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "2666df3",
       "covers": [
         "## [2026-10-10] code | p0.17 browser design review fixes: title-bar question Q-125, plain decision text, readable panel on phones, sample note under the picture",
-        "## [2026-10-10] lint | p0.17 browser design review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read"
+        "## [2026-10-10] lint | p0.17 browser design review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read",
+        "## [2026-10-10] plan | p0.17 step \"browser-design-fixes\" committed: browser picture fixed after a review, question Q-125 added"
       ],
       "phase": "phase-p0-planning"
     }

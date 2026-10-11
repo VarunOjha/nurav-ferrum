@@ -1014,3 +1014,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-testing, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/browser-design-fixes-checks.txt]
 - result: `npm run verify` exit 0 on the final files (typecheck, eslint, 786 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 35 warnings, 2 info, build, 107 browser tests passed, E2E guard: real files unchanged) in a scratch git worktree of HEAD 038cb03 with this step's files copied in (byte-identical), E2E on 3418 and screenshots on 3423; the worktree was deleted, its servers stopped, the owner's portal on 3417 kept running and `.git/config` is unchanged. A first run failed only on RAW-IMMUTABLE for the sanctioned masking commit because its git calls lacked core.longpaths; with it set through the environment the wiki check gave 0 errors. Screenshots read: at 390 px the panel close-up is at scale 0.892 and readable in both palettes, the note is 12 px under the picture; at 1280 and 1440 px the picture is at 0.803 and the close-up is hidden; before scripts run the drawing is hidden; no sideways scrolling. Quick lint 0 errors, portal check clean, portal-sync self-tests 29 passed, mask scan 0 unmasked.
+
+## [2026-10-10] plan | p0.17 step "browser-design-fixes" committed: browser picture fixed after a review, question Q-125 added
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/browser-design-fixes-checks.txt]
+- result: What was done → a review of the browser picture found 10 problems (a title-bar clash, jargon and an invented owner feeling in the decision text, a picture too small on phones, the sample note far from it, a wrong-size flash) → all fixed, with a new open question Q-125 on keeping the normal Windows title bar above the tabs at first → the owner sees a readable, clearly-sample picture and decides the title bar before tabs are built. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause), now naming the close-up and the moved note. A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear; Q-125 can be answered any time before P3; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: 2666df3

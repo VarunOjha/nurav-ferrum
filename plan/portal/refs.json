@@ -4286,6 +4286,18 @@
         "comp-app-shell",
         "phase-p3-tabs-sessions"
       ]
+    },
+    {
+      "id": "2666df3",
+      "kind": "commit",
+      "title": "Commit: browser picture fixed after a review",
+      "summary": "On phones a close-up of the Ferrum panel follows the small picture; the sample note sits right under it with a \"Sample values\" tag; the decision text is in plain words, and a new question asks about the window's top bar.",
+      "status": null,
+      "related": [
+        "adr-0028",
+        "Q-125",
+        "phase-p0-planning"
+      ]
     }
   ]
 }
