@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:c5dfe15261c4800efd01f9957b5cbc86385dda7dfb8e45e730aa8fd2e5c7051e"
+    "content_hash": "sha256:4b79253853e7d21ad491b1714c18eb78f28dd9628f3fac6a0576595c1b8471ad"
   },
   "entries": [
     {
@@ -2058,6 +2058,26 @@
       "tags": [
         "wiki",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-15",
+      "date": "2026-10-11",
+      "time": "13:57",
+      "title": "Pre-commit warning finished",
+      "done": "The before-commit warning now passes its full check: it warns when code changes without its design page, and the rulebook says so.",
+      "next": "Your hand check of experiment 1, then the phase 1 review.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "b570056",
+      "covers": [
+        "## [2026-10-11] code | p1.15 hook check passes after the SCHEMA §9.8 update"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "check scripts",
+        "git"
       ]
     }
   ]

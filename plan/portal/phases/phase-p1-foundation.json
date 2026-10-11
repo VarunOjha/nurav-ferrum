@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 14,
+    "done": 15,
     "total": 17
   },
   "step_order": [
@@ -191,7 +191,7 @@
       "what": "A check before each commit that warns when code changes without its wiki page.",
       "why": "If code changes but its page does not, the plan you read slowly stops describing the real app, and later sessions trust wrong pages.",
       "how": "A git hook runs the quick wiki check before each commit. Whether a hook can do this is not checked yet; it is tried in a temporary copy first.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "Code and its wiki page must change together → a check that runs before each commit warns when they don't → the plan never drifts from the code.",
       "check": "In a test copy, a code-only commit warns and a code-plus-page commit passes.",
       "script": "scripts/verify/p1.15-code-page-warning.ps1"

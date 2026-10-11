@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 1 is nearly done: 14 of 17 tasks finished. You approved the design and answered four questions. One hand check of experiment 1 is left for you; Claude is doing the end-of-phase cleanup.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 15 of 17 tasks done. Next: your hand check of experiment 1.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:6f7563271b6ab95a931d5d8300bd71b0e18888084826d596339d9b838c6c446f"
+    "content_hash": "sha256:b40698afb585bfec3712d3a16e9f8174d6b491306a59c41a50c5cc63b8733af0"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: 14 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 15 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -34,28 +34,20 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
-        "item": "Your decisions",
-        "state": "Recorded"
+        "item": "Phase 1",
+        "state": "15 of 17 tasks done"
       },
       {
-        "item": "Experiment 1",
-        "state": "Needs your hand check"
+        "item": "Next task",
+        "state": "your hand check of experiment 1"
       }
     ],
-    "why": "Experiment 1 passed its automatic checks. Only a person can judge keyboard focus after Alt+Tab and copy/paste in a tab → the script opens the test app → you try it and close it with its X button. Nothing is installed or changed.",
-    "script": {
-      "path": "spikes/s1-multiwebview/run-manual.ps1",
-      "parts": [
-        {
-          "code": "pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1",
-          "explains": "Opens experiment 1 (a dark tab bar and three coloured tabs); the script ends when you close the window."
-        }
-      ]
-    },
-    "tell_claude": "What you saw, e.g. \"Alt+Tab OK, resize OK, shortcuts OK\", or what failed."
+    "why": "Nothing to run. Experiment 1 needs a person for two checks; then Claude writes its report, runs the end-of-phase check and asks for your sign-off.",
+    "script": null,
+    "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
   "questions_for_you": {
     "open": 29,

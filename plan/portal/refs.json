@@ -360,7 +360,7 @@
       "kind": "task",
       "title": "P1 task: Warn when code changes without its page",
       "summary": "Code and its wiki page must change together → a check that runs before each commit warns when they don't → the plan never drifts from the code.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4571,6 +4571,14 @@
       "kind": "commit",
       "title": "Commit: Design proposals from the four experiments",
       "summary": "Three proposed decisions, updated risk pages, and the revised phase 2 plan.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "b570056",
+      "kind": "commit",
+      "title": "Commit: Pre-commit warning finished",
+      "summary": "The before-commit warning now passes its full check: it warns when code changes without its design page, and the rulebook says so.",
       "status": null,
       "related": []
     }

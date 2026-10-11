@@ -1503,3 +1503,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [adr-0002, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
 - result: The exit-preparation edits above change these approved pages (claim closures only; no decision text changed), so their approvals are STALE (approvals_check). No implementation depends on them before the owner's review: only the S1 report and the exit gate remain, and the gate's entry check will wait for the re-approval. The owner is asked to re-approve them together with the P1 sign-off.
 - next: owner's S1 hand check, then the re-approval round
+
+## [2026-10-11] code | p1.15 hook check passes after the SCHEMA §9.8 update
+
+- session: s02
+- time: 13:57
+- pages: [phase-p1-foundation]
+- sources: [raw/evidence/phase-p1-foundation/check-p1.15.txt]
+- result: scripts/verify/p1.15-code-page-warning.ps1 -SaveEvidence PASS (2 of 2): the clone test (code-only commit warns, code-plus-page commit does not) and the rulebook step (SCHEMA §9.8 now names the hook). Hook committed in 898fd14; not installed in this repo unless the owner asks.
+- commit: b570056
