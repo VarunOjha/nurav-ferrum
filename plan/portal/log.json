@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:3d9cc1e37ef530feaf08f761982c45d395b499128953cda27dc0f46400bfddaf"
+    "content_hash": "sha256:4607f4ea4804b2c3371fad17f61baef26c0dfb57ba6a20d81acd9bef0e1fb3eb"
   },
   "entries": [
     {
@@ -2176,6 +2176,32 @@
         "## [2026-10-11] handoff | s02 closed: P1 done and signed off; paused before P2"
       ],
       "phase": "phase-p1-foundation",
+      "category": "Decided",
+      "tags": [
+        "phases",
+        "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-go",
+      "date": "2026-10-11",
+      "time": "15:49",
+      "title": "You said go for phase 2; Claude updated its pages first",
+      "done": "Your go-ahead is recorded. Before phase 2 can start, 6 pages need your approval and 3 questions your answer. Claude first brought four of those pages in line with your decision that Ferrum creates the tab views itself (engine events instead of Tauri hooks), so you approve the current design.",
+      "next": "You approve the phase 2 pages and answer three questions; then the entry check runs.",
+      "decisions": [
+        {
+          "what": "Start phase 2",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] gate | phase-p2-minimal-container go-ahead given",
+        "## [2026-10-11] plan | P2 dependency pages aligned with adr-0029 before Approval Wave 3"
+      ],
+      "phase": "phase-p2-minimal-container",
       "category": "Decided",
       "tags": [
         "phases",

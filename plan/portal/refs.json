@@ -3252,7 +3252,7 @@
       "id": "comp-tab-content",
       "kind": "component",
       "title": "Websites in tabs",
-      "summary": "Any website you open, each in its own view. Untrusted: treated as the attacker and sandboxed. It can send messages to the app, but every command is refused, so it cannot reach Ferrum's own functions.",
+      "summary": "Any website you open, each in its own view. Untrusted: treated as the attacker and sandboxed. Its view is created by Ferrum, so it should have no bridge to the app at all (checked in P2); if one appeared, every command would be refused.",
       "status": "Planned",
       "related": [
         "layer-websites"

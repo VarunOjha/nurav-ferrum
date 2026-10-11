@@ -16,13 +16,14 @@ sources:
   - raw/owner/2026-10-11-s01-wave2-pages-approval.md
   - raw/owner/2026-10-11-s02-p1-go-ahead.md
   - raw/owner/2026-10-11-s02-p1-signoff.md
+  - raw/owner/2026-10-11-s02-p2-go-ahead.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s02
-current_phase: phase-p1-foundation
+current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "PAUSED after P1 (done and signed off 2026-10-11). Claude starts no P2 work. Next session: RESUME per CLAUDE.md section 1; only on the owner's explicit go for P2: transcribe it, log gate | phase-p2-minimal-container go-ahead given, ask Approval Wave 3 and Q-109, Q-202, Q-214, then run python tools/approvals_check.py --gate phase-p2-minimal-container."
-blocked_on: []
+next_action: "Owner: approve Wave 3 (adr-0015, comp-app-shell, comp-security-engine, comp-tab-content, comp-webview-manager, phase-p2-minimal-container) and answer Q-109, Q-202, Q-214. Claude then records them and runs python tools/approvals_check.py --gate phase-p2-minimal-container; if PASS, sets phase-p2-minimal-container in-progress and starts p2.1."
+blocked_on: [adr-0015, comp-app-shell, comp-security-engine, comp-tab-content, comp-webview-manager, phase-p2-minimal-container, Q-109, Q-202, Q-214]
 last_handoff: handoff-2026-10-11-s02
 ---
 
@@ -34,13 +35,13 @@ last_handoff: handoff-2026-10-11-s02
 
 ## Current phase
 
-**phase-p1-foundation — DONE (session s02, 2026-10-11).** The owner signed off P1 on 2026-10-11
-([raw/owner/2026-10-11-s02-p1-signoff.md](wiki/raw/owner/2026-10-11-s02-p1-signoff.md); `phase-p1-foundation#exit`
-APPROVED after the gate passed on `8cd0461`, evidence `314f849`). **Claude is PAUSED**: phase-p2-minimal-container does not
-start until the owner explicitly says go in chat (SCHEMA §9.7 step 7). Standing rule: no kill commands and no deleting of
-things Claude did not create without asking.
+**phase-p2-minimal-container — go-ahead given (2026-10-11, 15:47), entry gate BLOCKED.** The owner said "Go ahead with
+phase 2" ([raw/owner/2026-10-11-s02-p2-go-ahead.md](wiki/raw/owner/2026-10-11-s02-p2-go-ahead.md)). Entry still needs
+Approval Wave 3 (adr-0015, comp-app-shell, comp-security-engine, comp-tab-content, comp-webview-manager,
+phase-p2-minimal-container) and answers to Q-109, Q-202, Q-214. No P2 implementation before that. Standing rule: no kill
+commands and no deleting of things Claude did not create without asking.
 
-P0 (planning) is done and signed off (2026-10-11).
+P0 and P1 are done and signed off (2026-10-11).
 
 ## Done this session (s02)
 
@@ -68,6 +69,7 @@ P0 (planning) is done and signed off (2026-10-11).
 - Owner re-approved the 9 pages changed by the claim closures ([raw/owner/2026-10-11-s02-p1-reapproval.md](wiki/raw/owner/2026-10-11-s02-p1-reapproval.md)); entry gate PASS.
 - p1.16: P1 gate run (`314f849`): all automatic checks pass; phase-p1-foundation set to gate-review; waiting for the owner's sign-off.
 - P1 signed off by the owner; phase-p1-foundation done; handoff [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md) written.
+- P2 go-ahead recorded; four P2 dependency pages aligned with adr-0029 before Approval Wave 3.
 
 ## Done this session (s01)
 
@@ -315,17 +317,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| P1 Foundation | Done: 17 of 17 tasks; end-of-phase check passed; signed off by you on 11 Oct |
-| Approvals | All current |
-| Phase 2 | Not started. Claude is paused until you say go |
-| Before phase 2 | Approval Wave 3 (the phase 2 pages) and questions Q-109, Q-202, Q-214 |
+| Phase 1 | Done and signed off |
+| Phase 2 | Your go recorded; entry check blocked |
+| Waiting on you | Approve 6 phase 2 pages (Wave 3); answer Q-109 (Google sign-in), Q-202 (test pages), Q-214 (settings format) |
 
-**2. Why, and what it does.** Nothing to run. Your rule: after a phase ends, Claude stops until you explicitly say go.
+**2. Why, and what it does.** Nothing to run. Phase 2 may start only when its pages are approved and its questions answered.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** "Go ahead with phase 2" when you want it to start (Claude then asks the phase 2 approvals and
-questions first). Optional any time: the history-rewrite question (Q-221) before the first GitHub upload.
+**4. What to tell Claude:** your answers to the questions Claude asks in chat.
 
 ## Pending owner approvals
 
@@ -336,4 +336,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 done and signed off; PAUSED before P2). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 go-ahead given; waiting for Wave 3 and three answers). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

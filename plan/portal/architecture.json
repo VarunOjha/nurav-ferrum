@@ -227,13 +227,13 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:7ed160a8c5e41f621e3396abd332ea5eb3ef38a58630c43d8255810c3842327b"
+        "content_hash": "sha256:2e38ee9a432e19641699f903edc18f52bc1f76488377e59cb9c120fb99949c90"
       }
     },
     {
       "id": "comp-tab-content",
       "title": "Websites in tabs",
-      "summary": "Any website you open, each in its own view. Untrusted: treated as the attacker and sandboxed. It can send messages to the app, but every command is refused, so it cannot reach Ferrum's own functions.",
+      "summary": "Any website you open, each in its own view. Untrusted: treated as the attacker and sandboxed. Its view is created by Ferrum, so it should have no bridge to the app at all (checked in P2); if one appeared, every command would be refused.",
       "group": "application",
       "layer": "layer-websites",
       "status": "Planned",
@@ -242,7 +242,7 @@
       "connects": [
         {
           "to": "comp-app-shell",
-          "what": "can send messages; every command is refused"
+          "what": "should have no bridge to the app (checked in P2); any command would be refused"
         },
         {
           "to": "comp-webview2-runtime",
@@ -254,7 +254,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-tab-content.md",
-        "content_hash": "sha256:2d655aa3d1948ab440f6dad642889524e102970c51878faab392b99216c2f791"
+        "content_hash": "sha256:f2beede071cfd51f436a92d751ad3c819f673d331ef788e33c50b9d7aa448005"
       }
     },
     {
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:7250be53ee28df80d536fc035d5ca4662e5f2be9e92b8ba15f5531cfd047c96c"
+        "content_hash": "sha256:dfb32b69a6fd3a05c7adf181604a59d45d6e1d63b246fbd9f2125ad7eea7d49c"
       }
     },
     {

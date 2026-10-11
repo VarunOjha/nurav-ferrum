@@ -2,26 +2,26 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 1 is done and signed off by you on 11 Oct: tools, an empty Rust project with automatic checks, four experiments and three design decisions. Claude is paused; phase 2 starts only when you say go.",
+  "summary": "Phase 1 is done. You said go for phase 2; before building starts, 6 phase 2 pages need your approval and 3 questions your answer.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:f4661ce16a2d8539e191934aee54241c370cead133128010a703d1f51e1ab15a"
+    "content_hash": "sha256:6eb59b47fb9040f3d9fe27e168c7a5d67d61ce43628596fdf564e84482994c21"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: done, signed off by you on 11 Oct (17 of 17 tasks)",
-      "ref": "phase-p1-foundation"
-    },
-    {
-      "item": "Phase 2",
-      "state": "Not started. It starts only when you explicitly say go",
+      "state": "P2 First working app: your go recorded, waiting for approvals",
       "ref": "phase-p2-minimal-container"
     },
     {
+      "item": "Phase 1",
+      "state": "Done, signed off by you on 11 Oct",
+      "ref": "phase-p1-foundation"
+    },
+    {
       "item": "Approvals",
-      "state": "All current"
+      "state": "6 phase 2 pages wait for you (Wave 3)"
     },
     {
       "item": "Your rule",
@@ -37,21 +37,40 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "Phase 1",
-        "state": "Done and signed off"
+        "item": "Phase 2",
+        "state": "Go recorded; entry blocked"
       },
       {
-        "item": "Phase 2",
-        "state": "Paused until you say go"
+        "item": "Approvals",
+        "state": "6 pages wait"
+      },
+      {
+        "item": "Questions",
+        "state": "Google sign-in, test pages, settings format"
       }
     ],
-    "why": "Nothing to run. Your rule: after a phase ends, Claude stops until you explicitly say go. Before phase 2 starts, Claude asks for the phase 2 approvals and three questions.",
+    "why": "Nothing to run. Phase 2 starts only when its pages are approved and its questions answered.",
     "script": null,
-    "tell_claude": "\"Go ahead with phase 2\" when you want building to start."
+    "tell_claude": "Your answers to the questions Claude asks in chat."
   },
   "questions_for_you": {
     "open": 29,
     "items": [
+      {
+        "id": "Q-109",
+        "question": "How should Ferrum hand Google sign-in over to your normal browser, since Google blocks sign-in inside embedded web views?",
+        "asked": "2026-10-08"
+      },
+      {
+        "id": "Q-202",
+        "question": "For local test pages: install a local development certificate (HTTPS), allow plain HTTP on this PC for tests only, or use public HTTPS sites?",
+        "asked": "2026-10-08"
+      },
+      {
+        "id": "Q-214",
+        "question": "Should Ferrum's settings file use the TOML or the JSON format (two common text formats for settings)?",
+        "asked": "2026-10-08"
+      },
       {
         "id": "Q-221",
         "question": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path?",

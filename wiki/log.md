@@ -1562,3 +1562,19 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [handoff-2026-10-11-s02, status-live]
 - result: Handoff written; STATUS points the next session at the owner's P2 go-ahead and Approval Wave 3. Tree clean after the closing commits.
 - next: owner's explicit go for P2
+
+## [2026-10-11] gate | phase-p2-minimal-container go-ahead given
+
+- session: s02
+- time: 15:49
+- pages: [phase-p2-minimal-container]
+- sources: [raw/owner/2026-10-11-s02-p2-go-ahead.md]
+- result: Owner: "Go ahead with phase 2". approvals_check --gate phase-p2-minimal-container: BLOCKED by adr-0015, comp-app-shell, comp-security-engine, comp-tab-content, comp-webview-manager, phase-p2-minimal-container (all PENDING: Approval Wave 3) and Q-109, Q-202, Q-214. No P2 implementation until these clear.
+
+## [2026-10-11] plan | P2 dependency pages aligned with adr-0029 before Approval Wave 3
+
+- session: s02
+- time: 15:49
+- pages: [comp-webview-manager, comp-tab-content, comp-app-shell, adr-0015]
+- result: So that the owner approves the current design: comp-webview-manager now names the RawComHost backend and WebView2 events instead of Tauri hooks (downloads via DownloadStarting; old P4 claim about coexistence with Tauri on_navigation replaced by a P2 claim that the COM events cover the hooks); comp-tab-content says Ferrum-created tab controllers should have no Tauri IPC bridge (P2 claim, p2.3 negative test); comp-app-shell's async-creation note follows S1 and adr-0029; adr-0015 got a dated Claude-elaboration note (the owner's choice unchanged) mapping its Tauri hooks to WebView2 events for tabs, and its P4 claim now refers to Ferrum-created controllers. None of these pages was approved yet.
+- next: ask Approval Wave 3 and Q-109, Q-202, Q-214

@@ -3,7 +3,7 @@ id: adr-0015
 type: decision
 title: "Default navigation posture is open browsing + blocklist"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -79,12 +79,14 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
      - *Override:* an allowlist entry that is more specific than a matching blocklist rule wins (for example, allow `docs.example.com` while `example.com` and its subdomains are blocked). At equal specificity, block wins.
      - *Allowlist-only mode:* an optional mode, set globally or per profile, in which only allowlisted hosts may be navigated to and everything else is denied (this is option B, kept available as a configuration).
    - Default: open mode with an empty allowlist, per Q12. Every rule is re-evaluated on each redirect hop and for frames.
-3. **Fail closed.** The security engine itself parses URLs. **Unparsable URLs are denied**, whatever Tauri's fail-open default does. Iframe navigations and external-scheme launches are intercepted through raw COM, `FrameNavigationStarting` and `LaunchingExternalUriScheme` ([ADR-0019](adr-0019-raw-webview2-com-boundary.md)). That this works on Tauri-created webviews is UNVERIFIED[phase-p4-security].
+3. **Fail closed.** The security engine itself parses URLs. **Unparsable URLs are denied**, whatever Tauri's fail-open default does. Iframe navigations and external-scheme launches are intercepted through raw COM, `FrameNavigationStarting` and `LaunchingExternalUriScheme` ([ADR-0019](adr-0019-raw-webview2-com-boundary.md)). That this works on the tab controllers Ferrum creates (adr-0029) is UNVERIFIED[phase-p4-security]; spike S3 showed raw COM events work on such views.
 4. **Certificate errors are never bypassed.** There is no "proceed anyway" for TLS errors.
 5. **Popups** (`on_new_window`) open as a new Ferrum tab under the same policy once tabs exist (P3). In P2, which has no tabs, they open in the same view or in the system browser, per configuration. They are never allowed as an uncontrolled native window.
 6. **Downloads** are always routed through Ferrum's handler. The default destination is the user's Downloads folder, and executable file types need a confirmation prompt. The final policy is set in P4.
 7. **Permissions** (camera, microphone, geolocation, notifications, clipboard read, …) are **denied by default, with per-site grants** stored in Ferrum settings, which are authoritative (`SavesInProfile(FALSE)` via raw COM). This matches `comp-security-engine` and `phase-p4-security` task p4.5. A grant is revocable.
 8. **Google OAuth.** Ferrum detects Google OAuth flows (`accounts.google.com` authorization endpoints) and offers "Open in system browser". No user-agent spoofing or other workaround, ever.
+**Note (2026-10-11, after P1; Claude elaboration, the owner's choice above is unchanged).** Under adr-0029 tab views are WebView2 controllers Ferrum creates itself, so for tabs the Tauri hooks named in this ADR (`on_navigation`, `on_new_window`, `on_download`, `on_permission_request`) are replaced by their WebView2 events (`NavigationStarting`, `NewWindowRequested`, `DownloadStarting`, `PermissionRequested`) in the raw-COM module (adr-0019). Tauri's fail-open URL-parse default therefore does not apply to tabs; the security engine still denies unparsable URLs.
+
 9. **Audit trail.** Every denial or confirmation is an audit event. These events feed the network log's `policy_decision` field ([ADR-0008](adr-0008-network-logging-metadata-jsonl.md)).
 
 ## Consequences
