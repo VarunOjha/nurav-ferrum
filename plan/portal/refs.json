@@ -360,7 +360,7 @@
       "kind": "task",
       "title": "P1 task: Warn when code changes without its page",
       "summary": "Code and its wiki page must change together → a check that runs before each commit warns when they don't → the plan never drifts from the code.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4500,6 +4500,14 @@
       "kind": "commit",
       "title": "Commit: Short public documents written",
       "summary": "The repository now has short entry documents for security (how to report problems, the trust zones, the debug-port warning), benchmarking (the fairness rules, no results yet) and reproducibility (reco",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "898fd14",
+      "kind": "commit",
+      "title": "Commit: Pre-commit warning written and tested",
+      "summary": "The before-commit check: wiki lint plus a warning when code changes without its design page.",
       "status": null,
       "related": []
     }

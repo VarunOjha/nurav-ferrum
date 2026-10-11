@@ -19,8 +19,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: null
-next_action: "Task p1.15 (CODE-rule enforcement): pre-commit hook that runs the quick lint subset and warns when crates/ or apps/ change without a component page change; test it in a temporary clone; resolve the SCHEMA section 9.8 UNVERIFIED tag at the exit gate."
+current_task: p1.11
+next_action: "Task p1.11 (CI): write .github/workflows/ci.yml (windows-latest: cargo fmt/clippy/test/deny, plan app lint/typecheck/unit/build, wiki lint) and scripts/ci-local.ps1 running the same steps; run ci-local.ps1 and save ci-local.txt; owner pushes or defers."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -55,6 +55,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.10 done (`60c7d03`): git-backed lint rules re-confirmed (13 tests, 0 wiki errors, 106 fingerprints match).
 - p1.12 done (`04d9f8c`): deny.toml, cargo deny ok; npm audit dispositioned; new question Q-222 (MPL-2.0 licence, blocks P2).
 - p1.13 done (`3b24c12`): SECURITY.md, BENCHMARKING.md, REPRODUCIBILITY.md, docs/README.md; AI_USAGE.md updated.
+- p1.15 hook committed (`898fd14`): warns on code without its page; clone test passes; SCHEMA §9.8 tag closed at the exit gate.
 
 ## Done this session (s01)
 
@@ -266,7 +267,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); p1.13 done; next p1.15 (not started)
+- task: p1.5 waits for the owner's hand checks; p1.15 waits for the SCHEMA §9.8 edit at the exit gate (hook committed `898fd14`); next p1.11 (not started)
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -304,10 +305,10 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 1 | In progress: 11 of 17 tasks done |
-| Next task | p1.15 code-page warning before each commit |
+| Next task | p1.11 automatic checks for GitHub, plus a local copy |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. The rule "code that changes behaviour updates its design page in the same commit" is easy to forget → Claude adds a pre-commit warning → design pages stay true.
+**2. Why, and what it does.** Nothing for you to run now. Claude writes the GitHub check workflow and one local script that runs exactly the same checks on this computer.
 
 **3. The script:** none for you.
 
@@ -322,4 +323,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 11 of 17 tasks done, last p1.13). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 11 of 17 tasks done; p1.5 and p1.15 wait for the end-of-phase batch). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

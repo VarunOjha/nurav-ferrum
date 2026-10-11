@@ -1430,3 +1430,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: SECURITY.md, BENCHMARKING.md, REPRODUCIBILITY.md and docs/README.md written as short entry points linking the canonical wiki pages and the P1 spike reports; AI_USAGE.md gained a use-by-phase section and a dated approval note. Check PASS (3 of 3): files exist, all relative links resolve, lint:wiki REF-DANGLING 0.
 - next: p1.15 pre-commit hook
 - commit: 3b24c12
+
+## [2026-10-11] code | p1.15 pre-commit hook written and tested in a temporary clone; SCHEMA tag closed at the exit gate
+
+- session: s02
+- time: 13:25
+- pages: [phase-p1-foundation, schema, qual-ci-plan]
+- result: scripts/hooks/pre-commit stops a commit on quick_lint errors and warns when code under a component path (crates/*, apps/*) is committed without its component page. scripts/verify/p1.15-code-page-warning.ps1: the clone test passes (code-only commit warns, code-plus-page commit does not); its second step fails until SCHEMA §9.8 drops its UNVERIFIED tag. That SCHEMA edit (and the matching qual-ci-plan tag) is deferred to the exit-gate batch, because editing SCHEMA stales the schema approval, which is in every phase's dependency set; the owner re-approves once there. The hook is not installed in this repo (one cp per clone); installing it is offered to the owner.
+- next: p1.11 CI workflow and local CI script
+- commit: 898fd14
