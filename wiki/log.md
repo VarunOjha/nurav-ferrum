@@ -1391,3 +1391,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: spikes/s4-playwright-cdp/run.ts (playwright 1.64.0, Node 24 type stripping) drove spike S1 (WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9222, non-elevated), Chrome for Testing 155.0.8059.39 and Edge 155.0.4283.45 (fresh profiles) through the same connectOverCDP path. S1 exposes the shell and each child web view as its own page target, identifiable by URL. Navigation to a loopback fixture, paint entries, evaluate, click, type, screenshot, response events, page.route, a raw CDP session, goBack, newPage and newContext worked on all three. Limitation: on a hidden S1 tab there are no paint entries and screenshots time out, while visibilityState reads visible; the harness must measure only shown tabs. S1 exits by its own timer; browsers closed with CDP Browser.close; nothing killed. Check PASS (2 of 2).
 - next: p1.6 spike S2 profiles
 - commit: c4dfd4d
+
+## [2026-10-11] code | p1.6 spike S2 profiles: route (c) gives per-site profiles in one browser process
+
+- session: s02
+- time: 13:17
+- pages: [phase-p1-foundation, risk-r01]
+- sources: [raw/evidence/phase-p1-foundation/spike-s2-profiles.md, raw/evidence/phase-p1-foundation/spike-s2/s2-1.json]
+- result: spikes/s2-profiles ran routes (c) and (d) with a loopback cookie fixture. Route (c), tab controllers created with raw COM from Tauri's own environment (CreateCoreWebView2ControllerWithOptions + SetProfileName): all calls S_OK, both sites and the shell report one BrowserProcessId, cookie who=A is sent by site A only. Route (d), Tauri child web views with a data_directory each: works and isolates cookies, but each site gets its own browser process (contradicts Q7). Route (a): Tauri PR 16054 still open and unmerged (GitHub API, 13:14); route (b), a fork patch, not run (supply-chain decision). Check PASS (2 of 2). Correction: the f7004a9 commit message said clippy was clean; it had 2 collapsible_if warnings, fixed in 809cd3c; all three Rust spikes now show 0 clippy warnings.
+- next: p1.9 spike synthesis and proposed ADRs
+- commit: f7004a9

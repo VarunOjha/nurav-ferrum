@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 7 of 17 tasks done. Next: p1.6 experiment 2: one private profile per site.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 8 of 17 tasks done. Next: p1.9 design proposals from the experiments.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:0b8c489bed01e40c11c78fe9078075b5bc0af8ea3ac12ce3d383d3d52d0a3da6"
+    "content_hash": "sha256:d7791530ac615467164fed5ad97515ec233b3e6eebf812449cdeee6060577e9f"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 7 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 8 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "7 of 17 tasks done"
+        "state": "8 of 17 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p1.6 experiment 2: one private profile per site"
+        "state": "p1.9 design proposals from the experiments"
       }
     ],
-    "why": "Nothing to run. Your design gives each site its own profile inside one shared browser → Tauri cannot set that directly → Claude tries the possible routes and compares them so you can choose.",
+    "why": "Nothing to run. The four experiments are done → Claude turns the results into proposed design decisions (profile route, back/forward, test-robot path) → you choose, and phase 2 is planned on facts.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

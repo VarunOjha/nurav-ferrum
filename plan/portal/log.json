@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:d86d625a055bdd0bb16951b3169fde547ab8a0cac4491d8e76826c1842bc8a74"
+    "content_hash": "sha256:1cac6bc558932702bd74c00a32de45ef8c798f98872ab0524dc43e0bbcb816a5"
   },
   "entries": [
     {
@@ -1816,6 +1816,26 @@
       "tags": [
         "benchmarks",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-6",
+      "date": "2026-10-11",
+      "time": "13:17",
+      "title": "Experiment 2: per-site profiles work (one route)",
+      "done": "Claude tried the ways to give each site its own private profile. Creating the tab views ourselves with a profile name each works: one shared browser process, and cookies stay separate. One data folder per site also keeps cookies apart but starts a browser per site. The Tauri update that would do this for us is not released. A small code-style slip in the commit was found and fixed.",
+      "next": "Claude writes up all four experiments as design proposals for you to decide.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "f7004a9",
+      "covers": [
+        "## [2026-10-11] code | p1.6 spike S2 profiles: route (c) gives per-site profiles in one browser process"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "isolation",
+        "WebView2"
       ]
     }
   ]

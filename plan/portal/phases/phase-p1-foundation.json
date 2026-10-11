@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 7,
+    "done": 8,
     "total": 17
   },
   "step_order": [
@@ -92,7 +92,7 @@
       "what": "A test of four ways to give each site its own browser profile.",
       "why": "Without a working route, logins from one site could leak into another. The choice also shapes how tabs are built, so it must be settled first.",
       "how": "Build a small test for each of the four routes, run at least two of them for real, and score every route on the same criteria, including the work of keeping it working.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Per-site isolation needs a profile chosen when a view is created, and Tauri does not offer that → try four routes → pick one that keeps cookies apart, before tabs are built.",
       "check": "A route-by-criterion table; site A's cookie is absent in site B; at least two routes actually run.",
       "script": "scripts/verify/p1.6-spike-profiles.ps1"

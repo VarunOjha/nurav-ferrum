@@ -430,7 +430,7 @@
       "kind": "task",
       "title": "P1 task: Experiment 2: a separate profile per site",
       "summary": "Per-site isolation needs a profile chosen when a view is created, and Tauri does not offer that → try four routes → pick one that keeps cookies apart, before tabs are built.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4450,6 +4450,22 @@
       "kind": "commit",
       "title": "Commit: Experiment 4: one test robot drives all three",
       "summary": "The same Playwright robot connected to experiment 1, Chrome and Edge and did the same ten things in each: open a local test page, read paint timing, click, type, take a screenshot, watch and rewrite n",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "f7004a9",
+      "kind": "commit",
+      "title": "Commit: Experiment 2: per-site profiles work (one route)",
+      "summary": "Claude tried the ways to give each site its own private profile. Creating the tab views ourselves with a profile name each works: one shared browser process, and cookies stay separate. One data folder",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "809cd3c",
+      "kind": "commit",
+      "title": "Commit: Experiment 2 code-style fix",
+      "summary": "Two small code-style warnings in experiment 2 fixed; the earlier commit message wrongly said there were none.",
       "status": null,
       "related": []
     }
