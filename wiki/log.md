@@ -1077,3 +1077,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/browse-fixes-checks.txt]
 - result: `npm run verify` exit 0 (typecheck, eslint, 833 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 35 warnings, 2 info, build, 141 browser tests passed, E2E guard: real files unchanged) in a scratch git worktree of HEAD 55ae9f2 outside the repo with this step's files copied in; after the new plain log entry (41 entries, 3 pages) the browse, log, decisions and ref-mode browser tests were re-run there: 67 passed. Screenshots on port 3423 (Decisions and Log at 1440 and 390 px in both themes, the open tag lists with 25 and 13 tags, the phone filters with "Search the log" and "Affects phase", the reversed-date message in both themes, Previous keeping focus after going to page 1, log page 2 on a phone) were read: no defects, no sideways scrolling. The worktree was removed, its server stopped, the owner's portal on 3417 kept running, `.git/config` unchanged. Repo: quick lint 0 errors, 0 warnings; portal-sync self-tests 39 passed; mask scan 0 unmasked; portal check clean after restamping.
+
+## [2026-10-10] plan | p0.17 step "browse-fixes" committed: search and filters fixed after a review
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/browse-fixes-checks.txt]
+- result: What was done → a review of the new search, filters and pages raised 11 points → 10 were fixed (focus kept on Previous and Next, only tags in use offered, a plain message for a reversed date range, "Affects phase" on Decisions, a one-choice filter hidden, the tag list closing when focus leaves, a too-high page number corrected, a shorter Log search hint, four decision labels and the browse log entry's wording) and the Ref name change of LO-2 is noted for the owner → the owner finds things without dead ends or confusing labels. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause), now naming the review fixes. A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: c14d4b6

@@ -4308,6 +4308,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "c14d4b6",
+      "kind": "commit",
+      "title": "Commit: search and filters fixed after a review",
+      "summary": "The Tags list offers only tags in use, a reversed date range says so, Previous and Next keep the keyboard focus, the Decisions phase filter is called \"Affects phase\", and four decisions got better labels.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

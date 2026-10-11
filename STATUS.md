@@ -17,7 +17,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes, the browser design you chose, first under Architecture, with its review fixes: a readable close-up of the Ferrum panel on phones and the sample note right under the picture, and the new search, filters, category and tag labels and page numbers on the Decisions and Log tabs). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes, the browser design you chose, first under Architecture, with its review fixes: a readable close-up of the Ferrum panel on phones and the sample note right under the picture, and the new search, filters, category and tag labels and page numbers on the Decisions and Log tabs, with their review fixes). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,10 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "browse-fixes" (review fixes for the Decisions and Log search, filters and pages)
-- intent: keep focus on Previous/Next, offer only tags in use, warn when "Date from" is after "Date to", call the Decisions phase filter "Affects phase", hide a filter with one choice, close the tag list when focus leaves it, tidy a too-high page number in the address, shorter Log search hint, fix four decision labels (adr-0012, adr-0013, adr-0019, adr-0020) and the browse log entry's wording; tests, wiki pages and portal JSON updated
-- planned paths: interactive_plan/components/portal/browse/Browse.tsx, interactive_plan/lib/portal/{browse,browseTabs,taxonomy}.ts, interactive_plan/app/{decisions,log}/page.tsx, interactive_plan/tests/{unit,e2e}/*browse*, plan/portal/{decisions,log,overview,refs}.json, wiki/interactive-plan/ip-routes-and-views.md, wiki/raw/evidence/phase-p0-planning/portal-v2/browse-fixes-checks.txt, wiki/raw/MANIFEST.sha256
-- rollback: git checkout -- <those paths> (new evidence file: owner consent needed to delete)
+(empty: p0.17 step "browse-fixes" (review fixes for the Decisions and Log search, filters and pages) verified and committed 2026-10-10 (`c14d4b6`); next the owner restarts the portal and continues the walkthrough)
 
 ## Blockers
 

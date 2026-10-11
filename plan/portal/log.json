@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f07476aade2cc7aee333b656a4cdc32e5728e01a153c1b0f19b63752172b5bac"
+    "content_hash": "sha256:e53a8c3c4a59d61def2832897ceba33361aeaca1eec8669359a9a14d4b45d3ac"
   },
   "entries": [
     {
@@ -1363,10 +1363,11 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "c14d4b6",
       "covers": [
         "## [2026-10-10] code | p0.17 browse review fixes: focus kept on Previous/Next, only tags in use, reversed-date hint, \"Affects phase\", four decision labels",
-        "## [2026-10-10] lint | p0.17 browse review fixes: npm run verify green, screenshots of Decisions and Log read at 1440 and 390 px"
+        "## [2026-10-10] lint | p0.17 browse review fixes: npm run verify green, screenshots of Decisions and Log read at 1440 and 390 px",
+        "## [2026-10-10] plan | p0.17 step \"browse-fixes\" committed: search and filters fixed after a review"
       ],
       "phase": "phase-p0-planning",
       "category": "Fixed",
