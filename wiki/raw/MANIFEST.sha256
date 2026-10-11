@@ -136,3 +136,5 @@ be8eb75dac0718da0037b19a5f52926be25e73eecf06c87ea2460dc34c4507c4  owner/2026-10-
 6765f572fb0fa4a0aa14a832eaa73aa52398ed959409009b4a52b50c78260afd  evidence/phase-p2-minimal-container/p2.2-tauri-build.txt
 371f3daed896e2806914e208ce0b051ea313273f052b343f660bf222e32728ed  evidence/phase-p2-minimal-container/p2.2-window.png
 6b728a98e8a6f89cd1a8218232b9389884dac8d6b5698f3f04bc2afcfa752592  evidence/phase-p2-minimal-container/p2.2-window-check.png
+3244b042c15932da190d4ad547837e95161b517d77a4282db698625bbed728c5  evidence/phase-p2-minimal-container/check-p2.3.txt
+68a7cc4125b60761adce371f94d581d4c35b6e70ee63b8fa831a6273004756a5  evidence/phase-p2-minimal-container/p2.3-ipc-selftest.json

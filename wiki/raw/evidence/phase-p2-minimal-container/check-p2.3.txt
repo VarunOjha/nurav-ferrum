@@ -1,0 +1,38 @@
+Ferrum check p2.3: Lock the bridge to the app
+Why: a website cannot control Ferrum.
+Run at 2026-10-11 18:31 on commit 81b38fb (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Only the shell has a capability, and none allows remote pages
+         shell.json: webviews ["shell"], no remote section
+  PASS   The app declares its commands at build time
+         build.rs: AppManifest commands declared
+{
+  "all_probe_calls_refused": true,
+  "pass": true,
+  "probe_report": {
+    "app_command": {
+      "error": "app_ping not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-app-ping",
+      "ok": false
+    },
+    "bridge": true,
+    "event_emit": {
+      "error": "event.emit not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-emit",
+      "ok": false
+    },
+    "event_listen": {
+      "error": "event.listen not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-listen",
+      "ok": false
+    },
+    "ipc": true
+  },
+  "probe_url": "https://localhost:8443/ipc-probe",
+  "probe_view_created": true,
+  "selftest": "ipc",
+  "shell_positive_control_pings": 1
+}
+  PASS   Self-test: every bridge call from a website is refused; the shell still works (54 s)
+         refused: app command, event listen, event emit; shell pings: 1
+------------------------------------------------------------------------
+RESULT: PASS - p2.3 (3 PASS; 55 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.3 check passed".

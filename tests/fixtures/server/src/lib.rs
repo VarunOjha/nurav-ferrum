@@ -104,6 +104,11 @@ pub const ROUTES: &[Route] = &[
         purpose: "not-found error page",
     },
     Route {
+        path: "/ipc-probe",
+        status: 200,
+        purpose: "tries Ferrum's app bridge (app command, event listen, event emit); reports in the title",
+    },
+    Route {
         path: "/status/500",
         status: 500,
         purpose: "server error page",
@@ -213,6 +218,29 @@ async fn slow(Query(q): Query<SlowQuery>) -> Html<String> {
     page("Slow page", &format!("<p>Answered after {ms} ms.</p>"))
 }
 
+/// Script for /ipc-probe: tries the Tauri bridge if present and reports in the title (it cannot use the bridge).
+const IPC_PROBE: &str = r#"<p id="r">probing</p><script>
+(async () => {
+  const t = window.__TAURI_INTERNALS__;
+  const r = { bridge: typeof t !== "undefined", ipc: typeof window.ipc !== "undefined" };
+  async function tryCall(cmd, args) {
+    try { const v = await t.invoke(cmd, args || {}); return { ok: true, value: String(v) }; }
+    catch (e) { return { ok: false, error: String(e) }; }
+  }
+  if (r.bridge) {
+    r.app_command = await tryCall("app_ping");
+    r.event_listen = await tryCall("plugin:event|listen", { event: "ferrum-probe", target: { kind: "Any" }, handler: 1 });
+    r.event_emit = await tryCall("plugin:event|emit", { event: "ferrum-probe", payload: "x" });
+  }
+  document.getElementById("r").textContent = JSON.stringify(r);
+  document.title = "IPC-PROBE:" + JSON.stringify(r);
+})();
+</script>"#;
+
+async fn ipc_probe() -> Html<String> {
+    page("IPC probe", IPC_PROBE)
+}
+
 async fn status(Path(code): Path<u16>) -> Response {
     match code {
         404 => (
@@ -244,6 +272,7 @@ pub fn router() -> Router {
         .route("/cookie/set", get(cookie_set))
         .route("/cookie/read", get(cookie_read))
         .route("/slow", get(slow))
+        .route("/ipc-probe", get(ipc_probe))
         .route("/status/{code}", get(status))
 }
 
