@@ -1,0 +1,28 @@
+[package]
+name = "ferrum-spike-s3"
+version = "0.0.0"
+description = "P1 spike S3 (throw-away): raw WebView2 COM through with_webview. Not shipped."
+edition = "2024"
+rust-version = "1.90"
+license = "MIT OR Apache-2.0"
+publish = false
+default-run = "ferrum-spike-s3"
+
+# Not a member of the Ferrum workspace (root Cargo.toml excludes spikes/*).
+[workspace]
+
+[build-dependencies]
+tauri-build = { version = "=2.7.2", features = [] }
+
+[dependencies]
+tauri = { version = "=2.12.3", features = ["unstable"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+webview2-com = "0.39"
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+] }
+windows-core = "0.62"
+
+[profile.dev]
+debug = 1

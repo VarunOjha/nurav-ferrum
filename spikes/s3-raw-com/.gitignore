@@ -1,0 +1,4 @@
+# Spike S3 build output (never committed)
+src-tauri/target/
+src-tauri/gen/
+out/

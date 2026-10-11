@@ -1,0 +1,71 @@
+# cargo tree checks for spike S3 (p1.7, session s02, 2026-10-11 12:59 -0500)
+$ cargo tree -i webview2-com --locked
+webview2-com v0.39.1
+├── ferrum-spike-s3 v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\spikes\s3-raw-com\src-tauri)
+├── tauri v2.12.3
+│   └── ferrum-spike-s3 v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\spikes\s3-raw-com\src-tauri)
+├── tauri-runtime v2.12.1
+│   ├── tauri v2.12.3 (*)
+│   └── tauri-runtime-wry v2.12.1
+│       └── tauri v2.12.3 (*)
+├── tauri-runtime-wry v2.12.1 (*)
+└── wry v0.57.0
+    └── tauri-runtime-wry v2.12.1 (*)
+
+$ cargo tree -i windows --locked
+windows v0.62.2
+├── ferrum-spike-s3 v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\spikes\s3-raw-com\src-tauri)
+├── tao v0.37.1
+│   └── tauri-runtime-wry v2.12.1
+│       └── tauri v2.12.3
+│           └── ferrum-spike-s3 v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\spikes\s3-raw-com\src-tauri)
+├── tauri v2.12.3 (*)
+├── tauri-runtime v2.12.1
+│   ├── tauri v2.12.3 (*)
+│   └── tauri-runtime-wry v2.12.1 (*)
+├── tauri-runtime-wry v2.12.1 (*)
+├── webview2-com v0.39.1
+│   ├── ferrum-spike-s3 v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\spikes\s3-raw-com\src-tauri)
+│   ├── tauri v2.12.3 (*)
+│   ├── tauri-runtime v2.12.1 (*)
+│   ├── tauri-runtime-wry v2.12.1 (*)
+│   └── wry v0.57.0
+│       └── tauri-runtime-wry v2.12.1 (*)
+├── webview2-com-sys v0.39.1
+│   └── webview2-com v0.39.1 (*)
+└── wry v0.57.0 (*)
+
+$ cargo tree --locked -d   (all crates present in more than one version)
+bitflags v1.3.2
+bitflags v2.13.2
+bitflags v2.13.2
+getrandom v0.3.4
+getrandom v0.4.3
+hashbrown v0.12.3
+hashbrown v0.17.1
+indexmap v1.9.3 (*)
+indexmap v2.14.2 (*)
+miniz_oxide v0.8.9
+miniz_oxide v0.9.1
+percent-encoding v2.3.2
+percent-encoding v2.3.2
+png v0.17.16 (*)
+png v0.18.1 (*)
+semver v1.0.28
+semver v1.0.28
+serde v1.0.229
+serde v1.0.229
+serde_core v1.0.229
+serde_core v1.0.229
+serde_json v1.0.154 (*)
+serde_json v1.0.154 (*)
+syn v2.0.119
+syn v3.0.8
+tauri-utils v2.10.1 (*)
+tauri-utils v2.10.1 (*)
+time v0.3.55
+time v0.3.55
+uuid v1.28.0 (*)
+uuid v1.28.0 (*)
+windows-sys v0.61.2
+windows-sys v0.61.2

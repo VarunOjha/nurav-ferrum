@@ -12,7 +12,7 @@
   What it changes: nothing. It only reads the experiment's list of libraries.
   How long       : about 5 seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p1.7-spike-raw-com.ps1
-                   (expects the experiment in spikes/s3-raw-com; Claude updates the path if it lives elsewhere)
+                   (the Rust project in spikes/s3-raw-com/src-tauri, or directly in spikes/s3-raw-com)
   Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
                    still waits).
   Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p1.7 check failed".
@@ -28,7 +28,8 @@ Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
 Start-Check -Id 'p1.7' -Title 'Experiment 3: low-level WebView2 calls' -Phase 'phase-p1-foundation' `
     -Why 'we must know which low-level features are possible, and how to call them safely.'
 
-$folder = 'spikes/s3-raw-com'
+# The Rust project sits in src-tauri/ (Tauri's layout) or directly in the spike folder.
+$folder = if (Test-Path -LiteralPath (Get-RepoPath 'spikes/s3-raw-com/src-tauri/Cargo.toml')) { 'spikes/s3-raw-com/src-tauri' } else { 'spikes/s3-raw-com' }
 $report = 'wiki/raw/evidence/phase-p1-foundation/spike-s3-raw-com.md'
 
 foreach ($lib in 'webview2-com', 'windows') {

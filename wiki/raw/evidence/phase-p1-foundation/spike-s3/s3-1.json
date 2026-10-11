@@ -1,0 +1,127 @@
+{
+  "first_load": true,
+  "memory_usage_target_level": {
+    "after_low": 1,
+    "after_normal": 0,
+    "cast_ICoreWebView2_19": "S_OK",
+    "get_after_low": "S_OK",
+    "get_after_normal": "S_OK",
+    "get_start": "S_OK",
+    "low_value": 1,
+    "normal_value": 0,
+    "set_low": "S_OK",
+    "set_normal": "S_OK",
+    "start": 0
+  },
+  "mode": "auto",
+  "own_pid": 15200,
+  "process_failed": {
+    "events": [
+      {
+        "exit_code": 1,
+        "exit_code_hr": "S_OK",
+        "kind": 1,
+        "kind_hr": "S_OK",
+        "reason": 2,
+        "reason_hr": "S_OK"
+      }
+    ],
+    "fired": true,
+    "recovered_by_navigate": true,
+    "trigger": "navigate tab to edge://kill"
+  },
+  "process_infos": {
+    "GetProcessInfos": "S_OK",
+    "cast_Environment8": "S_OK",
+    "count": 6,
+    "list": [
+      {
+        "kind": 2,
+        "pid": 9964
+      },
+      {
+        "kind": 4,
+        "pid": 15856
+      },
+      {
+        "kind": 1,
+        "pid": 52704
+      },
+      {
+        "kind": 1,
+        "pid": 57920
+      },
+      {
+        "kind": 2,
+        "pid": 60648
+      },
+      {
+        "kind": 0,
+        "pid": 69608
+      }
+    ]
+  },
+  "register_handlers": {
+    "add_ProcessFailed": "S_OK",
+    "add_WebResourceResponseReceived": "S_OK",
+    "cast_ICoreWebView2_2": "S_OK",
+    "token_failed": 20,
+    "token_resp": 20
+  },
+  "remove_handlers": {
+    "remove_ProcessFailed": "S_OK",
+    "remove_WebResourceResponseReceived": "S_OK"
+  },
+  "suspend": {
+    "explicit_resume": {
+      "is_suspended_after_resume": false,
+      "is_suspended_hr": "S_OK",
+      "resume": "S_OK"
+    },
+    "hidden_try_suspend": {
+      "is_suspended": true,
+      "is_suspended_hr": "S_OK",
+      "is_visible": false,
+      "is_visible_hr": "S_OK",
+      "try_suspend_completed_hr": "S_OK",
+      "try_suspend_result": true
+    },
+    "show_after_second_suspend": {
+      "is_suspended_after_show": false,
+      "is_suspended_hr": "S_OK",
+      "is_visible": true,
+      "is_visible_hr": "S_OK"
+    }
+  },
+  "web_resource_response": {
+    "https_events": [
+      {
+        "status": 200,
+        "uri": "https://example.com/"
+      },
+      {
+        "status": 200,
+        "uri": "https://example.com/s.js"
+      }
+    ],
+    "https_loaded": true,
+    "local_reload_events": [
+      {
+        "status": 200,
+        "uri": "http://tauri.localhost/tab.html"
+      },
+      {
+        "status": 200,
+        "uri": "http://tauri.localhost/tab.css"
+      },
+      {
+        "status": 200,
+        "uri": "http://tauri.localhost/dot.svg"
+      },
+      {
+        "status": 200,
+        "uri": "http://tauri.localhost/favicon.ico"
+      }
+    ]
+  }
+}
