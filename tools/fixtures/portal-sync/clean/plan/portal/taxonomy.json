@@ -1,0 +1,50 @@
+{
+  "$schema": "schema/taxonomy.schema.json",
+  "id": "taxonomy",
+  "title": "Labels",
+  "summary": "The fixed lists of categories and tags used to sort decisions and log entries. A new tag is added only on purpose, here, and noted in the log.",
+  "decision_categories": [
+    { "name": "Process & approvals", "explains": "How the work is run: phases, sign-offs, the wiki, sessions and handoffs." },
+    { "name": "The app", "explains": "What the Ferrum browser itself does and how it looks." },
+    { "name": "Security & privacy", "explains": "Keeping sites apart, blocking, what is recorded and what is kept private." },
+    { "name": "Research & benchmarks", "explains": "Measurements, fair comparisons with other browsers, statistics and the paper." },
+    { "name": "Tools & setup", "explains": "Developer tools, installs, the repository, licence and check scripts." },
+    { "name": "Plan portal", "explains": "This read-only portal: what it shows and how its text is kept up to date." }
+  ],
+  "log_categories": [
+    { "name": "Built", "explains": "Something new was made: a feature, a screen, a tool or a set of pages." },
+    { "name": "Checked", "explains": "Work was tested, reviewed or verified, and the result recorded." },
+    { "name": "Decided", "explains": "You or Claude made a choice, or your answers were saved." },
+    { "name": "Fixed", "explains": "Problems found earlier, often by a review, were put right." },
+    { "name": "Planned", "explains": "Research, rules or plan pages were written before building." },
+    { "name": "Set up", "explains": "Tools were installed or a project was created, ready for work." }
+  ],
+  "tags": [
+    { "name": "tabs", "explains": "Browser tabs: opening, closing and switching them." },
+    { "name": "web views", "explains": "The embedded browser areas that show each website." },
+    { "name": "address bar", "explains": "Typing addresses, the lock icon, back, forward and refresh." },
+    { "name": "look & feel", "explains": "Layout, design, wording and how screens look." },
+    { "name": "tab sleeping", "explains": "Putting unused tabs to sleep to save memory and CPU." },
+    { "name": "blocklist", "explains": "Sites and requests that are blocked on purpose." },
+    { "name": "isolation", "explains": "Keeping one site's data and cookies apart from another's." },
+    { "name": "privacy", "explains": "What is never recorded or shared, and masking personal details." },
+    { "name": "memory", "explains": "How much memory the browser and its tabs use." },
+    { "name": "CPU", "explains": "Processor use and energy." },
+    { "name": "network log", "explains": "The record of what each tab fetched from the internet." },
+    { "name": "benchmarks", "explains": "Fair, repeatable speed and resource tests against other browsers." },
+    { "name": "statistics", "explains": "How the measured numbers are analysed and compared." },
+    { "name": "paper", "explains": "The research paper." },
+    { "name": "approvals", "explains": "Your sign-offs and how Claude records them." },
+    { "name": "phases", "explains": "The project's stages, their tasks and their start and end checks." },
+    { "name": "wiki", "explains": "Claude's working memory: the plan pages, rules and log." },
+    { "name": "sessions", "explains": "Claude's work sessions, status notes and handoffs between them." },
+    { "name": "git", "explains": "Saving work in version history (commits) and what may be saved there." },
+    { "name": "licensing", "explains": "The open-source licence of the code." },
+    { "name": "toolchain", "explains": "Developer tools and their installs and versions." },
+    { "name": "testing", "explains": "Automated tests and checks of the work." },
+    { "name": "check scripts", "explains": "The PowerShell scripts that prove each task and phase is done." },
+    { "name": "portal", "explains": "This plan portal." },
+    { "name": "WebView2", "explains": "Microsoft's built-in browser engine that Ferrum uses to show websites." },
+    { "name": "Tauri", "explains": "The app framework Ferrum is built with." }
+  ]
+}

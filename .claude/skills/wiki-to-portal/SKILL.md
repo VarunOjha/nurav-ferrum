@@ -1,7 +1,7 @@
 ---
 name: wiki-to-portal
 description: Translate a changed wiki page (anything under wiki/, plus STATUS.md) into its plain-language JSON record in plan/portal/, the only thing the owner's read-only plan portal shows (adr-0024). Use it in the SAME edit as every wiki or STATUS.md change, before ending the turn, then run pwsh tools/portal-sync-check.ps1 until it is clean.
-when_to_use: After editing, creating or removing any wiki page, appending to wiki/log.md, editing wiki/overview/ov-open-questions.md or STATUS.md; when the Stop hook or tools/portal-sync-check.ps1 reports STALE, MISSING, UNCOVERED, ORPHAN, BAD-SHAPE, UNKNOWN-REF or MISSING-SCRIPT; when asked to "update the portal" or "write the portal JSON".
+when_to_use: After editing, creating or removing any wiki page, appending to wiki/log.md, editing wiki/overview/ov-open-questions.md or STATUS.md; when the Stop hook or tools/portal-sync-check.ps1 reports STALE, MISSING, UNCOVERED, ORPHAN, BAD-SHAPE, UNKNOWN-REF, MISSING-SCRIPT, MISMATCH or BAD-LABEL; when labelling a decision or log entry with its category and tags (plan/portal/taxonomy.json); when asked to "update the portal" or "write the portal JSON".
 allowed-tools: Bash(pwsh tools/portal-sync-check.ps1*)
 ---
 
@@ -121,6 +121,11 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   ("One window, many web views"); `summary` = what it means in practice; `why` = the main reason;
   `catch` = the main downside or open risk (or `null`); `status` "Proposed" | "Accepted" | "Replaced" |
   "Rejected"; `decided_by` "you" (`decided_by: owner`) or "claude" (`claude-proposed`); `replaced_by`.
+  Plus the labels (see "Labels" below): `category` (one of `decision_categories`), `tags` (2) and
+  `phase` = the phase the decision **mainly affects** (where its effect is built or used, e.g. the
+  network-log decision → `phase-p5-telemetry`). This is not the ADR's frontmatter `phase`, which is the
+  phase that produced the page (almost always P0); use that only when the decision is about how the
+  project is run.
 - **Risk**: `likelihood`/`impact` copied from the page (1-5); `mitigation` = what we do about it;
   `phase` = owner_phase; `status` open → "Open", mitigating → "Being reduced", resolved → "Resolved",
   realized → "Happened", tolerated → "Accepted".
@@ -139,7 +144,33 @@ Limits: `title` ≤ 80 characters, `summary` ≤ 360 (1-3 sentences), task `titl
   log entries (list each exact heading in `covers`). `title` = what happened ("You reviewed portal v1 —
   redesign started"); `done` = what was done; `next` = what happens next (or `null`);
   `decisions[]` = `{what, by: "you"|"claude"}`; `approvals[]` = `{what, status}`; `commit` = the short sha or
-  `null` (the sha needs a `refs.json` entry of kind `commit`).
+  `null` (the sha needs a `refs.json` entry of kind `commit`); `phase` = the phase the work belongs to;
+  `category` = the kind of work (one of `log_categories`) and `tags` (2), see "Labels" below.
+
+### Labels: category and tags (owner's plan of 2026-10-10)
+
+Decisions and log entries are sorted with labels so the owner can filter and search them. The lists
+live in **one** place, `plan/portal/taxonomy.json` (`decision_categories`, `log_categories`, `tags`,
+each `{name, explains}`); the schemas do not repeat them.
+
+- Every decision gets exactly one `category` from `decision_categories` (Process & approvals, The app,
+  Security & privacy, Research & benchmarks, Tools & setup, Plan portal), two different `tags` and a
+  `phase`. Every log entry gets one `category` from `log_categories` (Built, Checked, Decided, Fixed,
+  Planned, Set up) and two different `tags`. The two category lists are separate: "The app" is not a log
+  category.
+- Labels are the portal's classification, not facts of the wiki page: Claude assigns them when it
+  writes or re-translates the record, choosing from `taxonomy.json` only. They do not change the
+  record's `source.content_hash`, and the ADR frontmatter `tags` (free kebab-case words) are not copied.
+- Pick the two tags that best say what the record is about, most important first. Same kind of record →
+  same labels (for example every "review found problems, all fixed" log entry is `Fixed`; every entry
+  where the owner answered questions is `Decided`; a log entry that mainly records a check or handoff
+  is `Checked`).
+- No tag fits? Do not invent one in the record. Adding a tag (or category) is deliberate: edit
+  `taxonomy.json` (name plus a one-line plain explanation), and note it in the log with the owner's
+  reason. Never rename or remove a name still used by a record.
+- `pwsh tools/portal-sync-check.ps1` reports **BAD-LABEL** for a missing or unknown category, a number
+  of tags other than 2, an unknown tag, the same tag twice, a name listed twice in `taxonomy.json`, or a
+  `phase` with no `phases/<id>.json`.
 - **Overview** (`overview.json`, from STATUS.md): `where_we_are[]` = 3-6 rows `{item, state}`;
   `next_action` in the owner's four-part format (below); `questions_for_you` = `open` (the number of open
   items in `questions.json`) and `items`: the open questions asked **now** (the current approval wave),
@@ -183,7 +214,7 @@ shas). Write "metric based" instead of "metric-based" to avoid a false alarm.
 
 ## The safety net
 
-- `pwsh tools/portal-sync-check.ps1` — shape, freshness, coverage, refs, scripts. Exit 0 = clean.
+- `pwsh tools/portal-sync-check.ps1` — shape, freshness, coverage, refs, scripts, consistency, labels. Exit 0 = clean.
 - Stop hook (`.claude/settings.json`) runs the same check in hook mode at the end of every turn. It is
   **off** until the file `plan/portal/.hook-enabled` exists (switched on once all JSON is fresh). When on
   and something is wrong, the turn does not end: the hook's message lists the problems; fix them with

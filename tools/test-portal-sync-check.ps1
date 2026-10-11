@@ -268,6 +268,75 @@ try {
         Assert-Result (Invoke-Checker $d) 1 @('BAD-SHAPE', 'architecture.json', '"callouts"')
     }
 
+    # --- Labels (BAD-LABEL): one category and two tags from taxonomy.json -----------------------------
+    Test-Case 'BAD-LABEL: a decision with no category' {
+        $d = New-Fixture 'label no category'
+        Edit-Json (Join-Path $d 'plan/portal/decisions.json') { param($j) $j['items'][0].Remove('category') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', '/items/0/category', 'Decision adr-0007 has no category')
+    }
+
+    Test-Case 'BAD-LABEL: a log entry with a category that is not in the list' {
+        $d = New-Fixture 'label unknown category'
+        Edit-Json (Join-Path $d 'plan/portal/log.json') { param($j) $j['entries'][0]['category'] = 'Improved' }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', '/entries/0/category', "category 'Improved', which is not in 'log_categories'")
+    }
+
+    Test-Case 'BAD-LABEL: a decision category used on a log entry (the two lists are separate)' {
+        $d = New-Fixture 'label wrong list'
+        Edit-Json (Join-Path $d 'plan/portal/log.json') { param($j) $j['entries'][0]['category'] = 'The app' }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "category 'The app', which is not in 'log_categories'")
+    }
+
+    Test-Case 'BAD-LABEL: three tags, and one tag' {
+        $d = New-Fixture 'label tag count'
+        Edit-Json (Join-Path $d 'plan/portal/decisions.json') { param($j) $j['items'][0]['tags'] = @('web views', 'Tauri', 'tabs') }
+        Edit-Json (Join-Path $d 'plan/portal/log.json') { param($j) $j['entries'][0]['tags'] = @('wiki') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', 'Decision adr-0007 has 3 tags', 'Log entry log-2026-10-09-1 has 1 tags', 'exactly 2')
+    }
+
+    Test-Case 'BAD-LABEL: no tags at all' {
+        $d = New-Fixture 'label no tags'
+        Edit-Json (Join-Path $d 'plan/portal/log.json') { param($j) $j['entries'][0].Remove('tags') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', 'log-2026-10-09-1 has no tags')
+    }
+
+    Test-Case 'BAD-LABEL: a tag that is not in the list' {
+        $d = New-Fixture 'label unknown tag'
+        Edit-Json (Join-Path $d 'plan/portal/decisions.json') { param($j) $j['items'][0]['tags'] = @('web views', 'Web Views 2') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "the tag 'Web Views 2', which is not in 'tags'")
+    }
+
+    Test-Case 'BAD-LABEL: the same tag twice' {
+        $d = New-Fixture 'label duplicate tag'
+        Edit-Json (Join-Path $d 'plan/portal/log.json') { param($j) $j['entries'][0]['tags'] = @('wiki', 'wiki') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "the tag 'wiki' twice")
+    }
+
+    Test-Case 'BAD-LABEL: a decision naming a phase with no phase file, and one with no phase' {
+        $d = New-Fixture 'label phase'
+        Edit-Json (Join-Path $d 'plan/portal/decisions.json') {
+            param($j)
+            $copy = [ordered]@{}
+            foreach ($k in $j['items'][0].Keys) { $copy[$k] = $j['items'][0][$k] }
+            $copy.Remove('phase')
+            $j['items'][0]['phase'] = 'phase-p9-nope'
+            $j['items'] = @($j['items']) + $copy
+        }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "the phase 'phase-p9-nope'", '/items/1/phase', 'mainly affects')
+    }
+
+    Test-Case 'BAD-LABEL: a name listed twice in taxonomy.json' {
+        $d = New-Fixture 'label taxonomy dup'
+        Edit-Json (Join-Path $d 'plan/portal/taxonomy.json') { param($j) $j['tags'] = @($j['tags']) + @{ name = 'wiki'; explains = 'Again.' } }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-LABEL', "'wiki' is listed twice in tags")
+    }
+
+    Test-Case 'MISSING-FILE: taxonomy.json removed' {
+        $d = New-Fixture 'label taxonomy missing'
+        Remove-Item -LiteralPath (Join-Path $d 'plan/portal/taxonomy.json')
+        Assert-Result (Invoke-Checker $d) 1 @('MISSING-FILE', 'plan/portal/taxonomy.json')
+    }
+
     # --- Hook mode -----------------------------------------------------------------------------------
     Test-Case 'hook: switched off (no flag file) -> exit 0 even when stale' {
         $d = New-Fixture 'hook off'

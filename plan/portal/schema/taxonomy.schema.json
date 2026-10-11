@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "taxonomy.schema.json",
+  "title": "taxonomy.json - the fixed lists of categories and tags",
+  "description": "The single place where the decision categories, the log categories and the tags are listed (owner plan of 2026-10-10). decisions.json and log.json must use only these names; tools/portal-sync-check.ps1 reports BAD-LABEL otherwise. Adding a tag means editing this file and noting it in the log.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "decision_categories",
+    "log_categories",
+    "tags"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "decision_categories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/taxonomy_entry"
+      },
+      "minItems": 1
+    },
+    "log_categories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/taxonomy_entry"
+      },
+      "minItems": 1
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/taxonomy_entry"
+      },
+      "minItems": 2
+    }
+  },
+  "additionalProperties": false
+}

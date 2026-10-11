@@ -1,8 +1,9 @@
 {
-  "$comment": "Wiki -> portal JSON pipeline config (adr-0024; design note wiki/operations/ops-portal-pipeline.md). Read by tools/portal-sync-check.ps1. 'files': every portal file and the schema it must match (paths relative to plan/portal/). 'translate': every wiki page matched by 'pages' needs a record with source.wiki_path = that page inside 'into' ({stem} = file name without .md). 'sections': every heading matched in 'page' needs a record whose 'field' holds the captured text. 'id_patterns': text that looks like an id and must resolve in refs.json. 'skip_keys': JSON keys whose values are not portal text (paths, code, hashes, log headings).",
+  "$comment": "Wiki -> portal JSON pipeline config (adr-0024; design note wiki/operations/ops-portal-pipeline.md). Read by tools/portal-sync-check.ps1. 'files': every portal file and the schema it must match (paths relative to plan/portal/). 'translate': every wiki page matched by 'pages' needs a record with source.wiki_path = that page inside 'into' ({stem} = file name without .md). 'sections': every heading matched in 'page' needs a record whose 'field' holds the captured text. 'id_patterns': text that looks like an id and must resolve in refs.json. 'skip_keys': JSON keys whose values are not portal text (paths, code, hashes, log headings). 'taxonomy_file': the one list of decision categories, log categories and tags; every decision and log entry must use exactly one category and two different tags from it (BAD-LABEL).",
   "version": 1,
   "hook_flag": ".hook-enabled",
   "refs_file": "refs.json",
+  "taxonomy_file": "taxonomy.json",
   "files": [
     { "path": "overview.json", "schema": "overview.schema.json" },
     { "path": "roadmap.json", "schema": "roadmap.schema.json" },
@@ -13,7 +14,8 @@
     { "path": "architecture.json", "schema": "architecture.schema.json" },
     { "path": "questions.json", "schema": "questions.schema.json" },
     { "path": "log.json", "schema": "log.schema.json" },
-    { "path": "refs.json", "schema": "refs.schema.json" }
+    { "path": "refs.json", "schema": "refs.schema.json" },
+    { "path": "taxonomy.json", "schema": "taxonomy.schema.json" }
   ],
   "translate": [
     { "pages": "STATUS.md", "into": "overview.json" },

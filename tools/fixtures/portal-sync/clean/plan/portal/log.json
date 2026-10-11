@@ -25,6 +25,11 @@
       "covers": [
         "## [2026-10-08] plan | fixture first entry",
         "## [2026-10-09] code | fixture second entry"
+      ],
+      "category": "Built",
+      "tags": [
+        "wiki",
+        "testing"
       ]
     }
   ]

@@ -126,6 +126,10 @@ export const UI_REFS = {
   "DE-1": { name: "Page heading" },
   "DE-2": { name: "Decision list" },
   "DE-3": { name: "Risks table" },
+  "DE-4": { name: "Search and filters" },
+  "DE-5": { name: "Results count" },
+  "DE-6": { name: "Page numbers" },
+  "DE-7": { name: "Category and tag chips" },
 
   // Research
   "RE-1": { name: "Page heading" },
@@ -146,11 +150,17 @@ export const UI_REFS = {
 
   // Log
   "LO-1": { name: "Page heading" },
-  "LO-2": { name: "Filter and count" },
+  // Since 2026-10-10 the "has decisions / has approvals" choice inside the search and filters (LO-7);
+  // the count moved to LO-8.
+  "LO-2": { name: "Decisions or approvals filter" },
   "LO-3": { name: "Log entry (all look the same)" },
   "LO-4": { name: "What was done, what's next" },
   "LO-5": { name: "Decisions and approvals tables" },
   "LO-6": { name: "Entry footer with the commit" },
+  "LO-7": { name: "Search and filters" },
+  "LO-8": { name: "Results count" },
+  "LO-9": { name: "Page numbers" },
+  "LO-10": { name: "Category and tag chips" },
 
   // Phase popup (opens from a phase card, a phase name or a phase id)
   "PH-1": { name: "Popup header" },

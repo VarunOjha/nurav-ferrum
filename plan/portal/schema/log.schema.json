@@ -40,7 +40,9 @@
           "decisions",
           "approvals",
           "commit",
-          "covers"
+          "covers",
+          "category",
+          "tags"
         ],
         "properties": {
           "id": {
@@ -130,6 +132,13 @@
           },
           "phase": {
             "$ref": "#/$defs/phase_id"
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "One kind of work from 'log_categories' in taxonomy.json."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
           }
         },
         "additionalProperties": false

@@ -117,6 +117,39 @@
         "Blocked"
       ],
       "description": "Phase page status in plain words: planned, ready, in-progress, gate-review, done, blocked."
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "pattern": "^[^\n]+$",
+      "description": "A category or tag name. It must be one of the names in plan/portal/taxonomy.json (the single list); tools/portal-sync-check.ps1 reports BAD-LABEL otherwise. The list is not repeated here."
+    },
+    "tag_pair": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/label"
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "description": "Exactly two different tags from the 'tags' list in plan/portal/taxonomy.json (checked by tools/portal-sync-check.ps1, BAD-LABEL)."
+    },
+    "taxonomy_entry": {
+      "type": "object",
+      "required": [
+        "name",
+        "explains"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/label"
+        },
+        "explains": {
+          "$ref": "#/$defs/short_text"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

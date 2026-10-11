@@ -240,7 +240,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "browser-design-fixes" (10 review fixes to the browser design in the Architecture view; new open question Q-125 on the title bar) verified and committed 2026-10-10 (`2666df3`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 step "browse" (owner-approved plan, raw/owner/2026-10-10-s01-decisions-log-browse.md and -approval.md)
+- intent: decisions and log tabs get category + 2 tags (fixed lists), search, filters (category, tag, status/who, phase, date range), 20-per-page numbered pagination kept in the URL
+- planned paths: plan/portal/decisions.json, plan/portal/log.json, plan/portal/taxonomy.json (new), plan/portal/schema/**, plan/portal/pipeline.json, plan/portal/refs.json, tools/portal-sync-check.ps1, tools/test-portal-sync-check.ps1, tools/fixtures/portal-sync/**, .claude/skills/wiki-to-portal/SKILL.md, interactive_plan/**, wiki/interactive-plan/ip-*.md, wiki/operations/ops-portal-pipeline.md, wiki/raw/owner/2026-10-10-s01-decisions-log-browse*.md, wiki/raw/MANIFEST.sha256, wiki/raw/evidence/phase-p0-planning/portal-v2/
+- rollback: git restore the planned paths; new raw transcripts are kept
 
 ## Blockers
 

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e5a09c6b8351fcb301c3b18c1aeb9de5d29fd162faa3a1587249658aaee94f9a"
+    "content_hash": "sha256:35ad35ad968c6a0a53e28183d264417ef896b70cc697b68a4c06ae58436f0b44"
   },
   "entries": [
     {
@@ -25,7 +25,12 @@
       "covers": [
         "## [2026-10-08] ingest | Raw sources: master prompt and owner scoping decisions"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "phases",
+        "wiki"
+      ]
     },
     {
       "id": "log-2026-10-08-research",
@@ -43,7 +48,12 @@
         "## [2026-10-08] ingest | Research note research-nextjs-stack",
         "## [2026-10-08] ingest | Research note research-related-work-seed"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Planned",
+      "tags": [
+        "WebView2",
+        "benchmarks"
+      ]
     },
     {
       "id": "log-2026-10-08-rulebook",
@@ -57,7 +67,12 @@
       "covers": [
         "## [2026-10-08] schema | SCHEMA.md and CLAUDE.md drafted"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Planned",
+      "tags": [
+        "wiki",
+        "sessions"
+      ]
     },
     {
       "id": "log-2026-10-08-drafted",
@@ -91,7 +106,12 @@
         "## [2026-10-08] plan | Quality area drafted (multi-agent)",
         "## [2026-10-08] plan | Interactive-plan area drafted (multi-agent)"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Planned",
+      "tags": [
+        "phases",
+        "wiki"
+      ]
     },
     {
       "id": "log-2026-10-08-review",
@@ -120,7 +140,12 @@
         "## [2026-10-08] plan | Integration: index.md created",
         "## [2026-10-08] lint | Integration lint over the whole wiki"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Checked",
+      "tags": [
+        "wiki",
+        "approvals"
+      ]
     },
     {
       "id": "log-2026-10-08-wave0",
@@ -168,7 +193,12 @@
       "covers": [
         "## [2026-10-08] ingest | Owner answers, Approval Wave 0 (s01)"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "portal"
+      ]
     },
     {
       "id": "log-2026-10-08-manual-check",
@@ -187,7 +217,12 @@
       "covers": [
         "## [2026-10-08] lint | p0.8 manual lint over the whole wiki + raw manifest"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Checked",
+      "tags": [
+        "wiki",
+        "testing"
+      ]
     },
     {
       "id": "log-2026-10-08-toolchain",
@@ -201,7 +236,12 @@
       "covers": [
         "## [2026-10-08] code | p0.9 (IP-0 preconditions): toolchain recorded, Node gate passed"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Set up",
+      "tags": [
+        "toolchain",
+        "wiki"
+      ]
     },
     {
       "id": "log-2026-10-08-wave0b",
@@ -235,7 +275,12 @@
         "## [2026-10-08] schema | SCHEMA §11 raw evidence/bench folders (adr-0020), §8 registry, §9.3 tools/ fallback; CLAUDE.md",
         "## [2026-10-08] lint | tools/ committed (Q-216); quick lint over the whole wiki after the wave-0b ingest"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "toolchain",
+        "check scripts"
+      ]
     },
     {
       "id": "log-2026-10-08-scaffold",
@@ -255,7 +300,12 @@
         "## [2026-10-08] code | p0.10 (IP-1 scaffold + spikes): interactive_plan/ scaffolded, stack pinned, S1-S3 pass",
         "## [2026-10-08] correct | p0.10 code entry: tag keyword put in backticks (lint UNV-NOPHASE)"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Set up",
+      "tags": [
+        "portal",
+        "toolchain"
+      ]
     },
     {
       "id": "log-2026-10-08-loader-stopped",
@@ -269,7 +319,12 @@
       "covers": [
         "## [2026-10-08] code | p0.11 (IP-2 wiki loader + zod schemas + fixtures): implemented, gate STOPPED on real-wiki `sources` errors"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "wiki"
+      ]
     },
     {
       "id": "log-2026-10-09-wave0c",
@@ -307,7 +362,12 @@
         "## [2026-10-09] schema | SCHEMA §5.1/§6.13/§9.3: `sources` format and existence (wave 0c items 1-2); delegated details decided",
         "## [2026-10-09] code | p0.11 (IP-2 wiki loader + zod schemas + fixtures): gate PASS after the wave 0c answers"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "wiki",
+        "testing"
+      ]
     },
     {
       "id": "log-2026-10-09-hashes",
@@ -331,7 +391,12 @@
         "## [2026-10-09] decide | IP-3 delegated details: bootstrap_hash fail-closed, entry-gate step 4, model/diff placement, new hash vectors",
         "## [2026-10-09] code | p0.12 (IP-3 hashes + effective state + entry gates): gate PASS incl. the Python cross-check"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "approvals",
+        "portal"
+      ]
     },
     {
       "id": "log-2026-10-09-store",
@@ -355,7 +420,12 @@
         "## [2026-10-09] decide | IP-4 delegated details: seen_bootstrap_hash, lock scope, rename retry budget, GET details, fake clock",
         "## [2026-10-09] code | p0.14 (IP-4 approvals store + API route): gate PASS, cross-process test green 3 more times in a row"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "approvals",
+        "testing"
+      ]
     },
     {
       "id": "log-2026-10-09-lint",
@@ -380,7 +450,12 @@
         "## [2026-10-09] lint | first run of npm run lint:wiki (IP-5) on the real wiki: 0 errors, 34 warnings, dispositions",
         "## [2026-10-09] code | p0.13 (IP-5 wiki lint + gate report): gate PASS, real wiki 0 errors"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "wiki",
+        "testing"
+      ]
     },
     {
       "id": "log-2026-10-09-shell",
@@ -400,7 +475,12 @@
         "## [2026-10-09] decide | IP-6 delegated details: raw HTML as text, heading shift, /go targets, disabled nav, E2E overlay and setup, ApproveBar tests in IP-7",
         "## [2026-10-09] code | p0.13 (IP-6 app shell, markdown, wiki browser, search, log): gate PASS"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     },
     {
       "id": "log-2026-10-09-dashboard",
@@ -420,7 +500,12 @@
         "## [2026-10-09] decide | IP-7 delegated details: eligible exit keys, Stale tab, wave and grouping rules, evidence paths, ApproveBar placement, E2E isolation",
         "## [2026-10-09] code | p0.15 (IP-7 dashboard, approvals inbox, phase detail, ApproveBar, lint view): gate PASS"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "approvals"
+      ]
     },
     {
       "id": "log-2026-10-09-views",
@@ -440,7 +525,12 @@
         "## [2026-10-09] decide | IP-8 delegated details: graph layout and keyboard model, filters as URL parameters, roadmap/research/risk/decision rules, fixture scope, lock busy-retry",
         "## [2026-10-09] code | p0.13 (IP-8 architecture, roadmap, decisions, risks, research views): gate PASS"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     },
     {
       "id": "log-2026-10-09-verify",
@@ -464,7 +554,12 @@
         "## [2026-10-09] decide | IP-9 delegated details: coverage thresholds in vitest config, read-only E2E server, bind probe with control, perf method, no axe",
         "## [2026-10-09] code | p0.16 (IP-9 accessibility, performance, security, full verify): gate PASS"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Checked",
+      "tags": [
+        "portal",
+        "testing"
+      ]
     },
     {
       "id": "log-2026-10-09-review-fixes",
@@ -489,7 +584,12 @@
         "## [2026-10-09] schema | APPROVAL-INVALID added to the SCHEMA §9.3 table as an error (adr-0022, claude-proposed)",
         "## [2026-10-09] code | p0.16 (IP-9 review fixes: security, spec gaps, lint correctness, graph and layout UX, tests): gate PASS"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
+      "tags": [
+        "portal",
+        "approvals"
+      ]
     },
     {
       "id": "log-2026-10-09-v1-done",
@@ -515,7 +615,12 @@
         "## [2026-10-09] lint | p0.16 (IP-10 documentation, evidence, handoff): final lint:wiki 0 errors, gate PASS",
         "## [2026-10-09] handoff | s01 end of the plan-app build: handoff-2026-10-09-s01"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Checked",
+      "tags": [
+        "portal",
+        "sessions"
+      ]
     },
     {
       "id": "log-2026-10-09-labels",
@@ -541,7 +646,12 @@
         "## [2026-10-09] decide | raw working copies restored from git; comp-interactive-plan implemented",
         "## [2026-10-09] code | p0.16 (IP-10 follow-up: architecture edge-label overlap fixed, E2E overlap assertion): gate PASS"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     },
     {
       "id": "log-2026-10-09-feedback",
@@ -596,7 +706,12 @@
       "covers": [
         "## [2026-10-09] ingest | owner feedback on plan app v1 and owner decisions for portal v2"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     },
     {
       "id": "log-2026-10-09-rules",
@@ -624,7 +739,12 @@
         "## [2026-10-09] lint | p0.17 rules step: quick lint 0 errors, lint:wiki 0 errors, mask scan 0 unmasked",
         "## [2026-10-09] plan | p0.17 step \"rules\" committed: portal v2 rules, masking, approvals recorder"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
+      ]
     },
     {
       "id": "log-2026-10-09-pipeline",
@@ -663,7 +783,12 @@
         "## [2026-10-09] lint | p0.17 pipeline step: 20 checker tests pass, quick lint and lint:wiki 0 errors",
         "## [2026-10-09] plan | p0.17 step \"pipeline\" committed: wiki-to-portal JSON pipeline, hook switched off"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "wiki"
+      ]
     },
     {
       "id": "log-2026-10-09-content",
@@ -697,7 +822,12 @@
         "## [2026-10-09] lint | p0.17 content step: portal check clean, quick lint and lint:wiki 0 errors, mask scan 0 unmasked",
         "## [2026-10-09] plan | p0.17 step \"content\" committed: portal text for every page, end-of-turn check switched on"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "wiki"
+      ]
     },
     {
       "id": "log-2026-10-09-scripts",
@@ -730,7 +860,12 @@
         "## [2026-10-09] lint | p0.17 scripts step: P0 gate PASS, P1 gate FAIL as expected, script test PASS, portal check clean",
         "## [2026-10-09] plan | p0.17 step \"scripts\" committed: check scripts for every task and phase, P0 gate passes"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "check scripts",
+        "phases"
+      ]
     },
     {
       "id": "log-2026-10-09-portal-shell",
@@ -768,7 +903,12 @@
         "## [2026-10-09] code | p0.17 portal shell: read-only data layer, Layout-A shell, reference popup, Overview and phase popup",
         "## [2026-10-09] plan | p0.17 step \"portal-data-shell\" committed: read-only portal with Overview, phase popup and reference popup"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     },
     {
       "id": "log-2026-10-09-portal-views",
@@ -802,7 +942,12 @@
         "## [2026-10-09] code | p0.17 portal views: Roadmap, Architecture, Decisions, Research, Questions and Log tabs; script popup",
         "## [2026-10-09] plan | p0.17 step \"portal-views\" committed: all seven portal tabs, script popup, phase popups everywhere"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "check scripts"
+      ]
     },
     {
       "id": "log-2026-10-09-portal-verify",
@@ -832,7 +977,12 @@
         "## [2026-10-09] lint | p0.17 portal verify: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
         "## [2026-10-09] plan | p0.17 step \"portal-verify\" committed: portal v2 reviewed against the mockups, start script, ip-* pages for v2"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Checked",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     },
     {
       "id": "log-2026-10-09-portal-review-fixes",
@@ -871,7 +1021,12 @@
         "## [2026-10-09] lint | p0.17 review fixes: npm run verify and the P0 gate pass, portal check clean, mask scan 0 unmasked",
         "## [2026-10-09] plan | p0.17 step \"fix\" committed: review fixes for portal v2"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
+      "tags": [
+        "portal",
+        "phases"
+      ]
     },
     {
       "id": "log-2026-10-10-portal-v2-handoff",
@@ -902,7 +1057,12 @@
         "## [2026-10-10] lint | p0.17 handoff: P0 gate passes, the end-of-turn hook passes clean and blocks stale, portal check clean, mask scan 0 unmasked",
         "## [2026-10-10] plan | p0.17 step \"handoff\" committed: portal v2 handed over to the owner"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Checked",
+      "tags": [
+        "portal",
+        "sessions"
+      ]
     },
     {
       "id": "log-2026-10-10-q008-and-pause",
@@ -935,7 +1095,12 @@
         "## [2026-10-10] schema | Pause between phases: CLAUDE.md §1 and SCHEMA §9.7 exit-gate step 7",
         "## [2026-10-10] plan | p0.17 step \"q008-pause\" committed: Q-008 answered, pause between phases recorded"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "phases",
+        "testing"
+      ]
     },
     {
       "id": "log-2026-10-10-ref-button",
@@ -969,7 +1134,12 @@
         "## [2026-10-10] lint | p0.17 Ref mode: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px",
         "## [2026-10-10] plan | p0.17 step \"ref-mode\" committed: Ref button for layout feedback"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     },
     {
       "id": "log-2026-10-10-ref-fixes",
@@ -998,7 +1168,12 @@
         "## [2026-10-10] lint | p0.17 Ref mode review fixes: npm run verify green, positions unchanged in Ref mode",
         "## [2026-10-10] plan | p0.17 step \"ref-mode-fixes\" committed: Ref mode shows the real layout"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     },
     {
       "id": "log-2026-10-10-task-columns",
@@ -1024,7 +1199,12 @@
         "## [2026-10-10] lint | p0.17 tasks table: npm run verify green, screenshots reviewed in both themes at 1440 and 390 px",
         "## [2026-10-10] plan | p0.17 step \"task-columns\" committed: tasks table in eight columns"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "phases"
+      ]
     },
     {
       "id": "log-2026-10-10-task-columns-fixes",
@@ -1049,7 +1229,12 @@
         "## [2026-10-10] lint | p0.17 tasks table review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read",
         "## [2026-10-10] plan | p0.17 step \"task-columns-fixes\" committed: tasks table fixed after a review"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
+      "tags": [
+        "portal",
+        "phases"
+      ]
     },
     {
       "id": "log-2026-10-10-browser-design",
@@ -1076,7 +1261,12 @@
         "## [2026-10-10] lint | p0.17 browser design: npm run verify green, screenshots read in both themes at 1440 and 390 px",
         "## [2026-10-10] plan | p0.17 step \"browser-design\" committed: the chosen browser look is in the Architecture view"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Decided",
+      "tags": [
+        "look & feel",
+        "tabs"
+      ]
     },
     {
       "id": "log-2026-10-10-browser-design-fixes",
@@ -1101,7 +1291,51 @@
         "## [2026-10-10] lint | p0.17 browser design review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read",
         "## [2026-10-10] plan | p0.17 step \"browser-design-fixes\" committed: browser picture fixed after a review, question Q-125 added"
       ],
-      "phase": "phase-p0-planning"
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
+      "tags": [
+        "look & feel",
+        "portal"
+      ]
+    },
+    {
+      "id": "log-2026-10-10-browse",
+      "date": "2026-10-10",
+      "title": "Decisions and log can now be searched, filtered and paged",
+      "done": "You asked for this and approved the plan. Every decision now has a topic and two tags, and every log entry a kind of work and two tags, from one fixed list. Both tabs have a search box, filters (topic, tags, phase, dates; for decisions also status and who decided), a results line, 20 per page with page numbers, and the view stays in the address. Clicking a tag shows everything with that tag. All checks pass.",
+      "next": "Restart the portal to see the new search and filters, then go on with your walkthrough using Ref.",
+      "decisions": [
+        {
+          "what": "Decisions sorted by topic, log entries by kind of work, each with two tags from a fixed list of 26",
+          "by": "you"
+        },
+        {
+          "what": "20 per page with page numbers; filters for topic, tags, phase, dates, status and who decided",
+          "by": "you"
+        },
+        {
+          "what": "Choosing several tags shows only items that have all of them",
+          "by": "claude"
+        },
+        {
+          "what": "The Risks table stays as it is, since you did not ask for it",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] ingest | Owner asks for paged, searchable, filterable decisions and log with a category and 2 tags each",
+        "## [2026-10-10] plan | Owner approves the browsing plan for decisions and log: \"Approved the plan\"",
+        "## [2026-10-10] code | p0.17 browse: categories, tags, search, filters and pages on Decisions and Log",
+        "## [2026-10-10] lint | p0.17 browse: npm run verify green, screenshots of Decisions and Log read at 1440 and 390 px in both themes"
+      ],
+      "phase": "phase-p0-planning",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
     }
   ]
 }

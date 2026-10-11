@@ -14,6 +14,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "The app",
+      "tags": [
+        "web views",
+        "Tauri"
+      ],
+      "phase": "phase-p1-foundation",
       "related": [
         "risk-r02"
       ],

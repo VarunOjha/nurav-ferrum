@@ -20,6 +20,9 @@
                    questions.json; a phase's progress counts its tasks marked Done; roadmap rows follow
                    the phase files; layer and group lists follow each part's own layer and group; each
                    log entry id is used once                                                   (MISMATCH)
+    7. Labels    - every decision and log entry has one category and two different tags from
+                   the single list in plan/portal/taxonomy.json; a decision names a phase the
+                   portal has a file for                                                       (BAD-LABEL)
   The rules (which pages, which files, which id shapes) live in plan/portal/pipeline.json.
 
   Exit codes: 0 = clean, 1 = problems found (or the config is broken).
@@ -369,6 +372,90 @@ function Get-PortalMismatches($Docs, $RefsById, [string]$RefsFile) {
     return , $out
 }
 
+# Labels (BAD-LABEL). Decisions and log entries carry one category and two tags, chosen from the single
+# list in taxonomy.json (the owner's plan of 2026-10-10). The schemas only say "a short name" and "two
+# different names", so the list lives in one place; this check holds the records to it. A decision also
+# names the phase it mainly affects, and a log entry may name one: it must be a phase the portal has a file
+# for. Returns a list of @{ Where; Message }.
+function Get-LabelProblems($Docs, [string]$TaxFile) {
+    $out = [System.Collections.Generic.List[object]]::new()
+    if (-not $Docs.Contains($TaxFile) -or $Docs[$TaxFile] -isnot [System.Collections.IDictionary]) { return , $out }  # MISSING-FILE / BAD-JSON already said why
+    $tax = $Docs[$TaxFile]
+    $lists = @{}
+    foreach ($ln in 'decision_categories', 'log_categories', 'tags') {
+        $set = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+        $i = 0
+        foreach ($t in @($tax[$ln])) {
+            $nm = if ($t -is [System.Collections.IDictionary]) { $t['name'] } else { $null }
+            if ($nm -is [string] -and -not $set.Add($nm)) {
+                $out.Add(@{ Where = "plan/portal/$TaxFile at /$ln/$i/name"; Message = "'$nm' is listed twice in $ln; keep one." })
+            }
+            $i++
+        }
+        $lists[$ln] = $set
+    }
+    $phaseIds = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($rel in @($Docs.Keys | Where-Object { $_ -like 'phases/*.json' })) {
+        if ($Docs[$rel] -is [System.Collections.IDictionary] -and $Docs[$rel]['id'] -is [string]) { [void]$phaseIds.Add($Docs[$rel]['id']) }
+    }
+
+    # One record: category, two tags, phase.
+    function Test-Labels($Rec, [string]$Where, [string]$What, [string]$CatList, [bool]$NeedPhase) {
+        $cats = $lists[$CatList]
+        if (-not $Rec.Contains('category') -or $Rec['category'] -isnot [string] -or $Rec['category'] -eq '') {
+            $out.Add(@{ Where = "$Where/category"; Message = "$What has no category. Give it exactly one from '$CatList' in $TaxFile." })
+        }
+        elseif (-not $cats.Contains($Rec['category'])) {
+            $out.Add(@{ Where = "$Where/category"; Message = "$What has the category '$($Rec['category'])', which is not in '$CatList' in $TaxFile. Use one of: $(@($cats) -join ', ')." })
+        }
+        $tags = $null
+        if ($Rec.Contains('tags')) { $tags = $Rec['tags'] }   # plain assignment: 'if' output would unroll a one-item array
+        if ($tags -isnot [System.Collections.IList]) {
+            $out.Add(@{ Where = "$Where/tags"; Message = "$What has no tags. Give it exactly 2 different tags from 'tags' in $TaxFile." })
+        }
+        else {
+            if ($tags.Count -ne 2) {
+                $out.Add(@{ Where = "$Where/tags"; Message = "$What has $($tags.Count) tags; it needs exactly 2 different tags from $TaxFile." })
+            }
+            $seenTags = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+            foreach ($t in $tags) {
+                if ($t -isnot [string] -or -not $lists['tags'].Contains($t)) {
+                    $out.Add(@{ Where = "$Where/tags"; Message = "$What has the tag '$t', which is not in 'tags' in $TaxFile. Pick one from the list, or add the tag there on purpose and note it in the log." })
+                }
+                elseif (-not $seenTags.Add($t)) {
+                    $out.Add(@{ Where = "$Where/tags"; Message = "$What has the tag '$t' twice; its 2 tags must be different." })
+                }
+            }
+        }
+        if ($Rec.Contains('phase')) {
+            if ($Rec['phase'] -isnot [string] -or -not $phaseIds.Contains($Rec['phase'])) {
+                $out.Add(@{ Where = "$Where/phase"; Message = "$What names the phase '$($Rec['phase'])', but the portal has no phase file for it (plan/portal/phases/)." })
+            }
+        }
+        elseif ($NeedPhase) {
+            $out.Add(@{ Where = "$Where/phase"; Message = "$What does not say which phase it mainly affects. Add a 'phase'." })
+        }
+    }
+
+    $decisions = if ($Docs.Contains('decisions.json')) { $Docs['decisions.json'] } else { $null }
+    if ($decisions -is [System.Collections.IDictionary]) {
+        $i = 0
+        foreach ($d in @($decisions['items'])) {
+            if ($d -is [System.Collections.IDictionary]) { Test-Labels $d "plan/portal/decisions.json at /items/$i" "Decision $($d['id'])" 'decision_categories' $true }
+            $i++
+        }
+    }
+    $log = if ($Docs.Contains('log.json')) { $Docs['log.json'] } else { $null }
+    if ($log -is [System.Collections.IDictionary]) {
+        $i = 0
+        foreach ($e in @($log['entries'])) {
+            if ($e -is [System.Collections.IDictionary]) { Test-Labels $e "plan/portal/log.json at /entries/$i" "Log entry $($e['id'])" 'log_categories' $false }
+            $i++
+        }
+    }
+    return , $out
+}
+
 function Invoke-PortalSyncCheck {
     $problems = [System.Collections.Generic.List[object]]::new()
     function Add-Problem([string]$Code, [string]$Where, [string]$Message) {
@@ -527,6 +614,10 @@ function Invoke-PortalSyncCheck {
     # A refs.json explainer, the Overview's question count and a phase's progress are copies of another
     # record. They carry no source of their own, so freshness (2) cannot see them; these checks can.
     foreach ($m in (Get-PortalMismatches $docs $refsById $refsFile)) { Add-Problem 'MISMATCH' $m.Where $m.Message }
+
+    # 7. Labels: one category and two tags from taxonomy.json on every decision and log entry ---------
+    $taxFile = if ($config.Contains('taxonomy_file')) { [string]$config['taxonomy_file'] } else { 'taxonomy.json' }
+    foreach ($m in (Get-LabelProblems $docs $taxFile)) { Add-Problem 'BAD-LABEL' $m.Where $m.Message }
 
     $script:Stats = @{ Files = $docs.Count; Records = $recordCount; Refs = $refCount }
     return , $problems

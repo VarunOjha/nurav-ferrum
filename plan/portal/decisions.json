@@ -15,6 +15,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Process & approvals",
+      "tags": [
+        "phases",
+        "approvals"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0002",
         "adr-0003",
@@ -40,6 +46,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Process & approvals",
+      "tags": [
+        "wiki",
+        "sessions"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0001",
         "adr-0003",
@@ -62,6 +74,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Process & approvals",
+      "tags": [
+        "sessions",
+        "git"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0001",
         "adr-0002",
@@ -86,6 +104,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "phases"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0001",
         "adr-0012",
@@ -113,6 +137,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": "adr-0021",
+      "category": "Tools & setup",
+      "tags": [
+        "toolchain",
+        "approvals"
+      ],
+      "phase": "phase-p1-foundation",
       "related": [
         "adr-0021",
         "adr-0006",
@@ -137,6 +167,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "The app",
+      "tags": [
+        "look & feel",
+        "address bar"
+      ],
+      "phase": "phase-p2-minimal-container",
       "related": [
         "adr-0007",
         "adr-0005",
@@ -162,6 +198,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "The app",
+      "tags": [
+        "web views",
+        "Tauri"
+      ],
+      "phase": "phase-p2-minimal-container",
       "related": [
         "adr-0006",
         "adr-0010",
@@ -190,6 +232,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Security & privacy",
+      "tags": [
+        "network log",
+        "privacy"
+      ],
+      "phase": "phase-p5-telemetry",
       "related": [
         "adr-0015",
         "adr-0019",
@@ -215,6 +263,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "CPU"
+      ],
+      "phase": "phase-p6-benchmark-harness",
       "related": [
         "adr-0012",
         "adr-0013",
@@ -242,6 +296,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Security & privacy",
+      "tags": [
+        "isolation",
+        "WebView2"
+      ],
+      "phase": "phase-p3-tabs-sessions",
       "related": [
         "adr-0007",
         "adr-0019",
@@ -270,6 +330,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Tools & setup",
+      "tags": [
+        "git",
+        "licensing"
+      ],
+      "phase": "phase-p1-foundation",
       "related": [
         "adr-0003",
         "adr-0005",
@@ -293,6 +359,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "testing"
+      ],
+      "phase": "phase-p6-benchmark-harness",
       "related": [
         "adr-0009",
         "adr-0013",
@@ -321,6 +393,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Research & benchmarks",
+      "tags": [
+        "statistics",
+        "paper"
+      ],
+      "phase": "phase-p8-research-paper",
       "related": [
         "adr-0012",
         "adr-0009",
@@ -345,6 +423,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Process & approvals",
+      "tags": [
+        "phases",
+        "approvals"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0001",
         "adr-0003",
@@ -370,6 +454,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Security & privacy",
+      "tags": [
+        "blocklist",
+        "address bar"
+      ],
+      "phase": "phase-p4-security",
       "related": [
         "adr-0007",
         "adr-0008",
@@ -395,6 +485,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": "adr-0023",
+      "category": "Plan portal",
+      "tags": [
+        "portal",
+        "approvals"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0001",
         "adr-0002",
@@ -420,6 +516,12 @@
       "decided_by": "claude",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Research & benchmarks",
+      "tags": [
+        "paper",
+        "toolchain"
+      ],
+      "phase": "phase-p8-research-paper",
       "related": [
         "adr-0004",
         "adr-0013",
@@ -442,6 +544,12 @@
       "decided_by": "claude",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Tools & setup",
+      "tags": [
+        "git",
+        "toolchain"
+      ],
+      "phase": "phase-p1-foundation",
       "related": [
         "adr-0011",
         "adr-0006",
@@ -467,6 +575,12 @@
       "decided_by": "claude",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Security & privacy",
+      "tags": [
+        "WebView2",
+        "Tauri"
+      ],
+      "phase": "phase-p7-lifecycle",
       "related": [
         "adr-0007",
         "adr-0008",
@@ -496,6 +610,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Process & approvals",
+      "tags": [
+        "wiki",
+        "testing"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "phase-p0-planning",
         "adr-0002"
@@ -516,6 +636,12 @@
       "decided_by": "you",
       "date": "2026-10-08",
       "replaced_by": null,
+      "category": "Tools & setup",
+      "tags": [
+        "toolchain",
+        "approvals"
+      ],
+      "phase": "phase-p1-foundation",
       "related": [
         "adr-0005",
         "adr-0009",
@@ -540,6 +666,12 @@
       "decided_by": "claude",
       "date": "2026-10-09",
       "replaced_by": null,
+      "category": "Process & approvals",
+      "tags": [
+        "approvals",
+        "wiki"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "phase-p0-planning"
       ],
@@ -559,6 +691,12 @@
       "decided_by": "you",
       "date": "2026-10-09",
       "replaced_by": null,
+      "category": "Plan portal",
+      "tags": [
+        "portal",
+        "approvals"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0016",
         "adr-0024",
@@ -582,6 +720,12 @@
       "decided_by": "you",
       "date": "2026-10-09",
       "replaced_by": null,
+      "category": "Plan portal",
+      "tags": [
+        "portal",
+        "wiki"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0016",
         "adr-0023",
@@ -603,6 +747,12 @@
       "decided_by": "you",
       "date": "2026-10-09",
       "replaced_by": null,
+      "category": "Tools & setup",
+      "tags": [
+        "check scripts",
+        "testing"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0014",
         "adr-0021",
@@ -625,6 +775,12 @@
       "decided_by": "you",
       "date": "2026-10-09",
       "replaced_by": null,
+      "category": "Plan portal",
+      "tags": [
+        "portal",
+        "look & feel"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0004",
         "adr-0024"
@@ -645,6 +801,12 @@
       "decided_by": "you",
       "date": "2026-10-09",
       "replaced_by": null,
+      "category": "Security & privacy",
+      "tags": [
+        "privacy",
+        "git"
+      ],
+      "phase": "phase-p0-planning",
       "related": [
         "adr-0011",
         "adr-0025",
@@ -666,6 +828,12 @@
       "decided_by": "you",
       "date": "2026-10-10",
       "replaced_by": null,
+      "category": "The app",
+      "tags": [
+        "look & feel",
+        "tabs"
+      ],
+      "phase": "phase-p2-minimal-container",
       "related": [
         "adr-0006",
         "adr-0007",

@@ -1,0 +1,28 @@
+p0.17 step browse: search, filters, labels and pages for Decisions and Log (2026-10-10, session s01)
+Owner request: wiki/raw/owner/2026-10-10-s01-decisions-log-browse.md; approval: ...-browse-approval.md
+
+== 1. npm run verify in a scratch git worktree of HEAD ce4acb5 with this step's files copied in (byte-identical, checked with cmp), outside the repo; wiki check with core.longpaths set only through the environment (GIT_CONFIG_COUNT) ==
+(typecheck and eslint passed: verify runs them first and stops on failure)
+ Test Files  28 passed (28)
+      Tests  825 passed | 1 skipped (826)
+lint: 0 errors, 35 warnings, 2 info (pages: 203)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+✓ Compiled successfully in 7.1s
+E2E guard: 23 real files unchanged (approvals.json absent)
+  133 passed (5.0m)
+exit 0
+
+== 2. After plan/portal/log.json gained the new plain entry (40 entries, 2 pages): browse, log, decisions and ref-mode browser tests re-run in the same scratch copy ==
+59 passed (2.8m); E2E guard: 23 real files unchanged (approvals.json absent)
+
+== 3. Screenshots (scratch production server on port 3423; owner's portal on 3417 never stopped) ==
+Decisions and Log at 1440 and 390 px, light and dark; Decisions filtered (category Plan portal + tag approvals): Showing 1-2 of 2 (28 in all);
+Log filtered (search review + tag portal) at 390 dark: Showing 1-12 of 12 (40 in all); Log page 2 at 1440 light and 390 dark: Showing 21-40 of 40;
+empty state (search zzqqxx): No matches (28 in all); tag list open at 1440; phone filters open at 390.
+Every view: page scrollWidth equals viewport width (no sideways scrolling). Read by Claude: no defects found.
+
+== 4. Repo checks (real repo, no build) ==
+203 files checked, 0 errors, 0 warnings
+portal-sync: clean - 19 files, 169 translated records, 390 refs
+test-portal-sync-check: 39 passed, 0 failed

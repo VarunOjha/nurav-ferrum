@@ -39,7 +39,10 @@
           "date",
           "replaced_by",
           "related",
-          "source"
+          "source",
+          "category",
+          "tags",
+          "phase"
         ],
         "properties": {
           "id": {
@@ -94,6 +97,17 @@
           },
           "source": {
             "$ref": "#/$defs/source"
+          },
+          "category": {
+            "$ref": "#/$defs/label",
+            "description": "One topic from 'decision_categories' in taxonomy.json."
+          },
+          "tags": {
+            "$ref": "#/$defs/tag_pair"
+          },
+          "phase": {
+            "$ref": "#/$defs/phase_id",
+            "description": "The phase this decision mainly affects. Must be a phase the portal has a file for."
           }
         },
         "additionalProperties": false

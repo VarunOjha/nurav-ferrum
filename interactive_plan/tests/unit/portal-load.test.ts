@@ -83,7 +83,7 @@ describe("problems instead of crashes", () => {
     temps.push(root);
     const p = await loadPortalUncached({ portalDir: path.join(root, "nothing"), approvalsFile: path.join(root, "approvals.json") });
     expect(p.files.phases).toEqual([]);
-    expect(p.problems.length).toBe(10);
+    expect(p.problems.length).toBe(11); // one per single file; taxonomy.json is the eleventh
     expect(p.approvals.exists).toBe(false);
   });
 

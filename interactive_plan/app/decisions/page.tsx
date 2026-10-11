@@ -1,15 +1,22 @@
-// Decisions tab: every decision as a short row; clicking its title opens a popup with what it means,
-// why, the catch and one plain standing (who chose it, and whether you signed off its written page). Replaced decisions stay listed, muted, and point to what
-// replaced them. Below, the risks we watch, highest first, each with its own popup. Reads
-// decisions.json, risks.json, roadmap.json and plan/approvals.json (read-only labels).
+// Decisions tab: every decision as a short row with its category and two tags; clicking its title opens
+// a popup with what it means, why, the catch and one plain standing (who chose it, and whether you signed
+// off its written page). Replaced decisions stay listed, muted, and point to what replaced them. A search
+// box and filters (category, tags, phase, dates, status, who decided) narrow the list, 20 per page, and the
+// choice stays in the page address (owner request 2026-10-10). Below, the risks we watch, highest first,
+// each with its own popup. Reads decisions.json, taxonomy.json, risks.json, roadmap.json and
+// plan/approvals.json (read-only labels).
 import type { Metadata } from "next";
+import Browse from "@/components/portal/browse/Browse";
+import LabelChips from "@/components/portal/browse/LabelChips";
 import DetailPopup from "@/components/portal/DetailPopup";
 import { OpenModalButton } from "@/components/portal/Modal";
 import PageHead from "@/components/portal/PageHead";
 import Ref from "@/components/portal/Ref";
 import RichText from "@/components/portal/RichText";
+import { decisionsBrowse } from "@/lib/portal/browseTabs";
 import { detailDialogId } from "@/lib/portal/dialogs";
 import { getPortal } from "@/lib/portal/server";
+import { labelsOf, normalizeTaxonomy } from "@/lib/portal/taxonomy";
 import { ui } from "@/lib/portal/uiRefs";
 import { approvalLabel, decisionStanding, decisionTone, firstSentence, riskTone, risksByScore, roadmapRow } from "@/lib/portal/view";
 
@@ -25,6 +32,7 @@ export default async function DecisionsPage() {
   const phaseShort = (id: string) => roadmapRow(roadmap, id)?.short ?? id;
   // Choosing a decision and signing off its written page are two steps; one plain standing says both.
   const standing = new Map(items.map((d) => [d.id, decisionStanding(d, approvalLabel(approvals, d.id, d.source.content_hash))]));
+  const browse = decisionsBrowse(decisions, normalizeTaxonomy(files.taxonomy), roadmap);
 
   return (
     <div className="page">
@@ -37,36 +45,51 @@ export default async function DecisionsPage() {
           </h2>
           <span className="small muted">Click a decision to open it</span>
         </div>
-        <ul className="row-list" data-testid="decision-list">
-          {items.map((d) => {
-            const replaced = d.status === "Replaced" || d.status === "Rejected";
-            return (
-              <li key={d.id} className={`row-item${replaced ? " is-muted" : ""}`} data-decision={d.id} data-status={d.status}>
-                <span className="mono small muted row-id">#{d.number}</span>
-                <div className="stack-4 row-main">
-                  <OpenModalButton target={detailDialogId(d.id)} className="link-btn row-title" label={`${d.title}: open the decision`}>
-                    {d.title}
-                  </OpenModalButton>
-                  <span className="small text-2">
-                    <RichText text={firstSentence(d.summary)} />
-                  </span>
-                  {d.replaced_by && (
-                    <span className="small muted">
-                      Replaced by{" "}
-                      <Ref id={d.replaced_by} variant="inline">
-                        {titleOf.get(d.replaced_by) ?? d.replaced_by}
-                      </Ref>
+        <Browse
+          name="decisions"
+          spec={browse.spec}
+          items={browse.items}
+          categories={browse.categories}
+          tags={browse.tags}
+          phases={browse.phases}
+          searchHint="Search titles and text"
+          noun="decisions"
+          list={{ as: "ul", className: "row-list", testId: "decision-list" }}
+          refs={{ filters: "DE-4", results: "DE-5", pages: "DE-6" }}
+          cards={Object.fromEntries(
+            items.map((d) => {
+              const replaced = d.status === "Replaced" || d.status === "Rejected";
+              const labels = labelsOf(d);
+              return [
+                d.id,
+                <li key={d.id} className={`row-item${replaced ? " is-muted" : ""}`} data-decision={d.id} data-status={d.status}>
+                  <span className="mono small muted row-id">#{d.number}</span>
+                  <div className="stack-4 row-main">
+                    <OpenModalButton target={detailDialogId(d.id)} className="link-btn row-title" label={`${d.title}: open the decision`}>
+                      {d.title}
+                    </OpenModalButton>
+                    <span className="small text-2">
+                      <RichText text={firstSentence(d.summary)} />
                     </span>
-                  )}
-                </div>
-                <div className="row-side">
-                  <span className={`chip chip-${decisionTone(d.status)}`}>{standing.get(d.id)!.chip}</span>
-                  <span className="small muted">{standing.get(d.id)!.short}</span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+                    {d.replaced_by && (
+                      <span className="small muted">
+                        Replaced by{" "}
+                        <Ref id={d.replaced_by} variant="inline">
+                          {titleOf.get(d.replaced_by) ?? d.replaced_by}
+                        </Ref>
+                      </span>
+                    )}
+                    <LabelChips category={labels.category} tags={labels.tags} uiRef="DE-7" />
+                  </div>
+                  <div className="row-side">
+                    <span className={`chip chip-${decisionTone(d.status)}`}>{standing.get(d.id)!.chip}</span>
+                    <span className="small muted">{standing.get(d.id)!.short}</span>
+                  </div>
+                </li>,
+              ];
+            }),
+          )}
+        />
       </section>
 
       <section aria-labelledby="risk-title" className="stack-12" {...ui("DE-3")}>

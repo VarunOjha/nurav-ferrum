@@ -23,6 +23,7 @@ import {
   ResearchFile,
   RisksFile,
   RoadmapFile,
+  TaxonomyFile,
   type Architecture,
   type Decisions,
   type Log,
@@ -33,6 +34,7 @@ import {
   type Research,
   type Risks,
   type Roadmap,
+  type Taxonomy,
 } from "./schemas.gen";
 
 /** The part of plan/portal/pipeline.json the portal uses (that file has no JSON Schema of its own). */
@@ -55,6 +57,8 @@ export interface PortalFiles {
   log: Log | null;
   refs: Refs | null;
   pipeline: Pipeline | null;
+  /** The category and tag lists of the Decisions and Log tabs (lib/portal/taxonomy.ts). */
+  taxonomy: Taxonomy | null;
 }
 
 export interface PortalProblem {
@@ -80,6 +84,7 @@ const SINGLE = {
   log: ["log.json", LogFile],
   refs: ["refs.json", RefsFile],
   pipeline: ["pipeline.json", PipelineFile],
+  taxonomy: ["taxonomy.json", TaxonomyFile],
 } as const;
 
 /** First few zod issues in plain words: "where_we_are.0.state: at most 240 characters". */
@@ -141,6 +146,7 @@ export async function loadPortalUncached(cfg: Pick<PlanConfig, "portalDir" | "ap
     log: one("log"),
     refs: one("refs"),
     pipeline: one("pipeline"),
+    taxonomy: one("taxonomy"),
   };
   const wanted = files.roadmap ? files.roadmap.phases.map((p) => `phases/${p.id}.json`) : listPhaseFiles(dir).map((f) => `phases/${f}`);
   for (const rel of wanted) {

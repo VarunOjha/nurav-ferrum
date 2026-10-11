@@ -1,7 +1,8 @@
-// decisions.spec: the Decisions tab. Every decision is one row; its title opens a popup (what it
-// means, why, the catch, one plain standing); replaced decisions are muted, say what replaced them,
-// and their popup opens the replacement on top. The risks we watch are listed highest first, each
-// with its own popup. Accessible (axe), phone width without sideways scrolling.
+// decisions.spec: the Decisions tab. Every decision is one row (20 per page); its title opens a popup
+// (what it means, why, the catch, one plain standing); replaced decisions are muted, say what replaced
+// them, and their popup opens the replacement on top. The risks we watch are listed highest first, each
+// with its own popup. Accessible (axe), phone width without sideways scrolling. Search, filters and pages
+// are tested in browse.spec.ts.
 import { expect, test } from "@playwright/test";
 import { collectErrors, expectAccessible, sidewaysOverflow } from "./axe";
 import { portalJson } from "./helpers";
@@ -14,30 +15,39 @@ interface Risks {
 }
 const decisions = portalJson<Decisions>("decisions.json");
 const risks = portalJson<Risks>("risks.json");
+/** The list page a decision is on (20 per page, file order). */
+const pageOf = (id: string) => Math.floor(decisions.items.findIndex((d) => d.id === id) / 20) + 1;
+const pageUrl = (id: string) => (pageOf(id) > 1 ? `/decisions?page=${pageOf(id)}` : "/decisions");
 
-test("one row per decision; replaced ones are muted and name their replacement", async ({ page }) => {
+test("one row per decision, 20 per page; replaced ones are muted and name their replacement", async ({ page }) => {
   const errors = collectErrors(page);
-  await page.goto("/decisions");
-  const rows = page.getByTestId("decision-list").locator("li[data-decision]");
-  await expect(rows).toHaveCount(decisions.items.length);
-  for (const d of decisions.items) {
-    const row = page.locator(`[data-decision="${d.id}"]`);
-    await expect(row.locator(".row-title")).toHaveText(d.title);
-    await expect(row).toHaveAttribute("data-status", d.status);
-    if (d.replaced_by) {
-      await expect(row).toHaveClass(/is-muted/);
-      await expect(row.locator(`[data-ref-id="${d.replaced_by}"]`)).toBeVisible();
-    } else {
-      await expect(row).not.toHaveClass(/is-muted/);
+  const pages = Math.ceil(decisions.items.length / 20);
+  for (let p = 1; p <= pages; p++) {
+    await page.goto(p > 1 ? `/decisions?page=${p}` : "/decisions");
+    const onPage = decisions.items.slice((p - 1) * 20, p * 20);
+    const rows = page.getByTestId("decision-list").locator("li[data-decision]");
+    await expect(rows).toHaveCount(onPage.length);
+    expect(await rows.evaluateAll((els) => els.map((e) => e.getAttribute("data-decision")))).toEqual(onPage.map((d) => d.id));
+    for (const d of onPage) {
+      const row = page.locator(`[data-decision="${d.id}"]`);
+      await expect(row.locator(".row-title")).toHaveText(d.title);
+      await expect(row).toHaveAttribute("data-status", d.status);
+      if (d.replaced_by) {
+        await expect(row).toHaveClass(/is-muted/);
+        await expect(row.locator(`[data-ref-id="${d.replaced_by}"]`)).toBeVisible();
+      } else {
+        await expect(row).not.toHaveClass(/is-muted/);
+      }
     }
   }
+  await page.goto("/decisions");
   await expectAccessible(page);
   expect(errors).toEqual([]);
 });
 
 test("a decision opens in a popup; a replaced one opens its replacement on top", async ({ page }) => {
-  await page.goto("/decisions");
   const d = decisions.items.find((x) => x.replaced_by)!;
+  await page.goto(pageUrl(d.id));
   const replacement = decisions.items.find((x) => x.id === d.replaced_by)!;
   const title = page.locator(`[data-decision="${d.id}"] .row-title`);
   await title.click();
@@ -88,8 +98,8 @@ test("phone width: no sideways scrolling", async ({ page }) => {
 });
 
 test("a decision you chose says in one sentence whether its page is signed off", async ({ page }) => {
-  await page.goto("/decisions");
   const d = decisions.items.find((x) => x.status === "Accepted" && x.decided_by === "you")!;
+  await page.goto(pageUrl(d.id));
   await page.locator(`[data-decision="${d.id}"] .row-title`).click();
   const dialog = page.getByRole("dialog", { name: d.title });
   await expect(dialog.getByTestId("decision-standing")).toContainText(/^You chose this on \d+ \w+; /);

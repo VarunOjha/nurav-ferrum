@@ -18,7 +18,7 @@ interface Architecture {
   browser_design?: unknown;
 }
 interface Log {
-  entries: { id: string; decisions: unknown[]; approvals: unknown[] }[];
+  entries: { id: string; date: string; decisions: unknown[]; approvals: unknown[] }[];
 }
 interface Phase {
   short: string;
@@ -30,6 +30,13 @@ const roadmap = portalJson<Roadmap>("roadmap.json");
 const arch = portalJson<Architecture>("architecture.json");
 const log = portalJson<Log>("log.json");
 const p0 = portalJson<Phase>(`phases/${roadmap.phases[0].id}.json`);
+const decisionCount = portalJson<{ items: unknown[] }>("decisions.json").items.length;
+/** The log entries on the first page of the Log tab (newest first, 20 per page). */
+const logFirstPage = [...log.entries]
+  .map((e, i) => ({ e, i }))
+  .sort((a, b) => (a.e.date === b.e.date ? b.i - a.i : a.e.date < b.e.date ? 1 : -1))
+  .map((x) => x.e)
+  .slice(0, 20);
 const HEADER = ["HD-1", "HD-2", "HD-3", "HD-4", "HD-5"];
 const name = (id: string) => (UI_REFS as Record<string, { name: string }>)[id].name;
 
@@ -53,10 +60,24 @@ const TABS: { route: string; ids: string[] }[] = [
       ...(arch.browser_design ? ["AR-9", "AR-9.1", "AR-9.2", "AR-9.3"] : []),
     ],
   },
-  { route: "/decisions", ids: ["DE-1", "DE-2", "DE-3"] },
+  { route: "/decisions", ids: ["DE-1", "DE-2", "DE-3", "DE-4", "DE-5", ...(decisionCount > 20 ? ["DE-6"] : []), "DE-7"] },
   { route: "/research", ids: ["RE-1", "RE-2", "RE-3", "RE-4", "RE-5", "RE-6", "RE-7"] },
   { route: "/questions", ids: ["QU-1", "QU-2", "QU-3", "QU-4", "QU-5", "QU-6"] },
-  { route: "/log", ids: ["LO-1", "LO-2", "LO-3", "LO-4", "LO-6", ...(log.entries.some((e) => e.decisions.length + e.approvals.length > 0) ? ["LO-5"] : [])] },
+  {
+    route: "/log",
+    ids: [
+      "LO-1",
+      "LO-2",
+      "LO-3",
+      "LO-4",
+      "LO-6",
+      "LO-7",
+      "LO-8",
+      ...(log.entries.length > 20 ? ["LO-9"] : []),
+      "LO-10",
+      ...(logFirstPage.some((e) => e.decisions.length + e.approvals.length > 0) ? ["LO-5"] : []),
+    ],
+  },
 ];
 
 /** The Ref button, once the page's script is running (a click before that would do nothing). */
@@ -390,22 +411,24 @@ test.describe("Ref mode", () => {
     expect(m.bottom).toBeLessThanOrEqual(m.height);
   });
 
-  test("the log labels the first entry the filter leaves visible", async ({ page }) => {
+  test("the log labels the first entry the filter and the page leave visible", async ({ page }) => {
     await page.goto("/log");
     await turnOn(page);
     type Entry = Log["entries"][number];
-    const filters: { name: string; has: (e: Entry) => boolean }[] = [
-      { name: "All", has: () => true },
+    const filters: { name: string; has: (e: Entry) => boolean; page?: number }[] = [
+      { name: "All entries", has: () => true },
+      ...(log.entries.length > 20 ? [{ name: "All entries", has: () => true, page: 2 }] : []),
       { name: "Has decisions", has: (e) => e.decisions.length > 0 },
       { name: "Has approvals", has: (e) => e.approvals.length > 0 },
     ];
     for (const f of filters) {
-      await page.getByRole("group", { name: "Filter" }).getByRole("button", { name: f.name }).click();
+      await page.getByLabel("Show", { exact: true }).selectOption({ label: f.name });
+      if (f.page) await page.getByRole("navigation", { name: "Pages" }).getByRole("button", { name: `Page ${f.page}` }).click();
       if (!log.entries.some(f.has)) continue;
       await expect(chip(page, "LO-3").locator("visible=true")).toHaveCount(1);
       const ids = await visibleIds(page);
       for (const id of ["LO-3", "LO-4", "LO-6"]) expect(ids.filter((x) => x === id), `${f.name} ${id}`).toHaveLength(1);
-      if (f.name !== "All") expect(ids, f.name).toContain("LO-5");
+      if (f.name !== "All entries") expect(ids, f.name).toContain("LO-5");
       const labelled = await page.locator('article[data-ui-ref="LO-3"]:not([data-ui-dup])').getAttribute("data-entry");
       const firstVisible = await page.locator("article.log-entry:visible").first().getAttribute("data-entry");
       expect(labelled, f.name).toBe(firstVisible);
