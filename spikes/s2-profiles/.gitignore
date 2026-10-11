@@ -1,0 +1,4 @@
+# Spike S2 build output (never committed)
+src-tauri/target/
+src-tauri/gen/
+out/

@@ -1,0 +1,60 @@
+{
+  "fixture_port": 64071,
+  "own_pid": 76684,
+  "route_c": {
+    "close": [
+      "ferrum-site-a: S_OK",
+      "ferrum-site-b: S_OK"
+    ],
+    "cookie_seen_from_a": "who=A",
+    "cookie_seen_from_b": "",
+    "ferrum-site-a": {
+      "browser_pid": 18860,
+      "create_completed": "S_OK",
+      "profile_name_read_back": "ferrum-site-a",
+      "profile_path": "<USERPROFILE>\\AppData\\Local\\dev.ferrum.spike.s2\\EBWebView\\WV2Profile_ferrum-site-a",
+      "set_bounds": "S_OK",
+      "set_profile_name": "S_OK",
+      "set_visible": "S_OK",
+      "site": "ferrum-site-a"
+    },
+    "ferrum-site-b": {
+      "browser_pid": 18860,
+      "create_completed": "S_OK",
+      "profile_name_read_back": "ferrum-site-b",
+      "profile_path": "<USERPROFILE>\\AppData\\Local\\dev.ferrum.spike.s2\\EBWebView\\WV2Profile_ferrum-site-b",
+      "set_bounds": "S_OK",
+      "set_profile_name": "S_OK",
+      "set_visible": "S_OK",
+      "site": "ferrum-site-b"
+    },
+    "how": "raw COM controllers from Tauri's environment, ProfileName per site",
+    "nav_a_read": "S_OK",
+    "nav_a_set": "S_OK",
+    "nav_b_read": "S_OK",
+    "route": "c",
+    "seen_a_set": "",
+    "shell_browser_pid": 18860
+  },
+  "route_d": {
+    "browser_pids": {
+      "site-a": 87472,
+      "site-b": 14672
+    },
+    "cookie_seen_from_a": "who=A",
+    "cookie_seen_from_b": "",
+    "cookie_seen_from_b_first_load": "",
+    "how": "Tauri child web views with a data_directory per site",
+    "route": "d",
+    "seen_a_set": "",
+    "shell_browser_pid": 18860,
+    "site-a": {
+      "create": "ok",
+      "data_directory_leaf": "route-d/site-a"
+    },
+    "site-b": {
+      "create": "ok",
+      "data_directory_leaf": "route-d/site-b"
+    }
+  }
+}
