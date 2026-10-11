@@ -14,18 +14,10 @@ audience: both
 phase: phase-p0-planning
 tags: [webview2, com, unsafe, tauri, wry]
 unverified:
-  - claim: "Ferrum's direct webview2-com 0.39 / windows 0.62 dependencies unify with Tauri's so COM types from with_webview are usable"
-    verify_in: phase-p1-foundation
   - claim: "Back/forward via raw COM GoBack/GoForward is preferable to eval(history.back())"
     verify_in: phase-p2-minimal-container
-  - claim: "clippy::undocumented_unsafe_blocks lint is available and usable to enforce SAFETY comments"
-    verify_in: phase-p1-foundation
-  - claim: "webview2-com provides helpers to free COM-allocated strings (CoTaskMemFree) safely"
-    verify_in: phase-p1-foundation
   - claim: "NavigationCompleted args expose an HTTP status code usable for error states"
     verify_in: phase-p2-minimal-container
-  - claim: "RawComHost (own ICoreWebView2Controller in a child HWND with ProfileName) is feasible inside a Tauri window"
-    verify_in: phase-p1-foundation
 ---
 
 # WebView2 integration layer
@@ -39,7 +31,7 @@ The guiding rule (master prompt §3): *"Do not assume Tauri exposes every WebVie
 | `tauri` | 2.12.1 (`rust_version` 1.90), feature `unstable` for `add_child` | Tauri note §1–2 |
 | `tauri-build` | 2.7.1 | |
 | `wry` | 0.57.0 (transitive via tauri-runtime-wry) | |
-| `webview2-com` | **0.39** (must match Tauri's) | Type unification UNVERIFIED[phase-p1-foundation] |
+| `webview2-com` | **0.39** (must match Tauri's) | Type unification verified in P1 ([spike S3](../raw/evidence/phase-p1-foundation/spike-s3-raw-com.md): one version in `cargo tree`, COM types from `with_webview` used directly) |
 | `windows` | **0.62** (must match Tauri's) | same |
 
 Rust toolchain ≥ 1.90 (Tauri note §1). Tauri 3.0.0-alpha.4 exists, but Ferrum stays on 2.x (Tauri note §1).
@@ -106,7 +98,7 @@ classDiagram
 | `TauriChildHost` (default profile) | No: all tabs share one profile with the shell | Lowest | Works on stock Tauri (VERIFIED APIs). Fallback |
 | `TauriChildHost` + per-site `data_directory` | No: separate browser process per site | Memory per Microsoft docs | Works today (VERIFIED). Contradicts Q7 |
 | `PatchedTauriHost` | Yes | Maintaining a `[patch.crates-io]` fork | Depends on PR #16054 (open) |
-| `RawComHost` | Yes | Ferrum owns all tab COM + `unsafe`; loses Tauri hooks for tabs, so `on_navigation` etc. are reimplemented in COM | Feasibility UNVERIFIED[phase-p1-foundation] (spike) |
+| `RawComHost` | Yes | Ferrum owns all tab COM + `unsafe`; loses Tauri hooks for tabs, so `on_navigation` etc. are reimplemented in COM | Feasible: verified in P1 ([spike S2](../raw/evidence/phase-p1-foundation/spike-s2-profiles.md)); chosen by adr-0029 |
 
 **PROPOSAL:** P2 starts on `TauriChildHost` (default profile). Spike S2 in phase-p1-foundation (task p1.6) tries `RawComHost` and checks the state of PR #16054. The owner then chooses the backend for P3/P4 (open question Q-107) in a new ADR with the next free number, before phase-p3-tabs-sessions starts. The trait keeps the swap local to `webview-manager`.
 
@@ -125,7 +117,7 @@ This section implements adr-0019 (approved by the owner on 2026-10-11, Q-110 ans
 | `ferrum-bench` (harness) | `#![deny(unsafe_code)]` + allow on `mod win` | `win::*` (Job Objects, suspended launch, ETW) |
 | `ferrum-baseline` | `#![forbid(unsafe_code)]` | none (must stay "plain Tauri") |
 
-Every `unsafe` block carries a `// SAFETY:` comment naming the invariant(s) below. Enforcement through `clippy::undocumented_unsafe_blocks` is UNVERIFIED[phase-p1-foundation]. Each unsafe module exposes only **safe** functions, and the component page lists them under `## Unsafe invariants`.
+Every `unsafe` block carries a `// SAFETY:` comment naming the invariant(s) below. Enforcement through `clippy::undocumented_unsafe_blocks` works: the lint exists on the pinned toolchain and can be denied ([claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §1). Each unsafe module exposes only **safe** functions, and the component page lists them under `## Unsafe invariants`.
 
 **Invariants for WebView2 COM (`webview-manager::webview2`)**, from the facts in Tauri note §5–6:
 
@@ -135,10 +127,10 @@ Every `unsafe` block carries a `// SAFETY:` comment naming the invariant(s) belo
 | COM-2 | Never block the UI thread waiting for an async COM completion. Completion handlers post results to a tokio channel. This avoids re-entrancy and deadlock | wry `dispatch_handler` comment (VERIFIED); add_child deadlock doc (VERIFIED) |
 | COM-3 | Newer interfaces are obtained with `cast::<ICoreWebView2_N>()`, and a cast failure degrades the feature (logged) instead of panicking | Runtime-version dependent interfaces (VERIFIED min versions) |
 | COM-4 | Every `add_*` event registration stores its token and is removed (`remove_*`) on tab close or discard. Controllers are `Close()`d on discard to avoid reference cycles that keep WebViews alive | WebView2 Close docs (VERIFIED) |
-| COM-5 | No raw pointer or borrowed COM string outlives its callback. COM-allocated strings are copied into `String` and freed exactly once. Helper availability is UNVERIFIED[phase-p1-foundation] | COM ownership rules |
+| COM-5 | No raw pointer or borrowed COM string outlives its callback. COM-allocated strings are copied into `String` and freed exactly once. The helper exists: `webview2_com::take_pwstr` (used in [spike S3](../raw/evidence/phase-p1-foundation/spike-s3-raw-com.md) and spike S2) | COM ownership rules |
 | COM-6 | `TrySuspend` is called only when `IsVisible == false`. `TrySuspend/Resume` and `MemoryUsageTargetLevel` are **never mixed** on the same WebView (one `reclaim_mode` per configuration) | Microsoft reference (VERIFIED) |
 | COM-7 | All WebViews on one UDF use **identical environment options** (browser args, extensions, proxy, language) | WebView2 docs (VERIFIED) |
-| COM-8 | Ferrum's `webview2-com`/`windows` versions equal Tauri's (0.39/0.62) | crates.io deps (VERIFIED); unification UNVERIFIED[phase-p1-foundation] |
+| COM-8 | Ferrum's `webview2-com`/`windows` versions equal Tauri's (0.39/0.62) | crates.io deps (VERIFIED); unification verified in P1 ([spike S3](../raw/evidence/phase-p1-foundation/spike-s3-raw-com.md)) |
 | COM-9 | Data leaving a CDP/COM event handler is reduced to an **allow-list of fields** before it crosses into safe code (no headers, bodies or cookies). See adr-0008 | Design rule |
 
 **Invariants for Windows process APIs (`telemetry::win`, `bench::win`):** handles are opened with least access (query-limited information where sufficient) and closed via RAII wrappers. A PID is always paired with the process creation time to guard against PID reuse. No pointer escapes the call.

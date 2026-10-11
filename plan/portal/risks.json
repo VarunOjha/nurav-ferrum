@@ -484,7 +484,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r18-unsafe-com-bugs.md",
-        "content_hash": "sha256:d134bc519f887b7246ef57f75c48198ce450ea2ca822ee5d319593a9eb0df61e"
+        "content_hash": "sha256:580bef5a228167e2920a0ae900564bb5ada6b9ab79c0046c8986ac793c1a50dd"
       }
     },
     {
@@ -541,7 +541,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r20-dependency-toolchain-churn.md",
-        "content_hash": "sha256:16c7959599c3cc88e1da4067a236ef728b7c225ae7a9fdec1af76c38818c56b3"
+        "content_hash": "sha256:aa90bf66d9471f7aa28170874fa9195a195e0170744ccd3debf0c7c7189a6858"
       }
     },
     {

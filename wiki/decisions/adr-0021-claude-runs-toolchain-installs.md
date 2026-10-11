@@ -3,7 +3,7 @@ id: adr-0021
 type: decision
 title: "Claude runs all toolchain installs, including elevated ones; kernel drivers need separate owner approval"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/owner/2026-10-08-s01-wave0b.md
   - raw/owner/2026-10-08-s01-wave0.md
@@ -21,9 +21,7 @@ options:
   - "Keep adr-0005 as written (owner runs every winget install)"
 phase: phase-p1-foundation
 tags: [toolchain, environment, windows]
-unverified:
-  - claim: "winget id Microsoft.VisualStudio.2022.BuildTools with the VCTools workload and --includeRecommended installs MSVC link.exe plus a Windows SDK sufficient for Tauri 2.12.1"
-    verify_in: phase-p1-foundation
+unverified: []
 ---
 
 # ADR-0021: Claude runs all toolchain installs, including elevated ones; kernel drivers need separate owner approval
@@ -81,8 +79,8 @@ This quoted choice is what `decided_by: owner` and `status: accepted` cover (SCH
 
 ### Negative
 
-- Whether the Visual Studio 2022 Build Tools id and workload flags give a toolchain sufficient for
-  Tauri 2.12.1 is UNVERIFIED[phase-p1-foundation] (carried over from adr-0005).
+- The Visual Studio 2022 Build Tools (VCTools workload) installed on this machine proved sufficient for Tauri in P1:
+  three Tauri 2.12.3 spikes built and linked ([link check](../raw/evidence/phase-p1-foundation/toolchain-details.txt)). Nothing had to be installed in P1 besides cargo-deny.
 - Claude-initiated elevated installs change the machine; the evidence file is the audit trail.
 
 ### Related risks and phases

@@ -3,7 +3,7 @@ id: ops-environment-setup
 type: operations
 title: "Environment setup: toolchain install (winget), verification, PATH"
 status: draft
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -15,15 +15,7 @@ approvable: true
 audience: both
 trigger: "Before P0 plan-app work (Node), before P1 (Rust, MSVC), on a new machine, or when a tool is reported missing."
 tags: [toolchain, winget, windows, path]
-unverified:
-  - claim: "rustc's MSVC target finds the MSVC linker without a Developer Prompt, even from Git Bash where /usr/bin/link shadows link.exe"
-    verify_in: phase-p1-foundation
-  - claim: "The VCTools workload with --includeRecommended also installs a Windows SDK sufficient for Tauri"
-    verify_in: phase-p1-foundation
-  - claim: "vswhere.exe query below reports the VC tools installation"
-    verify_in: phase-p1-foundation
-  - claim: "winget pin can stop OpenJS.NodeJS.LTS moving to a new major on upgrade"
-    verify_in: phase-p1-foundation
+unverified: []
 ---
 
 # Environment setup
@@ -48,13 +40,12 @@ exact installed versions as evidence after every install.
 | WebView2 Runtime | 154.0.4258.62 | raw scoping record; re-read from the registry in s01 (same value) |
 | Edge / Chrome | 154.0.4258.x / 154.0.8037.x | raw scoping record |
 | Node.js / npm | **Installed** by Claude on the owner's authorisation (`winget install -e --id OpenJS.NodeJS.LTS`): `node.exe` v24.20.0 in `C:\Program Files\nodejs`. **Not on the default PATH of the Claude Code Bash shell**: prepend it with `export PATH="/c/Program Files/nodejs:$PATH"` in every Bash call. The owner chose to stay on Node 24 LTS (Q-102). npm version: see the IP-0 evidence | [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md); `raw/evidence/phase-p0-planning/interactive-plan/IP-0-toolchain.txt` (p0.9) |
-| Rust (rustup/rustc/cargo) | **Not installed** (`rustc` not found; `%USERPROFILE%\.cargo\bin` absent) | raw scoping record; re-checked in s01 |
-| MSVC Build Tools | **Not installed** (`C:\Program Files (x86)\Microsoft Visual Studio\Installer\` absent) | raw scoping record; re-checked in s01 |
+| Rust (rustup/rustc/cargo) | **Installed**: rustc and cargo 1.99.0 on `stable-x86_64-pc-windows-msvc`; the repo pins 1.99.0 in `rust-toolchain.toml`; cargo-deny 0.20.2 added in P1. `%USERPROFILE%\.cargo\bin` may be missing from the Claude Code Bash PATH: prepend `$USERPROFILE/.cargo/bin` | [toolchain.txt](../raw/evidence/phase-p1-foundation/toolchain.txt) (p1.1, 2026-10-11) |
+| MSVC Build Tools | **Installed**: Visual Studio Build Tools 2022 17.14 (MSVC 14.44 linker) | [toolchain.txt](../raw/evidence/phase-p1-foundation/toolchain.txt), [toolchain-details.txt](../raw/evidence/phase-p1-foundation/toolchain-details.txt) (p1.1) |
 | winget | Present (v1.29.380) | Observed in s01 |
 
-The s01 observations above should be captured as a raw environment record at the start of P1
-(`wiki/raw/evidence/phase-p1-foundation/environment.md`), because SCHEMA §7.5 requires versions to cite a
-raw record.
+The machine inventory was captured in P1 as a raw record
+([environment.md](../raw/evidence/phase-p1-foundation/environment.md), p1.2), as SCHEMA §7.5 requires.
 
 ## 2. Install commands (Claude runs these in PowerShell)
 
@@ -73,7 +64,7 @@ Notes:
   without checking: Node 26 becomes LTS on 2026-10-28, after which `OpenJS.NodeJS.LTS` may resolve to a
   new major ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §2). The owner answered Q-102:
   stay on Node 24 LTS for now; moving to 26 needs its own ADR ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)).
-  A winget pin (`winget pin add --id OpenJS.NodeJS.LTS`) may prevent the move `UNVERIFIED[phase-p1-foundation]`.
+  A winget pin (`winget pin add --id OpenJS.NodeJS.LTS`) can stop winget from upgrading it (winget's own help, checked in P1: [claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §4); a package may still be upgraded from outside winget.
 - The Build Tools install is large, needs elevation (the owner confirms the UAC prompt) and may need a
   reboot. Claude tells the owner before starting it.
 - `rustup default stable-msvc` must run in a **new** terminal opened after the rustup install, so that
@@ -105,7 +96,7 @@ python --version
 git --version
 ```
 
-The `vswhere` line is `UNVERIFIED[phase-p1-foundation]` (standard location, not yet checked here).
+The `vswhere` query works at the standard location: the p1.1 check found "Visual Studio Build Tools 2022 17.14" with it ([toolchain](../raw/evidence/phase-p1-foundation/toolchain.txt)).
 The `reg query` line was run in s01 and returned `pv REG_SZ 154.0.4258.62`; the output is saved as [raw/evidence/phase-p0-planning/env-webview2-pv.txt](../raw/evidence/phase-p0-planning/env-webview2-pv.txt).
 
 The definitive check that Rust + MSVC + WebView2 work together is P1's smoke build (a hello-world crate,
@@ -124,8 +115,8 @@ then a minimal Tauri app), not these version commands.
 - **Workaround inside an old session (PowerShell).**
   `$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')`
 - **Linker shadowing.** In Git Bash, `/usr/bin/link` (coreutils) is found before MSVC's `link.exe`; the raw
-  record notes that the `link.exe` on PATH is Git's. Whether `cargo build` in Git Bash still finds the MSVC
-  linker is `UNVERIFIED[phase-p1-foundation]`. Until verified, run Rust and Tauri builds from PowerShell.
+  record notes that the `link.exe` on PATH is Git's. In P1 `cargo build` from Git Bash used the MSVC linker
+  (`cargo rustc -- --print link-args` shows the Build Tools `link.exe`, [link check](../raw/evidence/phase-p1-foundation/toolchain-details.txt)), so either shell works. Note: `%USERPROFILE%\.cargoin` may be missing from the Git Bash PATH; add it.
 - **Which shell for what.** winget and installers: PowerShell (Claude runs them; owner confirms UAC). `grep`/`sed`/log recipes and the
   wiki scripts: Git Bash. npm/Next.js: either. Cargo/Tauri: PowerShell until the linker question is settled.
 - **Python output in Git Bash** has CRLF line endings; strip `\r` when capturing it.

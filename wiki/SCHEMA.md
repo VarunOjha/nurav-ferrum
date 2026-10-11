@@ -444,7 +444,7 @@ Resume/handoff protocol, toolchain setup, git workflow, lint procedure, plan-app
 | phase | `^phase-p[0-8]-[a-z0-9-]+$` | Fixed: `phase-p0-planning`, `phase-p1-foundation`, `phase-p2-minimal-container`, `phase-p3-tabs-sessions`, `phase-p4-security`, `phase-p5-telemetry`, `phase-p6-benchmark-harness`, `phase-p7-lifecycle`, `phase-p8-research-paper` |
 | task (inside phase) | `^p[0-8]\.[0-9]+$` | `p1.4` |
 | component | `^comp-[a-z0-9-]+$` | Fixed: `comp-app-shell, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-core, comp-benchmark-harness, comp-research-analysis, comp-baseline-app, comp-webview2-runtime, comp-interactive-plan`. Modelling nodes added by the architecture area (2026-10-08): `comp-tab-content` (untrusted web content), `comp-windows-os` and `comp-competitor-browsers` (external) |
-| decision | `^adr-[0-9]{4}$` | `adr-0001` … `adr-0027` registered; next free `adr-0028` (always confirm with `ls wiki/decisions/adr-*.md`, sorted, last entry) |
+| decision | `^adr-[0-9]{4}$` | `adr-0001` … `adr-0031` registered; next free `adr-0032` (always confirm with `ls wiki/decisions/adr-*.md`, sorted, last entry) |
 | risk | `^risk-r[0-9]{2,}$` | `risk-r01` … `risk-r25` registered; next free `risk-r26` |
 | research-question | `^rq-[0-9]{2,}$` | `rq-01` |
 | hypothesis | `^hyp-[0-9]{2,}$` | `hyp-01` |
@@ -601,7 +601,7 @@ Any code change that alters behaviour or interfaces:
 - updates the matching component page in the **same commit** (responsibilities, connects, interfaces, `last_verified_commit`)
 - appends a `code` log entry naming the task id
 
-Whether a pre-commit hook or CI can enforce this is `UNVERIFIED[phase-p1-foundation]`.
+A pre-commit hook warns when code under a component path is committed without its component page: `scripts/hooks/pre-commit` (P1 task p1.15; tested in [the hook test](raw/evidence/phase-p1-foundation/p1.15-hook-test.txt)). It warns and does not block; install it per clone with `cp scripts/hooks/pre-commit .git/hooks/pre-commit`.
 
 ---
 

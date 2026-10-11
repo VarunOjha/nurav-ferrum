@@ -3,7 +3,7 @@ id: adr-0006
 type: decision
 title: "Shell UI stack is vanilla TypeScript + Vite"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -20,8 +20,6 @@ options:
 phase: phase-p0-planning
 tags: [ui, shell, frontend]
 unverified:
-  - claim: "The create-tauri-app vanilla-ts template scaffolds a Vite-based frontend compatible with tauri 2.12.1"
-    verify_in: phase-p1-foundation
   - claim: "A strict Content-Security-Policy for the shell webview can be configured in Tauri 2.12.1 without breaking IPC"
     verify_in: phase-p2-minimal-container
 ---
@@ -80,7 +78,7 @@ Design rules that follow from the research:
 
 - UI work is slower than with a component framework. Keyboard shortcuts, tab drag and accessibility must be written by hand.
 - The no-overlap rule constrains the UX (for example, no floating menus over page content).
-- The exact Vite version is chosen when P1 scaffolds. Whether the official `create-tauri-app` vanilla-ts template produces a Vite frontend compatible with tauri 2.12.1 is UNVERIFIED[phase-p1-foundation].
+- The exact Vite version is chosen when P1 scaffolds. P1 did not use the `create-tauri-app` template (spikes are hand-written so no unpinned template enters the evidence, p1.17). A hand-written vanilla TypeScript + Vite frontend (vite 8.3.4, typescript 7.0.2) worked with tauri 2.12.3 in spike S1 ([pins](../raw/evidence/phase-p1-foundation/toolchain-tauri.txt), [spike S1 results](../raw/evidence/phase-p1-foundation/spike-s1/auto-1.json)).
 
 ### Follow-ups
 

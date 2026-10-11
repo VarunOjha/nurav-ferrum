@@ -53,7 +53,7 @@ tasks:
     verify: "cargo build --workspace --locked, cargo test --workspace --locked, cargo fmt --all -- --check and cargo clippy --workspace --all-targets --locked -- -D warnings all exit 0; outputs saved as evidence."
   - id: p1.17
     title: "Tauri CLI and frontend pins: use the npm package @tauri-apps/cli at the Tauri version pinned for the spikes (2.12.1 at research time, matching the adr-0006 Vite toolchain); record exact vite and typescript pins for the shell; spikes are created by hand (Cargo.toml plus the src-tauri layout documented in each spike README), not with create-tauri-app@latest"
-    verify: "package.json for spikes/s1-multiwebview has exact (no ^ or ~) versions for @tauri-apps/cli, vite and typescript; 'npx tauri --version' output saved to raw/evidence/phase-p1-foundation/toolchain.txt; versions re-checked on the registry at task start (UNVERIFIED[phase-p1-foundation] until then)."
+    verify: "package.json for spikes/s1-multiwebview has exact (no ^ or ~) versions for @tauri-apps/cli, vite and typescript; 'npx tauri --version' output saved to raw/evidence/phase-p1-foundation/toolchain.txt; versions re-checked on the registry at task start (done 2026-10-11: raw/evidence/phase-p1-foundation/registry-versions-2026-10-11.txt)."
   - id: p1.5
     title: "Spike S1 (risk-r02, risk-r05): multi-webview stability. Tauri 2.12.1 with the unstable feature, vanilla TS + Vite shell (adr-0006), three child webviews created from an async command, tab switching via hide/show, auto-resize; plus the process-attribution check (launch suspended in a Job Object)"
     verify: "raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md contains a pass/fail row for each check listed in the body (sync-vs-async creation deadlock, resize, Alt+Tab keyboard focus, z-order overlap, blank rendering, text-editing shortcuts, Job Object membership of msedgewebview2 processes compared with GetProcessInfos and GetProcessExtendedInfos) with the command or manual step used; the spike builds with 'cargo build --locked' in spikes/s1-multiwebview."
@@ -131,17 +131,7 @@ risks: [risk-r01, risk-r02, risk-r03, risk-r04, risk-r05, risk-r06, risk-r15, ri
 decisions: [adr-0021, adr-0006, adr-0007, adr-0010, adr-0011, adr-0012, adr-0014, adr-0018, adr-0019]
 experiments: []
 components: [comp-core, comp-webview2-runtime, comp-windows-os]
-unverified:
-  - claim: "The VS 2022 Build Tools winget command with the VCTools workload and --includeRecommended installs everything Rust stable-msvc and Tauri need (linker and Windows SDK)"
-    verify_in: phase-p1-foundation
-  - claim: "Rust stable-msvc locates the MSVC link.exe even though Git's link.exe is on PATH"
-    verify_in: phase-p1-foundation
-  - claim: "winget install accepts --version 24.20.0 for OpenJS.NodeJS.LTS to pin the Node major"
-    verify_in: phase-p1-foundation
-  - claim: "A renderer crash can be triggered deliberately in WebView2 for the ProcessFailed check"
-    verify_in: phase-p1-foundation
-  - claim: "A git pre-commit hook can enforce or warn on the SCHEMA section 9.8 CODE rule"
-    verify_in: phase-p1-foundation
+unverified: []
 ---
 
 # P1 Foundation: toolchain, repo scaffold, CI, de-risking spikes
@@ -161,7 +151,7 @@ winget install -e --id OpenJS.NodeJS.LTS
 rustup default stable-msvc
 ```
 
-Observed on 2026-10-09 (session s01, not yet saved as evidence): Rust 1.99.0 on `stable-x86_64-pc-windows-msvc` (default), Visual Studio Build Tools 2022 17.14 with MSVC 14.44 and Windows SDK 10.0.26100, Node v24.20.0 (installed in P0, p0.9) and PowerShell 7.6.6 are already installed; cargo-deny is not. p1.1 therefore confirms and records these versions and runs a command above only for a missing tool. Whether the Build Tools command is sufficient for Tauri is UNVERIFIED[phase-p1-foundation]. Tauri 2.12.1 needs Rust 1.90 or newer (research note section 10, item 10). After 2026-10-28 the LTS winget id may resolve to Node 26 ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) section 2); pinning with `--version` is UNVERIFIED[phase-p1-foundation].
+Observed on 2026-10-09 (session s01, not yet saved as evidence): Rust 1.99.0 on `stable-x86_64-pc-windows-msvc` (default), Visual Studio Build Tools 2022 17.14 with MSVC 14.44 and Windows SDK 10.0.26100, Node v24.20.0 (installed in P0, p0.9) and PowerShell 7.6.6 are already installed; cargo-deny is not. p1.1 therefore confirms and records these versions and runs a command above only for a missing tool. The installed Build Tools proved sufficient for Tauri in P1: three Tauri 2.12.3 spikes built and linked ([link check](../raw/evidence/phase-p1-foundation/toolchain-details.txt)). Tauri 2.12.1 needs Rust 1.90 or newer (research note section 10, item 10). After 2026-10-28 the LTS winget id may resolve to Node 26 ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) section 2); pinning with `--version` is possible, because winget lists 24.20.0 as an installable version ([claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §4).
 
 Verification commands Claude runs afterwards (output to `toolchain.txt`):
 
@@ -177,7 +167,7 @@ pwsh --version
 where.exe link.exe
 ```
 
-`raw/01` observed that `link.exe` on PATH is Git's, not MSVC's. Whether that matters for cargo is UNVERIFIED[phase-p1-foundation]; the decisive check is a throwaway `cargo new --lib` + `cargo build`.
+`raw/01` observed that `link.exe` on PATH is Git's, not MSVC's. It does not matter for cargo: cargo calls the MSVC `link.exe` ([link check](../raw/evidence/phase-p1-foundation/toolchain-details.txt), p1.1); the decisive check is a throwaway `cargo new --lib` + `cargo build`.
 
 ### Machine inventory (p1.2)
 
@@ -208,7 +198,7 @@ Version pins come from the research note (tauri 2.12.1, wry 0.57.0, webview2-com
 
 | Spike | Risk | Question | Pass criteria |
 |---|---|---|---|
-| S1 multi-webview | risk-r02 (and risk-r05) | Is `Window::add_child` (unstable feature) usable for a shell + N tabs on Windows? | No deadlock when created from an async command (and the sync-command deadlock reproduced or documented); tabs switch by hide/show; window resize keeps children laid out; keyboard focus reaches tab content after Alt+Tab (issue 13466); shell UI does not need to overlap tab bounds (issue 15682); children render (issues 10011, 11376); text-editing shortcuts work (issue 9257). Attribution row (risk-r05, comp-benchmark-harness): launch the spike suspended in a Job Object; compare job membership with `GetProcessInfos` and `GetProcessExtendedInfos`; record whether `msedgewebview2` processes join the job (UNVERIFIED[phase-p1-foundation]) |
+| S1 multi-webview | risk-r02 (and risk-r05) | Is `Window::add_child` (unstable feature) usable for a shell + N tabs on Windows? | No deadlock when created from an async command (and the sync-command deadlock reproduced or documented); tabs switch by hide/show; window resize keeps children laid out; keyboard focus reaches tab content after Alt+Tab (issue 13466); shell UI does not need to overlap tab bounds (issue 15682); children render (issues 10011, 11376); text-editing shortcuts work (issue 9257). Attribution row (risk-r05, comp-benchmark-harness): launch the spike suspended in a Job Object; compare job membership with `GetProcessInfos` and `GetProcessExtendedInfos`; record whether `msedgewebview2` processes join the job (they do, plus a crashpad handler WebView2 does not list: [job check](../raw/evidence/phase-p1-foundation/spike-s1/job-4.job.json)) |
 | S2 profiles | risk-r01 | Can each tab get its own WebView2 profile in one shared browser process (Q7, adr-0010)? | For each route (a) to (d): creation succeeds; two profiles share one `BrowserProcessId`; cookie isolation between profiles holds on a local fixture; unsafe and maintenance cost noted |
 | S3 raw COM | risk-r03 | Can Ferrum reach TrySuspend/Resume, MemoryUsageTargetLevel, ProcessFailed, WebResourceResponseReceived and GetProcessInfos through `with_webview`? | Each call returns success or a documented failure HRESULT; TrySuspend only attempted while hidden; one `webview2-com`/`windows` version in the tree; unsafe invariants drafted |
 | S4 Playwright CDP | risk-r06 | Can the Node/TS Playwright harness drive a multi-webview Ferrum and Chrome/Edge through the same CDP path? | `connectOverCDP` attaches; every target listed and attributable to shell or tab; navigation and paint timing work; unsupported features listed |

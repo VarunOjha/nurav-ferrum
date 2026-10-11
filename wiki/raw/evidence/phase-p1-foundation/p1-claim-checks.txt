@@ -1,0 +1,36 @@
+# Small checks that close P1-targeted wiki claims (exit-gate preparation, session s02, 2026-10-11 13:52 -0500)
+
+## 1. Lints undocumented_unsafe_blocks (clippy) and unsafe_op_in_unsafe_fn (rustc) on the pinned toolchain 1.99.0
+Scratch crate (outside the repo): a pub fn with an undocumented unsafe block, and an unsafe fn dereferencing a raw pointer without an inner unsafe block.
+$ cargo +1.99.0 clippy -- -D clippy::undocumented_unsafe_blocks -D unsafe_op_in_unsafe_fn
+error[E0133]: dereference of raw pointer is unsafe and requires unsafe block
+error: this public function might dereference a raw pointer but is not marked `unsafe`
+error: unsafe block missing a safety comment
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#undocumented_unsafe_blocks
+  = note: requested on the command line with `-D clippy::undocumented-unsafe-blocks`
+For more information about this error, try `rustc --explain E0133`.
+error: could not compile `lintcheck` (lib) due to 3 previous errors
+Result: both lints exist and can be denied (the build fails on each).
+
+## 2. proptest compatibility with Rust 1.99.0 (crates.io API metadata)
+latest proptest 1.12.0 rust_version 1.88 published 2026-10-10
+Result: required Rust 1.88 <= pinned 1.99.0 (metadata only; first real use in P2+).
+
+## 3. interactive_plan pins its Turbopack root
+6:  turbopack: {
+9:    root: path.resolve(__dirname),
+12:        loaders: ["@tailwindcss/turbopack"],
+Result: turbopack.root is set; npm run build passed in ci-local-p1.11.txt while spikes/s1-multiwebview and spikes/s4-playwright-cdp lockfiles exist in the repo.
+
+## 4. winget version pinning for Node
+$ winget show --id OpenJS.NodeJS.LTS --versions   (first lines)
+Found Node.js (LTS) [OpenJS.NodeJS.LTS]
+Version
+24.20.0
+24.19.0
+24.18.1
+24.18.0
+$ winget pin --help   (first lines)
+
+Manage package pins with the sub-commands. A pin can limit the Windows Package Manager from upgrading a package to specific ranges of versions, or it can prevent it from upgrading the package altogether. A pinned package may still upgrade on its own and be upgraded from outside the Windows Package Manager.
+Result: 24.20.0 is an installable listed version (so --version 24.20.0 can pin the install); winget has a pin command that limits upgrades (its help notes a pinned package may still upgrade from outside winget). Whether this holds once Node 26 becomes LTS cannot be checked before that release.

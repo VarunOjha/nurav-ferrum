@@ -19,9 +19,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: p1.5
+current_task: p1.16
 next_action: "Owner: run pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1 and report Alt+Tab focus, resize and shortcuts. Claude meanwhile: close every UNVERIFIED[phase-p1-foundation] claim (verify with evidence, re-target with a logged reason, or delete), including SCHEMA §9.8 for p1.15; then write the S1 report from the owner's result and run scripts/gates/p1-gate.ps1 -SaveEvidence."
-blocked_on: []
+blocked_on: [adr-0002, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
 last_handoff: handoff-2026-10-09-s01
 ---
 
@@ -60,6 +60,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.14 done (`058ca1a`): literature protocol, reading log, batch 1 (4 primary sources).
 - p1.9 proposals committed (`82fe00a`): adr-0029, adr-0030, adr-0031 proposed; risks r01, r02, r03, r05, r06 updated; P2 revised. Owner decides.
 - Owner batch recorded ([raw/owner/2026-10-11-s02-p1-design-and-questions.md](wiki/raw/owner/2026-10-11-s02-p1-design-and-questions.md)): adr-0029, adr-0030, adr-0031 approved and accepted; Q-107, Q-116, Q-122, Q-222 answered; GitHub deferred. p1.9 and p1.11 done.
+- P1 exit preparation: every P1-targeted claim closed on 25 pages except four that wait for the S1 hand check; 8 approvals stale by design (re-approval with the sign-off).
 
 ## Done this session (s01)
 

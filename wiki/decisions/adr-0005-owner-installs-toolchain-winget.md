@@ -3,7 +3,7 @@ id: adr-0005
 type: decision
 title: "Owner installs the toolchain via winget; Claude supplies exact commands and verifies"
 status: superseded
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -22,13 +22,7 @@ options:
   - "Containerised or devcontainer toolchain"
 phase: phase-p0-planning
 tags: [toolchain, environment, windows]
-unverified:
-  - claim: "winget id Microsoft.VisualStudio.2022.BuildTools with the VCTools workload and --includeRecommended installs MSVC link.exe plus a Windows SDK sufficient for Tauri 2.12.1"
-    verify_in: phase-p1-foundation
-  - claim: "The Rust stable version installed by rustup is at least 1.90 (tauri 2.12.1 rust_version)"
-    verify_in: phase-p1-foundation
-  - claim: "winget --version pinning works for OpenJS.NodeJS.LTS"
-    verify_in: phase-p1-foundation
+unverified: []
 ---
 
 # ADR-0005: The owner installs the toolchain via winget; Claude supplies exact commands and verifies
@@ -110,9 +104,9 @@ Rules:
 
 ### Negative
 
-- Whether the Visual Studio 2022 Build Tools id and workload flags give a toolchain sufficient for Tauri 2.12.1 is UNVERIFIED[phase-p1-foundation]. A newer Visual Studio generation may exist. This was not researched.
-- Whether the installed stable Rust is ≥ 1.90 is UNVERIFIED[phase-p1-foundation]. It is almost certainly met by any current stable, but it must be observed.
-- If Node is installed after 2026-10-28 it may be v26. Pinning with `winget ... --version 24.20.0` is UNVERIFIED[phase-p1-foundation]. Node v24.20.0 was installed in session s01 and the owner chose to stay on Node 24 LTS (Q-102, answered: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)).
+- Whether the Visual Studio 2022 Build Tools id and workload flags give a toolchain sufficient for Tauri: verified in P1 for the installed Build Tools 2022 17.14 (VCTools workload): three Tauri 2.12.3 spikes built and linked with its MSVC linker ([toolchain](../raw/evidence/phase-p1-foundation/toolchain.txt), [link check](../raw/evidence/phase-p1-foundation/toolchain-details.txt)). A newer Visual Studio generation may exist. This was not researched.
+- The installed stable Rust is 1.99.0, observed in P1 ([toolchain](../raw/evidence/phase-p1-foundation/toolchain.txt)).
+- If Node is installed after 2026-10-28 it may be v26. Pinning with `winget ... --version 24.20.0` is possible: winget lists 24.20.0 as an installable version ([claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §4). Node v24.20.0 was installed in session s01 and the owner chose to stay on Node 24 LTS (Q-102, answered: [raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)).
 
 ### Follow-ups
 

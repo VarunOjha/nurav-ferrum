@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:96cb37ffb38add365d79a07a4dc1db0a1795775ad9393fb3360824ff8222c507"
+    "content_hash": "sha256:c5dfe15261c4800efd01f9957b5cbc86385dda7dfb8e45e730aa8fd2e5c7051e"
   },
   "entries": [
     {
@@ -2032,6 +2032,32 @@
       "tags": [
         "approvals",
         "web views"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-exit-prep",
+      "date": "2026-10-11",
+      "time": "13:56",
+      "title": "End-of-phase cleanup: phase 1 notes closed",
+      "done": "Claude went through every note that said \"check this in phase 1\". Most are now confirmed by phase 1 test output; the rest moved to the phase that can really test them (each with a reason), or were dropped because that route was not chosen. A few quick extra checks were saved. Eight pages you approved changed this way, so they need your re-approval.",
+      "next": "Your hand check of experiment 1 closes the last four notes; then you re-approve the changed pages with the phase 1 sign-off.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Six decisions, the phase 1 page and the rulebook: changed by the cleanup",
+          "status": "Outdated"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] plan | P1 exit preparation: P1-targeted claims closed on 25 pages; four wait for the S1 hand check",
+        "## [2026-10-11] gate | adr-0002, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema approval stale"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "wiki",
+        "approvals"
       ]
     }
   ]

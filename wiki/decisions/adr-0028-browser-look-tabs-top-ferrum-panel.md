@@ -3,7 +3,7 @@ id: adr-0028
 type: decision
 title: "Browser look: tabs on top, Ferrum panel on the right"
 status: accepted
-updated: 2026-10-10
+updated: 2026-10-11
 sources:
   - raw/owner/2026-10-10-s01-browser-ui-design-request.md
   - raw/owner/2026-10-10-s01-browser-ui-design-answers-1.md
@@ -24,7 +24,7 @@ unverified:
   - claim: "Per-tab memory and CPU can be read for the Ferrum panel"
     verify_in: phase-p5-telemetry
   - claim: "A custom title bar with tabs in it resizes reliably under Tauri on Windows 11 (issue #12207)"
-    verify_in: phase-p1-foundation
+    verify_in: phase-p3-tabs-sessions
   - claim: "A strict content security policy for the shell is workable, so the IBM Plex fonts can be bundled locally"
     verify_in: phase-p2-minimal-container
 ---
@@ -118,7 +118,7 @@ Claude's proposals for building it (also binding only once the owner approves th
 - **Tabs in the title bar need a custom title bar.** Option A as drawn puts the tabs in the window's top bar, next
   to the Windows 11 window buttons. That needs a custom title bar, which the shell's design notes
   ([comp-app-shell](../architecture/components/comp-app-shell.md)) advise against at first, because of a known
-  resize problem (Tauri issue #12207, UNVERIFIED[phase-p1-foundation]). Until P1 has checked it, the early shell
+  resize problem (Tauri issue #12207, UNVERIFIED[phase-p3-tabs-sessions]; re-targeted in P1: spike S1 used the normal Windows title bar, so the custom-title-bar case was not tested; it belongs with the title-bar question Q-125 before P3). Until it is checked, the early shell
   may show the normal Windows title bar above the tab strip. Open question
   [Q-125](../overview/ov-open-questions.md#q-125-tabs-in-the-windows-top-bar-custom-title-bar-or-the-normal-windows-title-bar-first)
   asks the owner which way to go.

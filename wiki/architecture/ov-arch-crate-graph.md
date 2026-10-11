@@ -3,7 +3,7 @@ id: ov-arch-crate-graph
 type: overview
 title: "Architecture: Cargo workspace and crate dependency graph"
 status: review
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
@@ -17,7 +17,7 @@ unverified:
   - claim: "Building ferrum-baseline with cargo -p does not inherit the tauri unstable feature enabled by ferrum-desktop"
     verify_in: phase-p6-benchmark-harness
   - claim: "Versions of crates not covered by research notes (url, thiserror, serde_json, toml, tokio features, psl) are current and compatible"
-    verify_in: phase-p1-foundation
+    verify_in: phase-p2-minimal-container
 ---
 
 # Cargo workspace and crate dependency graph
@@ -99,7 +99,7 @@ Design rules:
 | `serde` | `1.0.229` | Tauri note §1 |
 | `tracing` | `0.1.44` | Tauri note §1 |
 
-Other crates (`serde_json`, `url`, `thiserror`, `toml`, a PSL crate, `tracing-subscriber`) are needed, but their versions are not in any research note yet: UNVERIFIED[phase-p1-foundation]. `sysinfo` is **not** used for headline memory metrics: its `memory()` returns the double-counting working set ([measurement note](../raw/research/measurement-methodology.md)).
+Other crates (`serde_json`, `url`, `thiserror`, `toml`, a PSL crate, `tracing-subscriber`) are needed, but their versions are not in any research note yet: UNVERIFIED[phase-p2-minimal-container] (re-targeted in P1: the P1 workspace has no dependencies; each crate is checked when P2 adds it, under `cargo deny`). `sysinfo` is **not** used for headline memory metrics: its `memory()` returns the double-counting working set ([measurement note](../raw/research/measurement-methodology.md)).
 
 ## 4. Profiles and reproducibility
 

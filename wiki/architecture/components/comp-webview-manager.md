@@ -3,7 +3,7 @@ id: comp-webview-manager
 type: component
 title: "WebView manager (tab WebViews, navigation, sessions, raw COM layer)"
 status: planned
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -63,8 +63,6 @@ connects:
     kind: rust-api
     crosses_trust_boundary: false
 unverified:
-  - claim: "RawComHost (own controllers in child HWNDs with ProfileName) is feasible inside a Tauri window"
-    verify_in: phase-p1-foundation
   - claim: "Raw-COM NavigationStarting handler can coexist with Tauri's on_navigation"
     verify_in: phase-p4-security
 ---
@@ -77,7 +75,7 @@ This crate owns every tab WebView. **It is the only place in Ferrum where WebVie
 
 | Module | Content | unsafe |
 |---|---|---|
-| `host` | `TabHost` trait + backends (`TauriChildHost`, optional `PatchedTauriHost`, `RawComHost`), [integration §3](../ov-arch-webview2-integration.md). `RawComHost` feasibility is UNVERIFIED[phase-p1-foundation] | no (RawComHost delegates to `webview2`) |
+| `host` | `TabHost` trait + backends (`TauriChildHost`, optional `PatchedTauriHost`, `RawComHost`), [integration §3](../ov-arch-webview2-integration.md). `RawComHost` feasibility was verified in P1 (spike S2, [report](../../raw/evidence/phase-p1-foundation/spike-s2-profiles.md); chosen by adr-0029) | no (RawComHost delegates to `webview2`) |
 | `tab` | Per-tab state, Tauri hooks (`on_navigation`, `on_new_window`, `on_download`, `on_page_load`, `on_permission_request`) | no |
 | `session` | `session.json` snapshot store, shared by restore and discard | no |
 | `actuator` | `LifecycleActuator` implementation with the two-phase discard ([state machine §2](../ov-arch-lifecycle-state-machine.md)) | no |

@@ -3,7 +3,7 @@ id: adr-0010
 type: decision
 title: "Default site isolation via WebView2 profiles in a shared browser process"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -24,8 +24,6 @@ options:
 phase: phase-p0-planning
 tags: [isolation, security, webview2, profiles]
 unverified:
-  - claim: "Patching tauri-runtime-wry to the PR #16054 branch compiles and yields per-tab WebView2 profiles with Tauri 2.12.x"
-    verify_in: phase-p1-foundation
   - claim: "Chromium site isolation applies to WebView2 renderers in the shared process group as it does in Chrome"
     verify_in: phase-p4-security
   - claim: "Exactly which resources remain shared between WebView2 profiles in one user data folder (beyond cookies, preferences, cache being per-profile)"
@@ -68,7 +66,7 @@ All options aim to deliver Q7. They differ in how. The pros and cons below are f
 | Option | Pros | Cons |
 |---|---|---|
 | (a) **Wait** for PR #16054 to ship in a Tauri 2.x release | No custom code. Stays on supported Tauri | Release timing unknown, possibly not before P3. The PR could change or be rejected |
-| (b) **Patch** `tauri-runtime-wry` to the PR branch via `[patch.crates-io]` | Gets the feature now. Small code delta. Keeps Tauri hooks for tabs | Supply-chain and maintenance cost (pinned fork commit, manual rebase on each Tauri update). Builds are less reproducible for outside users. That it compiles and works is UNVERIFIED[phase-p1-foundation] |
+| (b) **Patch** `tauri-runtime-wry` to the PR branch via `[patch.crates-io]` | Gets the feature now. Small code delta. Keeps Tauri hooks for tabs | Supply-chain and maintenance cost (pinned fork commit, manual rebase on each Tauri update). Builds are less reproducible for outside users. Not tried in P1: the owner chose route (c) instead (adr-0029, spike S2 [report](../raw/evidence/phase-p1-foundation/spike-s2-profiles.md)) |
 | (c) **Raw-COM tab controllers** (`CreateCoreWebView2ControllerWithOptions` + `ProfileName`) in child HWNDs; Tauri only for the shell | Full control: profiles, suspend, `ProcessFailed`, network events. Independent of the Tauri release cadence | Loses Tauri hooks for tabs (`on_navigation`, `on_download`, …). All tab plumbing becomes Ferrum-owned `unsafe` COM. Largest effort. Overlaps option D of [ADR-0007](adr-0007-child-webviews.md) |
 | (d) **Per-site `data_directory`** | Works today with public Tauri API | One browser process group per site, which contradicts Q7's shared browser process and costs more memory. Environment options can differ per UDF |
 | (e) No per-site isolation | Simplest | Fails the master prompt's "isolation where technically feasible". Not the owner's choice |

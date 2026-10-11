@@ -3,7 +3,7 @@ id: ops-git-conventions
 type: operations
 title: "Git conventions: checkpoint commits, messages, never push"
 status: draft
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
@@ -16,8 +16,6 @@ tags: [git, commits, ci]
 unverified:
   - claim: "Whether large benchmark outputs under wiki/raw/bench/ are committed in full, compressed or kept outside git"
     verify_in: phase-p6-benchmark-harness
-  - claim: "A pre-commit hook or CI job can enforce that the component page is updated in the same commit as the code"
-    verify_in: phase-p1-foundation
 ---
 
 # Git conventions
@@ -137,5 +135,5 @@ unknown until then).
 ## 6. CI
 
 GitHub Actions on `windows-latest` (adr-0011) is set up in P1. CI runs only after the owner creates and
-pushes to the remote; Claude never triggers it. Whether a pre-commit hook or CI job can enforce "component
-page updated in the same commit as the code" is `UNVERIFIED[phase-p1-foundation]` (SCHEMA §9.8).
+pushes to the remote; Claude never triggers it. A pre-commit hook can warn when code changes without its component
+page (SCHEMA §9.8): `scripts/hooks/pre-commit`, tested in P1 ([hook test](../raw/evidence/phase-p1-foundation/p1.15-hook-test.txt)). It warns and does not block; install it per clone with `cp scripts/hooks/pre-commit .git/hooks/pre-commit`.

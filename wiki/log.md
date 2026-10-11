@@ -1486,3 +1486,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-11-s02-p1-design-and-questions.md]
 - result: Owner: "Approve all three (Recommended)", "Allow MPL-2.0 for libraries (Recommended)", "Defer GitHub for now (Recommended)", "Yes this PC; no power meter". Recorded with tools/approvals_record.py (34 entries); the three ADRs set to accepted (volatile key, state APPROVED_VOLATILE_DRIFT). The one-window model (adr-0007) is confirmed. Questions answered: Q-107 (by adr-0029), Q-116 (this PC), Q-122 (no meter), Q-222 (MPL-2.0 allowed for libraries). The p1.11 GitHub step is deferred by the owner. Still open in this batch: the spike S1 hand checks.
 - next: owner's S1 hand-check result; meanwhile Claude closes the remaining P1-targeted claims for the exit gate
+
+## [2026-10-11] plan | P1 exit preparation: P1-targeted claims closed on 25 pages; four wait for the S1 hand check
+
+- session: s02
+- time: 13:56
+- pages: [comp-webview-manager, ov-arch-configuration, ov-arch-crate-graph, ov-arch-repo-layout, ov-arch-webview2-integration, adr-0002, adr-0005, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, adr-0028, ov-open-questions, ops-environment-setup, ops-git-conventions, phase-p1-foundation, qual-ci-plan, qual-testing-strategy, risk-r18, risk-r20, schema]
+- sources: [raw/evidence/phase-p1-foundation/p1-claim-checks.txt, raw/evidence/phase-p1-foundation/p1.15-hook-test.txt]
+- result: Every claim tagged for P1 was verified with P1 evidence, re-targeted with a written reason, or dropped. New small checks saved in p1-claim-checks.txt (clippy undocumented_unsafe_blocks and rustc unsafe_op_in_unsafe_fn deny on Rust 1.99.0; proptest 1.12.0 needs Rust 1.88; turbopack.root works with spike lockfiles present; winget lists Node 24.20.0 and has a pin command) and the hook clone test in p1.15-hook-test.txt. Re-targeted to P2: Tauri app as a workspace member, crate versions and the toml crate, GitHub runner capabilities and SHA-pinned actions (first push deferred), reproducible-binary hashes, Node pinning after Node 26 LTS; to P3: the custom title bar resize issue 12207; to P6: pytest. Dropped: the PR 16054 patch route (not chosen) and cargo-audit (cargo-deny reads the same advisory database). SCHEMA §9.8 now names the pre-commit hook (closes the p1.15 check) and §8 lists adr-0001 to adr-0031 (next free adr-0032). ops-environment-setup's Rust and Build Tools rows now say installed. Still tagged for P1, waiting for the owner's S1 hand check: adr-0007, risk-r02, ov-arch-system-overview, comp-app-shell. quick_lint 0 errors; portal clean.
+- stales: [adr-0002, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
+
+## [2026-10-11] gate | adr-0002, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema approval stale
+
+- session: s02
+- time: 13:56
+- pages: [adr-0002, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
+- result: The exit-preparation edits above change these approved pages (claim closures only; no decision text changed), so their approvals are STALE (approvals_check). No implementation depends on them before the owner's review: only the S1 report and the exit gate remain, and the gate's entry check will wait for the re-approval. The owner is asked to re-approve them together with the P1 sign-off.
+- next: owner's S1 hand check, then the re-approval round

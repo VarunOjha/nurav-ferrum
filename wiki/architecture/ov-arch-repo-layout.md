@@ -3,7 +3,7 @@ id: ov-arch-repo-layout
 type: overview
 title: "Architecture: repository layout (master prompt section 12 adapted to repo root)"
 status: review
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -16,11 +16,9 @@ phase: phase-p0-planning
 tags: [repo, layout, gitignore]
 unverified:
   - claim: "A Tauri 2 app can live at apps/desktop with its Rust crate in apps/desktop/src-tauri as a member of a root Cargo workspace"
-    verify_in: phase-p1-foundation
+    verify_in: phase-p2-minimal-container
   - claim: "Git LFS (or an alternative) is needed for large raw benchmark outputs"
     verify_in: phase-p6-benchmark-harness
-  - claim: "Setting turbopack.root to interactive_plan prevents wrong workspace-root inference when other lockfiles exist"
-    verify_in: phase-p1-foundation
 ---
 
 # Repository layout
@@ -87,7 +85,7 @@ Notes:
 - **`docs/` vs `wiki/`.** `wiki/` is the canonical planning, decision and research memory. `docs/` holds end-user and developer documentation generated from it or written for GitHub readers. Where they conflict, the wiki wins (SCHEMA §3.4).
 - **`benchmarks/configurations/` vs `experiments/`.** `configurations/` holds *product* configurations (cfg-chrome … cfg-ferrum-adaptive and policy parameter sets). `experiments/<family>/` holds experiment definitions that combine workloads, configurations and trials. The canonical design of each experiment lives in `wiki/research/experiments/`.
 - **Generated data is separate from source** (master prompt §12). The harness writes to `benchmarks/results/<run-id>/`, which is gitignored. A run counts for research only once its full raw output is **copied unedited** into `wiki/raw/bench/<run-id>/`. Whether that needs Git LFS depends on size: UNVERIFIED[phase-p6-benchmark-harness].
-- **Shell UI location.** Putting the Tauri crate in `apps/desktop/src-tauri/` follows the Tauri convention. Whether it works cleanly as a member of a root Cargo workspace is UNVERIFIED[phase-p1-foundation].
+- **Shell UI location.** Putting the Tauri crate in `apps/desktop/src-tauri/` follows the Tauri convention. Whether it works cleanly as a member of a root Cargo workspace is UNVERIFIED[phase-p2-minimal-container] (re-targeted in P1: the spikes were built outside the workspace on purpose; p2.2 creates `apps/desktop`).
 
 ## `.gitignore` plan (phase-p1-foundation deliverable)
 
@@ -108,4 +106,4 @@ Notes:
 
 ## Lockfiles and Node project roots
 
-There will be several Node projects: `apps/desktop` (shell UI), `benchmarks/runners/playwright`, and `interactive_plan`. Each keeps its own `package-lock.json`. **No `package.json` sits at the repo root.** That keeps Next.js/Turbopack root detection from picking the wrong folder, and `interactive_plan` additionally sets `turbopack.root` explicitly ([Next.js note §3.5](../raw/research/nextjs-stack.md)). Whether that setting has the intended effect is UNVERIFIED[phase-p1-foundation].
+There will be several Node projects: `apps/desktop` (shell UI), `benchmarks/runners/playwright`, and `interactive_plan`. Each keeps its own `package-lock.json`. **No `package.json` sits at the repo root.** That keeps Next.js/Turbopack root detection from picking the wrong folder, and `interactive_plan` additionally sets `turbopack.root` explicitly ([Next.js note §3.5](../raw/research/nextjs-stack.md)). That setting works: the plan app built cleanly in P1 while the spike lockfiles existed elsewhere in the repo ([claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §3, [local CI run](../raw/evidence/phase-p1-foundation/ci-local-p1.11.txt)).

@@ -3,7 +3,7 @@ id: ov-arch-configuration
 type: overview
 title: "Architecture: configuration model and lifecycle policy flags"
 status: review
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -18,7 +18,7 @@ unverified:
   - claim: "Tauri's default app data / WebView2 user data folder location on Windows"
     verify_in: phase-p2-minimal-container
   - claim: "The toml crate is the right choice for config parsing (version and maintenance)"
-    verify_in: phase-p1-foundation
+    verify_in: phase-p2-minimal-container
   - claim: "Source of the OS memory-pressure signal used by the memory-pressure policy"
     verify_in: phase-p7-lifecycle
 ---
@@ -54,7 +54,7 @@ The **effective config** is serialised in canonical form and hashed (`config_sha
 
 ## 3. Schema sketch (TOML; key names are PROPOSALs, values are placeholders, not tuned)
 
-TOML is proposed because experiment configs are human-edited. Which parsing crate and version to use is UNVERIFIED[phase-p1-foundation]. JSON via `serde_json` is the fallback.
+TOML is proposed because experiment configs are human-edited. Which parsing crate and version to use is UNVERIFIED[phase-p2-minimal-container] (re-targeted in P1: the format itself is still open, Q-214, and the crate is chosen when p2.4 adds it). JSON via `serde_json` is the fallback.
 
 ```toml
 [session]

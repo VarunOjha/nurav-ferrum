@@ -3,7 +3,7 @@ id: adr-0002
 type: decision
 title: "Karpathy's LLM Wiki pattern as the documentation and decision system"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/llm-wiki-pattern.md
@@ -18,9 +18,7 @@ options:
   - "LLM Wiki pattern plus a search engine (qmd) or an Obsidian vault as a hard dependency"
 phase: phase-p0-planning
 tags: [process, documentation, llm-wiki]
-unverified:
-  - claim: "A pre-commit hook or CI check can enforce the CODE rule (component page updated in the same commit)"
-    verify_in: phase-p1-foundation
+unverified: []
 ---
 
 # ADR-0002: Karpathy's LLM Wiki pattern as the documentation and decision system
@@ -81,7 +79,7 @@ Search uses `index.md` and grep only. Obsidian MAY be used by the owner for brow
 
 ### Negative
 
-- Code is not a raw source, so the wiki can drift from the code. The mitigation is the CODE operation and `last_verified_commit` on component pages. Whether a pre-commit hook or CI can enforce it is UNVERIFIED[phase-p1-foundation].
+- Code is not a raw source, so the wiki can drift from the code. The mitigation is the CODE operation and `last_verified_commit` on component pages. P1 showed a pre-commit hook can warn when code changes without its component page (`scripts/hooks/pre-commit`, [hook test](../raw/evidence/phase-p1-foundation/p1.15-hook-test.txt)); it warns rather than blocks.
 - The bookkeeping overhead is real: index lines, log entries and frontmatter on every page. Until the lint script exists (a P1 deliverable), lint depends on Claude's diligence.
 - It diverges from the gist on ownership: the LLM writes the pages, but owner approval decides which pages are binding.
 

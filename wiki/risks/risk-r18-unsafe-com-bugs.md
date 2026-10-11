@@ -3,7 +3,7 @@ id: risk-r18
 type: risk
 title: "Bugs in unsafe raw-COM code (memory safety, handler leaks, re-entrancy)"
 status: open
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/00-master-prompt.md
@@ -17,9 +17,7 @@ spike: null
 owner_phase: phase-p1-foundation
 trigger: "Webview processes or private commit keep growing over create/destroy cycles; crashes or hangs inside COM callbacks; a closed tab's handlers still fire."
 fallback: "Reduce raw COM use to the minimum feature set and drop features (for example sleep, iframe interception) whose COM code cannot be made reliable, recording the gap."
-unverified:
-  - claim: "The rustc lint unsafe_op_in_unsafe_fn and the clippy lint undocumented_unsafe_blocks are available on the pinned toolchain and can be denied workspace-wide"
-    verify_in: phase-p1-foundation
+unverified: []
 ---
 
 # risk-r18: Bugs in unsafe raw-COM code (memory safety, handler leaks, re-entrancy)
@@ -62,7 +60,7 @@ Reduce raw COM use to the minimum feature set and drop features (for example sle
 
 ## Unverified claims
 
-- The rustc lint unsafe_op_in_unsafe_fn and the clippy lint undocumented_unsafe_blocks are available on the pinned toolchain and can be denied workspace-wide. UNVERIFIED[phase-p1-foundation]
+- The rustc lint unsafe_op_in_unsafe_fn and the clippy lint undocumented_unsafe_blocks are available on the pinned toolchain and can be denied: checked in P1 on Rust 1.99.0 ([claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §1).
 
 ## Affects
 

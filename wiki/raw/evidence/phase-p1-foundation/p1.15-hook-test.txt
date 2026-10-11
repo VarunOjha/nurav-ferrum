@@ -1,0 +1,12 @@
+# p1.15 hook test before the SCHEMA section 9.8 edit (session s02). Step 2 fails by design until that edit at the exit gate.
+Ferrum check p1.15: Warn when code changes without its page
+Why: the plan must never drift from the code.
+Run at 2026-10-11 13:52 on commit a3bd51f (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Code-only commit warns; code-plus-page commit does not (15 s)
+         warning shown only for the code-only commit
+  FAIL   The rulebook no longer marks this as unverified
+         The rule book still says this warning is untested (SCHEMA section 9.8 still marks it as not checked yet).
+------------------------------------------------------------------------
+RESULT: FAIL - p1.15 (1 PASS, 1 FAIL; 16 s)
+What to tell Claude: "p1.15 check failed at: The rulebook no longer marks this as unverified", and paste the FAIL lines above.

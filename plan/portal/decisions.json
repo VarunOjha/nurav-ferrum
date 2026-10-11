@@ -41,7 +41,7 @@
       "title": "The wiki is Claude's working memory",
       "summary": "Claude keeps plans, decisions and research as linked pages in the wiki (Karpathy's 'LLM wiki' pattern). Your raw notes are never edited; Claude maintains everything else.",
       "why": "You chose this pattern for documentation and decision making.",
-      "catch": "Bookkeeping on every change, and the wiki can drift from the code unless it is checked.",
+      "catch": "Bookkeeping on every change, and the wiki can drift from the code; a before-commit warning (tested in P1) helps.",
       "status": "Accepted",
       "decided_by": "you",
       "date": "2026-10-08",
@@ -60,7 +60,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0002-llm-wiki-documentation-system.md",
-        "content_hash": "sha256:ce62c03d78c712d210d2fa4980b5571cd3ceb538e1ef96cc8ef25c45f3e38e4b"
+        "content_hash": "sha256:8fc032a5c487a479d3424b7ec10387f624983dc6ac4de63b97979a28f1dcbca6"
       }
     },
     {
@@ -153,7 +153,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0005-owner-installs-toolchain-winget.md",
-        "content_hash": "sha256:3d35002d9b9c80af3fd24a9a6d899ec711d78e95fb3cd7df7452f1017f5f551e"
+        "content_hash": "sha256:e1dea8bf1debd1f3e2b65680835b3943b86e8b6c64df80fbb6c545e2ac9254d5"
       }
     },
     {
@@ -184,7 +184,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0006-shell-ui-vanilla-ts-vite.md",
-        "content_hash": "sha256:7918e1b6e25fc19b61590e31027f1afb822cb04ca64df5a8dbc2874cfe8f6555"
+        "content_hash": "sha256:4ef92ab8f3895a5b6cdf9ea2375a878c77976bd207a3cb5a50b47c801b912cbc"
       }
     },
     {
@@ -291,7 +291,7 @@
       "title": "Sites kept apart by profiles in one shared browser process",
       "summary": "Each site gets its own WebView2 profile (own cookies and storage) while all share one browser process. How to build it is still open and must be settled before P3.",
       "why": "Your choice: separate data per site without one browser process per site.",
-      "catch": "Tauri cannot set a profile yet, so P3 depends on an unreleased fix, a patch, or low-level code.",
+      "catch": "Tauri cannot set a profile yet; you chose the low-level route in P1 (decision 29), which means more of our own code.",
       "status": "Accepted",
       "decided_by": "you",
       "date": "2026-10-08",
@@ -316,7 +316,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0010-isolation-webview2-profiles.md",
-        "content_hash": "sha256:3d5b7eb82295fa312065db2af124db84cdb82fa93c21a40df47f3b711f9b0a32"
+        "content_hash": "sha256:818a0e9fbc60875953db30d2761549279faa9070471068a186b71e5be1d3f750"
       }
     },
     {
@@ -345,7 +345,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0011-git-ci-license.md",
-        "content_hash": "sha256:d798dd041915c1c860991cf20961c110ae82afc63685d2176fbfab44befdca76"
+        "content_hash": "sha256:b0a1bf4e16cb5c1759cab654d7a1994503b127ff6756d943955011573d3e3d40"
       }
     },
     {
@@ -539,7 +539,7 @@
       "title": "Repo folder is the project folder; Rust code in one workspace",
       "summary": "The planned folder layout (app, libraries, benchmarks, analysis, paper) sits directly at the repo root, plus folders for the baseline app, the benchmark robot and the throwaway test builds (kept as evidence). You approved it on 11 Oct.",
       "why": "Shorter Windows paths, and the wiki and plan sit beside the code.",
-      "catch": "Slightly differs from the original drawing; that the tools build this layout is not checked yet (P1).",
+      "catch": "Slightly differs from the original drawing; that the Tauri tool builds the app inside this layout is checked in P2.",
       "status": "Accepted",
       "decided_by": "claude",
       "date": "2026-10-08",
@@ -561,7 +561,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0018-repo-root-cargo-workspace.md",
-        "content_hash": "sha256:5af406d9a19d84278d0fb51eb57ca2537998c5b0b113229a85615c943adea736"
+        "content_hash": "sha256:edf1b89394a79adb40b23a8d687fc53c915a0f5bbb538484e912007a9035eaa8"
       }
     },
     {
@@ -652,7 +652,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0021-claude-runs-toolchain-installs.md",
-        "content_hash": "sha256:cc5ae072989e0e7f78de1aea81b54aeb54bf55bea04121506663b7cc096922ae"
+        "content_hash": "sha256:2443e70fccab25634c1ee112185c5c7a330b1def2b8be67a323e7ed5f3b2d9f6"
       }
     },
     {
@@ -851,7 +851,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md",
-        "content_hash": "sha256:b13f18fc6fbe73755f87b02d5713194119df804b74174b280e8b33f5a53a6a68"
+        "content_hash": "sha256:90f446db59f30a2eea018b2a38bb43a501e07c95a96c314242e02914b2c6d311"
       }
     },
     {
