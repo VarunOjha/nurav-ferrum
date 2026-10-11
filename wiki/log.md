@@ -1120,3 +1120,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views, ip-testing, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/lists-checks.txt]
 - result: In a scratch copy outside the repo (own npm ci, e2e port 3448): typecheck, eslint, 868 unit tests passed and 1 skipped; lint:wiki first failed with 1 error: the copy has no .git, so the lint checked the MANIFEST format and flagged line 64 (an existing ` *` marker from c14d4b6); with that line changed in the copy only, 0 errors, 34 warnings, 4 info (in the repo, with git, the line stays as committed and lint:wiki is 0 errors); build; 210 browser tests passed; E2E guard: real files unchanged. 36 screenshots on port 3449 (all five lists at 1440 and 390 px, light and dark; a card opened; Open all; Oldest first, By number, risk A to Z; Questions on Any; Research filtered to Experiment and Measure) were read: no sideways scrolling, counts right (Questions "1–20 of 39 (54 in all)" on Open, 54 on Any; Research 9 experiments, 27 measures), no defects found. Scratch copy deleted, its server stopped, the owner's portal on 3417 kept running, `.git/config` unchanged. Repo: quick lint 0 errors, 0 warnings; python tool tests 19 OK; portal-sync self-tests 52 passed; portal check clean; mask scan 0.
+
+## [2026-10-11] plan | p0.17 step "lists" committed: every list now works the same way
+
+- session: s01
+- time: 00:16
+- pages: [status-live]
+- sources: [raw/owner/2026-10-10-s01-browse-v2-approval.md, raw/evidence/phase-p0-planning/portal-v2/lists-checks.txt]
+- result: What was done → the owner's approved plan ("Approved") was built by two agents and integrated: one list pattern on Log, Questions, Decisions, Risks and Research, labels on every question, risk and research item, the time of day on new log entries and questions → the owner finds and compares items the same way on every tab. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause), now naming the five lists. A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear (and whether a "speed" or "reliability" tag should be added); then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: 8af6847

@@ -4318,6 +4318,16 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "8af6847",
+      "kind": "commit",
+      "title": "Commit: every list now works the same way",
+      "summary": "Log, Questions, Decisions, Risks and Research now share one pattern: cards that open on click, Sort, search, filters and pages. Questions, risks and research items got a category and two tags, and new entries record the time of day.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

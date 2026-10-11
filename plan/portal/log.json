@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:6062c1e2e9ccf2c7cd2135997c66651b0dd21957659c24529f4fae1032fa663f"
+    "content_hash": "sha256:a04daf72911ca6b5f6d701f39c820aa018f23bc450abcabc5f89066e9a43fcbb"
   },
   "entries": [
     {
@@ -1406,12 +1406,13 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "8af6847",
       "covers": [
         "## [2026-10-11] ingest | Owner asks for one list pattern: cards that open on click, sort, and the same for questions, risks and research",
         "## [2026-10-11] plan | Owner approves the \"same pattern for every list\" plan: \"Approved\"",
         "## [2026-10-11] code | p0.17 lists: one list pattern for log, questions, decisions, risks and research",
-        "## [2026-10-11] lint | p0.17 lists: npm run verify green in a scratch copy; screenshots of all five lists read at 1440 and 390 px in both themes"
+        "## [2026-10-11] lint | p0.17 lists: npm run verify green in a scratch copy; screenshots of all five lists read at 1440 and 390 px in both themes",
+        "## [2026-10-11] plan | p0.17 step \"lists\" committed: every list now works the same way"
       ],
       "phase": "phase-p0-planning",
       "category": "Built",

@@ -3,7 +3,7 @@ id: status-live
 type: status
 title: "Ferrum live status and next action"
 status: active
-updated: 2026-10-10
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -17,7 +17,7 @@ approvable: false
 session: s01
 current_phase: phase-p0-planning
 current_task: p0.17
-next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes, the browser design you chose, first under Architecture, with its review fixes: a readable close-up of the Ferrum panel on phones and the sample note right under the picture, and the new search, filters, category and tag labels and page numbers on the Decisions and Log tabs, with their review fixes). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
+next_action: "Owner: stop the running portal with Ctrl+C, then in PowerShell 7, from the repo folder, run pwsh -NoProfile -File scripts/start-portal.ps1 again (it rebuilds and opens http://127.0.0.1:3417/ with the Ref button, its fixes and the new eight-column tasks table with its review fixes, the browser design you chose, first under Architecture, with its review fixes: a readable close-up of the Ferrum panel on phones and the sample note right under the picture, and one list pattern on Log, Questions, Decisions, Risks and Research: cards that open on click with Open all, a Sort choice, search, filters, category and tag labels and page numbers; Questions start on the open ones, Risks are cards highest risk first, Research is one list of 70 with a Kind filter). Read every tab and popup, including the P1 phase popup with its task check scripts and gate script. Then tell Claude in Claude Code what reads wrong or unclear, or \"the portal reads fine\"; for layout feedback turn on Ref and paste the copied block names. Claude fixes the wording, asks your first approvals in chat and records them, then asks your P0 sign-off. Then Claude PAUSES (your directive of 2026-10-10): P1 does not start until you explicitly say go."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -240,10 +240,7 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p0.17 step "lists" (owner-approved 2026-10-10: one list pattern for Log, Questions, Decisions, Risks, Research: accordion cards, sort, search, filters, category + 2 tags, pages; time of day from now on; delete unused LogFilter.tsx)
-- intent: build per [raw/owner/2026-10-10-s01-browse-v2-approval.md](wiki/raw/owner/2026-10-10-s01-browse-v2-approval.md); verify in a scratch copy; commit feat + checkpoint, then review fixes + checkpoint
-- planned paths: plan/portal/{questions,risks,research,decisions,log,taxonomy,refs,pipeline}.json, plan/portal/schema/**, tools/portal-sync-check.ps1, tools/test-portal-sync-check.ps1, tools/fixtures/portal-sync/**, tools/quick_lint.py (time line), .claude/skills/wiki-to-portal/SKILL.md, wiki/SCHEMA.md (§12 time line), wiki/operations/ops-wiki-maintenance.md, wiki/operations/ops-portal-pipeline.md, wiki/interactive-plan/ip-*.md, wiki/overview/ov-open-questions.md (time rule note only), interactive_plan/** (incl. deleting components/portal/LogFilter.tsx, owner-allowed), wiki/raw/owner/2026-10-10-s01-browse-v2-*.md (new), wiki/raw/evidence/phase-p0-planning/portal-v2/lists-*.txt, MANIFEST.sha256
-- rollback: `git restore` the planned paths (and `git clean` only for files this step created)
+(empty: p0.17 step "lists" (one list pattern for Log, Questions, Decisions, Risks and Research; time of day from now on) verified and committed 2026-10-11 (`8af6847`); next the owner restarts the portal and continues the walkthrough)
 
 ## Blockers
 

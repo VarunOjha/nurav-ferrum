@@ -5,9 +5,9 @@
   "summary": "We are finishing the plan (P0). The new read-only portal is built, reviewed and handed over to you; Claude cannot end a turn while its text is out of date. Nothing is approved yet, and no Ferrum code exists yet. After your P0 sign-off Claude pauses until you say go for P1.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:855074a59245af4c17b4d4d2357e74a40a45f1cc66377ae3eed4d3f2f74b12db"
+    "content_hash": "sha256:1abfa13afa55c4093b07e735b50d26f5e642facb75fc8af6ab9f02c8de39efe8"
   },
-  "updated": "2026-10-10",
+  "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
@@ -41,7 +41,7 @@
     "where_we_are": [
       {
         "item": "Portal",
-        "state": "Built, reviewed and handed over; Ref button; tasks table in eight columns; the browser design you chose under Architecture, fixed after a review; Decisions and Log can now be searched, filtered and paged, fixed after a review"
+        "state": "Built, reviewed and handed over; Ref button; eight-column tasks table; your browser design under Architecture; all five lists have cards that open on click, Sort, search, filters and pages"
       },
       {
         "item": "Your walkthrough",
