@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: the tools are confirmed. Next Claude records this computer's hardware.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 2 of 17 tasks done. Next: p1.3 ignore rules and licence files.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:e62f6092fdc091fe2d44b73971bdcc2e3b2ab5af39b22507700e5c07ff23b05c"
+    "content_hash": "sha256:61f7b916fdcedbd07de67d557a3283c6f342bda9dca22df7e65a2e9a7fda7b82"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 1 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 2 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "1 of 17 tasks done"
+        "state": "2 of 17 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Record this computer's hardware"
+        "state": "p1.3 ignore rules and licence files"
       }
     ],
-    "why": "Nothing to run. Benchmark numbers depend on the machine → Claude records processor, memory, screens and browser versions → every later result can name the computer it ran on.",
+    "why": "Nothing to run. Claude adds the ignore rules (build output never gets saved), the MIT and Apache licence texts from their official sources, and a licence note in the README.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

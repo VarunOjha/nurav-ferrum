@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:d7d70dcdafb47a9d4091f43ed347180d5f01cd96af9cade882f7e71b6777eb54"
+    "content_hash": "sha256:5807090ff5fe82bff0c5d614c75241e022978f36f4717130581087063151b134"
   },
   "entries": [
     {
@@ -1676,6 +1676,26 @@
       "tags": [
         "toolchain",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-2",
+      "date": "2026-10-11",
+      "time": "12:35",
+      "title": "This computer's hardware recorded",
+      "done": "Claude saved the processor, memory, graphics, screens, Windows build, power plan and browser versions. The web view engine is unchanged since 8 Oct; Edge is one version ahead of it.",
+      "next": "Claude sets up the git ignore rules and the two licence files.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "c0142a5",
+      "covers": [
+        "## [2026-10-11] code | p1.2 benchmark machine inventory recorded"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Set up",
+      "tags": [
+        "benchmarks",
+        "toolchain"
       ]
     }
   ]

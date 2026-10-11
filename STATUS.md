@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: null
-next_action: "Task p1.2 (machine inventory): write wiki/raw/evidence/phase-p1-foundation/environment.md from the PowerShell inventory commands on the phase page, then run pwsh -NoProfile -File scripts/verify/p1.2-machine-inventory.ps1; commit p1.2; continue in the phase page step order."
+next_action: "Task p1.3 (git hygiene): extend .gitignore and .gitattributes per the phase page, add LICENSE-MIT and LICENSE-APACHE from the official texts and a README licence section, run pwsh -NoProfile -File scripts/verify/p1.3-ignore-licences.ps1, commit p1.3."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -44,6 +44,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 
 - Session start; go-ahead transcribed; P1 entry gate passed; `phase-p1-foundation` set to in-progress.
 - p1.1 done (`29b7d81`): toolchain recorded ([toolchain.txt](wiki/raw/evidence/phase-p1-foundation/toolchain.txt), [toolchain-details.txt](wiki/raw/evidence/phase-p1-foundation/toolchain-details.txt)); cargo-deny 0.20.2 installed; cargo uses the MSVC linker.
+- p1.2 done (`c0142a5`): machine inventory saved ([environment.md](wiki/raw/evidence/phase-p1-foundation/environment.md)); Q-116 and Q-122 still open for the owner.
 
 ## Done this session (s01)
 
@@ -255,7 +256,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p1.1 verified and committed 2026-10-11 as `29b7d81`)
+(empty: p1.2 verified and committed 2026-10-11 as `c0142a5`)
 
 ## Blockers
 
@@ -291,11 +292,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 1 of 17 tasks done |
-| Next task | p1.2 record this computer's hardware |
+| Phase 1 | In progress: 2 of 17 tasks done |
+| Next task | p1.3 ignore rules and licence files |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude records the processor, memory, graphics, screens, power plan, Windows build and the browser and WebView2 versions.
+**2. Why, and what it does.** Nothing for you to run now. Claude adds the ignore rules (build output never gets saved), the MIT and Apache licence texts from their official sources, and a licence note in the README.
 
 **3. The script:** none for you.
 
@@ -310,4 +311,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: p1.1 done). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 2 of 17 tasks done, last p1.2). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

@@ -1322,3 +1322,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: cargo install cargo-deny --locked installed cargo-deny 0.20.2. scripts/verify/p1.1-toolchain.ps1 -SaveEvidence PASS (8 of 8): rustc 1.99.0 on x86_64-pc-windows-msvc, cargo 1.99.0, VS Build Tools 2022 17.14, node v24.20.0, npm 11.19.0, Python 3.12.10, git 2.52.0.windows.1, PowerShell 7.6.6. Nothing else had to be installed (no winget, no UAC prompt). Git's link.exe is first on PATH, but cargo rustc --print link-args shows cargo calls the MSVC 14.44.35207 link.exe, and throw-away --lib and --bin crates build. This settles the phase page's link.exe claim; the phase-page tags are closed at the exit gate (editing the page now would stale its approval). Note: cargo and rustc are not on the Claude Code Bash PATH; add $USERPROFILE/.cargo/bin.
 - next: p1.2 machine inventory
 - commit: 29b7d81
+
+## [2026-10-11] code | p1.2 benchmark machine inventory recorded
+
+- session: s02
+- time: 12:35
+- pages: [phase-p1-foundation]
+- sources: [raw/evidence/phase-p1-foundation/environment.md]
+- result: Inventory commands of the phase page (plus memory modules, monitor list, Windows display version, browser file versions) saved as environment.md, masked. AMD Ryzen 7 6800H (8 cores, 16 threads), 4 x 8 GiB memory modules, Radeon graphics plus two DisplayLink adapters, Windows 11 Pro 25H2 build 26200.9457, Balanced power plan, no battery. WebView2 pv 154.0.4258.62, unchanged since 2026-10-08; Edge 155.0.4283.45; Chrome 154.0.8037.95. scripts/verify/p1.2-machine-inventory.ps1 PASS (3 of 3). Q-116 (is this the benchmark machine) and Q-122 (wall-power meter) are still open for the owner; batched with the next owner questions.
+- next: p1.3 git hygiene and licences
+- commit: c0142a5

@@ -390,7 +390,7 @@
       "kind": "task",
       "title": "P1 task: Record this computer's hardware",
       "summary": "Benchmark numbers depend on the machine → record CPU, memory, graphics, power plan and browser versions → results can be compared and repeated.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4394,6 +4394,14 @@
       "kind": "commit",
       "title": "Commit: Tools confirmed and recorded",
       "summary": "Tool versions for phase 1 saved, licence checker added.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "c0142a5",
+      "kind": "commit",
+      "title": "Commit: This computer's hardware recorded",
+      "summary": "Claude saved the processor, memory, graphics, screens, Windows build, power plan and browser versions. The web view engine is unchanged since 8 Oct; Edge is one version ahead of it.",
       "status": null,
       "related": []
     }

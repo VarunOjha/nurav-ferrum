@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 1,
+    "done": 2,
     "total": 17
   },
   "step_order": [
@@ -37,7 +37,7 @@
       "what": "A record of this computer: CPU, memory, graphics, power plan, Windows build, and browser and web view versions.",
       "why": "The same app can score very differently on another computer or power setting. Without this record, readers could not judge or repeat any benchmark number.",
       "how": "Run the PowerShell inventory commands listed on the phase page and save their output; you answer the CPU, memory and power-meter questions.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Benchmark numbers depend on the machine → record CPU, memory, graphics, power plan and browser versions → results can be compared and repeated.",
       "check": "The inventory file holds every listed item; the web view version is re-read and compared with the one from 8 Oct.",
       "script": "scripts/verify/p1.2-machine-inventory.ps1"
