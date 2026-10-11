@@ -3,7 +3,7 @@ id: ops-wiki-maintenance
 type: operations
 title: "Wiki maintenance: running ingest, query, lint and decide as Claude"
 status: draft
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/research/llm-wiki-pattern.md
   - raw/01-scoping-decisions.md

@@ -19,6 +19,7 @@ import {
   isIsoDate,
   matches,
   mergeQuery,
+  mirrorsCategory,
   normalize,
   ownPart,
   ownsKey,
@@ -33,6 +34,7 @@ import {
   searchText,
   searchWords,
   sortItems,
+  sortNote,
   SORTS,
   stateToQuery,
   update,
@@ -803,5 +805,41 @@ describe("per-tab rules", () => {
     expect(ids(filterItems(b.items, parseState("?category=Measure", b.spec)))).toEqual(["metric-ram"]);
     expect(ids(filterItems(b.items, parseState("?q=prediction", b.spec)))).toEqual(["hyp-01"]); // the kind is searched
     expect(researchBrowse(null, null, null).items).toEqual([]);
+  });
+
+  it("researchBrowse leaves out the Status filter while each kind has its own single status (review 2026-10-11)", () => {
+    const base = { summary: "Details", related: [], source: SOURCE, tags: ["memory", "CPU"] };
+    const r = {
+      questions: [{ ...base, id: "rq-01", title: "Q", question: "Q?", status: "Open, no data yet" }],
+      hypotheses: [{ ...base, id: "hyp-01", title: "H", prediction: "P", status: "Draft, not tested" }],
+      experiments: [{ ...base, id: "exp-a", title: "E", status: "Designed, not run" }],
+      metrics: [{ ...base, id: "metric-a", title: "M", unit: "MB", status: "Proposed, not checked" }],
+      workloads: [{ ...base, id: "wl-a", title: "W", status: "Proposed, not built" }],
+    } as unknown as Research;
+    expect(researchBrowse(r, TAX, ROADMAP).spec.extras).toEqual([]);
+  });
+});
+
+describe("review fixes 2026-10-11", () => {
+  const it_ = (id: string, category: string | null, status: string[]) => ({ id, category, facets: { status } });
+
+  it("mirrorsCategory: true only when the filter splits the items exactly like the category", () => {
+    expect(mirrorsCategory([it_("a", "X", ["1"]), it_("b", "X", ["1"]), it_("c", "Y", ["2"])], "status")).toBe(true);
+    // One status in two categories, or two statuses in one category: a real extra choice.
+    expect(mirrorsCategory([it_("a", "X", ["1"]), it_("b", "Y", ["1"]), it_("c", "Y", ["2"])], "status")).toBe(false);
+    expect(mirrorsCategory([it_("a", "X", ["1"]), it_("b", "X", ["2"]), it_("c", "Y", ["3"])], "status")).toBe(false);
+    // Fewer than two values: nothing to repeat.
+    expect(mirrorsCategory([it_("a", "X", ["1"]), it_("b", "X", ["1"])], "status")).toBe(false);
+    expect(mirrorsCategory([], "status")).toBe(false);
+  });
+
+  it("sortNote: only Newest or Oldest first on a list without dates", () => {
+    const undated = [{ date: null }, { date: null }];
+    expect(sortNote("newest", undated, "risks")).toBe("The risks have no date, so this shows the last written first.");
+    expect(sortNote("oldest", undated, "risks")).toBe("The risks have no date, so this shows the first written first.");
+    expect(sortNote("az", undated, "risks")).toBeNull();
+    expect(sortNote("risk", undated, "risks")).toBeNull();
+    expect(sortNote("newest", [{ date: "2026-10-10" }, { date: null }], "entries")).toBeNull();
+    expect(sortNote("newest", [], "risks")).toBeNull();
   });
 });

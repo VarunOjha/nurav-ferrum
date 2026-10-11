@@ -8,6 +8,7 @@ import { act, cleanup, fireEvent, render, screen, within } from "@testing-librar
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Browse, { type BrowseCard } from "@/components/portal/browse/Browse";
 import CardLine from "@/components/portal/browse/CardLine";
+import { kindHref } from "@/components/portal/browse/KindLinks";
 import LabelChips from "@/components/portal/browse/LabelChips";
 import { searchText, type BrowseItem, type BrowseSpec, type ExtraFilter } from "@/lib/portal/browse";
 
@@ -74,7 +75,7 @@ const CARDS: Record<string, BrowseCard> = Object.fromEntries(
       body: (
         <div>
           <p>Details of {it.id}</p>
-          <LabelChips category={it.category} tags={it.tags} uiRef="LO-10" />
+          <LabelChips tags={it.tags} uiRef="LO-10" />
         </div>
       ),
     },
@@ -451,12 +452,26 @@ describe("Browse", () => {
     expect(window.location.search).toBe("?risk-sort=az&risk-page=2");
   });
 
-  it("outside a browse list the tag chips are plain labels", () => {
-    render(<LabelChips category="Built" tags={["memory"]} uiRef="LO-10" />);
+  it("outside a browse list the tag chips are plain labels, without the category (review 2026-10-11)", () => {
+    render(<LabelChips tags={["memory", "CPU"]} uiRef="LO-10" />);
     expect(screen.queryByRole("button")).toBeNull();
-    expect(screen.getByTestId("label-chips").textContent).toBe("Category: BuiltTag: #memory");
+    expect(screen.getByTestId("label-chips").textContent).toBe("Tags:#memory#CPU");
     cleanup();
-    const { container } = render(<LabelChips category={null} tags={[]} uiRef="LO-10" />);
+    const { container } = render(<LabelChips tags={[]} uiRef="LO-10" />);
     expect(container.innerHTML).toBe("");
+  });
+
+  it("inside a browse list the opened card's tag row says Filter by tag and repeats no category", () => {
+    renderBrowse();
+    const chips = screen.getAllByTestId("label-chips")[0];
+    expect(chips.textContent?.startsWith("Filter by tag:")).toBe(true);
+    expect(chips.querySelector(".chip-cat")).toBeNull();
+  });
+
+  it("kindHref keeps the other choices, drops the page, and a second click on the chosen kind clears it", () => {
+    expect(kindHref("q=memory&sort=az&page=2", "Measure")).toBe("?q=memory&sort=az&category=Measure");
+    expect(kindHref("q=memory&category=Measure", "Measure")).toBe("?q=memory");
+    expect(kindHref("category=Measure", "Measure")).toBe("");
+    expect(kindHref("category=Measure", "Test site")).toBe("?category=Test+site");
   });
 });

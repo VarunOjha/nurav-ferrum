@@ -5,7 +5,7 @@
   "summary": "We are finishing the plan (P0). The new read-only portal is built, reviewed and handed over to you; Claude cannot end a turn while its text is out of date. Nothing is approved yet, and no Ferrum code exists yet. After your P0 sign-off Claude pauses until you say go for P1.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:1abfa13afa55c4093b07e735b50d26f5e642facb75fc8af6ab9f02c8de39efe8"
+    "content_hash": "sha256:869f8715931bc2cd25b6a5e435faf9dec73f5e4afbc526296b0426a50a2d9cf0"
   },
   "updated": "2026-10-11",
   "where_we_are": [

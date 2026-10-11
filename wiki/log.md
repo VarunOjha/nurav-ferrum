@@ -3,7 +3,7 @@ id: log
 type: log
 title: "Wiki log (append-only)"
 status: active
-updated: 2026-10-10
+updated: 2026-10-11
 sources: []
 related: [schema, index]
 approvable: false
@@ -1130,3 +1130,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: What was done → the owner's approved plan ("Approved") was built by two agents and integrated: one list pattern on Log, Questions, Decisions, Risks and Research, labels on every question, risk and research item, the time of day on new log entries and questions → the owner finds and compares items the same way on every tab. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause), now naming the five lists. A refs.json explainer was added for the new commit.
 - next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear (and whether a "speed" or "reliability" tag should be added); then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
 - commit: 8af6847
+
+## [2026-10-11] code | p0.17 lists-fixes: review fixes for the one list pattern
+
+- session: s01
+- time: 00:50
+- pages: [ip-routes-and-views, ip-testing, ops-resume-after-interruption]
+- sources: [raw/owner/2026-10-10-s01-browse-v2-approval.md, raw/evidence/phase-p0-planning/portal-v2/lists-fixes-checks.txt]
+- result: Planning tooling only, no Ferrum code. A review of the lists step raised 11 findings; 10 fixed, 1 partly. (1) Research: each kind has one status, so the Status filter is left out while it follows the kind one to one (new pure helper mirrorsCategory) and the closed line drops the status chip; the opened card shows "Status: …". (2) Overview link now says "See the open questions →". (3) Topics aligned with their decisions: Q-110 and Q-211 → Security & privacy (as adr-0019), risk-r18 → Security & privacy, Q-104 → Process & approvals (as adr-0003), Q-102 → Plan portal (as Q-103); risk-r03 kept under The app (its subject is the tab-sleep feature). (4) The owner's weak-tag list gains the page-load items tagged "address bar", rq-07 and exp-reliability ("memory"), Q-005 ("tabs") and Q-115 ("web views"); no tag changed or added. (5) Lists without dates (Risks, Research) show a note under Sort for Newest or Oldest first (sortNote). (6) Research kind links are a client component (KindLinks.tsx) that keeps the rest of the address, drops the page, marks the chosen kind (aria-current, filled pill) and clears it on a second click. (7) The resume example in ops-resume-after-interruption §4 carries "- time:" with the rule; the optional lint warning for missing times was not added (the rule lives in the skill and the procedures; a new lint code would also need a SCHEMA §9.3 row). (8) "Asked now" is a solid orange chip (.chip-asked). (9) The opened card's tag row says "Filter by tag:" and no longer repeats the category (LabelChips without category). (10) a11y.spec checks every list with all cards open at 1440 and 390 px in both themes (20 new tests). (11) Ref names: DE-7, DE-17, RE-15, QU-12 and LO-10 renamed to "Filter by tag chips" (they hold only tags now; supersedes the suggested "Kind and tag chips"); RE-2 marks the chosen kind; no id added, retired or renumbered. Also: updated set to 2026-10-11 on 8 pages committed after midnight (STALE-UPDATED), their portal hashes restamped.
+- stales: [ip-routes-and-views, ip-testing, ops-resume-after-interruption, schema, ov-open-questions, ops-wiki-maintenance, ops-portal-pipeline, ip-spec, comp-interactive-plan] (no approvals exist yet, so nothing is actually stale)
+
+## [2026-10-11] lint | p0.17 lists-fixes: npm run verify green in a scratch clone; fresh screenshots of the five lists and of each fix
+
+- session: s01
+- time: 00:50
+- pages: [ip-routes-and-views, ip-testing, status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/lists-fixes-checks.txt]
+- result: Scratch clone outside the repo (git clone, working-tree diff applied, node_modules copied, core.longpaths via env only): typecheck, eslint, 873 unit tests passed and 1 skipped, lint:wiki 0 errors, build, 233 browser tests passed (23 new), E2E guard: real files unchanged. 33 screenshots on port 3449 read: no sideways scrolling anywhere; Research has no Status filter and the opened card says the status; the Overview link reads "See the open questions →"; the sort notes read right; the chosen kind is filled and keeps search and sort; "Asked now" stands apart in both themes; opened cards show "Filter by tag:" and no repeated category. Clone deleted, its server stopped, the owner's portal on 3417 kept running, .git/config unchanged. Repo: vitest 873 passed; lint:wiki 0 errors, 34 warnings after the updated-date fix; quick lint 0 errors, 0 warnings; python tool tests 19 OK; portal-sync self-tests 52 passed; mask scan 0.

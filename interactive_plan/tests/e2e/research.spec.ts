@@ -70,3 +70,43 @@ test("phone width: no sideways scrolling, also with every card open", async ({ p
   await page.getByTestId("research-open-all").click();
   expect(await sidewaysOverflow(page)).toBeLessThanOrEqual(0);
 });
+
+// Review 2026-10-11: each kind has one status today, so the Status filter would repeat the Kind filter
+// and the closed line would show two chips that mean the same. The status sits in the opened card.
+test("no Status filter while it follows the kind; the status is in the opened card, not the closed line", async ({ page }) => {
+  await page.goto("/research");
+  await expect(page.getByTestId("research-browse").getByLabel("Status", { exact: true })).toHaveCount(0);
+  await expect(page.getByTestId("research-browse").getByLabel("Kind", { exact: true })).toBeVisible();
+  const first = page.locator("li[data-item]").first();
+  const id = await first.getAttribute("data-item");
+  const item = KINDS.flatMap(([k]) => research[k] as unknown as { id: string; status: string }[]).find((i) => i.id === id)!;
+  await expect(first.locator("summary")).not.toContainText(item.status);
+  await first.locator("summary").click();
+  await expect(first.getByTestId("research-status")).toHaveText(`Status: ${item.status}`);
+});
+
+test("a kind link keeps search and sort, marks the chosen kind, and a second click shows every kind", async ({ page }) => {
+  await page.goto("/research?q=memory&sort=az&page=2");
+  const nav = page.getByRole("navigation", { name: "Research kinds" });
+  const measure = nav.getByRole("link", { name: /^Measure/ });
+  await measure.click();
+  const params = () => Object.fromEntries(new URL(page.url()).searchParams);
+  await expect.poll(params).toEqual({ q: "memory", sort: "az", category: "Measure" });
+  await expect(measure).toHaveAttribute("aria-current", "true");
+  await expect(nav.locator("[aria-current]")).toHaveCount(1);
+  await expect(page.getByTestId("research-browse").getByLabel("Kind", { exact: true })).toHaveValue("Measure");
+  await expect(page.getByTestId("research-browse").getByLabel("Search the research items")).toHaveValue("memory");
+  await measure.click();
+  await expect.poll(params).toEqual({ q: "memory", sort: "az" });
+  await expect(nav.locator("[aria-current]")).toHaveCount(0);
+});
+
+test("Newest first on a list without dates says it follows the written order", async ({ page }) => {
+  await page.goto("/research");
+  await expect(page.getByTestId("research-sort-note")).toHaveCount(0);
+  await page.getByTestId("research-browse").getByLabel("Sort").selectOption("newest");
+  await expect(page.getByTestId("research-sort-note")).toHaveText("The research items have no date, so this shows the last written first.");
+  await page.goto("/decisions?risk-sort=oldest");
+  await expect(page.getByTestId("risks-sort-note")).toHaveText("The risks have no date, so this shows the first written first.");
+  await expect(page.getByTestId("decisions-sort-note")).toHaveCount(0);
+});

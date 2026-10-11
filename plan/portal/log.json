@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:a04daf72911ca6b5f6d701f39c820aa018f23bc450abcabc5f89066e9a43fcbb"
+    "content_hash": "sha256:c3db311326a58986e8084d37780727170cd537bf845db2c54cfd3594e1f59529"
   },
   "entries": [
     {
@@ -1416,6 +1416,48 @@
       ],
       "phase": "phase-p0-planning",
       "category": "Built",
+      "tags": [
+        "portal",
+        "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-lists-fixes",
+      "date": "2026-10-11",
+      "time": "00:50",
+      "title": "Review fixes for the lists: clearer Research, notes and chips",
+      "done": "A review of the new lists found 11 points; all are fixed. Research no longer shows a Status filter or chip that only repeats the kind; the status is in the opened card. The kind links keep your search and mark the chosen kind. Lists without dates explain Newest and Oldest first. \"Asked now\" looks different from the topic chip. Opened cards show \"Filter by tag\" chips only. Five topics were aligned with their decisions. All checks pass.",
+      "next": "Restart the portal to see the fixes and go on with your walkthrough. More items fit fewer than two tags well; a \"speed\" and a \"reliability\" tag would fix most. Say if you want them.",
+      "decisions": [
+        {
+          "what": "Research hides its Status filter while each kind has exactly one status; it comes back by itself once they differ",
+          "by": "claude"
+        },
+        {
+          "what": "Risks and Research keep Newest and Oldest first, with a note that they follow the written order",
+          "by": "claude"
+        },
+        {
+          "what": "The two questions on unsafe code, and the risk of bugs in unsafe code, are filed under Security & privacy, like their decision",
+          "by": "claude"
+        },
+        {
+          "what": "The question on local commits is filed under Process & approvals, and the Node version question under Plan portal",
+          "by": "claude"
+        },
+        {
+          "what": "No new lint check for log entries without a time; the rule stays in the written procedures",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] code | p0.17 lists-fixes: review fixes for the one list pattern",
+        "## [2026-10-11] lint | p0.17 lists-fixes: npm run verify green in a scratch clone; fresh screenshots of the five lists and of each fix"
+      ],
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
       "tags": [
         "portal",
         "look & feel"

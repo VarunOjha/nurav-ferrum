@@ -1,0 +1,93 @@
+# p0.17 lists-fixes step (review fixes for the one list pattern): checks (2026-10-11, session s01)
+# Scratch clone of the repo outside the repo (git clone --no-hardlinks, working-tree diff applied, node_modules copied; core.longpaths via env only), e2e port 3418 (playwright default), screenshots on 127.0.0.1:3449. Owner's portal on 3417 untouched; .git/config unchanged.
+# Commands: npm run verify (full, in the scratch clone); then next start on 3449 and the screenshot script; repo: vitest, lint:wiki, quick_lint, tool tests, portal-sync self-tests.
+
+## npm run verify in the scratch clone (summary lines)
+✓ Types generated successfully
+ Test Files  28 passed (28)
+      Tests  873 passed | 1 skipped (874)
+lint: 0 errors, 42 warnings, 2 info (pages: 203)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+✓ Compiled successfully in 6.9s
+  233 passed (8.9m)
+EXIT 0
+
+## new browser tests in this step (from the verify run)
+  ✓   20 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /log with every card open has no accessibility violations (light theme, 1440 wide)
+  ✓   21 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /questions with every card open has no accessibility violations (light theme, 1440 wide)
+  ✓   22 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /questions?status=any with every card open has no accessibility violations (light theme, 1440 wide)
+  ✓   23 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /decisions with every card open has no accessibility violations (light theme, 1440 wide)
+  ✓   24 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /research with every card open has no accessibility violations (light theme, 1440 wide)
+  ✓   25 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /log with every card open has no accessibility violations (light theme, 390 wide)
+  ✓   26 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /questions with every card open has no accessibility violations (light theme, 390 wide)
+  ✓   27 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /questions?status=any with every card open has no accessibility violations (light theme, 390 wide)
+  ✓   28 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /decisions with every card open has no accessibility violations (light theme, 390 wide)
+  ✓   29 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /research with every card open has no accessibility violations (light theme, 390 wide)
+  ✓   30 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /log with every card open has no accessibility violations (dark theme, 1440 wide)
+  ✓   31 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /questions with every card open has no accessibility violations (dark theme, 1440 wide)
+  ✓   32 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /questions?status=any with every card open has no accessibility violations (dark theme, 1440 wide)
+  ✓   33 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /decisions with every card open has no accessibility violations (dark theme, 1440 wide)
+  ✓   34 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /research with every card open has no accessibility violations (dark theme, 1440 wide)
+  ✓   35 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /log with every card open has no accessibility violations (dark theme, 390 wide)
+  ✓   36 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /questions with every card open has no accessibility violations (dark theme, 390 wide)
+  ✓   37 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /questions?status=any with every card open has no accessibility violations (dark theme, 390 wide)
+  ✓   38 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /decisions with every card open has no accessibility violations (dark theme, 390 wide)
+  ✓   39 [chromium] › tests\e2e\a11y.spec.ts:52:11 › /research with every card open has no accessibility violations (dark theme, 390 wide)
+  ✓  159 [chromium] › tests\e2e\decisions.spec.ts:49:5 › phone width: no sideways scrolling, also with every card open
+  ✓  162 [chromium] › tests\e2e\log.spec.ts:63:5 › phone width: no sideways scrolling, also with every card open
+  ✓  170 [chromium] › tests\e2e\questions.spec.ts:54:5 › phone width: no sideways scrolling, also with every card open
+  ✓  203 [chromium] › tests\e2e\research.spec.ts:66:5 › phone width: no sideways scrolling, also with every card open
+  ✓  204 [chromium] › tests\e2e\research.spec.ts:76:5 › no Status filter while it follows the kind; the status is in the opened card, not the closed line
+  ✓  205 [chromium] › tests\e2e\research.spec.ts:88:5 › a kind link keeps search and sort, marks the chosen kind, and a second click shows every kind
+  ✓  206 [chromium] › tests\e2e\research.spec.ts:104:5 › Newest first on a list without dates says it follows the written order
+
+## screenshots (33, port 3449): shot, sideways overflow px, extra
+log-1440-light 0 {'count': 'Showing 1–20 of 42'}
+questions-1440-light 0 {'count': 'Showing 1–20 of 39 (54 in all)'}
+decisions-1440-light 0 {'count': 'Showing 1–20 of 28'}
+risks-1440-light 0 {'count': 'Showing 1–20 of 25'}
+research-1440-light 0 {'count': 'Showing 1–20 of 70'}
+log-390-light 0 {'count': 'Showing 1–20 of 42'}
+questions-390-light 0 {'count': 'Showing 1–20 of 39 (54 in all)'}
+decisions-390-light 0 {'count': 'Showing 1–20 of 28'}
+risks-390-light 0 {'count': 'Showing 1–20 of 25'}
+research-390-light 0 {'count': 'Showing 1–20 of 70'}
+log-1440-dark 0 {'count': 'Showing 1–20 of 42'}
+questions-1440-dark 0 {'count': 'Showing 1–20 of 39 (54 in all)'}
+decisions-1440-dark 0 {'count': 'Showing 1–20 of 28'}
+risks-1440-dark 0 {'count': 'Showing 1–20 of 25'}
+research-1440-dark 0 {'count': 'Showing 1–20 of 70'}
+log-390-dark 0 {'count': 'Showing 1–20 of 42'}
+questions-390-dark 0 {'count': 'Showing 1–20 of 39 (54 in all)'}
+decisions-390-dark 0 {'count': 'Showing 1–20 of 28'}
+risks-390-dark 0 {'count': 'Showing 1–20 of 25'}
+research-390-dark 0 {'count': 'Showing 1–20 of 70'}
+fix1-research-opened-1440-light 0 {'statusFilter': 0, 'statusLine': 'Status: Proposed, not checked'}
+fix1-research-filters-390-light 0 {'statusFilter': 0}
+fix2-overview-questions-link-1440-light 0 {'link': 'See the open questions →'}
+fix5-risks-sort-newest-1440-light 0 {'note': 'The risks have no date, so this shows the last written first.'}
+fix5-research-sort-oldest-390-dark 0 {'note': 'The research items have no date, so this shows the first written first.'}
+fix6-research-kind-chosen-1440-light 0 {'url': '/research?q=memory&sort=az&category=Measure', 'current': 'Measure (27)'}
+fix6-research-kind-chosen-390-dark 0 {'current': 'Experiment (9)'}
+fix8-questions-asked-now-1440-light 0 {'askedNow': 1}
+fix8-questions-asked-now-1440-dark 0 {'askedNow': 1}
+fix9-log-card-opened-1440-light 0 {'lead': 'Filter by tag:', 'catInBody': 0}
+fix9-decisions-open-all-390-light 0 {'open': 20}
+questions-any-1440-light 0 {'count': 'Showing 1–20 of 54'}
+research-open-all-390-light 0 {'open': 20}
+
+## repo (C:/<repo>): npx vitest run
+ Test Files  28 passed (28)
+      Tests  873 passed | 1 skipped (874)
+## repo: npm run lint:wiki
+lint: 0 errors, 42 warnings, 2 info (pages: 203)  (first run; 8 of the 42 were STALE-UPDATED: pages committed after midnight still said updated 2026-10-09/10)
+## repo: npm run lint:wiki after setting updated: 2026-10-11 on those 8 pages
+lint: 0 errors, 34 warnings, 2 info (pages: 203)
+## repo: python tools/quick_lint.py / python -m unittest tools.test_quick_lint / pwsh tools/test-portal-sync-check.ps1
+203 files checked, 0 errors, 0 warnings
+Ran 19 tests in 2.336s
+
+OK
+
+test-portal-sync-check: 52 passed, 0 failed

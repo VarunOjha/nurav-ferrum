@@ -10,13 +10,13 @@
  * | Questions | id, question, why it matters, answer      | Status (starts on Open) | yes   | Newest, Oldest, By phase, A to Z         |
  * | Decisions | title, meaning, why, the catch            | Status, Who decided     | yes   | Newest, Oldest, By phase, A to Z, Number |
  * | Risks     | title, what could happen, what we do      | Status                  | no    | Highest risk, Newest, Oldest, ...        |
- * | Research  | title, details, kind                      | Status                  | no    | By phase, Newest, Oldest, A to Z         |
+ * | Research  | title, details, kind                      | Status (hidden if = kind) | no  | By phase, Newest, Oldest, A to Z         |
  *
  * Pure: the pages pass in the files they already loaded.
  */
 import type { Decisions, Log, Questions, Research, Risks, Roadmap } from "./schemas.gen";
 import { plainText, riskScore } from "./view";
-import { searchText, SORTS, type BrowseItem, type BrowseSpec, type ExtraFilter, type FilterOption, type SortKey } from "./browse";
+import { mirrorsCategory, searchText, SORTS, type BrowseItem, type BrowseSpec, type ExtraFilter, type FilterOption, type SortKey } from "./browse";
 import { labelsOf, offered, offeredInUse, RESEARCH_KINDS, timeOf, type TaxonomyLists, type TaxonomyTerm } from "./taxonomy";
 
 export interface TabBrowse {
@@ -244,7 +244,8 @@ export function researchDetail(row: ResearchRow): string | null {
 
 /**
  * The 70 research items as one list (owner's answer: kind as category). The category is the item's
- * own `category` when it has one, else its kind. Search covers title, details and kind.
+ * own `category` when it has one, else its kind. Search covers title, details and kind. The Status
+ * filter is left out while every kind has exactly one status (it would repeat the Kind filter).
  */
 export function researchBrowse(r: Research | null, taxonomy: TaxonomyLists | null, roadmap: Roadmap | null): TabBrowse {
   const rows = researchRows(r);
@@ -270,7 +271,9 @@ export function researchBrowse(r: Research | null, taxonomy: TaxonomyLists | nul
     taxonomy?.researchCategories ?? Object.values(RESEARCH_KINDS).map((name) => ({ name, explains: null })),
     taxonomy?.tags,
     roadmap,
-    [statusFilter(rows.map((x) => x.item.status))],
+    // Each kind has one status today, so a Status filter would repeat the Kind filter (review
+    // 2026-10-11): it is offered only once the statuses no longer follow the kinds one to one.
+    mirrorsCategory(items, "status") ? [] : [statusFilter(rows.map((x) => x.item.status))],
   );
 }
 

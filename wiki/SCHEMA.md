@@ -3,7 +3,7 @@ id: schema
 type: schema
 title: "Ferrum wiki schema (constitution of the LLM-maintained wiki)"
 status: review
-updated: 2026-10-10
+updated: 2026-10-11
 sources:
   - raw/research/llm-wiki-pattern.md
   - raw/00-master-prompt.md

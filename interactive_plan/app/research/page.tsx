@@ -1,14 +1,16 @@
 // Research tab: the research plan as one list of cards ("one pattern for every list", owner's plan of
 // 2026-10-10): the questions we want to answer, our predictions, the experiments, the measures and the
 // test sites, 70 items in all, in phase order. The kind is each item's category; the links under the
-// heading show one kind. A card is closed at first and shows one line: the title, its phase, its status,
-// its kind and two tags; a click opens the details, and every id inside opens its explainer. Search,
+// heading show one kind (they keep the rest of the address, and the chosen one is marked). A card is
+// closed at first and shows one line: the title, its phase, its kind and two tags (the status is in the
+// opened card: each kind has one status today, so on the closed line it repeated the kind; review
+// 2026-10-11); a click opens the details, and every id inside opens its explainer. Search,
 // filters, a Sort dropdown, "Open all" and 20 per page; the choice stays in the page address. Nothing is
 // measured yet, and the text says so. Reads research.json, taxonomy.json, roadmap.json and refs.json.
 import type { Metadata } from "next";
-import Link from "next/link";
 import Browse, { type BrowseCard } from "@/components/portal/browse/Browse";
 import CardLine from "@/components/portal/browse/CardLine";
+import KindLinks from "@/components/portal/browse/KindLinks";
 import { CardFields, CardRelated, type CardField } from "@/components/portal/browse/CardParts";
 import LabelChips from "@/components/portal/browse/LabelChips";
 import PageHead from "@/components/portal/PageHead";
@@ -73,30 +75,28 @@ export default async function ResearchPage() {
             title={item.title}
             level={3}
             when={labels.phase ? `Phase ${phaseShort(labels.phase)}` : null}
-            status={{ label: item.status, tone: "later" }}
             category={categoryOf.get(item.id) ?? null}
             tags={labels.tags}
           />
         ),
         body: (
           <div className="stack-12">
-            {(labels.phase || unit) && (
-              <p className="small text-2" data-testid="research-meta">
-                {labels.phase && (
-                  <>
-                    {row.kind === "experiments" ? "Runs in" : "Phase"}{" "}
-                    <Ref id={labels.phase} variant="inline">
-                      {phaseLabel(labels.phase)}
-                    </Ref>
-                  </>
-                )}
-                {labels.phase && unit && " · "}
-                {unit && <>Unit: {unit}</>}
-              </p>
-            )}
+            <p className="small text-2" data-testid="research-meta">
+              <span data-testid="research-status">Status: {item.status}</span>
+              {labels.phase && (
+                <>
+                  {" · "}
+                  {row.kind === "experiments" ? "Runs in" : "Phase"}{" "}
+                  <Ref id={labels.phase} variant="inline">
+                    {phaseLabel(labels.phase)}
+                  </Ref>
+                </>
+              )}
+              {unit && <> · Unit: {unit}</>}
+            </p>
             <CardFields fields={fieldsOf(row)} />
             <CardRelated ids={item.related} title={refTitle} />
-            <LabelChips category={categoryOf.get(item.id) ?? null} tags={labels.tags} uiRef="RE-15" />
+            <LabelChips tags={labels.tags} uiRef="RE-15" />
           </div>
         ),
       };
@@ -107,13 +107,7 @@ export default async function ResearchPage() {
   return (
     <div className="page">
       <PageHead title="Research" summary={r?.summary ?? null} uiRef="RE-1">
-        <nav aria-label="Research kinds" className="pill-row" {...ui("RE-2")}>
-          {kinds.map((k) => (
-            <Link key={k.kind} href={`/research?category=${encodeURIComponent(k.kind)}`} className="pill" scroll={false}>
-              {k.kind} ({k.count})
-            </Link>
-          ))}
-        </nav>
+        <KindLinks kinds={kinds} path="/research" uiRef="RE-2" />
       </PageHead>
       <section aria-labelledby="research-title" className="stack-12" {...ui("RE-8")}>
         <div className="row-between">
@@ -132,7 +126,7 @@ export default async function ResearchPage() {
           sorts={browse.sorts}
           categoryLabel="Kind"
           searchHint="Search research"
-          noun="items"
+          noun="research items"
           listTestId="research-list"
           cardRef="RE-14"
           refs={{ filters: "RE-9", results: "RE-10", pages: "RE-11", sort: "RE-12", openAll: "RE-13" }}

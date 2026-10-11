@@ -3,7 +3,7 @@ id: ip-spec
 type: operations
 title: "Plan portal (interactive_plan/): product specification"
 status: active
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md

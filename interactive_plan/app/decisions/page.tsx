@@ -79,7 +79,7 @@ export default async function DecisionsPage() {
               </p>
             )}
             <CardRelated ids={d.related} title={refTitle} />
-            <LabelChips category={labels.category} tags={labels.tags} uiRef="DE-7" />
+            <LabelChips tags={labels.tags} uiRef="DE-7" />
           </div>
         ),
       };
@@ -117,7 +117,7 @@ export default async function DecisionsPage() {
               ]}
             />
             <CardRelated ids={r.related} title={refTitle} />
-            <LabelChips category={labels.category} tags={labels.tags} uiRef="DE-17" />
+            <LabelChips tags={labels.tags} uiRef="DE-17" />
           </div>
         ),
       };

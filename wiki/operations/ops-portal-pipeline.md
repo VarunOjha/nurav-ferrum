@@ -3,7 +3,7 @@ id: ops-portal-pipeline
 type: operations
 title: "Portal pipeline: how wiki changes become plain-language JSON for the plan portal"
 status: active
-updated: 2026-10-10
+updated: 2026-10-11
 sources:
   - raw/owner/2026-10-09-s01-plan-app-feedback.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md

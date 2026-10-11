@@ -41,7 +41,7 @@ export default async function QuestionsPage() {
             level={2}
             when={`Asked ${dateTime(q.asked, timeOf(q))}`}
             status={{ label: QUESTION_STATUS[q.status], tone: TONE[q.status] }}
-            chips={askedNow.has(q.id) ? [{ label: "Asked now", className: "chip-now", testId: "asked-now" }] : []}
+            chips={askedNow.has(q.id) ? [{ label: "Asked now", className: "chip-asked", testId: "asked-now" }] : []}
             category={labels.category}
             tags={labels.tags}
           />
@@ -76,7 +76,7 @@ export default async function QuestionsPage() {
                 <RichText text={q.answer} />
               </p>
             )}
-            <LabelChips category={labels.category} tags={labels.tags} uiRef="QU-12" />
+            <LabelChips tags={labels.tags} uiRef="QU-12" />
           </div>
         ),
       };

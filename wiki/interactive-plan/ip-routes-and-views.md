@@ -3,7 +3,7 @@ id: ip-routes-and-views
 type: operations
 title: "Plan portal: tabs, popups and UI rules"
 status: active
-updated: 2026-10-10
+updated: 2026-10-11
 sources:
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
@@ -21,6 +21,7 @@ sources:
   - raw/owner/2026-10-10-s01-browse-v2-answers-2.md
   - raw/owner/2026-10-10-s01-browse-v2-answers-3.md
   - raw/owner/2026-10-10-s01-browse-v2-approval.md
+  - raw/evidence/phase-p0-planning/portal-v2/lists-fixes-checks.txt
 related: [adr-0028, ip-spec, ip-data-contract, ip-testing, comp-interactive-plan, adr-0023, adr-0024, adr-0025, adr-0026, ops-portal-pipeline, adr-0014, schema]
 approvable: true
 phase: phase-p0-planning
@@ -48,8 +49,8 @@ so a page always shows the current files.
 | `/roadmap` | Roadmap | The three stages (build, measure, publish), one compact row per phase (name, outcome in one line, status, tasks done), and "Same in every phase" | `roadmap.json`, `phases/*.json` |
 | `/architecture` | Architecture | Four group buttons (Application, Benchmark, Testing and quality, Research and analysis, [adr-0026](../decisions/adr-0026-architecture-four-groups.md)); for the application first "How the browser will look" (`AR-9`, only when `browser_design` is present): a static picture of the chosen design ([adr-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md), option A) drawn at 1440 × 900 and scaled to the card, with a Light / Dark switch that starts on the portal's theme, one image with a summary for screen readers and nothing inside it focusable, a small "Sample values" tag in its corner and the note that every value is a sample directly under it (the drawing stays hidden until it has measured its width, so it never shows at a wrong size); on narrow screens (900 px or less) a close-up of the Ferrum panel follows, drawn at its design size 352 × 802 and scaled to the column so its words stay readable (also one labelled image with the tag); then the callouts, a link to the design canvas (new tab) and "Why we chose it", which opens the decision's explainer; then a layered diagram of the Rust app built from plain boxes, coloured by trust, with a "How to read this" side panel (colour key, purpose, one-line flow), as in the mockup; for each other group its purpose, a one-line flow and one short line per part; every box and part line opens the part popup; cards for the other groups; a footnote for planning tooling | `architecture.json` |
 | `/decisions` | Decisions | Two lists with the shared list controls (§6): the decisions (start newest first; extra sort "By number"; the closed line of a card shows the title, the date, the plain standing, the category chip and two tag chips; opened, it shows the meaning, why, the catch, who chose it and whether its written page is signed off; replaced ones muted with a link to what replaced them), then "Risks we watch" (start highest risk first; each card shows "Risk L × I = S", a category by topic, two tags, the phase that handles it; a status filter; its choices in the address start with `risk-`) | `decisions.json`, `taxonomy.json`, `risks.json` |
-| `/research` | Research | The core question, kind links (each one filters the list by its kind), then one list of all 70 research items with the shared list controls (§6): category = kind (Research question, Prediction, Experiment, Measure, Test site), starts in phase order; the rest of the tab stays | `research.json`, `taxonomy.json` |
-| `/questions` | Questions | One list with the shared list controls (§6); the Status filter starts on Open when the address names no status, and "Any status" shows all; starts newest first (date asked, then the written order); "Asked now" chip; phase filter "Holds up phase"; category by topic; an answered question shows the owner's answer | `questions.json`, `taxonomy.json` |
+| `/research` | Research | The core question, kind links (each one filters the list by its kind and keeps the rest of the address; the chosen kind is marked and a second click shows every kind), then one list of all 70 research items with the shared list controls (§6): category = kind (Research question, Prediction, Experiment, Measure, Test site), starts in phase order; the status shows in the opened card, and the Status filter is left out while every kind has exactly one status (it would repeat the Kind filter); the rest of the tab stays | `research.json`, `taxonomy.json` |
+| `/questions` | Questions | One list with the shared list controls (§6); the Status filter starts on Open when the address names no status, and "Any status" shows all; starts newest first (date asked, then the written order); "Asked now" chip (solid orange, unlike the outlined category chip); phase filter "Holds up phase"; category by topic; an answered question shows the owner's answer | `questions.json`, `taxonomy.json` |
 | `/log` | Log | One list with the shared list controls (§6), newest first: what was done, what is next, a small table of decisions, approvals, the commit, the category chip and two tag chips; extra filter "Show" (all entries, has decisions, has approvals) | `log.json`, `taxonomy.json` |
 | `/api/script?path=…` | (popup data) | The text of one check script, `text/plain`, read-only | the scripts the portal JSON names |
 | anything else | 404 | "Page not found" inside the portal frame | none |
@@ -167,7 +168,7 @@ answers [1](../raw/owner/2026-10-10-s01-browse-v2-answers-1.md), [2](../raw/owne
 | Questions | 54 | topic | Newest first | – | Status (starts on Open), "Holds up phase" | yes |
 | Decisions | 28 | topic | Newest first | By number | Status, who decided | yes |
 | Risks | 25 | topic | Highest risk first | Highest risk first | Status | no |
-| Research | 70 | kind (Research question, Prediction, Experiment, Measure, Test site) | By phase | – | – | no |
+| Research | 70 | kind (Research question, Prediction, Experiment, Measure, Test site) | By phase | – | Status, only while it does not follow the kind one to one (today it does, so it is hidden) | no |
 
 - **Labels.** Every decision, log entry, question, risk and research item has one category and exactly two tags from
   the 26 in `plan/portal/taxonomy.json`, each with a plain one-line explanation ([ops-portal-pipeline](../operations/ops-portal-pipeline.md)).
@@ -178,13 +179,16 @@ answers [1](../raw/owner/2026-10-10-s01-browse-v2-answers-1.md), [2](../raw/owne
   it; a question's is the phase or phases it holds up; a research item's is the phase on its page.
 - **Cards are closed at first** (native `<details>` and `<summary>`). The closed line shows the title, the date (with
   the time of day when known), the status, the category chip and two tag chips, with no buttons inside it. Clicking it
-  opens the details (every field the card showed before). Tag chips that filter sit in the opened card: clicking one
-  adds that tag to the filter, clicking again takes it off. One **Open all / Close all** button per list acts on the
+  opens the details (every field the card showed before). Tag chips that filter sit in the opened card under the words
+  "Filter by tag:" (the category is not repeated there): clicking one adds that tag to the filter, clicking again takes
+  it off. On Research the closed line leaves out the status (each kind has one status today); the opened card shows it. One **Open all / Close all** button per list acts on the
   page shown. Which cards are open is not kept in the address.
 - **Sort** dropdown on every list: Newest first, Oldest first, By phase (P0 to P8, items without a phase last), A to Z by
   title, plus the extras in the table. Highest risk first = likelihood × impact, ties by id. Items of the same date (and
   time) keep their written order (the order in `log.json`; for questions the order in `questions.json`); Newest first
-  reverses it; the id breaks any remaining tie.
+  reverses it; the id breaks any remaining tie. Risks and research items have no date, so on those lists Newest first
+  and Oldest first follow the written order, and a note under the Sort menu says so ("The risks have no date, so this
+  shows the last written first").
 - **Time of day** (from 2026-10-10 on): a log entry or question may carry `time` ("HH:MM", 24-hour local); the card
   shows it after the date. Older items keep the date only (SCHEMA §12).
 - **Search box:** not case-sensitive, accents ignored, every typed word must appear.
@@ -201,7 +205,7 @@ answers [1](../raw/owner/2026-10-10-s01-browse-v2-answers-1.md), [2](../raw/owne
   `phase`, `from`, `to`, `sort`, `page`, plus `status`, `by` or `has`; the risk list on the Decisions tab uses the same
   keys with `risk-` in front), replaced rather than added to the history, so a reload or a copied link opens the same
   view. Unknown values are dropped quietly; any change of search, filter or sort goes back to page 1; a page number past
-  the end shows the last page. The Overview's "Questions for you" link opens Questions on Open.
+  the end shows the last page. The Overview's "Questions for you" link ("See the open questions →") opens Questions on Open.
 - **Ref ids** (none renumbered). Decisions: `DE-4` to `DE-7` (search and filters, results count, page numbers, chips),
   `DE-8` sort, `DE-9` Open all, `DE-10` card; risks `DE-11` search and filters, `DE-12` results count, `DE-13` page
   numbers, `DE-14` sort, `DE-15` Open all, `DE-16` card, `DE-17` chips; `DE-3` is now "Risks we watch" (cards).
@@ -210,10 +214,12 @@ answers [1](../raw/owner/2026-10-10-s01-browse-v2-answers-1.md), [2](../raw/owne
   search and filters, `QU-8` results count, `QU-9` page numbers, `QU-10` sort, `QU-11` Open all, `QU-12` chips; `QU-6`
   is now a card that opens on click; `QU-2` to `QU-5` retired. Log: `LO-7` to `LO-10` as before (`LO-10` now inside the
   opened card), `LO-11` sort, `LO-12` Open all; `LO-3` is now a card that opens on click. Every results-count block
-  covers only the count and Clear filters. In Ref mode, parts inside a closed card count as not visible.
+  covers only the count and Clear filters. In Ref mode, parts inside a closed card count as not visible. Since the
+  review of 2026-10-11 the chip blocks `DE-7`, `DE-17`, `RE-15`, `QU-12` and `LO-10` hold only the "Filter by tag"
+  chips (renamed to say so), and `RE-2` marks the chosen kind.
 - **Code:** the pure rules (address, sort, matching, page slices, results line) are in
   `interactive_plan/lib/portal/browse.ts`; the per-list rules (`TAB_CONFIG`) and item builders in
   `lib/portal/browseTabs.ts`; the label lists in `lib/portal/taxonomy.ts`; the controls are one client component,
-  `components/portal/browse/Browse.tsx`, with `CardLine.tsx` (the closed line) and `CardParts.tsx`, shared by all five
-  lists. The unused `LogFilter.tsx` and its two style rules were deleted (owner allowed it). The server still renders
+  `components/portal/browse/Browse.tsx`, with `CardLine.tsx` (the closed line), `CardParts.tsx` and `LabelChips.tsx`
+  (the "Filter by tag" chips), shared by all five lists, plus `KindLinks.tsx` (the Research kind links). The unused `LogFilter.tsx` and its two style rules were deleted (owner allowed it). The server still renders
   every card; the component shows the ones that match.

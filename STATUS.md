@@ -240,7 +240,11 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "lists" (one list pattern for Log, Questions, Decisions, Risks and Research; time of day from now on) verified and committed 2026-10-11 (`8af6847`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 step "lists-fixes" (review fixes for the one list pattern)
+- intent: fix the 11 review findings: Research status filter/chip duplicates kind; Overview link text; question/risk topics that disagree with their decision; owner list of weak tags; note under Sort when items have no date; Research kind links keep the address and mark the chosen kind; "- time:" in the resume example; "Asked now" chip look; repeated labels in opened cards; axe check with cards open; RE-15 name
+- planned paths: interactive_plan/lib/portal/browseTabs.ts, interactive_plan/lib/portal/browse.ts, interactive_plan/app/research/page.tsx, interactive_plan/app/page.tsx, interactive_plan/app/questions/page.tsx, interactive_plan/app/decisions/page.tsx, interactive_plan/app/log/page.tsx, interactive_plan/app/globals.css, interactive_plan/components/portal/browse/*, interactive_plan/lib/portal/uiRefs.ts, interactive_plan/tests/**, plan/portal/questions.json, plan/portal/risks.json, plan/portal/*.json for changed wiki pages, wiki/operations/ops-resume-after-interruption.md, wiki/interactive-plan/ip-routes-and-views.md, wiki/raw/evidence/phase-p0-planning/portal-v2/lists-fixes-checks.txt, wiki/raw/MANIFEST.sha256
+- rollback: git checkout -- <paths>; delete the new evidence file
+- state: started 2026-10-11 00:25
 
 ## Blockers
 

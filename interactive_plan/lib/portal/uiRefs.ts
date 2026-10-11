@@ -130,7 +130,7 @@ export const UI_REFS = {
   "DE-4": { name: "Search and filters" },
   "DE-5": { name: "Results count" },
   "DE-6": { name: "Page numbers" },
-  "DE-7": { name: "Category and tag chips" },
+  "DE-7": { name: "Filter by tag chips" },
   "DE-8": { name: "Decision sort order" },
   "DE-9": { name: "Decision Open all button" },
   "DE-10": { name: "Decision card (all look the same)" },
@@ -140,7 +140,7 @@ export const UI_REFS = {
   "DE-14": { name: "Risk sort order" },
   "DE-15": { name: "Risk Open all button" },
   "DE-16": { name: "Risk card (all look the same)" },
-  "DE-17": { name: "Risk category and tag chips" },
+  "DE-17": { name: "Risk filter by tag chips" },
 
   // Research
   "RE-1": { name: "Page heading" },
@@ -154,7 +154,7 @@ export const UI_REFS = {
   "RE-12": { name: "Sort order" },
   "RE-13": { name: "Open all button" },
   "RE-14": { name: "Research item card (all look the same)" },
-  "RE-15": { name: "Category and tag chips" },
+  "RE-15": { name: "Filter by tag chips" },
 
   // Questions
   "QU-1": { name: "Page heading" },
@@ -166,7 +166,7 @@ export const UI_REFS = {
   "QU-9": { name: "Page numbers" },
   "QU-10": { name: "Sort order" },
   "QU-11": { name: "Open all button" },
-  "QU-12": { name: "Category and tag chips" },
+  "QU-12": { name: "Filter by tag chips" },
 
   // Log
   "LO-1": { name: "Page heading" },
@@ -181,7 +181,7 @@ export const UI_REFS = {
   "LO-7": { name: "Search and filters" },
   "LO-8": { name: "Results count" },
   "LO-9": { name: "Page numbers" },
-  "LO-10": { name: "Category and tag chips" },
+  "LO-10": { name: "Filter by tag chips" },
   "LO-11": { name: "Sort order" },
   "LO-12": { name: "Open all button" },
 

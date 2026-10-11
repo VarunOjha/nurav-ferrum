@@ -286,7 +286,7 @@ const TABS: Tab[] = [
   {
     route: "/research",
     name: "research",
-    noun: "items",
+    noun: "research items",
     idAttr: "data-item",
     rows: researchItems.map((i, index) => ({
       id: i.id,
@@ -684,7 +684,7 @@ test.describe("questions: starts on Open", () => {
 
   test("the Overview's link opens Questions on Open", async ({ page }) => {
     await page.goto("/");
-    await page.getByTestId("questions-for-you").getByRole("link", { name: /See all questions/ }).click();
+    await page.getByTestId("questions-for-you").getByRole("link", { name: /See the open questions/ }).click();
     await expect(page).toHaveURL(/\/questions$/);
     await expect(box(page).getByLabel("Status", { exact: true })).toHaveValue("open");
     await expect(count(page)).toHaveText(firstPageLine(open.length, questions.length));

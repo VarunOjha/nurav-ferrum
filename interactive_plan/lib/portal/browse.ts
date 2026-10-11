@@ -505,3 +505,40 @@ export function resultsLine(info: PageInfo, all: number, filtered: boolean): str
   if (info.total === 0) return `No matches${tail}`;
   return `Showing ${info.start}–${info.end} of ${info.total}${tail}`;
 }
+
+/**
+ * A short note under the Sort menu when "Newest first" or "Oldest first" is chosen on a list whose
+ * items carry no date (Risks, Research): then those sorts follow the written order, and the owner
+ * should be told why (review 2026-10-11). Null when the sort uses real dates or is another sort.
+ */
+export function sortNote(sort: SortKey, items: readonly Pick<BrowseItem, "date">[], noun: string): string | null {
+  if (sort !== "newest" && sort !== "oldest") return null;
+  if (items.length === 0 || items.some((i) => i.date)) return null;
+  return sort === "newest"
+    ? `The ${noun} have no date, so this shows the last written first.`
+    : `The ${noun} have no date, so this shows the first written first.`;
+}
+
+/**
+ * True when a tab filter (`key`) splits the items exactly as the category does: every category has one
+ * value and every value one category (Research: each kind has one status). Such a filter would repeat
+ * the category filter, so the tab leaves it out (review 2026-10-11). False with fewer than two values.
+ */
+export function mirrorsCategory(items: readonly Pick<BrowseItem, "category" | "facets">[], key: string): boolean {
+  const byCat = new Map<string, Set<string>>();
+  const byVal = new Map<string, Set<string>>();
+  const add = (m: Map<string, Set<string>>, k: string, v: string) => {
+    const set = m.get(k) ?? new Set<string>();
+    set.add(v);
+    m.set(k, set);
+  };
+  for (const it of items) {
+    const cat = it.category ?? "";
+    for (const v of it.facets[key] ?? []) {
+      add(byCat, cat, v);
+      add(byVal, v, cat);
+    }
+  }
+  if (byVal.size < 2) return false;
+  return [...byCat.values()].every((s) => s.size === 1) && [...byVal.values()].every((s) => s.size === 1);
+}

@@ -3,7 +3,7 @@ id: comp-interactive-plan
 type: component
 title: "Plan portal (Next.js, read-only, planning tooling, not shipped)"
 status: implemented
-updated: 2026-10-09
+updated: 2026-10-11
 last_verified_commit: ef5dcc5
 sources:
   - raw/01-scoping-decisions.md

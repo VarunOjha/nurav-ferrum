@@ -5,7 +5,8 @@
  * Clear filters, a Sort dropdown, an "Open all / Close all" button, cards that open on click and page
  * numbers (20 per page). The server renders every card's closed line and its details; this component
  * shows the ones that match, in the chosen order, and keeps search, filters, sort and page in the page
- * address, so a reload or a copied link opens the same view. Which cards are open is not kept there
+ * address, so a reload or a copied link opens the same view. On a list without dates (Risks, Research)
+ * "Newest first" and "Oldest first" follow the written order, and a note under the Sort menu says so. Which cards are open is not kept there
  * (owner's answer). The address is replaced, never pushed, and the page does not jump.
  *
  * Each card is a native <details>/<summary> (closed by default). The closed line holds only plain
@@ -35,6 +36,7 @@ import {
   pageSlice,
   parseState,
   resultsLine,
+  sortNote,
   stateToQuery,
   update,
   visibleItems,
@@ -192,6 +194,7 @@ export default function Browse(props: BrowseProps) {
   const on = activeCount(state);
   const reversed = datesReversed(state);
   const allOpen = shown.length > 0 && shown.every((it) => openIds.has(it.id));
+  const note = sortNote(state.sort, items, props.noun);
 
   const set = (patch: Partial<BrowseState>) => commit(update(state, patch));
 
@@ -463,6 +466,12 @@ export default function Browse(props: BrowseProps) {
             )}
           </div>
         </div>
+
+        {note && (
+          <p className="small muted browse-sort-note" data-testid={`${name}-sort-note`}>
+            {note}
+          </p>
+        )}
 
         {info.total === 0 ? (
           <div className="note browse-empty" data-testid={`${name}-empty`}>

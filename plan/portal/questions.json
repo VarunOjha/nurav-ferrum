@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:02b3e586fe0843e172249c946b7b52241ca31fa05b64f73494fe0fb514364535"
+    "content_hash": "sha256:e3b3272ae96a6652f39fe72b9a006bc033cb60916cf2212cb21a2558e17a384c"
   },
   "items": [
     {
@@ -156,7 +156,7 @@
       "answer": "Stay on Node 24 for now; consider 26 later through its own decision. Node 24.20.0 is installed.",
       "answered_on": "2026-10-08",
       "blocks": [],
-      "category": "Tools & setup",
+      "category": "Plan portal",
       "tags": [
         "toolchain",
         "portal"
@@ -190,7 +190,7 @@
       "blocks": [
         "phase-p1-foundation"
       ],
-      "category": "Tools & setup",
+      "category": "Process & approvals",
       "tags": [
         "git",
         "sessions"
@@ -289,7 +289,7 @@
         "phase-p1-foundation",
         "phase-p2-minimal-container"
       ],
-      "category": "The app",
+      "category": "Security & privacy",
       "tags": [
         "WebView2",
         "Tauri"
@@ -734,7 +734,7 @@
         "phase-p1-foundation",
         "phase-p2-minimal-container"
       ],
-      "category": "The app",
+      "category": "Security & privacy",
       "tags": [
         "benchmarks",
         "memory"

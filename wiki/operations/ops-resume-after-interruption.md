@@ -3,7 +3,7 @@ id: ops-resume-after-interruption
 type: operations
 title: "Resume after interruption: detect, decide, recover"
 status: draft
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/llm-wiki-pattern.md
@@ -189,11 +189,14 @@ Do not finish the task. This does not apply to P0, which has no approval-based g
 
 1. Update STATUS.md: the session id, In-flight (including any `state: preserved …` line),
    `next_action` and `updated`.
-2. Append a `resume` log entry that states what was found and what was done, for example:
+2. Append a `resume` log entry that states what was found and what was done. Like every log entry
+   from 2026-10-10 on, it carries `- time: HH:MM` right after `- session:`: the real local time from
+   `date +%H:%M` (Git Bash), never a guess ([ops-wiki-maintenance](ops-wiki-maintenance.md)). For example:
 
 ```markdown
 ## [2026-10-12] resume | s06 resumed after interruption in p2.3
 - session: s06
+- time: 09:14
 - result: dirty task files matched In-flight p2.3; diff small; finished and verified (cargo test -p webview-manager passed)
 - next: p2.4
 - commit: abc1234

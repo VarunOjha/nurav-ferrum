@@ -126,7 +126,7 @@ export default async function OverviewPage() {
             </p>
           )}
           <Link href="/questions" className="more">
-            See all questions →
+            See the open questions →
           </Link>
         </aside>
       </section>

@@ -524,6 +524,12 @@ pre,
   background: var(--you-bg);
   color: var(--you-fg);
 }
+/* "Asked now" on a question: solid orange, so it does not read as the outlined category chip or as the
+   light orange "Open" status next to it (review 2026-10-11) */
+.chip-asked {
+  background: var(--you-fg);
+  color: var(--surface);
+}
 .chip-sm {
   font-size: 11px;
   padding: 1px 6px;
@@ -1771,7 +1777,8 @@ section[tabindex="-1"]:focus {
   min-width: 40px;
   text-align: center;
 }
-.pill[aria-current="page"] {
+.pill[aria-current="page"],
+.pill[aria-current="true"] {
   border-color: var(--link);
   background: var(--link);
   color: var(--surface);
@@ -1918,6 +1925,13 @@ section[tabindex="-1"]:focus {
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
+}
+.label-chips-lead {
+  margin-right: 2px;
+}
+/* under the Sort menu on a list without dates: why Newest / Oldest first is the written order */
+.browse-sort-note {
+  margin: 0;
 }
 .chip-cat {
   background: var(--chip-bg);

@@ -468,7 +468,7 @@
       "mitigation": "One module behind a safe interface; every unsafe block documented; handlers that remove themselves; leak and crash tests; checklist review of each change.",
       "phase": "phase-p1-foundation",
       "status": "Open",
-      "category": "The app",
+      "category": "Security & privacy",
       "tags": [
         "WebView2",
         "testing"

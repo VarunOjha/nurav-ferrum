@@ -53,7 +53,7 @@ export default async function LogPage() {
         ),
         body: (
           <div className="stack-12">
-            <LabelChips category={labels.category} tags={labels.tags} uiRef="LO-10" />
+            <LabelChips tags={labels.tags} uiRef="LO-10" />
             <div className="done-next" {...ui("LO-4")}>
               <div className="stack-4">
                 <div className="eyebrow eyebrow-done">What was done</div>
