@@ -1,0 +1,5 @@
+Command output saved by scripts/gates/p1-gate.ps1 on 2026-10-11 14:27 at commit 8cd0461 (with uncommitted changes)
+Exit code: 0
+
+
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s

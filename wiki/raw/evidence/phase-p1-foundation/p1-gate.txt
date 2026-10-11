@@ -1,0 +1,429 @@
+Ferrum check P1-gate: Foundation: end-of-phase gate
+Why: P2 starts only on a project that builds cleanly and a design settled from evidence.
+Run at 2026-10-11 14:25 on commit 8cd0461
+------------------------------------------------------------------------
+
+Part 1 - P1 was allowed to start
+approvals.json entries: 34
+  APPROVED                 adr-0001
+  APPROVED                 adr-0002
+  APPROVED                 adr-0003
+  APPROVED                 adr-0004
+  APPROVED                 adr-0006
+  APPROVED                 adr-0007
+  APPROVED                 adr-0010
+  APPROVED                 adr-0011
+  APPROVED                 adr-0012
+  APPROVED                 adr-0014
+  APPROVED                 adr-0018
+  APPROVED                 adr-0019
+  APPROVED                 adr-0021
+  APPROVED                 adr-0023
+  APPROVED                 adr-0024
+  APPROVED                 adr-0025
+  APPROVED                 adr-0026
+  APPROVED                 adr-0027
+  APPROVED_VOLATILE_DRIFT  adr-0029
+  APPROVED_VOLATILE_DRIFT  adr-0030
+  APPROVED_VOLATILE_DRIFT  adr-0031
+  APPROVED                 comp-core
+  APPROVED                 comp-interactive-plan
+  APPROVED                 comp-webview2-runtime
+  APPROVED                 comp-windows-os
+  APPROVED                 ip-data-contract
+  APPROVED                 ip-routes-and-views
+  APPROVED                 ip-spec
+  APPROVED                 ip-testing
+  APPROVED                 ip-wiki-lint
+  APPROVED                 phase-p0-planning
+  APPROVED                 phase-p0-planning#exit
+  APPROVED                 phase-p1-foundation
+  APPROVED                 schema
+  depends_on phase-p0-planning: status=done exit=APPROVED
+  APPROVED                 adr-0006
+  APPROVED                 adr-0007
+  APPROVED                 adr-0010
+  APPROVED                 adr-0011
+  APPROVED                 adr-0012
+  APPROVED                 adr-0014
+  APPROVED                 adr-0018
+  APPROVED                 adr-0019
+  APPROVED                 adr-0021
+  APPROVED                 comp-core
+  APPROVED                 comp-webview2-runtime
+  APPROVED                 comp-windows-os
+  APPROVED                 phase-p1-foundation
+  APPROVED                 schema
+  registered CONTRADICTION wiki/decisions/adr-0010-isolation-webview2-profiles.md:44 -> Q-107
+ENTRY GATE: PASS
+  PASS   Your approvals for P1 are recorded and no question blocks it
+         entry gate: PASS
+
+Part 2 - Every P1 task, checked
+  PASS   Wiki check (run once, reused by the task checks) (9 s)
+         209 pages: 0 errors
+    --- output of scripts/verify/p1.1-toolchain.ps1 (exit 0) ---
+Ferrum check p1.1: Confirm and record the toolchain
+Why: every later result must name the exact tools it was built with.
+Run at 2026-10-11 14:25 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Rust 1.90 or newer, built for Windows with the Microsoft C++ tools
+         rustc 1.99.0 (x86_64-pc-windows-msvc)
+  PASS   cargo and rustup answer
+         cargo 1.99.0 (5f94df478 2026-08-27); active toolchain: 1.99.0-x86_64-pc-windows-msvc (overridden by '<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\rust-toolchain.toml')
+  PASS   Microsoft C++ build tools are installed (found with vswhere)
+         Visual Studio Build Tools 2022 17.14.37710.0
+  PASS   Node 24 and npm
+         node v24.20.0; npm 11.19.0
+  PASS   Python, git and PowerShell 7
+         Python 3.12.10; git version 2.52.0.windows.1; PowerShell 7.6.6
+  PASS   Licence checker cargo-deny is installed
+         cargo-deny 0.20.2
+  PASS   A tiny Rust program builds and links (2 s)
+         built, linked and ran (prints Hello, world!)
+  PASS   Versions saved as evidence (toolchain.txt)
+         wiki/raw/evidence/phase-p1-foundation/toolchain.txt exists
+------------------------------------------------------------------------
+RESULT: PASS - p1.1 (8 PASS; 3 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.1 check passed".
+    --- end of scripts/verify/p1.1-toolchain.ps1 ---
+  PASS   Task p1.1: Confirm and record the toolchain (4 s)
+         scripts/verify/p1.1-toolchain.ps1: RESULT: PASS - p1.1 (8 PASS; 3 s)
+    --- output of scripts/verify/p1.2-machine-inventory.ps1 (exit 0) ---
+Ferrum check p1.2: Record this computer's hardware
+Why: benchmark numbers depend on the machine they ran on.
+Run at 2026-10-11 14:25 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   The inventory file exists
+         wiki/raw/evidence/phase-p1-foundation/environment.md
+  PASS   It covers every listed item
+         10 items found
+  PASS   WebView2 version now, compared with 8 October
+         154.0.4258.62 (same as on 8 October)
+------------------------------------------------------------------------
+RESULT: PASS - p1.2 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.2 check passed".
+    --- end of scripts/verify/p1.2-machine-inventory.ps1 ---
+  PASS   Task p1.2: Record this computer's hardware (1 s)
+         scripts/verify/p1.2-machine-inventory.ps1: RESULT: PASS - p1.2 (3 PASS; 0 s)
+    --- output of scripts/verify/p1.3-ignore-licences.ps1 (exit 0) ---
+Ferrum check p1.3: Set ignore rules and licences
+Why: build output and local data must not reach git, and the licence must be clear.
+Run at 2026-10-11 14:25 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Build output and local data folders are ignored by git
+         5 paths ignored
+  PASS   Plan snapshots are kept (not ignored)
+         plan/snapshots/ stays tracked
+  PASS   Both licence files exist
+         LICENSE-MIT, LICENSE-APACHE
+------------------------------------------------------------------------
+RESULT: PASS - p1.3 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.3 check passed".
+    --- end of scripts/verify/p1.3-ignore-licences.ps1 ---
+  PASS   Task p1.3: Set ignore rules and licences (1 s)
+         scripts/verify/p1.3-ignore-licences.ps1: RESULT: PASS - p1.3 (3 PASS; 0 s)
+    --- output of scripts/verify/p1.4-rust-workspace.ps1 (exit 0) ---
+Ferrum check p1.4: Create the empty Rust workspace
+Why: every later task needs a home with a pinned Rust version.
+Run at 2026-10-11 14:25 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Workspace file exists, resolver 2, spikes left out
+         Cargo.toml ok
+  PASS   Rust version pinned (rust-toolchain.toml)
+         pinned to 1.99.0
+  PASS   The planned empty libraries exist
+         crates/: core, webview-manager, security, resource-manager, telemetry
+  PASS   Build passes
+         cargo build: exit 0
+  PASS   Tests pass
+         cargo test: exit 0
+  PASS   Formatting is consistent
+         cargo fmt --check: exit 0
+  PASS   No code warnings
+         cargo clippy: no warnings
+------------------------------------------------------------------------
+RESULT: PASS - p1.4 (7 PASS; 2 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.4 check passed".
+    --- end of scripts/verify/p1.4-rust-workspace.ps1 ---
+  PASS   Task p1.4: Create the empty Rust workspace (3 s)
+         scripts/verify/p1.4-rust-workspace.ps1: RESULT: PASS - p1.4 (7 PASS; 2 s)
+    --- output of scripts/verify/p1.17-tauri-pins.ps1 (exit 0) ---
+Ferrum check p1.17: Pin the Tauri and web-tool versions
+Why: exact pins let the experiments be rerun identically.
+Run at 2026-10-11 14:26 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Tauri tool, Vite and TypeScript are pinned exactly
+         @tauri-apps/cli 2.12.2, vite 8.3.4, typescript 7.0.2
+  PASS   Tauri tool's version is saved in the toolchain record
+         tauri-cli version recorded in toolchain-tauri.txt
+------------------------------------------------------------------------
+RESULT: PASS - p1.17 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.17 check passed".
+    --- end of scripts/verify/p1.17-tauri-pins.ps1 ---
+  PASS   Task p1.17: Pin the Tauri and web-tool versions (1 s)
+         scripts/verify/p1.17-tauri-pins.ps1: RESULT: PASS - p1.17 (2 PASS; 0 s)
+    --- output of scripts/verify/p1.5-spike-multiwebview.ps1 (exit 0) ---
+Ferrum check p1.5: Experiment 1: several web views in one window
+Why: an unstable multi-view feature must change the design before P2.
+Run at 2026-10-11 14:26 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   The report has a pass/fail row for every planned check
+         7 rows found
+  PASS   The experiment app builds
+         cargo build --locked in spikes/s1-multiwebview/src-tauri
+------------------------------------------------------------------------
+RESULT: PASS - p1.5 (2 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.5 check passed".
+    --- end of scripts/verify/p1.5-spike-multiwebview.ps1 ---
+  PASS   Task p1.5: Experiment 1: several web views in one window (2 s)
+         scripts/verify/p1.5-spike-multiwebview.ps1: RESULT: PASS - p1.5 (2 PASS; 1 s)
+    --- output of scripts/verify/p1.6-spike-profiles.ps1 (exit 0) ---
+Ferrum check p1.6: Experiment 2: a separate profile per site
+Why: a route that keeps cookies apart must be chosen before tabs are built.
+Run at 2026-10-11 14:26 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   The report compares all four routes on every criterion
+         4 routes x 4 criteria
+  PASS   At least two routes were really run, including (d)
+         routes run: c, d
+------------------------------------------------------------------------
+RESULT: PASS - p1.6 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.6 check passed".
+    --- end of scripts/verify/p1.6-spike-profiles.ps1 ---
+  PASS   Task p1.6: Experiment 2: a separate profile per site (1 s)
+         scripts/verify/p1.6-spike-profiles.ps1: RESULT: PASS - p1.6 (2 PASS; 0 s)
+    --- output of scripts/verify/p1.7-spike-raw-com.ps1 (exit 0) ---
+Ferrum check p1.7: Experiment 3: low-level WebView2 calls
+Why: we must know which low-level features are possible, and how to call them safely.
+Run at 2026-10-11 14:26 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Only one version of the 'webview2-com' library
+         webview2-com v0.39.1
+  PASS   Only one version of the 'windows' library
+         windows v0.62.2
+  PASS   The report logs each call result and drafts safety rules
+         call results and safety rules present
+------------------------------------------------------------------------
+RESULT: PASS - p1.7 (3 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.7 check passed".
+    --- end of scripts/verify/p1.7-spike-raw-com.ps1 ---
+  PASS   Task p1.7: Experiment 3: low-level WebView2 calls (2 s)
+         scripts/verify/p1.7-spike-raw-com.ps1: RESULT: PASS - p1.7 (3 PASS; 1 s)
+    --- output of scripts/verify/p1.8-spike-test-robot.ps1 (exit 0) ---
+Ferrum check p1.8: Experiment 4: test robot drives the app
+Why: one robot driving every product the same way keeps the benchmark fair.
+Run at 2026-10-11 14:26 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   The robot listed every view it could see
+         4 views listed
+  PASS   The report reads paint timing and says what did not work
+         paint timing and failures section present
+------------------------------------------------------------------------
+RESULT: PASS - p1.8 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.8 check passed".
+    --- end of scripts/verify/p1.8-spike-test-robot.ps1 ---
+  PASS   Task p1.8: Experiment 4: test robot drives the app (1 s)
+         scripts/verify/p1.8-spike-test-robot.ps1: RESULT: PASS - p1.8 (2 PASS; 0 s)
+    --- output of scripts/verify/p1.9-design-freeze.ps1 (exit 0) ---
+Ferrum check p1.9: Decide the design from the experiments
+Why: you settle the design from evidence before P2 starts.
+Run at 2026-10-11 14:26 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   New decision pages cite the experiment reports
+         6 decision page(s): adr-0006, adr-0007, adr-0010, adr-0029, adr-0030, adr-0031
+  PASS   Each tested risk cites its experiment report
+         4 risks cite their reports
+  PASS   Your approval of the new decisions is recorded
+         Approved: 6 decisions
+------------------------------------------------------------------------
+RESULT: PASS - p1.9 (3 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.9 check passed".
+    --- end of scripts/verify/p1.9-design-freeze.ps1 ---
+  PASS   Task p1.9: Decide the design from the experiments (2 s)
+         scripts/verify/p1.9-design-freeze.ps1: RESULT: PASS - p1.9 (3 PASS; 1 s)
+    --- output of scripts/verify/p1.10-history-wiki-checks.ps1 (exit 0) ---
+Ferrum check p1.10: Re-confirm the history-based wiki checks
+Why: raw-file tampering and stale page dates must be caught.
+Run at 2026-10-11 14:26 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Sample repositories trigger both history rules (4 s)
+         history rule tests: Tests  13 passed (13)
+  PASS   The real wiki has zero errors
+         209 pages, 0 errors (RAW-IMMUTABLE and STALE-UPDATED included)
+  PASS   Every raw file has a fingerprint, and all still match
+         119 fingerprints match
+------------------------------------------------------------------------
+RESULT: PASS - p1.10 (3 PASS; 5 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.10 check passed".
+    --- end of scripts/verify/p1.10-history-wiki-checks.ps1 ---
+  PASS   Task p1.10: Re-confirm the history-based wiki checks (6 s)
+         scripts/verify/p1.10-history-wiki-checks.ps1: RESULT: PASS - p1.10 (3 PASS; 5 s)
+    --- output of scripts/verify/p1.11-github-checks.ps1 (exit 0) ---
+Ferrum check p1.11: Turn on automatic checks on GitHub
+Why: every change is tested the same way, locally and on GitHub.
+Run at 2026-10-11 14:26 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   The GitHub workflow runs on Windows and lists every check
+         windows-latest; all checks listed
+  PASS   The local check script passes (83 s)
+         scripts/ci-local.ps1: exit 0
+  YOURS  GitHub run
+         Create the GitHub repository if needed, push, and tell Claude the result of the "ci" run (or say "defer GitHub").
+------------------------------------------------------------------------
+RESULT: PASS - p1.11 (2 PASS, 1 YOURS; 83 s)
+Everything this script can check is fine.
+Still yours to do by hand: GitHub run.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.11 check passed".
+    --- end of scripts/verify/p1.11-github-checks.ps1 ---
+  PASS   Task p1.11: Turn on automatic checks on GitHub (84 s)
+         scripts/verify/p1.11-github-checks.ps1: RESULT: PASS - p1.11 (2 PASS, 1 YOURS; 83 s)
+    --- output of scripts/verify/p1.12-dependency-audit.ps1 (exit 0) ---
+Ferrum check p1.12: Check dependency licences and alerts
+Why: we only use third-party code we may use and that has no known holes.
+Run at 2026-10-11 14:27 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Licence and alert rules file exists
+         deny.toml
+  PASS   Lock files are committed
+         Cargo.lock, interactive_plan/package-lock.json
+  PASS   Licence and security alert check passes
+         advisories ok, bans ok, licenses ok, sources ok
+  PASS   Plan-app security audit saved, findings explained
+         npm-audit.txt
+------------------------------------------------------------------------
+RESULT: PASS - p1.12 (4 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.12 check passed".
+    --- end of scripts/verify/p1.12-dependency-audit.ps1 ---
+  PASS   Task p1.12: Check dependency licences and alerts (2 s)
+         scripts/verify/p1.12-dependency-audit.ps1: RESULT: PASS - p1.12 (4 PASS; 1 s)
+    --- output of scripts/verify/p1.13-public-docs.ps1 (exit 0) ---
+Ferrum check p1.13: Start the public docs
+Why: documentation grows with the code and points to the wiki.
+Run at 2026-10-11 14:27 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   The starter documents exist
+         SECURITY.md, BENCHMARKING.md, REPRODUCIBILITY.md, docs/README.md, AI_USAGE.md
+  PASS   Each links to the wiki, and no link is broken
+         all links resolve
+  PASS   Wiki check: no broken links
+         REF-DANGLING: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p1.13 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.13 check passed".
+    --- end of scripts/verify/p1.13-public-docs.ps1 ---
+  PASS   Task p1.13: Start the public docs (1 s)
+         scripts/verify/p1.13-public-docs.ps1: RESULT: PASS - p1.13 (3 PASS; 0 s)
+    --- output of scripts/verify/p1.14-literature-start.ps1 (exit 0) ---
+Ferrum check p1.14: Start the literature review
+Why: no novelty may be claimed without checked prior work.
+Run at 2026-10-11 14:27 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Search-method and reading-log pages exist and are indexed
+         both pages exist and are indexed
+  PASS   At least one new research note, dated and labelled
+         1 new note(s): literature-batch-1
+------------------------------------------------------------------------
+RESULT: PASS - p1.14 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.14 check passed".
+    --- end of scripts/verify/p1.14-literature-start.ps1 ---
+  PASS   Task p1.14: Start the literature review (1 s)
+         scripts/verify/p1.14-literature-start.ps1: RESULT: PASS - p1.14 (2 PASS; 0 s)
+    --- output of scripts/verify/p1.15-code-page-warning.ps1 (exit 0) ---
+Ferrum check p1.15: Warn when code changes without its page
+Why: the plan must never drift from the code.
+Run at 2026-10-11 14:27 on commit 8cd0461
+------------------------------------------------------------------------
+  PASS   Code-only commit warns; code-plus-page commit does not (13 s)
+         warning shown only for the code-only commit
+  PASS   The rulebook no longer marks this as unverified
+         SCHEMA section 9.8 updated
+------------------------------------------------------------------------
+RESULT: PASS - p1.15 (2 PASS; 13 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.15 check passed".
+    --- end of scripts/verify/p1.15-code-page-warning.ps1 ---
+  PASS   Task p1.15: Warn when code changes without its page (14 s)
+         scripts/verify/p1.15-code-page-warning.ps1: RESULT: PASS - p1.15 (2 PASS; 13 s)
+
+Part 3 - Test gate on one commit
+         saved wiki/raw/evidence/phase-p1-foundation/cargo-fmt.txt
+         saved wiki/raw/evidence/phase-p1-foundation/cargo-clippy.txt
+  PASS   Formatting and code warnings (2 s)
+         cargo fmt --check and cargo clippy -D warnings: exit 0
+         saved wiki/raw/evidence/phase-p1-foundation/cargo-test.txt
+  PASS   Tests (1 s)
+         cargo test: exit 0
+         saved wiki/raw/evidence/phase-p1-foundation/cargo-deny.txt
+  PASS   Licences and alerts (2 s)
+         cargo deny check: exit 0
+         saved wiki/raw/evidence/phase-p1-foundation/wiki-lint.txt
+  PASS   Wiki check (10 s)
+         lint: 0 errors, 33 warnings, 2 info (pages: 209)
+  PASS   Plan app checks (56 s)
+         style, types, unit tests and build: exit 0
+         saved wiki/raw/evidence/phase-p1-foundation/ci-local.txt
+  PASS   Local check script (91 s)
+         scripts/ci-local.ps1: exit 0
+Ferrum check p1.8: Experiment 4: test robot drives the app
+Why: one robot driving every product the same way keeps the benchmark fair.
+Run at 2026-10-11 14:30 on commit 8cd0461 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The robot runs again and finishes cleanly (99 s)
+         npm run check: exit 0
+  PASS   The robot listed every view it could see
+         4 views listed
+  PASS   The report reads paint timing and says what did not work
+         paint timing and failures section present
+------------------------------------------------------------------------
+RESULT: PASS - p1.8 (3 PASS; 99 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p1.8 check passed".
+  PASS   Test robot experiment (100 s)
+         Playwright drove the experiment app
+
+Part 4 - Your part, then the review step (task p1.16)
+  YOURS  Admin prompts
+         You confirmed the Windows admin prompts of the installs Claude ran, and each finished (or you reported the error).
+  YOURS  Experiment 1 by hand
+         You tried Alt+Tab keyboard focus and resizing the window of experiment 1 and told Claude the outcome.
+  YOURS  Design choice
+         You read the four experiment reports, chose the profile route and confirmed (or changed) the one-window design.
+  YOURS  GitHub
+         You pushed and reported the GitHub check result, or said "defer GitHub".
+    --- output of scripts/verify/p1.16-gate-review.ps1 (exit 2) ---
+Ferrum check p1.16: Run the gate; your review
+Why: you approve the exit on saved evidence, not on a claim.
+Run at 2026-10-11 14:32 on commit 8cd0461 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Every evidence file of the P1 gate exists
+         12 evidence files
+  PASS   The log has a gate entry for P1
+         gate entry found
+  WAIT   Your approval of the P1 exit is recorded
+         Waiting for your approval of the P1 exit in Claude Code. 1 page is not approved yet: the end of P1.
+------------------------------------------------------------------------
+RESULT: NOT READY - p1.16 (2 PASS, 1 WAIT; 1 s)
+Not finished yet, and nothing is broken. Waiting on: Your approval of the P1 exit is recorded.
+What to tell Claude: nothing, unless you expected this to be finished.
+    --- end of scripts/verify/p1.16-gate-review.ps1 ---
+  WAIT   Task p1.16: Run the gate; your review (2 s)
+         Waiting on: Your approval of the P1 exit is recorded (waiting)
+------------------------------------------------------------------------
+RESULT: NOT READY - P1-gate (25 PASS, 1 WAIT, 4 YOURS; 399 s)
+Not finished yet, and nothing is broken. Waiting on: Task p1.16: Run the gate; your review.
+What to tell Claude: nothing, unless you expected this to be finished.
