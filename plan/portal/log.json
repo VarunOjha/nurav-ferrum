@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:35ad35ad968c6a0a53e28183d264417ef896b70cc697b68a4c06ae58436f0b44"
+    "content_hash": "sha256:199384fa2239e22dac06167eebd440ed9afb701f40cc01508c3fd05e57408cfd"
   },
   "entries": [
     {
@@ -1323,12 +1323,13 @@
         }
       ],
       "approvals": [],
-      "commit": null,
+      "commit": "3a19188",
       "covers": [
         "## [2026-10-10] ingest | Owner asks for paged, searchable, filterable decisions and log with a category and 2 tags each",
         "## [2026-10-10] plan | Owner approves the browsing plan for decisions and log: \"Approved the plan\"",
         "## [2026-10-10] code | p0.17 browse: categories, tags, search, filters and pages on Decisions and Log",
-        "## [2026-10-10] lint | p0.17 browse: npm run verify green, screenshots of Decisions and Log read at 1440 and 390 px in both themes"
+        "## [2026-10-10] lint | p0.17 browse: npm run verify green, screenshots of Decisions and Log read at 1440 and 390 px in both themes",
+        "## [2026-10-10] plan | p0.17 step \"browse\" committed: decisions and log can be searched, filtered and paged"
       ],
       "phase": "phase-p0-planning",
       "category": "Built",

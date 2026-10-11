@@ -1053,3 +1053,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views, ip-testing, status-live]
 - sources: [raw/evidence/phase-p0-planning/portal-v2/browse-checks.txt]
 - result: `npm run verify` exit 0 (typecheck, eslint, 825 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 35 warnings, 2 info, build, 133 browser tests passed, E2E guard: real files unchanged) in a scratch git worktree of HEAD ce4acb5 outside the repo with this step's files copied in (byte-identical), core.longpaths set only through the environment; after the new plain log entry was added (40 entries, 2 pages) the browse, log, decisions and ref-mode browser tests were re-run there: 59 passed. Screenshots on port 3423 (Decisions and Log at 1440 and 390 px, light and dark, a filtered view of each, log page 2, the empty state, the open tag list and the phone filters) were read: no defects, no sideways scrolling. The worktree was removed, its server stopped, the owner's portal on 3417 kept running, `.git/config` unchanged. Repo: quick lint 0 errors, portal check clean, portal-sync self-tests 39 passed, mask scan 0 unmasked.
+
+## [2026-10-10] plan | p0.17 step "browse" committed: decisions and log can be searched, filtered and paged
+
+- session: s01
+- pages: [status-live]
+- sources: [raw/owner/2026-10-10-s01-decisions-log-browse-approval.md, raw/evidence/phase-p0-planning/portal-v2/browse-checks.txt]
+- result: What was done → the owner asked for paged, searchable, filterable decisions and log with a category and two tags each, answered Claude's questions and approved the plan ("Approved the plan") → every decision and log entry is labelled from one fixed list, and both tabs have search, filters, a results line, 20 per page with page numbers and the view kept in the address → he can find any decision or log entry quickly and share a link to a filtered view. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause), now also naming the new search and filters. A refs.json explainer was added for the new commit.
+- next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
+- commit: 3a19188

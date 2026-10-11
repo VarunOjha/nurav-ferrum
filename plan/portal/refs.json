@@ -4298,6 +4298,16 @@
         "Q-125",
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "3a19188",
+      "kind": "commit",
+      "title": "Commit: decisions and log can be searched, filtered and paged",
+      "summary": "Every decision and log entry got a category and two tags from one fixed list. Both tabs got a search box, filters, a results line and 20 per page with page numbers, and the view stays in the address.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }
