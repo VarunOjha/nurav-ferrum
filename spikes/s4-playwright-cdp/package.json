@@ -1,0 +1,16 @@
+{
+  "name": "ferrum-spike-s4-playwright-cdp",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "P1 spike S4 (throw-away): Playwright over CDP against spike S1, Chrome for Testing and Edge. Not shipped.",
+  "license": "MIT OR Apache-2.0",
+  "scripts": {
+    "check": "node run.ts",
+    "get-cft": "browsers install chrome@stable --path .browsers"
+  },
+  "devDependencies": {
+    "@puppeteer/browsers": "3.2.4",
+    "playwright": "1.64.0"
+  }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "E004E15D733AF6644F07591D1B9BC98F",
+    "type": "page",
+    "url": "http://127.0.0.1:61103/fixture.html",
+    "title": "S4 fixture from-server",
+    "role": "tab navigated to fixture"
+  },
+  {
+    "id": "6BE2FB868D9ABB831C7CA974152ECE76",
+    "type": "page",
+    "url": "http://tauri.localhost/",
+    "title": "Ferrum spike S1 shell",
+    "role": "shell"
+  },
+  {
+    "id": "D412B3631977E5EEAD3B0E6CABD707D3",
+    "type": "page",
+    "url": "http://tauri.localhost/tab.html?n=3",
+    "title": "Spike S1 tab",
+    "role": "tab-3"
+  },
+  {
+    "id": "015E664C9FEEA9446EBE5B00EB2EA2C2",
+    "type": "page",
+    "url": "http://tauri.localhost/tab.html?n=2",
+    "title": "Spike S1 tab",
+    "role": "tab-2"
+  }
+]

@@ -1,0 +1,369 @@
+{
+  "fixture": "http://127.0.0.1:61103/fixture.html",
+  "started": "2026-10-11T18:06:22.279Z",
+  "ferrum": {
+    "product": "ferrum-spike-s1",
+    "version": "Edg/154.0.4258.62",
+    "connected": true,
+    "targets": [
+      {
+        "id": "E004E15D733AF6644F07591D1B9BC98F",
+        "type": "page",
+        "url": "http://127.0.0.1:61103/fixture.html",
+        "title": "S4 fixture from-server",
+        "role": "tab navigated to fixture"
+      },
+      {
+        "id": "6BE2FB868D9ABB831C7CA974152ECE76",
+        "type": "page",
+        "url": "http://tauri.localhost/",
+        "title": "Ferrum spike S1 shell",
+        "role": "shell"
+      },
+      {
+        "id": "D412B3631977E5EEAD3B0E6CABD707D3",
+        "type": "page",
+        "url": "http://tauri.localhost/tab.html?n=3",
+        "title": "Spike S1 tab",
+        "role": "tab-3"
+      },
+      {
+        "id": "015E664C9FEEA9446EBE5B00EB2EA2C2",
+        "type": "page",
+        "url": "http://tauri.localhost/tab.html?n=2",
+        "title": "Spike S1 tab",
+        "role": "tab-2"
+      }
+    ],
+    "pages_seen_by_playwright": [
+      "http://tauri.localhost/tab.html?n=2",
+      "http://tauri.localhost/",
+      "http://tauri.localhost/tab.html?n=3",
+      "http://tauri.localhost/tab.html?n=1"
+    ],
+    "navigated": true,
+    "paint": [
+      {
+        "name": "first-paint",
+        "startTime": 124
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 124
+      }
+    ],
+    "features": [
+      {
+        "feature": "evaluate",
+        "ok": true,
+        "detail": "title = S4 fixture from-server"
+      },
+      {
+        "feature": "click",
+        "ok": true,
+        "detail": "result text = clicked"
+      },
+      {
+        "feature": "keyboard type",
+        "ok": true,
+        "detail": "input value = abc"
+      },
+      {
+        "feature": "screenshot",
+        "ok": true,
+        "detail": "23602 bytes PNG"
+      },
+      {
+        "feature": "network events (page.on response)",
+        "ok": true,
+        "detail": "200 /fixture.html, 200 /dot.svg, 200 /data.json"
+      },
+      {
+        "feature": "request interception (page.route)",
+        "ok": true,
+        "detail": "title = S4 fixture routed"
+      },
+      {
+        "feature": "CDP session (Performance.getMetrics)",
+        "ok": true,
+        "detail": "36 metrics returned"
+      },
+      {
+        "feature": "history back",
+        "ok": true,
+        "detail": "url after back = http://tauri.localhost/tab.html?n=1"
+      },
+      {
+        "feature": "new page in the default context",
+        "ok": true,
+        "detail": "opened (about:blank) and closed"
+      },
+      {
+        "feature": "new isolated context",
+        "ok": true,
+        "detail": "created and closed"
+      }
+    ]
+  },
+  "ferrum_hidden_tab": {
+    "navigated": true,
+    "visibility": "visible",
+    "paint": [],
+    "screenshot": "failed: page.screenshot: Timeout 5000ms exceeded."
+  },
+  "ferrum_exit": "still running",
+  "chrome-for-testing": {
+    "product": "chrome-for-testing",
+    "version": "Chrome/155.0.8059.39",
+    "connected": true,
+    "targets": [
+      {
+        "id": "54FED2391ED1E15B255DFE6144B1FF5E",
+        "type": "page",
+        "url": "http://127.0.0.1:61103/fixture.html",
+        "title": "S4 fixture from-server",
+        "role": "fixture page"
+      },
+      {
+        "id": "336BBDC544FD485E1F6ED00FD275AE3B",
+        "type": "browser_ui",
+        "url": "chrome://webui-toolbar.top-chrome/",
+        "title": "chrome://webui-toolbar.top-chrome",
+        "role": "browser page"
+      },
+      {
+        "id": "2FEC8872BBE082D28B039394A4B1F069",
+        "type": "browser_ui",
+        "url": "chrome://omnibox-popup.top-chrome/",
+        "title": "Omnibox Popup",
+        "role": "browser page"
+      },
+      {
+        "id": "82D51DF6EC266D1B652A2F2F2102EC7F",
+        "type": "browser_ui",
+        "url": "chrome://omnibox-popup.top-chrome/omnibox_popup_aim.html",
+        "title": "Omnibox Popup",
+        "role": "browser page"
+      },
+      {
+        "id": "FA562274E0E922A1E50CD9542BB9D717",
+        "type": "service_worker",
+        "url": "chrome-extension://nkeimhogjdpnpccoofpliimaahmaaome/thunk.js",
+        "title": "Service Worker chrome-extension://nkeimhogjdpnpccoofpliimaahmaaome/thunk.js",
+        "role": "browser page"
+      },
+      {
+        "id": "038A06CF32EE1CCDBFAC5FED5AECA83F",
+        "type": "service_worker",
+        "url": "chrome-extension://glbjnfimcajjenihimblfaponejbkoph/background.js",
+        "title": "Service Worker chrome-extension://glbjnfimcajjenihimblfaponejbkoph/background.js",
+        "role": "browser page"
+      }
+    ],
+    "pages_seen_by_playwright": [
+      "about:blank"
+    ],
+    "navigated": true,
+    "paint": [
+      {
+        "name": "first-paint",
+        "startTime": 212
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 212
+      }
+    ],
+    "features": [
+      {
+        "feature": "evaluate",
+        "ok": true,
+        "detail": "title = S4 fixture from-server"
+      },
+      {
+        "feature": "click",
+        "ok": true,
+        "detail": "result text = clicked"
+      },
+      {
+        "feature": "keyboard type",
+        "ok": true,
+        "detail": "input value = abc"
+      },
+      {
+        "feature": "screenshot",
+        "ok": true,
+        "detail": "29441 bytes PNG"
+      },
+      {
+        "feature": "network events (page.on response)",
+        "ok": true,
+        "detail": "200 /fixture.html, 200 /dot.svg, 200 /data.json"
+      },
+      {
+        "feature": "request interception (page.route)",
+        "ok": true,
+        "detail": "title = S4 fixture routed"
+      },
+      {
+        "feature": "CDP session (Performance.getMetrics)",
+        "ok": true,
+        "detail": "36 metrics returned"
+      },
+      {
+        "feature": "history back",
+        "ok": true,
+        "detail": "url after back = about:blank"
+      },
+      {
+        "feature": "new page in the default context",
+        "ok": true,
+        "detail": "opened (about:blank) and closed"
+      },
+      {
+        "feature": "new isolated context",
+        "ok": true,
+        "detail": "created and closed"
+      }
+    ]
+  },
+  "chrome-for-testing_close": "Browser.close sent",
+  "chrome-for-testing_exit": 0,
+  "edge": {
+    "product": "edge",
+    "version": "Edg/155.0.4283.45",
+    "connected": true,
+    "targets": [
+      {
+        "id": "38AECC0B52084421CDA38557D5F85FAB",
+        "type": "page",
+        "url": "edge://sync-confirmation-dialog/",
+        "title": "We are now syncing your browsing data across all your devices",
+        "role": "browser page"
+      },
+      {
+        "id": "1335C6528CCFA70D584861F337001710",
+        "type": "page",
+        "url": "http://127.0.0.1:61103/fixture.html",
+        "title": "S4 fixture from-server",
+        "role": "fixture page"
+      },
+      {
+        "id": "363D8C4E15E163C480CCCDE05808D4F9",
+        "type": "background_page",
+        "url": "chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold/_generated_background_page.html",
+        "title": "Microsoft Voices",
+        "role": "browser page"
+      },
+      {
+        "id": "12174D66DA6711CEBE8066697B8CC39E",
+        "type": "background_page",
+        "url": "chrome-extension://ncbjelpjchkpbikbpkcchkhkblodoama/_generated_background_page.html",
+        "title": "WebRTC Internals Extension",
+        "role": "browser page"
+      },
+      {
+        "id": "D1C9F6EB1F672C7F64D3BD28B4A295F8",
+        "type": "background_page",
+        "url": "chrome-extension://fikbjbembnmfhppjfnmfkahdhfohhjmg/_generated_background_page.html",
+        "title": "Media Internals Services Extension",
+        "role": "browser page"
+      },
+      {
+        "id": "C6295FEFE19708FD29A62F9F747F0DDA",
+        "type": "background_page",
+        "url": "chrome-extension://ihmafllikibpmigkcoadcmckbfhibefp/_generated_background_page.html",
+        "title": "Edge Feedback",
+        "role": "browser page"
+      },
+      {
+        "id": "7479BF2FFEA73F23BB38E1A4A1036A60",
+        "type": "background_page",
+        "url": "chrome-extension://nkeimhogjdpnpccoofpliimaahmaaome/background.html",
+        "title": "WebRTC Extension",
+        "role": "browser page"
+      },
+      {
+        "id": "912E7F45A78A2C6CDA958CEF317C55CF",
+        "type": "service_worker",
+        "url": "chrome-extension://ndcpkimcihhghdcddljkfmmjccdmcmof/background.rollup.js",
+        "title": "Service Worker chrome-extension://ndcpkimcihhghdcddljkfmmjccdmcmof/background.rollup.js",
+        "role": "browser page"
+      }
+    ],
+    "pages_seen_by_playwright": [
+      "about:blank"
+    ],
+    "navigated": true,
+    "paint": [
+      {
+        "name": "first-paint",
+        "startTime": 312
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 312
+      }
+    ],
+    "features": [
+      {
+        "feature": "evaluate",
+        "ok": true,
+        "detail": "title = S4 fixture from-server"
+      },
+      {
+        "feature": "click",
+        "ok": true,
+        "detail": "result text = clicked"
+      },
+      {
+        "feature": "keyboard type",
+        "ok": true,
+        "detail": "input value = abc"
+      },
+      {
+        "feature": "screenshot",
+        "ok": true,
+        "detail": "30124 bytes PNG"
+      },
+      {
+        "feature": "network events (page.on response)",
+        "ok": true,
+        "detail": "200 /fixture.html, 200 /dot.svg, 200 /data.json"
+      },
+      {
+        "feature": "request interception (page.route)",
+        "ok": true,
+        "detail": "title = S4 fixture routed"
+      },
+      {
+        "feature": "CDP session (Performance.getMetrics)",
+        "ok": true,
+        "detail": "36 metrics returned"
+      },
+      {
+        "feature": "history back",
+        "ok": true,
+        "detail": "url after back = about:blank"
+      },
+      {
+        "feature": "new page in the default context",
+        "ok": true,
+        "detail": "opened (about:blank) and closed"
+      },
+      {
+        "feature": "new isolated context",
+        "ok": true,
+        "detail": "created and closed"
+      }
+    ]
+  },
+  "edge_close": "Browser.close sent",
+  "edge_exit": 0,
+  "finished": "2026-10-11T18:07:45.796Z",
+  "host": {
+    "node": "v24.20.0",
+    "platform": "win32",
+    "elevated": "checked separately"
+  }
+}

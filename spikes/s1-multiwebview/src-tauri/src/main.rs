@@ -395,6 +395,15 @@ fn main() {
         .manage(Mutex::new(SpikeState::default()))
         .invoke_handler(tauri::generate_handler![create_tabs, create_tabs_sync, show_tab, spike_mode, report])
         .setup(|app| {
+            // Optional self-exit timer (used by spike S4, whose robot must never kill the app).
+            if let Some(secs) = std::env::var("FERRUM_SPIKE_EXIT_AFTER").ok().and_then(|s| s.parse::<u64>().ok()) {
+                let handle = app.handle().clone();
+                std::thread::spawn(move || {
+                    std::thread::sleep(Duration::from_secs(secs));
+                    eprintln!("[spike] FERRUM_SPIKE_EXIT_AFTER={secs}: exiting by itself");
+                    handle.exit(0);
+                });
+            }
             let window = tauri::window::WindowBuilder::new(app, "main")
                 .title("Ferrum spike S1 - multi-webview")
                 .inner_size(1200.0, 800.0)

@@ -1,0 +1,5 @@
+# Spike S4 local output (never committed)
+node_modules/
+.browsers/
+profiles/
+out/
