@@ -1288,3 +1288,27 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Task commit 5de4b44 (claims closed, risk-r22 evidence, re-approval, portal records, handoff). The checks before the checkpoint then found two slips in it: the risk-r22 portal mitigation was over 240 characters (portal-sync BAD-SHAPE) and the handoff quoted the unverified-tag text literally (lint:wiki UNV-PASTDUE); both fixed in 1b4ad02. After 1b4ad02: quick_lint 0 errors, lint:wiki 0 errors (33 warnings), portal check clean, mask scan 0.
 - next: fresh session s02; owner's go-ahead for P1
 - commit: 5de4b44
+
+## [2026-10-11] resume | s02 start: P0 done and signed off, tree clean, nothing in flight
+
+- session: s02
+- time: 12:25
+- pages: [status-live, phase-p1-foundation]
+- result: Session-start steps of CLAUDE.md section 1 run: SCHEMA §5-§12 read, STATUS (In-flight empty), last five log entries, approvals_check (31 entries, all APPROVED), handoff-2026-10-09-s01, index, phase-p1-foundation. Git: clean on 9027860, no stash, no index.lock. Git and STATUS agree.
+
+## [2026-10-11] gate | phase-p1-foundation go-ahead given
+
+- session: s02
+- time: 12:25
+- pages: [phase-p1-foundation]
+- sources: [raw/owner/2026-10-11-s02-p1-go-ahead.md]
+- result: Owner: "Start phase 1 please", with the wish to finish P1 in this session and a standing rule: no kill commands and no deleting of things Claude did not create; ask first. Transcribed verbatim.
+
+## [2026-10-11] gate | phase-p1-foundation entry passed
+
+- session: s02
+- time: 12:25
+- pages: [phase-p1-foundation, status-live]
+- sources: [raw/owner/2026-10-11-s02-p1-go-ahead.md]
+- result: SCHEMA §9.7 entry checks. (1) phase-p0-planning done, phase-p0-planning#exit APPROVED, go-ahead given. (2) Dependency set (schema, phase-p1-foundation, adr-0006, adr-0007, adr-0010, adr-0011, adr-0012, adr-0014, adr-0018, adr-0019, adr-0021, comp-core, comp-webview2-runtime, comp-windows-os) all APPROVED. (3) No open question blocks an id in it (Q-106, Q-110, Q-218 answered). (4) The one CONTRADICTION in the set (adr-0010) is registered under Q-107. phase-p1-foundation set to in-progress (volatile key only; approval APPROVED_VOLATILE_DRIFT).
+- next: p1.1 confirm and record the toolchain

@@ -19,8 +19,8 @@
       "id": "phase-p1-foundation",
       "kind": "phase",
       "title": "P1 Foundation",
-      "summary": "Goal: Tools confirmed, empty project builds, riskiest ideas tested. Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. It starts only when you explicitly say go after signing off P0.",
-      "status": "Not started",
+      "summary": "Goal: Tools confirmed, empty project builds, riskiest ideas tested. Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
+      "status": "In progress",
       "related": [],
       "aliases": [
         "P1"

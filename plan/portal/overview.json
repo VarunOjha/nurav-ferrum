@@ -2,30 +2,30 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is finished and signed off by you on 11 Oct, and the last tidy-up is done. No Ferrum code exists yet. Claude is paused: phase 1 starts in a fresh session, only when you explicitly say go.",
+  "summary": "Planning (P0) is done and signed off. You gave the go for phase 1 on 11 Oct, and the entry check passed. Claude is now working through the phase 1 tasks, starting with the tools.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:6e62b632b11fcc1f71c879ba577d061947843ccace1005949fe7a8011a1ef2b9"
+    "content_hash": "sha256:e8c66063b261073ac33a730a87bcde4ce731abf4e22e50792c9620240fd6552c"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P0 Planning: done, signed off by you on 11 Oct (18 of 18 tasks)",
-      "ref": "phase-p0-planning"
-    },
-    {
-      "item": "Phase 1",
-      "state": "Not started. It starts only when you explicitly say go",
+      "state": "P1 Foundation: in progress, 0 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
-      "item": "Approvals",
-      "state": "Done for planning and for phase 1: 30 pages plus your sign-off, all current (you re-approved the planning page after the last fixes)"
+      "item": "Planning",
+      "state": "Done, signed off by you on 11 Oct",
+      "ref": "phase-p0-planning"
     },
     {
-      "item": "Plan portal (the site)",
-      "state": "Up to date, but not running: Claude Code stopped it to free memory. Start it with one PowerShell script"
+      "item": "Approvals",
+      "state": "All 31 current"
+    },
+    {
+      "item": "Your rule this session",
+      "state": "Claude asks you before any delete or kill command"
     },
     {
       "item": "First upload to GitHub",
@@ -34,24 +34,20 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
-        "item": "Planning",
-        "state": "Done and signed off"
-      },
-      {
-        "item": "Approvals",
-        "state": "30 pages plus your sign-off, all current"
-      },
-      {
         "item": "Phase 1",
-        "state": "Paused until you say go"
+        "state": "Started 11 Oct"
+      },
+      {
+        "item": "Next task",
+        "state": "Confirm and record the tools"
       }
     ],
-    "why": "Nothing to run. Claude is paused (your rule of 10 Oct): no tool installs, no project setup, no test builds. Open a fresh Claude Code session for phase 1 → Claude first reads the status and session notes → on your word it records the go and starts with confirming the tools. Optional any time: answer the title bar question, or the history-rewrite question before the first upload.",
+    "why": "Nothing to run. Claude continues with the first task: tools are already installed → Claude adds the licence checker and records every version → later results can name the exact tools used.",
     "script": null,
-    "tell_claude": "In the fresh session: \"Go ahead with phase 1\" when you want building to start. Until then nothing happens."
+    "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
   "questions_for_you": {
     "open": 32,

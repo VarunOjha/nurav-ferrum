@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:84feef92502afdaf73c18580bc3689edaa231f8b8fd34551b22cd5f4aaa9c892"
+    "content_hash": "sha256:e8f5506b04c1fa23c30fddf0ccefb752d47041fa9bd717d23efced2cbe92ecda"
   },
   "entries": [
     {
@@ -1629,6 +1629,33 @@
       "tags": [
         "approvals",
         "wiki"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-start",
+      "date": "2026-10-11",
+      "time": "12:25",
+      "title": "You said go: phase 1 started",
+      "done": "Claude read the status, log, approvals and session notes; everything was saved and clean. Your go-ahead was written down word for word. The entry check passed: planning is signed off, all 31 approvals are current and no open question holds up phase 1.",
+      "next": "Claude confirms the installed tools and records their versions (first task of phase 1).",
+      "decisions": [
+        {
+          "what": "Start phase 1 now and aim to finish it this session; Claude asks before any delete or kill command",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] resume | s02 start: P0 done and signed off, tree clean, nothing in flight",
+        "## [2026-10-11] gate | phase-p1-foundation go-ahead given",
+        "## [2026-10-11] gate | phase-p1-foundation entry passed"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Decided",
+      "tags": [
+        "phases",
+        "approvals"
       ]
     }
   ]

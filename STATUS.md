@@ -14,12 +14,13 @@ sources:
   - raw/owner/2026-10-10-s01-q008-and-pause.md
   - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
   - raw/owner/2026-10-11-s01-wave2-pages-approval.md
+  - raw/owner/2026-10-11-s02-p1-go-ahead.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
-session: s01
-current_phase: phase-p0-planning
+session: s02
+current_phase: phase-p1-foundation
 current_task: null
-next_action: "PAUSED after P0 (done and signed off 2026-10-11; finish-up committed). Claude starts no P1 work in session s01. Owner: open a fresh Claude Code session in the repo folder and say there that P1 may start (for example \"Go ahead with phase 1\"). Claude (session s02): first run the session-start steps of CLAUDE.md section 1 (STATUS, log, approvals_check, handoff, index, phase page, git); then transcribe the go-ahead to wiki/raw/owner/, log gate | phase-p1-foundation go-ahead given, run the P1 entry gate (SCHEMA §9.7, python tools/approvals_check.py) and start task p1.1 (confirm and record the toolchain)."
+next_action: "Task p1.1 (confirm and record the toolchain): run pwsh -NoProfile -File scripts/verify/p1.1-toolchain.ps1 -SaveEvidence from the repo folder after cargo install cargo-deny --locked; then commit p1.1 and continue with p1.2 per wiki/phases/phase-p1-foundation.md step order."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -32,16 +33,16 @@ last_handoff: handoff-2026-10-09-s01
 
 ## Current phase
 
-**phase-p0-planning — DONE (session s01, 2026-10-08 to 2026-10-11).** The owner signed off P0 on 2026-10-11
-(`phase-p0-planning#exit` APPROVED after the P0 gate passed on `b5f7d40`). **Claude is PAUSED**: phase-p1-foundation
-does not start until the owner explicitly says go in Claude Code (SCHEMA §9.7 exit-gate step 7; the owner said
-"don't start phase 1"). No Ferrum application code (no Rust, no Tauri) exists or may be written before that go.
+**phase-p1-foundation — IN PROGRESS (session s02, started 2026-10-11).** The owner gave the go-ahead in chat on
+2026-10-11 ([raw/owner/2026-10-11-s02-p1-go-ahead.md](wiki/raw/owner/2026-10-11-s02-p1-go-ahead.md)): "Start phase 1
+please", aiming to finish P1 in this session. Standing rule from the same message: **no kill commands and no deleting of
+things Claude did not create; ask the owner first.** The entry gate passed (log entry of 2026-10-11, 12:25).
 
-P0 in one line: **the wiki is written, checked and approved; the read-only plain-language portal
-(`interactive_plan/`) is built and checked (five browsable lists, Ref mode, the browser design); a PowerShell 7
-check script exists for every task and phase; the P0 gate passed (evidence
-[p0-gate.20261011-0218.txt](wiki/raw/evidence/phase-p0-planning/p0-gate.20261011-0218.txt)); Approval Waves 1 and 2
-and `phase-p0-planning#exit` are recorded in `plan/approvals.json`.**
+P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPROVED after the P0 gate passed on `b5f7d40`).
+
+## Done this session (s02)
+
+- Session start; go-ahead transcribed; P1 entry gate passed; `phase-p1-foundation` set to in-progress.
 
 ## Done this session (s01)
 
@@ -253,7 +254,7 @@ and `phase-p0-planning#exit` are recorded in `plan/approvals.json`.**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.18 P0 exit verified and committed 2026-10-11 (`e446aa4` answers and approvals, `b5f7d40` MANIFEST fix and gate run 1, `f975531` gate pass, sign-off, phase done; `5de4b44` finish-up and re-approval, `1b4ad02` two follow-up fixes); Claude is PAUSED before P1 until the owner says go in a fresh session)
+(empty: session s02 opened and P1 entry gate passed 2026-10-11; p1.1 not started yet)
 
 ## Blockers
 
@@ -289,28 +290,19 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| P0 Planning | Done: 18 of 18 tasks; final check passed; signed off by you on 11 Oct |
-| Approvals | 30 pages approved on 11 Oct, plus your P0 sign-off; all 31 current (you re-approved the planning page after the last check fixes) |
-| Phase 1 | Not started. Claude is paused until you say go |
-| Plan portal | Up to date, but not running: Claude Code stopped it to free memory. Start it with the script below |
-| First upload to GitHub | On hold until you answer the history-rewrite question (Q-221) |
+| P0 Planning | Done and signed off (11 Oct) |
+| Phase 1 | In progress since 11 Oct, 12:25 (your go-ahead); 0 of 17 tasks done |
+| Approvals | All 31 current |
+| Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing has to run. Your rule of 10 Oct: after a phase ends, Claude stops until you
-say go → you open a fresh Claude Code session for phase 1 → Claude first reads the status, log and session notes, then
-on your word checks the entry conditions and starts with confirming the tools (installs need your clicks on Windows
-prompts). The script below only starts the portal if you want to read
-it; it changes nothing.
+**2. Why, and what it does.** Nothing for you to run now. Claude continues with task p1.1: it installs the licence
+checker cargo-deny, then runs `scripts/verify/p1.1-toolchain.ps1 -SaveEvidence`, which records every tool version
+and builds a tiny Rust program to prove the C++ linker works.
 
-**3. The script** (optional; PowerShell 7, from the repo folder):
+**3. The script:** none for you.
 
-```powershell
-pwsh -NoProfile -File scripts/start-portal.ps1
-```
-
-- It finds Node, builds the portal, starts it on this computer only and opens http://127.0.0.1:3417/. Ctrl+C stops it.
-
-**4. What to tell Claude:** in the fresh session, "Go ahead with phase 1" when you want building to start. Optional any time: your
-answer on the title bar (Q-125, before P3) or on rewriting old commits (Q-221, before the first upload).
+**4. What to tell Claude:** nothing; Claude will ask when a step needs you (Windows prompts, manual spike checks,
+design choices, approvals).
 
 ## Pending owner approvals
 
@@ -321,4 +313,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s01 (p0.18: Waves 1 and 2 approved, P0 gate passed on `b5f7d40`, P0 signed off; finish-up `5de4b44` + `1b4ad02`, planning re-approved; PAUSED before P1, which starts in a fresh session s02). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 go-ahead given and entry gate passed; p1.1 next). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
