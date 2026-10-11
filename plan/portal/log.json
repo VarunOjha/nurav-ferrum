@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:bc2304fdf0122e36c3c038a52f9c454d26a93386dd78d03eb0949290d4dd5f51"
+    "content_hash": "sha256:5bf1fea62c63c965f8fc7a5b446b124a2de3e4c45bcb9e8b844ece3e298891b0"
   },
   "entries": [
     {
@@ -1736,6 +1736,26 @@
       "tags": [
         "toolchain",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-17",
+      "date": "2026-10-11",
+      "time": "12:41",
+      "title": "Tauri and web-tool versions pinned",
+      "done": "Claude re-checked the official registries. Tauri moved from 2.12.1 to 2.12.3 since research (small bug-fix releases), so the experiments use the newer ones, as planned. Exact versions of the Tauri tool, Vite and TypeScript are now fixed for experiment 1.",
+      "next": "Claude builds experiment 1: one window with a shell and three tab views.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "135d6cc",
+      "covers": [
+        "## [2026-10-11] code | p1.17 Tauri CLI and frontend tool pins for the spikes"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Set up",
+      "tags": [
+        "Tauri",
+        "toolchain"
       ]
     }
   ]

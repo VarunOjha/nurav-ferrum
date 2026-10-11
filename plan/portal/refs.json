@@ -380,7 +380,7 @@
       "kind": "task",
       "title": "P1 task: Pin the Tauri and web-tool versions",
       "summary": "Generated templates change under us → pin Tauri's command-line tool, Vite and TypeScript exactly, and write the experiments by hand → experiments can be rerun identically.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4418,6 +4418,14 @@
       "kind": "commit",
       "title": "Commit: Empty Rust project set up",
       "summary": "The Rust workspace now exists with six empty library parts, one for each planned component, and a pinned Rust version. It builds, its 6 tiny tests pass, formatting is clean and the code checker finds ",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "135d6cc",
+      "kind": "commit",
+      "title": "Commit: Tauri and web-tool versions pinned",
+      "summary": "Claude re-checked the official registries. Tauri moved from 2.12.1 to 2.12.3 since research (small bug-fix releases), so the experiments use the newer ones, as planned. Exact versions of the Tauri too",
       "status": null,
       "related": []
     }

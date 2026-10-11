@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 4,
+    "done": 5,
     "total": 17
   },
   "step_order": [
@@ -70,7 +70,7 @@
       "what": "Exact versions for Tauri's command-line tool, Vite and TypeScript.",
       "why": "Starter templates and loose versions change from week to week. An experiment rerun a month later could then test different code and give a different answer.",
       "how": "Use Tauri's npm package, write the experiment apps by hand instead of from a template, and re-check the versions online when the task starts.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Generated templates change under us → pin Tauri's command-line tool, Vite and TypeScript exactly, and write the experiments by hand → experiments can be rerun identically.",
       "check": "Experiment 1's package file has exact versions; Tauri's version is saved; versions re-checked online first.",
       "script": "scripts/verify/p1.17-tauri-pins.ps1"

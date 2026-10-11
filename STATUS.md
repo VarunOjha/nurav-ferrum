@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: null
-next_action: "Task p1.17 (Tauri CLI and frontend pins): re-check versions of tauri, wry, webview2-com, windows (crates.io) and @tauri-apps/cli, vite, typescript, playwright (npm); create spikes/s1-multiwebview/package.json with exact pins; save npx tauri --version as evidence; run scripts/verify/p1.17-tauri-pins.ps1; commit p1.17."
+next_action: "Task p1.5 (spike S1): build spikes/s1-multiwebview (Tauri 2.12.3 unstable feature, vanilla TS + Vite shell, three child webviews from an async command, hide/show tab switching, auto-resize, self-exiting test mode), run its automatic checks and the Job Object attribution check, write raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md row by row, ask the owner for the Alt+Tab focus and resize checks."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -47,6 +47,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.2 done (`c0142a5`): machine inventory saved ([environment.md](wiki/raw/evidence/phase-p1-foundation/environment.md)); Q-116 and Q-122 still open for the owner.
 - p1.3 done (`e4a193a`): ignore rules, `.gitattributes`, LICENSE-MIT, LICENSE-APACHE, README licence section.
 - p1.4 done (`de68d66`): Cargo workspace with six library stubs, rust-toolchain 1.99.0, section-12 folders; build/test/fmt/clippy clean.
+- p1.17 done (`135d6cc`): spikes pinned to tauri 2.12.3, @tauri-apps/cli 2.12.2, @tauri-apps/api 2.12.3, vite 8.3.4, typescript 7.0.2.
 
 ## Done this session (s01)
 
@@ -258,7 +259,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p1.4 verified and committed 2026-10-11 as `de68d66`)
+(empty: p1.17 verified and committed 2026-10-11 as `135d6cc`)
 
 ## Blockers
 
@@ -294,11 +295,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 4 of 17 tasks done |
-| Next task | p1.17 pin the Tauri and frontend tool versions |
+| Phase 1 | In progress: 5 of 17 tasks done |
+| Next task | p1.5 experiment 1: many web views in one window |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude re-checks the Tauri, Vite and TypeScript versions on the official registries and pins exact versions for the first experiment.
+**2. Why, and what it does.** Nothing for you to run now. Tauri's multi-view feature is experimental → Claude builds a throw-away app with a shell and three tab views and checks it → if it is unstable, the design changes before P2. Two checks need you at the keyboard.
 
 **3. The script:** none for you.
 
@@ -313,4 +314,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 4 of 17 tasks done, last p1.4). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 5 of 17 tasks done, last p1.17). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

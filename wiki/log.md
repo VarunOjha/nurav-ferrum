@@ -1351,3 +1351,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Root Cargo.toml (resolver 2, exclude spikes/*, edition 2024, rust-version 1.90, MIT OR Apache-2.0, publish false, workspace lint unsafe_code forbid), Cargo.lock, rust-toolchain.toml pinned to 1.99.0 (rustup installed the named toolchain on first use). Six library stubs with #![forbid(unsafe_code)] and one test each (ferrum-core, -webview-manager, -security, -resource-manager, -telemetry, -network-logger as its own crate per comp-network-logger). Section-12 folders with README placeholders (docs/ in p1.13). cargo build, test (6 passed), fmt --check and clippy -D warnings all exit 0 (evidence p1.4-cargo-*.txt; the gate re-runs them as cargo-*.txt on one commit). scripts/verify/p1.4-rust-workspace.ps1 PASS (7 of 7). No component page changed: the stubs add no behaviour or interface (SCHEMA §9.8).
 - next: p1.17 Tauri CLI and frontend pins
 - commit: de68d66
+
+## [2026-10-11] code | p1.17 Tauri CLI and frontend tool pins for the spikes
+
+- session: s02
+- time: 12:41
+- pages: [phase-p1-foundation]
+- sources: [raw/evidence/phase-p1-foundation/registry-versions-2026-10-11.txt, raw/evidence/phase-p1-foundation/toolchain-tauri.txt]
+- result: Registry re-check saved (registry-versions-2026-10-11.txt): tauri 2.12.1 -> 2.12.3, @tauri-apps/cli 2.12.1 -> 2.12.2, @tauri-apps/api 2.12.1 -> 2.12.3 (newer patch used, as the phase page says); wry 0.57.0, webview2-com 0.39.1, windows 0.62.2, Playwright 1.64.0 unchanged. spikes/s1-multiwebview/package.json pins @tauri-apps/api 2.12.3, @tauri-apps/cli 2.12.2, vite 8.3.4, typescript 7.0.2 exactly, with package-lock.json. npx tauri --version = tauri-cli 2.12.2 (toolchain-tauri.txt). Tooling decision (delegated): the p1.17 check script also reads toolchain-*.txt companions, because toolchain.txt is raw and cannot be edited. p1.17 check PASS (2 of 2); check-script self-test PASS.
+- next: p1.5 spike S1 multi-webview
+- commit: 135d6cc
