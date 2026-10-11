@@ -1,0 +1,52 @@
+#!/bin/sh
+# Ferrum before-commit check (P1 task p1.15; SCHEMA section 9.8, the CODE rule).
+#
+# 1. Runs the quick wiki lint (tools/quick_lint.py). Lint errors stop the commit; fix them and commit again.
+# 2. Warns (never blocks) when staged files under crates/ or apps/ belong to a component whose wiki page
+#    (wiki/architecture/components/comp-*.md, matched by its "path:" field) is not staged in the same commit.
+#    The warning is a reminder: a change that alters behaviour or interfaces updates its component page in
+#    the same commit; a pure refactor or comment change may not need it.
+#
+# Install (per clone, not versioned by git):  cp scripts/hooks/pre-commit .git/hooks/pre-commit
+# Git for Windows runs this with its own sh. It needs python on PATH for step 1 (skipped with a note if absent).
+
+root=$(git rev-parse --show-toplevel) || exit 0
+cd "$root" || exit 0
+
+# --- 1. quick lint ---------------------------------------------------------------------------------
+py=""
+for c in python python3 py; do
+    if command -v "$c" >/dev/null 2>&1; then py=$c; break; fi
+done
+if [ -n "$py" ] && [ -f tools/quick_lint.py ]; then
+    if ! out=$("$py" tools/quick_lint.py 2>&1); then
+        echo "$out" | tail -20
+        echo "pre-commit: the quick wiki lint found errors (above). Commit stopped; fix them and commit again."
+        exit 1
+    fi
+else
+    echo "pre-commit: note: python not found, quick wiki lint skipped."
+fi
+
+# --- 2. component page rule (warning only) --------------------------------------------------------
+staged=$(git diff --cached --name-only --diff-filter=ACMRD)
+[ -z "$staged" ] && exit 0
+warned=0
+for page in wiki/architecture/components/comp-*.md; do
+    [ -f "$page" ] || continue
+    cpath=$(sed -n 's/^path:[[:space:]]*\([^[:space:]]*\).*$/\1/p' "$page" | head -n 1)
+    case "$cpath" in
+        crates/*|apps/*) ;;
+        *) continue ;;
+    esac
+    code=$(printf '%s\n' "$staged" | grep -F -- "$cpath" | grep -v '^wiki/' | head -n 1)
+    [ -z "$code" ] && continue
+    if ! printf '%s\n' "$staged" | grep -qxF -- "$page"; then
+        echo "pre-commit: WARNING: $cpath changed (e.g. $code) but its component page $page is not in this commit."
+        warned=1
+    fi
+done
+if [ "$warned" -eq 1 ]; then
+    echo "pre-commit: WARNING: if the change alters behaviour or interfaces, update the page in the same commit (SCHEMA section 9.8)."
+fi
+exit 0
