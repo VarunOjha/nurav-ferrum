@@ -1594,3 +1594,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [phase-p2-minimal-container, status-live]
 - result: approvals_check --gate phase-p2-minimal-container: ENTRY GATE PASS (P1 done with #exit approved; go-ahead given; dependency set APPROVED; no open question blocks it; the adr-0010 contradiction is registered under the answered Q-107). phase-p2-minimal-container set to in-progress (volatile key).
 - next: p2.1 local fixture server
+
+## [2026-10-11] code | p2.1 local HTTPS fixture server with a name-constrained dev CA
+
+- session: s02
+- time: 18:12
+- pages: [phase-p2-minimal-container]
+- sources: [raw/evidence/phase-p2-minimal-container/p2.1-fixture-curl.txt, raw/evidence/phase-p2-minimal-container/check-p2.1.20261011-1811.txt]
+- result: tests/fixtures/server (fixture-server, exact pins) serves 16 documented routes over HTTPS. The local development CA lives outside the repo, is name-constrained to localhost, 127.0.0.0/8 and ::1, and was installed into the owner's user Root store with his confirmation of the Windows prompt (Q-202). 7 crate tests pass, including a certificate for example.com being rejected with NameConstraintViolation; a Windows curl probe got every documented status (--ssl-revoke-best-effort for the probe only, because a private CA has no revocation server). The p2.1 check script is now real: PASS; two earlier failing runs are kept as evidence. Test-support code, no component page.
+- commit: e007c71

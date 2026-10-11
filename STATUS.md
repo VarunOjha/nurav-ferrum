@@ -22,8 +22,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
-current_task: p2.1
-next_action: "Task p2.1 (fixture server): build the tests/fixtures/ server over HTTPS with a local development CA (owner confirms its install into his user certificate store), serving redirect chains, _blank, mailto/custom-scheme, cookie, slow, 404/500 pages; run scripts/verify/p2.1-local-test-pages.ps1."
+current_task: null
+next_action: "Task p2.2: create apps/desktop (Tauri 2.12.3 workspace member, src-tauri inside; shell UI vanilla TS + Vite), release build via the pinned Tauri CLI, window shows the shell; add MPL-2.0 to deny.toml if needed (Q-222); run scripts/verify/p2.2-*.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -72,6 +72,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - P1 signed off by the owner; phase-p1-foundation done; handoff [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md) written.
 - P2 go-ahead recorded; four P2 dependency pages aligned with adr-0029 before Approval Wave 3.
 - P2 entry passed: Wave 3 approved; Q-109, Q-202, Q-214 answered; phase-p2-minimal-container in progress.
+- p2.1 done (`e007c71`): fixture server over HTTPS, name-constrained dev CA installed (owner confirmed), 7 tests, curl probe.
 
 ## Done this session (s01)
 
@@ -283,7 +284,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: P1 done and signed off 2026-10-11; Claude is PAUSED before P2)
+(empty: p2.1 verified and committed 2026-10-11 as `e007c71`)
 
 ## Blockers
 
@@ -319,11 +320,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 0 of 18 tasks done |
-| Next task | p2.1 local test pages over HTTPS |
+| Phase 2 | In progress: 1 of 18 tasks done |
+| Next task | p2.2 the real app skeleton |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude builds the local test pages first; installing the local certificate needs your click on a Windows prompt, and Claude will ask when it gets there.
+**2. Why, and what it does.** Nothing for you to run now. The first real Ferrum needs a home → Claude creates the Tauri app in apps/desktop with the shell in TypeScript → later tasks fill it in.
 
 **3. The script:** none for you.
 
@@ -338,4 +339,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: entry passed). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 1 of 18 tasks done, last p2.1). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

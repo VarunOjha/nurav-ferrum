@@ -470,7 +470,7 @@
       "kind": "task",
       "title": "P2 task: Build local test pages",
       "summary": "Real websites change → a local server with fixed pages (redirects, pop-ups, cookies, slow and error pages) → navigation tests give the same answer every run.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4595,6 +4595,14 @@
       "kind": "commit",
       "title": "Commit: Phase 1 end-of-phase check passed",
       "summary": "The saved results of the full phase 1 check.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "e007c71",
+      "kind": "commit",
+      "title": "Commit: Local test pages built",
+      "summary": "A small local test server now serves fixed pages (redirects, pop-ups, mail links, cookies, a slow page, error pages) over real HTTPS. Its certificate comes from a local authority you installed, which ",
       "status": null,
       "related": []
     }

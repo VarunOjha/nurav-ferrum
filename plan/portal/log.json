@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:cd85a1f71d6deb8e3ccd00f020f2c5016080f9d1da3185c6d35b888233c2ecea"
+    "content_hash": "sha256:c9938f0d586d5535d451bca8f6492aad735d36c8871274875e23444c00a7883e"
   },
   "entries": [
     {
@@ -2245,6 +2245,26 @@
       "tags": [
         "approvals",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-1",
+      "date": "2026-10-11",
+      "time": "18:12",
+      "title": "Local test pages built",
+      "done": "A small local test server now serves fixed pages (redirects, pop-ups, mail links, cookies, a slow page, error pages) over real HTTPS. Its certificate comes from a local authority you installed, which can only vouch for this PC's own addresses; a test proves it is refused for any real site name.",
+      "next": "Claude creates the real Ferrum app skeleton (task p2.2).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "e007c71",
+      "covers": [
+        "## [2026-10-11] code | p2.1 local HTTPS fixture server with a name-constrained dev CA"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "testing",
+        "privacy"
       ]
     }
   ]
