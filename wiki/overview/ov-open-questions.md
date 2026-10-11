@@ -18,6 +18,7 @@ sources:
   - raw/owner/2026-10-10-s01-q008-and-pause.md
   - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
   - raw/owner/2026-10-11-s01-wave2-answers.md
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt
 related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability, adr-0028]
 approvable: false
 audience: owner
@@ -25,8 +26,6 @@ tags: [questions, owner]
 unverified:
   - claim: "A custom title bar resizes reliably under Tauri on Windows 11 (issue #12207), Q-125"
     verify_in: phase-p1-foundation
-  - claim: "@vitest/coverage-v8 exact version matching the pinned vitest is available from the registry at install time"
-    verify_in: phase-p0-planning
 ---
 
 # Open questions for the owner
@@ -687,8 +686,8 @@ the user. Only relevant if per-site profiles are adopted (Q-107).
 
 Raised by the review of [ip-build-plan](../interactive-plan/ip-build-plan.md) and
 [ip-testing](../interactive-plan/ip-testing.md). The IP-9 coverage gate needs a Vitest coverage provider
-(`@vitest/coverage-v8`, exact version pinned from the registry at install time,
-UNVERIFIED[phase-p0-planning]), and the E2E tests need `npx playwright install chromium`, which downloads
+(`@vitest/coverage-v8`, exact version pinned from the registry at install time;
+VERIFIED: 5.0.3, equal to the pinned vitest, installed in IP-1, [evidence](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)), and the E2E tests need `npx playwright install chromium`, which downloads
 a Chromium build into the user profile. Recommended default: yes to both (Approval Wave 0).
 
 ## Q-211 Scope of unsafe code beyond the WebView2 COM module

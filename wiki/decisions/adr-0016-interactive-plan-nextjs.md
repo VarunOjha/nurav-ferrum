@@ -3,13 +3,14 @@ id: adr-0016
 type: decision
 title: "Interactive plan = local Next.js app reading wiki/ directly; approvals persisted to plan/approvals.json"
 status: superseded
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
   - raw/research/llm-wiki-pattern.md
   - raw/owner/2026-10-08-s01-wave0.md
   - raw/owner/2026-10-09-s01-wave0c.md
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-4-tests.txt
 related: [adr-0001, adr-0002, adr-0021, adr-0014, adr-0023, adr-0024, schema, phase-p0-planning, comp-interactive-plan]
 approvable: true
 date: 2026-10-08
@@ -22,9 +23,7 @@ options:
   - "Approvals stored in browser localStorage"
 phase: phase-p0-planning
 tags: [interactive-plan, nextjs, approvals, tooling]
-unverified:
-  - claim: "The atomic temp-file-then-rename write of ../plan/approvals.json works under next dev and next start (plain fs reads and writes outside the root were verified by IP-1 spike S1)"
-    verify_in: phase-p0-planning
+unverified: []
 ---
 
 # ADR-0016: The interactive plan is a local Next.js app that reads wiki/ directly; approvals go to plan/approvals.json
@@ -105,7 +104,7 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
    - validates the request with zod and accepts only ids whose page has `approvable: true`;
    - computes `content_hash` and `scope_hash` exactly as SCHEMA §10.2 specifies, checked against shared test vectors;
    - moves the previous decision into `history`;
-   - writes atomically (temp file, then rename; that the rename works under both servers is UNVERIFIED[phase-p0-planning], checked in IP-4);
+   - writes atomically (temp file, then rename; whether the rename works under both servers was never fully checked: IP-4 tested it in plain Node processes, including a rename retry ([evidence](../raw/evidence/phase-p0-planning/interactive-plan/IP-4-tests.txt)), not under `next dev` and `next start`. The claim was withdrawn on 2026-10-11 because ADR-0023 removed this write path; this is the only change to the original text);
    - is served only on `127.0.0.1` (`next start -H 127.0.0.1`) and rejects non-loopback hosts.
 4. **Only the app writes `plan/approvals.json`.** **Claude never writes it** ([SCHEMA §10.1](../SCHEMA.md#101-file-format)).
 5. **Tests.** Unit tests (Vitest) cover the parsers, the hashing and the graph builders. E2E tests (Playwright against `next build && next start`) point at a temporary data folder via an environment variable (for example `PLAN_DATA_DIR`), so tests never mutate the real approvals file.

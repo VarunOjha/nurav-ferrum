@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:480e20ff6a971f3ddd0d3c5b8eb9bdae500589a474cb17dc4af967e96e9e089f"
+    "content_hash": "sha256:576985c28e7e274b6170f5e735a21f4a5fcf933573dd706044fe0e042c71b19f"
   },
   "items": [
     {

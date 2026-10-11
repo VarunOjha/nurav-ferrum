@@ -13,6 +13,8 @@ sources:
   - raw/owner/2026-10-10-s01-q008-and-pause.md
   - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
   - raw/owner/2026-10-11-s01-wave2-pages-approval.md
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt
+  - raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt
 related: [schema, phase-p1-foundation, comp-interactive-plan, ip-build-plan, ops-approval-workflow, ops-wiki-maintenance, adr-0001, adr-0002, adr-0003, adr-0014, adr-0016]
 approvable: true
 phase: phase-p0-planning
@@ -127,15 +129,7 @@ risks: [risk-r16, risk-r22, risk-r24]
 decisions: [adr-0001, adr-0002, adr-0003, adr-0004, adr-0014, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027]
 experiments: []
 components: [comp-interactive-plan]
-unverified:
-  - claim: "create-next-app 16.4.0 with the recommended flag set produces the expected files on Windows in a path containing a space"
-    verify_in: phase-p0-planning
-  - claim: "Runtime fs reads of ../wiki and writes of ../plan/approvals.json work under Turbopack dev and next start"
-    verify_in: phase-p0-planning
-  - claim: "npm install resolves without ERESOLVE using TypeScript 5.9.3 and ESLint 9.39.x with eslint-config-next 16.4.0"
-    verify_in: phase-p0-planning
-  - claim: "Mermaid 12 renders inside a React 19.3 client component under Next 16.4"
-    verify_in: phase-p0-planning
+unverified: []
 ---
 
 # P0 Planning: LLM wiki, interactive plan app, owner approval
@@ -220,6 +214,22 @@ Evidence files under `wiki/raw/evidence/` are raw and immutable. A failed run is
 ## Research track in P0
 
 Only the seed list exists ([raw/research/related-work-seed.md](../raw/research/related-work-seed.md)). The literature review protocol starts in P1 (p1.14). No novelty is claimed anywhere.
+
+## Claims checked in P0
+
+The four version and tooling claims this page carried as unverified were checked while the plan app was built.
+They were closed on 2026-10-11, after the phase was marked done, when the wiki lint flagged them as past due:
+
+- create-next-app 16.4.0 with the recommended flag set works on Windows in a path containing a space: VERIFIED,
+  exit 0 with no flag rejected ([IP-1 scaffold evidence](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt)).
+- npm install resolves without ERESOLVE with TypeScript 5.9.3, ESLint 9.39.x (9.39.5) and eslint-config-next 16.4.0:
+  VERIFIED, exact pins installed with no peer-dependency error and no `--force` or `--legacy-peer-deps` (same evidence).
+- Runtime reads of `../wiki` and writes under `../plan` work under Turbopack dev and `next start`: VERIFIED for both
+  servers by spike S1 ([IP-1 spike evidence](../raw/evidence/phase-p0-planning/interactive-plan/IP-1-spikes.txt)).
+  The approvals-file write itself is no longer needed: since adr-0023 the portal is read-only and approvals are
+  written by `tools/approvals_record.py`.
+- Mermaid 12 renders inside a React 19.3 client component under Next 16.4: VERIFIED for both servers by spike S2
+  (same evidence). The current portal no longer uses Mermaid.
 
 ## Owner review checkpoint (adr-0014)
 

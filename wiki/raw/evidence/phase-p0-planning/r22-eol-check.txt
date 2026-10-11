@@ -1,0 +1,41 @@
+RAW EVIDENCE - risk-r22 line-ending check (p0.18 finish-up), phase-p0-planning, session s01
+Captured 2026-10-11 11:56 -0500 in Git Bash. git 2.52.0.windows.1. HEAD a4d0f2e.
+Method: fresh local clone of HEAD into a scratch folder with this machine's own Git config (core.autocrlf=true
+from the system gitconfig), then list the working-tree line endings of every tracked text file under wiki/,
+plus STATUS.md and CLAUDE.md. A first attempt without core.longpaths failed at checkout ("Filename too long"
+for 7 deep fixture/evidence files under the long scratch path) and checked nothing; this run sets
+core.longpaths=true for the clone only (no other setting changed).
+
+$ git config --show-origin --get core.autocrlf
+file:C:/Program Files/Git/etc/gitconfig	true
+$ git config --get core.eol
+(unset)
+$ cat .gitattributes
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.zip binary
+*.pdf binary
+$ git clone -q -c core.longpaths=true <repo> <scratch>/eolclone
+clone exit 0
+$ git status --short | wc -l   (0 = full, clean checkout)
+0
+$ git config --get core.autocrlf  (effective in the clone)
+true
+$ git ls-files --eol -- wiki STATUS.md CLAUDE.md | summary
+text files: 276 ; working tree w/lf: 276 ; working tree w/crlf: 0
+files with w/crlf:
+(none)
+files with i/crlf (stored with CRLF):
+(none)
+sample:
+i/lf    w/lf    attr/text=auto eol=lf 	CLAUDE.md
+i/lf    w/lf    attr/text=auto eol=lf 	STATUS.md
+i/lf    w/lf    attr/text=auto eol=lf 	wiki/SCHEMA.md
+i/lf    w/lf    attr/text=auto eol=lf 	wiki/log.md
+$ CR bytes in the clone's wiki/SCHEMA.md, STATUS.md, wiki/log.md
+wiki/SCHEMA.md: 0
+STATUS.md: 0
+wiki/log.md: 0
+
+RESULT: PASS - with core.autocrlf=true, the eol=lf rule checks out all 276 wiki text files with LF.

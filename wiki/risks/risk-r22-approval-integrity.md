@@ -3,11 +3,12 @@ id: risk-r22
 type: risk
 title: "Approval records could be wrong (hash divergence, stale view, file corruption) and mis-gate phases"
 status: open
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - SCHEMA.md
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
+  - raw/evidence/phase-p0-planning/r22-eol-check.txt
 related: [phase-p0-planning, adr-0023, adr-0016, adr-0001, adr-0014, comp-interactive-plan, ip-data-contract, ip-approvals-api, ip-testing, risk-r15, risk-r24, qual-phase-gate-checklist]
 approvable: true
 tags: [governance, approvals, interactive-plan, hashing]
@@ -18,9 +19,7 @@ spike: null
 owner_phase: phase-p0-planning
 trigger: "The hash code disagrees with a shared hash test vector; an approval shows APPROVED for a page the owner has not seen in its current form; approvals.json fails to parse; git line-ending conversion changes hashes after checkout."
 fallback: "Treat all affected approvals as PENDING and ask the owner to re-approve after the fix."
-unverified:
-  - claim: "A .gitattributes eol=lf rule for wiki files prevents CRLF checkout on this machine's Git configuration"
-    verify_in: phase-p0-planning
+unverified: []
 ---
 
 # risk-r22: Approval records could be wrong (hash divergence, stale view, file corruption) and mis-gate phases
@@ -64,7 +63,14 @@ Treat all affected approvals as PENDING and ask the owner to re-approve after th
 
 ## Unverified claims
 
-- A .gitattributes eol=lf rule for wiki files prevents CRLF checkout on this machine's Git configuration. UNVERIFIED[phase-p0-planning]
+None open. The one claim this page had is now checked:
+
+- A .gitattributes eol=lf rule for wiki files prevents CRLF checkout on this machine's Git configuration. VERIFIED on
+  2026-10-11: a fresh clone with this machine's `core.autocrlf=true` checked out all 276 tracked text files under
+  `wiki/` (plus `STATUS.md` and `CLAUDE.md`) with LF and none with CRLF
+  ([evidence](../raw/evidence/phase-p0-planning/r22-eol-check.txt)). Side finding from the same run: a clone into a
+  deep folder fails at checkout ("Filename too long") unless `core.longpaths` is on, because some fixture and
+  evidence file names are long.
 
 ## Affects
 
