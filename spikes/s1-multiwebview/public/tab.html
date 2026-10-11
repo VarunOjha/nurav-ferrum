@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spike S1 tab</title>
+    <style>
+      html, body { margin: 0; height: 100%; font: 14px system-ui, sans-serif; color: #fff; }
+      body { display: flex; flex-direction: column; gap: 12px; padding: 16px; box-sizing: border-box; }
+      textarea { width: 40%; height: 120px; font: inherit; color: #000; }
+    </style>
+  </head>
+  <body>
+    <h1 id="title">Tab</h1>
+    <label>Text box for the shortcut check (type, then Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+Z):<br />
+      <textarea id="box" placeholder="Click here and type"></textarea></label>
+    <p id="state"></p>
+    <script>
+      // Plain script (no bundler): local fixture page for one tab of spike S1.
+      const n = Number(new URLSearchParams(location.search).get("n") || "0");
+      const colours = ["#c0392b", "#27ae60", "#2980b9"];
+      document.body.style.background = colours[n - 1] || "#000";
+      document.getElementById("title").textContent = "Tab " + n;
+      function spikeReport(tag) {
+        const data = { n, tag, visibility: document.visibilityState, innerWidth, innerHeight, focused: document.hasFocus() };
+        document.getElementById("state").textContent = JSON.stringify(data);
+        const t = window.__TAURI__;
+        if (t && t.core) t.core.invoke("report", { data }).catch(() => {});
+      }
+      window.spikeReport = spikeReport;
+      document.addEventListener("visibilitychange", () => spikeReport("visibilitychange"));
+      addEventListener("resize", () => spikeReport("resize"));
+      spikeReport("load");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+# Spike S1 build output (never committed)
+dist/
+node_modules/
+src-tauri/target/
+src-tauri/gen/
+# tauri icon writes many platform icons; only the Windows ones are used
+src-tauri/icons/*
+!src-tauri/icons/icon.ico
+!src-tauri/icons/icon.png
+# auto-mode output (copied into wiki/raw/evidence when kept)
+out/

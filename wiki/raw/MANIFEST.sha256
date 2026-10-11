@@ -89,3 +89,11 @@ d9fb4007622fd7bcf8efaf5d9b9ccbd251b082be21903fc097ae4f815dd6c67c  evidence/phase
 a21420a18d85411b369244366856f25f4042920299be6a5bf678a4c84d437de4  evidence/phase-p1-foundation/p1.4-cargo-clippy.txt
 e73145af696b4ade4daa132cf5da3b7ae913e2b54649c029d93a9ea6f03eec2e  evidence/phase-p1-foundation/registry-versions-2026-10-11.txt
 765f6a35005c81c2245828419667293fb641918d1c5c3fe2468e37a2b9daea89  evidence/phase-p1-foundation/toolchain-tauri.txt
+63ee47b959f8a9512ab1c0b8ee7dd254101101192b9c2632cd42124a9b8a7aea  evidence/phase-p1-foundation/spike-s1/auto-1.json
+7b9ff5cb24b20db088a986d619013f591226fee6e22e75bd4aa264c5e5266f51  evidence/phase-p1-foundation/spike-s1/job-4.job.json
+aa8ead7a5c55b9ae1cbb39a565809e0f1ca0cd469d5654f117743c909afdd0c1  evidence/phase-p1-foundation/spike-s1/job-4.json
+3a31a34f383d12486cedbfa0a4819c5a2bd6984019c11b7e0019bfdf71254b00  evidence/phase-p1-foundation/spike-s1/job-5.job.json
+14cd9e901af68f8bbd98f951cade5d904fadc689dcf46e1b3870d73a092e07c6  evidence/phase-p1-foundation/spike-s1/job-5.json
+04c25af798ce503f6ac786df59263c99aa9c8da9896b8d9ec724af099bbb5233  evidence/phase-p1-foundation/spike-s1/job-6.job.json
+ec314e226a9d0a6acf933c62eb990830fa13aea56e657ebf32558a53916e0cf1  evidence/phase-p1-foundation/spike-s1/job-6.json
+08cd83641cdba4a461163b1c5e31f847f2c25f0a41bcc0cecc35ee6e4cd0bf57  evidence/phase-p1-foundation/spike-s1/sync-1.json

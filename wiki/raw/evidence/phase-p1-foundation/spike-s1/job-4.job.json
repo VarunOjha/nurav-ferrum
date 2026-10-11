@@ -1,0 +1,62 @@
+{
+  "app_exit_code": 0,
+  "app_exited_by_itself": true,
+  "app_pid": 8196,
+  "job_pids_before_resume": [
+    8196
+  ],
+  "job_processes_3s_after_app_exit": [],
+  "job_processes_while_running": [
+    {
+      "chromium_type": "(none)",
+      "exe": "ferrum-spike-s1.exe",
+      "pid": 8196
+    },
+    {
+      "chromium_type": "(none)",
+      "exe": "msedgewebview2.exe",
+      "pid": 72844
+    },
+    {
+      "chromium_type": "crashpad-handler",
+      "exe": "msedgewebview2.exe",
+      "pid": 25128
+    },
+    {
+      "chromium_type": "gpu-process",
+      "exe": "msedgewebview2.exe",
+      "pid": 15132
+    },
+    {
+      "chromium_type": "utility",
+      "exe": "msedgewebview2.exe",
+      "pid": 47472
+    },
+    {
+      "chromium_type": "utility",
+      "exe": "msedgewebview2.exe",
+      "pid": 17628
+    },
+    {
+      "chromium_type": "renderer",
+      "exe": "msedgewebview2.exe",
+      "pid": 36724
+    },
+    {
+      "chromium_type": "renderer",
+      "exe": "msedgewebview2.exe",
+      "pid": 90484
+    },
+    {
+      "chromium_type": "renderer",
+      "exe": "msedgewebview2.exe",
+      "pid": 62564
+    },
+    {
+      "chromium_type": "renderer",
+      "exe": "msedgewebview2.exe",
+      "pid": 73696
+    }
+  ],
+  "launcher_already_in_a_job": false
+}

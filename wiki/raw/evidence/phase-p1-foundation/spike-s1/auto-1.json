@@ -1,0 +1,124 @@
+{
+  "checks": [
+    {
+      "detail": "3 child views created from an async command in 542 ms; all pages loaded: true",
+      "id": "async-create",
+      "result": "PASS"
+    },
+    {
+      "detail": "active 2: tab 3 hidden; active 2: tab 2 visible; active 2: tab 1 hidden; active 3: tab 3 visible; active 3: tab 1 hidden; active 3: tab 2 hidden; active 1: tab 3 hidden; active 1: tab 1 visible; active 1: tab 2 hidden",
+      "id": "tab-switch",
+      "result": "PASS"
+    },
+    {
+      "detail": "tab 1: shell px #21303f (want #203040) ok, tab px #be3d31 (want #c0392b) ok; tab 2: shell px #21303f (want #203040) ok, tab px #32ad67 (want #27ae60) ok; tab 3: shell px #21303f (want #203040) ok, tab px #2f7fb5 (want #2980b9) ok",
+      "id": "render-no-blank",
+      "result": "PASS"
+    },
+    {
+      "detail": "window inner 1000x700: tab-1 bounds 1000x636, page sees 1000x636 ok; window inner 1300x850: tab-1 bounds 1300x786, page sees 1300x786 ok",
+      "id": "resize-relayout",
+      "result": "PASS"
+    },
+    {
+      "detail": "shell resized to cover the tab area; pixel there = #be3d31 -> on top: the tab (child) view; Ferrum layout keeps shell and tabs apart (shell strip above, tabs below)",
+      "id": "zorder-overlap",
+      "result": "PASS"
+    },
+    {
+      "detail": "GetProcessInfos: 8 entries; GetProcessExtendedInfos: 8 entries",
+      "id": "process-infos",
+      "result": "PASS"
+    }
+  ],
+  "mode": "auto",
+  "own_pid": 49840,
+  "reports_total": 33,
+  "webview2_processes": {
+    "extended": [
+      {
+        "frames": [
+          "http://tauri.localhost/tab.html?n=3"
+        ],
+        "kind": "renderer",
+        "pid": 71984
+      },
+      {
+        "frames": [
+          "http://tauri.localhost/tab.html?n=2"
+        ],
+        "kind": "renderer",
+        "pid": 6088
+      },
+      {
+        "frames": [
+          "http://tauri.localhost/tab.html?n=1"
+        ],
+        "kind": "renderer",
+        "pid": 29360
+      },
+      {
+        "frames": [
+          "http://tauri.localhost/"
+        ],
+        "kind": "renderer",
+        "pid": 13080
+      },
+      {
+        "frames": [],
+        "kind": "utility",
+        "pid": 5048
+      },
+      {
+        "frames": [],
+        "kind": "gpu",
+        "pid": 49200
+      },
+      {
+        "frames": [],
+        "kind": "browser",
+        "pid": 53340
+      },
+      {
+        "frames": [],
+        "kind": "utility",
+        "pid": 62936
+      }
+    ],
+    "infos": [
+      {
+        "kind": "utility",
+        "pid": 5048
+      },
+      {
+        "kind": "renderer",
+        "pid": 6088
+      },
+      {
+        "kind": "renderer",
+        "pid": 13080
+      },
+      {
+        "kind": "renderer",
+        "pid": 29360
+      },
+      {
+        "kind": "gpu",
+        "pid": 49200
+      },
+      {
+        "kind": "browser",
+        "pid": 53340
+      },
+      {
+        "kind": "utility",
+        "pid": 62936
+      },
+      {
+        "kind": "renderer",
+        "pid": 71984
+      }
+    ]
+  },
+  "zorder_top_in_overlap": "the tab (child) view"
+}

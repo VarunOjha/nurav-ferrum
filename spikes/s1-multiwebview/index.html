@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ferrum spike S1 shell</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #203040; color: #e8eef4; font: 13px system-ui, sans-serif; overflow: hidden; }
+      #bar { display: flex; align-items: center; gap: 8px; height: 64px; padding: 0 12px; box-sizing: border-box; }
+      button { font: inherit; padding: 6px 12px; border-radius: 6px; border: 1px solid #5a7088; background: #2c4054; color: inherit; cursor: pointer; }
+      button.active { background: #4f7398; }
+      #info { margin-left: 12px; max-width: 60%; opacity: 0.85; }
+    </style>
+  </head>
+  <body>
+    <div id="bar">
+      <button data-tab="1">Tab 1</button>
+      <button data-tab="2">Tab 2</button>
+      <button data-tab="3">Tab 3</button>
+      <span id="info">Starting…</span>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

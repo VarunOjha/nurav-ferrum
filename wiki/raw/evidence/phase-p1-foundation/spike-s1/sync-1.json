@@ -1,0 +1,5 @@
+{
+  "deadlock": true,
+  "detail": "no return from the synchronous create_tabs_sync command within 25 s; watchdog ended the process",
+  "mode": "sync"
+}
