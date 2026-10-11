@@ -1,0 +1,27 @@
+[workspace]
+# Layout: adr-0018 (wiki/decisions/adr-0018-repo-root-cargo-workspace.md). Spikes are throw-away experiments with their
+# own Cargo.toml and lockfile, so they stay out of the workspace.
+resolver = "2"
+members = [
+    "crates/core",
+    "crates/webview-manager",
+    "crates/security",
+    "crates/resource-manager",
+    "crates/telemetry",
+    "crates/network-logger",
+]
+exclude = ["spikes/*"]
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.90"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }

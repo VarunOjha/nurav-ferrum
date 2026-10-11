@@ -83,3 +83,7 @@ b2e19aa9add764433ad53c87c9c8126159d2807f60aa2e9784de676cd73630bf  owner/2026-10-
 48d401673be29fac39a9777bdcf6de3fc870bd5d622b5df7259fa5b6d1016b5c  evidence/phase-p1-foundation/toolchain.txt
 4cbd18331f93eceb61715f181b55e5a69859c4cddab98a0490787896c7a56697  evidence/phase-p1-foundation/toolchain-details.txt
 644193f72f22926a47e0fae583805b1d348e83730da0518128413174e3293738  evidence/phase-p1-foundation/environment.md
+34c778369b08dd8e40e4e1692a229e31728510c44cc309b082252c9fe51641e7  evidence/phase-p1-foundation/p1.4-cargo-build.txt
+8fc4749f1e2f25a6d029df57fbb043d6bba051c3d53be4dfd6617e995214b89f  evidence/phase-p1-foundation/p1.4-cargo-test.txt
+d9fb4007622fd7bcf8efaf5d9b9ccbd251b082be21903fc097ae4f815dd6c67c  evidence/phase-p1-foundation/p1.4-cargo-fmt.txt
+a21420a18d85411b369244366856f25f4042920299be6a5bf678a4c84d437de4  evidence/phase-p1-foundation/p1.4-cargo-clippy.txt

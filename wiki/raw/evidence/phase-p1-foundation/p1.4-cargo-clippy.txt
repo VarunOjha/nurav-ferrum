@@ -1,0 +1,10 @@
+# cargo clippy --workspace --all-targets --locked -- -D warnings (p1.4, session s02, 2026-10-11 12:38 -0500, commit base 12f8aec + p1.4 working tree)
+$ cargo clippy --workspace --all-targets --locked -- -D warnings
+    Checking ferrum-security v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\security)
+    Checking ferrum-network-logger v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\network-logger)
+    Checking ferrum-webview-manager v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\webview-manager)
+    Checking ferrum-core v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\core)
+    Checking ferrum-telemetry v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\telemetry)
+    Checking ferrum-resource-manager v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\resource-manager)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.58s
+exit code: 0

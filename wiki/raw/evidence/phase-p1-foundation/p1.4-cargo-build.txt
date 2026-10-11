@@ -1,0 +1,4 @@
+# cargo build --workspace --locked (p1.4, session s02, 2026-10-11 12:38 -0500, commit base 12f8aec + p1.4 working tree)
+$ cargo build --workspace --locked
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.03s
+exit code: 0
