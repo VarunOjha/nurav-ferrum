@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5bf1fea62c63c965f8fc7a5b446b124a2de3e4c45bcb9e8b844ece3e298891b0"
+    "content_hash": "sha256:8761bc7fc552014f44466838f219ef9d77c09d743c447e20674a40d3235afa4b"
   },
   "entries": [
     {
@@ -1756,6 +1756,26 @@
       "tags": [
         "Tauri",
         "toolchain"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-5a",
+      "date": "2026-10-11",
+      "time": "12:55",
+      "title": "Experiment 1: the automatic checks pass",
+      "done": "Claude built a throw-away app with a shell bar and three tab views. Tabs are created without freezing, switch correctly, never show blank, and follow window resizes. Tab views always draw on top of the shell where they overlap, so the shell must stay above the tabs. Creating tabs the wrong way freezes the app, as the docs warn. All web view helper processes can be tracked as one group.",
+      "next": "Your hand checks (Alt+Tab, resizing, copy and paste) finish this experiment; Claude continues with experiment 3 meanwhile.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "331e3f6",
+      "covers": [
+        "## [2026-10-11] code | p1.5 spike S1 automatic part: all automatic checks pass; sync deadlock reproduced"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "web views",
+        "Tauri"
       ]
     }
   ]

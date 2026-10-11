@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 5 of 17 tasks done. Next: p1.5 experiment 1: many web views in one window.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 5 of 17 tasks done. Experiment 1 passed its automatic checks and waits for your hand checks; Claude continues with experiment 3.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:914a1f99b9ea8b79048d34dac725ab88275494e6503fdf8447d2b6e607866a24"
+    "content_hash": "sha256:15a762b6653121868a27c9cec73ce7be308ce3346158a2a0886234e3b49d2360"
   },
   "updated": "2026-10-11",
   "where_we_are": [
@@ -41,11 +41,15 @@
         "state": "5 of 17 tasks done"
       },
       {
+        "item": "Experiment 1",
+        "state": "Automatic checks passed; your hand checks come later"
+      },
+      {
         "item": "Next task",
-        "state": "p1.5 experiment 1: many web views in one window"
+        "state": "Experiment 3: raw access to the web view engine"
       }
     ],
-    "why": "Nothing to run. Tauri's multi-view feature is experimental → Claude builds a throw-away app with a shell and three tab views and checks it → if it is unstable, the design changes before P2. Two checks need you at the keyboard.",
+    "why": "Nothing to run yet. Claude collects all the steps that need you (hand checks, a few questions) and asks them together, to save your time.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

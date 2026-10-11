@@ -1361,3 +1361,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Registry re-check saved (registry-versions-2026-10-11.txt): tauri 2.12.1 -> 2.12.3, @tauri-apps/cli 2.12.1 -> 2.12.2, @tauri-apps/api 2.12.1 -> 2.12.3 (newer patch used, as the phase page says); wry 0.57.0, webview2-com 0.39.1, windows 0.62.2, Playwright 1.64.0 unchanged. spikes/s1-multiwebview/package.json pins @tauri-apps/api 2.12.3, @tauri-apps/cli 2.12.2, vite 8.3.4, typescript 7.0.2 exactly, with package-lock.json. npx tauri --version = tauri-cli 2.12.2 (toolchain-tauri.txt). Tooling decision (delegated): the p1.17 check script also reads toolchain-*.txt companions, because toolchain.txt is raw and cannot be edited. p1.17 check PASS (2 of 2); check-script self-test PASS.
 - next: p1.5 spike S1 multi-webview
 - commit: 135d6cc
+
+## [2026-10-11] code | p1.5 spike S1 automatic part: all automatic checks pass; sync deadlock reproduced
+
+- session: s02
+- time: 12:55
+- pages: [phase-p1-foundation, risk-r02, risk-r05]
+- sources: [raw/evidence/phase-p1-foundation/spike-s1/auto-1.json, raw/evidence/phase-p1-foundation/spike-s1/sync-1.json, raw/evidence/phase-p1-foundation/spike-s1/job-4.job.json]
+- result: Spike app in spikes/s1-multiwebview (tauri 2.12.3 unstable). Automatic run: three child views from an async command (no deadlock), hide/show tab switching (visibilityState follows), no blank rendering (PrintWindow pixels match each tab colour), relayout on resize (bounds and page size follow), process lists from GetProcessInfos and GetProcessExtendedInfos (8 processes; one renderer per tab plus one for the shell). Where shell and tab overlap, the tab is drawn on top (issue 15682 seen), so the shell must never overlap tab bounds. Creating views from a synchronous command deadlocked (watchdog ended the app after 25 s). Job Object: all 8 WebView2-listed processes join the job, plus the app and a crashpad-handler WebView2 does not list; the job is empty 3 s after exit (3 runs agree). Report waits for the owner's Alt+Tab, resize and text-shortcut checks (manual rows).
+- next: p1.7 spike S3 raw COM while the owner's S1 checks are pending
+- commit: 331e3f6

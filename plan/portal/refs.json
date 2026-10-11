@@ -420,7 +420,7 @@
       "kind": "task",
       "title": "P1 task: Experiment 1: several web views in one window",
       "summary": "Tauri's multi-view feature is experimental → build a throwaway app with three tab views and test resize, focus, overlap, blank pages and freezes → if it is unstable, the design changes before P2, not after.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4426,6 +4426,14 @@
       "kind": "commit",
       "title": "Commit: Tauri and web-tool versions pinned",
       "summary": "Claude re-checked the official registries. Tauri moved from 2.12.1 to 2.12.3 since research (small bug-fix releases), so the experiments use the newer ones, as planned. Exact versions of the Tauri too",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "331e3f6",
+      "kind": "commit",
+      "title": "Commit: Experiment 1: the automatic checks pass",
+      "summary": "Experiment 1 app, its automatic checks and the process-group launcher.",
       "status": null,
       "related": []
     }
