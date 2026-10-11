@@ -128,3 +128,7 @@ acb6835ccaf48eed10fb1b763064bde836abfa3adddb72dd7a3fcb00aa3d30f4  evidence/phase
 be8eb75dac0718da0037b19a5f52926be25e73eecf06c87ea2460dc34c4507c4  owner/2026-10-11-s02-p1-signoff.md
 66801c80985035e56484ded0b6ff09a377ee0b41214341cd896565740790a419  owner/2026-10-11-s02-p2-go-ahead.md
 98b8ecba1996fcbe6a474b6e6575ae0617f95da7409d8aa0b04eaf79aaadaf69  owner/2026-10-11-s02-wave3-and-p2-questions.md
+4e23febcab7a84b389bc0a009cea2da93ab52dce42629616eca439246f44a0ca  evidence/phase-p2-minimal-container/check-p2.1.20261011-1810.txt
+82ae879980a249caca63ee7da73ecf77052b160a7dcce555f44d1f7f4e166198  evidence/phase-p2-minimal-container/check-p2.1.20261011-1811.txt
+4e23febcab7a84b389bc0a009cea2da93ab52dce42629616eca439246f44a0ca  evidence/phase-p2-minimal-container/check-p2.1.txt
+1025bf08274758e7123cf2418de40057febb453e84641524bc47475a827e00bb  evidence/phase-p2-minimal-container/p2.1-fixture-curl.txt

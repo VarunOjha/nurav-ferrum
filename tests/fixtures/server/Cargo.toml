@@ -1,0 +1,24 @@
+[package]
+name = "fixture-server"
+description = "Local HTTPS fixture server with deterministic test pages (P2 task p2.1). Test support only, never shipped."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+axum = "=0.8.9"
+axum-server = { version = "=0.8.0", features = ["tls-rustls-no-provider"] }
+tokio = { version = "=1.53.2", features = ["rt-multi-thread", "macros", "net", "time"] }
+rustls = { version = "=0.23.45", default-features = false, features = ["ring", "std", "tls12", "logging"] }
+rcgen = "=0.14.10"
+time = "=0.3.55"
+serde = { version = "=1.0.229", features = ["derive"] }
+
+[dev-dependencies]
+tokio-rustls = { version = "=0.26.6", default-features = false, features = ["ring", "tls12"] }
+tower = { version = "=0.5.3", features = ["util"] }
+
+[lints]
+workspace = true

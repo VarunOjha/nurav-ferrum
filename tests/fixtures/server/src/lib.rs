@@ -1,0 +1,272 @@
+//! Local HTTPS fixture server for Ferrum's navigation tests (P2 task p2.1). Test support only, never shipped.
+//!
+//! Every page is deterministic. The routes are listed in [`ROUTES`] and served by [`router`]. TLS uses a leaf
+//! certificate for `localhost` / `127.0.0.1` / `::1`, signed at start-up by a local development CA that lives
+//! outside the repository ([`ca`]). The CA is **name-constrained** to those loopback names, so it cannot vouch
+//! for any real website even if its key leaked (owner decision Q-202, 2026-10-11).
+#![forbid(unsafe_code)]
+
+pub mod ca;
+
+use std::time::Duration;
+
+use axum::Router;
+use axum::extract::{Path, Query};
+use axum::http::{HeaderMap, HeaderValue, StatusCode, header};
+use axum::response::{Html, IntoResponse, Redirect, Response};
+use axum::routing::get;
+
+/// One documented fixture route: path, expected status code (for a request without following redirects) and purpose.
+pub struct Route {
+    /// Request path (with query, if the route needs one).
+    pub path: &'static str,
+    /// Status code the server answers with.
+    pub status: u16,
+    /// What the page is for.
+    pub purpose: &'static str,
+}
+
+/// The documented routes (README and the p2.1 check script list the same table).
+pub const ROUTES: &[Route] = &[
+    Route {
+        path: "/",
+        status: 200,
+        purpose: "index listing every fixture",
+    },
+    Route {
+        path: "/landing",
+        status: 200,
+        purpose: "plain target page for redirects and links",
+    },
+    Route {
+        path: "/redirect/301",
+        status: 301,
+        purpose: "permanent redirect to /landing",
+    },
+    Route {
+        path: "/redirect/302",
+        status: 302,
+        purpose: "found redirect to /landing",
+    },
+    Route {
+        path: "/redirect/303",
+        status: 303,
+        purpose: "see-other redirect to /landing",
+    },
+    Route {
+        path: "/redirect/307",
+        status: 307,
+        purpose: "temporary redirect (method kept) to /landing",
+    },
+    Route {
+        path: "/redirect/308",
+        status: 308,
+        purpose: "permanent redirect (method kept) to /landing",
+    },
+    Route {
+        path: "/redirect/chain",
+        status: 301,
+        purpose: "chain: 301 to /redirect/302, then /landing",
+    },
+    Route {
+        path: "/redirect/loop",
+        status: 302,
+        purpose: "redirects to itself forever (loop)",
+    },
+    Route {
+        path: "/links/blank",
+        status: 200,
+        purpose: "target=_blank link and a window.open button",
+    },
+    Route {
+        path: "/links/schemes",
+        status: 200,
+        purpose: "mailto: and custom-scheme (ferrum-test:) links",
+    },
+    Route {
+        path: "/cookie/set",
+        status: 200,
+        purpose: "sets cookie fixture=1 (Secure, HttpOnly, SameSite=Lax)",
+    },
+    Route {
+        path: "/cookie/read",
+        status: 200,
+        purpose: "shows the Cookie header the browser sent",
+    },
+    Route {
+        path: "/slow?ms=2000",
+        status: 200,
+        purpose: "answers after a delay (ms, at most 30000)",
+    },
+    Route {
+        path: "/status/404",
+        status: 404,
+        purpose: "not-found error page",
+    },
+    Route {
+        path: "/status/500",
+        status: 500,
+        purpose: "server error page",
+    },
+];
+
+fn page(title: &str, body: &str) -> Html<String> {
+    Html(format!(
+        "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>{title}</title>\
+         <style>body{{font:16px system-ui,sans-serif;padding:24px}}</style></head><body><h1>{title}</h1>{body}</body></html>"
+    ))
+}
+
+async fn index() -> Html<String> {
+    let rows: String = ROUTES
+        .iter()
+        .map(|r| {
+            format!(
+                "<li><a href=\"{p}\">{p}</a> ({s}): {d}</li>",
+                p = r.path,
+                s = r.status,
+                d = r.purpose
+            )
+        })
+        .collect();
+    page("Ferrum fixtures", &format!("<ul>{rows}</ul>"))
+}
+
+async fn landing() -> Html<String> {
+    page(
+        "Landing",
+        "<p id=\"landing\">You arrived at the landing page.</p>",
+    )
+}
+
+async fn redirect(Path(code): Path<String>) -> Response {
+    let to = "/landing";
+    match code.as_str() {
+        "301" => (StatusCode::MOVED_PERMANENTLY, [(header::LOCATION, to)]).into_response(),
+        "302" => (StatusCode::FOUND, [(header::LOCATION, to)]).into_response(),
+        "303" => Redirect::to(to).into_response(),
+        "307" => Redirect::temporary(to).into_response(),
+        "308" => Redirect::permanent(to).into_response(),
+        "chain" => (
+            StatusCode::MOVED_PERMANENTLY,
+            [(header::LOCATION, "/redirect/302")],
+        )
+            .into_response(),
+        "loop" => (StatusCode::FOUND, [(header::LOCATION, "/redirect/loop")]).into_response(),
+        _ => (
+            StatusCode::NOT_FOUND,
+            page("Unknown redirect", "<p>No such redirect fixture.</p>"),
+        )
+            .into_response(),
+    }
+}
+
+async fn links_blank() -> Html<String> {
+    page(
+        "New windows",
+        "<p><a id=\"blank\" href=\"/landing\" target=\"_blank\">Open the landing page in a new window</a></p>\
+         <p><button id=\"open\" onclick=\"window.open('/landing')\">window.open('/landing')</button></p>",
+    )
+}
+
+async fn links_schemes() -> Html<String> {
+    page(
+        "Other apps",
+        "<p><a id=\"mailto\" href=\"mailto:test@example.invalid\">mailto:test@example.invalid</a></p>\
+         <p><a id=\"custom\" href=\"ferrum-test:hello\">ferrum-test:hello</a></p>",
+    )
+}
+
+async fn cookie_set() -> Response {
+    let mut r = page("Cookie set", "<p>The cookie fixture=1 was set.</p>").into_response();
+    r.headers_mut().insert(
+        header::SET_COOKIE,
+        HeaderValue::from_static("fixture=1; Path=/; Secure; HttpOnly; SameSite=Lax"),
+    );
+    r
+}
+
+async fn cookie_read(headers: HeaderMap) -> Html<String> {
+    let cookie = headers
+        .get(header::COOKIE)
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("");
+    let shown = if cookie.is_empty() {
+        "(none)".to_string()
+    } else {
+        cookie.replace('<', "&lt;")
+    };
+    page(
+        "Cookie read",
+        &format!("<p>Cookie header: <code id=\"cookie\">{shown}</code></p>"),
+    )
+}
+
+#[derive(serde::Deserialize)]
+struct SlowQuery {
+    ms: Option<u64>,
+}
+
+async fn slow(Query(q): Query<SlowQuery>) -> Html<String> {
+    let ms = q.ms.unwrap_or(2000).min(30_000);
+    tokio::time::sleep(Duration::from_millis(ms)).await;
+    page("Slow page", &format!("<p>Answered after {ms} ms.</p>"))
+}
+
+async fn status(Path(code): Path<u16>) -> Response {
+    match code {
+        404 => (
+            StatusCode::NOT_FOUND,
+            page("Not found", "<p>Fixture 404 page.</p>"),
+        )
+            .into_response(),
+        500 => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            page("Server error", "<p>Fixture 500 page.</p>"),
+        )
+            .into_response(),
+        _ => (
+            StatusCode::BAD_REQUEST,
+            page("Unknown status", "<p>Only 404 and 500 exist.</p>"),
+        )
+            .into_response(),
+    }
+}
+
+/// The fixture routes as an axum router (no TLS; see [`serve`]).
+pub fn router() -> Router {
+    Router::new()
+        .route("/", get(index))
+        .route("/landing", get(landing))
+        .route("/redirect/{code}", get(redirect))
+        .route("/links/blank", get(links_blank))
+        .route("/links/schemes", get(links_schemes))
+        .route("/cookie/set", get(cookie_set))
+        .route("/cookie/read", get(cookie_read))
+        .route("/slow", get(slow))
+        .route("/status/{code}", get(status))
+}
+
+/// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`).
+/// The server stops by itself; it never needs to be killed.
+pub async fn serve(
+    addr: std::net::SocketAddr,
+    tls: std::sync::Arc<rustls::ServerConfig>,
+    exit_after: Option<Duration>,
+) -> std::io::Result<()> {
+    let handle = axum_server::Handle::new();
+    if let Some(after) = exit_after {
+        let h = handle.clone();
+        tokio::spawn(async move {
+            tokio::time::sleep(after).await;
+            h.graceful_shutdown(Some(Duration::from_secs(2)));
+        });
+    }
+    axum_server::bind_rustls(
+        addr,
+        axum_server::tls_rustls::RustlsConfig::from_config(tls),
+    )
+    .handle(handle)
+    .serve(router().into_make_service())
+    .await
+}

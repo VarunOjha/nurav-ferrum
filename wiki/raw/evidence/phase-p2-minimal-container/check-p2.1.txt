@@ -1,0 +1,11 @@
+Ferrum check p2.1: Build local test pages
+Why: navigation tests give the same answer every run.
+Run at 2026-10-11 18:10 on commit b104c10 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Server tests pass (routes, HTTPS, name limit of the local certificate authority) (3 s)
+         cargo test -p fixture-server: 7 tests passed
+  FAIL   Each test page returned its documented status over real HTTPS (3 s)
+         Not as documented: /slow?ms=2000 (no answer saved)
+------------------------------------------------------------------------
+RESULT: FAIL - p2.1 (1 PASS, 1 FAIL; 6 s)
+What to tell Claude: "p2.1 check failed at: Each test page returned its documented status over real HTTPS", and paste the FAIL lines above.

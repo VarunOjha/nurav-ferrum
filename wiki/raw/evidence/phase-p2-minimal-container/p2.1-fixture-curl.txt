@@ -1,0 +1,68 @@
+# Fixture server over HTTPS, checked with Windows curl (Schannel, Windows certificate store) (p2.1, session s02, 2026-10-11 18:09 -0500)
+# Server: fixture-server serve --port 8443 --exit-after 40 (stops by itself). CA: Ferrum local development CA, installed in the owner's user Root store.
+# --ssl-revoke-best-effort: Schannel otherwise fails with CRYPT_E_NO_REVOCATION_CHECK because a private local CA has no revocation server; chain and host-name validation stay on. Test probe only.
+curl 8.21.0 (Windows) libcurl/8.21.0 Schannel zlib/1.3.2 WinIDN WinLDAP
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/
+HTTP/1.1 200 OK
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/landing
+HTTP/1.1 200 OK
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/redirect/301
+HTTP/1.1 301 Moved Permanently
+location: /landing
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/redirect/302
+HTTP/1.1 302 Found
+location: /landing
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/redirect/303
+HTTP/1.1 303 See Other
+location: /landing
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/redirect/307
+HTTP/1.1 307 Temporary Redirect
+location: /landing
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/redirect/308
+HTTP/1.1 308 Permanent Redirect
+location: /landing
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/redirect/chain
+HTTP/1.1 301 Moved Permanently
+location: /redirect/302
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/redirect/loop
+HTTP/1.1 302 Found
+location: /redirect/loop
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/links/blank
+HTTP/1.1 200 OK
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/links/schemes
+HTTP/1.1 200 OK
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/cookie/set
+HTTP/1.1 200 OK
+set-cookie: fixture=1; Path=/; Secure; HttpOnly; SameSite=Lax
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/cookie/read
+HTTP/1.1 200 OK
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/slow?ms=500
+HTTP/1.1 200 OK
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/status/404
+HTTP/1.1 404 Not Found
+
+$ curl --ssl-revoke-best-effort -sSI https://localhost:8443/status/500
+HTTP/1.1 500 Internal Server Error
+
+$ curl --ssl-revoke-best-effort -sSI https://127.0.0.1:8443/landing
+HTTP/1.1 200 OK
+
+# Negative check: without the local CA the same request fails (curl with an empty CA bundle path is not available for Schannel), so instead: a name outside the constraint
+$ curl --ssl-revoke-best-effort -sSI --resolve ferrum-not-local.test:8443:127.0.0.1 https://ferrum-not-local.test:8443/landing
+curl: (60) schannel: SNI or certificate check failed: SEC_E_WRONG_PRINCIPAL (0x80090322) - The target principal name is incorrect.
+More details here: https://curl.se/docs/sslcerts.html

@@ -9,6 +9,7 @@ members = [
     "crates/resource-manager",
     "crates/telemetry",
     "crates/network-logger",
+    "tests/fixtures/server",
 ]
 exclude = ["spikes/*"]
 
