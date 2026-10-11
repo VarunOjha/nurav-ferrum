@@ -17,13 +17,14 @@ sources:
   - raw/owner/2026-10-11-s02-p1-go-ahead.md
   - raw/owner/2026-10-11-s02-p1-signoff.md
   - raw/owner/2026-10-11-s02-p2-go-ahead.md
+  - raw/owner/2026-10-11-s02-wave3-and-p2-questions.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
-current_task: null
-next_action: "Owner: approve Wave 3 (adr-0015, comp-app-shell, comp-security-engine, comp-tab-content, comp-webview-manager, phase-p2-minimal-container) and answer Q-109, Q-202, Q-214. Claude then records them and runs python tools/approvals_check.py --gate phase-p2-minimal-container; if PASS, sets phase-p2-minimal-container in-progress and starts p2.1."
-blocked_on: [adr-0015, comp-app-shell, comp-security-engine, comp-tab-content, comp-webview-manager, phase-p2-minimal-container, Q-109, Q-202, Q-214]
+current_task: p2.1
+next_action: "Task p2.1 (fixture server): build the tests/fixtures/ server over HTTPS with a local development CA (owner confirms its install into his user certificate store), serving redirect chains, _blank, mailto/custom-scheme, cookie, slow, 404/500 pages; run scripts/verify/p2.1-local-test-pages.ps1."
+blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
 
@@ -35,11 +36,11 @@ last_handoff: handoff-2026-10-11-s02
 
 ## Current phase
 
-**phase-p2-minimal-container — go-ahead given (2026-10-11, 15:47), entry gate BLOCKED.** The owner said "Go ahead with
-phase 2" ([raw/owner/2026-10-11-s02-p2-go-ahead.md](wiki/raw/owner/2026-10-11-s02-p2-go-ahead.md)). Entry still needs
-Approval Wave 3 (adr-0015, comp-app-shell, comp-security-engine, comp-tab-content, comp-webview-manager,
-phase-p2-minimal-container) and answers to Q-109, Q-202, Q-214. No P2 implementation before that. Standing rule: no kill
-commands and no deleting of things Claude did not create without asking.
+**phase-p2-minimal-container — IN PROGRESS (session s02, entry passed 2026-10-11).** Go-ahead
+([raw/owner/2026-10-11-s02-p2-go-ahead.md](wiki/raw/owner/2026-10-11-s02-p2-go-ahead.md)); Approval Wave 3 and Q-109, Q-202,
+Q-214 answered ([raw/owner/2026-10-11-s02-wave3-and-p2-questions.md](wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md)).
+Design: adr-0029 (Ferrum-created tab controllers), adr-0030 (history calls), adr-0031 (CDP smoke tests). Standing rule: no
+kill commands and no deleting of things Claude did not create without asking.
 
 P0 and P1 are done and signed off (2026-10-11).
 
@@ -70,6 +71,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p1.16: P1 gate run (`314f849`): all automatic checks pass; phase-p1-foundation set to gate-review; waiting for the owner's sign-off.
 - P1 signed off by the owner; phase-p1-foundation done; handoff [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md) written.
 - P2 go-ahead recorded; four P2 dependency pages aligned with adr-0029 before Approval Wave 3.
+- P2 entry passed: Wave 3 approved; Q-109, Q-202, Q-214 answered; phase-p2-minimal-container in progress.
 
 ## Done this session (s01)
 
@@ -301,7 +303,7 @@ Exact install and verification commands: [wiki/operations/ops-environment-setup.
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **29 open** (newest: Q-222, the MPL-2.0 licence), 23 answered (Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
+[ov-open-questions](wiki/overview/ov-open-questions.md): **26 open** (newest: Q-222, the MPL-2.0 licence), 26 answered (Q-109, Q-202, Q-214 on 2026-10-11; Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
 Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003).
 Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
@@ -317,15 +319,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | Done and signed off |
-| Phase 2 | Your go recorded; entry check blocked |
-| Waiting on you | Approve 6 phase 2 pages (Wave 3); answer Q-109 (Google sign-in), Q-202 (test pages), Q-214 (settings format) |
+| Phase 2 | In progress: 0 of 18 tasks done |
+| Next task | p2.1 local test pages over HTTPS |
+| Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing to run. Phase 2 may start only when its pages are approved and its questions answered.
+**2. Why, and what it does.** Nothing for you to run now. Claude builds the local test pages first; installing the local certificate needs your click on a Windows prompt, and Claude will ask when it gets there.
 
-**3. The script:** none.
+**3. The script:** none for you.
 
-**4. What to tell Claude:** your answers to the questions Claude asks in chat.
+**4. What to tell Claude:** nothing; Claude asks when a step needs you.
 
 ## Pending owner approvals
 
@@ -336,4 +338,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 go-ahead given; waiting for Wave 3 and three answers). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: entry passed). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

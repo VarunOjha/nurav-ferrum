@@ -31,7 +31,7 @@
       "kind": "phase",
       "title": "P2 First working app",
       "summary": "Goal: One window browses websites safely: address bar, back, forward, refresh. Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [],
       "aliases": [
         "P2"
@@ -3566,7 +3566,7 @@
       "kind": "question",
       "title": "Google sign-in hand-off",
       "summary": "How should Ferrum hand Google sign-in over to your normal browser, since Google blocks sign-in inside embedded web views? A P2 task builds the sign-in detection, so P2 needs the expected behaviour.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -3738,7 +3738,7 @@
       "kind": "question",
       "title": "HTTPS for local test pages?",
       "summary": "For local test pages: install a local development certificate (HTTPS), allow plain HTTP on this PC for tests only, or use public HTTPS sites? Every option touches security. The P2 test server needs it, and P4 sets the final web address rules around it. Recommended: local certificate plus a few public HTTPS sites.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p2-minimal-container",
         "phase-p4-security"
@@ -3861,7 +3861,7 @@
       "kind": "question",
       "title": "Settings file: TOML or JSON?",
       "summary": "Should Ferrum's settings file use the TOML or the JSON format (two common text formats for settings)? P2 creates the settings file. Recommended: TOML.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p2-minimal-container"
       ]

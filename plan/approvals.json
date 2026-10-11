@@ -554,6 +554,78 @@
       "recorded_by": "claude",
       "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-signoff.md",
       "history": []
+    },
+    "adr-0015": {
+      "status": "approved",
+      "comment": "Approve all six (Recommended)",
+      "timestamp": "2026-10-11T17:56:50-05:00",
+      "path": "wiki/decisions/adr-0015-navigation-posture-open-blocklist.md",
+      "content_hash": "sha256:66e203313ead363a7e9bb52fff93a04df56ff0003e8fcb8dc0c86116c3128166",
+      "scope_hash": "sha256:b76712e881cb4d988ba66b4c879d3a42415bca01d10fce36c5a9e1f1cb18b711",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md",
+      "history": []
+    },
+    "comp-app-shell": {
+      "status": "approved",
+      "comment": "Approve all six (Recommended)",
+      "timestamp": "2026-10-11T17:56:50-05:00",
+      "path": "wiki/architecture/components/comp-app-shell.md",
+      "content_hash": "sha256:2e38ee9a432e19641699f903edc18f52bc1f76488377e59cb9c120fb99949c90",
+      "scope_hash": "sha256:1949dc319d171a8b6dab4dd5de64a5c8c8854271d31006fcf5de1795bb58b0b4",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md",
+      "history": []
+    },
+    "comp-security-engine": {
+      "status": "approved",
+      "comment": "Approve all six (Recommended)",
+      "timestamp": "2026-10-11T17:56:50-05:00",
+      "path": "wiki/architecture/components/comp-security-engine.md",
+      "content_hash": "sha256:7d67612f4d8a95803c7bf75537a0b24165f1272992fcdca362903c850086de85",
+      "scope_hash": "sha256:434767de6fc8af542d893f8557289dc79f9bfe876073503a5f01b8df8f808b3a",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md",
+      "history": []
+    },
+    "comp-tab-content": {
+      "status": "approved",
+      "comment": "Approve all six (Recommended)",
+      "timestamp": "2026-10-11T17:56:51-05:00",
+      "path": "wiki/architecture/components/comp-tab-content.md",
+      "content_hash": "sha256:f2beede071cfd51f436a92d751ad3c819f673d331ef788e33c50b9d7aa448005",
+      "scope_hash": "sha256:834b6d579083c5ce0edde72abf9b9d1806bd3b08ee56859e8d95062915599e0a",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md",
+      "history": []
+    },
+    "comp-webview-manager": {
+      "status": "approved",
+      "comment": "Approve all six (Recommended)",
+      "timestamp": "2026-10-11T17:56:51-05:00",
+      "path": "wiki/architecture/components/comp-webview-manager.md",
+      "content_hash": "sha256:dfb32b69a6fd3a05c7adf181604a59d45d6e1d63b246fbd9f2125ad7eea7d49c",
+      "scope_hash": "sha256:b7c59ccf508c92c6609395000aa4676a4e1ae2eaa874917dd0db5042b1e2e888",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md",
+      "history": []
+    },
+    "phase-p2-minimal-container": {
+      "status": "approved",
+      "comment": "Approve all six (Recommended)",
+      "timestamp": "2026-10-11T17:56:51-05:00",
+      "path": "wiki/phases/phase-p2-minimal-container.md",
+      "content_hash": "sha256:d41ad72cf6005821d42aa35c55a1452c8f695c3bcd9f36cfe53ab7b1768d9154",
+      "scope_hash": "sha256:273ec99b5d262737ea1a14cef8aaf9627783a1f2882153481d7c8fdd53e43580",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md",
+      "history": []
     }
   }
 }

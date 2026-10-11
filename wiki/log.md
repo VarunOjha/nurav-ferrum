@@ -1578,3 +1578,19 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-webview-manager, comp-tab-content, comp-app-shell, adr-0015]
 - result: So that the owner approves the current design: comp-webview-manager now names the RawComHost backend and WebView2 events instead of Tauri hooks (downloads via DownloadStarting; old P4 claim about coexistence with Tauri on_navigation replaced by a P2 claim that the COM events cover the hooks); comp-tab-content says Ferrum-created tab controllers should have no Tauri IPC bridge (P2 claim, p2.3 negative test); comp-app-shell's async-creation note follows S1 and adr-0029; adr-0015 got a dated Claude-elaboration note (the owner's choice unchanged) mapping its Tauri hooks to WebView2 events for tabs, and its P4 claim now refers to Ferrum-created controllers. None of these pages was approved yet.
 - next: ask Approval Wave 3 and Q-109, Q-202, Q-214
+
+## [2026-10-11] approval | Approval Wave 3 approved; Q-109, Q-202, Q-214 answered
+
+- session: s02
+- time: 17:58
+- pages: [adr-0015, comp-app-shell, comp-security-engine, comp-tab-content, comp-webview-manager, phase-p2-minimal-container, ov-open-questions]
+- sources: [raw/owner/2026-10-11-s02-wave3-and-p2-questions.md]
+- result: Owner: "Approve all six (Recommended)", "Offer a button (Recommended)", "Local HTTPS certificate (Recommended)", "TOML (Recommended)". Six keys recorded with tools/approvals_record.py. Q-109 (sign-in bar with an Open-in-browser button), Q-202 (local development CA in the owner's user certificate store, installed with his confirmation; key never committed), Q-214 (TOML) answered.
+
+## [2026-10-11] gate | phase-p2-minimal-container entry passed
+
+- session: s02
+- time: 17:58
+- pages: [phase-p2-minimal-container, status-live]
+- result: approvals_check --gate phase-p2-minimal-container: ENTRY GATE PASS (P1 done with #exit approved; go-ahead given; dependency set APPROVED; no open question blocks it; the adr-0010 contradiction is registered under the answered Q-107). phase-p2-minimal-container set to in-progress (volatile key).
+- next: p2.1 local fixture server

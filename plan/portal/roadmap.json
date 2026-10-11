@@ -66,12 +66,12 @@
       "short": "P2",
       "name": "First working app",
       "one_line_goal": "One window browses websites safely: address bar, back, forward, refresh",
-      "status": "Not started",
+      "status": "In progress",
       "tasks_done": 0,
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
-        "content_hash": "sha256:d41ad72cf6005821d42aa35c55a1452c8f695c3bcd9f36cfe53ab7b1768d9154"
+        "content_hash": "sha256:2a5306bc00ef49bcd67f4ce0131b37625fefc65e784e45d01bf79841fd4f1224"
       }
     },
     {

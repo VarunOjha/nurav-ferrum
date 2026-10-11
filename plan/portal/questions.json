@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:f2cd713956aa1256ff2948069550f21030d939ee35b0101613c696d77920e069"
+    "content_hash": "sha256:5f3b30825036be57572c41a8b73f7c6a8fc1ca6fbfa2eab461fee0ab9182298b"
   },
   "items": [
     {
@@ -265,9 +265,9 @@
       "asked": "2026-10-08",
       "question": "How should Ferrum hand Google sign-in over to your normal browser, since Google blocks sign-in inside embedded web views?",
       "why_it_matters": "A P2 task builds the sign-in detection, so P2 needs the expected behaviour.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Offer a button: Ferrum shows a bar saying Google sign-in must open in your normal browser, with an \"Open in browser\" button; nothing opens without your click.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p2-minimal-container"
       ],
@@ -573,9 +573,9 @@
       "asked": "2026-10-08",
       "question": "For local test pages: install a local development certificate (HTTPS), allow plain HTTP on this PC for tests only, or use public HTTPS sites?",
       "why_it_matters": "Every option touches security. The P2 test server needs it, and P4 sets the final web address rules around it. Recommended: local certificate plus a few public HTTPS sites.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "A local test certificate, installed in your own certificate store with your click, so tests use real HTTPS on this PC only; its key never goes into git.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p2-minimal-container",
         "phase-p4-security"
@@ -780,9 +780,9 @@
       "asked": "2026-10-08",
       "question": "Should Ferrum's settings file use the TOML or the JSON format (two common text formats for settings)?",
       "why_it_matters": "P2 creates the settings file. Recommended: TOML.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "TOML: settings live in config.toml.",
+      "answered_on": "2026-10-11",
       "blocks": [
         "phase-p2-minimal-container"
       ],

@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 1 is done. You said go for phase 2; before building starts, 6 phase 2 pages need your approval and 3 questions your answer.",
+  "summary": "Phase 2 has started: you approved its pages and answered its questions. Claude is building the first real Ferrum, starting with the local test pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:6eb59b47fb9040f3d9fe27e168c7a5d67d61ce43628596fdf564e84482994c21"
+    "content_hash": "sha256:5f6866ece0f36069af4befbc0f6c9aeafe20be480ad433e7bf8d65b5cb927310"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: your go recorded, waiting for approvals",
+      "state": "P2 First working app: in progress, 0 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "6 phase 2 pages wait for you (Wave 3)"
+      "state": "All current"
     },
     {
       "item": "Your rule",
@@ -34,43 +34,24 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "Go recorded; entry blocked"
+        "state": "Started"
       },
       {
-        "item": "Approvals",
-        "state": "6 pages wait"
-      },
-      {
-        "item": "Questions",
-        "state": "Google sign-in, test pages, settings format"
+        "item": "Next task",
+        "state": "Local test pages over HTTPS"
       }
     ],
-    "why": "Nothing to run. Phase 2 starts only when its pages are approved and its questions answered.",
+    "why": "Nothing to run yet. The tests need small local web pages → Claude builds a local test server over HTTPS → the local certificate install needs your click; Claude will ask.",
     "script": null,
-    "tell_claude": "Your answers to the questions Claude asks in chat."
+    "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
   "questions_for_you": {
-    "open": 29,
+    "open": 26,
     "items": [
-      {
-        "id": "Q-109",
-        "question": "How should Ferrum hand Google sign-in over to your normal browser, since Google blocks sign-in inside embedded web views?",
-        "asked": "2026-10-08"
-      },
-      {
-        "id": "Q-202",
-        "question": "For local test pages: install a local development certificate (HTTPS), allow plain HTTP on this PC for tests only, or use public HTTPS sites?",
-        "asked": "2026-10-08"
-      },
-      {
-        "id": "Q-214",
-        "question": "Should Ferrum's settings file use the TOML or the JSON format (two common text formats for settings)?",
-        "asked": "2026-10-08"
-      },
       {
         "id": "Q-221",
         "question": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path?",

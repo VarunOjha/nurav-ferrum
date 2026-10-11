@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:4607f4ea4804b2c3371fad17f61baef26c0dfb57ba6a20d81acd9bef0e1fb3eb"
+    "content_hash": "sha256:cd85a1f71d6deb8e3ccd00f020f2c5016080f9d1da3185c6d35b888233c2ecea"
   },
   "entries": [
     {
@@ -2206,6 +2206,45 @@
       "tags": [
         "phases",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-entry",
+      "date": "2026-10-11",
+      "time": "17:58",
+      "title": "You approved phase 2's pages; phase 2 started",
+      "done": "You approved the six phase 2 pages and answered three questions: Google sign-in gets an \"Open in browser\" button, test pages use a local HTTPS certificate on this PC, and settings are a TOML file. Phase 2's entry check passed.",
+      "next": "Claude builds the local test pages first (task p2.1).",
+      "decisions": [
+        {
+          "what": "Google sign-in: offer an Open in browser button",
+          "by": "you"
+        },
+        {
+          "what": "Test pages over HTTPS with a local certificate",
+          "by": "you"
+        },
+        {
+          "what": "Settings file in TOML",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Phase 2 plan and its five pages (Wave 3)",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] approval | Approval Wave 3 approved; Q-109, Q-202, Q-214 answered",
+        "## [2026-10-11] gate | phase-p2-minimal-container entry passed"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]

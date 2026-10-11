@@ -77,16 +77,16 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | Building `interactive_plan/` in P0 (comp-interactive-plan) | none (Q-006, Q-007, Q-103, Q-210 answered 2026-10-08) |
 | `schema` approval (part of every phase entry) | none (Q-207 answered 2026-10-11) |
 | P1 entry | none (Q-106, Q-110, Q-211 answered 2026-10-11) |
-| P2 entry | Q-109, Q-202, Q-214 |
+| P2 entry | none (Q-109, Q-202, Q-214 answered 2026-10-11) |
 | P3 entry | Q-111, Q-209 |
-| P4 entry | Q-112, Q-113, Q-202, Q-212 |
+| P4 entry | Q-112, Q-113, Q-212 |
 | P5 entry | Q-114, Q-115, Q-203 |
 | P6 entry (incl. exp-energy, exp-reliability) | Q-117, Q-118, Q-119, Q-120, Q-121, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208, Q-212 |
 | P8 entry | Q-124, Q-206 |
 | Exit reviews only, or not blocking | Q-105, Q-215, Q-217 |
 | The first push to GitHub (not a phase gate) | Q-221 |
-| Answered | Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
+| Answered | Q-109, Q-202, Q-214, Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -320,8 +320,8 @@ phases, so this question stays open and is still asked in the first wave.
 
 - asked: 2026-10-08
 - blocking: [phase-p2-minimal-container]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s02-wave3-and-p2-questions.md](../raw/owner/2026-10-11-s02-wave3-and-p2-questions.md), owner answer (2026-10-11): "Offer a button (Recommended)": Ferrum detects the Google sign-in flow and shows a bar "Google sign-in must open in your normal browser" with an "Open in browser" button; nothing opens without the user's click.
 
 Raised in adr-0015. It gates P2 entry because task p2.13 builds the sign-in detection. Google's policy forbids sign-in from embedded webviews, so Ferrum should detect the
 sign-in flow and offer to open it in the system browser
@@ -565,8 +565,8 @@ Both must be fixed before the pre-registration freeze in P6 and the lifecycle fr
 
 - asked: 2026-10-08
 - blocking: [phase-p2-minimal-container, phase-p4-security]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s02-wave3-and-p2-questions.md](../raw/owner/2026-10-11-s02-wave3-and-p2-questions.md), owner answer (2026-10-11): "Local HTTPS certificate (Recommended)": a local development certificate authority, installed into the owner's user certificate store with his confirmation; fixtures over HTTPS on loopback; the CA private key stays on this PC and is never committed.
 
 Research label R-Q8 ([ov-research-workload-catalog](../research/ov-research-workload-catalog.md)); also
 raised by the P2 page (fixture server p2.1) and
@@ -732,8 +732,8 @@ its trials. Recommended default: yes, as a labelled secondary configuration.
 
 - asked: 2026-10-08
 - blocking: [phase-p2-minimal-container]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-11-s02-wave3-and-p2-questions.md](../raw/owner/2026-10-11-s02-wave3-and-p2-questions.md), owner answer (2026-10-11): "TOML (Recommended)": settings live in `config.toml`.
 
 Raised in [ov-arch-configuration](../architecture/ov-arch-configuration.md). Recommended default: TOML.
 
