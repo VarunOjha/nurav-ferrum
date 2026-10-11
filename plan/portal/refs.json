@@ -400,7 +400,7 @@
       "kind": "task",
       "title": "P1 task: Set ignore rules and licences",
       "summary": "Build output and local data must not reach git → ignore rules plus MIT and Apache licence files → a clean, legally clear repo.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4402,6 +4402,14 @@
       "kind": "commit",
       "title": "Commit: This computer's hardware recorded",
       "summary": "Claude saved the processor, memory, graphics, screens, Windows build, power plan and browser versions. The web view engine is unchanged since 8 Oct; Edge is one version ahead of it.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "e4a193a",
+      "kind": "commit",
+      "title": "Commit: Ignore rules and licence files added",
+      "summary": "Build output, benchmark results, trace files and browser profiles can no longer be saved to git by mistake. The two licence files (MIT and Apache 2.0) come from their official sources, and the README ",
       "status": null,
       "related": []
     }

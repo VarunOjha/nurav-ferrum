@@ -1332,3 +1332,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Inventory commands of the phase page (plus memory modules, monitor list, Windows display version, browser file versions) saved as environment.md, masked. AMD Ryzen 7 6800H (8 cores, 16 threads), 4 x 8 GiB memory modules, Radeon graphics plus two DisplayLink adapters, Windows 11 Pro 25H2 build 26200.9457, Balanced power plan, no battery. WebView2 pv 154.0.4258.62, unchanged since 2026-10-08; Edge 155.0.4283.45; Chrome 154.0.8037.95. scripts/verify/p1.2-machine-inventory.ps1 PASS (3 of 3). Q-116 (is this the benchmark machine) and Q-122 (wall-power meter) are still open for the owner; batched with the next owner questions.
 - next: p1.3 git hygiene and licences
 - commit: c0142a5
+
+## [2026-10-11] code | p1.3 ignore rules, line-ending rules and dual licence files
+
+- session: s02
+- time: 12:36
+- pages: [phase-p1-foundation]
+- result: .gitignore gained benchmarks/results/, *.etl and browser-profile folders (target/ already covers spikes/*/target/); .gitattributes gained binary types and CRLF for .cmd/.bat; LICENSE-APACHE from apache.org LICENSE-2.0.txt, LICENSE-MIT from opensource.org/license/mit (holder line "The Ferrum contributors", owner may change it); README licence section. scripts/verify/p1.3-ignore-licences.ps1 PASS (3 of 3); git check-ignore -v shows a rule for each build-output path; plan/snapshots/ stays tracked; no tracked file became ignored.
+- next: p1.4 Cargo workspace
+- commit: e4a193a

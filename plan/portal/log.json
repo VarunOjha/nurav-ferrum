@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5807090ff5fe82bff0c5d614c75241e022978f36f4717130581087063151b134"
+    "content_hash": "sha256:aabc132a0462da5141d87223b60454edf2404a2f1628d7a689a56e8cc36ffdfb"
   },
   "entries": [
     {
@@ -1696,6 +1696,26 @@
       "tags": [
         "benchmarks",
         "toolchain"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-3",
+      "date": "2026-10-11",
+      "time": "12:36",
+      "title": "Ignore rules and licence files added",
+      "done": "Build output, benchmark results, trace files and browser profiles can no longer be saved to git by mistake. The two licence files (MIT and Apache 2.0) come from their official sources, and the README explains the choice.",
+      "next": "Claude sets up the empty Rust workspace with its six library parts.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "e4a193a",
+      "covers": [
+        "## [2026-10-11] code | p1.3 ignore rules, line-ending rules and dual licence files"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Set up",
+      "tags": [
+        "git",
+        "licensing"
       ]
     }
   ]

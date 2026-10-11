@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 2,
+    "done": 3,
     "total": 17
   },
   "step_order": [
@@ -48,7 +48,7 @@
       "what": "Ignore rules for build output and local data, line-ending rules, and the MIT and Apache licence files.",
       "why": "Without ignore rules, large build files or private browsing data could be committed by accident; without licence files, others may not legally reuse the code.",
       "how": "Write the ignore and attribute files, copy both licences from their official texts, add a licence section to the README and commit locally.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Build output and local data must not reach git → ignore rules plus MIT and Apache licence files → a clean, legally clear repo.",
       "check": "Each build folder is ignored and plan snapshots are not; both licence files exist.",
       "script": "scripts/verify/p1.3-ignore-licences.ps1"
