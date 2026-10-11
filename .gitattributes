@@ -3,3 +3,12 @@
 *.jpg binary
 *.zip binary
 *.pdf binary
+*.ico binary
+*.gif binary
+*.webp binary
+*.woff2 binary
+*.exe binary
+*.dll binary
+*.etl binary
+*.cmd text eol=crlf
+*.bat text eol=crlf

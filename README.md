@@ -60,5 +60,11 @@ Nothing is buildable yet. Toolchain prerequisites and exact install commands are
 
 ## License
 
-Planned: dual-licensed under MIT OR Apache-2.0 (owner decision, adr-0011). License files will be
-added in phase P1.
+Ferrum is dual-licensed under either of
+
+- the MIT licence ([LICENSE-MIT](LICENSE-MIT)), or
+- the Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE)),
+
+at your option (`MIT OR Apache-2.0`, owner decision recorded in
+[adr-0011](wiki/decisions/adr-0011-git-ci-license.md)). Unless you state otherwise, any contribution you
+intentionally submit for inclusion in Ferrum is dual-licensed as above, without any additional terms or conditions.

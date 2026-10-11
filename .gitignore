@@ -18,8 +18,17 @@ plan/snapshots/**/*.tmp-*
 # Python bytecode (tools/ tests)
 __pycache__/
 
-# Rust (later phases)
+# Rust: build output of the workspace and of every spike (spikes/*/target/ is matched by target/)
 target/
+
+# Benchmark output (raw results are archived under wiki/raw/bench/, never here) and trace files
+benchmarks/results/
+*.etl
+
+# Browser profiles created by spikes, tests and benchmarks (never commit browsing data)
+profiles/
+**/profiles/
+*.profile/
 
 # Local / sensitive (never commit browser profiles, tokens, raw browsing data)
 # .env.local-map holds the real machine values behind the masks (adr-0027); also covered by .env*
