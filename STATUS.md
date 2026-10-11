@@ -19,8 +19,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: p1.11
-next_action: "Task p1.11 (CI): write .github/workflows/ci.yml (windows-latest: cargo fmt/clippy/test/deny, plan app lint/typecheck/unit/build, wiki lint) and scripts/ci-local.ps1 running the same steps; run ci-local.ps1 and save ci-local.txt; owner pushes or defers."
+current_task: p1.14
+next_action: "Task p1.14 (research track start): write wiki/research/ov-research-literature-protocol.md and ov-research-literature-log.md (add to index.md), fetch and record at least one new raw research note in wiki/raw/research/ with access dates and VERIFIED/UNCERTAIN labels covering the seed list gaps; run scripts/verify/p1.14-literature-start.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -56,6 +56,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.12 done (`04d9f8c`): deny.toml, cargo deny ok; npm audit dispositioned; new question Q-222 (MPL-2.0 licence, blocks P2).
 - p1.13 done (`3b24c12`): SECURITY.md, BENCHMARKING.md, REPRODUCIBILITY.md, docs/README.md; AI_USAGE.md updated.
 - p1.15 hook committed (`898fd14`): warns on code without its page; clone test passes; SCHEMA §9.8 tag closed at the exit gate.
+- p1.11 committed (`5b6113c`): ci.yml and scripts/ci-local.ps1; local run 14 of 14 PASS; owner pushes or defers GitHub.
 
 ## Done this session (s01)
 
@@ -267,7 +268,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 waits for the owner's hand checks; p1.15 waits for the SCHEMA §9.8 edit at the exit gate (hook committed `898fd14`); next p1.11 (not started)
+- task: p1.5 (owner hand checks), p1.11 (GitHub push or defer) and p1.15 (SCHEMA line at the exit gate) wait; next p1.14 (not started)
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -305,10 +306,10 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 1 | In progress: 11 of 17 tasks done |
-| Next task | p1.11 automatic checks for GitHub, plus a local copy |
+| Next task | p1.14 start the literature review |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude writes the GitHub check workflow and one local script that runs exactly the same checks on this computer.
+**2. Why, and what it does.** Nothing for you to run now. Claude writes how the literature review is done and records a first batch of checked reading notes.
 
 **3. The script:** none for you.
 
@@ -323,4 +324,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 11 of 17 tasks done; p1.5 and p1.15 wait for the end-of-phase batch). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 11 of 17 tasks done; p1.5, p1.11 and p1.15 wait for the end-of-phase batch). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

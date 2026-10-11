@@ -147,7 +147,7 @@
       "what": "One automatic GitHub check workflow and one local script that runs the same steps.",
       "why": "A mistake found weeks later is harder to trace. Running the same checks on GitHub also shows that a result does not depend on this one computer.",
       "how": "Write the workflow for a Windows build machine and the matching local script. Claude runs the script; you push and report the GitHub result.",
-      "status": "Not started",
+      "status": "Waiting for you",
       "chain": "Mistakes are cheaper caught at once → one GitHub workflow and one local script running the same checks → every change is tested the same way.",
       "check": "The local script passes; after you push, you report the GitHub result (Claude never pushes).",
       "script": "scripts/verify/p1.11-github-checks.ps1"

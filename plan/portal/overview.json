@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 11 of 17 tasks done. All four experiments have results; Claude is setting up the automatic checks before asking you one batch of questions.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 11 of 17 tasks done. All four experiments have results and the automatic checks are set up; Claude starts the literature review, then asks you one batch of questions.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:12ad9a97f88e80ec14669d71a522cafc1805d98f165aa6495c0404ff88a29cb2"
+    "content_hash": "sha256:63eeed59937d654fd04926050d2f4dfed676aa312b42ae5b388d5fb5d7c4f252"
   },
   "updated": "2026-10-11",
   "where_we_are": [
@@ -42,10 +42,10 @@
       },
       {
         "item": "Next task",
-        "state": "Automatic checks for GitHub, plus a local copy"
+        "state": "Start the literature review"
       }
     ],
-    "why": "Nothing to run. Claude finishes the tasks that do not need you, then asks one batch: your hand checks for experiment 1, the design choices, and a few questions.",
+    "why": "Nothing to run. Claude finishes the tasks that do not need you, then asks one batch: your hand checks for experiment 1, the design choices, GitHub, and a few questions.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

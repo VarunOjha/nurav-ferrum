@@ -1447,3 +1447,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [log]
 - result: The "[2026-10-11] code | p1.15 pre-commit hook written ..." entry, committed in 5c12770, contained the SCHEMA §7.1 tag keyword without backticks, which tools/quick_lint.py reports as 1 UNV-NOPHASE error. The keyword was put in backticks; no other character changed. This edits an existing entry, against SCHEMA §12 (append-only), following the 2026-10-08 precedent, so the wiki stays at 0 lint errors; it is reported to the owner. Claude's checkpoint script now refuses to commit when quick_lint prints errors.
 - commit: 5c12770
+
+## [2026-10-11] code | p1.11 CI workflow and local CI script; local run passes 14 of 14
+
+- session: s02
+- time: 13:32
+- pages: [phase-p1-foundation, qual-ci-plan]
+- sources: [raw/evidence/phase-p1-foundation/ci-local-p1.11.txt]
+- result: .github/workflows/ci.yml on windows-latest (contents read, actions pinned by commit SHA: checkout v7.0.1, setup-node v7.1.0; long paths enabled before checkout) with jobs rust, rust-deps (cargo-deny 0.20.2), plan-app (incl. Playwright e2e), wiki (lint:wiki with full history, hash parity, tools tests). cargo-audit not added: cargo-deny advisories use the same RustSec database (delegated tooling decision). scripts/ci-local.ps1 runs the same steps; two deliberate differences: npm ci only with -CleanInstall (it deletes node_modules), e2e only with -E2E (Playwright force-stops its server; owner's no-kill rule). Local run PASS 14 of 14 (873 unit tests, lint:wiki 0 errors and 33 warnings, hash parity 42, tools 44). p1.11 check PASS with one owner step: push and report the GitHub run, or defer (the first push also waits for Q-221).
+- next: p1.14 literature protocol and first reading batch
+- commit: 5b6113c

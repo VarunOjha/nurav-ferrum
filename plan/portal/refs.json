@@ -320,7 +320,7 @@
       "kind": "task",
       "title": "P1 task: Turn on automatic checks on GitHub",
       "summary": "Mistakes are cheaper caught at once → one GitHub workflow and one local script running the same checks → every change is tested the same way.",
-      "status": "Not started",
+      "status": "Waiting for you",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4508,6 +4508,14 @@
       "kind": "commit",
       "title": "Commit: Pre-commit warning written and tested",
       "summary": "The before-commit check: wiki lint plus a warning when code changes without its design page.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "5b6113c",
+      "kind": "commit",
+      "title": "Commit: Automatic checks for GitHub, and the same checks here",
+      "summary": "The GitHub check workflow and the local script that runs the same 14 checks.",
       "status": null,
       "related": []
     }

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:af0e1781307953071dfbb067f01865ecc44ba5813a1c3802ac906b97eeff237d"
+    "content_hash": "sha256:2946991d44e062640ec93fcf73ac1a2bba13d2c9b76e323282f5ed190123dfb0"
   },
   "entries": [
     {
@@ -1916,6 +1916,31 @@
       "category": "Built",
       "tags": [
         "check scripts",
+        "git"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-11",
+      "date": "2026-10-11",
+      "time": "13:32",
+      "title": "Automatic checks for GitHub, and the same checks here",
+      "done": "Claude wrote the GitHub check workflow (Windows, read-only, every outside tool pinned to an exact version) and one local script that runs the same 14 checks on this computer. All 14 pass here. Two things the local script skips by default, on purpose: reinstalling packages (it deletes a folder) and the browser tests (they force-stop a test server).",
+      "next": "Your part: push to GitHub and report the check result, or say \"defer GitHub\". Meanwhile Claude starts the literature review.",
+      "decisions": [
+        {
+          "what": "Use cargo-deny's security alerts instead of adding cargo-audit (same alert database)",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "5b6113c",
+      "covers": [
+        "## [2026-10-11] code | p1.11 CI workflow and local CI script; local run passes 14 of 14"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Set up",
+      "tags": [
+        "testing",
         "git"
       ]
     }
