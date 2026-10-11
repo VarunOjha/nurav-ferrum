@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 0,
+    "done": 1,
     "total": 18
   },
   "step_order": [
@@ -26,7 +26,7 @@
       "what": "A local test server with fixed pages: redirects, a redirect loop, new-window and mail links, a cookie page, slow and error pages.",
       "why": "Tests against live websites fail when a site changes or is down, so a red test would not tell us whether Ferrum is broken. Later benchmarks can reuse these pages.",
       "how": "Write a small Rust web server inside the tests folder that serves each page from a fixed script; its library version is chosen and pinned when P2 starts.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Real websites change → a local server with fixed pages (redirects, pop-ups, cookies, slow and error pages) → navigation tests give the same answer every run.",
       "check": "Server tests pass; each test page returns its documented status.",
       "script": "scripts/verify/p2.1-local-test-pages.ps1"
