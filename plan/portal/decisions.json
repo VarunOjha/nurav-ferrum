@@ -853,6 +853,90 @@
         "wiki_path": "wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md",
         "content_hash": "sha256:b13f18fc6fbe73755f87b02d5713194119df804b74174b280e8b33f5a53a6a68"
       }
+    },
+    {
+      "id": "adr-0029",
+      "number": 29,
+      "title": "Ferrum creates the tab views itself, one profile per site",
+      "summary": "Each tab is a web view Ferrum creates with the engine's own call, using Tauri's environment and a profile name per site; the shell stays a normal Tauri view. Proposed by Claude from experiment 2; you decide.",
+      "why": "It is the only tested way that gives each site its own profile inside one shared browser, as you chose.",
+      "catch": "More low-level code to maintain, and Tauri's ready-made tab hooks must be rebuilt with engine events in phase 2. That tab pages get no path to the app's commands is expected but not yet tested (P2).",
+      "status": "Proposed",
+      "decided_by": "claude",
+      "date": "2026-10-11",
+      "replaced_by": null,
+      "category": "The app",
+      "tags": [
+        "isolation",
+        "web views"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "related": [
+        "adr-0007",
+        "adr-0010",
+        "adr-0019",
+        "risk-r01",
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0029-profile-route-raw-com-tab-controllers.md",
+        "content_hash": "sha256:2c75fa767dccd63354f6ed1ee79fc64505d0d2f1cb2ad4d1ea3538cc8887fc69"
+      }
+    },
+    {
+      "id": "adr-0030",
+      "number": 30,
+      "title": "Back and forward ask the browser, not the page",
+      "summary": "The back and forward buttons use the engine's own history calls and its \"history changed\" signal. Proposed by Claude from experiment 3; you decide.",
+      "why": "The browser knows whether back is possible, so the buttons are always right, and no script is put into web pages.",
+      "catch": "One more low-level event per tab; cross-site navigation in per-site mode may still lose history (open question).",
+      "status": "Proposed",
+      "decided_by": "claude",
+      "date": "2026-10-11",
+      "replaced_by": null,
+      "category": "The app",
+      "tags": [
+        "tabs",
+        "web views"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "related": [
+        "adr-0029",
+        "adr-0019",
+        "phase-p3-tabs-sessions"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0030-back-forward-raw-com-history.md",
+        "content_hash": "sha256:b6d4e2ac07bbbb829c8f87308272a4ab2ee164d534de40e2838ce144337431f5"
+      }
+    },
+    {
+      "id": "adr-0031",
+      "number": 31,
+      "title": "One test robot path for every browser, visible tab only",
+      "summary": "Benchmarks drive Ferrum, Chrome and Edge with the same Playwright code over the debugging channel, measure only the tab on screen, and group each product's processes with a Windows job. Proposed by Claude from experiments 1 and 4; you decide.",
+      "why": "The same driving code and flags for everyone keeps the comparison fair.",
+      "catch": "The debugging channel exposes all views on the computer, so it is only for benchmark runs; its own overhead is checked in P6.",
+      "status": "Proposed",
+      "decided_by": "claude",
+      "date": "2026-10-11",
+      "replaced_by": null,
+      "category": "Research & benchmarks",
+      "tags": [
+        "benchmarks",
+        "testing"
+      ],
+      "phase": "phase-p6-benchmark-harness",
+      "related": [
+        "adr-0012",
+        "risk-r05",
+        "risk-r06",
+        "phase-p6-benchmark-harness"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0031-benchmark-cdp-path-visible-tab.md",
+        "content_hash": "sha256:110eb8e0d171a0ab2c5901c30fb3eec74a0ada990a2fbc8de1af804e15ce663e"
+      }
     }
   ]
 }

@@ -309,6 +309,10 @@ fn run(app: AppHandle) {
     let recovered = wait_until(Duration::from_secs(15), || loads(&app) > n3);
     out["process_failed"] = json!({"trigger": "navigate tab to edge://kill", "fired": fired, "events": events, "recovered_by_navigate": recovered});
 
+    // 6b. Back/forward (added for p1.9): raw COM CanGoBack/GoBack/CanGoForward/GoForward with a
+    //     HistoryChanged handler, compared with script `history.back()` through Tauri eval.
+    out["history"] = history_check(&app);
+
     // 7. Remove the handlers again (no reference cycles keep the web view alive).
     let t_failed = tokens["token_failed"].as_i64().unwrap_or(0);
     let t_resp = tokens["token_resp"].as_i64().unwrap_or(0);
@@ -334,6 +338,82 @@ fn run(app: AppHandle) {
     }
     eprintln!("[spike-s3] done");
     app.exit(0);
+}
+
+/// Back/forward through raw COM versus script, on the tab (p1.9 evidence for the back/forward ADR).
+fn history_check(app: &AppHandle) -> Value {
+    let tab = app.get_webview("tab").expect("tab");
+    let changes: Events = Arc::default();
+    let c2 = changes.clone();
+    let reg = on_ui(
+        app,
+        move |ctl, _env, tx| {
+            // SAFETY: UI thread, live controller; the handler only pushes plain JSON and is removed below.
+            let res = (|| -> windows::core::Result<Value> {
+                let core = unsafe { ctl.CoreWebView2()? };
+                let mut token = 0i64;
+                let h = webview2_com::HistoryChangedEventHandler::create(Box::new(move |_s, _a| {
+                    c2.lock().unwrap().push(json!(1));
+                    Ok(())
+                }));
+                let r = unsafe { core.add_HistoryChanged(&h, &mut token) };
+                Ok(json!({"add_HistoryChanged": hr(&r), "token": token}))
+            })();
+            let _ = tx.send(res.unwrap_or_else(|e| json!({"error": hr::<()>(&Err(e))})));
+        },
+        Duration::from_secs(10),
+    );
+    let go = |app: &AppHandle, url: &str| {
+        let n = loads(app);
+        let _ = app.get_webview("tab").unwrap().navigate(url.parse().unwrap());
+        wait_until(Duration::from_secs(10), || loads(app) > n)
+    };
+    let nav1 = go(app, "http://tauri.localhost/tab.html?h=1");
+    let nav2 = go(app, "http://tauri.localhost/tab.html?h=2");
+    let step = |app: &AppHandle, forward: bool| {
+        let n = loads(app);
+        let r = on_ui(
+            app,
+            move |ctl, _env, tx| {
+                // SAFETY: UI thread, live controller; out-pointers point to locals.
+                let res = (|| -> windows::core::Result<Value> {
+                    let core = unsafe { ctl.CoreWebView2()? };
+                    let mut can = BOOL(0);
+                    let rc = if forward { unsafe { core.CanGoForward(&mut can) } } else { unsafe { core.CanGoBack(&mut can) } };
+                    let rg = if forward { unsafe { core.GoForward() } } else { unsafe { core.GoBack() } };
+                    Ok(json!({"can": can.as_bool(), "can_hr": hr(&rc), "go_hr": hr(&rg)}))
+                })();
+                let _ = tx.send(res.unwrap_or_else(|e| json!({"error": hr::<()>(&Err(e))})));
+            },
+            Duration::from_secs(10),
+        );
+        let loaded = wait_until(Duration::from_secs(10), || loads(app) > n);
+        std::thread::sleep(Duration::from_millis(300));
+        let url = app.get_webview("tab").unwrap().url().map(|u| u.to_string()).unwrap_or_default();
+        json!({"call": r, "page_loaded": loaded, "url_after": url})
+    };
+    let back = step(app, false);
+    let fwd = step(app, true);
+    let n = loads(app);
+    let _ = tab.eval("history.back()");
+    let eval_loaded = wait_until(Duration::from_secs(10), || loads(app) > n);
+    std::thread::sleep(Duration::from_millis(300));
+    let eval_url = tab.url().map(|u| u.to_string()).unwrap_or_default();
+    let token = reg["token"].as_i64().unwrap_or(0);
+    let removed = on_ui(
+        app,
+        move |ctl, _env, tx| {
+            // SAFETY: UI thread; token from add_HistoryChanged on the same web view.
+            let r = unsafe { ctl.CoreWebView2() }.and_then(|c| unsafe { c.remove_HistoryChanged(token) });
+            let _ = tx.send(json!(hr(&r)));
+        },
+        Duration::from_secs(10),
+    );
+    json!({"register": reg, "navigated_h1": nav1, "navigated_h2": nav2,
+           "raw_com_back": back, "raw_com_forward": fwd,
+           "eval_history_back": {"page_loaded": eval_loaded, "url_after": eval_url},
+           "history_changed_events": changes.lock().unwrap().len(),
+           "remove_HistoryChanged": removed})
 }
 
 fn main() {

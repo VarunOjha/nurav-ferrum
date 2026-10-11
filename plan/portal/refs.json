@@ -529,7 +529,7 @@
       "id": "p2.15",
       "kind": "task",
       "title": "P2 task: Quick whole-app tests",
-      "summary": "Features interact → one suite drives shell and website view (Playwright if experiment 4 passed, otherwise Rust tests plus a manual list) → one command shows the first milestone works.",
+      "summary": "Features interact → one suite drives shell and website view with Playwright, plus a manual list → one command shows the first milestone works.",
       "status": "Not started",
       "related": [
         "phase-p2-minimal-container"
@@ -619,7 +619,7 @@
       "id": "p2.7",
       "kind": "task",
       "title": "P2 task: Back, forward, refresh",
-      "summary": "Basic browsing → use the method chosen in P1 and grey out buttons that cannot work → behaves like a normal browser.",
+      "summary": "Basic browsing → use the browser's own history calls and grey out buttons that cannot work → behaves like a normal browser.",
       "status": "Not started",
       "related": [
         "phase-p2-minimal-container"
@@ -1908,7 +1908,7 @@
       "kind": "risk",
       "title": "Tauri cannot yet give each site its own profile",
       "summary": "Sites are to be kept apart by separate WebView2 profiles, but a profile can only be set when a web view is created, and Tauri does not pass it through yet.",
-      "status": "Open",
+      "status": "Being reduced",
       "related": [
         "phase-p1-foundation",
         "phase-p3-tabs-sessions",
@@ -1923,7 +1923,7 @@
       "kind": "risk",
       "title": "Multi-view feature may be unstable",
       "summary": "Many web views in one window needs a Tauri feature marked experimental. Known bugs: hangs, blank views, lost keyboard focus.",
-      "status": "Open",
+      "status": "Being reduced",
       "related": [
         "phase-p1-foundation",
         "phase-p2-minimal-container",
@@ -1938,7 +1938,7 @@
       "kind": "risk",
       "title": "Tab sleep and memory saving need unsafe low-level code",
       "summary": "The WebView2 calls that put a tab to sleep or ask it to use less memory are not in Tauri, so we must reach them through unsafe code. Sleep can also simply fail.",
-      "status": "Open",
+      "status": "Being reduced",
       "related": [
         "phase-p1-foundation",
         "phase-p7-lifecycle",
@@ -1966,7 +1966,7 @@
       "kind": "risk",
       "title": "Counting each browser's memory fairly is hard",
       "summary": "Browsers run many helper processes, some shared. Counting the wrong ones, or double-counting shared memory, would make the main comparison wrong.",
-      "status": "Open",
+      "status": "Being reduced",
       "related": [
         "phase-p5-telemetry",
         "phase-p6-benchmark-harness",
@@ -1980,7 +1980,7 @@
       "kind": "risk",
       "title": "The test robot sees WebView2 less clearly",
       "summary": "Playwright reaches WebView2 only through a debugging channel it calls lower fidelity, and an open channel may itself change behaviour.",
-      "status": "Open",
+      "status": "Being reduced",
       "related": [
         "phase-p5-telemetry",
         "phase-p6-benchmark-harness",
@@ -4526,6 +4526,45 @@
       "summary": "Claude wrote down how the literature review is done (questions, where to search, what counts, how every source is checked) and read four primary sources the seed list was missing: the original ARC cac",
       "status": null,
       "related": []
+    },
+    {
+      "id": "adr-0029",
+      "kind": "decision",
+      "title": "Decision 29: Ferrum creates the tab views itself, one profile per site",
+      "summary": "Each tab is a web view Ferrum creates with the engine's own call, using Tauri's environment and a profile name per site; the shell stays a normal Tauri view. Proposed by Claude from experiment 2; you decide.",
+      "status": "Proposed",
+      "related": [
+        "adr-0007",
+        "adr-0010",
+        "adr-0019",
+        "risk-r01",
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "adr-0030",
+      "kind": "decision",
+      "title": "Decision 30: Back and forward ask the browser, not the page",
+      "summary": "The back and forward buttons use the engine's own history calls and its \"history changed\" signal. Proposed by Claude from experiment 3; you decide.",
+      "status": "Proposed",
+      "related": [
+        "adr-0029",
+        "adr-0019",
+        "phase-p3-tabs-sessions"
+      ]
+    },
+    {
+      "id": "adr-0031",
+      "kind": "decision",
+      "title": "Decision 31: One test robot path for every browser, visible tab only",
+      "summary": "Benchmarks drive Ferrum, Chrome and Edge with the same Playwright code over the debugging channel, measure only the tab on screen, and group each product's processes with a Windows job. Proposed by Claude from experiments 1 and 4; you decide.",
+      "status": "Proposed",
+      "related": [
+        "adr-0012",
+        "risk-r05",
+        "risk-r06",
+        "phase-p6-benchmark-harness"
+      ]
     }
   ]
 }

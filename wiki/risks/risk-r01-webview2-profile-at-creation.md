@@ -2,13 +2,14 @@
 id: risk-r01
 type: risk
 title: "WebView2 profile can only be chosen at controller creation and Tauri 2.12.1 does not expose it"
-status: open
-updated: 2026-10-08
+status: mitigating
+updated: 2026-10-11
 sources:
+  - raw/evidence/phase-p1-foundation/spike-s2-profiles.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/01-scoping-decisions.md
   - raw/research/measurement-methodology.md
-related: [phase-p1-foundation, phase-p3-tabs-sessions, phase-p4-security, adr-0010, adr-0007, comp-webview-manager, comp-security-engine, comp-webview2-runtime, exp-isolation-overhead, risk-r02, risk-r09, qual-security-testing-plan]
+related: [phase-p1-foundation, phase-p3-tabs-sessions, phase-p4-security, adr-0010, adr-0007, comp-webview-manager, comp-security-engine, comp-webview2-runtime, exp-isolation-overhead, risk-r02, risk-r09, qual-security-testing-plan, adr-0029]
 approvable: true
 tags: [webview2, tauri, isolation, profiles]
 likelihood: 4
@@ -20,11 +21,7 @@ trigger: "Tauri PR 16054 is still unmerged when P3 is about to start; the patche
 fallback: "Per-site data_directory (works today but starts one browser process per site, which contradicts the shared-browser-process part of adr-0010 and needs a superseding ADR), or a single shared profile with per-site InPrivate controllers for sites that need separation."
 unverified:
   - claim: "No WebView2 API changes the profile of an already-created controller (absence found only by not finding one)"
-    verify_in: phase-p1-foundation
-  - claim: "Patching tauri-runtime-wry to the PR 16054 branch compiles against tauri 2.12.1"
-    verify_in: phase-p1-foundation
-  - claim: "Raw-COM controllers in a child HWND coexist with Tauri child webviews in one window"
-    verify_in: phase-p1-foundation
+    verify_in: phase-p3-tabs-sessions
 ---
 
 # risk-r01: WebView2 profile can only be chosen at controller creation and Tauri 2.12.1 does not expose it
@@ -75,11 +72,19 @@ Assigned by the integration pass (2026-10-08): task `p1.6`, phase-p1-foundation 
 
 Per-site data_directory (works today but starts one browser process per site, which contradicts the shared-browser-process part of adr-0010 and needs a superseding ADR), or a single shared profile with per-site InPrivate controllers for sites that need separation.
 
+## Spike result (P1, p1.6, 2026-10-11)
+
+Spike S2 ([report](../raw/evidence/phase-p1-foundation/spike-s2-profiles.md)) ran two routes. **Route (c) works**: tab
+controllers created with raw COM from Tauri's own environment, with a profile name per site, are hosted in the Tauri window
+next to the Tauri shell web view (this settles the earlier "coexist in one window" question); both sites and the shell report
+one `BrowserProcessId`, and a cookie set by site A is not sent by site B. Route (d), a data folder per site, also isolates
+cookies but starts a browser process per site. Route (a) is not available (PR 16054 still unmerged); route (b), the fork patch,
+was not run (so whether it compiles is no longer a question for P1). Proposed decision: [adr-0029](../decisions/adr-0029-profile-route-raw-com-tab-controllers.md).
+Status `mitigating` until the owner decides.
+
 ## Unverified claims
 
-- No WebView2 API changes the profile of an already-created controller (absence found only by not finding one). UNVERIFIED[phase-p1-foundation]
-- Patching tauri-runtime-wry to the PR 16054 branch compiles against tauri 2.12.1. UNVERIFIED[phase-p1-foundation]
-- Raw-COM controllers in a child HWND coexist with Tauri child webviews in one window. UNVERIFIED[phase-p1-foundation]
+- No WebView2 API changes the profile of an already-created controller (absence found only by not finding one). UNVERIFIED[phase-p3-tabs-sessions] (re-targeted in P1: spike S2 did not search for such an API; P3 implements profiles)
 
 ## Affects
 

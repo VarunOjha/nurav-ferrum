@@ -2,12 +2,14 @@
 id: risk-r02
 type: risk
 title: "Tauri multi-webview (child WebViews in one window) is behind the unstable feature"
-status: open
-updated: 2026-10-08
+status: mitigating
+updated: 2026-10-11
 sources:
+  - raw/evidence/phase-p1-foundation/spike-s1/sync-1.json
+  - raw/evidence/phase-p1-foundation/spike-s1/auto-1.json
   - raw/research/tauri-webview2-capabilities.md
   - raw/01-scoping-decisions.md
-related: [phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, adr-0007, adr-0006, comp-app-shell, comp-webview-manager, risk-r01, risk-r20, qual-testing-strategy]
+related: [phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, adr-0007, adr-0006, comp-app-shell, comp-webview-manager, risk-r01, risk-r20, qual-testing-strategy, adr-0029]
 approvable: true
 tags: [tauri, multi-webview, ui, stability]
 likelihood: 4
@@ -19,8 +21,6 @@ trigger: "Hang or deadlock while creating a tab; child webviews render white or 
 fallback: "Host tab controllers outside Tauri's webview manager with raw COM in child HWNDs (route c of risk-r01), or one top-level window per tab; either needs an ADR superseding adr-0007."
 unverified:
   - claim: "Each listed open unstable-flag issue reproduces (or not) on tauri 2.12.1 on Windows 11"
-    verify_in: phase-p1-foundation
-  - claim: "Async creation of child webviews from a spawned task avoids the documented Windows deadlock in practice"
     verify_in: phase-p1-foundation
 ---
 
@@ -67,10 +67,19 @@ Assigned by the integration pass (2026-10-08): task `p1.5`, phase-p1-foundation 
 
 Host tab controllers outside Tauri's webview manager with raw COM in child HWNDs (route c of risk-r01), or one top-level window per tab; either needs an ADR superseding adr-0007.
 
+## Spike result (P1, p1.5, 2026-10-11)
+
+Spike S1 (tauri 2.12.3, [automatic results](../raw/evidence/phase-p1-foundation/spike-s1/auto-1.json)): three child web views
+created from an async command loaded without a deadlock; the same creation from a **synchronous** command deadlocked as the
+Tauri docs warn ([sync-1.json](../raw/evidence/phase-p1-foundation/spike-s1/sync-1.json)), so the async rule is confirmed.
+Hide/show tab switching, relayout on window resize, and rendering (no blank or white tabs, issues 10011 and 11376 not seen) all
+passed. Where the shell and a tab overlap, the **tab is drawn on top** (issue 15682 seen): the shell must never overlap tab
+bounds. Alt+Tab keyboard focus (issue 13466) and text-editing shortcuts (issue 9257) are hand checks by the owner; their
+result goes into the S1 report, which closes the remaining claim below.
+
 ## Unverified claims
 
 - Each listed open unstable-flag issue reproduces (or not) on tauri 2.12.1 on Windows 11. UNVERIFIED[phase-p1-foundation]
-- Async creation of child webviews from a spawned task avoids the documented Windows deadlock in practice. UNVERIFIED[phase-p1-foundation]
 
 ## Affects
 

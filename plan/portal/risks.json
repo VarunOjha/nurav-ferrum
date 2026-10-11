@@ -10,9 +10,9 @@
       "summary": "Sites are to be kept apart by separate WebView2 profiles, but a profile can only be set when a web view is created, and Tauri does not pass it through yet.",
       "likelihood": 4,
       "impact": 4,
-      "mitigation": "Test two workarounds in P1 (a patched Tauri, or low-level code) with a cookie-leak test; you settle the route before P3 starts.",
+      "mitigation": "Tested in P1: creating the tab views ourselves gives each site its own profile in one shared browser (experiment 2). You choose the route; then the risk can close.",
       "phase": "phase-p1-foundation",
-      "status": "Open",
+      "status": "Being reduced",
       "category": "Security & privacy",
       "tags": [
         "isolation",
@@ -29,7 +29,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r01-webview2-profile-at-creation.md",
-        "content_hash": "sha256:56b08d77929ad167b02a583f3e66e531253856e89523d1f379e6b2631bb15e32"
+        "content_hash": "sha256:c80a839773a57007591d9882b230cad16bb63edf6d20633a20cffb0f43b56da6"
       }
     },
     {
@@ -38,9 +38,9 @@
       "summary": "Many web views in one window needs a Tauri feature marked experimental. Known bugs: hangs, blank views, lost keyboard focus.",
       "likelihood": 4,
       "impact": 4,
-      "mitigation": "Pin the exact Tauri version, create tabs off the main thread, keep controls off the page area, and keep a test per known bug. Tested first in P1.",
+      "mitigation": "Tested in P1: create views only from background code, keep the shell above the tabs (tabs always draw on top). Your Alt+Tab and copy-paste checks finish the test.",
       "phase": "phase-p1-foundation",
-      "status": "Open",
+      "status": "Being reduced",
       "category": "The app",
       "tags": [
         "web views",
@@ -57,7 +57,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r02-tauri-multiwebview-unstable.md",
-        "content_hash": "sha256:af0ddd918b00ea48f734dc3430b3c9e44383b6bb37351e1608b273d8988d222b"
+        "content_hash": "sha256:d7b44f8408bbb17b97e5670628d29ca3015a610a8e8f5b0c05f4ffa042036673"
       }
     },
     {
@@ -66,9 +66,9 @@
       "summary": "The WebView2 calls that put a tab to sleep or ask it to use less memory are not in Tauri, so we must reach them through unsafe code. Sleep can also simply fail.",
       "likelihood": 5,
       "impact": 3,
-      "mitigation": "One small documented module with a safe interface; treat 'sleep failed' as normal; keep sleep and discard as separate states. Tried in P1.",
+      "mitigation": "Tested in P1: every needed engine call works through Tauri. All low-level code stays in one module with written safety rules.",
       "phase": "phase-p7-lifecycle",
-      "status": "Open",
+      "status": "Being reduced",
       "category": "The app",
       "tags": [
         "tab sleeping",
@@ -83,7 +83,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r03-raw-com-lifecycle-apis.md",
-        "content_hash": "sha256:9a069edf521782ba2c0a414fdddf97b3aa5178ced74a1ac1893ab11baed838d1"
+        "content_hash": "sha256:da9a7b32286c8d3065325e81a93c9edf410493d5097625f94b98239962174858"
       }
     },
     {
@@ -118,9 +118,9 @@
       "summary": "Browsers run many helper processes, some shared. Counting the wrong ones, or double-counting shared memory, would make the main comparison wrong.",
       "likelihood": 4,
       "impact": 5,
-      "mitigation": "Start each browser in its own tracked process group; count private memory only; cross-check the process list two ways; fail any trial with a stray process.",
+      "mitigation": "Tested in P1: every web view helper process lands in a Windows job around the app, plus a crash reporter counted separately. Chrome and Edge are checked in P6.",
       "phase": "phase-p5-telemetry",
-      "status": "Open",
+      "status": "Being reduced",
       "category": "Research & benchmarks",
       "tags": [
         "memory",
@@ -135,7 +135,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r05-process-tree-attribution.md",
-        "content_hash": "sha256:b2f1f647aba2aa16f73540d7e95467aeec7f949c7afc7e3629c36fb9ca2ac43f"
+        "content_hash": "sha256:485198f5e43bf7700721586da0235aef03be45db575fe4655998973965c20c55"
       }
     },
     {
@@ -144,9 +144,9 @@
       "summary": "Playwright reaches WebView2 only through a debugging channel it calls lower fidelity, and an open channel may itself change behaviour.",
       "likelihood": 4,
       "impact": 3,
-      "mitigation": "Drive every browser the same way; measure resources from Rust, not Playwright; measure the channel's own effect; enable it only in benchmark builds.",
+      "mitigation": "Tested in P1: the same robot drives Ferrum, Chrome and Edge, and each tab is visible to it; it measures only the shown tab. The debug-channel overhead is checked in P6.",
       "phase": "phase-p6-benchmark-harness",
-      "status": "Open",
+      "status": "Being reduced",
       "category": "Research & benchmarks",
       "tags": [
         "benchmarks",
@@ -162,7 +162,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r06-playwright-cdp-webview2.md",
-        "content_hash": "sha256:da0e75799f496e42a35901cb15244de329212bed24c1389ff3fd85755bbd202f"
+        "content_hash": "sha256:2b644115f8b10a4d4e9ea1231f051323fa91fda95394bf16c47f2f58afddc07a"
       }
     },
     {

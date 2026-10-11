@@ -2,13 +2,14 @@
 id: risk-r03
 type: risk
 title: "TrySuspend and MemoryUsageTargetLevel are only reachable through raw COM (unsafe) via with_webview"
-status: open
-updated: 2026-10-08
+status: mitigating
+updated: 2026-10-11
 sources:
+  - raw/evidence/phase-p1-foundation/spike-s3-raw-com.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/related-work-seed.md
   - raw/00-master-prompt.md
-related: [phase-p1-foundation, phase-p7-lifecycle, comp-resource-manager, comp-webview-manager, comp-webview2-runtime, exp-lifecycle-policies, risk-r18, risk-r23, risk-r20]
+related: [phase-p1-foundation, phase-p7-lifecycle, comp-resource-manager, comp-webview-manager, comp-webview2-runtime, exp-lifecycle-policies, risk-r18, risk-r23, risk-r20, adr-0030]
 approvable: true
 tags: [webview2, com, unsafe, lifecycle]
 likelihood: 5
@@ -19,8 +20,6 @@ owner_phase: phase-p7-lifecycle
 trigger: "Type-mismatch compile errors between Ferrum's COM types and the ones with_webview hands out; TrySuspend always reports failure; a crash or hang inside a COM completion handler."
 fallback: "Discard-only lifecycle (destroy and recreate the webview) for policies 2 to 4, dropping the sleep arm; report the gap in the paper."
 unverified:
-  - claim: "Ferrum's direct webview2-com 0.39 / windows 0.62 dependencies unify with the types tauri 2.12.1 hands out via with_webview"
-    verify_in: phase-p1-foundation
   - claim: "WebView2 fires Page Lifecycle freeze/resume events to the page on TrySuspend/Resume"
     verify_in: phase-p7-lifecycle
   - claim: "Suspending a hidden webview measurably reduces CPU or memory on this machine"
@@ -71,9 +70,18 @@ Assigned by the integration pass (2026-10-08): task `p1.7`, phase-p1-foundation 
 
 Discard-only lifecycle (destroy and recreate the webview) for policies 2 to 4, dropping the sleep arm; report the gap in the paper.
 
+## Spike result (P1, p1.7, 2026-10-11)
+
+Spike S3 ([report](../raw/evidence/phase-p1-foundation/spike-s3-raw-com.md)) reached every planned call through
+`with_webview` on tauri 2.12.3: TrySuspend (only while hidden; result true), IsSuspended, Resume, MemoryUsageTargetLevel
+Low/Normal, ProcessFailed (renderer ended on purpose, then recovered), WebResourceResponseReceived, GetProcessInfos, and (added
+for p1.9, [s3-2.json](../raw/evidence/phase-p1-foundation/spike-s3/s3-2.json)) CanGoBack/GoBack/GoForward with HistoryChanged.
+`cargo tree` shows one webview2-com (0.39.1) and one windows (0.62.2), and the COM types from `with_webview` were used directly,
+so the version-unification question is settled. Draft unsafe invariants are in the report. The remaining risk is correctness of
+the unsafe code (risk-r18) and best-effort suspend.
+
 ## Unverified claims
 
-- Ferrum's direct webview2-com 0.39 / windows 0.62 dependencies unify with the types tauri 2.12.1 hands out via with_webview. UNVERIFIED[phase-p1-foundation]
 - WebView2 fires Page Lifecycle freeze/resume events to the page on TrySuspend/Resume. UNVERIFIED[phase-p7-lifecycle]
 - Suspending a hidden webview measurably reduces CPU or memory on this machine. UNVERIFIED[phase-p7-lifecycle]
 

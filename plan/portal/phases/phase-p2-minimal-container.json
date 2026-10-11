@@ -80,7 +80,7 @@
       "title": "Show a website and track it",
       "what": "The website view, plus reporting of its address and loading state to the shell.",
       "why": "If the shell loses track of the page, the address bar could show the wrong site, and you could type a password into the wrong place.",
-      "how": "The view manager creates the view and uses Tauri's navigation and page-load hooks; a test visits two local pages and checks the events arrive in order.",
+      "how": "The view manager creates the website view itself from Tauri's engine environment (proposed decision) and listens to the engine's navigation events; a test visits two local pages and checks the events arrive in order.",
       "status": "Not started",
       "chain": "The shell must know where the page is → create the website view and report address and loading state → the address bar and spinner are always right.",
       "check": "A test visits two pages; the shell receives address and load events in order.",
@@ -91,9 +91,9 @@
       "title": "Back, forward, refresh",
       "what": "Back, forward and refresh buttons, greyed out when they cannot work.",
       "why": "Without these, every wrong click means retyping an address. Grey buttons stop you pressing something that silently does nothing.",
-      "how": "Use the method chosen in P1; a test goes from page A to B, then back, forward and refresh, and the test server counts the requests.",
+      "how": "Use the browser's own history calls and its \"history changed\" signal (proposed decision from experiment 3); a test goes from A to B, back, forward and refresh while the test server counts requests.",
       "status": "Not started",
-      "chain": "Basic browsing → use the method chosen in P1 and grey out buttons that cannot work → behaves like a normal browser.",
+      "chain": "Basic browsing → use the browser's own history calls and grey out buttons that cannot work → behaves like a normal browser.",
       "check": "A then B: back shows A, forward shows B, refresh reloads B; buttons match history.",
       "script": "scripts/verify/p2.7-back-forward-refresh.ps1"
     },
@@ -124,7 +124,7 @@
       "title": "New windows and outside links",
       "what": "Handling of links that open new windows or other apps, such as mail.",
       "why": "A link could otherwise open your mail app or another program without asking, which is surprising at best and unsafe at worst.",
-      "how": "New windows follow the setting (same view or system browser); mail and other app links ask in the shell first. Tests use a fake launcher.",
+      "how": "New windows follow the setting (same view or system browser), caught through the engine's new-window event; mail and other app links ask in the shell first. Tests use a fake launcher.",
       "status": "Not started",
       "chain": "Links open new windows or other apps such as mail → follow the setting, and ask before handing off to another app → nothing launches without your consent.",
       "check": "The new-window test follows the setting; the mail-link test asks and launches nothing without consent.",
@@ -179,9 +179,9 @@
       "title": "Quick whole-app tests",
       "what": "One quick test suite that drives the shell and the website view together.",
       "why": "Features that pass alone can break each other. Without one quick whole-app run, such breaks are found only by you, by hand.",
-      "how": "Playwright over the debugging channel if experiment 4 in P1 passed; otherwise Rust integration tests plus a manual checklist.",
+      "how": "Playwright over the debugging channel, which experiment 4 showed works (proposed decision), plus a manual checklist.",
       "status": "Not started",
-      "chain": "Features interact → one suite drives shell and website view (Playwright if experiment 4 passed, otherwise Rust tests plus a manual list) → one command shows the first milestone works.",
+      "chain": "Features interact → one suite drives shell and website view with Playwright, plus a manual list → one command shows the first milestone works.",
       "check": "The suite command passes; output saved.",
       "script": "scripts/verify/p2.15-quick-whole-app.ps1"
     },
@@ -269,6 +269,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
-    "content_hash": "sha256:3bab46de31af7b6ce479507634da82e2b3b2f58c984484bb67de038d73efbba9"
+    "content_hash": "sha256:3295672bfdd7e0f8892a72072b0e2a6569643d3ce560c9c533c5c50f13a236b0"
   }
 }

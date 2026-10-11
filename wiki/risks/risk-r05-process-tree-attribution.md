@@ -2,14 +2,15 @@
 id: risk-r05
 type: risk
 title: "Fair process-tree attribution between Chrome/Edge and Ferrum plus WebView2"
-status: open
-updated: 2026-10-08
+status: mitigating
+updated: 2026-10-11
 sources:
+  - raw/evidence/phase-p1-foundation/spike-s1/job-4.job.json
   - raw/research/measurement-methodology.md
   - raw/research/related-work-seed.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/00-master-prompt.md
-related: [phase-p5-telemetry, phase-p6-benchmark-harness, comp-telemetry, comp-benchmark-harness, comp-webview2-runtime, exp-baseline-footprint, exp-isolation-overhead, exp-lifecycle-policies, adr-0010, risk-r01, risk-r14, qual-testing-strategy]
+related: [phase-p5-telemetry, phase-p6-benchmark-harness, comp-telemetry, comp-benchmark-harness, comp-webview2-runtime, exp-baseline-footprint, exp-isolation-overhead, exp-lifecycle-policies, adr-0010, risk-r01, risk-r14, qual-testing-strategy, adr-0031]
 approvable: true
 tags: [measurement, memory, attribution, fairness]
 likelihood: 4
@@ -75,6 +76,14 @@ Assigned by the integration pass (2026-10-08): task `p5.2`, phase-p5-telemetry p
 ## Fallback if realised
 
 Report only tree-level metrics with the attribution method stated, drop per-tab and per-profile memory claims, and list the gap as a threat to validity.
+
+## Spike result (P1, p1.5, 2026-10-11)
+
+Spike S1's launcher started the app suspended in a Job Object without kill-on-close
+([job-4.job.json](../raw/evidence/phase-p1-foundation/spike-s1/job-4.job.json), repeated in job-5 and job-6): every process
+WebView2 lists through `GetProcessInfos` was in the job, plus the app itself and a `crashpad-handler` that WebView2 does not
+list; three seconds after the app exited by itself the job was empty. So job-scoped attribution works for Ferrum's model; the
+crashpad handler must be counted and reported separately (adr-0031). Chrome and Edge job behaviour stays a P6 question.
 
 ## Unverified claims
 

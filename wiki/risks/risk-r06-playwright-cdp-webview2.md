@@ -2,13 +2,14 @@
 id: risk-r06
 type: risk
 title: "Playwright over CDP to WebView2 has partial, lower-fidelity support"
-status: open
-updated: 2026-10-08
+status: mitigating
+updated: 2026-10-11
 sources:
+  - raw/evidence/phase-p1-foundation/spike-s4-playwright-cdp.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
   - raw/01-scoping-decisions.md
-related: [phase-p5-telemetry, phase-p6-benchmark-harness, adr-0012, comp-benchmark-harness, comp-baseline-app, exp-navigation, exp-rendering, exp-startup, risk-r09, risk-r14, risk-r19]
+related: [phase-p5-telemetry, phase-p6-benchmark-harness, adr-0012, comp-benchmark-harness, comp-baseline-app, exp-navigation, exp-rendering, exp-startup, risk-r09, risk-r14, risk-r19, adr-0031]
 approvable: true
 tags: [playwright, cdp, benchmark, automation]
 likelihood: 4
@@ -19,8 +20,6 @@ owner_phase: phase-p6-benchmark-harness
 trigger: "Playwright cannot find a tab's page among CDP targets; API calls used by a workload fail only on WebView2; the debug-port pilot shows a difference larger than the A/A noise floor."
 fallback: "Drive Ferrum tabs through in-process CDP (CallDevToolsProtocolMethod via raw COM) or a test-only automation hook, and report the asymmetry as a threat to validity."
 unverified:
-  - claim: "Each Ferrum child webview appears as a separate, identifiable CDP page target"
-    verify_in: phase-p6-benchmark-harness
   - claim: "Opening --remote-debugging-port or attaching a CDP client changes resource use by less than the A/A noise floor"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -69,9 +68,16 @@ Assigned by the integration pass (2026-10-08): task `p1.8`, phase-p1-foundation 
 
 Drive Ferrum tabs through in-process CDP (CallDevToolsProtocolMethod via raw COM) or a test-only automation hook, and report the asymmetry as a threat to validity.
 
+## Spike result (P1, p1.8, 2026-10-11)
+
+Spike S4 ([report](../raw/evidence/phase-p1-foundation/spike-s4-playwright-cdp.md)) drove spike S1, Chrome for Testing and Edge
+with the same `connectOverCDP` code. In S1 the shell and each child web view are separate `page` targets, identifiable by URL
+(this settles the earlier P6 question early). Navigation, paint entries, input, screenshots, response events, request routing,
+a raw CDP session and goBack worked on all three. On a hidden tab there are no paint entries and screenshots time out, so the
+harness measures only the shown tab (adr-0031). The debug-port overhead pilot stays in P6.
+
 ## Unverified claims
 
-- Each Ferrum child webview appears as a separate, identifiable CDP page target. UNVERIFIED[phase-p6-benchmark-harness]
 - Opening --remote-debugging-port or attaching a CDP client changes resource use by less than the A/A noise floor. UNVERIFIED[phase-p6-benchmark-harness]
 
 ## Affects
