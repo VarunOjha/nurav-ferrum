@@ -1371,3 +1371,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Spike app in spikes/s1-multiwebview (tauri 2.12.3 unstable). Automatic run: three child views from an async command (no deadlock), hide/show tab switching (visibilityState follows), no blank rendering (PrintWindow pixels match each tab colour), relayout on resize (bounds and page size follow), process lists from GetProcessInfos and GetProcessExtendedInfos (8 processes; one renderer per tab plus one for the shell). Where shell and tab overlap, the tab is drawn on top (issue 15682 seen), so the shell must never overlap tab bounds. Creating views from a synchronous command deadlocked (watchdog ended the app after 25 s). Job Object: all 8 WebView2-listed processes join the job, plus the app and a crashpad-handler WebView2 does not list; the job is empty 3 s after exit (3 runs agree). Report waits for the owner's Alt+Tab, resize and text-shortcut checks (manual rows).
 - next: p1.7 spike S3 raw COM while the owner's S1 checks are pending
 - commit: 331e3f6
+
+## [2026-10-11] code | p1.7 spike S3 raw COM: every call succeeded
+
+- session: s02
+- time: 13:01
+- pages: [phase-p1-foundation, risk-r03]
+- sources: [raw/evidence/phase-p1-foundation/spike-s3-raw-com.md, raw/evidence/phase-p1-foundation/spike-s3/s3-1.json, raw/evidence/phase-p1-foundation/spike-s3/cargo-tree.txt]
+- result: spikes/s3-raw-com (tauri 2.12.3, shell plus one child tab) reached every planned feature through with_webview: casts to ICoreWebView2_2/_3/_19 and Environment8; MemoryUsageTargetLevel Normal -> Low -> Normal; TrySuspend while hidden (result true, IsSuspended true), Resume, and show() waking a suspended view; GetProcessInfos; WebResourceResponseReceived (also reports Tauri custom-protocol responses, so a network logger must filter); ProcessFailed for the tab renderer ended via edge://kill (RENDER_PROCESS_EXITED, TERMINATED, exit code 1) with recovery by navigating; handlers removed with their tokens. One webview2-com (0.39.1) and one windows (0.62.2) in the tree. Unsafe invariants drafted in the report. This settles risk-r03 in favour of the raw-COM route and the phase-page claim that a renderer crash can be triggered on purpose (closed at the exit gate). Tooling decision (delegated): the p1.7 check script also looks in src-tauri/. Check PASS (3 of 3).
+- next: p1.8 spike S4 Playwright over CDP
+- commit: 3e30f93

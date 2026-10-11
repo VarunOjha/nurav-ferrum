@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 5,
+    "done": 6,
     "total": 17
   },
   "step_order": [
@@ -103,7 +103,7 @@
       "what": "A test of low-level WebView2 calls: suspend and resume, memory limits, crash and network events, process lists.",
       "why": "Saving memory by pausing idle tabs and several security rules depend on these calls. If one does not work, those plans must change before they are built.",
       "how": "In a throwaway experiment, reach the web view's own controls through Tauri's escape hatch, try each call in turn and log what each one returns.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Suspend, memory limits and crash events are only reachable below Tauri → call each one through Tauri's escape hatch → we know which lifecycle and security features are possible.",
       "check": "Each call's result is logged; only one version of each Windows library; safety rules drafted for each call.",
       "script": "scripts/verify/p1.7-spike-raw-com.ps1"

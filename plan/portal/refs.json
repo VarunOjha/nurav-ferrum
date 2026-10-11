@@ -440,7 +440,7 @@
       "kind": "task",
       "title": "P1 task: Experiment 3: low-level WebView2 calls",
       "summary": "Suspend, memory limits and crash events are only reachable below Tauri → call each one through Tauri's escape hatch → we know which lifecycle and security features are possible.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4434,6 +4434,14 @@
       "kind": "commit",
       "title": "Commit: Experiment 1: the automatic checks pass",
       "summary": "Experiment 1 app, its automatic checks and the process-group launcher.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "3e30f93",
+      "kind": "commit",
+      "title": "Commit: Experiment 3: raw engine access works",
+      "summary": "Claude built a second throw-away app and called each engine feature Tauri does not offer directly. All worked: pausing a hidden tab and waking it, lowering its memory use, seeing every network respons",
       "status": null,
       "related": []
     }

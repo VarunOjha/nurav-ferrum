@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8761bc7fc552014f44466838f219ef9d77c09d743c447e20674a40d3235afa4b"
+    "content_hash": "sha256:7b2c97cfcabee654a846369b82adf8b1dbaefd1fb06ce8fda0f5cb0757997ab6"
   },
   "entries": [
     {
@@ -1776,6 +1776,26 @@
       "tags": [
         "web views",
         "Tauri"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-7",
+      "date": "2026-10-11",
+      "time": "13:01",
+      "title": "Experiment 3: raw engine access works",
+      "done": "Claude built a second throw-away app and called each engine feature Tauri does not offer directly. All worked: pausing a hidden tab and waking it, lowering its memory use, seeing every network response, noticing a crashed tab (and reloading it), and listing the helper processes. Claude also wrote the first safety rules for this low-level code.",
+      "next": "Claude builds experiment 4: the test robot (Playwright) driving the app.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "3e30f93",
+      "covers": [
+        "## [2026-10-11] code | p1.7 spike S3 raw COM: every call succeeded"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "WebView2",
+        "tab sleeping"
       ]
     }
   ]

@@ -19,8 +19,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: p1.5
-next_action: "Continue P1 while the owner's S1 hand checks are pending: task p1.7 (spike S3 raw COM, spikes/s3-raw-com), then p1.8 (S4 Playwright) and p1.6 (S2 profiles); ask the owner to run spikes/s1-multiwebview/run-manual.ps1 together with the other owner questions."
+current_task: null
+next_action: "Task p1.8 (spike S4): spikes/s4-playwright-cdp Node/TS script with Playwright 1.64.0 connectOverCDP to spike S1 (non-elevated, WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9222), list targets to targets.json, navigate one child to a local fixture, read paint timing; same against Chrome for Testing and Edge with a fresh user-data-dir; report spike-s4-playwright-cdp.md."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -49,6 +49,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.4 done (`de68d66`): Cargo workspace with six library stubs, rust-toolchain 1.99.0, section-12 folders; build/test/fmt/clippy clean.
 - p1.17 done (`135d6cc`): spikes pinned to tauri 2.12.3, @tauri-apps/cli 2.12.2, @tauri-apps/api 2.12.3, vite 8.3.4, typescript 7.0.2.
 - p1.5 automatic part (`331e3f6`): spike S1 built; all automatic checks pass; sync deadlock reproduced; Job Object holds all WebView2 processes. Owner hand checks pending.
+- p1.7 done (`3e30f93`): spike S3 raw COM, every call S_OK; one webview2-com and one windows version; unsafe invariants drafted.
 
 ## Done this session (s01)
 
@@ -260,9 +261,8 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 spike S1 multi-webview: automatic part committed (`331e3f6`); waiting for the owner's Alt+Tab, resize and text-shortcut checks, then the report spike-s1-multiwebview.md (draft kept outside the repo until then, because raw files are immutable once committed)
-- paths still to write: wiki/raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md, raw/owner transcript, MANIFEST line
-- rollback: nothing uncommitted for p1.5
+- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); next p1.8 (not started)
+- rollback: nothing uncommitted
 
 ## Blockers
 
@@ -298,11 +298,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 5 of 17 tasks done |
-| Next task | p1.7 experiment 3: raw access to the web view engine |
+| Phase 1 | In progress: 6 of 17 tasks done |
+| Next task | p1.8 experiment 4: the test robot drives the app |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude checks that Ferrum can reach the engine features Tauri does not expose (pause a hidden tab, lower its memory, crash and request events, process list). Your hand checks for experiment 1 come together with your other questions.
+**2. Why, and what it does.** Nothing for you to run now. Benchmarks need a robot that drives Ferrum, Chrome and Edge the same way → Claude connects Playwright to experiment 1 and to Chrome and Edge → if it works, one benchmark tool covers all three.
 
 **3. The script:** none for you.
 
@@ -317,4 +317,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 5 of 17 tasks done; p1.5 waits for owner hand checks). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 6 of 17 tasks done, last p1.7). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
