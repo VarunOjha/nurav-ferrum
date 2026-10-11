@@ -132,3 +132,7 @@ be8eb75dac0718da0037b19a5f52926be25e73eecf06c87ea2460dc34c4507c4  owner/2026-10-
 82ae879980a249caca63ee7da73ecf77052b160a7dcce555f44d1f7f4e166198  evidence/phase-p2-minimal-container/check-p2.1.20261011-1811.txt
 4e23febcab7a84b389bc0a009cea2da93ab52dce42629616eca439246f44a0ca  evidence/phase-p2-minimal-container/check-p2.1.txt
 1025bf08274758e7123cf2418de40057febb453e84641524bc47475a827e00bb  evidence/phase-p2-minimal-container/p2.1-fixture-curl.txt
+265486d28f940c5aec7e716499a92cc0d7cf9e89d52e87df13bcc95c262aea62  evidence/phase-p2-minimal-container/check-p2.2.txt
+6765f572fb0fa4a0aa14a832eaa73aa52398ed959409009b4a52b50c78260afd  evidence/phase-p2-minimal-container/p2.2-tauri-build.txt
+371f3daed896e2806914e208ce0b051ea313273f052b343f660bf222e32728ed  evidence/phase-p2-minimal-container/p2.2-window.png
+6b728a98e8a6f89cd1a8218232b9389884dac8d6b5698f3f04bc2afcfa752592  evidence/phase-p2-minimal-container/p2.2-window-check.png

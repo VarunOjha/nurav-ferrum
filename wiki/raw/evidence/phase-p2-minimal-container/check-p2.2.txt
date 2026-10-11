@@ -1,0 +1,20 @@
+Ferrum check p2.2: Create the desktop app
+Why: every later task builds on the real app.
+Run at 2026-10-11 18:22 on commit 4869ae2 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Tauri tool, Vite and TypeScript are pinned exactly; the app forbids unsafe code
+         pins exact; #![forbid(unsafe_code)]
+[32m✓ built in 68ms[39m
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `npm run build`
+   Compiling ferrum-desktop v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\src-tauri)
+    Finished `release` profile [optimized] target(s) in 38.71s
+       Built application at: <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\target\release\ferrum-desktop.exe
+  PASS   Release build with the pinned Tauri tool (42 s)
+         npm run tauri -- build --no-bundle: exit 0
+  PASS   The window opens, shows the shell, and closes by itself (11 s)
+         window 1295x837; toolbar shows 119 colours; exited by itself (code 0)
+------------------------------------------------------------------------
+RESULT: PASS - p2.2 (3 PASS; 53 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.2 check passed".

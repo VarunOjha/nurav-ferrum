@@ -10,6 +10,7 @@ members = [
     "crates/telemetry",
     "crates/network-logger",
     "tests/fixtures/server",
+    "apps/desktop/src-tauri",
 ]
 exclude = ["spikes/*"]
 
@@ -21,7 +22,9 @@ license = "MIT OR Apache-2.0"
 publish = false
 
 [workspace.lints.rust]
-unsafe_code = "forbid"
+# deny, not forbid: every crate root still has #![forbid(unsafe_code)] except webview-manager, whose single
+# webview2 module may allow it (adr-0019, owner-approved).
+unsafe_code = "deny"
 missing_docs = "warn"
 
 [workspace.lints.clippy]

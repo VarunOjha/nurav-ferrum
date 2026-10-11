@@ -1,0 +1,24 @@
+/* Ferrum shell (adr-0028 look, P2 subset: toolbar only). Calm warm grey, one rust-orange accent. */
+:root {
+  --bg: #ecebe8;
+  --surface: #f7f6f4;
+  --text: #2b2a28;
+  --muted: #6f6c66;
+  --accent: #b5562a;
+  --border: #d6d3cd;
+  font: 13px "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #232220; --surface: #2d2c2a; --text: #ecebe8; --muted: #a8a49c; --border: #3d3b38; }
+}
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); overflow: hidden; }
+#toolbar { display: flex; align-items: center; gap: 6px; height: 52px; padding: 0 10px; box-sizing: border-box; border-bottom: 1px solid var(--border); }
+.nav { width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--text); font-size: 16px; cursor: pointer; }
+.nav:hover:not(:disabled) { background: var(--surface); }
+.nav:disabled { color: var(--muted); opacity: 0.5; cursor: default; }
+#address-form { flex: 1; display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 17px; background: var(--surface); border: 1px solid var(--border); }
+#address-form:focus-within { border-color: var(--accent); }
+#lock { font-size: 12px; opacity: 0.7; }
+#address { flex: 1; border: 0; outline: 0; background: transparent; color: var(--text); font: 13px "IBM Plex Mono", Consolas, monospace; }
+#status { min-width: 0; max-width: 30%; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

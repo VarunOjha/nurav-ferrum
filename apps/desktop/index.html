@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ferrum shell</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header id="toolbar" role="toolbar" aria-label="Navigation">
+      <button id="back" class="nav" title="Back" aria-label="Back" disabled>&#x2190;</button>
+      <button id="forward" class="nav" title="Forward" aria-label="Forward" disabled>&#x2192;</button>
+      <button id="reload" class="nav" title="Reload" aria-label="Reload" disabled>&#x21bb;</button>
+      <form id="address-form" autocomplete="off">
+        <span id="lock" aria-hidden="true">&#x1f512;</span>
+        <input id="address" type="text" spellcheck="false" placeholder="Enter an address" aria-label="Address" />
+      </form>
+      <span id="status" aria-live="polite"></span>
+    </header>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
