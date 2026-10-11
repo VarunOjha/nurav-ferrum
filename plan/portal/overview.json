@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 5 of 18 tasks done. Next: p2.6 show a website and track it.",
+  "summary": "Phase 2 is in progress: 6 of 18 tasks done. Next: p2.7 back, forward, refresh.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:52c47098b9a4581ec150a4e0d1f1db50cf5fbaad0a49d7219b8f1a0f8e6cdfd7"
+    "content_hash": "sha256:b2f976c4301b92fc298d2687d70c78611f925c7c1e109da5256796145cdddf6e"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 5 of 18 tasks done",
+      "state": "P2 First working app: in progress, 6 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "5 of 18 tasks done"
+        "state": "6 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.6 show a website and track it"
+        "state": "p2.7 back, forward, refresh"
       }
     ],
-    "why": "Nothing to run. This is the heart of phase 2 → Claude creates the website view the way you approved (Ferrum creates it, decision 29) and wires its address and loading events to the shell → the first real page loads.",
+    "why": "Nothing to run. The buttons now exist → Claude tests them end to end on local pages, with the test server counting requests → you can rely on them like in any browser.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

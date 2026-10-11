@@ -3,7 +3,7 @@ id: comp-app-shell
 type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: planned
-last_verified_commit: 196e66a
+last_verified_commit: 2c9d89f
 updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md

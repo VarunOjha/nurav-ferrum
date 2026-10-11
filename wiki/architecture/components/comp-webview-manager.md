@@ -3,6 +3,7 @@ id: comp-webview-manager
 type: component
 title: "WebView manager (tab WebViews, navigation, sessions, raw COM layer)"
 status: planned
+last_verified_commit: 2c9d89f
 updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md

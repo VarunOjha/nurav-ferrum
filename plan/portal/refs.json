@@ -610,7 +610,7 @@
       "kind": "task",
       "title": "P2 task: Show a website and track it",
       "summary": "The shell must know where the page is → create the website view and report address and loading state → the address bar and spinner are always right.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4635,6 +4635,14 @@
       "kind": "commit",
       "title": "Commit: Address-bar logic written",
       "summary": "One tested function now decides what happens to anything typed into the address bar: real addresses are loaded (plain http is upgraded), links to other apps ask first, and script, data and file addres",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "2c9d89f",
+      "kind": "commit",
+      "title": "Commit: Websites load in Ferrum",
+      "summary": "The first real website view works: Ferrum creates it itself (your decision 29) and the toolbar follows it: the address, the lock, a loading indicator and the back and forward buttons. Tests load two p",
       "status": null,
       "related": []
     }

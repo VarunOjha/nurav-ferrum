@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:41709e3bcaac1ea5600075cad769e457f1bfbc753a1a4e000a7a9b628ba96429"
+    "content_hash": "sha256:0e20c0bf0296e0315c29c3f51c5cde83c688b863a60e7f0a482d0672fe47501b"
   },
   "entries": [
     {
@@ -2345,6 +2345,26 @@
       "tags": [
         "address bar",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-6",
+      "date": "2026-10-11",
+      "time": "18:51",
+      "title": "Websites load in Ferrum",
+      "done": "The first real website view works: Ferrum creates it itself (your decision 29) and the toolbar follows it: the address, the lock, a loading indicator and the back and forward buttons. Tests load two pages and confirm every step is reported in order. Websites in this view have no bridge to the app at all. When the window comes back to the front, the keyboard goes back to the page; please try Alt+Tab at the end of the phase.",
+      "next": "Claude makes back, forward and refresh fully work and tested (task p2.7).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "2c9d89f",
+      "covers": [
+        "## [2026-10-11] code | p2.6 content web view created by Ferrum, wired to the shell"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "web views",
+        "address bar"
       ]
     }
   ]

@@ -1639,3 +1639,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.5.txt]
 - result: Pure function address::normalize: scheme-less input gets https, http upgraded or warned, javascript/data/file/blob/view-source/about (except about:blank) refused, mailto/tel/custom schemes need confirmation or are denied, IDN to punycode, IPv6 literals, plain words refused (no search engine in P2), domain-label rules. 36 table cases over 14 classes plus a "malformed never navigates" test pass; the table caught a real bug (example..org accepted), fixed. p2.5 check PASS.
 - commit: d3ad7ee
+
+## [2026-10-11] code | p2.6 content web view created by Ferrum, wired to the shell
+
+- session: s02
+- time: 18:51
+- pages: [phase-p2-minimal-container, comp-webview-manager, comp-app-shell]
+- sources: [raw/evidence/phase-p2-minimal-container/p2.6-nav-selftest.json, raw/evidence/phase-p2-minimal-container/p2.6-ipc-selftest.json]
+- result: webview-manager gained the tab module and the single raw-COM module webview2 (adr-0019): ContentView from Tauri's environment with profile ferrum-default (adr-0029), navigation, source, completion (HTTP status), history, title and focus events, navigate/back/forward/reload/stop/bounds/focus/close. The app places it below the toolbar, loads settings, exposes tab_* commands to the shell only, and restores page focus on window activation (S1 issue; manual confirmation pending). Self-test nav: two fixture pages each starting -> source changed -> completed (200) in order, received in order by the shell. Self-test ipc: the Ferrum-created view has no bridge at all (settles the adr-0029 / comp-tab-content / P2 claim; tags closed at the exit gate). Checks p2.6 and p2.3 PASS.
+- commit: 2c9d89f

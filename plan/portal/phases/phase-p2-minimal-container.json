@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 5,
+    "done": 6,
     "total": 18
   },
   "step_order": [
@@ -81,7 +81,7 @@
       "what": "The website view, plus reporting of its address and loading state to the shell.",
       "why": "If the shell loses track of the page, the address bar could show the wrong site, and you could type a password into the wrong place.",
       "how": "The view manager creates the website view itself from Tauri's engine environment (proposed decision) and listens to the engine's navigation events; a test visits two local pages and checks the events arrive in order.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "The shell must know where the page is → create the website view and report address and loading state → the address bar and spinner are always right.",
       "check": "A test visits two pages; the shell receives address and load events in order.",
       "script": "scripts/verify/p2.6-show-website.ps1"
