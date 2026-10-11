@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f499b5680d5ce6c00c9962bc961dc9cebc9720c0c696320c06e8c5b754b9028a"
+    "content_hash": "sha256:41709e3bcaac1ea5600075cad769e457f1bfbc753a1a4e000a7a9b628ba96429"
   },
   "entries": [
     {
@@ -2325,6 +2325,26 @@
       "tags": [
         "toolchain",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-5",
+      "date": "2026-10-11",
+      "time": "18:39",
+      "title": "Address-bar logic written",
+      "done": "One tested function now decides what happens to anything typed into the address bar: real addresses are loaded (plain http is upgraded), links to other apps ask first, and script, data and file addresses, broken input and plain words are refused. Its 36 test cases found and fixed one real bug.",
+      "next": "Claude builds the website view itself, using the engine directly (task p2.6).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "d3ad7ee",
+      "covers": [
+        "## [2026-10-11] code | p2.5 address-bar normalisation in ferrum-core"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "address bar",
+        "testing"
       ]
     }
   ]

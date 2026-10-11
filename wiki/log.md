@@ -1630,3 +1630,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.4.txt]
 - result: crates/core config module: the P2 subset of ov-arch-configuration in TOML (Q-214): start pages, http_policy, external_schemes, google_oauth (Q-109), new_window, data_dir; deny_unknown_fields; layered load (defaults, user file, experiment override); adr-0015 validation of start pages (https kept, http upgraded or warned, other schemes refused); config hash for later telemetry. 9 tests pass; p2.4 check PASS. comp-core last_verified_commit set (its interfaces already name config::Config, load, hash).
 - commit: a69fa57
+
+## [2026-10-11] code | p2.5 address-bar normalisation in ferrum-core
+
+- session: s02
+- time: 18:39
+- pages: [phase-p2-minimal-container, comp-core]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.5.txt]
+- result: Pure function address::normalize: scheme-less input gets https, http upgraded or warned, javascript/data/file/blob/view-source/about (except about:blank) refused, mailto/tel/custom schemes need confirmation or are denied, IDN to punycode, IPv6 literals, plain words refused (no search engine in P2), domain-label rules. 36 table cases over 14 classes plus a "malformed never navigates" test pass; the table caught a real bug (example..org accepted), fixed. p2.5 check PASS.
+- commit: d3ad7ee

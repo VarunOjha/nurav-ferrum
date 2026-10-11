@@ -600,7 +600,7 @@
       "kind": "task",
       "title": "P2 task: Clean up address-bar input",
       "summary": "People type anything → one tested function turns input into a safe address or refuses it → malformed input never navigates.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4627,6 +4627,14 @@
       "kind": "commit",
       "title": "Commit: Settings model written",
       "summary": "Ferrum's settings now live in a checked TOML file: start page, how plain-http and other-app links are treated, Google sign-in by button, where new windows open, and the data folder. A typo or an unsaf",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "d3ad7ee",
+      "kind": "commit",
+      "title": "Commit: Address-bar logic written",
+      "summary": "One tested function now decides what happens to anything typed into the address bar: real addresses are loaded (plain http is upgraded), links to other apps ask first, and script, data and file addres",
       "status": null,
       "related": []
     }

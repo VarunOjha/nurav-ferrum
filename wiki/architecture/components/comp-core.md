@@ -3,7 +3,7 @@ id: comp-core
 type: component
 title: "Core crate (shared types, config schema, traits)"
 status: planned
-last_verified_commit: a69fa57
+last_verified_commit: d3ad7ee
 updated: 2026-10-08
 sources:
   - raw/00-master-prompt.md

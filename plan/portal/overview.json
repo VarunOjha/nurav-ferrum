@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 4 of 18 tasks done. Next: p2.5 address-bar logic.",
+  "summary": "Phase 2 is in progress: 5 of 18 tasks done. Next: p2.6 show a website and track it.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:861449b5a7c7acb2be5119f0097f7a301ea8ab29a670887836566f1d56e73da1"
+    "content_hash": "sha256:52c47098b9a4581ec150a4e0d1f1db50cf5fbaad0a49d7219b8f1a0f8e6cdfd7"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 4 of 18 tasks done",
+      "state": "P2 First working app: in progress, 5 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "4 of 18 tasks done"
+        "state": "5 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.5 address-bar logic"
+        "state": "p2.6 show a website and track it"
       }
     ],
-    "why": "Nothing to run. People type all kinds of things into the address bar → Claude writes one tested function that turns input into a safe address (or a refusal) → nothing malformed or dangerous is ever loaded.",
+    "why": "Nothing to run. This is the heart of phase 2 → Claude creates the website view the way you approved (Ferrum creates it, decision 29) and wires its address and loading events to the shell → the first real page loads.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

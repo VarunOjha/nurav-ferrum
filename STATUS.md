@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.5 (address-bar normalisation): pure function in crates/core (scheme-less input, http upgrade/warn, non-web schemes need confirmation, whitespace, IDN, IPv6, javascript:, data:, file:, malformed), table-driven tests; run scripts/verify/p2.5-*.ps1."
+next_action: "Task p2.6 (content WebView): webview-manager raw-COM RawComHost (adr-0019 module, unsafe invariants), create the content controller from Tauri's environment, navigate, emit URL and load-state events to the shell; wire the address bar through address::normalize; integration test visits two fixture pages; join the ipc self-test (no bridge in the Ferrum-created view); fix keyboard focus after Alt+Tab."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -76,6 +76,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.2 done (`2c96d06`): app skeleton with the shell toolbar; release build and window check PASS.
 - p2.3 done (`196e66a`): bridge locked to the shell; IPC refusal self-test PASS.
 - p2.4 done (`a69fa57`): settings model (TOML, adr-0015 validation), 9 tests.
+- p2.5 done (`d3ad7ee`): address-bar normalisation, 36 cases, one real bug fixed.
 
 ## Done this session (s01)
 
@@ -287,7 +288,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.4 verified and committed 2026-10-11 as `a69fa57`)
+(empty: p2.5 verified and committed 2026-10-11 as `d3ad7ee`)
 
 ## Blockers
 
@@ -323,11 +324,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 4 of 18 tasks done |
-| Next task | p2.5 address-bar logic |
+| Phase 2 | In progress: 5 of 18 tasks done |
+| Next task | p2.6 show a website and track it |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. People type all kinds of things into the address bar → Claude writes one tested function that turns input into a safe address (or a refusal) → nothing malformed or dangerous is ever loaded.
+**2. Why, and what it does.** Nothing for you to run now. This is the heart of phase 2 → Claude creates the website view the way you approved (Ferrum creates it, decision 29) and wires its address and loading events to the shell → the first real page loads.
 
 **3. The script:** none for you.
 
@@ -342,4 +343,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 4 of 18 tasks done, last p2.4). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 5 of 18 tasks done, last p2.5). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

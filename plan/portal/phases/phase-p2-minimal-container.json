@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 4,
+    "done": 5,
     "total": 18
   },
   "step_order": [
@@ -70,7 +70,7 @@
       "what": "One function that turns address-bar text into a safe address or refuses it.",
       "why": "Typed text can hide a script or a local file link. Without one checked gate, such input could run code or open files on your computer.",
       "how": "Write one pure function in the core library with no side effects, plus a table of example inputs and the answer each must give.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "People type anything → one tested function turns input into a safe address or refuses it → malformed input never navigates.",
       "check": "One test per input type (no scheme, http, foreign letters, IPv6, script, data and file links, junk) passes.",
       "script": "scripts/verify/p2.5-address-input.ps1"
