@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:4a1fad7832791720b126ac8bc13e96b9717291d0b45a3587fa77fa28546bc3d9"
+    "content_hash": "sha256:84feef92502afdaf73c18580bc3689edaa231f8b8fd34551b22cd5f4aaa9c892"
   },
   "entries": [
     {
@@ -1592,6 +1592,43 @@
       "tags": [
         "phases",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p0-finishup",
+      "date": "2026-10-11",
+      "time": "11:54",
+      "title": "Planning tidy-up: last checks closed, you re-approved the planning page",
+      "done": "The full wiki check found 12 problems that only show once planning is done: eight \"check this during planning\" notes were overdue, and one status field held text. Claude closed each note with saved test output, ran one fresh check (a new copy of the project keeps wiki line endings, so fingerprints hold) and fixed two small slips. The planning page changed, so you re-approved it and your sign-off.",
+      "next": "Open a fresh Claude Code session for phase 1. Claude reads the status first and starts only when you say go.",
+      "decisions": [
+        {
+          "what": "Re-approve the updated planning page and the planning sign-off; phase 1 waits for a fresh session",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Planning page (updated)",
+          "status": "Approved"
+        },
+        {
+          "what": "Planning sign-off (end of P0)",
+          "status": "Approved"
+        }
+      ],
+      "commit": "5de4b44",
+      "covers": [
+        "## [2026-10-11] lint | P0 finish-up: lint:wiki found 12 errors after P0 was set to done",
+        "## [2026-10-11] approval | phase-p0-planning and phase-p0-planning#exit re-approved after the finish-up edit",
+        "## [2026-10-11] handoff | s01 closed: P0 finish-up done; P1 starts in a fresh session",
+        "## [2026-10-11] plan | P0 finish-up committed"
+      ],
+      "phase": "phase-p0-planning",
+      "category": "Fixed",
+      "tags": [
+        "approvals",
+        "wiki"
       ]
     }
   ]

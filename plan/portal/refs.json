@@ -4368,6 +4368,26 @@
       "related": [
         "phase-p0-planning"
       ]
+    },
+    {
+      "id": "5de4b44",
+      "kind": "commit",
+      "title": "Commit: planning tidy-up and re-approval",
+      "summary": "Closed the last overdue planning checks with saved test output, added a fresh line-ending check, and recorded your re-approval of the planning page and sign-off.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "1b4ad02",
+      "kind": "commit",
+      "title": "Commit: two small fixes to the tidy-up",
+      "summary": "Shortened one risk note that was too long for the portal and reworded one line in the session notes that tripped the wiki check.",
+      "status": null,
+      "related": [
+        "phase-p0-planning"
+      ]
     }
   ]
 }

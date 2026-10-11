@@ -1255,3 +1255,36 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Task commits e446aa4 (answers written into pages, Waves 1 and 2 recorded), b5f7d40 (MANIFEST line appended, gate run 1 saved) and f975531 (gate run 2 PASS, phase-p0-planning#exit recorded, phase done, handoff). scripts/verify/p0.17-portal-v2.ps1 PASS and scripts/verify/p0.18-close-p0.ps1 PASS after f975531. STATUS In-flight cleared; next action: paused until the owner says go for P1. Commit explainers added to refs.json.
 - next: owner's go-ahead for P1
 - commit: f975531
+
+## [2026-10-11] lint | P0 finish-up: lint:wiki found 12 errors after P0 was set to done
+
+- session: s01
+- time: 11:54
+- pages: [status-live, phase-p0-planning, adr-0016, ov-open-questions, risk-r22]
+- sources: [raw/owner/2026-10-11-s01-p0-finishup-reapproval.md, raw/evidence/phase-p0-planning/r22-eol-check.txt]
+- result: The owner asked to "update everything well" before a fresh session for P1. End-of-session checks: quick_lint 0, portal check clean, mask scan 0, but npm run lint:wiki showed 12 errors that appear only once P0 is done: STATUS current_task held text (pattern pN.M or null) and eight UNVERIFIED[phase-p0-planning] claims were past due (UNV-PASTDUE). Fixed: current_task null; phase-p0-planning's four claims closed with IP-1 scaffold and spike evidence; adr-0016's rename claim withdrawn (IP-4 tested it in Node only; adr-0023 removed the write path); ov-open-questions' coverage-v8 claim closed with IP-1 evidence; risk-r22's line-ending claim checked fresh (a clean clone with core.autocrlf=true: 276 wiki text files, all LF). A first clone attempt failed at checkout ("Filename too long") and checked nothing; rerun with core.longpaths for the clone only. MANIFEST: two lines appended (one first written with the " *" marker and corrected before commit). After the fixes: lint:wiki 0 errors, 36 warnings (34 plus APPROVAL-STALE for phase-p0-planning and its #exit, cleared by the re-approval below). Stales approval of phase-p0-planning and phase-p0-planning#exit.
+
+## [2026-10-11] approval | phase-p0-planning and phase-p0-planning#exit re-approved after the finish-up edit
+
+- session: s01
+- time: 12:13
+- pages: [phase-p0-planning]
+- sources: [raw/owner/2026-10-11-s01-p0-finishup-reapproval.md]
+- result: Owner: "Yes, re-approve both (Recommended)". Recorded with tools/approvals_record.py (earlier decisions kept in history). approvals_check: 31 entries, all APPROVED. Not a P1 go-ahead: the owner gives that in a fresh session.
+
+## [2026-10-11] handoff | s01 closed: P0 finish-up done; P1 starts in a fresh session
+
+- session: s01
+- time: 12:14
+- pages: [handoff-2026-10-09-s01, status-live]
+- result: Handoff updated (finish-up, approvals all APPROVED, risk-r22 check done, long-path side finding, portal not running because Claude Code stopped it on low memory). STATUS: current_task null; next action: the owner opens a fresh session (s02), Claude runs the session start, and P1 begins only on the owner's explicit go.
+- next: fresh session s02; owner's go-ahead for P1
+
+## [2026-10-11] plan | P0 finish-up committed
+
+- session: s01
+- time: 12:14
+- pages: [status-live]
+- result: Task commit 5de4b44 (claims closed, risk-r22 evidence, re-approval, portal records, handoff). The checks before the checkpoint then found two slips in it: the risk-r22 portal mitigation was over 240 characters (portal-sync BAD-SHAPE) and the handoff quoted the unverified-tag text literally (lint:wiki UNV-PASTDUE); both fixed in 1b4ad02. After 1b4ad02: quick_lint 0 errors, lint:wiki 0 errors (33 warnings), portal check clean, mask scan 0.
+- next: fresh session s02; owner's go-ahead for P1
+- commit: 5de4b44

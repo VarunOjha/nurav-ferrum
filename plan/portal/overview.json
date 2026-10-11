@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is finished and signed off by you on 11 Oct. You approved 30 pages in two rounds. No Ferrum code exists yet. Claude is paused: phase 1 starts only when you explicitly say go.",
+  "summary": "Planning (P0) is finished and signed off by you on 11 Oct, and the last tidy-up is done. No Ferrum code exists yet. Claude is paused: phase 1 starts in a fresh session, only when you explicitly say go.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:ddbb72695a41a541bcc2095d551bda59f43ee3bad6076b5afd35a14abebff38b"
+    "content_hash": "sha256:6e62b632b11fcc1f71c879ba577d061947843ccace1005949fe7a8011a1ef2b9"
   },
   "updated": "2026-10-11",
   "where_we_are": [
@@ -21,11 +21,11 @@
     },
     {
       "item": "Approvals",
-      "state": "Done for planning and for phase 1: 30 pages approved on 11 Oct"
+      "state": "Done for planning and for phase 1: 30 pages plus your sign-off, all current (you re-approved the planning page after the last fixes)"
     },
     {
       "item": "Plan portal (the site)",
-      "state": "Built and checked: every list has cards, sort, search, filters and pages; start it with one PowerShell script"
+      "state": "Up to date, but not running: Claude Code stopped it to free memory. Start it with one PowerShell script"
     },
     {
       "item": "First upload to GitHub",
@@ -42,16 +42,16 @@
       },
       {
         "item": "Approvals",
-        "state": "30 pages approved, for planning and phase 1"
+        "state": "30 pages plus your sign-off, all current"
       },
       {
         "item": "Phase 1",
         "state": "Paused until you say go"
       }
     ],
-    "why": "Nothing to run. Claude is paused (your rule of 10 Oct): no tool installs, no project setup, no test builds. When you are ready, say go for phase 1 in Claude Code; Claude records your words and starts with confirming the tools. Optional any time: answer the title bar question, or the history-rewrite question before the first upload.",
+    "why": "Nothing to run. Claude is paused (your rule of 10 Oct): no tool installs, no project setup, no test builds. Open a fresh Claude Code session for phase 1 → Claude first reads the status and session notes → on your word it records the go and starts with confirming the tools. Optional any time: answer the title bar question, or the history-rewrite question before the first upload.",
     "script": null,
-    "tell_claude": "\"Go ahead with phase 1\" when you want building to start. Until then nothing happens."
+    "tell_claude": "In the fresh session: \"Go ahead with phase 1\" when you want building to start. Until then nothing happens."
   },
   "questions_for_you": {
     "open": 32,

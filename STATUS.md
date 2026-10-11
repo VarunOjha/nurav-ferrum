@@ -18,8 +18,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s01
 current_phase: phase-p0-planning
-current_task: none (paused before p1.1)
-next_action: "PAUSED after P0 (done and signed off 2026-10-11). Claude starts no P1 work. Owner: when ready, say in Claude Code that P1 may start (for example \"Go ahead with phase 1\"). Claude then transcribes it to wiki/raw/owner/, logs gate | phase-p1-foundation go-ahead given, runs the P1 entry gate (SCHEMA §9.7, python tools/approvals_check.py) and starts task p1.1 (confirm and record the toolchain)."
+current_task: null
+next_action: "PAUSED after P0 (done and signed off 2026-10-11; finish-up committed). Claude starts no P1 work in session s01. Owner: open a fresh Claude Code session in the repo folder and say there that P1 may start (for example \"Go ahead with phase 1\"). Claude (session s02): first run the session-start steps of CLAUDE.md section 1 (STATUS, log, approvals_check, handoff, index, phase page, git); then transcribe the go-ahead to wiki/raw/owner/, log gate | phase-p1-foundation go-ahead given, run the P1 entry gate (SCHEMA §9.7, python tools/approvals_check.py) and start task p1.1 (confirm and record the toolchain)."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -238,6 +238,11 @@ and `phase-p0-planning#exit` are recorded in `plan/approvals.json`.**
 - 2026-10-11: owner answered Q-207, Q-004, Q-005, Q-108, Q-106, Q-110, Q-211; approved Waves 1 and 2 (30 keys);
   P0 gate run 1 failed on one unreadable MANIFEST line (fixed by appending), run 2 passed on `b5f7d40`; P0 signed off
   and set to done; Claude paused before P1 (owner: "don't start phase 1").
+- 2026-10-11 P0 finish-up (commits `5de4b44`, `1b4ad02`; owner: "update everything well", P1 in a fresh session): the full wiki check
+  showed 12 errors that appear only once P0 is done; fixed (`current_task` null; eight past-due planning claims closed with
+  evidence or withdrawn; risk-r22 line endings checked: [r22-eol-check.txt](wiki/raw/evidence/phase-p0-planning/r22-eol-check.txt)).
+  The planning page edit staled its approval and sign-off; the owner re-approved both
+  ([raw/owner/2026-10-11-s01-p0-finishup-reapproval.md](wiki/raw/owner/2026-10-11-s01-p0-finishup-reapproval.md)).
 - p0.8 done (commit `04b27b9`): quick lint + integration lint 0 errors; manual checks and dispositions in
   [wiki-lint-manual.md](wiki/raw/evidence/phase-p0-planning/wiki-lint-manual.md);
   [wiki/raw/MANIFEST.sha256](wiki/raw/MANIFEST.sha256) created.
@@ -248,7 +253,7 @@ and `phase-p0-planning#exit` are recorded in `plan/approvals.json`.**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.18 P0 exit verified and committed 2026-10-11 (`e446aa4` answers and approvals, `b5f7d40` MANIFEST fix and gate run 1, `f975531` gate pass, sign-off, phase done); Claude is PAUSED before P1 until the owner says go)
+(empty: p0.18 P0 exit verified and committed 2026-10-11 (`e446aa4` answers and approvals, `b5f7d40` MANIFEST fix and gate run 1, `f975531` gate pass, sign-off, phase done; `5de4b44` finish-up and re-approval, `1b4ad02` two follow-up fixes); Claude is PAUSED before P1 until the owner says go in a fresh session)
 
 ## Blockers
 
@@ -261,7 +266,7 @@ and `phase-p0-planning#exit` are recorded in `plan/approvals.json`.**
 | Index ids for upper-case evidence names (Q-219) | Quick lint reported 1 INDEX-MISSING error (IP-0-toolchain); paused the build before IP-1 | Owner | **Resolved 2026-10-08**: index lists evidence folders (adr-0020); quick lint 0 errors |
 | `sources` format on the real wiki (found by the IP-2 loader) | Holds p0.11 / IP-2: the real-wiki loader test reports 4 FM-MISSING errors | Owner / integrator | **Resolved 2026-10-09** (wave 0c items 1-3, Q-220): any wiki-relative path or https URL; raw research notes exempt; IP-2 gate passed |
 | Rust (rustup/cargo), MSVC Build Tools | Needed by P1 toolchain tasks; do not block P0 | Claude runs winget, owner clicks UAC (adr-0021) | **Installed** (observed 2026-10-09: Rust 1.99.0 stable-msvc, VS Build Tools 2022 17.14); versions are recorded as evidence in p1.1. cargo-deny not installed yet |
-| Owner approvals | Every phase entry gate | Owner (in Claude Code), recorded by Claude (adr-0023) | **Waves 1 and 2 approved 2026-10-11** (30 keys, all APPROVED in `plan/approvals.json`); Wave 3 is asked before P2 |
+| Owner approvals | Every phase entry gate | Owner (in Claude Code), recorded by Claude (adr-0023) | **Waves 1 and 2 approved 2026-10-11** (30 keys) plus the P0 sign-off; all 31 APPROVED in `plan/approvals.json` (planning page and sign-off re-approved after the finish-up edit); Wave 3 is asked before P2 |
 | **First push to GitHub** | Old commits still contain the real IP addresses and user-folder path that were masked on 2026-10-09 | Owner ([Q-221](wiki/overview/ov-open-questions.md#q-221-rewrite-git-history-before-the-first-push-to-remove-real-machine-values)) | Open — **blocks the first push**: Claude asks the owner to approve a history rewrite before anything is pushed (adr-0027) |
 
 Exact install and verification commands: [wiki/operations/ops-environment-setup.md](wiki/operations/ops-environment-setup.md).
@@ -285,14 +290,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | P0 Planning | Done: 18 of 18 tasks; final check passed; signed off by you on 11 Oct |
-| Approvals | 30 pages approved on 11 Oct (planning round and phase 1 round), plus your P0 sign-off |
+| Approvals | 30 pages approved on 11 Oct, plus your P0 sign-off; all 31 current (you re-approved the planning page after the last check fixes) |
 | Phase 1 | Not started. Claude is paused until you say go |
-| Plan portal | Running and up to date; restart it any time with the script below |
+| Plan portal | Up to date, but not running: Claude Code stopped it to free memory. Start it with the script below |
 | First upload to GitHub | On hold until you answer the history-rewrite question (Q-221) |
 
 **2. Why, and what it does.** Nothing has to run. Your rule of 10 Oct: after a phase ends, Claude stops until you
-say go → phase 1 begins only on your word → then Claude checks the entry conditions and starts with confirming the
-tools (installs need your clicks on Windows prompts). The script below only starts the portal if you want to read
+say go → you open a fresh Claude Code session for phase 1 → Claude first reads the status, log and session notes, then
+on your word checks the entry conditions and starts with confirming the tools (installs need your clicks on Windows
+prompts). The script below only starts the portal if you want to read
 it; it changes nothing.
 
 **3. The script** (optional; PowerShell 7, from the repo folder):
@@ -303,7 +309,7 @@ pwsh -NoProfile -File scripts/start-portal.ps1
 
 - It finds Node, builds the portal, starts it on this computer only and opens http://127.0.0.1:3417/. Ctrl+C stops it.
 
-**4. What to tell Claude:** "Go ahead with phase 1" when you want building to start. Optional any time: your
+**4. What to tell Claude:** in the fresh session, "Go ahead with phase 1" when you want building to start. Optional any time: your
 answer on the title bar (Q-125, before P3) or on rewriting old commits (Q-221, before the first upload).
 
 ## Pending owner approvals
@@ -315,4 +321,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s01 (p0.18: Waves 1 and 2 approved, P0 gate passed on `b5f7d40`, P0 signed off; PAUSED before P1). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s01 (p0.18: Waves 1 and 2 approved, P0 gate passed on `b5f7d40`, P0 signed off; finish-up `5de4b44` + `1b4ad02`, planning re-approved; PAUSED before P1, which starts in a fresh session s02). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
