@@ -1603,3 +1603,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/p2.1-fixture-curl.txt, raw/evidence/phase-p2-minimal-container/check-p2.1.20261011-1811.txt]
 - result: tests/fixtures/server (fixture-server, exact pins) serves 16 documented routes over HTTPS. The local development CA lives outside the repo, is name-constrained to localhost, 127.0.0.0/8 and ::1, and was installed into the owner's user Root store with his confirmation of the Windows prompt (Q-202). 7 crate tests pass, including a certificate for example.com being rejected with NameConstraintViolation; a Windows curl probe got every documented status (--ssl-revoke-best-effort for the probe only, because a private CA has no revocation server). The p2.1 check script is now real: PASS; two earlier failing runs are kept as evidence. Test-support code, no component page.
 - commit: e007c71
+
+## [2026-10-11] code | p2.2 Ferrum app skeleton in apps/desktop
+
+- session: s02
+- time: 18:25
+- pages: [phase-p2-minimal-container, comp-app-shell]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.2.txt, raw/evidence/phase-p2-minimal-container/p2.2-window-check.png]
+- result: Tauri 2.12.3 app crate ferrum-desktop (workspace member, forbid unsafe), shell in vanilla TS + Vite with the adr-0028 toolbar (back, forward, reload, address bar), shell as a Tauri child web view in a 52 px band, strict CSP, capability shell.json for the shell web view only (no remote), FERRUM_EXIT_AFTER self-exit switch. Workspace lint unsafe_code now deny (crate roots keep forbid; adr-0019 module later); deny.toml allows MPL-2.0 (Q-222). Release build with the pinned Tauri CLI exit 0; p2.2 check PASS (window shows the toolbar, exits by itself); a first sampling bug in the check was fixed. comp-app-shell last_verified_commit set (volatile; its text already describes this).
+- commit: 2c96d06

@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 1,
+    "done": 2,
     "total": 18
   },
   "step_order": [
@@ -37,7 +37,7 @@
       "what": "The desktop app itself, with the shell window built in plain TypeScript and Vite.",
       "why": "Without the app itself nothing else in P2 can be built or tried, and building it differently from what P1 tested would undo P1's lessons.",
       "how": "Create the app with the Tauri version and window layout chosen in P1, make a release build and save a screenshot of the shell window.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "The design was fixed in P1 → create the app with the chosen Tauri version and hosting route → the shell window opens.",
       "check": "Release build succeeds; the window shows the shell (screenshot saved).",
       "script": "scripts/verify/p2.2-create-desktop-app.ps1"

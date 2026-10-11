@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 1 of 18 tasks done. Next: p2.2 the real app skeleton.",
+  "summary": "Phase 2 is in progress: 2 of 18 tasks done. Next: p2.3 lock down the bridge.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:a1de696c6c48a10a6c834b43e05759d92d40049ced03367b0beb1e88396baee5"
+    "content_hash": "sha256:798c543b295708601c920f614559b1b8aca586e5cd18cb0d21e5c0bc84f21387"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 1 of 18 tasks done",
+      "state": "P2 First working app: in progress, 2 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "1 of 18 tasks done"
+        "state": "2 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.2 the real app skeleton"
+        "state": "p2.3 lock down the bridge"
       }
     ],
-    "why": "Nothing to run. The first real Ferrum needs a home → Claude creates the Tauri app in apps/desktop with the shell in TypeScript → later tasks fill it in.",
+    "why": "Nothing to run. Websites must never reach Ferrum's commands → Claude limits the bridge to the shell and tests that every call from a website is refused → the security floor holds from the first website loaded.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:c9938f0d586d5535d451bca8f6492aad735d36c8871274875e23444c00a7883e"
+    "content_hash": "sha256:5aa17cb3910aa4d61cd7e1d30a59ce0b62e336b9e79a2557d7a60000186e04c3"
   },
   "entries": [
     {
@@ -2265,6 +2265,26 @@
       "tags": [
         "testing",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-2",
+      "date": "2026-10-11",
+      "time": "18:25",
+      "title": "The real Ferrum app opens",
+      "done": "The first real Ferrum window now builds in release mode and opens with its toolbar: back, forward, reload and the address bar, in your chosen look (light or dark following Windows). The website area is still empty; the security lock-down comes next.",
+      "next": "Claude locks down the bridge so websites cannot call the app (task p2.3).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "2c96d06",
+      "covers": [
+        "## [2026-10-11] code | p2.2 Ferrum app skeleton in apps/desktop"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "look & feel",
+        "Tauri"
       ]
     }
   ]

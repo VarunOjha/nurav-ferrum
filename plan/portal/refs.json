@@ -570,7 +570,7 @@
       "kind": "task",
       "title": "P2 task: Create the desktop app",
       "summary": "The design was fixed in P1 → create the app with the chosen Tauri version and hosting route → the shell window opens.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4603,6 +4603,14 @@
       "kind": "commit",
       "title": "Commit: Local test pages built",
       "summary": "A small local test server now serves fixed pages (redirects, pop-ups, mail links, cookies, a slow page, error pages) over real HTTPS. Its certificate comes from a local authority you installed, which ",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "2c96d06",
+      "kind": "commit",
+      "title": "Commit: The real Ferrum app opens",
+      "summary": "The first real Ferrum window now builds in release mode and opens with its toolbar: back, forward, reload and the address bar, in your chosen look (light or dark following Windows). The website area i",
       "status": null,
       "related": []
     }
