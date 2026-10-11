@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7b2c97cfcabee654a846369b82adf8b1dbaefd1fb06ce8fda0f5cb0757997ab6"
+    "content_hash": "sha256:d86d625a055bdd0bb16951b3169fde547ab8a0cac4491d8e76826c1842bc8a74"
   },
   "entries": [
     {
@@ -1796,6 +1796,26 @@
       "tags": [
         "WebView2",
         "tab sleeping"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-8",
+      "date": "2026-10-11",
+      "time": "13:09",
+      "title": "Experiment 4: one test robot drives all three",
+      "done": "The same Playwright robot connected to experiment 1, Chrome and Edge and did the same ten things in each: open a local test page, read paint timing, click, type, take a screenshot, watch and rewrite network requests, go back. One catch: on a hidden tab the robot gets no paint timing or screenshot, so benchmarks must measure the shown tab only.",
+      "next": "Claude runs experiment 2: giving each site its own private profile.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "c4dfd4d",
+      "covers": [
+        "## [2026-10-11] code | p1.8 spike S4 Playwright over CDP: one harness drives S1, Chrome and Edge"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "benchmarks",
+        "testing"
       ]
     }
   ]

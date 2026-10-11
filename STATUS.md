@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: null
-next_action: "Task p1.8 (spike S4): spikes/s4-playwright-cdp Node/TS script with Playwright 1.64.0 connectOverCDP to spike S1 (non-elevated, WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9222), list targets to targets.json, navigate one child to a local fixture, read paint timing; same against Chrome for Testing and Edge with a fresh user-data-dir; report spike-s4-playwright-cdp.md."
+next_action: "Task p1.6 (spike S2): spikes/s2-profiles: try routes (d) per-site data directory and at least one of (a) released Tauri PR 16054, (b) patched tauri-runtime-wry, (c) own controllers via raw COM; for each: creation, BrowserProcessId of two profiles, cookie isolation on a local fixture, unsafe and maintenance cost; report spike-s2-profiles.md."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -50,6 +50,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.17 done (`135d6cc`): spikes pinned to tauri 2.12.3, @tauri-apps/cli 2.12.2, @tauri-apps/api 2.12.3, vite 8.3.4, typescript 7.0.2.
 - p1.5 automatic part (`331e3f6`): spike S1 built; all automatic checks pass; sync deadlock reproduced; Job Object holds all WebView2 processes. Owner hand checks pending.
 - p1.7 done (`3e30f93`): spike S3 raw COM, every call S_OK; one webview2-com and one windows version; unsafe invariants drafted.
+- p1.8 done (`c4dfd4d`): spike S4, one Playwright harness drives S1, Chrome for Testing and Edge over CDP; hidden tabs give no paint or screenshot.
 
 ## Done this session (s01)
 
@@ -261,7 +262,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); next p1.8 (not started)
+- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); p1.8 done `c4dfd4d`; next p1.6 (not started)
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -298,11 +299,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 6 of 17 tasks done |
-| Next task | p1.8 experiment 4: the test robot drives the app |
+| Phase 1 | In progress: 7 of 17 tasks done |
+| Next task | p1.6 experiment 2: one private profile per site |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Benchmarks need a robot that drives Ferrum, Chrome and Edge the same way → Claude connects Playwright to experiment 1 and to Chrome and Edge → if it works, one benchmark tool covers all three.
+**2. Why, and what it does.** Nothing for you to run now. Your design gives each site its own profile inside one shared browser → Tauri cannot set that directly → Claude tries the possible routes and compares them so you can choose.
 
 **3. The script:** none for you.
 
@@ -317,4 +318,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 6 of 17 tasks done, last p1.7). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 7 of 17 tasks done, last p1.8). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

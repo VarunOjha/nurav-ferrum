@@ -450,7 +450,7 @@
       "kind": "task",
       "title": "P1 task: Experiment 4: test robot drives the app",
       "summary": "Benchmarks drive browsers with Playwright through a debugging channel → connect to the experiment app, Chrome and Edge the same way → one fair harness for all.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4442,6 +4442,14 @@
       "kind": "commit",
       "title": "Commit: Experiment 3: raw engine access works",
       "summary": "Claude built a second throw-away app and called each engine feature Tauri does not offer directly. All worked: pausing a hidden tab and waking it, lowering its memory use, seeing every network respons",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "c4dfd4d",
+      "kind": "commit",
+      "title": "Commit: Experiment 4: one test robot drives all three",
+      "summary": "The same Playwright robot connected to experiment 1, Chrome and Edge and did the same ten things in each: open a local test page, read paint timing, click, type, take a screenshot, watch and rewrite n",
       "status": null,
       "related": []
     }

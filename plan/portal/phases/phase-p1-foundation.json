@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 6,
+    "done": 7,
     "total": 17
   },
   "step_order": [
@@ -114,7 +114,7 @@
       "what": "A test of whether the Playwright test robot can drive the experiment app, Chrome and Edge the same way.",
       "why": "If the robot cannot drive all three the same way, Ferrum, Chrome and Edge would be measured differently and the comparison would not be fair.",
       "how": "Start Experiment 1's app, Chrome and Edge, not as admin and with the debugging port on (each browser with a fresh profile); one Playwright script then connects to each.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Benchmarks drive browsers with Playwright through a debugging channel → connect to the experiment app, Chrome and Edge the same way → one fair harness for all.",
       "check": "The script exits cleanly, lists every view, reads paint timing on a local page, and lists what did not work.",
       "script": "scripts/verify/p1.8-spike-test-robot.ps1"

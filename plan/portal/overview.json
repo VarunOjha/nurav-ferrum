@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 6 of 17 tasks done. Next: p1.8 experiment 4: the test robot drives the app.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 7 of 17 tasks done. Next: p1.6 experiment 2: one private profile per site.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:97a524dfec5245821867cade6426ec3589514630e25addab1df04c7d7a0ab706"
+    "content_hash": "sha256:0b8c489bed01e40c11c78fe9078075b5bc0af8ea3ac12ce3d383d3d52d0a3da6"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 6 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 7 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "6 of 17 tasks done"
+        "state": "7 of 17 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p1.8 experiment 4: the test robot drives the app"
+        "state": "p1.6 experiment 2: one private profile per site"
       }
     ],
-    "why": "Nothing to run. Benchmarks need a robot that drives Ferrum, Chrome and Edge the same way → Claude connects Playwright to experiment 1 and to Chrome and Edge → if it works, one benchmark tool covers all three.",
+    "why": "Nothing to run. Your design gives each site its own profile inside one shared browser → Tauri cannot set that directly → Claude tries the possible routes and compares them so you can choose.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

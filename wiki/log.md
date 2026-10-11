@@ -1381,3 +1381,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: spikes/s3-raw-com (tauri 2.12.3, shell plus one child tab) reached every planned feature through with_webview: casts to ICoreWebView2_2/_3/_19 and Environment8; MemoryUsageTargetLevel Normal -> Low -> Normal; TrySuspend while hidden (result true, IsSuspended true), Resume, and show() waking a suspended view; GetProcessInfos; WebResourceResponseReceived (also reports Tauri custom-protocol responses, so a network logger must filter); ProcessFailed for the tab renderer ended via edge://kill (RENDER_PROCESS_EXITED, TERMINATED, exit code 1) with recovery by navigating; handlers removed with their tokens. One webview2-com (0.39.1) and one windows (0.62.2) in the tree. Unsafe invariants drafted in the report. This settles risk-r03 in favour of the raw-COM route and the phase-page claim that a renderer crash can be triggered on purpose (closed at the exit gate). Tooling decision (delegated): the p1.7 check script also looks in src-tauri/. Check PASS (3 of 3).
 - next: p1.8 spike S4 Playwright over CDP
 - commit: 3e30f93
+
+## [2026-10-11] code | p1.8 spike S4 Playwright over CDP: one harness drives S1, Chrome and Edge
+
+- session: s02
+- time: 13:09
+- pages: [phase-p1-foundation, risk-r06]
+- sources: [raw/evidence/phase-p1-foundation/spike-s4-playwright-cdp.md, raw/evidence/phase-p1-foundation/spike-s4/results.json]
+- result: spikes/s4-playwright-cdp/run.ts (playwright 1.64.0, Node 24 type stripping) drove spike S1 (WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9222, non-elevated), Chrome for Testing 155.0.8059.39 and Edge 155.0.4283.45 (fresh profiles) through the same connectOverCDP path. S1 exposes the shell and each child web view as its own page target, identifiable by URL. Navigation to a loopback fixture, paint entries, evaluate, click, type, screenshot, response events, page.route, a raw CDP session, goBack, newPage and newContext worked on all three. Limitation: on a hidden S1 tab there are no paint entries and screenshots time out, while visibilityState reads visible; the harness must measure only shown tabs. S1 exits by its own timer; browsers closed with CDP Browser.close; nothing killed. Check PASS (2 of 2).
+- next: p1.6 spike S2 profiles
+- commit: c4dfd4d
