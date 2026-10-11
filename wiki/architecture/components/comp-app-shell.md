@@ -3,7 +3,7 @@ id: comp-app-shell
 type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: planned
-updated: 2026-10-10
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -70,7 +70,7 @@ unverified:
   - claim: "A strict content security policy for the shell is workable, so fonts and assets can be bundled locally"
     verify_in: phase-p2-minimal-container
   - claim: "Tauri unstable multi-webview focus, resize and z-order issues are workable on Windows"
-    verify_in: phase-p1-foundation
+    verify_in: phase-p2-minimal-container
 ---
 
 # comp-app-shell: application shell
@@ -94,14 +94,14 @@ P7 sleeping tabs). Proposed (not yet approved): the fonts are bundled with the a
 no remote resources (strict policy, UNVERIFIED[phase-p2-minimal-container]).
 
 **Title bar.** Option A as drawn puts the tabs in the window's top bar, which needs a custom title bar; the design
-notes below advise against one at first (resize problem, Tauri issue #12207, UNVERIFIED[phase-p1-foundation]). Until
+notes below advise against one at first (resize problem, Tauri issue #12207, UNVERIFIED[phase-p3-tabs-sessions]; not tested in P1 because spike S1 used the normal title bar). Until
 P1 has checked it, the early shell may show the normal Windows title bar above the tab strip. Open question
 [Q-125](../../overview/ov-open-questions.md#q-125-tabs-in-the-windows-top-bar-custom-title-bar-or-the-normal-windows-title-bar-first)
 asks the owner which way to go.
 
 ## Design notes
 
-- **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) and resize with a custom title bar (#12207) are known issues. Whether they are workable is UNVERIFIED[phase-p1-foundation]. Avoid a custom title bar initially.
+- **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) was seen in P1 ([S1 report](../../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md); owner: fix later) and its fix is UNVERIFIED[phase-p2-minimal-container]; resize and z-order behaved as designed in S1. Resize with a custom title bar (#12207) is UNVERIFIED[phase-p3-tabs-sessions]. Avoid a custom title bar initially.
 - **Capabilities.** Exactly one capability file, `shell.json`, targets `"webviews": ["shell"]`. **No capability declares `remote`.** A CI check enforces this ([trust boundaries R1–R3](../ov-arch-trust-boundaries.md)).
 - **Commands are async.** Tab creation happens on async commands because `add_child` deadlocks from synchronous handlers on Windows (VERIFIED, Tauri note §2).
 - **No web storage in the shell** (trust rule R9). Settings go through `settings_get`/`settings_set` to Rust-side `config.toml`.

@@ -3,7 +3,7 @@ id: adr-0007
 type: decision
 title: "Child WebViews in one window (trusted shell + one untrusted child WebView per tab, Tauri multi-webview unstable feature)"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -20,8 +20,6 @@ options:
 phase: phase-p0-planning
 tags: [architecture, webview, tauri, unstable]
 unverified:
-  - claim: "The open unstable-flag issues (focus after Alt+Tab, resize with custom titlebar, white/only-last-child rendering) affect Ferrum's configuration on this machine"
-    verify_in: phase-p1-foundation
   - claim: "Whether WebView2 lets a remote page navigate a tab top-level to the app's local origin (http://tauri.localhost or tauri://)"
     verify_in: phase-p4-security
 ---
@@ -44,7 +42,7 @@ Research findings, all from [raw/research/tauri-webview2-capabilities.md](../raw
   - #10011 and #11376: white or only-last-child rendering;
   - #9257: text-editing shortcuts.
 
-  Whether they affect Ferrum's exact configuration is UNVERIFIED[phase-p1-foundation].
+  Checked in P1 ([spike S1 report](../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md)): white or only-last-child rendering was not seen; focus after Alt+Tab (13466) was seen: typing reaches the tab only after a click, a known issue the owner chose to fix later; resize with a custom title bar (12207) was not tested because the spike used the normal title bar (question Q-125, before P3).
 - **Positioning and back/forward (§2).** Child webviews do not resize with the window unless `auto_resize` is enabled. There is **no `go_back`/`go_forward`** on Tauri's `Webview`; use `eval("history.back()")` or raw COM `GoBack`/`GoForward`.
 - **IPC exposure (§3).** The Tauri IPC bridge is attached to **every** webview, including remote tab webviews. Protection is authorisation in Rust: remote origins can reach commands only through an explicit `remote` capability. Capability matching accepts a webview-label match **or** a window-label match, and a window-label match also covers the child tabs in that window.
 

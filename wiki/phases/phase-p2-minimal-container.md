@@ -133,6 +133,8 @@ unverified:
     verify_in: phase-p2-minimal-container
   - claim: "A WebView2 controller that Ferrum creates itself has no Tauri IPC bridge"
     verify_in: phase-p2-minimal-container
+  - claim: "Moving keyboard focus into the content web view when the window becomes active fixes the Alt+Tab focus issue (13466)"
+    verify_in: phase-p2-minimal-container
 ---
 
 # P2 Minimal container (Milestone M1)
@@ -145,6 +147,7 @@ Even with a single tab, P2 uses the hosting model chosen for tabs: one window, t
 
 - Shell UI: address bar, back/forward/refresh, load indicator, error panel. Vanilla TS + Vite (adr-0006).
 - Content WebView: navigation, redirects, external links, cookies, DevTools gating.
+- Known issue from spike S1 (owner: fix later): after Alt+Tab back to the window, typing does not reach the web view until a click ([S1 report](../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md), Tauri issue 13466). P2 moves keyboard focus into the content web view when the window becomes active; that this fixes it is UNVERIFIED[phase-p2-minimal-container].
 - Security floor from day one. Every web view Tauri creates gets the IPC channel, and authorisation in Rust is the only protection ([raw/research/tauri-webview2-capabilities.md](../raw/research/tauri-webview2-capabilities.md) section 3). P2 therefore applies recipe items 1 to 3 (no `remote` capability, webview-label targeting, app ACL manifest) and proves them with the p2.3 negative test. The content web view is created by Ferrum (adr-0029) and should have no IPC bridge at all; the same negative test checks that (UNVERIFIED[phase-p2-minimal-container]). The full policy engine is [P4](phase-p4-security.md).
 - Secure defaults from master prompt section 5: never bypass certificate validation, never weaken Chromium sandboxing, never bypass OAuth provider restrictions.
 

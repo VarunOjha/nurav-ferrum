@@ -14,7 +14,7 @@
       "language": "TypeScript",
       "source": {
         "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
-        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+        "content_hash": "sha256:5e7868868d2fbf315b58e8216c6278af2df96f322d5a58a22dd53767ef2129f3"
       }
     },
     {
@@ -27,7 +27,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
-        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+        "content_hash": "sha256:5e7868868d2fbf315b58e8216c6278af2df96f322d5a58a22dd53767ef2129f3"
       }
     },
     {
@@ -45,7 +45,7 @@
       "language": "Rust",
       "source": {
         "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
-        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+        "content_hash": "sha256:5e7868868d2fbf315b58e8216c6278af2df96f322d5a58a22dd53767ef2129f3"
       }
     },
     {
@@ -59,7 +59,7 @@
       "language": "Rust",
       "source": {
         "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
-        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+        "content_hash": "sha256:5e7868868d2fbf315b58e8216c6278af2df96f322d5a58a22dd53767ef2129f3"
       }
     },
     {
@@ -72,7 +72,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
-        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+        "content_hash": "sha256:5e7868868d2fbf315b58e8216c6278af2df96f322d5a58a22dd53767ef2129f3"
       }
     },
     {
@@ -85,7 +85,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/ov-arch-system-overview.md",
-        "content_hash": "sha256:21d6f9caa712d956bc0b44382c52517840d303a0fea82ad64f46288579289a5d"
+        "content_hash": "sha256:5e7868868d2fbf315b58e8216c6278af2df96f322d5a58a22dd53767ef2129f3"
       }
     }
   ],
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:4c74f0902fecb316bf23d1870d21ef444ea9cbd9e9751690d8ec4917310b5a9e"
+        "content_hash": "sha256:7ed160a8c5e41f621e3396abd332ea5eb3ef38a58630c43d8255810c3842327b"
       }
     },
     {

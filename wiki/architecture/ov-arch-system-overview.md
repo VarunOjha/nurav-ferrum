@@ -3,7 +3,7 @@ id: ov-arch-system-overview
 type: overview
 title: "Architecture: system overview (context and container views)"
 status: review
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -15,8 +15,6 @@ audience: both
 phase: phase-p0-planning
 tags: [architecture, c4]
 unverified:
-  - claim: "Tauri child WebViews (unstable feature) are stable enough on Windows for a shell plus N tabs"
-    verify_in: phase-p1-foundation
   - claim: "Hiding a background tab WebView measurably reduces CPU and memory"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -194,7 +192,7 @@ The last three ids, plus `comp-tab-content`, were added by the architecture area
 - **Only the active tab is visible.** Background tabs are hidden (`Webview::hide`, which maps to `ICoreWebView2Controller::put_IsVisible(false)`, VERIFIED in the Tauri note §2). The CPU and memory effect of hiding is UNVERIFIED[phase-p6-benchmark-harness].
 - **Threads.** The Tauri main thread is the WebView2 UI thread, and all COM calls run there through `with_webview`. Async work (sampling, file writes, policy ticks) runs on a tokio runtime. The two communicate through channels, and the UI thread is never blocked (see [WebView2 integration §4](ov-arch-webview2-integration.md)). Tab WebViews must be created from async commands or non-UI threads, because creating them from synchronous handlers deadlocks on Windows (VERIFIED doc comment, Tauri note §2).
 - **WebView2 processes.** All WebViews on one user data folder (UDF) share a browser process, a GPU process and helper processes. Renderers may be shared across WebViews (VERIFIED, [measurement note §2.2](../raw/research/measurement-methodology.md)). Per-tab memory is therefore not well defined. See [isolation model](ov-arch-isolation-model.md).
-- **Overall stability.** Whether Tauri's unstable multi-webview is stable enough for a shell plus N tabs is UNVERIFIED[phase-p1-foundation]. The Tauri note lists 23 open issues against the `unstable` flag. Spikes in phase-p1-foundation must cover focus, resize, z-order and creation deadlock.
+- **Overall stability.** Spike S1 found Tauri's unstable multi-webview usable for a shell plus N tabs on this machine ([S1 report](../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md)), with two rules (create views from async code; the shell never overlaps tabs) and one known issue (keyboard focus after Alt+Tab, issue 13466, to fix later). Tabs will be controllers Ferrum creates itself (adr-0029). The Tauri note lists 23 open issues against the `unstable` flag. Spikes in phase-p1-foundation must cover focus, resize, z-order and creation deadlock.
 
 ## 7. Key architectural decisions referenced
 

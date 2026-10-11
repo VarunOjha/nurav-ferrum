@@ -20,8 +20,8 @@ owner_phase: phase-p1-foundation
 trigger: "Hang or deadlock while creating a tab; child webviews render white or only the last one renders; keyboard focus lost after Alt+Tab; text-editing shortcuts fail; shell dropdowns hidden under tab content; a Tauri release changes add_child."
 fallback: "Host tab controllers outside Tauri's webview manager with raw COM in child HWNDs (route c of risk-r01), or one top-level window per tab; either needs an ADR superseding adr-0007."
 unverified:
-  - claim: "Each listed open unstable-flag issue reproduces (or not) on tauri 2.12.1 on Windows 11"
-    verify_in: phase-p1-foundation
+  - claim: "Moving keyboard focus into the visible tab when the window becomes active fixes the Alt+Tab focus issue (13466)"
+    verify_in: phase-p2-minimal-container
 ---
 
 # risk-r02: Tauri multi-webview (child WebViews in one window) is behind the unstable feature
@@ -74,12 +74,15 @@ created from an async command loaded without a deadlock; the same creation from 
 Tauri docs warn ([sync-1.json](../raw/evidence/phase-p1-foundation/spike-s1/sync-1.json)), so the async rule is confirmed.
 Hide/show tab switching, relayout on window resize, and rendering (no blank or white tabs, issues 10011 and 11376 not seen) all
 passed. Where the shell and a tab overlap, the **tab is drawn on top** (issue 15682 seen): the shell must never overlap tab
-bounds. Alt+Tab keyboard focus (issue 13466) and text-editing shortcuts (issue 9257) are hand checks by the owner; their
-result goes into the S1 report, which closes the remaining claim below.
+bounds. The owner's hand checks ([S1 report](../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md)): text-editing shortcuts work (issue 9257 not seen);
+**keyboard focus after Alt+Tab fails** (issue 13466 seen): typing reaches the tab only after a click on the window. The owner
+marked it a known issue to fix later; the expected fix (move focus into the visible tab when the window becomes active) is
+UNVERIFIED[phase-p2-minimal-container]. Resize with a custom title bar (issue 12207) was not tested (normal title bar).
 
 ## Unverified claims
 
-- Each listed open unstable-flag issue reproduces (or not) on tauri 2.12.1 on Windows 11. UNVERIFIED[phase-p1-foundation]
+- Moving keyboard focus into the visible tab when the window becomes active fixes the Alt+Tab focus issue (13466). UNVERIFIED[phase-p2-minimal-container]
+
 
 ## Affects
 
