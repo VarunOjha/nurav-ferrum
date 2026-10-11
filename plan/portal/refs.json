@@ -420,7 +420,7 @@
       "kind": "task",
       "title": "P1 task: Experiment 1: several web views in one window",
       "summary": "Tauri's multi-view feature is experimental → build a throwaway app with three tab views and test resize, focus, overlap, blank pages and freezes → if it is unstable, the design changes before P2, not after.",
-      "status": "Waiting for you",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4579,6 +4579,14 @@
       "kind": "commit",
       "title": "Commit: Pre-commit warning finished",
       "summary": "The before-commit warning now passes its full check: it warns when code changes without its design page, and the rulebook says so.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "af70134",
+      "kind": "commit",
+      "title": "Commit: Experiment 1 finished with your hand check",
+      "summary": "You confirmed copy, paste, undo, resizing and maximising work. After Alt+Tab the keyboard only reaches the page after a click: a known Tauri problem, recorded as an issue to fix in phase 2, as you ask",
       "status": null,
       "related": []
     }

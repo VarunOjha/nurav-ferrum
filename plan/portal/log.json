@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:4b79253853e7d21ad491b1714c18eb78f28dd9628f3fac6a0576595c1b8471ad"
+    "content_hash": "sha256:62488ded3f02cd8fe1efc853cbd46de179567df6f435449e5ff2f876c7f65a3e"
   },
   "entries": [
     {
@@ -2078,6 +2078,26 @@
       "tags": [
         "check scripts",
         "git"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-5",
+      "date": "2026-10-11",
+      "time": "14:18",
+      "title": "Experiment 1 finished with your hand check",
+      "done": "You confirmed copy, paste, undo, resizing and maximising work. After Alt+Tab the keyboard only reaches the page after a click: a known Tauri problem, recorded as an issue to fix in phase 2, as you asked. The experiment report is written and the last phase 1 notes are settled.",
+      "next": "You re-approve the 9 changed pages; then Claude runs the end-of-phase check.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "af70134",
+      "covers": [
+        "## [2026-10-11] code | p1.5 spike S1 report with the owner hand checks; Alt+Tab focus a known issue"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "web views",
+        "Tauri"
       ]
     }
   ]

@@ -1512,3 +1512,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p1-foundation/check-p1.15.txt]
 - result: scripts/verify/p1.15-code-page-warning.ps1 -SaveEvidence PASS (2 of 2): the clone test (code-only commit warns, code-plus-page commit does not) and the rulebook step (SCHEMA §9.8 now names the hook). Hook committed in 898fd14; not installed in this repo unless the owner asks.
 - commit: b570056
+
+## [2026-10-11] code | p1.5 spike S1 report with the owner hand checks; Alt+Tab focus a known issue
+
+- session: s02
+- time: 14:18
+- pages: [phase-p1-foundation, risk-r02, adr-0007]
+- sources: [raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md, raw/owner/2026-10-11-s02-s1-hand-checks.md]
+- result: Owner hand checks: Ctrl+A/C/V/Z work in a tab; resize, maximise and minimise work; after Alt+Tab back, typing reaches the tab only after a click (Tauri issue 13466 seen); owner: known issue, fix later. S1 report written (9 PASS, 1 FAIL as a known issue). The last four P1-targeted claims closed (adr-0007, risk-r02, ov-arch-system-overview, comp-app-shell); the focus fix is now a P2 claim, custom-title-bar resize a P3 claim. p1.5 check PASS. Stales adr-0007 (re-approval with the other 8 pages).
+- commit: af70134

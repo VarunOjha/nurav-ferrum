@@ -19,9 +19,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: p1.5
-next_action: "Owner: run pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1 and report Alt+Tab focus, resize and shortcuts. Claude then writes spike-s1-multiwebview.md, closes the last four P1 claims (adr-0007, risk-r02, ov-arch-system-overview, comp-app-shell), asks the owner to re-approve the stale pages, and runs scripts/gates/p1-gate.ps1 -SaveEvidence."
-blocked_on: [adr-0002, adr-0006, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
+current_task: null
+next_action: "Owner: re-approve adr-0002, adr-0006, adr-0007, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema (changed only by the P1 claim closures). Then Claude records it and runs pwsh -NoProfile -File scripts/gates/p1-gate.ps1 -SaveEvidence, then asks for the phase-p1-foundation#exit sign-off."
+blocked_on: [adr-0002, adr-0006, adr-0007, adr-0010, adr-0011, adr-0018, adr-0021, phase-p1-foundation, schema]
 last_handoff: handoff-2026-10-09-s01
 ---
 
@@ -62,6 +62,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - Owner batch recorded ([raw/owner/2026-10-11-s02-p1-design-and-questions.md](wiki/raw/owner/2026-10-11-s02-p1-design-and-questions.md)): adr-0029, adr-0030, adr-0031 approved and accepted; Q-107, Q-116, Q-122, Q-222 answered; GitHub deferred. p1.9 and p1.11 done.
 - P1 exit preparation: every P1-targeted claim closed on 25 pages except four that wait for the S1 hand check; 8 approvals stale by design (re-approval with the sign-off).
 - p1.15 done (`b570056`): hook check PASS 2 of 2 after the SCHEMA §9.8 update.
+- p1.5 done (`af70134`): S1 report with hand checks; Alt+Tab focus is a known issue (fix in P2); last P1 claims closed.
 
 ## Done this session (s01)
 
@@ -273,7 +274,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 waits for the owner's S1 hand check; then the S1 report, the last four claims, re-approval of 8 stale pages, and p1.16 (exit gate)
+- task: p1.16 exit gate: waits for the owner to re-approve 9 pages changed by the claim closures
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -310,22 +311,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | 15 of 17 tasks done; your decisions recorded; end-of-phase cleanup done |
-| Still from you | The hand check of experiment 1, then re-approval of 8 changed pages and the phase 1 sign-off |
+| Phase 1 | In progress: 16 of 17 tasks done |
+| Next task | re-approve 9 changed pages, then the end-of-phase check |
+| Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Experiment 1 passed every automatic check; only a person can judge keyboard focus after
-Alt+Tab and copy/paste in a tab. The script opens the throw-away app; you try it and close it with its X button. Nothing is
-installed or changed.
+**2. Why, and what it does.** Nothing for you to run now. The end-of-phase check first confirms every phase 1 page is approved; 9 pages changed during the cleanup, so they need your re-approval first.
 
-**3. The script** (PowerShell 7, from the repo folder):
+**3. The script:** none for you.
 
-```powershell
-pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1
-```
-
-- It opens experiment 1 (a dark tab bar and three coloured tabs); the script ends when you close the window.
-
-**4. What to tell Claude:** what you saw, for example "Alt+Tab OK, resize OK, shortcuts OK", or what failed.
+**4. What to tell Claude:** nothing; Claude asks when a step needs you.
 
 ## Pending owner approvals
 
@@ -336,4 +330,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 15 of 17 tasks done, last p1.15). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 16 of 17 tasks done, last p1.5). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 1 is nearly done: 15 of 17 tasks finished, your decisions are recorded and the end-of-phase cleanup is done. Left for you: a hand check of experiment 1, then re-approving 8 changed pages and signing off phase 1.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 16 of 17 tasks done. Next: re-approve 9 changed pages, then the end-of-phase check.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:0cfdd450a049c33ddc12240f8d1480e1dc6af42b93e62c124798403e3c0467f9"
+    "content_hash": "sha256:8985fa965026bf50fe55661c9b80003290c35cceee8203b0f56683118ca71a75"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 15 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 16 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -34,32 +34,20 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "15 of 17 tasks done"
+        "state": "16 of 17 tasks done"
       },
       {
-        "item": "Experiment 1",
-        "state": "Needs your hand check"
-      },
-      {
-        "item": "Then",
-        "state": "Re-approve 8 changed pages and sign off"
+        "item": "Next task",
+        "state": "re-approve 9 changed pages, then the end-of-phase check"
       }
     ],
-    "why": "Experiment 1 passed its automatic checks. Only a person can judge keyboard focus after Alt+Tab and copy/paste in a tab → the script opens the test app → you try it and close it with its X button. Nothing is installed or changed.",
-    "script": {
-      "path": "spikes/s1-multiwebview/run-manual.ps1",
-      "parts": [
-        {
-          "code": "pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1",
-          "explains": "Opens experiment 1 (a dark tab bar and three coloured tabs); the script ends when you close the window."
-        }
-      ]
-    },
-    "tell_claude": "What you saw, e.g. \"Alt+Tab OK, resize OK, shortcuts OK\", or what failed."
+    "why": "Nothing to run. The end-of-phase check first confirms every phase 1 page is approved; 9 pages changed during the cleanup, so they need your re-approval first.",
+    "script": null,
+    "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
   "questions_for_you": {
     "open": 29,

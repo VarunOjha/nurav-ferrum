@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 15,
+    "done": 16,
     "total": 17
   },
   "step_order": [
@@ -81,7 +81,7 @@
       "what": "A throwaway app with one window and three tab views, to test Tauri's experimental multi-view feature.",
       "why": "One window with many tab views is the core of the app's design. Finding a crash or freeze after the app is built would mean redoing that work.",
       "how": "Create the views from a background command, switch tabs by hiding and showing, and record pass or fail for resize, focus, overlap, blank pages, freezes, shortcuts and helper processes.",
-      "status": "Waiting for you",
+      "status": "Done",
       "chain": "Tauri's multi-view feature is experimental → build a throwaway app with three tab views and test resize, focus, overlap, blank pages and freezes → if it is unstable, the design changes before P2, not after.",
       "check": "Report has a pass/fail row per check, including which helper processes belong to the app; the experiment builds.",
       "script": "scripts/verify/p1.5-spike-multiwebview.ps1"
