@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 12 of 17 tasks done. Next: p1.9 design proposals from the experiments.",
+  "summary": "Phase 1 is nearly done: 12 of 17 tasks finished, all four experiments ran, and Claude proposed three design decisions. Now it needs you: a hand check of experiment 1, your decisions, and a few answers.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:fc17400b10aba96462c68de36ef795312cb221a297b1f3d41da3a8ca49de1dee"
+    "content_hash": "sha256:77914d15276026819d05f6bdb472ce8f1884d694acbf3bc587a5aa5f65db21de"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 12 of 17 tasks done",
+      "state": "P1 Foundation: 12 of 17 tasks done, waiting for you",
       "ref": "phase-p1-foundation"
     },
     {
@@ -34,23 +34,56 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
-        "item": "Phase 1",
-        "state": "12 of 17 tasks done"
+        "item": "Experiments",
+        "state": "All four ran; experiment 1 needs your hand check"
       },
       {
-        "item": "Next task",
-        "state": "p1.9 design proposals from the experiments"
+        "item": "Design proposals",
+        "state": "Three proposals wait for your decision"
+      },
+      {
+        "item": "Questions",
+        "state": "Licence, benchmark machine, power meter, GitHub"
       }
     ],
-    "why": "Nothing to run. The four experiments are done → Claude writes proposed decisions (profile route, back/forward, test-robot path, one-window design) → you choose, and phase 2 is planned on facts.",
-    "script": null,
-    "tell_claude": "Nothing for now. Claude asks when a step needs you."
+    "why": "Experiment 1 passed its automatic checks. Only a person can judge keyboard focus after Alt+Tab and copy/paste in a tab → the script opens the test app → you try it and close it with its X button. Nothing is installed or changed.",
+    "script": {
+      "path": "spikes/s1-multiwebview/run-manual.ps1",
+      "parts": [
+        {
+          "code": "pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1",
+          "explains": "Opens experiment 1 (a dark tab bar and three coloured tabs); the script ends when you close the window."
+        }
+      ]
+    },
+    "tell_claude": "What you saw, e.g. \"Alt+Tab focus OK, resize OK, shortcuts OK\" (or what failed), then answer Claude's questions in chat."
   },
   "questions_for_you": {
     "open": 33,
-    "items": []
+    "items": [
+      {
+        "id": "Q-222",
+        "question": "May the licence check allow MPL-2.0, a mild open-source licence used by five libraries that Tauri brings in?",
+        "asked": "2026-10-11"
+      },
+      {
+        "id": "Q-116",
+        "question": "What is the exact CPU model and RAM of the benchmark machine?",
+        "asked": "2026-10-08"
+      },
+      {
+        "id": "Q-122",
+        "question": "Do you have a wall-power meter?",
+        "asked": "2026-10-08"
+      },
+      {
+        "id": "Q-221",
+        "question": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path?",
+        "asked": "2026-10-09"
+      }
+    ]
   }
 }

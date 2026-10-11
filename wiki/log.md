@@ -1467,3 +1467,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: New raw note literature-batch-1 (fetched 2026-10-11): ARC original paper page (USENIX FAST 2003), WICG Page Lifecycle report (2022), Win32 CreateMemoryResourceNotification, WebView2 TrySuspend/Resume reference; each labelled. New pages ov-research-literature-protocol and ov-research-literature-log (indexed). Open: memory-pressure thresholds, and whether WebView2 fires freeze/resume on suspend (P7 test). Check PASS (2 of 2); lint:wiki 0 errors.
 - next: p1.9 spike synthesis and proposed ADRs
 - commit: 058ca1a
+
+## [2026-10-11] decide | p1.9 proposed ADRs 0029 to 0031 from the spikes; owner batch next
+
+- session: s02
+- time: 13:42
+- pages: [adr-0029, adr-0030, adr-0031, risk-r01, risk-r02, risk-r03, risk-r05, risk-r06, phase-p2-minimal-container]
+- sources: [raw/evidence/phase-p1-foundation/spike-s2-profiles.md, raw/evidence/phase-p1-foundation/spike-s3/s3-2.json, raw/evidence/phase-p1-foundation/spike-s4-playwright-cdp.md]
+- result: Proposed adr-0029 (tab web views are controllers Ferrum creates from Tauri's environment, one profile per site; refines how adr-0007 is built; would answer Q-107), adr-0030 (back/forward through CanGoBack/GoBack/GoForward and HistoryChanged; spike S3 history step, s3-2.json), adr-0031 (one Playwright CDP harness for all products, visible tab only, Job Object attribution). Five risks set to mitigating with spike results; their P1 claims closed or re-targeted (risk-r01 absence claim to P3). P2 page revised to the proposals (no P2 approval existed yet). No approved page was edited. Next: one owner batch (S1 hand checks, the three ADRs, Q-222, GitHub, Q-116, Q-122, hook install, MIT holder line), then the exit-gate claim closure.
+- next: owner batch in chat
+- commit: 82fe00a

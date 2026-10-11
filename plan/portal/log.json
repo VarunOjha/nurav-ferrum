@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7d8cbd3762113cf53e1457042c364a95e434094cb9e8e5c33aab9085a9565466"
+    "content_hash": "sha256:7ea0732b972c707746e4da1174c0467451dbbbf02d4c39d3068426d6aa028677"
   },
   "entries": [
     {
@@ -1962,6 +1962,26 @@
       "tags": [
         "paper",
         "tab sleeping"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-9",
+      "date": "2026-10-11",
+      "time": "13:42",
+      "title": "Design proposals from the four experiments",
+      "done": "Claude turned the experiment results into three proposed decisions: Ferrum creates each tab view itself with a profile per site; back and forward ask the browser; one test-robot path for every browser, visible tab only. A quick extra test showed back and forward work through the engine. The risk pages now show what the experiments found, and the phase 2 plan follows the proposals.",
+      "next": "You decide the three proposals and answer a short batch of questions; you also try experiment 1 by hand.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "82fe00a",
+      "covers": [
+        "## [2026-10-11] decide | p1.9 proposed ADRs 0029 to 0031 from the spikes; owner batch next"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Planned",
+      "tags": [
+        "web views",
+        "benchmarks"
       ]
     }
   ]

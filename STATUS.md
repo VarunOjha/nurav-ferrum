@@ -19,8 +19,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: null
-next_action: "Task p1.9 (spike synthesis): update risk pages risk-r01, r02, r03, r05, r06 with spike evidence; propose ADRs from adr-0029 (profile route, back/forward, CDP benchmark path, hosting model confirmation); update the P2 page; then ask the owner one batch (S1 hand checks, ADR choices, Q-222, Q-116, Q-122, GitHub, hook install, MIT holder line)."
+current_task: p1.9
+next_action: "Owner batch: owner runs pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1 and reports Alt+Tab focus, resize and shortcuts; owner decides adr-0029, adr-0030, adr-0031, Q-222, Q-116, Q-122, GitHub push or defer, hook install, MIT holder line. Then Claude: transcribe to wiki/raw/owner/, record approvals with tools/approvals_record.py, write the S1 report, close all P1-targeted claims, run scripts/gates/p1-gate.ps1 -SaveEvidence."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -58,6 +58,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.15 hook committed (`898fd14`): warns on code without its page; clone test passes; SCHEMA §9.8 tag closed at the exit gate.
 - p1.11 committed (`5b6113c`): ci.yml and scripts/ci-local.ps1; local run 14 of 14 PASS; owner pushes or defers GitHub.
 - p1.14 done (`058ca1a`): literature protocol, reading log, batch 1 (4 primary sources).
+- p1.9 proposals committed (`82fe00a`): adr-0029, adr-0030, adr-0031 proposed; risks r01, r02, r03, r05, r06 updated; P2 revised. Owner decides.
 
 ## Done this session (s01)
 
@@ -269,7 +270,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 (owner hand checks), p1.11 (GitHub push or defer) and p1.15 (SCHEMA line at the exit gate) wait; p1.14 done `058ca1a`; next p1.9 (not started)
+- task: owner batch pending: p1.5 (S1 hand checks), p1.9 (approve adr-0029, adr-0030, adr-0031), p1.11 (GitHub push or defer); p1.15 and p1.16 wait for the exit-gate claim closure
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -306,15 +307,25 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 12 of 17 tasks done |
-| Next task | p1.9 design proposals from the experiments |
-| Your rule this session | Claude asks before any delete or kill command |
+| Phase 1 | 12 of 17 tasks done; the rest wait for you or for the end-of-phase cleanup |
+| Experiments | All four ran; experiment 1 needs your hand checks |
+| Design proposals | adr-0029, adr-0030, adr-0031 proposed; your decision |
+| Questions | Q-222 (MPL-2.0 licence), Q-116 (benchmark machine), Q-122 (power meter), GitHub push or defer |
 
-**2. Why, and what it does.** Nothing for you to run now. The four experiments are done → Claude writes proposed decisions (profile route, back/forward, test-robot path, one-window design) → you choose, and phase 2 is planned on facts.
+**2. Why, and what it does.** Experiment 1 passed every automatic check. Two things only a person can judge remain:
+keyboard focus after Alt+Tab, and copy/paste shortcuts in a tab. The script opens the throw-away app; you try those,
+resize the window, and close it with its X button. Nothing is installed or changed.
 
-**3. The script:** none for you.
+**3. The script** (PowerShell 7, from the repo folder):
 
-**4. What to tell Claude:** nothing; Claude asks when a step needs you.
+```powershell
+pwsh -NoProfile -File spikes/s1-multiwebview/run-manual.ps1
+```
+
+- It opens experiment 1: a dark tab bar and three coloured tabs. When you close the window, the script ends.
+
+**4. What to tell Claude:** what you saw, for example "Alt+Tab focus OK, resize OK, shortcuts OK", or what failed;
+then answer the decision questions Claude asks in chat.
 
 ## Pending owner approvals
 
@@ -325,4 +336,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 12 of 17 tasks done, last p1.14). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1: 12 of 17 tasks done; waiting for the owner batch). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

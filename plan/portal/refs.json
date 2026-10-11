@@ -420,7 +420,7 @@
       "kind": "task",
       "title": "P1 task: Experiment 1: several web views in one window",
       "summary": "Tauri's multi-view feature is experimental → build a throwaway app with three tab views and test resize, focus, overlap, blank pages and freezes → if it is unstable, the design changes before P2, not after.",
-      "status": "In progress",
+      "status": "Waiting for you",
       "related": [
         "phase-p1-foundation"
       ]
@@ -460,7 +460,7 @@
       "kind": "task",
       "title": "P1 task: Decide the design from the experiments",
       "summary": "Four experiment verdicts → update the risks and propose decisions on profiles, back/forward and the benchmark path → you decide, then P2 and P3 are revised to match.",
-      "status": "Not started",
+      "status": "Waiting for you",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4565,6 +4565,14 @@
         "risk-r06",
         "phase-p6-benchmark-harness"
       ]
+    },
+    {
+      "id": "82fe00a",
+      "kind": "commit",
+      "title": "Commit: Design proposals from the four experiments",
+      "summary": "Three proposed decisions, updated risk pages, and the revised phase 2 plan.",
+      "status": null,
+      "related": []
     }
   ]
 }

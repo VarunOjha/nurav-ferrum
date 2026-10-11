@@ -81,7 +81,7 @@
       "what": "A throwaway app with one window and three tab views, to test Tauri's experimental multi-view feature.",
       "why": "One window with many tab views is the core of the app's design. Finding a crash or freeze after the app is built would mean redoing that work.",
       "how": "Create the views from a background command, switch tabs by hiding and showing, and record pass or fail for resize, focus, overlap, blank pages, freezes, shortcuts and helper processes.",
-      "status": "In progress",
+      "status": "Waiting for you",
       "chain": "Tauri's multi-view feature is experimental → build a throwaway app with three tab views and test resize, focus, overlap, blank pages and freezes → if it is unstable, the design changes before P2, not after.",
       "check": "Report has a pass/fail row per check, including which helper processes belong to the app; the experiment builds.",
       "script": "scripts/verify/p1.5-spike-multiwebview.ps1"
@@ -125,7 +125,7 @@
       "what": "Updated risks and proposed decisions on profiles, back and forward, and the benchmark path.",
       "why": "Designing tabs and profiles before reading the experiment results would risk building on an idea that just failed a test.",
       "how": "Write the four results into the risk and part pages and propose new decision pages; you decide in Claude Code, then the P2 and P3 pages are revised.",
-      "status": "Not started",
+      "status": "Waiting for you",
       "chain": "Four experiment verdicts → update the risks and propose decisions on profiles, back/forward and the benchmark path → you decide, then P2 and P3 are revised to match.",
       "check": "New decision pages proposed; each tested risk cites its report; you approved them in Claude Code.",
       "script": "scripts/verify/p1.9-design-freeze.ps1"
