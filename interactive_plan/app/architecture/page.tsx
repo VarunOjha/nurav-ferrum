@@ -88,7 +88,14 @@ function BrowserDesign({ design }: { design: BrowserDesignData }) {
           <RichText text={design.summary} />
         </p>
       </div>
-      <BrowserMockup />
+      {/* The sample note sits directly under the picture (review 2026-10-10), not after the callouts. */}
+      <BrowserMockup
+        note={
+          <p className="note small" data-testid="browser-sample-note">
+            <RichText text={design.sample_note} />
+          </p>
+        }
+      />
       <div className="stack-12" {...ui("AR-9", { key: "callouts" })}>
         <ul className="bm-callouts" aria-label="The parts of the window" data-testid="browser-callouts">
           {design.callouts.map((c) => (
@@ -100,9 +107,6 @@ function BrowserDesign({ design }: { design: BrowserDesignData }) {
             </li>
           ))}
         </ul>
-        <p className="note small" data-testid="browser-sample-note">
-          <RichText text={design.sample_note} />
-        </p>
         <div className="bm-links small">
           <a href={design.canvas_url} target="_blank" rel="noopener noreferrer" data-testid="browser-canvas-link">
             Open the design canvas<span className="sr-only"> (opens in a new tab)</span>

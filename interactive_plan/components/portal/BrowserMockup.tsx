@@ -12,7 +12,8 @@
  * design, not a measurement: Ferrum is not built yet.
  *
  * The picture is drawn at the design size, 1440 x 900, and scaled to the width of its box (a
- * ResizeObserver sets --bm-scale), so it fits from a 390 px phone to a wide screen. The "Light / Dark"
+ * ResizeObserver sets --bm-scale), so it fits from a 390 px phone to a wide screen. On narrow screens a
+ * close-up of the Ferrum panel follows it, because the whole window is too small to read there. The "Light / Dark"
  * switch above it starts on the portal's own theme and then follows the owner's clicks. Both palettes
  * are copied exactly from the source's renderVals.
  */
@@ -101,6 +102,77 @@ const Close = ({ size = 14 }: { size?: number }) => (
     <path d="M6 6l12 12M18 6L6 18" />
   </Icon>
 );
+
+/** The Ferrum panel (about 352 px wide in the design). Used inside the window and, on narrow screens, alone as a close-up. */
+function FerrumPanel({ testId }: { testId: string }) {
+  return (
+    <div className="bm-panel" data-testid={testId}>
+      <div className="bm-panel-head">
+        <span className="bm-panel-title">Ferrum</span>
+        <span className="bm-panel-close">
+          <Close />
+        </span>
+      </div>
+      <div className="bm-panel-body">
+        <div className="bm-stats">
+          {STATS.map((s) => (
+            <div key={s.label} className="bm-stat">
+              <span className="bm-stat-value">{s.value}</span>
+              <span className="bm-stat-label">{s.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="bm-section">
+          <div className="bm-h3">TABS · MEMORY</div>
+          {MEM_TABS.map((m) => (
+            <div key={m.host} className="bm-mem">
+              <div className="bm-mem-row">
+                <span className="bm-mem-host">{m.host}</span>
+                <span className="bm-mono bm-muted">{m.mem}</span>
+              </div>
+              <div className="bm-track">
+                <div className={`bm-fill bm-fill-${m.bar}`} style={{ width: m.w }} />
+              </div>
+              <span className={m.sleeping ? "bm-state bm-state-sleep" : "bm-state"}>{m.state}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="bm-section bm-section-8">
+          <div className="bm-h3">BLOCKED ON THIS PAGE</div>
+          {BLOCKED.map((h) => (
+            <div key={h} className="bm-blocked">
+              <Icon size={14} stroke="var(--bm-accent)">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M5.7 5.7l12.6 12.6" />
+              </Icon>
+              <span className="bm-mono bm-blocked-host">{h}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="bm-section bm-section-8">
+          <div className="bm-h3">NETWORK LOG · THIS TAB</div>
+          <div className="bm-log">
+            {NETLOG.map((n) => (
+              <div key={n.host} className="bm-log-row">
+                <span className="bm-log-method">{n.method}</span>
+                <span className="bm-log-host">{n.host}</span>
+                <span className={n.status === "blocked" ? "bm-log-blocked" : "bm-log-ok"}>{n.status}</span>
+                <span className="bm-log-size">{n.size}</span>
+              </div>
+            ))}
+          </div>
+          <div className="bm-log-foot">
+            <span className="bm-log-note">Addresses and sizes only, never page content</span>
+            <span className="bm-log-btn">Open log folder</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /** The window itself, at the design size (1440 x 900). Static: spans, no controls. */
 export function BrowserWindow({ theme }: { theme: Theme }) {
@@ -214,93 +286,64 @@ export function BrowserWindow({ theme }: { theme: Theme }) {
           </div>
         </div>
 
-        <div className="bm-panel" data-testid="mockup-panel">
-          <div className="bm-panel-head">
-            <span className="bm-panel-title">Ferrum</span>
-            <span className="bm-panel-close">
-              <Close />
-            </span>
-          </div>
-          <div className="bm-panel-body">
-            <div className="bm-stats">
-              {STATS.map((s) => (
-                <div key={s.label} className="bm-stat">
-                  <span className="bm-stat-value">{s.value}</span>
-                  <span className="bm-stat-label">{s.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="bm-section">
-              <div className="bm-h3">TABS · MEMORY</div>
-              {MEM_TABS.map((m) => (
-                <div key={m.host} className="bm-mem">
-                  <div className="bm-mem-row">
-                    <span className="bm-mem-host">{m.host}</span>
-                    <span className="bm-mono bm-muted">{m.mem}</span>
-                  </div>
-                  <div className="bm-track">
-                    <div className={`bm-fill bm-fill-${m.bar}`} style={{ width: m.w }} />
-                  </div>
-                  <span className={m.sleeping ? "bm-state bm-state-sleep" : "bm-state"}>{m.state}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="bm-section bm-section-8">
-              <div className="bm-h3">BLOCKED ON THIS PAGE</div>
-              {BLOCKED.map((h) => (
-                <div key={h} className="bm-blocked">
-                  <Icon size={14} stroke="var(--bm-accent)">
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M5.7 5.7l12.6 12.6" />
-                  </Icon>
-                  <span className="bm-mono bm-blocked-host">{h}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="bm-section bm-section-8">
-              <div className="bm-h3">NETWORK LOG · THIS TAB</div>
-              <div className="bm-log">
-                {NETLOG.map((n) => (
-                  <div key={n.host} className="bm-log-row">
-                    <span className="bm-log-method">{n.method}</span>
-                    <span className="bm-log-host">{n.host}</span>
-                    <span className={n.status === "blocked" ? "bm-log-blocked" : "bm-log-ok"}>{n.status}</span>
-                    <span className="bm-log-size">{n.size}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="bm-log-foot">
-                <span className="bm-log-note">Addresses and sizes only, never page content</span>
-                <span className="bm-log-btn">Open log folder</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <FerrumPanel testId="mockup-panel" />
       </div>
     </div>
   );
 }
 
-/** The Light / Dark switch and the scaled picture. Starts on the portal's theme. */
-export default function BrowserMockup() {
-  const portalTheme = useEffectiveTheme();
-  const [picked, setPicked] = useState<Theme | null>(null);
-  const theme = picked ?? portalTheme;
-  const frame = useRef<HTMLDivElement>(null);
+/** What a screen reader hears for the close-up of the panel (narrow screens only). */
+export const CLOSEUP_LABEL =
+  "Close-up of the Ferrum panel from the picture above, with sample values only: memory of all tabs, CPU, sleeping tabs, " +
+  "memory per tab with its state, sites blocked on this page and this tab's network log.";
 
+/** Height of the panel in the design: the window (900) minus the tab strip (46) and the toolbar (52). */
+export const PANEL_W = 352;
+export const PANEL_H = DESIGN_H - 46 - 52;
+
+/**
+ * Scales a box drawn at `designW` pixels to the width of `ref` (--bm-scale). Until the first real
+ * measurement the box has no data-ready, and CSS keeps the drawing hidden, so it never shows at a wrong
+ * size (review 2026-10-10). A hidden box (width 0) waits for the ResizeObserver to report a width.
+ */
+function useFitScale(ref: React.RefObject<HTMLDivElement | null>, designW: number) {
   useEffect(() => {
-    const el = frame.current;
+    const el = ref.current;
     if (!el) return;
-    const fit = () => el.style.setProperty("--bm-scale", String(el.clientWidth / DESIGN_W));
+    const fit = () => {
+      const w = el.clientWidth;
+      if (w <= 0) return;
+      el.style.setProperty("--bm-scale", String(w / designW));
+      el.setAttribute("data-ready", "");
+    };
     fit();
     if (typeof ResizeObserver !== "function") return;
     const ro = new ResizeObserver(fit);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [ref, designW]);
+}
+
+/** A small tag in the picture's corner, in portal colours, so even a cut-out of the picture says it is a sample. */
+const SampleTag = () => (
+  <span className="bm-sample-tag" aria-hidden="true">
+    Sample values
+  </span>
+);
+
+/**
+ * The Light / Dark switch and the scaled picture. Starts on the portal's theme. `note` (the sample note)
+ * sits directly under the picture. On narrow screens (CSS, max-width 900 px) a close-up of the Ferrum
+ * panel follows, drawn at its design size 352 x 802 and scaled to the column, so its words stay readable.
+ */
+export default function BrowserMockup({ note }: { note?: React.ReactNode }) {
+  const portalTheme = useEffectiveTheme();
+  const [picked, setPicked] = useState<Theme | null>(null);
+  const theme = picked ?? portalTheme;
+  const frame = useRef<HTMLDivElement>(null);
+  const closeup = useRef<HTMLDivElement>(null);
+  useFitScale(frame, DESIGN_W);
+  useFitScale(closeup, PANEL_W);
 
   return (
     <div className="stack-12">
@@ -313,9 +356,20 @@ export default function BrowserMockup() {
           ))}
         </div>
       </div>
-      <div {...ui("AR-9", { key: "mockup" })}>
+      <div className="stack-12" {...ui("AR-9", { key: "mockup" })}>
         <div ref={frame} className="bm-frame" role="img" aria-label={MOCKUP_LABEL} data-testid="browser-mockup" data-mock={theme}>
           <BrowserWindow theme={theme} />
+          <SampleTag />
+        </div>
+        {note}
+        <div className="bm-closeup-wrap stack-8" data-testid="browser-closeup-wrap">
+          <p className="small strong">The Ferrum panel, close up</p>
+          <div ref={closeup} className="bm-frame bm-closeup-frame" role="img" aria-label={CLOSEUP_LABEL} data-testid="browser-closeup" data-mock={theme}>
+            <div className="bm-closeup" style={paletteVars(PALETTES[theme]) as React.CSSProperties}>
+              <FerrumPanel testId="mockup-panel-closeup" />
+            </div>
+            <SampleTag />
+          </div>
         </div>
       </div>
     </div>

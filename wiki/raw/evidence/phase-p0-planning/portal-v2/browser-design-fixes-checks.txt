@@ -1,0 +1,156 @@
+# Browser design review fixes (p0.17 step browser-design-fixes, session s01, 2026-10-10)
+# A review of the browser design step (adr-0028, option A in the Architecture view) listed 10 findings; all were fixed:
+# title-bar clash (new open question Q-125, lines in adr-0028 and comp-app-shell), plain words and the full related list
+# in the adr-0028 portal record, no invented owner feeling, Claude's proposals moved into the elaboration block with
+# UNVERIFIED tags, a readable close-up of the Ferrum panel on narrow screens, a "Sample values" tag and the sample note
+# directly under the picture, the drawing hidden until its width is measured, 1280 px screenshots, and an evidence note
+# that the frozen design copy needs the canvas runtime to draw.
+# npm run verify and the screenshots ran in a scratch git worktree of HEAD 038cb03 with this step's changed files copied
+# in (byte-identical, checked with cmp; a one-line placeholder stood in for this evidence file), core.longpaths given to
+# git through environment variables only, E2E on port 3418 and screenshots on 3423 (PLAN_PORT=3423), so the owner's
+# running portal (port 3417) was not rebuilt or stopped. The worktree was deleted and both servers stopped afterwards.
+# Every number, site and log line in the picture is a sample value; nothing is measured.
+
+## npm run verify (scratch worktree), first run
+Only failure: wiki lint 16 RAW-IMMUTABLE errors for the sanctioned masking commit 5d33859, because that run's git calls
+lacked core.longpaths (the sanction check could not read the long-path blobs). With core.longpaths set through the
+environment, lint:wiki gave 0 errors; it also showed 3 new UNV-MIRROR warnings (frontmatter unverified lists), fixed.
+
+## npm run verify (scratch worktree), final run, summary lines
+> interactive_plan@0.1.0 verify
+> npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e
+> interactive_plan@0.1.0 typecheck
+> next typegen && tsc --noEmit
+> interactive_plan@0.1.0 lint
+> eslint .
+> interactive_plan@0.1.0 test
+> vitest run
+ Test Files  26 passed (26)
+      Tests  786 passed | 1 skipped (787)
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+wiki lint: wiki wiki, status STATUS.md, approvals plan/approvals.json (absent), git ok, today 2026-10-10
+lint: 0 errors, 35 warnings, 2 info (pages: 203)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+> interactive_plan@0.1.0 build
+> next build
+> interactive_plan@0.1.0 test:e2e
+> playwright test
+E2E guard: 22 real files unchanged (approvals.json absent)
+  107 passed (4.1m)
+rc=0
+
+## Screenshot measurements (Playwright, server on 3423), portal theme x window width
+[
+ {
+  "scheme": "light",
+  "w": 1440,
+  "picture": [
+   1158,
+   724
+  ],
+  "scale": "0.803",
+  "noteGap": 12,
+  "closeupVisible": false,
+  "closeup": null,
+  "closeupScale": null,
+  "sidewaysOverflow": 0
+ },
+ {
+  "scheme": "light",
+  "w": 1280,
+  "picture": [
+   1158,
+   724
+  ],
+  "scale": "0.803",
+  "noteGap": 12,
+  "closeupVisible": false,
+  "closeup": null,
+  "closeupScale": null,
+  "sidewaysOverflow": 0
+ },
+ {
+  "scheme": "light",
+  "w": 390,
+  "picture": [
+   316,
+   198
+  ],
+  "scale": "0.218",
+  "noteGap": 12,
+  "closeupVisible": true,
+  "closeup": [
+   316,
+   720
+  ],
+  "closeupScale": "0.892",
+  "sidewaysOverflow": 0
+ },
+ {
+  "scheme": "dark",
+  "w": 1440,
+  "picture": [
+   1158,
+   724
+  ],
+  "scale": "0.803",
+  "noteGap": 12,
+  "closeupVisible": false,
+  "closeup": null,
+  "closeupScale": null,
+  "sidewaysOverflow": 0
+ },
+ {
+  "scheme": "dark",
+  "w": 1280,
+  "picture": [
+   1158,
+   724
+  ],
+  "scale": "0.803",
+  "noteGap": 12,
+  "closeupVisible": false,
+  "closeup": null,
+  "closeupScale": null,
+  "sidewaysOverflow": 0
+ },
+ {
+  "scheme": "dark",
+  "w": 390,
+  "picture": [
+   316,
+   198
+  ],
+  "scale": "0.218",
+  "noteGap": 12,
+  "closeupVisible": true,
+  "closeup": [
+   316,
+   720
+  ],
+  "closeupScale": "0.892",
+  "sidewaysOverflow": 0
+ },
+ {
+  "noScriptFirstPaint": {
+   "windowVisibility": "hidden"
+  }
+ }
+]
+
+## Screenshot review (Claude read them)
+Read: block-light-390-mock-light, block-dark-390-mock-light, block-dark-1280-mock-dark, block-light-390-before-scale.
+At 390 px the whole-window picture stays an overview (scale 0.218); the sample note follows it 12 px below; the close-up
+of the Ferrum panel (scale 0.892) shows stat cards, memory bars with states, blocked sites, network log rows, the log note
+and the "Open log folder" button legibly, in both palettes. At 1280 and 1440 px the picture is at scale 0.803 (the page
+is capped at 1280 px, so both widths draw the same), the close-up is not shown, and the note is directly under the
+picture. A "Sample values" tag sits in the bottom-left corner of both pictures in portal colours. Before scripts run the
+drawing is hidden (visibility hidden) inside its reserved frame: no wrong-size flash. No sideways scrolling anywhere.
+Files (scratchpad shots-browser-design/): arch-app-{light,dark}-{1440,1280,390}.png,
+block-{light,dark}-{1440,1280,390}-mock-{light,dark}.png, layer-diagram-light-1440.png, block-light-390-before-scale.png.
+
+## Repo checks (real repo, after the fixes)
+203 files checked, 0 errors, 0 warnings
+test-portal-sync-check: 29 passed, 0 failed

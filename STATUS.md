@@ -240,7 +240,11 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "browser-design" (owner picked option A; adr-0028; the picture is in the Architecture view) verified and committed 2026-10-10 (`d0ac1f3`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 (step "browser-design-fixes": review fixes for the browser design in the Architecture view)
+- intent: fix the 10 review findings: title-bar clash (new open question + ADR/app-shell lines), plain wording and full related list in the adr-0028 portal record, owner-feeling wording, move Claude's proposals into the elaboration block, readable panel on phones, sample note next to the picture, no wrong-scale flash, 1280 px screenshots, evidence note on the frozen design copy
+- planned paths: wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md, wiki/architecture/components/comp-app-shell.md, wiki/overview/ov-open-questions.md, plan/portal/decisions.json, plan/portal/architecture.json, plan/portal/questions.json, plan/portal/overview.json, plan/portal/refs.json, interactive_plan/components/portal/BrowserMockup.tsx, interactive_plan/app/architecture/page.tsx, interactive_plan/app/globals.css, interactive_plan tests, wiki/raw/evidence/phase-p0-planning/portal-v2/browser-design-fixes-checks.txt (new), wiki/index.md, wiki/raw/MANIFEST.sha256
+- rollback: git checkout -- <planned paths>; delete the new evidence file
+- state: started 2026-10-10
 
 ## Blockers
 

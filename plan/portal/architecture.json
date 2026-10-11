@@ -222,11 +222,12 @@
       "related": [
         "risk-r02",
         "risk-r19",
-        "adr-0028"
+        "adr-0028",
+        "Q-125"
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:f7c2774a4c47294c042781f92758a71d0afd99e61d0f2c2a4f3195643313ab95"
+        "content_hash": "sha256:4c74f0902fecb316bf23d1870d21ef444ea9cbd9e9751690d8ec4917310b5a9e"
       }
     },
     {

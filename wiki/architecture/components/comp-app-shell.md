@@ -67,6 +67,8 @@ connects:
     kind: os-api
     crosses_trust_boundary: true
 unverified:
+  - claim: "A strict content security policy for the shell is workable, so fonts and assets can be bundled locally"
+    verify_in: phase-p2-minimal-container
   - claim: "Tauri unstable multi-webview focus, resize and z-order issues are workable on Windows"
     verify_in: phase-p1-foundation
 ---
@@ -88,7 +90,14 @@ sleeping tabs, blocked sites and this tab's network log (metadata only, adr-0008
 warm grey, one rust-orange accent, IBM Plex Sans and Mono, light and dark. No AI assistant. Frozen design:
 [option-a.dc.html](../../raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html). All numbers on it are samples;
 nothing is measured. The panel's sections fill in as later phases land (P4 blocking, P5 measurement and network log,
-P7 sleeping tabs). The fonts are bundled with the app, since the shell loads no remote resources.
+P7 sleeping tabs). Proposed (not yet approved): the fonts are bundled with the app, since the shell is meant to load
+no remote resources (strict policy, UNVERIFIED[phase-p2-minimal-container]).
+
+**Title bar.** Option A as drawn puts the tabs in the window's top bar, which needs a custom title bar; the design
+notes below advise against one at first (resize problem, Tauri issue #12207, UNVERIFIED[phase-p1-foundation]). Until
+P1 has checked it, the early shell may show the normal Windows title bar above the tab strip. Open question
+[Q-125](../../overview/ov-open-questions.md#q-125-tabs-in-the-windows-top-bar-custom-title-bar-or-the-normal-windows-title-bar-first)
+asks the owner which way to go.
 
 ## Design notes
 

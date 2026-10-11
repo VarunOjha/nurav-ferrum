@@ -661,7 +661,7 @@
       "title": "Browser look: tabs on top, Ferrum panel on the right",
       "summary": "The browser has tabs across the top, an address bar with a lock and a shield button, the website in the middle, and a Ferrum panel on the right with memory, CPU, sleeping tabs, blocked sites and this tab's network log. No AI assistant.",
       "why": "Your choice (option A of three): everything Ferrum knows about your tabs is visible at a glance.",
-      "catch": "The panel takes about 352 pixels of width while open, and its parts stay empty until P4, P5 and P7 build what feeds them. Numbers on the design are samples.",
+      "catch": "The panel takes about 352 pixels. Its sections stay empty until later stages build blocking, memory measuring, the network log and tab sleep. Tabs in the top bar need a custom title bar: [open question](ref:Q-125). Values are samples.",
       "status": "Accepted",
       "decided_by": "you",
       "date": "2026-10-10",
@@ -673,11 +673,17 @@
         "adr-0015",
         "adr-0026",
         "comp-app-shell",
+        "comp-tab-content",
+        "comp-resource-manager",
+        "comp-telemetry",
+        "comp-network-logger",
+        "comp-security-engine",
+        "Q-125",
         "phase-p0-planning"
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md",
-        "content_hash": "sha256:d6d618a0348c6b2261071edaba22665e365a5e675d6c17ddc945bc8c77240e93"
+        "content_hash": "sha256:b13f18fc6fbe73755f87b02d5713194119df804b74174b280e8b33f5a53a6a68"
       }
     }
   ]

@@ -4266,7 +4266,25 @@
         "adr-0015",
         "adr-0026",
         "comp-app-shell",
+        "comp-tab-content",
+        "comp-resource-manager",
+        "comp-telemetry",
+        "comp-network-logger",
+        "comp-security-engine",
+        "Q-125",
         "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "Q-125",
+      "kind": "question",
+      "title": "Tabs in the top bar: normal title bar first?",
+      "summary": "The look you chose puts the tabs in the window's top bar. Should the first version keep the normal Windows title bar above the tabs until that is checked? Tabs in the top bar need a custom title bar, which has a known resize problem in Tauri; not checked yet (checked in P1). Claude suggests the normal title bar first. Needed before tabs are built (P3).",
+      "status": "Open",
+      "related": [
+        "adr-0028",
+        "comp-app-shell",
+        "phase-p3-tabs-sessions"
       ]
     }
   ]

@@ -5,9 +5,21 @@
   "summary": "Every question Claude has asked you, open ones first, ordered by the phase they hold up. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:4b6a96d4deed7115a0b311723bcecbb548c905451bd502c1e9833784575def1b"
+    "content_hash": "sha256:d34f7652fd1236424eac5acb41bfdd65d59020f56cd4c5689e2d1eaf9a94d991"
   },
   "items": [
+    {
+      "id": "Q-125",
+      "asked": "2026-10-10",
+      "question": "The look you chose puts the tabs in the window's top bar. Should the first version keep the normal Windows title bar above the tabs until that is checked?",
+      "why_it_matters": "Tabs in the top bar need a custom title bar, which has a known resize problem in Tauri; not checked yet (checked in P1). Claude suggests the normal title bar first. Needed before tabs are built (P3).",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [
+        "phase-p3-tabs-sessions"
+      ]
+    },
     {
       "id": "Q-221",
       "asked": "2026-10-09",

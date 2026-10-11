@@ -61,7 +61,7 @@ npm run test:coverage   # unit tests with coverage thresholds
 | `security.test.ts`, `config.test.ts` | Loopback `Host` allowlist and GET/HEAD only on every route, security headers, every server script binds 127.0.0.1 on `PLAN_PORT`, configuration from environment variables |
 | `mask-labels.test.ts` | Machine addresses printed by tests are always masked |
 | `ui-refs.test.ts` | Ref mode's id registry: ids unique and well formed; every id used in the portal code is in the registry and every registry id is used; no id sits on an element that cannot hold the label; popup ids only in their popup; label, copy text and Layout map format; repeated items take their number and word from the registry (every stage and layer row in the plan data is registered) and never from a list position |
-| `browser-mockup.test.tsx` | The picture of the chosen browser design ([adr-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md)): both palettes copied from the design; the Light / Dark switch starts on the portal's theme and changes only the picture; the whole picture is one labelled image whose summary says the values are samples, with nothing inside it focusable and every icon hidden from screen readers |
+| `browser-mockup.test.tsx` | The picture of the chosen browser design ([adr-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md)): both palettes copied from the design; the Light / Dark switch starts on the portal's theme and changes only the picture; the whole picture is one labelled image whose summary says the values are samples, with nothing inside it focusable and every icon hidden from screen readers; the close-up of the Ferrum panel is a second labelled image with the same palettes; both carry a "Sample values" tag and the note follows the window directly; the drawing stays hidden until its width is measured, then gets the right scale |
 | `portal-task-table.test.ts` | The phase popup's tasks table: the eight column headers in the owner's order ([request](../raw/owner/2026-10-10-s01-task-table-columns.md)); the thought chain splits into one step per arrow without breaking a `[words](ref:id)` link; the phase schema requires `what`, `why` and `how` and rejects empty or over-long text; a task chain must have exactly three steps, and every task in the real phase files does; the hidden words "then" and "so" stand in for the arrows |
 | the other files | The command-line wiki check ([ip-wiki-lint](ip-wiki-lint.md)): loader, frontmatter, links, rules, git checks, Python parity, SCHEMA sync |
 
@@ -104,6 +104,10 @@ bar wrapping to two lines in normal mode once the button was added.
 The browser design review (2026-10-10) read the Architecture view's Application group at 1440 and 390 pixels in both
 portal themes, each with the picture switched to the other palette as well, and compared it with the design file
 ([browser-design-checks.txt](../raw/evidence/phase-p0-planning/portal-v2/browser-design-checks.txt)).
+Its follow-up review the same day found the picture unreadable on a phone, the sample note far below it and a moment
+where the drawing showed at a wrong size; the close-up of the panel, the tag, the moved note and the hidden-until-measured
+drawing fixed them, and the browser tests check them at 1280 and 390 pixels
+([browser-design-fixes-checks.txt](../raw/evidence/phase-p0-planning/portal-v2/browser-design-fixes-checks.txt)).
 A second review the same day found that those fixes made Ref mode change the layout it names (extra space above every
 block, a two-row top bar), that the bar hid the end of every page at phone width, and smaller gaps (log labels lost
 under a filter, list-position numbers, item labels without a name, a Layout map without jump links, an old "Copied"

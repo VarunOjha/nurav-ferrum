@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:c0e1e25daa054456d81399d4f4eca13042dde49a8b3c3c94cf4d9c7de0fad12a"
+    "content_hash": "sha256:72b51299f30eed87bd2cb87c39beffa8d0276d31759b7ac36ad8446381b0563e"
   },
   "entries": [
     {
@@ -1075,6 +1075,30 @@
         "## [2026-10-10] code | p0.17 browser design: \"How the browser will look\" in the Architecture view",
         "## [2026-10-10] lint | p0.17 browser design: npm run verify green, screenshots read in both themes at 1440 and 390 px",
         "## [2026-10-10] plan | p0.17 step \"browser-design\" committed: the chosen browser look is in the Architecture view"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-10-browser-design-fixes",
+      "date": "2026-10-10",
+      "title": "Browser picture fixed after a review; one new question for you",
+      "done": "A review of the browser picture found 10 problems, and all are fixed. On a phone, a close-up of the Ferrum panel now follows the small picture, so its words can be read. The note that every value is an example sits right under the picture, and the picture carries a \"Sample values\" tag. The picture no longer shows at a wrong size while the page loads. The decision text no longer claims you liked Comet's layout, and Claude's own building ideas are marked as proposals.",
+      "next": "Answer the new [question about the window's top bar](ref:Q-125) when you get to it; it is needed before tabs are built. Restart the portal to see the fixes, then go on with your walkthrough using Ref.",
+      "decisions": [
+        {
+          "what": "On phones, a close-up of the Ferrum panel follows the whole-window picture",
+          "by": "claude"
+        },
+        {
+          "what": "New open question: keep the normal Windows title bar above the tabs at first, until a custom one is checked (Claude's suggestion)",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] code | p0.17 browser design review fixes: title-bar question Q-125, plain decision text, readable panel on phones, sample note under the picture",
+        "## [2026-10-10] lint | p0.17 browser design review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read"
       ],
       "phase": "phase-p0-planning"
     }

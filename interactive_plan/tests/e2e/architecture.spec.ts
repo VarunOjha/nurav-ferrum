@@ -34,7 +34,7 @@ test("the application group shows the layered diagram and the side panel; a box 
   expect(
     await page
       .locator("main svg, main canvas")
-      .evaluateAll((els) => els.filter((e) => !e.closest("dialog") && !e.closest("[data-testid=browser-mockup]")).length),
+      .evaluateAll((els) => els.filter((e) => !e.closest("dialog") && !e.closest("[data-testid=browser-mockup]") && !e.closest("[data-testid=browser-closeup]")).length),
   ).toBe(0);
   expect(await sidewaysOverflow(page)).toBeLessThanOrEqual(0);
   await expect(page.locator('[data-group="application"] .connects')).toHaveCount(0);
@@ -150,6 +150,13 @@ test.describe("browser design", () => {
     // Callouts, the sample note and the two links.
     await expect(page.getByTestId("browser-callouts").locator("li")).toHaveCount(d.callouts.length);
     await expect(page.getByTestId("browser-sample-note")).toBeVisible();
+    // Review 2026-10-10: the note sits directly under the picture, the picture carries a "Sample values"
+    // tag, and at this width the panel close-up is not shown.
+    const note = (await page.getByTestId("browser-sample-note").boundingBox())!;
+    expect(note.y - (box.y + box.height)).toBeLessThan(40);
+    await expect(pic.locator(".bm-sample-tag")).toBeVisible();
+    await expect(page.getByTestId("browser-closeup")).toBeHidden();
+    await expect(pic).toHaveAttribute("data-ready", "");
     const link = page.getByTestId("browser-canvas-link");
     await expect(link).toHaveAttribute("href", d.canvas_url);
     await expect(link).toHaveAttribute("target", "_blank");
@@ -197,6 +204,21 @@ test.describe("browser design", () => {
     const win = (await pic.locator(".bm-window").boundingBox())!;
     expect(win.width).toBeLessThanOrEqual(box.width + 1);
     expect(await sidewaysOverflow(page)).toBeLessThanOrEqual(0);
+    // Review 2026-10-10: the note sits right under the picture, then a readable close-up of the panel.
+    const note = (await page.getByTestId("browser-sample-note").boundingBox())!;
+    expect(note.y - (box.y + box.height)).toBeLessThan(40);
+    const close = page.getByRole("img", { name: /Close-up of the Ferrum panel/ });
+    await expect(close).toBeVisible();
+    const cb = (await close.boundingBox())!;
+    expect(cb.x + cb.width).toBeLessThanOrEqual(390);
+    expect(Math.abs(cb.width / cb.height - 352 / 802)).toBeLessThan(0.02);
+    // Scaled at least 0.8: the 11.5 px log lines show at about 9 px or more, the 13 px labels at 10 px or more.
+    const row = (await close.locator(".bm-log-row").first().boundingBox())!;
+    const panel = (await close.locator(".bm-closeup").boundingBox())!;
+    expect(panel.width / 352).toBeGreaterThanOrEqual(0.8);
+    expect(row.width).toBeGreaterThan(0);
+    await expect(close.locator(".bm-sample-tag")).toBeVisible();
+    await expectAccessible(page);
   });
 
   test("Ref mode names the block and its three parts", async ({ page }) => {

@@ -2072,28 +2072,76 @@ html[data-ref-mode] dialog.modal[open]:not(.layout-map) {
   border-radius: 10px;
   border: 1px solid var(--border);
 }
-.bm-window {
+.bm-window,
+.bm-closeup {
   position: absolute;
   top: 0;
   left: 0;
-  width: 1440px;
-  height: 900px;
-  transform: scale(var(--bm-scale, 0.6));
+  transform: scale(var(--bm-scale, 1));
   transform-origin: 0 0;
   display: flex;
-  flex-direction: column;
   overflow: hidden;
   font-family: var(--font-sans);
   font-size: 14px;
   line-height: normal;
-  background: var(--bm-strip);
   color: var(--bm-text);
   pointer-events: none;
   user-select: none;
 }
+.bm-window {
+  width: 1440px;
+  height: 900px;
+  flex-direction: column;
+  background: var(--bm-strip);
+}
+/* Until the frame has measured its width (data-ready, set by BrowserMockup), the drawing stays hidden,
+   so it never flashes at a wrong size (review 2026-10-10). */
+.bm-frame:not([data-ready]) > .bm-window,
+.bm-frame:not([data-ready]) > .bm-closeup {
+  visibility: hidden;
+}
 .bm-window,
-.bm-window * {
+.bm-window *,
+.bm-closeup,
+.bm-closeup * {
   box-sizing: border-box;
+}
+/* "Sample values" tag in the frame's bottom-left corner, outside the scaled drawing, in portal colours. */
+.bm-sample-tag {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  pointer-events: none;
+}
+/* Close-up of the Ferrum panel (design size 352 x 802), only on narrow screens, where the whole window is
+   too small to read (review 2026-10-10). Scaled to the column like the window. */
+.bm-closeup-wrap {
+  display: none;
+}
+@media (max-width: 900px) {
+  .bm-closeup-wrap {
+    display: flex;
+  }
+}
+.bm-closeup-frame {
+  aspect-ratio: 352 / 802;
+  max-width: 480px;
+}
+.bm-closeup {
+  width: 352px;
+  height: 802px;
+}
+.bm-closeup .bm-panel {
+  flex: 1;
+  border-left: none;
 }
 .bm-window p {
   margin: 0;

@@ -7,8 +7,8 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
-import BrowserMockup, { BrowserWindow, DESIGN_H, DESIGN_W, MOCKUP_LABEL, PALETTES, paletteVars } from "@/components/portal/BrowserMockup";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import BrowserMockup, { BrowserWindow, CLOSEUP_LABEL, DESIGN_H, DESIGN_W, MOCKUP_LABEL, PALETTES, PANEL_H, PANEL_W, paletteVars } from "@/components/portal/BrowserMockup";
 import { ArchitectureFile } from "@/lib/portal/schemas.gen";
 import { uiLabel } from "@/lib/portal/uiRefs";
 import { REPO_ROOT } from "./helpers";
@@ -91,6 +91,47 @@ describe("BrowserMockup", () => {
     expect(within(panel).getByText("Open log folder")).toBeTruthy();
     // No AI assistant: the owner chose Ferrum's own panel.
     expect(document.body.textContent).not.toMatch(/\bAI\b|assistant|Ask anything/i);
+  });
+
+  // Review fixes of 2026-10-10: readable panel on phones, sample tag and note next to the picture,
+  // no drawing at a wrong size before the first measurement.
+  it("has a close-up of the panel: one image, sample values only, nothing to focus, same colours", () => {
+    render(<BrowserMockup />);
+    expect([PANEL_W, PANEL_H]).toEqual([352, 802]);
+    const close = screen.getByTestId("browser-closeup");
+    expect(close.getAttribute("role")).toBe("img");
+    expect(close.getAttribute("aria-label")).toBe(CLOSEUP_LABEL);
+    expect(CLOSEUP_LABEL).toMatch(/sample values only/);
+    expect(close.querySelectorAll("button, a, input, select, textarea, [tabindex], h1, h2, h3")).toHaveLength(0);
+    expect(within(close).getByTestId("mockup-panel-closeup").querySelectorAll(".bm-log-row")).toHaveLength(5);
+    const inner = close.querySelector(".bm-closeup") as HTMLElement;
+    expect(inner.style.getPropertyValue("--bm-accent")).toBe(PALETTES.light.accent);
+    fireEvent.click(switchBtn("dark"));
+    expect(inner.style.getPropertyValue("--bm-accent")).toBe(PALETTES.dark.accent);
+    expect(close.getAttribute("data-mock")).toBe("dark");
+  });
+
+  it("puts a Sample values tag on both pictures and the note directly under the window", () => {
+    render(<BrowserMockup note={<p data-testid="note">Examples only</p>} />);
+    expect(mockup().querySelector(".bm-sample-tag")?.textContent).toBe("Sample values");
+    expect(screen.getByTestId("browser-closeup").querySelector(".bm-sample-tag")?.textContent).toBe("Sample values");
+    expect(mockup().nextElementSibling).toBe(screen.getByTestId("note"));
+  });
+
+  it("keeps the drawing hidden until it has measured its width, then sets the scale", () => {
+    render(<BrowserMockup />);
+    // jsdom has no layout (width 0): no scale yet, so CSS keeps the drawing hidden.
+    expect(mockup().hasAttribute("data-ready")).toBe(false);
+    cleanup();
+    const spy = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(720);
+    try {
+      render(<BrowserMockup />);
+      expect(mockup().hasAttribute("data-ready")).toBe(true);
+      expect(mockup().style.getPropertyValue("--bm-scale")).toBe("0.5");
+      expect(screen.getByTestId("browser-closeup").style.getPropertyValue("--bm-scale")).toBe(String(720 / 352));
+    } finally {
+      spy.mockRestore();
+    }
   });
 
   it("marks the switch and the picture for Ref mode", () => {

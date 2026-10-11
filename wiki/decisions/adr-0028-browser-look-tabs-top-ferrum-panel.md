@@ -9,7 +9,7 @@ sources:
   - raw/owner/2026-10-10-s01-browser-ui-design-answers-1.md
   - raw/owner/2026-10-10-s01-browser-ui-choice.md
   - raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html
-related: [adr-0006, adr-0007, adr-0008, adr-0015, adr-0026, comp-app-shell, comp-tab-content, comp-resource-manager, comp-telemetry, comp-network-logger, comp-security-engine, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p7-lifecycle]
+related: [adr-0006, adr-0007, adr-0008, adr-0015, adr-0026, comp-app-shell, comp-tab-content, comp-resource-manager, comp-telemetry, comp-network-logger, comp-security-engine, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p7-lifecycle, phase-p1-foundation, ov-open-questions]
 approvable: true
 date: 2026-10-10
 decided_by: owner
@@ -20,6 +20,13 @@ options:
   - "C. Tabs on top, one toolbar button next to the address bar that opens a pop-over card"
 phase: phase-p0-planning
 tags: [ui, shell, design, browser-controls]
+unverified:
+  - claim: "Per-tab memory and CPU can be read for the Ferrum panel"
+    verify_in: phase-p5-telemetry
+  - claim: "A custom title bar with tabs in it resizes reliably under Tauri on Windows 11 (issue #12207)"
+    verify_in: phase-p1-foundation
+  - claim: "A strict content security policy for the shell is workable, so the IBM Plex fonts can be bundled locally"
+    verify_in: phase-p2-minimal-container
 ---
 
 # ADR-0028: Browser look: tabs on top, Ferrum panel on the right
@@ -43,7 +50,7 @@ application code exists (P0). Every number, site and log line on the canvas is a
 
 | Option | Good | Bad |
 |---|---|---|
-| A. **Ferrum panel docked on the right** | Everything Ferrum knows about your tabs is visible at a glance; closest to the Comet layout the owner liked | Takes about 352 px of width from the website while it is open |
+| A. **Ferrum panel docked on the right** | Everything Ferrum knows about your tabs is visible at a glance; closest to Comet's side-panel layout, which the owner named as inspiration | Takes about 352 px of width from the website while it is open |
 | B. Slim status bar along the bottom, opens a drawer | Website keeps almost the full window | Details are one click away; a drawer covers part of the page |
 | C. One toolbar button with a pop-over card | Least screen space; the familiar extension-button pattern | Information is hidden until clicked; little room for the network log |
 
@@ -80,6 +87,15 @@ Option A, as drawn, has these parts, top to bottom and left to right:
   IBM Plex Mono for numbers and log lines. Light and dark mode.
 - **No AI assistant.** The panel is Ferrum's own information, not a chat.
 
+Claude's proposals for building it (also binding only once the owner approves this ADR):
+
+- **Empty sections until their data exists.** Until the phase that feeds a panel section lands (see Consequences),
+  that section stays empty or hidden.
+- **Fonts bundled with the app.** The IBM Plex fonts would be bundled locally rather than loaded from the web,
+  because the shell is meant to load no remote resources under a strict content security policy
+  ([adr-0006](adr-0006-shell-ui-vanilla-ts-vite.md)); whether a strict policy is workable is
+  UNVERIFIED[phase-p2-minimal-container]. The design file loads the fonts from Google Fonts only because it is a mockup.
+
 ## Consequences
 
 ### Positive
@@ -98,20 +114,26 @@ Option A, as drawn, has these parts, top to bottom and left to right:
   blocklist (P4, [comp-security-engine](../architecture/components/comp-security-engine.md)); the network log from
   P5 ([comp-network-logger](../architecture/components/comp-network-logger.md)); sleeping tabs and "goes to sleep
   in N min" from tab lifecycle (P7, [comp-resource-manager](../architecture/components/comp-resource-manager.md)).
-  Until each phase lands, its section stays empty or hidden. Whether per-tab memory and CPU can be read at all is
-  UNVERIFIED[phase-p5-telemetry].
+  Whether per-tab memory and CPU can be read at all is UNVERIFIED[phase-p5-telemetry].
+- **Tabs in the title bar need a custom title bar.** Option A as drawn puts the tabs in the window's top bar, next
+  to the Windows 11 window buttons. That needs a custom title bar, which the shell's design notes
+  ([comp-app-shell](../architecture/components/comp-app-shell.md)) advise against at first, because of a known
+  resize problem (Tauri issue #12207, UNVERIFIED[phase-p1-foundation]). Until P1 has checked it, the early shell
+  may show the normal Windows title bar above the tab strip. Open question
+  [Q-125](../overview/ov-open-questions.md#q-125-tabs-in-the-windows-top-bar-custom-title-bar-or-the-normal-windows-title-bar-first)
+  asks the owner which way to go.
 - **Network log stays metadata only** ([adr-0008](adr-0008-network-logging-metadata-jsonl.md)): addresses, method,
   status and size, never page content. Whether full addresses are shown or partly hidden follows the open question
   on address redaction in that decision (Q-114).
 - **Numbers on the design are samples.** No Ferrum code exists yet; nothing on the canvas is measured.
-- The shell UI stays vanilla TypeScript ([adr-0006](adr-0006-shell-ui-vanilla-ts-vite.md)); the IBM Plex fonts
-  must be bundled locally, because the shell loads no remote resources (strict CSP). The design file loads them
-  from Google Fonts only because it is a mockup.
+- The shell UI stays vanilla TypeScript ([adr-0006](adr-0006-shell-ui-vanilla-ts-vite.md)).
 
 ## Verification / evidence
 
 - Owner's words: the three raw files listed in `sources`.
 - Frozen design: [raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html](../raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html)
-  (byte-for-byte copy of the canvas source of option A, 2026-10-10; mask check: no private values).
+  (byte-for-byte copy of the canvas source of option A, 2026-10-10; mask check: no private values). It is the
+  source text only: it needs the design canvas's runtime script (`support.js`, not frozen) to draw, so opened on its
+  own it shows nothing, but its palettes and content can be read in the file.
 - Design canvas (all three options, light and dark): <https://claude.ai/artifact/YTbBgjDsSJyuNPk8hk3wra>.
 - When the shell is built (P2 onward), its screenshots are compared with this design by the owner at each phase review.

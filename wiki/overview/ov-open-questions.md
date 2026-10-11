@@ -16,11 +16,13 @@ sources:
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
   - raw/owner/2026-10-10-s01-q008-and-pause.md
-related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability]
+related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability, adr-0028]
 approvable: false
 audience: owner
 tags: [questions, owner]
 unverified:
+  - claim: "A custom title bar resizes reliably under Tauri on Windows 11 (issue #12207), Q-125"
+    verify_in: phase-p1-foundation
   - claim: "@vitest/coverage-v8 exact version matching the pinned vitest is available from the registry at install time"
     verify_in: phase-p0-planning
 ---
@@ -517,6 +519,29 @@ driver is installed until the owner approves.
 - answer: none yet
 
 Raised in adr-0017. It is not needed until results exist, and it gates P8 entry.
+
+## Q-125 Tabs in the window's top bar: custom title bar, or the normal Windows title bar first?
+
+- asked: 2026-10-10
+- blocking: [phase-p3-tabs-sessions]
+- status: open
+- answer: none yet
+
+Raised in [adr-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md) (review of 2026-10-10). The
+browser look the owner chose (option A) puts the tabs in the window's top bar, next to the Windows 11 minimise,
+maximise and close buttons. That needs a **custom title bar**. The shell's design notes
+([comp-app-shell](../architecture/components/comp-app-shell.md), "Design notes") advise against a custom title bar
+at first, because of a known resize problem with one in Tauri (issue #12207; whether it is workable is
+UNVERIFIED[phase-p1-foundation]).
+
+Options:
+
+- (a) **Normal Windows title bar first** (recommended default): the early shell shows the standard Windows title
+  bar, with the tab strip just under it. Tabs move into the top bar once P1 has shown that a custom title bar
+  resizes reliably.
+- (b) **Custom title bar from the start**, as drawn, accepting the resize risk until it is checked.
+
+P2 has a single tab, so the answer is first needed when tabs are built; the question gates P3 entry.
 
 ## Q-201 Practical-significance thresholds and the J weight vector
 
