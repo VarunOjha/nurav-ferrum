@@ -577,7 +577,7 @@
       "summary": "Phases start only when approvals match the current pages. A fingerprint bug, a corrupt file, or an approval you never gave would start or block work wrongly.",
       "likelihood": 2,
       "impact": 4,
-      "mitigation": "Claude records an approval only after saving your words, through one tested script that stores page fingerprints and writes safely; all logged and in git. Line endings checked on 11 Oct: a fresh copy of the project keeps every wiki file's fingerprint unchanged.",
+      "mitigation": "Claude records approvals only after saving your words, via one tested script that stores page fingerprints; all logged in git. Checked 11 Oct: a fresh copy keeps wiki line endings, so fingerprints hold.",
       "phase": "phase-p0-planning",
       "status": "Open",
       "category": "Process & approvals",
