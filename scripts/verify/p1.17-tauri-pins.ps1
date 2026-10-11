@@ -6,7 +6,8 @@
 .DESCRIPTION
   What it checks : experiment 1's package file (spikes/s1-multiwebview/package.json) pins Tauri's
                    command-line tool, Vite and TypeScript to exact versions (no "^" or "~"), and the Tauri
-                   tool's version is saved in the toolchain record (toolchain.txt).
+                   tool's version is saved in a toolchain record (toolchain.txt or a companion such as
+                   toolchain-tauri.txt).
   Why            : generated templates change under us → exact pins mean the experiments can be rerun
                    identically.
   What it changes: nothing. It only reads files.
@@ -43,9 +44,13 @@ Invoke-Step 'Tauri tool, Vite and TypeScript are pinned exactly' {
 }
 
 Invoke-Step "Tauri tool's version is saved in the toolchain record" {
-    $t = Read-RepoText 'wiki/raw/evidence/phase-p1-foundation/toolchain.txt'
-    if ($t -notmatch '(?i)tauri-cli\s+\d') { Stop-Fail 'toolchain.txt has no "tauri-cli <version>" line (output of npx tauri --version).' }
-    'tauri-cli version recorded'
+    # Raw evidence is never edited (SCHEMA §3.1), so the version may sit in a later companion file
+    # (toolchain-tauri.txt, written in p1.17) instead of the p1.1 file toolchain.txt.
+    $folder = Get-RepoPath 'wiki/raw/evidence/phase-p1-foundation'
+    $files = @(Get-ChildItem -LiteralPath $folder -Filter 'toolchain*.txt' -ErrorAction SilentlyContinue)
+    $hit = $files | Where-Object { (Get-Content -LiteralPath $_.FullName -Raw) -match '(?i)tauri-cli\s+\d' } | Select-Object -First 1
+    if (-not $hit) { Stop-Fail 'No toolchain*.txt file has a "tauri-cli <version>" line (output of npx tauri --version).' }
+    "tauri-cli version recorded in $($hit.Name)"
 }
 
 Complete-Check -SaveEvidence:$SaveEvidence

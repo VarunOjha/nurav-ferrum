@@ -87,3 +87,5 @@ b2e19aa9add764433ad53c87c9c8126159d2807f60aa2e9784de676cd73630bf  owner/2026-10-
 8fc4749f1e2f25a6d029df57fbb043d6bba051c3d53be4dfd6617e995214b89f  evidence/phase-p1-foundation/p1.4-cargo-test.txt
 d9fb4007622fd7bcf8efaf5d9b9ccbd251b082be21903fc097ae4f815dd6c67c  evidence/phase-p1-foundation/p1.4-cargo-fmt.txt
 a21420a18d85411b369244366856f25f4042920299be6a5bf678a4c84d437de4  evidence/phase-p1-foundation/p1.4-cargo-clippy.txt
+e73145af696b4ade4daa132cf5da3b7ae913e2b54649c029d93a9ea6f03eec2e  evidence/phase-p1-foundation/registry-versions-2026-10-11.txt
+765f6a35005c81c2245828419667293fb641918d1c5c3fe2468e37a2b9daea89  evidence/phase-p1-foundation/toolchain-tauri.txt

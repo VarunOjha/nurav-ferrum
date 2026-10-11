@@ -1,0 +1,14 @@
+# Tauri CLI and frontend tool versions (p1.17, session s02, 2026-10-11 12:40 -0500), run in spikes/s1-multiwebview after npm install
+$ npx tauri --version
+tauri-cli 2.12.2
+$ npx tsc --version
+Version 7.0.2
+$ npx vite --version
+vite/8.3.4 win32-x64 node-v24.20.0
+$ npm ls --depth=0
+ferrum-spike-s1-multiwebview@0.0.0 <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\spikes\s1-multiwebview
++-- @tauri-apps/api@2.12.3
++-- @tauri-apps/cli@2.12.2
++-- typescript@7.0.2
+`-- vite@8.3.4
+

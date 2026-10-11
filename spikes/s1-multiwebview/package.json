@@ -1,0 +1,21 @@
+{
+  "name": "ferrum-spike-s1-multiwebview",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "P1 spike S1 (throw-away): one Tauri window with a trusted shell web view and three child web views. Not shipped.",
+  "license": "MIT OR Apache-2.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.12.3"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.4"
+  }
+}

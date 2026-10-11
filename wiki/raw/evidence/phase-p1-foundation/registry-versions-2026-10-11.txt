@@ -1,0 +1,21 @@
+# Registry re-check at P1 spike start (p1.17, session s02, 2026-10-11 12:40 -0500)
+# Research-time pins (raw/research/tauri-webview2-capabilities.md, 2026-10-08): tauri 2.12.1, tauri-runtime-wry 2.12.1, wry 0.57.0, webview2-com 0.39.1, windows 0.62.2, @tauri-apps/cli 2.12.1, @tauri-apps/api 2.12.1, Playwright 1.64.0
+
+## crates.io API (max_stable_version, updated_at)
+tauri 2.12.3 2026-10-10T17:47:55.540921Z
+tauri-build 2.7.2 2026-10-10T17:46:52.122386Z
+tauri-runtime-wry 2.12.1 2026-10-01T13:35:32.641925Z
+wry 0.57.0 2026-09-08T03:54:05.166931Z
+webview2-com 0.39.1 2026-03-11T06:54:35.239990Z
+windows 0.62.2 2025-10-06T19:19:49.704461Z
+
+## npm registry (npm view <pkg> version)
+@tauri-apps/cli 2.12.2
+@tauri-apps/api 2.12.3
+vite 8.3.4
+typescript 7.0.2
+playwright 1.64.0
+@playwright/test 1.64.0
+
+## Pins chosen for the spikes
+Patch releases moved since research: tauri 2.12.1 -> 2.12.3, @tauri-apps/cli 2.12.1 -> 2.12.2, @tauri-apps/api 2.12.1 -> 2.12.3. Per phase-p1-foundation (De-risking spikes) the spikes use the newer patch release. wry, webview2-com, windows and Playwright are unchanged. vite 8.3.4 and typescript 7.0.2 are the current latest tags (first exact pins; adr-0006 names no version).
