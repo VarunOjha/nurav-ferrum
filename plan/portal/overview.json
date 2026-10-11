@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 9 of 17 tasks done. Next: p1.12 licence and security-alert check.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 10 of 17 tasks done. Next: p1.13 short public documents.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:fea5924ea782956ae3709971dff2122b465df6c0b7356b8ba2ab296821900bd6"
+    "content_hash": "sha256:f8570b1af40dfe3efefcca04fe52666ea732c0b9d6782ae2cdebb0c52cf26812"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 9 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 10 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -38,19 +38,19 @@
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "9 of 17 tasks done"
+        "state": "10 of 17 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p1.12 licence and security-alert check"
+        "state": "p1.13 short public documents"
       }
     ],
-    "why": "Nothing to run. Every library Ferrum uses must have a licence compatible with ours and no known security alert → Claude configures cargo-deny and audits the plan app → problems surface before they ship.",
+    "why": "Nothing to run. Readers and reviewers need short entry documents → Claude writes security, benchmarking and reproducibility stubs that point into the wiki → the repo explains itself.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
   "questions_for_you": {
-    "open": 32,
+    "open": 33,
     "items": []
   }
 }

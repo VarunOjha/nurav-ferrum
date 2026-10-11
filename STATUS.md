@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: null
-next_action: "Task p1.12 (dependency auditing): write deny.toml (licence allowlist compatible with MIT OR Apache-2.0, advisories), run cargo deny check (save cargo-deny-p1.12.txt) and npm audit for interactive_plan (save, disposition findings); Cargo.lock and package-lock.json committed; run scripts/verify/p1.12-dependency-audit.ps1."
+next_action: "Task p1.13 (doc stubs): SECURITY.md, BENCHMARKING.md, REPRODUCIBILITY.md, docs/README.md, update AI_USAGE.md; each links its canonical wiki pages; run scripts/verify/p1.13-public-docs.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -53,6 +53,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.8 done (`c4dfd4d`): spike S4, one Playwright harness drives S1, Chrome for Testing and Edge over CDP; hidden tabs give no paint or screenshot.
 - p1.6 done (`f7004a9`, fix `809cd3c`): spike S2, route (c) per-site profiles in one browser process with isolated cookies; route (d) works with a browser per site; (a) unreleased, (b) not run.
 - p1.10 done (`60c7d03`): git-backed lint rules re-confirmed (13 tests, 0 wiki errors, 106 fingerprints match).
+- p1.12 done (`04d9f8c`): deny.toml, cargo deny ok; npm audit dispositioned; new question Q-222 (MPL-2.0 licence, blocks P2).
 
 ## Done this session (s01)
 
@@ -264,7 +265,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); p1.10 done `60c7d03`; next p1.12 (not started)
+- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); p1.12 done `04d9f8c`; next p1.13 (not started)
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -285,7 +286,7 @@ Exact install and verification commands: [wiki/operations/ops-environment-setup.
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **32 open** (newest: Q-125, the title bar), 19 answered (Q-004, Q-005, Q-006, Q-007,
+[ov-open-questions](wiki/overview/ov-open-questions.md): **33 open** (newest: Q-222, the MPL-2.0 licence), 19 answered (Q-004, Q-005, Q-006, Q-007,
 Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003).
 Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
@@ -301,11 +302,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 9 of 17 tasks done |
-| Next task | p1.12 licence and security-alert check |
+| Phase 1 | In progress: 10 of 17 tasks done |
+| Next task | p1.13 short public documents |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Every library Ferrum uses must have a licence compatible with ours and no known security alert → Claude configures cargo-deny and audits the plan app → problems surface before they ship.
+**2. Why, and what it does.** Nothing for you to run now. Readers and reviewers need short entry documents → Claude writes security, benchmarking and reproducibility stubs that point into the wiki → the repo explains itself.
 
 **3. The script:** none for you.
 
@@ -320,4 +321,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 9 of 17 tasks done, last p1.10). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 10 of 17 tasks done, last p1.12). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

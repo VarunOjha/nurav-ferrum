@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:3c2ce5f702ca119d622fea54437f01bf0c9af251cd9ee0c5c439959d548127c1"
+    "content_hash": "sha256:43e0c86aaff95dec93be056ccebd8d25719ced90a017f6dce6d130feea25f421"
   },
   "entries": [
     {
@@ -1856,6 +1856,26 @@
       "tags": [
         "wiki",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-12",
+      "date": "2026-10-11",
+      "time": "13:22",
+      "title": "Licence and security-alert checks set up",
+      "done": "Ferrum's Rust libraries are now checked for allowed licences and known security alerts; today all pass. A trial run on the Tauri test app found five libraries under MPL-2.0, a mild open-source licence, so Claude added a question for you before phase 2. The plan app has no alerts in what it runs; five alerts sit in a lint tool only.",
+      "next": "Claude writes the public doc stubs (security, benchmarking, reproducibility).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "04d9f8c",
+      "covers": [
+        "## [2026-10-11] code | p1.12 cargo-deny rules, npm audit, new question Q-222 (MPL-2.0)"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Set up",
+      "tags": [
+        "licensing",
+        "toolchain"
       ]
     }
   ]

@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 9,
+    "done": 10,
     "total": 17
   },
   "step_order": [
@@ -158,7 +158,7 @@
       "what": "A licence allowlist and a known-security-problem check for third-party code, with lock files committed.",
       "why": "Code under an unsuitable licence could stop Ferrum from being open source, and a package with a known hole could expose your accounts.",
       "how": "Set up the dependency checker with licences that fit MIT or Apache, run it, and save a plan-app audit with each finding explained.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Third-party code can carry unsuitable licences or known holes → a licence allowlist and a security-alert check, lock files committed → we only use what we may and should.",
       "check": "The licence and alert check passes; the plan-app audit is saved with each finding explained.",
       "script": "scripts/verify/p1.12-dependency-audit.ps1"

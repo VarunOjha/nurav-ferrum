@@ -330,7 +330,7 @@
       "kind": "task",
       "title": "P1 task: Check dependency licences and alerts",
       "summary": "Third-party code can carry unsuitable licences or known holes → a licence allowlist and a security-alert check, lock files committed → we only use what we may and should.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4486,6 +4486,14 @@
       "related": [
         "phase-p2-minimal-container"
       ]
+    },
+    {
+      "id": "04d9f8c",
+      "kind": "commit",
+      "title": "Commit: Licence and security-alert checks set up",
+      "summary": "Ferrum's Rust libraries are now checked for allowed licences and known security alerts; today all pass. A trial run on the Tauri test app found five libraries under MPL-2.0, a mild open-source licence",
+      "status": null,
+      "related": []
     }
   ]
 }
