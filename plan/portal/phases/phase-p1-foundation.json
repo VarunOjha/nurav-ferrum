@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 11,
+    "done": 12,
     "total": 17
   },
   "step_order": [
@@ -180,7 +180,7 @@
       "what": "The method for the literature review and the first batch of reading notes.",
       "why": "A paper that misses earlier work can claim something as new that is not. Reviewers check this first, and a wrong claim would damage trust.",
       "how": "Write the questions, sources, search terms and rules, then read the gaps the seed list names, using dated and checked sources only.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "A research claim needs prior work → write the search method and read the first batch, with checked sources → no novelty is claimed without evidence.",
       "check": "Method and reading-log pages exist; at least one new dated note; no unchecked citation.",
       "script": "scripts/verify/p1.14-literature-start.ps1"

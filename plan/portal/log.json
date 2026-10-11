@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:2946991d44e062640ec93fcf73ac1a2bba13d2c9b76e323282f5ed190123dfb0"
+    "content_hash": "sha256:7d8cbd3762113cf53e1457042c364a95e434094cb9e8e5c33aab9085a9565466"
   },
   "entries": [
     {
@@ -1942,6 +1942,26 @@
       "tags": [
         "testing",
         "git"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-14",
+      "date": "2026-10-11",
+      "time": "13:34",
+      "title": "Literature review started",
+      "done": "Claude wrote down how the literature review is done (questions, where to search, what counts, how every source is checked) and read four primary sources the seed list was missing: the original ARC caching paper, the web standard for freezing and discarding pages, the Windows low-memory signal, and Microsoft's rules for pausing a web view.",
+      "next": "Claude turns the experiment results into design proposals for you.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "058ca1a",
+      "covers": [
+        "## [2026-10-11] code | p1.14 literature protocol, reading log and batch 1"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Planned",
+      "tags": [
+        "paper",
+        "tab sleeping"
       ]
     }
   ]

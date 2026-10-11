@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 11 of 17 tasks done. All four experiments have results and the automatic checks are set up; Claude starts the literature review, then asks you one batch of questions.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 12 of 17 tasks done. Next: p1.9 design proposals from the experiments.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:63eeed59937d654fd04926050d2f4dfed676aa312b42ae5b388d5fb5d7c4f252"
+    "content_hash": "sha256:fc17400b10aba96462c68de36ef795312cb221a297b1f3d41da3a8ca49de1dee"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 11 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 12 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "11 of 17 tasks done"
+        "state": "12 of 17 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Start the literature review"
+        "state": "p1.9 design proposals from the experiments"
       }
     ],
-    "why": "Nothing to run. Claude finishes the tasks that do not need you, then asks one batch: your hand checks for experiment 1, the design choices, GitHub, and a few questions.",
+    "why": "Nothing to run. The four experiments are done → Claude writes proposed decisions (profile route, back/forward, test-robot path, one-window design) → you choose, and phase 2 is planned on facts.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

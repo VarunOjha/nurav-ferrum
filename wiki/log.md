@@ -1457,3 +1457,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: .github/workflows/ci.yml on windows-latest (contents read, actions pinned by commit SHA: checkout v7.0.1, setup-node v7.1.0; long paths enabled before checkout) with jobs rust, rust-deps (cargo-deny 0.20.2), plan-app (incl. Playwright e2e), wiki (lint:wiki with full history, hash parity, tools tests). cargo-audit not added: cargo-deny advisories use the same RustSec database (delegated tooling decision). scripts/ci-local.ps1 runs the same steps; two deliberate differences: npm ci only with -CleanInstall (it deletes node_modules), e2e only with -E2E (Playwright force-stops its server; owner's no-kill rule). Local run PASS 14 of 14 (873 unit tests, lint:wiki 0 errors and 33 warnings, hash parity 42, tools 44). p1.11 check PASS with one owner step: push and report the GitHub run, or defer (the first push also waits for Q-221).
 - next: p1.14 literature protocol and first reading batch
 - commit: 5b6113c
+
+## [2026-10-11] code | p1.14 literature protocol, reading log and batch 1
+
+- session: s02
+- time: 13:34
+- pages: [phase-p1-foundation]
+- sources: [raw/research/literature-batch-1.md]
+- result: New raw note literature-batch-1 (fetched 2026-10-11): ARC original paper page (USENIX FAST 2003), WICG Page Lifecycle report (2022), Win32 CreateMemoryResourceNotification, WebView2 TrySuspend/Resume reference; each labelled. New pages ov-research-literature-protocol and ov-research-literature-log (indexed). Open: memory-pressure thresholds, and whether WebView2 fires freeze/resume on suspend (P7 test). Check PASS (2 of 2); lint:wiki 0 errors.
+- next: p1.9 spike synthesis and proposed ADRs
+- commit: 058ca1a

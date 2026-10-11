@@ -350,7 +350,7 @@
       "kind": "task",
       "title": "P1 task: Start the literature review",
       "summary": "A research claim needs prior work → write the search method and read the first batch, with checked sources → no novelty is claimed without evidence.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4516,6 +4516,14 @@
       "kind": "commit",
       "title": "Commit: Automatic checks for GitHub, and the same checks here",
       "summary": "The GitHub check workflow and the local script that runs the same 14 checks.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "058ca1a",
+      "kind": "commit",
+      "title": "Commit: Literature review started",
+      "summary": "Claude wrote down how the literature review is done (questions, where to search, what counts, how every source is checked) and read four primary sources the seed list was missing: the original ARC cac",
       "status": null,
       "related": []
     }
