@@ -1,0 +1,99 @@
+Ferrum check p2.6: Show a website and track it
+Why: the address bar and spinner are always right.
+Run at 2026-10-11 18:48 on commit 64dae09 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Raw WebView2 code is confined to one audited module
+         unsafe only in crates/webview-manager/src/webview2.rs; clippy (incl. undocumented_unsafe_blocks) clean
+{
+  "content_ready": true,
+  "pages": [
+    {
+      "events": [
+        {
+          "allowed": true,
+          "id": 5,
+          "kind": "navigation-starting",
+          "redirected": false,
+          "uri": "https://localhost:8443/landing",
+          "user_initiated": true
+        },
+        {
+          "kind": "source-changed",
+          "uri": "https://localhost:8443/landing"
+        },
+        {
+          "can_go_back": true,
+          "can_go_forward": false,
+          "kind": "history-changed"
+        },
+        {
+          "kind": "title-changed",
+          "title": "Landing"
+        },
+        {
+          "http_status": 200,
+          "id": 5,
+          "kind": "navigation-completed",
+          "success": true,
+          "web_error_status": 0
+        }
+      ],
+      "in_order": true,
+      "positions": {
+        "completed": 4,
+        "source_changed": 1,
+        "starting": 0
+      },
+      "url": "https://localhost:8443/landing"
+    },
+    {
+      "events": [
+        {
+          "allowed": true,
+          "id": 6,
+          "kind": "navigation-starting",
+          "redirected": false,
+          "uri": "https://localhost:8443/links/blank",
+          "user_initiated": true
+        },
+        {
+          "kind": "source-changed",
+          "uri": "https://localhost:8443/links/blank"
+        },
+        {
+          "can_go_back": true,
+          "can_go_forward": false,
+          "kind": "history-changed"
+        },
+        {
+          "kind": "title-changed",
+          "title": "New windows"
+        },
+        {
+          "http_status": 200,
+          "id": 6,
+          "kind": "navigation-completed",
+          "success": true,
+          "web_error_status": 0
+        }
+      ],
+      "in_order": true,
+      "positions": {
+        "completed": 4,
+        "source_changed": 1,
+        "starting": 0
+      },
+      "url": "https://localhost:8443/links/blank"
+    }
+  ],
+  "pass": true,
+  "selftest": "nav",
+  "shell_events": 10,
+  "shell_received_in_order": true
+}
+  PASS   Self-test: two pages, events in order, the shell receives them (58 s)
+         2 pages in order; the shell received 10 events in order
+------------------------------------------------------------------------
+RESULT: PASS - p2.6 (2 PASS; 59 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.6 check passed".

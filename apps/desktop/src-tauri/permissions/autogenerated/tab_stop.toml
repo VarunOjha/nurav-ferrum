@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-tab-stop"
+description = "Enables the tab_stop command without any pre-configured scope."
+commands.allow = ["tab_stop"]
+
+[[permission]]
+identifier = "deny-tab-stop"
+description = "Denies the tab_stop command without any pre-configured scope."
+commands.deny = ["tab_stop"]

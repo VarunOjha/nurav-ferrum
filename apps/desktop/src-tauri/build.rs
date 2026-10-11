@@ -5,9 +5,16 @@
 //! `allow-<command>` permission. Only `capabilities/shell.json` (the shell web view) does.
 
 fn main() {
-    tauri_build::try_build(
-        tauri_build::Attributes::new()
-            .app_manifest(tauri_build::AppManifest::new().commands(&["app_ping"])),
-    )
+    tauri_build::try_build(tauri_build::Attributes::new().app_manifest(
+        tauri_build::AppManifest::new().commands(&[
+            "app_ping",
+            "tab_navigate",
+            "tab_back",
+            "tab_forward",
+            "tab_reload",
+            "tab_stop",
+            "shell_focused",
+        ]),
+    ))
     .expect("Tauri build step failed");
 }

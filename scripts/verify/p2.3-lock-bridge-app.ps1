@@ -23,14 +23,15 @@
   For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
                    scripts/lib/Ferrum.Check.psm1). Phase-page verify field: integration test loads a fixture page in
                    the content WebView that calls an app command, a core plugin command and event emit/listen
-                   through the IPC bridge; every call is rejected and the rejection is logged. (The Ferrum-created
-                   content controller of adr-0029 joins this self-test in p2.6.)
+                   through the IPC bridge; every call is rejected and the rejection is logged. Since p2.6 the same
+                   page also runs in the content view Ferrum creates itself (adr-0029), which must have no bridge.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
+. (Join-Path $PSScriptRoot '../lib/Ferrum.SelfTest.ps1')
 
 Start-Check -Id 'p2.3' -Title 'Lock the bridge to the app' -Phase 'phase-p2-minimal-container' `
     -Why 'a website cannot control Ferrum.'
@@ -52,32 +53,19 @@ Invoke-Step 'The app declares its commands at build time' {
     'build.rs: AppManifest commands declared'
 }
 
-Invoke-Step 'Self-test: every bridge call from a website is refused; the shell still works' {
-    $b = Invoke-Npm -Arguments @('run', 'build') -Folder 'apps/desktop'
-    if ($b.ExitCode -ne 0) { Stop-Fail "Shell build failed: $(Get-Tail $b.Output 5)" }
-    [void](Assert-Cargo @('build', '--locked', '-p', 'ferrum-desktop', '-p', 'fixture-server'))
-    $out = Join-Path ([IO.Path]::GetTempPath()) "ferrum-p2.3-ipc-$PID.json"
-    $server = Start-Process -FilePath (Get-RepoPath 'target/debug/fixture-server.exe') -ArgumentList 'serve', '--port', '8443', '--exit-after', '45' -PassThru -WindowStyle Hidden
-    Start-Sleep -Seconds 2
-    $env:FERRUM_SELFTEST = 'ipc'; $env:FERRUM_SELFTEST_OUT = $out
-    try {
-        $app = Start-Process -FilePath (Get-RepoPath 'target/debug/ferrum-desktop.exe') -PassThru
-        if (-not $app.WaitForExit(60000)) { Stop-Fail 'The app did not finish its self-test within 60 s (left running; close it by hand).' }
-    }
-    finally { Remove-Item Env:FERRUM_SELFTEST, Env:FERRUM_SELFTEST_OUT -ErrorAction SilentlyContinue }
-    [void]$server.WaitForExit(60000)
-    if (-not (Test-Path -LiteralPath $out)) { Stop-Fail 'The self-test wrote no result.' }
-    $raw = Get-Content -LiteralPath $out -Raw
-    Add-LogText $raw
-    $r = $raw | ConvertFrom-Json
+Invoke-Step 'Self-test: website calls refused in a Tauri view; no bridge at all in the Ferrum-created view; the shell works' {
+    $st = Invoke-FerrumSelfTest -Name 'ipc'
+    $r = $st.Result
+    Add-LogText $st.Raw
     if ($SaveEvidence) {
-        $dest = Get-RepoPath 'wiki/raw/evidence/phase-p2-minimal-container/p2.3-ipc-selftest.json'
-        if (-not (Test-Path -LiteralPath $dest)) { [void](Save-Evidence -Path 'wiki/raw/evidence/phase-p2-minimal-container/p2.3-ipc-selftest.json' -Text $raw) }
+        $dest = 'wiki/raw/evidence/phase-p2-minimal-container/p2.6-ipc-selftest.json'
+        if (-not (Test-Path -LiteralPath (Get-RepoPath $dest))) { [void](Save-Evidence -Path $dest -Text $st.Raw) }
     }
-    if (-not $r.probe_view_created -or $null -eq $r.probe_report) { Stop-Fail 'The probe page did not load or did not report (is the local certificate installed? is port 8443 free?).' }
-    if (-not $r.all_probe_calls_refused) { Stop-Fail 'A bridge call from the website was NOT refused.' }
+    if (-not $r.tauri_view.created -or $null -eq $r.tauri_view.report) { Stop-Fail 'The probe page did not load in the Tauri view (local certificate installed? port 8443 free?).' }
+    if (-not $r.tauri_view.all_calls_refused) { Stop-Fail 'A bridge call from the website in the Tauri view was NOT refused.' }
+    if (-not $r.content_view.no_bridge) { Stop-Fail 'The Ferrum-created content view exposes a bridge (or did not report).' }
     if ($r.shell_positive_control_pings -lt 1) { Stop-Fail 'The shell could not use the bridge (positive control failed).' }
-    "refused: app command, event listen, event emit; shell pings: $($r.shell_positive_control_pings)"
+    "Tauri view: 3 calls refused; content view: no bridge; shell pings: $($r.shell_positive_control_pings)"
 }
 
 Complete-Check -SaveEvidence:$SaveEvidence

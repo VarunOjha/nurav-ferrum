@@ -1,0 +1,87 @@
+{
+  "content_ready": true,
+  "pages": [
+    {
+      "events": [
+        {
+          "allowed": true,
+          "id": 5,
+          "kind": "navigation-starting",
+          "redirected": false,
+          "uri": "https://localhost:8443/landing",
+          "user_initiated": true
+        },
+        {
+          "kind": "source-changed",
+          "uri": "https://localhost:8443/landing"
+        },
+        {
+          "can_go_back": true,
+          "can_go_forward": false,
+          "kind": "history-changed"
+        },
+        {
+          "kind": "title-changed",
+          "title": "Landing"
+        },
+        {
+          "http_status": 200,
+          "id": 5,
+          "kind": "navigation-completed",
+          "success": true,
+          "web_error_status": 0
+        }
+      ],
+      "in_order": true,
+      "positions": {
+        "completed": 4,
+        "source_changed": 1,
+        "starting": 0
+      },
+      "url": "https://localhost:8443/landing"
+    },
+    {
+      "events": [
+        {
+          "allowed": true,
+          "id": 6,
+          "kind": "navigation-starting",
+          "redirected": false,
+          "uri": "https://localhost:8443/links/blank",
+          "user_initiated": true
+        },
+        {
+          "kind": "source-changed",
+          "uri": "https://localhost:8443/links/blank"
+        },
+        {
+          "can_go_back": true,
+          "can_go_forward": false,
+          "kind": "history-changed"
+        },
+        {
+          "kind": "title-changed",
+          "title": "New windows"
+        },
+        {
+          "http_status": 200,
+          "id": 6,
+          "kind": "navigation-completed",
+          "success": true,
+          "web_error_status": 0
+        }
+      ],
+      "in_order": true,
+      "positions": {
+        "completed": 4,
+        "source_changed": 1,
+        "starting": 0
+      },
+      "url": "https://localhost:8443/links/blank"
+    }
+  ],
+  "pass": true,
+  "selftest": "nav",
+  "shell_events": 10,
+  "shell_received_in_order": true
+}

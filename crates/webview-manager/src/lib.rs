@@ -1,18 +1,14 @@
-//! Creates, shows, hides and tears down the per-tab web views.
+//! Creates, shows, hides and tears down the per-tab web views (design: `wiki/architecture/components/comp-webview-manager.md`).
 //!
-//! Empty library stub created in P1 (task p1.4). Design: the component page
-//! `wiki/architecture/components/comp-webview-manager.md`. Real code arrives in the phase named there.
-#![forbid(unsafe_code)]
+//! Tab web views are WebView2 controllers Ferrum creates itself from Tauri's environment (adr-0029, owner-approved).
+//! **This crate holds Ferrum's only raw WebView2 COM code**, in the module [`webview2`] (adr-0019). The rest of the
+//! crate is safe Rust: unsafe code is denied at the crate root, and every `unsafe` block in `webview2` must carry a
+//! `// SAFETY:` comment naming its invariant (COM-1 … COM-9 on the integration page; enforced by
+//! `clippy::undocumented_unsafe_blocks`).
+#![deny(unsafe_code)]
+#![deny(clippy::undocumented_unsafe_blocks)]
 
-/// The crate name, so the stub has one public item and one test.
-pub const CRATE_NAME: &str = "ferrum-webview-manager";
+pub mod tab;
 
-#[cfg(test)]
-mod tests {
-    use super::CRATE_NAME;
-
-    #[test]
-    fn crate_name_matches_package() {
-        assert_eq!(CRATE_NAME, env!("CARGO_PKG_NAME"));
-    }
-}
+#[cfg(windows)]
+pub mod webview2;

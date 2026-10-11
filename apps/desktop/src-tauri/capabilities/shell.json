@@ -3,5 +3,14 @@
   "identifier": "shell",
   "description": "The trusted shell web view only (label \"shell\"). No remote section: no website may use any command (trust rules R1-R3).",
   "webviews": ["shell"],
-  "permissions": ["core:event:default", "allow-app-ping"]
+  "permissions": [
+    "core:event:default",
+    "allow-app-ping",
+    "allow-tab-navigate",
+    "allow-tab-back",
+    "allow-tab-forward",
+    "allow-tab-reload",
+    "allow-tab-stop",
+    "allow-shell-focused"
+  ]
 }

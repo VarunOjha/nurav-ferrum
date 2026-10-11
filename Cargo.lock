@@ -962,10 +962,12 @@ name = "ferrum-desktop"
 version = "0.0.0"
 dependencies = [
  "ferrum-core",
+ "ferrum-webview-manager",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
+ "windows",
 ]
 
 [[package]]
@@ -987,6 +989,11 @@ version = "0.0.0"
 [[package]]
 name = "ferrum-webview-manager"
 version = "0.0.0"
+dependencies = [
+ "webview2-com",
+ "windows",
+ "windows-core",
+]
 
 [[package]]
 name = "field-offset"

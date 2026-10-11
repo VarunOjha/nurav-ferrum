@@ -140,3 +140,7 @@ be8eb75dac0718da0037b19a5f52926be25e73eecf06c87ea2460dc34c4507c4  owner/2026-10-
 68a7cc4125b60761adce371f94d581d4c35b6e70ee63b8fa831a6273004756a5  evidence/phase-p2-minimal-container/p2.3-ipc-selftest.json
 21964825ddbedd27d34a2565c920dc441f15f3c765521c7eb329b634088807bd  evidence/phase-p2-minimal-container/check-p2.4.txt
 194bcaaf0ce350e8e1d3f5419297b43ae2c73697aef5ca3b40994598ec771a92  evidence/phase-p2-minimal-container/check-p2.5.txt
+9f8246dfb1d1873ac38172d47ea3b25a184ae1497c69b1131a0a760891f09ba5  evidence/phase-p2-minimal-container/check-p2.6.txt
+7ab34267a55d57d7ec3cf6ab26a2be1b9f3b4e19ac5a96f122697c831dadf10a  evidence/phase-p2-minimal-container/check-p2.3.20261011-1850.txt
+6f1a2f493bccdd6671c624ecfc5beff01ec5ec23e57e005ebe914df7ceefd36b  evidence/phase-p2-minimal-container/p2.6-ipc-selftest.json
+c664968d1bf85a9515d949799abc039fcf6cdff3e7138de44f9ee10655e1b146  evidence/phase-p2-minimal-container/p2.6-nav-selftest.json
