@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:eff5b203bcbccce77dfcd48ff8f285f9d0f328886b6ea1f0dfc5d7ba3a8741c7"
+    "content_hash": "sha256:3d9cc1e37ef530feaf08f761982c45d395b499128953cda27dc0f46400bfddaf"
   },
   "entries": [
     {
@@ -2148,6 +2148,38 @@
       "tags": [
         "phases",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-signoff",
+      "date": "2026-10-11",
+      "time": "15:14",
+      "title": "You signed off phase 1; Claude is paused",
+      "done": "You signed off phase 1. All 17 tasks are done, the end-of-phase check passed, and the session notes for the next session are written. Claude now stops: no phase 2 work starts until you say go.",
+      "next": "When you want phase 2, say so in chat; Claude then asks for the phase 2 approvals and three open questions first.",
+      "decisions": [
+        {
+          "what": "Sign off phase 1",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Phase 1 sign-off (end of P1)",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] approval | phase-p1-foundation#exit approved: P1 signed off",
+        "## [2026-10-11] gate | phase-p1-foundation exit approved",
+        "## [2026-10-11] handoff | s02 closed: P1 done and signed off; paused before P2"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Decided",
+      "tags": [
+        "phases",
+        "approvals"
       ]
     }
   ]

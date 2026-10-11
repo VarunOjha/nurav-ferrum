@@ -2,29 +2,29 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 1's end-of-phase check passed: every automatic check is green and your hand checks are recorded. Phase 1 now waits for your sign-off; after it, Claude pauses until you say go for phase 2.",
+  "summary": "Phase 1 is done and signed off by you on 11 Oct: tools, an empty Rust project with automatic checks, four experiments and three design decisions. Claude is paused; phase 2 starts only when you say go.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:44555997614048f38791fe8a1fcb377cdea4c3fac6b7475780dca74a2de7f3de"
+    "content_hash": "sha256:f4661ce16a2d8539e191934aee54241c370cead133128010a703d1f51e1ab15a"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: waiting for your sign-off (16 of 17 tasks done)",
+      "state": "P1 Foundation: done, signed off by you on 11 Oct (17 of 17 tasks)",
       "ref": "phase-p1-foundation"
     },
     {
-      "item": "Planning",
-      "state": "Done, signed off by you on 11 Oct",
-      "ref": "phase-p0-planning"
+      "item": "Phase 2",
+      "state": "Not started. It starts only when you explicitly say go",
+      "ref": "phase-p2-minimal-container"
     },
     {
       "item": "Approvals",
-      "state": "All 31 current"
+      "state": "All current"
     },
     {
-      "item": "Your rule this session",
+      "item": "Your rule",
       "state": "Claude asks you before any delete or kill command"
     },
     {
@@ -37,21 +37,17 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "End-of-phase check",
-        "state": "Passed"
+        "item": "Phase 1",
+        "state": "Done and signed off"
       },
       {
-        "item": "Known issue",
-        "state": "Keyboard after Alt+Tab, fix in P2"
-      },
-      {
-        "item": "Next",
-        "state": "Your sign-off"
+        "item": "Phase 2",
+        "state": "Paused until you say go"
       }
     ],
-    "why": "Nothing to run. Your sign-off closes phase 1; then Claude stops until you explicitly say go for phase 2.",
+    "why": "Nothing to run. Your rule: after a phase ends, Claude stops until you explicitly say go. Before phase 2 starts, Claude asks for the phase 2 approvals and three questions.",
     "script": null,
-    "tell_claude": "\"Sign off phase 1\", or what you want changed first."
+    "tell_claude": "\"Go ahead with phase 2\" when you want building to start."
   },
   "questions_for_you": {
     "open": 29,

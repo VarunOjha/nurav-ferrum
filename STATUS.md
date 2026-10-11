@@ -2,7 +2,7 @@
 id: status-live
 type: status
 title: "Ferrum live status and next action"
-status: awaiting-owner
+status: active
 updated: 2026-10-11
 sources:
   - raw/01-scoping-decisions.md
@@ -15,14 +15,15 @@ sources:
   - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
   - raw/owner/2026-10-11-s01-wave2-pages-approval.md
   - raw/owner/2026-10-11-s02-p1-go-ahead.md
+  - raw/owner/2026-10-11-s02-p1-signoff.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s02
 current_phase: phase-p1-foundation
-current_task: p1.16
-next_action: "Owner: review P1 and say whether to sign off (phase-p1-foundation#exit). Claude then records it, sets the phase done and pauses; P2 needs a separate explicit go."
+current_task: null
+next_action: "PAUSED after P1 (done and signed off 2026-10-11). Claude starts no P2 work. Next session: RESUME per CLAUDE.md section 1; only on the owner's explicit go for P2: transcribe it, log gate | phase-p2-minimal-container go-ahead given, ask Approval Wave 3 and Q-109, Q-202, Q-214, then run python tools/approvals_check.py --gate phase-p2-minimal-container."
 blocked_on: []
-last_handoff: handoff-2026-10-09-s01
+last_handoff: handoff-2026-10-11-s02
 ---
 
 # STATUS — live state (read this first every session)
@@ -33,12 +34,13 @@ last_handoff: handoff-2026-10-09-s01
 
 ## Current phase
 
-**phase-p1-foundation — IN PROGRESS (session s02, started 2026-10-11).** The owner gave the go-ahead in chat on
-2026-10-11 ([raw/owner/2026-10-11-s02-p1-go-ahead.md](wiki/raw/owner/2026-10-11-s02-p1-go-ahead.md)): "Start phase 1
-please", aiming to finish P1 in this session. Standing rule from the same message: **no kill commands and no deleting of
-things Claude did not create; ask the owner first.** The entry gate passed (log entry of 2026-10-11, 12:25).
+**phase-p1-foundation — DONE (session s02, 2026-10-11).** The owner signed off P1 on 2026-10-11
+([raw/owner/2026-10-11-s02-p1-signoff.md](wiki/raw/owner/2026-10-11-s02-p1-signoff.md); `phase-p1-foundation#exit`
+APPROVED after the gate passed on `8cd0461`, evidence `314f849`). **Claude is PAUSED**: phase-p2-minimal-container does not
+start until the owner explicitly says go in chat (SCHEMA §9.7 step 7). Standing rule: no kill commands and no deleting of
+things Claude did not create without asking.
 
-P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPROVED after the P0 gate passed on `b5f7d40`).
+P0 (planning) is done and signed off (2026-10-11).
 
 ## Done this session (s02)
 
@@ -65,6 +67,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.5 done (`af70134`): S1 report with hand checks; Alt+Tab focus is a known issue (fix in P2); last P1 claims closed.
 - Owner re-approved the 9 pages changed by the claim closures ([raw/owner/2026-10-11-s02-p1-reapproval.md](wiki/raw/owner/2026-10-11-s02-p1-reapproval.md)); entry gate PASS.
 - p1.16: P1 gate run (`314f849`): all automatic checks pass; phase-p1-foundation set to gate-review; waiting for the owner's sign-off.
+- P1 signed off by the owner; phase-p1-foundation done; handoff [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md) written.
 
 ## Done this session (s01)
 
@@ -276,7 +279,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: P1 gate evidence committed `314f849`; phase-p1-foundation in gate-review; waiting for the owner's sign-off)
+(empty: P1 done and signed off 2026-10-11; Claude is PAUSED before P2)
 
 ## Blockers
 
@@ -312,16 +315,17 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | 16 of 17 tasks done; the end-of-phase check passed (all automatic checks) |
-| Experiments | All four done; one known issue (keyboard after Alt+Tab, fix in P2) |
+| P1 Foundation | Done: 17 of 17 tasks; end-of-phase check passed; signed off by you on 11 Oct |
 | Approvals | All current |
-| Next | Your phase 1 sign-off; then Claude pauses until you say go for phase 2 |
+| Phase 2 | Not started. Claude is paused until you say go |
+| Before phase 2 | Approval Wave 3 (the phase 2 pages) and questions Q-109, Q-202, Q-214 |
 
-**2. Why, and what it does.** Nothing to run. Your sign-off closes phase 1 (rule of 10 Oct: Claude then stops and waits).
+**2. Why, and what it does.** Nothing to run. Your rule: after a phase ends, Claude stops until you explicitly say go.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** "Sign off phase 1", or what you want changed first. Phase 2 starts only on a separate, explicit go.
+**4. What to tell Claude:** "Go ahead with phase 2" when you want it to start (Claude then asks the phase 2 approvals and
+questions first). Optional any time: the history-rewrite question (Q-221) before the first GitHub upload.
 
 ## Pending owner approvals
 
@@ -332,4 +336,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 gate passed on 8cd0461; waiting for the owner's sign-off). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 done and signed off; PAUSED before P2). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

@@ -66,7 +66,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 ## Phases
 
 - [phase-p0-planning](phases/phase-p0-planning.md) | done | P0 Planning: LLM wiki, interactive plan app, owner approval | 18 tasks; est. 4 sessions (planning estimate). P0 creates the project's memory and its approval mechanism before any Ferrum code exists.
-- [phase-p1-foundation](phases/phase-p1-foundation.md) | gate-review | P1 Foundation: toolchain, repo scaffold, CI, de-risking spikes | 17 tasks; est. 6 sessions (planning estimate). P1 turns an empty repository into a working Rust workspace and, before any M1 design is frozen, runs four throwaway …
+- [phase-p1-foundation](phases/phase-p1-foundation.md) | done | P1 Foundation: toolchain, repo scaffold, CI, de-risking spikes | 17 tasks; est. 6 sessions (planning estimate). P1 turns an empty repository into a working Rust workspace and, before any M1 design is frozen, runs four throwaway …
 - [phase-p2-minimal-container](phases/phase-p2-minimal-container.md) | planned | P2 Minimal container (Milestone M1): one shell, one content WebView, safe navigation | Milestone M1; 18 tasks; est. 4 sessions (planning estimate). P2 builds the smallest useful Ferrum: one window with a trusted shell WebView and one untrusted content WebView that …
 - [phase-p3-tabs-sessions](phases/phase-p3-tabs-sessions.md) | planned | P3 Tabs and sessions (Milestone M2): multi-tab, session restore, per-site settings | Milestone M2; 15 tasks; est. 5 sessions (planning estimate). P3 turns the single content WebView into a tab manager.
 - [phase-p4-security](phases/phase-p4-security.md) | planned | P4 Security (Milestone M3): policy engine, permissions, isolation tests, threat model | Milestone M3; 17 tasks; est. 5 sessions (planning estimate). P4 builds the security policy engine and proves, with tests, which security properties Ferrum actually enforces.
@@ -247,6 +247,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 ## Handoffs
 
 - [handoff-2026-10-09-s01](operations/handoffs/handoff-2026-10-09-s01.md) | final | Handoff s01 (2026-10-09/10): portal v2 built and checked; owner walkthrough, then P0 sign-off | End of session s01: v1 plan app, then portal v2 (rules, pipeline, content, scripts, portal, review fixes), hook on, owner next steps, open items
+- [handoff-2026-10-11-s02](operations/handoffs/handoff-2026-10-11-s02.md) | final | Handoff s02 (2026-10-11): P1 done and signed off; PAUSED before P2 | P1 17 of 17 tasks, gate passed, signed off; next: owner go for P2, Wave 3
 
 ## Interactive plan
 
@@ -290,6 +291,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 - [2026-10-11-s02-p1-design-and-questions](raw/owner/2026-10-11-s02-p1-design-and-questions.md) | raw | RAW SOURCE — Owner decides the P1 design proposals and four questions (session s02, 2026-10-11 13:49) | Owner approves adr-0029, 0030, 0031; allows MPL-2.0 for libraries (Q-222); defers GitHub; this PC is the benchmark machine, no power meter (Q-116, Q-122)
 - [2026-10-11-s02-s1-hand-checks](raw/owner/2026-10-11-s02-s1-hand-checks.md) | raw | RAW SOURCE — Owner's hand checks of spike S1 (session s02, 2026-10-11 14:16) | Shortcuts, resize, maximise and minimise work; keyboard focus after Alt+Tab needs a click (known issue, fix later)
 - [2026-10-11-s02-p1-reapproval](raw/owner/2026-10-11-s02-p1-reapproval.md) | raw | RAW SOURCE — Owner re-approves 9 pages changed by the P1 claim closures (session s02, 2026-10-11) | Owner: "Re-approve all 9": adr-0002, 0006, 0007, 0010, 0011, 0018, 0021, phase-p1-foundation, schema; not the P1 sign-off
+- [2026-10-11-s02-p1-signoff](raw/owner/2026-10-11-s02-p1-signoff.md) | raw | RAW SOURCE — Owner signs off phase 1 (session s02, 2026-10-11) | Owner: "Sign off": phase-p1-foundation#exit approved; not a P2 go-ahead
 - [evidence-phase-p0-planning](raw/evidence/phase-p0-planning/) | raw | Evidence folder: phase-p0-planning | P0 test-gate evidence: WebView2 runtime pv, p0.8 manual lint, tools check, interactive-plan/ IP-n gate outputs, p0.17 step checks, portal-v2/ final review and browser-ui/ (frozen copy of the chosen browser design) (SCHEMA §11, adr-0020)
 - [evidence-phase-p1-foundation](raw/evidence/phase-p1-foundation/) | raw | Evidence folder: phase-p1-foundation | P1 test-gate evidence: toolchain versions and link check, machine inventory, workspace checks, spike reports (SCHEMA §11, adr-0020)
 - [research-claude-code-hooks-skills](raw/research/claude-code-hooks-skills.md) | raw | Claude Code Stop hooks and project skills (format and semantics used by the portal pipeline) | Claude Code docs, 2026-10-09: Stop hook input and exit codes, Windows exec form, SKILL.md format; Test-Json observations

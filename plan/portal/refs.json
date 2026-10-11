@@ -20,7 +20,7 @@
       "kind": "phase",
       "title": "P1 Foundation",
       "summary": "Goal: Tools confirmed, empty project builds, riskiest ideas tested. Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
-      "status": "Waiting for your review",
+      "status": "Done",
       "related": [],
       "aliases": [
         "P1"
@@ -370,7 +370,7 @@
       "kind": "task",
       "title": "P1 task: Run the gate; your review",
       "summary": "All tasks done → run every check on one commit and save the output → you review the experiment evidence and approve the exit.",
-      "status": "Waiting for you",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]

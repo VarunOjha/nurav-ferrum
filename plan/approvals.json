@@ -542,6 +542,18 @@
       "recorded_by": "claude",
       "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-design-and-questions.md",
       "history": []
+    },
+    "phase-p1-foundation#exit": {
+      "status": "approved",
+      "comment": "Sign off",
+      "timestamp": "2026-10-11T15:13:50-05:00",
+      "path": "wiki/phases/phase-p1-foundation.md",
+      "content_hash": "sha256:be0da62cc927c2f7486f3d811d0314fcb366654677ce4935b545d6ce07dca970",
+      "scope_hash": "sha256:58e2818092eaab293209e73285d58f58b7838aad90d8c993edf8d4fe3512bbf3",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-signoff.md",
+      "history": []
     }
   }
 }

@@ -2,7 +2,7 @@
 id: phase-p1-foundation
 type: phase
 title: "P1 Foundation: toolchain, repo scaffold, CI, de-risking spikes"
-status: gate-review
+status: done
 updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
