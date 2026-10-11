@@ -6,7 +6,11 @@
 // same popup. Connections live only in the popups, so the page stays about one screen high (review
 // 2026-10-09: the owner found long lists of connections hard to navigate). Reads architecture.json and
 // roadmap.json.
+// The Application group opens with "How the browser will look" (owner's choice of 2026-10-10, option
+// A): a static picture of the planned Ferrum window with a Light / Dark switch, a few words on each part,
+// the note that every value in it is a sample, a link to the design canvas and the decision behind it.
 import type { Metadata } from "next";
+import BrowserMockup from "@/components/portal/BrowserMockup";
 import DetailPopup from "@/components/portal/DetailPopup";
 import GroupSwitcher from "@/components/portal/GroupSwitcher";
 import { OpenModalButton } from "@/components/portal/Modal";
@@ -17,12 +21,13 @@ import { detailDialogId } from "@/lib/portal/dialogs";
 import type { Architecture } from "@/lib/portal/schemas.gen";
 import { getPortal } from "@/lib/portal/server";
 import { ui } from "@/lib/portal/uiRefs";
-import { firstSentence, layerRows, layerShortName, partWhen, roadmapRow, type Layer } from "@/lib/portal/view";
+import { firstSentence, layerRows, plainText, layerShortName, partWhen, roadmapRow, type Layer } from "@/lib/portal/view";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Architecture" };
 
 type Component = Architecture["components"][number];
+type BrowserDesignData = NonNullable<Architecture["browser_design"]>;
 
 const TRUST_LABEL: Record<Layer["trust"], string> = {
   trusted: "Trusted: our code",
@@ -57,7 +62,7 @@ function LayerDiagram({ arch, byId }: { arch: Architecture; byId: Map<string, Co
                   <OpenModalButton key={cid} target={detailDialogId(cid)} className="ref ref-box">
                     <span className={`layer-box ${trustClass(l.trust)}`} data-part={cid}>
                       <span className="strong">{name}</span>
-                      <span className="small layer-box-text">{c ? firstSentence(c.summary) : l.summary}</span>
+                      <span className="small layer-box-text">{plainText(c ? firstSentence(c.summary) : l.summary)}</span>
                       {l.trust === "untrusted" && <span className="small strong">Untrusted · sandboxed</span>}
                     </span>
                   </OpenModalButton>
@@ -68,6 +73,49 @@ function LayerDiagram({ arch, byId }: { arch: Architecture; byId: Map<string, Co
         </div>
       ))}
     </div>
+  );
+}
+
+/** "How the browser will look": the picture of option A, what its parts are, and where it comes from. */
+function BrowserDesign({ design }: { design: BrowserDesignData }) {
+  return (
+    <section className="card browser-design" aria-labelledby="browser-design-title" data-testid="browser-design" {...ui("AR-9")}>
+      <div className="stack-8">
+        <h2 id="browser-design-title" className="h3">
+          {design.title}
+        </h2>
+        <p className="lead">
+          <RichText text={design.summary} />
+        </p>
+      </div>
+      <BrowserMockup />
+      <div className="stack-12" {...ui("AR-9", { key: "callouts" })}>
+        <ul className="bm-callouts" aria-label="The parts of the window" data-testid="browser-callouts">
+          {design.callouts.map((c) => (
+            <li key={c.label}>
+              <span className="small strong">{c.label}</span>
+              <span className="small text-2">
+                <RichText text={c.text} />
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="note small" data-testid="browser-sample-note">
+          <RichText text={design.sample_note} />
+        </p>
+        <div className="bm-links small">
+          <a href={design.canvas_url} target="_blank" rel="noopener noreferrer" data-testid="browser-canvas-link">
+            Open the design canvas<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          <span className="text-2">
+            Why we chose it: the{" "}
+            <Ref id={design.decision} variant="inline">
+              decision
+            </Ref>
+          </span>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -145,9 +193,12 @@ export default async function ArchitecturePage() {
     const items = g.components.map((id) => byId.get(id)).filter((c): c is Component => c !== undefined);
     if (g.id === "application") {
       return (
-        <div key={g.id} className="arch-main">
-          <LayerDiagram arch={arch} byId={byId} />
-          <HowToRead purpose={g.purpose} flow={g.flow} />
+        <div key={g.id} className="stack-18">
+          {arch.browser_design && <BrowserDesign design={arch.browser_design} />}
+          <div className="arch-main">
+            <LayerDiagram arch={arch} byId={byId} />
+            <HowToRead purpose={g.purpose} flow={g.flow} />
+          </div>
         </div>
       );
     }

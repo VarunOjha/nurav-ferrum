@@ -15,6 +15,7 @@ interface Roadmap {
 interface Architecture {
   groups: { id: string; name: string }[];
   footnote: unknown;
+  browser_design?: unknown;
 }
 interface Log {
   entries: { id: string; decisions: unknown[]; approvals: unknown[] }[];
@@ -39,7 +40,19 @@ const TABS: { route: string; ids: string[] }[] = [
     ids: ["OV-1", "OV-2", "OV-3", "OV-3.1", "OV-3.2", "OV-3.3", "OV-3.4", "OV-4", "OV-5", "OV-6", ...roadmap.phases.map((p) => `OV-4.${p.short.slice(1)}`)],
   },
   { route: "/roadmap", ids: ["RM-1", "RM-2", "RM-3", "RM-4", ...roadmap.stages.map((s) => `RM-2.${uiItem("RM-2", s.id)?.n ?? s.id}`)] },
-  { route: "/architecture", ids: ["AR-1", "AR-2", "AR-3", "AR-3.1", "AR-4", "AR-7", ...(arch.footnote ? ["AR-8"] : [])] },
+  {
+    route: "/architecture",
+    ids: [
+      "AR-1",
+      "AR-2",
+      "AR-3",
+      "AR-3.1",
+      "AR-4",
+      "AR-7",
+      ...(arch.footnote ? ["AR-8"] : []),
+      ...(arch.browser_design ? ["AR-9", "AR-9.1", "AR-9.2", "AR-9.3"] : []),
+    ],
+  },
   { route: "/decisions", ids: ["DE-1", "DE-2", "DE-3"] },
   { route: "/research", ids: ["RE-1", "RE-2", "RE-3", "RE-4", "RE-5", "RE-6", "RE-7"] },
   { route: "/questions", ids: ["QU-1", "QU-2", "QU-3", "QU-4", "QU-5", "QU-6"] },
@@ -121,6 +134,8 @@ test.describe("Ref mode", () => {
     const ids = await visibleIds(page);
     expect(ids).toEqual(expect.arrayContaining(["AR-5", "AR-6", "AR-7"]));
     expect(ids).not.toContain("AR-3");
+    // The browser picture belongs to the Application group only.
+    expect(ids).not.toContain("AR-9");
   });
 
   test("the mode lasts across tab changes and reloads", async ({ page }) => {

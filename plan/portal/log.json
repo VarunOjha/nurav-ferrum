@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:0afb59dc94c3ca87abd2ad8031f263b2b57b5e2cde2b94bb8fd0e72fba91d082"
+    "content_hash": "sha256:7fdb103949cca7f73049a05ea1c431cd64a799524d9f60a2af9c94c8798bd90f"
   },
   "entries": [
     {
@@ -1048,6 +1048,32 @@
         "## [2026-10-10] code | p0.17 tasks table review fixes: three-step chains, why and how rewritten, fits 1280 px, short phone cards",
         "## [2026-10-10] lint | p0.17 tasks table review fixes: npm run verify green, screenshots at 1440, 1280 and 390 px read",
         "## [2026-10-10] plan | p0.17 step \"task-columns-fixes\" committed: tasks table fixed after a review"
+      ],
+      "phase": "phase-p0-planning"
+    },
+    {
+      "id": "log-2026-10-10-browser-design",
+      "date": "2026-10-10",
+      "title": "You picked how the browser will look; it is now in the Architecture view",
+      "done": "You chose option A: tabs across the top, the website in the middle, and a Ferrum panel on the right with memory, CPU, sleeping tabs, blocked sites and the network log. It is saved as your decision, and the Architecture view now shows the picture first, in light or dark, with a link to the design canvas. All numbers and sites in it are examples; nothing is measured. All checks pass.",
+      "next": "Restart the portal to see the picture under Architecture, then go on with your walkthrough using Ref. Then your first approvals in chat and your P0 sign-off.",
+      "decisions": [
+        {
+          "what": "Browser look: tabs on top, Ferrum panel on the right, light and dark, no AI assistant (option A)",
+          "by": "you"
+        },
+        {
+          "what": "The picture goes first in the Architecture view's Application group, with a Light / Dark switch",
+          "by": "claude"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-10] ingest | Owner asks for a browser design and picks option A",
+        "## [2026-10-10] decide | adr-0028: browser look, tabs on top and a Ferrum panel on the right (owner, option A)",
+        "## [2026-10-10] code | p0.17 browser design: \"How the browser will look\" in the Architecture view",
+        "## [2026-10-10] lint | p0.17 browser design: npm run verify green, screenshots read in both themes at 1440 and 390 px"
       ],
       "phase": "phase-p0-planning"
     }

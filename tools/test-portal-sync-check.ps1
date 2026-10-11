@@ -256,6 +256,18 @@ try {
         Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', '/layers/0/components')
     }
 
+    Test-Case 'MISMATCH: the browser design names a decision that decisions.json does not list' {
+        $d = New-Fixture 'mismatch browser design'
+        Edit-Json (Join-Path $d 'plan/portal/architecture.json') { param($j) $j['browser_design']['decision'] = 'adr-0099' }
+        Assert-Result (Invoke-Checker $d) 1 @('MISMATCH', '/browser_design/decision', 'adr-0099')
+    }
+
+    Test-Case 'BAD-SHAPE: a browser design without callouts' {
+        $d = New-Fixture 'bad browser design'
+        Edit-Json (Join-Path $d 'plan/portal/architecture.json') { param($j) $j['browser_design'].Remove('callouts') }
+        Assert-Result (Invoke-Checker $d) 1 @('BAD-SHAPE', 'architecture.json', '"callouts"')
+    }
+
     # --- Hook mode -----------------------------------------------------------------------------------
     Test-Case 'hook: switched off (no flag file) -> exit 0 even when stale' {
         $d = New-Fixture 'hook off'

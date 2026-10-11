@@ -252,6 +252,14 @@ export function risksByScore(risks: Risks | null): Risks["items"] {
   return [...(risks?.items ?? [])].map((r, i) => ({ r, i })).sort((a, b) => riskScore(b.r) - riskScore(a.r) || a.i - b.i).map((x) => x.r);
 }
 
+/**
+ * Text for a place that cannot hold a reference button (the text inside a layer box, which is itself a button):
+ * every `[words](ref:id)` link becomes its words, so no link markup shows.
+ */
+export function plainText(text: string): string {
+  return text.replace(/\[([^\]\n]+)\]\(ref:[^)\s]+\)/g, "$1");
+}
+
 /** The first sentence of a text (the whole text when it has one sentence). */
 export function firstSentence(text: string): string {
   return headline(text).head;

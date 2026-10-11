@@ -67,6 +67,7 @@ non-specialist who does not remember internal ids. Write for him, not for Claude
 | `wiki/phases/phase-*.md` | `phases/<phase-id>.json` and `roadmap.json` | the whole phase file; one row in `roadmap.phases`; the explainers of the phase and its tasks (no source, see step 5) |
 | `wiki/architecture/ov-arch-system-overview.md`, `wiki/decisions/adr-0026-*.md` | `architecture.json` | the layers (first) and the groups (second), each with that page as its source |
 | `wiki/decisions/adr-*.md` | `decisions.json` | one item in `items` |
+| `wiki/decisions/adr-0028-*.md` (the chosen browser look) | `architecture.json` | also `browser_design` (title, summary, `decision`, `canvas_url`, `sample_note`, 1-10 `callouts`); no source hash; keep it in step with the ADR and the picture in `components/portal/BrowserMockup.tsx`; every value on the picture is a sample |
 | `wiki/risks/risk-*.md` | `risks.json` | one item in `items` |
 | `wiki/research/questions/rq-*.md` | `research.json` | one item in `questions` |
 | `wiki/research/hypotheses/hyp-*.md` | `research.json` | one item in `hypotheses` |

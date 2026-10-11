@@ -240,7 +240,10 @@ yet (every approvable page is PENDING).**
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p0.17 step "task-columns-fixes" (review fixes for the eight-column tasks table) verified and committed 2026-10-10 (`659f619`); next the owner restarts the portal and continues the walkthrough)
+- task: p0.17 step "browser-design" (owner picked option A, raw/owner/2026-10-10-s01-browser-ui-choice.md)
+- intent: record the browser UI choice as an owner decision (ADR) and show option A (light + dark) in the portal's Architecture view, Application group, with a link to the design canvas
+- planned paths: wiki/decisions/adr-*.md (new), wiki/architecture/**, wiki/index.md, wiki/raw/owner/2026-10-10-s01-browser-ui-*.md, wiki/raw/MANIFEST.sha256, plan/portal/*.json, interactive_plan/**, wiki/interactive-plan/ip-*.md, wiki/raw/evidence/phase-p0-planning/portal-v2/
+- rollback: git restore the planned paths; new raw transcripts are kept
 
 ## Blockers
 

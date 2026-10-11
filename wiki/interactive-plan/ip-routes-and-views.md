@@ -13,7 +13,8 @@ sources:
   - raw/evidence/phase-p0-planning/portal-v2/portal-verify.txt
   - raw/owner/2026-10-10-s01-ref-button.md
   - raw/owner/2026-10-10-s01-task-table-columns.md
-related: [ip-spec, ip-data-contract, ip-testing, comp-interactive-plan, adr-0023, adr-0024, adr-0025, adr-0026, ops-portal-pipeline, adr-0014, schema]
+  - raw/owner/2026-10-10-s01-browser-ui-choice.md
+related: [adr-0028, ip-spec, ip-data-contract, ip-testing, comp-interactive-plan, adr-0023, adr-0024, adr-0025, adr-0026, ops-portal-pipeline, adr-0014, schema]
 approvable: true
 phase: phase-p0-planning
 audience: both
@@ -38,7 +39,7 @@ so a page always shows the current files.
 |---|---|---|---|
 | `/` | Overview | Where we are (headline and small table; its "Questions for you" row is counted from the list of questions asked now), questions for you, what happens next in the owner's four parts (where we are, why run something, the script with a button that opens it, then tell Claude), phase progress cards, how references work, the latest three log entries | `overview.json`, `roadmap.json`, `phases/*.json`, `log.json` |
 | `/roadmap` | Roadmap | The three stages (build, measure, publish), one compact row per phase (name, outcome in one line, status, tasks done), and "Same in every phase" | `roadmap.json`, `phases/*.json` |
-| `/architecture` | Architecture | Four group buttons (Application, Benchmark, Testing and quality, Research and analysis, [adr-0026](../decisions/adr-0026-architecture-four-groups.md)); for the application a layered diagram of the Rust app built from plain boxes, coloured by trust, with a "How to read this" side panel (colour key, purpose, one-line flow), as in the mockup; for each other group its purpose, a one-line flow and one short line per part; every box and part line opens the part popup; cards for the other groups; a footnote for planning tooling | `architecture.json` |
+| `/architecture` | Architecture | Four group buttons (Application, Benchmark, Testing and quality, Research and analysis, [adr-0026](../decisions/adr-0026-architecture-four-groups.md)); for the application first "How the browser will look" (`AR-9`, only when `browser_design` is present): a static picture of the chosen design ([adr-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md), option A) drawn at 1440 × 900 and scaled to the card, with a Light / Dark switch that starts on the portal's theme, one image with a summary for screen readers and nothing inside it focusable, then the callouts, the note that every value is a sample, a link to the design canvas (new tab) and "Why we chose it", which opens the decision's explainer; then a layered diagram of the Rust app built from plain boxes, coloured by trust, with a "How to read this" side panel (colour key, purpose, one-line flow), as in the mockup; for each other group its purpose, a one-line flow and one short line per part; every box and part line opens the part popup; cards for the other groups; a footnote for planning tooling | `architecture.json` |
 | `/decisions` | Decisions | One row per decision (number, title, one line, one plain standing: who chose it, when, and whether its written page is signed off); replaced ones muted with a link to what replaced them; then the risks, highest likelihood × impact first | `decisions.json`, `risks.json` |
 | `/research` | Research | The core question, then short sections: questions we want to answer, what we expect to find, experiments, measurements, test pages and tasks | `research.json` |
 | `/questions` | Questions | Open questions first (ordered by the phase they hold up), then answered (with the owner's answer), then withdrawn | `questions.json` |
@@ -101,7 +102,8 @@ he wants to point at parts of the portal when he gives feedback on its layout.
   and a short word that say which item it is, both taken from the item itself, never from its place in a list: the phase
   cards are `OV-4.0` to `OV-4.8` (the phase number, "Phase card: P1"); the four next-step parts (`OV-3.1` "Step: Where we
   are" to `OV-3.4` "Step: Then tell Claude"), the stage cards (`RM-2.1` "Stage card: Build" to `RM-2.3`) and the layer rows
-  (`AR-3.1` "Layer row: What you see" to `AR-3.5` "Layer row: Windows 11") are listed in the registry under the item's own id
+  (`AR-3.1` "Layer row: What you see" to `AR-3.5` "Layer row: Windows 11") and the parts of the browser design block
+  (`AR-9.1` "Light/Dark switch", `AR-9.2` "Picture of the window", `AR-9.3` "What the parts are") are listed in the registry under the item's own id
   in the plan data. Cards that all look the same (questions, log entries) are labelled once: the log labels the first entry
   that the current filter leaves visible.
 - **A click on a label** (or Enter, since every label is a button reachable with Tab only while the mode is on) copies

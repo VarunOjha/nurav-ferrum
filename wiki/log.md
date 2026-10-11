@@ -960,3 +960,33 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: What was done → a review found that Why and How repeated the Logic and check columns, one chain split into nine lines, the table scrolled sideways on 1280 px laptops and phone cards were long → every Why now says what goes wrong without the task, every How the method, every chain has exactly three steps (enforced by the schema), the table fits 1280 px and phone cards open with Id, State and Title → each column now tells the owner something new. STATUS: In-flight cleared; next action unchanged in substance (restart the portal, walk through it with Ref mode, then approvals in chat and the P0 sign-off, then the pause). A refs.json explainer was added for the new commit.
 - next: the owner restarts the portal, walks through it with Ref mode and tells Claude what reads unclear or what to change in the layout; then Approval Wave 1 in chat, the P0 exit review and sign-off; then Claude pauses until the owner says go for P1
 - commit: 659f619
+
+## [2026-10-10] ingest | Owner asks for a browser design and picks option A
+
+- session: s01
+- pages: [adr-0028, comp-app-shell, ip-routes-and-views, ip-testing, ops-portal-pipeline, index, status-live]
+- sources: [raw/owner/2026-10-10-s01-browser-ui-design-request.md, raw/owner/2026-10-10-s01-browser-ui-design-answers-1.md, raw/owner/2026-10-10-s01-browser-ui-choice.md, raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html]
+- result: Three raw owner files and a frozen, byte-identical copy of the chosen design file (option-a.dc.html, run through tools/mask.ps1 --stdin with no change) appended to MANIFEST.sha256 and listed in index.md (the evidence folder entry now names browser-ui/). The owner asked for a Claude design of the Ferrum browser in light and dark mode, partly inspired by the Comet browser; he chose Ferrum's own panel instead of an AI assistant, tabs across the top, and to see panel options; from the three options on the design canvas (A right-side panel, B bottom status bar with a drawer, C toolbar pop-over) he picked A: "I like Option A, let's go with it now. Can we add it to the interactive plan document". Claude's reading: "the interactive plan document" is the read-only plan portal; the design goes into the Architecture view's Application group. All numbers, sites and log lines on the design are sample values; nothing is measured.
+- stales: [comp-app-shell, ip-routes-and-views, ip-testing, ops-portal-pipeline] (no approvals exist yet, so nothing is actually stale)
+
+## [2026-10-10] decide | adr-0028: browser look, tabs on top and a Ferrum panel on the right (owner, option A)
+
+- session: s01
+- pages: [adr-0028, comp-app-shell]
+- sources: [raw/owner/2026-10-10-s01-browser-ui-choice.md, raw/owner/2026-10-10-s01-browser-ui-design-answers-1.md]
+- result: adr-0028 status accepted, decided_by owner (SCHEMA §10.4 rule 3(b), the owner's words quoted verbatim); its "Claude elaboration" section binds only after the owner approves the ADR. Options A, B, C recorded; consequences: the panel costs about 352 px of width; its content waits on P4 (blocklist), P5 (measurement and network log) and P7 (sleeping tabs); per-tab memory and CPU stay UNVERIFIED[phase-p5-telemetry]; the network log stays addresses and sizes only (adr-0008, Q-114); fonts must be bundled because the shell loads nothing remote. comp-app-shell gains a "Look" section and its phase-plan line names the panel's sections. Portal: decisions.json item (decided by "you"), architecture.json `browser_design` block (title, summary, decision adr-0028, canvas link, sample note, six callouts), comp-app-shell record and refs.json explainers updated.
+
+## [2026-10-10] code | p0.17 browser design: "How the browser will look" in the Architecture view
+
+- session: s01
+- pages: [ip-routes-and-views, ip-testing, ops-portal-pipeline, comp-app-shell]
+- sources: [raw/owner/2026-10-10-s01-browser-ui-choice.md, raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html]
+- result: Planning tooling only, no Ferrum code. `plan/portal/schema/architecture.schema.json` gains an optional `browser_design` object (decision `adr-NNNN`, canvas_url `https://claude.ai/...` up to 200 characters, 1-10 callouts, no unknown keys; `schemas.gen.ts` regenerated). `components/portal/BrowserMockup.tsx` is a static copy of option A drawn at 1440 x 900 and scaled to the card, both palettes copied from the design file, with a Light / Dark switch that starts on the portal's theme; it is one image for screen readers whose summary says the values are samples, and nothing in it is focusable. `app/architecture/page.tsx` shows the block first in the Application group, then the callouts, the sample note, the canvas link and "Why we chose it". Ref ids AR-9, AR-9.1 to AR-9.3 in `lib/portal/uiRefs.ts`. The screenshot review found the layer box "Browser controls" printing raw link markup (a button cannot hold a link): `plainText()` in `lib/portal/view.ts` now prints the link's words there. `tools/portal-sync-check.ps1` reports MISMATCH when `browser_design.decision` is not a decision in decisions.json (two new self-tests, fixture updated). Tests: `tests/unit/browser-mockup.test.tsx`, AR-9 in ui-refs and ref-mode, a "browser design" group in architecture.spec.ts, plainText in portal-view-tabs. ip-routes-and-views, ip-testing, ops-portal-pipeline and the wiki-to-portal skill describe the block.
+- stales: [ip-routes-and-views, ip-testing, ops-portal-pipeline] (no approvals exist yet, so nothing is actually stale)
+
+## [2026-10-10] lint | p0.17 browser design: npm run verify green, screenshots read in both themes at 1440 and 390 px
+
+- session: s01
+- pages: [ip-routes-and-views, ip-testing, status-live]
+- sources: [raw/evidence/phase-p0-planning/portal-v2/browser-design-checks.txt]
+- result: `npm run verify` exit 0 on the final files (typecheck, eslint, 783 unit tests passed and 1 skipped, `lint:wiki` 0 errors, 36 warnings, 2 info, build, 107 browser tests passed incl. the five browser design tests, E2E guard: real files unchanged), in a scratch git worktree of HEAD with this step's files copied in (byte-identical), so the owner's portal on 3417 kept running; the worktree was deleted and its servers stopped. Screenshots of the Architecture view's Application group at 1440 and 390 px, portal light and dark, each with the picture also switched to the other palette, were read against the design file: one defect (raw link markup in a layer box), fixed and re-verified; no sideways scrolling; at 390 px the picture is small but whole. Quick lint 0 errors, portal check clean, portal-sync self-tests 29 passed, mask scan 0 unmasked.

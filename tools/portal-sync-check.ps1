@@ -357,6 +357,14 @@ function Get-PortalMismatches($Docs, $RefsById, [string]$RefsFile) {
             }
             $i++
         }
+        # The browser design (optional) must point at a decision that decisions.json lists.
+        $bd = $arch['browser_design']
+        if ($bd -is [System.Collections.IDictionary] -and $bd['decision'] -is [string]) {
+            $decIds = @(if ($decisions) { @($decisions['items'] | Where-Object { $_ -is [System.Collections.IDictionary] } | ForEach-Object { [string]$_['id'] }) })
+            if ($decIds -notcontains $bd['decision']) {
+                & $add "plan/portal/architecture.json at /browser_design/decision" "The browser design names the decision '$($bd['decision'])', but decisions.json has no such decision. Point it at the decision that records the design."
+            }
+        }
     }
     return , $out
 }

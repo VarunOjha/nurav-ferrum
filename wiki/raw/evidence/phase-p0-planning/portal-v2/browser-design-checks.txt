@@ -1,0 +1,88 @@
+# Browser design in the Architecture view (p0.17 step browser-design, session s01, 2026-10-10)
+# Owner picked option A (raw/owner/2026-10-10-s01-browser-ui-choice.md); recorded as adr-0028 and shown in the portal's
+# Architecture view, Application group, as "How the browser will look" (AR-9). npm run verify and the screenshots ran in a
+# scratch git worktree of HEAD a8c4d52 with this step's changed and new files copied in (byte-identical, checked with
+# cmp; a one-line placeholder stood in for this evidence file so the wiki link check could pass there), core.longpaths
+# given to that worktree's git calls through environment variables only, E2E on port 3418 and screenshots on 3423, so
+# the owner's running portal (port 3417) was not rebuilt or stopped. The worktree was deleted afterwards.
+# Every number, site and log line in the picture is a sample value; nothing is measured.
+
+## npm run verify (scratch worktree), first run
+Only failure: wiki lint REF-DANGLING, ip-testing.md links this evidence file, which did not exist yet. rc=1
+(fixed by the placeholder above; the real file is this one)
+
+## npm run verify (scratch worktree), second run, summary lines
+> interactive_plan@0.1.0 verify
+> npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e
+> interactive_plan@0.1.0 typecheck
+> next typegen && tsc --noEmit
+> interactive_plan@0.1.0 lint
+> eslint .
+> interactive_plan@0.1.0 test
+> vitest run
+ Test Files  26 passed (26)
+      Tests  782 passed | 1 skipped (783)
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+lint: 0 errors, 36 warnings, 2 info (pages: 203)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+> interactive_plan@0.1.0 build
+> next build
+> interactive_plan@0.1.0 test:e2e
+> playwright test
+E2E guard: 22 real files unchanged (approvals.json absent)
+  107 passed (4.0m)
+rc=0
+
+## Screenshot review (Claude read them), server on 3423
+Found one real defect: the "Browser controls" box of the layer diagram showed raw link markup
+"([the look you chose](ref:adr-0028))", because the box is itself a button and prints its text without links.
+Fix: plainText() in lib/portal/view.ts turns every [words](ref:id) into its words for that box text; unit test in
+tests/unit/portal-view-tabs.test.ts. Then npm run verify ran again on the final files (third run).
+
+## npm run verify (scratch worktree), third run on the final files, summary lines
+> interactive_plan@0.1.0 verify
+> npm run typecheck && npm run lint && npm run test && npm run lint:wiki && npm run build && npm run test:e2e
+> interactive_plan@0.1.0 typecheck
+> next typegen && tsc --noEmit
+> interactive_plan@0.1.0 lint
+> eslint .
+> interactive_plan@0.1.0 test
+> vitest run
+ Test Files  26 passed (26)
+      Tests  783 passed | 1 skipped (784)
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+lint: 0 errors, 36 warnings, 2 info (pages: 203)
+ Test Files  2 passed (2)
+      Tests  8 passed | 1 skipped (9)
+> interactive_plan@0.1.0 build
+> next build
+> interactive_plan@0.1.0 test:e2e
+> playwright test
+E2E guard: 22 real files unchanged (approvals.json absent)
+  107 passed (4.0m)
+rc=0
+Browser design tests in that run (all passed):
+  ✓   25 [chromium] › tests\e2e\architecture.spec.ts:132:7 › browser design › the Application group shows the picture first; the other groups do not (1.7s)
+  ✓   26 [chromium] › tests\e2e\architecture.spec.ts:169:9 › browser design › the switch starts on the portal theme and swaps the colours (light portal) (3.0s)
+  ✓   27 [chromium] › tests\e2e\architecture.spec.ts:169:9 › browser design › the switch starts on the portal theme and swaps the colours (dark portal) (2.8s)
+  ✓   28 [chromium] › tests\e2e\architecture.spec.ts:190:7 › browser design › phone width: the picture shrinks to fit and nothing scrolls sideways (693ms)
+  ✓   29 [chromium] › tests\e2e\architecture.spec.ts:202:7 › browser design › Ref mode names the block and its three parts (840ms)
+Layer diagram text after the fix (1440, light): no-markup; "Ferrum panel on the right (the look you chose)."
+
+## Screenshots after the fix (saved in Claude's scratch folder, not committed)
+arch-app-{light,dark}-{1440,390}.png: whole Architecture view, Application group, portal light and dark
+block-{portal}-{width}-mock-{light,dark}.png: the block with the picture in its own palette and switched to the other
+layer-diagram-light-1440.png: the fixed box text
+Probe (sideways = page scroll width minus window width; picture size in px):
+[{"scheme":"light","w":1440,"sideways":0,"picW":1158,"picH":724},{"scheme":"light","w":390,"sideways":0,"picW":316,"picH":198},{"scheme":"dark","w":1440,"sideways":0,"picW":1158,"picH":724},{"scheme":"dark","w":390,"sideways":0,"picW":316,"picH":198}]
+Read: at 1440 the block sits first in the Application group, above the layer diagram; tabs (two sleeping with a moon
+and grey text), window buttons, toolbar, address bar with lock, shield with badge 2, panel button and menu, sample
+website, Ferrum panel with three stat cards, memory bars with Active / Idle / Sleeping, blocked sites, network log,
+the "addresses and sizes only" note and "Open log folder" on one line, all as in the design file
+(raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html). Light and dark palettes both render and the switch
+changes only the picture. The six callouts, the sample note, the canvas link and "Why we chose it" show under it.
+At 390 the picture shrinks to the card width (316 x 198 px, small but whole; the callouts carry the words) and nothing
+scrolls sideways. No other defect.

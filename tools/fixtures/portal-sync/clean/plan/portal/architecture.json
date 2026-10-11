@@ -46,6 +46,19 @@
       "components": []
     }
   ],
+  "browser_design": {
+    "title": "How the browser will look",
+    "summary": "Tabs on top, the website in the middle, a panel on the right.",
+    "decision": "adr-0007",
+    "canvas_url": "https://claude.ai/artifact/example",
+    "sample_note": "Numbers are examples. Nothing is measured yet.",
+    "callouts": [
+      {
+        "label": "Tabs on top",
+        "text": "Tabs across the top of the window."
+      }
+    ]
+  },
   "components": [
     {
       "id": "comp-core",

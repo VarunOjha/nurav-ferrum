@@ -3,14 +3,14 @@ id: ops-portal-pipeline
 type: operations
 title: "Portal pipeline: how wiki changes become plain-language JSON for the plan portal"
 status: active
-updated: 2026-10-09
+updated: 2026-10-10
 sources:
   - raw/owner/2026-10-09-s01-plan-app-feedback.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
   - raw/owner/2026-10-09-s01-wave0c.md
   - raw/research/claude-code-hooks-skills.md
   - SCHEMA.md
-related: [adr-0024, adr-0025, adr-0026, adr-0023, schema, comp-interactive-plan, ops-wiki-maintenance, ops-git-conventions, phase-p0-planning]
+related: [adr-0024, adr-0028, adr-0025, adr-0026, adr-0023, schema, comp-interactive-plan, ops-wiki-maintenance, ops-git-conventions, phase-p0-planning]
 approvable: false
 audience: both
 trigger: "Whenever Claude edits a wiki page or STATUS.md (same edit), when the portal check or its Stop hook reports a problem, and when the portal JSON shape changes."
@@ -48,7 +48,7 @@ flowchart LR
 | `plan/portal/roadmap.json` | Stages, one row per phase, and the things that are the same in every phase (written once) |
 | `plan/portal/phases/<phase-id>.json` | One phase for the phase popup: goal, status, progress, step order, tasks, test gate |
 | `plan/portal/decisions.json`, `risks.json`, `research.json` | One plain record per ADR, risk, research question, hypothesis, experiment, metric, workload |
-| `plan/portal/architecture.json` | Layers of the Rust app, the four groups ([ADR-0026](../decisions/adr-0026-architecture-four-groups.md)), every component |
+| `plan/portal/architecture.json` | Layers of the Rust app, the four groups ([ADR-0026](../decisions/adr-0026-architecture-four-groups.md)), every component, and the optional `browser_design` block (how the browser will look, [ADR-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md); its `decision` must be an item in `decisions.json`) |
 | `plan/portal/questions.json` | The questions log (one item per `Q-NNN` in [ov-open-questions](../overview/ov-open-questions.md)) |
 | `plan/portal/log.json` | The plain-language log; each entry lists the wiki log headings it covers |
 | `plan/portal/refs.json` | An explainer (kind, title, 1-3 sentences, status, related ids) for every id the portal can show, so any id opens a popup |

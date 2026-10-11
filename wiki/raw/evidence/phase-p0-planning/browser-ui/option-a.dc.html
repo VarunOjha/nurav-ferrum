@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ferrum, option A: side panel</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#A8471B}a:hover{color:#7E3412}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; border-radius: 10px; font-family: 'IBM Plex Sans', system-ui, sans-serif; background: {{t.strip}}; color: {{t.text}};">
+
+  <div style="height: 46px; display: flex; align-items: flex-end; padding: 0 0 0 10px; gap: 4px;">
+    <div style="display: flex; align-items: flex-end; gap: 4px; flex: 1; min-width: 0; height: 46px;">
+      <sc-for list="{{tabs}}" as="tab" hint-placeholder-count="4">
+        <button type="button" style="font: inherit; width: 230px; height: 38px; display: flex; align-items: center; gap: 8px; padding: 0 10px 0 12px; border: 0; border-radius: 10px 10px 0 0; cursor: pointer; text-align: left; background: {{tab.bg}}; color: {{tab.fg}};">
+          <span aria-hidden="true" style="width: 18px; height: 18px; flex-shrink: 0; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: {{tab.iconBg}}; color: {{tab.iconFg}};">{{tab.letter}}</span>
+          <span style="flex: 1; min-width: 0; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{tab.title}}</span>
+          <sc-if value="{{tab.sleeping}}" hint-placeholder-val="{{false}}">
+            <svg role="img" aria-label="Sleeping" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="{{t.sleep}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg>
+          </sc-if>
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </sc-for>
+      <button type="button" aria-label="New tab" style="width: 34px; height: 34px; margin-bottom: 2px; border: 0; border-radius: 8px; background: transparent; color: {{t.muted}}; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+      </button>
+    </div>
+    <div style="display: flex; align-self: flex-start; height: 34px;">
+      <button type="button" aria-label="Minimise" style="width: 46px; height: 34px; border: 0; background: transparent; color: {{t.text}}; cursor: pointer;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M1 6h10"></path></svg></button>
+      <button type="button" aria-label="Maximise" style="width: 46px; height: 34px; border: 0; background: transparent; color: {{t.text}}; cursor: pointer;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"><rect x="1.5" y="1.5" width="9" height="9" rx="1"></rect></svg></button>
+      <button type="button" aria-label="Close window" style="width: 46px; height: 34px; border: 0; background: transparent; color: {{t.text}}; cursor: pointer; border-top-right-radius: 10px;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M1.5 1.5l9 9M10.5 1.5l-9 9"></path></svg></button>
+    </div>
+  </div>
+
+  <div style="height: 52px; flex-shrink: 0; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: {{t.toolbar}}; border-bottom: 1px solid {{t.border}};">
+    <button type="button" aria-label="Back" style="width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: {{t.text}}; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg></button>
+    <button type="button" aria-label="Forward" style="width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: {{t.faint}}; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <button type="button" aria-label="Reload" style="width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: {{t.text}}; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 4v7h-7"></path></svg></button>
+
+    <div style="flex: 1; display: flex; justify-content: center; padding: 0 24px;">
+      <label style="width: 100%; max-width: 760px; height: 36px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-radius: 999px; background: {{t.pill}}; border: 1px solid {{t.border}};">
+        <svg role="img" aria-label="Secure connection" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="{{t.good}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+        <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);">Address</span>
+        <input type="text" value="example.org/getting-started" style="flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font: inherit; font-size: 14px; color: {{t.text}};">
+      </label>
+    </div>
+
+    <button type="button" aria-label="2 sites blocked on this page" style="position: relative; width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: {{t.text}}; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"></path></svg>
+      <span aria-hidden="true" style="position: absolute; top: 3px; right: 2px; min-width: 15px; height: 15px; border-radius: 8px; font-size: 10px; font-weight: 700; line-height: 15px; text-align: center; background: {{t.accent}}; color: {{t.onAccent}};">2</span>
+    </button>
+    <button type="button" aria-label="Ferrum panel (open)" aria-pressed="true" style="width: 36px; height: 36px; border: 0; border-radius: 8px; background: {{t.accentSoft}}; color: {{t.accent}}; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M15 4v16"></path></svg>
+    </button>
+    <button type="button" aria-label="Menu" style="width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: {{t.text}}; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+    </button>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex;">
+    <main style="flex: 1; min-width: 0; overflow: hidden; background: {{t.page}};">
+      <div style="height: 56px; display: flex; align-items: center; gap: 28px; padding: 0 48px; border-bottom: 1px solid {{t.pageLine}};">
+        <div aria-hidden="true" style="width: 96px; height: 20px; border-radius: 4px; background: {{t.pageBlock}};"></div>
+        <span style="font-size: 14px; color: {{t.muted}};">Home</span>
+        <span style="font-size: 14px; color: {{t.muted}};">Docs</span>
+        <span style="font-size: 14px; color: {{t.muted}};">Blog</span>
+      </div>
+      <article style="max-width: 720px; margin: 0 auto; padding: 48px 32px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: {{t.muted}};">SAMPLE WEBSITE</div>
+        <h1 style="margin: 0; font-size: 36px; line-height: 1.2; font-weight: 600;">Getting started</h1>
+        <p style="margin: 0; font-size: 17px; line-height: 1.65; color: {{t.body}};">This stands in for whatever website you open. Ferrum draws it with WebView2, the same engine Edge uses, so pages look and behave as they do there.</p>
+        <div aria-hidden="true" style="height: 220px; border-radius: 12px; background: {{t.pageBlock}};"></div>
+        <p style="margin: 0; font-size: 17px; line-height: 1.65; color: {{t.body}};">Everything around this area is Ferrum: the tabs, the address bar, the buttons and the panel on the right.</p>
+      </article>
+    </main>
+
+    <aside aria-label="Ferrum panel" style="width: 352px; flex-shrink: 0; overflow: hidden; display: flex; flex-direction: column; background: {{t.panel}}; border-left: 1px solid {{t.border}};">
+      <div style="height: 52px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 18px;">
+        <h2 style="margin: 0; font-size: 15px; font-weight: 600;">Ferrum</h2>
+        <button type="button" aria-label="Close panel" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: {{t.muted}}; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+
+      <div style="flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 22px; padding: 4px 18px 18px;">
+        <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+          <sc-for list="{{stats}}" as="s" hint-placeholder-count="3">
+            <div style="padding: 12px; border-radius: 10px; background: {{t.card}}; border: 1px solid {{t.border}}; display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 18px; font-weight: 600;">{{s.value}}</span>
+              <span style="font-size: 12px; color: {{t.muted}};">{{s.label}}</span>
+            </div>
+          </sc-for>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 10px;">
+          <h3 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; color: {{t.muted}};">TABS · MEMORY</h3>
+          <sc-for list="{{memTabs}}" as="m" hint-placeholder-count="4">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px;">
+                <span style="font-weight: 500;">{{m.host}}</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; color: {{t.muted}};">{{m.mem}}</span>
+              </div>
+              <div style="height: 6px; border-radius: 3px; background: {{t.track}};"><div style="height: 6px; border-radius: 3px; width: {{m.w}}; background: {{m.color}};"></div></div>
+              <span style="font-size: 12px; color: {{m.stateColor}};">{{m.state}}</span>
+            </div>
+          </sc-for>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 8px;">
+          <h3 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; color: {{t.muted}};">BLOCKED ON THIS PAGE</h3>
+          <sc-for list="{{blocked}}" as="b" hint-placeholder-count="2">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="{{t.accent}}" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M5.7 5.7l12.6 12.6"></path></svg>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px;">{{b.host}}</span>
+            </div>
+          </sc-for>
+        </section>
+
+        <section style="display: flex; flex-direction: column; gap: 8px;">
+          <h3 style="margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; color: {{t.muted}};">NETWORK LOG · THIS TAB</h3>
+          <div style="border-radius: 10px; border: 1px solid {{t.border}}; background: {{t.card}}; overflow: hidden;">
+            <sc-for list="{{netlog}}" as="n" hint-placeholder-count="5">
+              <div style="display: flex; gap: 8px; padding: 7px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; border-top: 1px solid {{t.pageLine}};">
+                <span style="width: 34px; color: {{t.muted}};">{{n.method}}</span>
+                <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{n.host}}</span>
+                <span style="color: {{n.statusColor}};">{{n.status}}</span>
+                <span style="width: 48px; text-align: right; color: {{t.muted}};">{{n.size}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <span style="font-size: 12px; color: {{t.muted}};">Addresses and sizes only, never page content</span>
+            <button type="button" style="font: inherit; font-size: 13px; font-weight: 500; padding: 7px 12px; border-radius: 8px; border: 1px solid {{t.border}}; background: {{t.toolbar}}; color: {{t.text}}; cursor: pointer;">Open log folder</button>
+          </div>
+        </section>
+      </div>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const dark = this.props.dark ?? false;
+    const t = dark ? {
+      strip: '#141414', toolbar: '#262626', tabActive: '#262626', text: '#ECEAE6', body: '#CFCBC4', muted: '#A9A59D', faint: '#5F5C57',
+      border: '#383735', pill: '#1C1C1C', page: '#1A1A1A', pageLine: '#2C2B29', pageBlock: '#2E2D2B', panel: '#1F1F1F', card: '#262626',
+      track: '#34332F', accent: '#EC8A5C', accentSoft: '#3D2A1F', onAccent: '#1A1A1A', good: '#7CC4A0', sleep: '#A3B1E6', warn: '#E9B872'
+    } : {
+      strip: '#E8E6E1', toolbar: '#FFFFFF', tabActive: '#FFFFFF', text: '#1C1B19', body: '#3B3934', muted: '#5F5B54', faint: '#B5B1AA',
+      border: '#DAD7D0', pill: '#F3F1ED', page: '#FFFFFF', pageLine: '#ECEAE5', pageBlock: '#EFEDE8', panel: '#FAF9F6', card: '#FFFFFF',
+      track: '#ECE9E3', accent: '#A8471B', accentSoft: '#F7E7DD', onAccent: '#FFFFFF', good: '#2E6B4E', sleep: '#3F55A3', warn: '#8A5A00'
+    };
+    const tabs = [
+      { title: 'Getting started · example.org', letter: 'E', active: true, sleeping: false },
+      { title: 'Weather · example.net', letter: 'W', active: false, sleeping: false },
+      { title: 'Team notes · example.com', letter: 'T', active: false, sleeping: true },
+      { title: 'Docs search · example.dev', letter: 'D', active: false, sleeping: true }
+    ].map((x) => ({
+      ...x,
+      bg: x.active ? t.tabActive : 'transparent',
+      fg: x.sleeping ? t.muted : t.text,
+      iconBg: x.active ? t.accentSoft : t.track,
+      iconFg: x.active ? t.accent : t.muted
+    }));
+    const memTabs = [
+      { host: 'example.org', mem: '182 MB', w: '74%', color: t.accent, state: 'Active', stateColor: t.muted },
+      { host: 'example.net', mem: '96 MB', w: '39%', color: t.warn, state: 'Idle · goes to sleep in 4 min', stateColor: t.muted },
+      { host: 'example.com', mem: '6 MB', w: '3%', color: t.sleep, state: 'Sleeping', stateColor: t.sleep },
+      { host: 'example.dev', mem: '5 MB', w: '2%', color: t.sleep, state: 'Sleeping', stateColor: t.sleep }
+    ];
+    const netlog = [
+      { method: 'GET', host: 'example.org/getting-started', status: '200', size: '18 KB' },
+      { method: 'GET', host: 'example.org/app.css', status: '200', size: '42 KB' },
+      { method: 'GET', host: 'images.example.org/hero.webp', status: '200', size: '210 KB' },
+      { method: 'POST', host: 'tracker.example-ads.net/collect', status: 'blocked', size: '—' },
+      { method: 'GET', host: 'example.org/api/menu', status: '304', size: '0 KB' }
+    ].map((n) => ({ ...n, statusColor: n.status === 'blocked' ? t.accent : t.good }));
+    return {
+      t, tabs, memTabs, netlog,
+      stats: [
+        { value: '289 MB', label: 'All tabs' },
+        { value: '1.2%', label: 'CPU' },
+        { value: '2', label: 'Sleeping' }
+      ],
+      blocked: [{ host: 'tracker.example-ads.net' }, { host: 'metrics.example-cdn.io' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

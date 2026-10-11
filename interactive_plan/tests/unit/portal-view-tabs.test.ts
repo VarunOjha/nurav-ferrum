@@ -13,6 +13,7 @@ import {
   questionsRow,
   taskTone,
   firstSentence,
+  plainText,
   layerRows,
   layerShortName,
   newestFirst,
@@ -75,6 +76,11 @@ describe("log, questions and labels", () => {
     expect(riskScore({ likelihood: 3, impact: 5 })).toBe(15);
     expect(risksByScore(null)).toEqual([]);
   });
+  it("plainText keeps a link's words and drops its markup", () => {
+    expect(plainText("a Ferrum panel ([the look you chose](ref:adr-0028)). Next")).toBe("a Ferrum panel (the look you chose). Next");
+    expect(plainText("no links, adr-0028 stays")).toBe("no links, adr-0028 stays");
+  });
+
   it("firstSentence", () => {
     expect(firstSentence("One. Two.")).toBe("One.");
     expect(firstSentence("Only one")).toBe("Only one");

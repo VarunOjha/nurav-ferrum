@@ -3,12 +3,13 @@ id: comp-app-shell
 type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: planned
-updated: 2026-10-08
+updated: 2026-10-10
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
-related: [ov-arch-system-overview, ov-arch-trust-boundaries, ov-arch-data-flows, ov-arch-configuration, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-core, comp-tab-content, comp-webview2-runtime, comp-windows-os, adr-0006, adr-0007, adr-0015, risk-r02, phase-p2-minimal-container, phase-p3-tabs-sessions]
+  - raw/owner/2026-10-10-s01-browser-ui-choice.md
+related: [ov-arch-system-overview, ov-arch-trust-boundaries, ov-arch-data-flows, ov-arch-configuration, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-core, comp-tab-content, comp-webview2-runtime, comp-windows-os, adr-0006, adr-0007, adr-0015, adr-0028, risk-r02, phase-p2-minimal-container, phase-p3-tabs-sessions]
 approvable: true
 path: apps/desktop/
 crate: ferrum-desktop
@@ -77,6 +78,18 @@ The Ferrum desktop application. It has two halves in one component:
 1. **Shell UI.** Vanilla TypeScript + Vite (adr-0006), in `apps/desktop/ui/`, rendered in the **trusted shell WebView** at the local app origin.
 2. **Tauri host.** The `ferrum-desktop` crate in `apps/desktop/src-tauri/`. It owns the window, registers commands, holds the capability files and wires the other crates together.
 
+## Look
+
+The owner chose how the browser looks ([adr-0028](../../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md),
+option A of the design canvas, 2026-10-10): tabs across the top with the Windows 11 window buttons at the right; a
+toolbar with back, forward, reload, a rounded address bar with a lock, a shield button with a blocked count, a panel
+toggle and a menu; the website in the middle; and a **Ferrum panel** on the right (about 352 px) with memory, CPU,
+sleeping tabs, blocked sites and this tab's network log (metadata only, adr-0008). Sleeping tabs show a moon. Calm
+warm grey, one rust-orange accent, IBM Plex Sans and Mono, light and dark. No AI assistant. Frozen design:
+[option-a.dc.html](../../raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html). All numbers on it are samples;
+nothing is measured. The panel's sections fill in as later phases land (P4 blocking, P5 measurement and network log,
+P7 sleeping tabs). The fonts are bundled with the app, since the shell loads no remote resources.
+
 ## Design notes
 
 - **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) and resize with a custom title bar (#12207) are known issues. Whether they are workable is UNVERIFIED[phase-p1-foundation]. Avoid a custom title bar initially.
@@ -90,4 +103,4 @@ The Ferrum desktop application. It has two halves in one component:
 - phase-p2-minimal-container (M1): shell plus **one** child tab WebView, address bar, back/forward/reload, loading/error states.
 - phase-p3-tabs-sessions (M2): tabs, shortcuts, session restore, per-site settings UI, downloads list.
 - phase-p4-security (M3): permission and external-scheme prompts, blocked-navigation UI.
-- Later: sidebar, split view.
+- Later: the Ferrum panel's sections as their data sources land (adr-0028); split view.

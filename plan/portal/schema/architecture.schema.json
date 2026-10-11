@@ -132,6 +132,62 @@
       },
       "additionalProperties": false
     },
+    "browser_design": {
+      "description": "How the Ferrum browser window will look (owner's design choice). Shown first in the Application group. Every number, site and log line in the picture is a sample, nothing is measured.",
+      "type": "object",
+      "required": [
+        "title",
+        "summary",
+        "decision",
+        "canvas_url",
+        "sample_note",
+        "callouts"
+      ],
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "summary": {
+          "$ref": "#/$defs/summary"
+        },
+        "decision": {
+          "type": "string",
+          "pattern": "^adr-[0-9]{4}$",
+          "description": "The decision record (ADR) that holds this choice."
+        },
+        "canvas_url": {
+          "type": "string",
+          "pattern": "^https://claude\\.ai/[A-Za-z0-9/_-]+$",
+          "maxLength": 200,
+          "description": "Link to the owner's private design canvas."
+        },
+        "sample_note": {
+          "$ref": "#/$defs/short_text"
+        },
+        "callouts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "text"
+            ],
+            "properties": {
+              "label": {
+                "$ref": "#/$defs/title"
+              },
+              "text": {
+                "$ref": "#/$defs/short_text"
+              }
+            },
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 10
+        }
+      },
+      "additionalProperties": false
+    },
     "components": {
       "type": "array",
       "items": {

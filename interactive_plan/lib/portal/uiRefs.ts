@@ -111,6 +111,16 @@ export const UI_REFS = {
   "AR-6": { name: "Parts list" },
   "AR-7": { name: "Other groups at a glance" },
   "AR-8": { name: "Footnote" },
+  "AR-9": {
+    name: "How the browser will look",
+    item: "Part",
+    // Fixed parts of the block (owner's design choice of 2026-10-10), keyed by a word, as OV-3's steps.
+    items: {
+      switch: { n: 1, name: "Light/Dark switch" },
+      mockup: { n: 2, name: "Picture of the window" },
+      callouts: { n: 3, name: "What the parts are" },
+    },
+  },
 
   // Decisions
   "DE-1": { name: "Page heading" },

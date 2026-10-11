@@ -138,6 +138,11 @@ describe("ui ref labels", () => {
     expect(copyText(scopeLabel("OV-3"), uiLabel("OV-3", "3", "The script")!)).toBe("Overview › OV-3.3 Step: The script");
     expect(copyText(scopeLabel("AR-3"), uiLabel("AR-3", "2", "Ferrum engine")!)).toBe("Architecture › AR-3.2 Layer row: Ferrum engine");
     expect(copyText(scopeLabel("RM-2"), uiLabel("RM-2", "1", "Build")!)).toBe("Roadmap › RM-2.1 Stage card: Build");
+    // The browser design block (owner's choice of 2026-10-10) has three fixed parts.
+    expect(copyText(scopeLabel("AR-9"), uiLabel("AR-9")!)).toBe("Architecture › AR-9 How the browser will look");
+    expect(ui("AR-9", { key: "switch" })).toEqual({ "data-ui-ref": "AR-9", "data-ui-index": "1", "data-ui-item": "Light/Dark switch" });
+    expect(ui("AR-9", { key: "mockup" })["data-ui-index"]).toBe("2");
+    expect(ui("AR-9", { key: "callouts" })["data-ui-index"]).toBe("3");
   });
 
   it("every item numbers its group's items uniquely, and the plan data has no unregistered item", () => {

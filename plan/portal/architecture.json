@@ -158,11 +158,44 @@
       "comp-interactive-plan"
     ]
   },
+  "browser_design": {
+    "title": "How the browser will look",
+    "summary": "You chose option A: tabs across the top, the website in the middle, and a Ferrum panel on the right that shows memory, CPU, sleeping tabs, blocked sites and the network log. No AI assistant; light and dark mode.",
+    "decision": "adr-0028",
+    "canvas_url": "https://claude.ai/artifact/YTbBgjDsSJyuNPk8hk3wra",
+    "sample_note": "Numbers, sites and log lines are examples. Nothing is measured yet.",
+    "callouts": [
+      {
+        "label": "Tabs on top",
+        "text": "Rounded tabs across the top of the window, with the Windows 11 minimise, maximise and close buttons at the right."
+      },
+      {
+        "label": "Address bar with a lock",
+        "text": "Back, forward and reload, then a rounded address bar; a lock shows the site uses a secure connection."
+      },
+      {
+        "label": "Shield with blocked count",
+        "text": "A shield button next to the address bar; its badge counts what the blocklist stopped on this page."
+      },
+      {
+        "label": "Ferrum panel",
+        "text": "A panel on the right (about 352 pixels wide) with memory and CPU of all tabs, sleeping tabs and blocked sites; a button hides it."
+      },
+      {
+        "label": "Sleeping tabs",
+        "text": "A tab Ferrum put to sleep to save memory shows a moon and greyed text; the panel says when an idle tab will sleep."
+      },
+      {
+        "label": "Network log: addresses only",
+        "text": "The panel lists this tab's requests (method, address, status, size), never page content, with a button to open the log folder."
+      }
+    ]
+  },
   "components": [
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use: address bar, tabs, back, forward, reload and settings. Trusted (our code): a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
+      "summary": "The window you use: tabs on top, address bar, back, forward, reload, settings and a Ferrum panel on the right ([the look you chose](ref:adr-0028)). Our code: a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
       "group": "application",
       "layer": "layer-controls",
       "status": "Planned",
@@ -188,11 +221,12 @@
       ],
       "related": [
         "risk-r02",
-        "risk-r19"
+        "risk-r19",
+        "adr-0028"
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:3794b3d9917d6bcc8c09fd86780044fd2603eef4f5386348c2107d6b9c0ba9c2"
+        "content_hash": "sha256:f7c2774a4c47294c042781f92758a71d0afd99e61d0f2c2a4f3195643313ab95"
       }
     },
     {

@@ -3162,7 +3162,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use: address bar, tabs, back, forward, reload and settings. Trusted (our code): a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
+      "summary": "The window you use: tabs on top, address bar, back, forward, reload, settings and a Ferrum panel on the right ([the look you chose](ref:adr-0028)). Our code: a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
       "status": "Planned",
       "related": [
         "layer-controls"
@@ -4239,6 +4239,22 @@
       "summary": "Every Why now says what goes wrong without the task and every How says how it is done; every Logic cell has three steps; the table fits a 1280 px screen and phone cards start with id, state and title.",
       "status": null,
       "related": [
+        "phase-p0-planning"
+      ]
+    },
+    {
+      "id": "adr-0028",
+      "kind": "decision",
+      "title": "Decision 28: Browser look: tabs on top, Ferrum panel on the right",
+      "summary": "The browser has tabs across the top, an address bar with a lock and a shield button, the website in the middle, and a Ferrum panel on the right with memory, CPU, sleeping tabs, blocked sites and this tab's network log. No AI assistant. You decided.",
+      "status": "Accepted",
+      "related": [
+        "adr-0006",
+        "adr-0007",
+        "adr-0008",
+        "adr-0015",
+        "adr-0026",
+        "comp-app-shell",
         "phase-p0-planning"
       ]
     }

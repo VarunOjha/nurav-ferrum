@@ -654,6 +654,31 @@
         "wiki_path": "wiki/decisions/adr-0027-mask-sensitive-values.md",
         "content_hash": "sha256:447e6ef18379016376ffbe41d81811716d63004285e102d9ed0a3d00ac358a5b"
       }
+    },
+    {
+      "id": "adr-0028",
+      "number": 28,
+      "title": "Browser look: tabs on top, Ferrum panel on the right",
+      "summary": "The browser has tabs across the top, an address bar with a lock and a shield button, the website in the middle, and a Ferrum panel on the right with memory, CPU, sleeping tabs, blocked sites and this tab's network log. No AI assistant.",
+      "why": "Your choice (option A of three): everything Ferrum knows about your tabs is visible at a glance.",
+      "catch": "The panel takes about 352 pixels of width while open, and its parts stay empty until P4, P5 and P7 build what feeds them. Numbers on the design are samples.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-10",
+      "replaced_by": null,
+      "related": [
+        "adr-0006",
+        "adr-0007",
+        "adr-0008",
+        "adr-0015",
+        "adr-0026",
+        "comp-app-shell",
+        "phase-p0-planning"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md",
+        "content_hash": "sha256:d6d618a0348c6b2261071edaba22665e365a5e675d6c17ddc945bc8c77240e93"
+      }
     }
   ]
 }
