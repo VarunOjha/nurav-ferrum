@@ -340,7 +340,7 @@
       "kind": "task",
       "title": "P1 task: Start the public docs",
       "summary": "Readers need security, benchmark and reproducibility notes → short starter files linking to the wiki → documentation grows with the code.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4492,6 +4492,14 @@
       "kind": "commit",
       "title": "Commit: Licence and security-alert checks set up",
       "summary": "Ferrum's Rust libraries are now checked for allowed licences and known security alerts; today all pass. A trial run on the Tauri test app found five libraries under MPL-2.0, a mild open-source licence",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "3b24c12",
+      "kind": "commit",
+      "title": "Commit: Short public documents written",
+      "summary": "The repository now has short entry documents for security (how to report problems, the trust zones, the debug-port warning), benchmarking (the fairness rules, no results yet) and reproducibility (reco",
       "status": null,
       "related": []
     }

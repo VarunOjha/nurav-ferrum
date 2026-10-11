@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 10 of 17 tasks done. Next: p1.13 short public documents.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 11 of 17 tasks done. Next: p1.15 code-page warning before each commit.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:f8570b1af40dfe3efefcca04fe52666ea732c0b9d6782ae2cdebb0c52cf26812"
+    "content_hash": "sha256:3630073fd682321c491a1e031df48cb25584a3e4b6d73cf0e78384bc1983f1fb"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 10 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 11 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "10 of 17 tasks done"
+        "state": "11 of 17 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p1.13 short public documents"
+        "state": "p1.15 code-page warning before each commit"
       }
     ],
-    "why": "Nothing to run. Readers and reviewers need short entry documents → Claude writes security, benchmarking and reproducibility stubs that point into the wiki → the repo explains itself.",
+    "why": "Nothing to run. The rule \"code that changes behaviour updates its design page in the same commit\" is easy to forget → Claude adds a pre-commit warning → design pages stay true.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

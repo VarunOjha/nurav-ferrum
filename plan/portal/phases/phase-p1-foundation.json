@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 10,
+    "done": 11,
     "total": 17
   },
   "step_order": [
@@ -169,7 +169,7 @@
       "what": "Starter files for security, benchmarking and reproducibility notes, a docs index and an updated AI-use note.",
       "why": "Docs written at the end tend to be thin or wrong. Small starter files now make it easy to add each fact when it is learned.",
       "how": "Write a short outline for each file, with a link to the wiki page that holds the details.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Readers need security, benchmark and reproducibility notes → short starter files linking to the wiki → documentation grows with the code.",
       "check": "Files exist and link to their wiki pages; no broken links.",
       "script": "scripts/verify/p1.13-public-docs.ps1"

@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: null
-next_action: "Task p1.13 (doc stubs): SECURITY.md, BENCHMARKING.md, REPRODUCIBILITY.md, docs/README.md, update AI_USAGE.md; each links its canonical wiki pages; run scripts/verify/p1.13-public-docs.ps1."
+next_action: "Task p1.15 (CODE-rule enforcement): pre-commit hook that runs the quick lint subset and warns when crates/ or apps/ change without a component page change; test it in a temporary clone; resolve the SCHEMA section 9.8 UNVERIFIED tag at the exit gate."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -54,6 +54,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.6 done (`f7004a9`, fix `809cd3c`): spike S2, route (c) per-site profiles in one browser process with isolated cookies; route (d) works with a browser per site; (a) unreleased, (b) not run.
 - p1.10 done (`60c7d03`): git-backed lint rules re-confirmed (13 tests, 0 wiki errors, 106 fingerprints match).
 - p1.12 done (`04d9f8c`): deny.toml, cargo deny ok; npm audit dispositioned; new question Q-222 (MPL-2.0 licence, blocks P2).
+- p1.13 done (`3b24c12`): SECURITY.md, BENCHMARKING.md, REPRODUCIBILITY.md, docs/README.md; AI_USAGE.md updated.
 
 ## Done this session (s01)
 
@@ -265,7 +266,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); p1.12 done `04d9f8c`; next p1.13 (not started)
+- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); p1.13 done; next p1.15 (not started)
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -302,11 +303,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 10 of 17 tasks done |
-| Next task | p1.13 short public documents |
+| Phase 1 | In progress: 11 of 17 tasks done |
+| Next task | p1.15 code-page warning before each commit |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Readers and reviewers need short entry documents → Claude writes security, benchmarking and reproducibility stubs that point into the wiki → the repo explains itself.
+**2. Why, and what it does.** Nothing for you to run now. The rule "code that changes behaviour updates its design page in the same commit" is easy to forget → Claude adds a pre-commit warning → design pages stay true.
 
 **3. The script:** none for you.
 
@@ -321,4 +322,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 10 of 17 tasks done, last p1.12). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 11 of 17 tasks done, last p1.13). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

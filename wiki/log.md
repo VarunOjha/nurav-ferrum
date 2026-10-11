@@ -1421,3 +1421,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: deny.toml (advisories, permissive licence allow list compatible with MIT OR Apache-2.0, wildcards denied, crates.io only): cargo deny check ok on the workspace. Informational run on spike S1's Tauri tree: 5 crates declare MPL-2.0 (cssparser, cssparser-macros, dtoa-short, option-ext, selectors) and are rejected; new question Q-222 (blocks P2) asks the owner whether to allow MPL-2.0. npm audit for interactive_plan: production 0; dev-only 5 high from braces 3.0.3 via eslint-config-next 16.4.0, the only offered fix is a breaking downgrade, accepted as dev-only (delegated tooling decision, owner may overturn). Check PASS (4 of 4).
 - next: p1.13 doc stubs
 - commit: 04d9f8c
+
+## [2026-10-11] code | p1.13 public doc stubs and AI_USAGE update
+
+- session: s02
+- time: 13:24
+- pages: [phase-p1-foundation]
+- result: SECURITY.md, BENCHMARKING.md, REPRODUCIBILITY.md and docs/README.md written as short entry points linking the canonical wiki pages and the P1 spike reports; AI_USAGE.md gained a use-by-phase section and a dated approval note. Check PASS (3 of 3): files exist, all relative links resolve, lint:wiki REF-DANGLING 0.
+- next: p1.15 pre-commit hook
+- commit: 3b24c12

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:43e0c86aaff95dec93be056ccebd8d25719ced90a017f6dce6d130feea25f421"
+    "content_hash": "sha256:eba1769afd9ff13b6a529f6a2de9cf8360de0ec6ea4e50a9a4493e45372fbe9a"
   },
   "entries": [
     {
@@ -1876,6 +1876,26 @@
       "tags": [
         "licensing",
         "toolchain"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-13",
+      "date": "2026-10-11",
+      "time": "13:24",
+      "title": "Short public documents written",
+      "done": "The repository now has short entry documents for security (how to report problems, the trust zones, the debug-port warning), benchmarking (the fairness rules, no results yet) and reproducibility (recorded tool versions and pins). The AI usage note now says what AI did in planning and phase 1.",
+      "next": "Claude adds a warning that fires when code changes without its design page.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "3b24c12",
+      "covers": [
+        "## [2026-10-11] code | p1.13 public doc stubs and AI_USAGE update"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Built",
+      "tags": [
+        "wiki",
+        "privacy"
       ]
     }
   ]
