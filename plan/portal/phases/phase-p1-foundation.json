@@ -6,7 +6,7 @@
   "summary": "Confirm the installed tools, set up an empty Rust project with automatic checks, and test the four riskiest technical assumptions with throwaway experiments before the real app is designed. You gave the go on 11 Oct.",
   "status": "In progress",
   "progress": {
-    "done": 8,
+    "done": 9,
     "total": 17
   },
   "step_order": [
@@ -136,7 +136,7 @@
       "what": "A re-run of the wiki checks that use git history: raw files unchanged, page dates not stale.",
       "why": "A changed raw file or an outdated page would quietly weaken the record the paper relies on. Re-running avoids writing a second checker.",
       "how": "Re-run the existing wiki check on the P1 history and its tests on sample repos; adjust the rules only if needed. No second checker is written.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "These checks were already built during P0 → P1 re-runs them on the new history and adjusts them only if needed → tampering with raw files or stale dates are still caught; P1 has one less real build task.",
       "check": "Sample repos trigger both rules; the real wiki has zero errors; raw-file fingerprints all match.",
       "script": "scripts/verify/p1.10-history-wiki-checks.ps1"

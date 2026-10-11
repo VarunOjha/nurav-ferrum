@@ -1401,3 +1401,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: spikes/s2-profiles ran routes (c) and (d) with a loopback cookie fixture. Route (c), tab controllers created with raw COM from Tauri's own environment (CreateCoreWebView2ControllerWithOptions + SetProfileName): all calls S_OK, both sites and the shell report one BrowserProcessId, cookie who=A is sent by site A only. Route (d), Tauri child web views with a data_directory each: works and isolates cookies, but each site gets its own browser process (contradicts Q7). Route (a): Tauri PR 16054 still open and unmerged (GitHub API, 13:14); route (b), a fork patch, not run (supply-chain decision). Check PASS (2 of 2). Correction: the f7004a9 commit message said clippy was clean; it had 2 collapsible_if warnings, fixed in 809cd3c; all three Rust spikes now show 0 clippy warnings.
 - next: p1.9 spike synthesis and proposed ADRs
 - commit: f7004a9
+
+## [2026-10-11] code | p1.10 git-backed wiki lint rules re-confirmed on the P1 history
+
+- session: s02
+- time: 13:19
+- pages: [phase-p1-foundation]
+- sources: [raw/evidence/phase-p1-foundation/check-p1.10.txt]
+- result: scripts/verify/p1.10-history-wiki-checks.ps1 PASS (3 of 3): RAW-IMMUTABLE and STALE-UPDATED unit tests on fixture repositories 13 passed; npm run lint:wiki on the real wiki 203 pages, 0 errors; all 106 raw files have matching MANIFEST fingerprints. No second linter, no rule change needed.
+- next: p1.12 dependency auditing
+- commit: 60c7d03

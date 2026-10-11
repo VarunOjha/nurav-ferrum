@@ -310,7 +310,7 @@
       "kind": "task",
       "title": "P1 task: Re-confirm the history-based wiki checks",
       "summary": "These checks were already built during P0 → P1 re-runs them on the new history and adjusts them only if needed → tampering with raw files or stale dates are still caught; P1 has one less real build task.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p1-foundation"
       ]
@@ -4466,6 +4466,14 @@
       "kind": "commit",
       "title": "Commit: Experiment 2 code-style fix",
       "summary": "Two small code-style warnings in experiment 2 fixed; the earlier commit message wrongly said there were none.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "60c7d03",
+      "kind": "commit",
+      "title": "Commit: History-based wiki checks still work",
+      "summary": "The checks that catch edited raw files and stale page dates still work on all of phase 1's history: 13 tests pass, the wiki has no errors, and all 106 raw files match their fingerprints.",
       "status": null,
       "related": []
     }

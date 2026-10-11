@@ -20,7 +20,7 @@ approvable: false
 session: s02
 current_phase: phase-p1-foundation
 current_task: null
-next_action: "Task p1.9 (spike synthesis): update risk pages risk-r01, r02, r03, r05, r06 with spike evidence; propose ADRs adr-0028.. (profile route, back/forward mechanism, CDP benchmark path, hosting model confirmation); update P2 page; ask the owner to choose and approve, together with the S1 hand checks."
+next_action: "Task p1.12 (dependency auditing): write deny.toml (licence allowlist compatible with MIT OR Apache-2.0, advisories), run cargo deny check (save cargo-deny-p1.12.txt) and npm audit for interactive_plan (save, disposition findings); Cargo.lock and package-lock.json committed; run scripts/verify/p1.12-dependency-audit.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-09-s01
 ---
@@ -52,6 +52,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 - p1.7 done (`3e30f93`): spike S3 raw COM, every call S_OK; one webview2-com and one windows version; unsafe invariants drafted.
 - p1.8 done (`c4dfd4d`): spike S4, one Playwright harness drives S1, Chrome for Testing and Edge over CDP; hidden tabs give no paint or screenshot.
 - p1.6 done (`f7004a9`, fix `809cd3c`): spike S2, route (c) per-site profiles in one browser process with isolated cookies; route (d) works with a browser per site; (a) unreleased, (b) not run.
+- p1.10 done (`60c7d03`): git-backed lint rules re-confirmed (13 tests, 0 wiki errors, 106 fingerprints match).
 
 ## Done this session (s01)
 
@@ -263,7 +264,7 @@ P0 (planning) is done and signed off (2026-10-11, `phase-p0-planning#exit` APPRO
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); p1.6 done (`f7004a9`, `809cd3c`); next p1.9 (not started)
+- task: p1.5 waits for the owner's hand checks (automatic part `331e3f6`); p1.10 done `60c7d03`; next p1.12 (not started)
 - rollback: nothing uncommitted
 
 ## Blockers
@@ -300,11 +301,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 1 | In progress: 8 of 17 tasks done |
-| Next task | p1.9 design proposals from the experiments |
+| Phase 1 | In progress: 9 of 17 tasks done |
+| Next task | p1.12 licence and security-alert check |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. The four experiments are done → Claude turns the results into proposed design decisions (profile route, back/forward, test-robot path) → you choose, and phase 2 is planned on facts.
+**2. Why, and what it does.** Nothing for you to run now. Every library Ferrum uses must have a licence compatible with ours and no known security alert → Claude configures cargo-deny and audits the plan app → problems surface before they ship.
 
 **3. The script:** none for you.
 
@@ -319,4 +320,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P1 in progress: 8 of 17 tasks done, last p1.6). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).
+2026-10-11, session s02 (P1 in progress: 9 of 17 tasks done, last p1.10). Last handoff: [handoff-2026-10-09-s01](wiki/operations/handoffs/handoff-2026-10-09-s01.md) (updated 2026-10-11).

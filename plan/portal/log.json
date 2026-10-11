@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:1cac6bc558932702bd74c00a32de45ef8c798f98872ab0524dc43e0bbcb816a5"
+    "content_hash": "sha256:3c2ce5f702ca119d622fea54437f01bf0c9af251cd9ee0c5c439959d548127c1"
   },
   "entries": [
     {
@@ -1836,6 +1836,26 @@
       "tags": [
         "isolation",
         "WebView2"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p1-10",
+      "date": "2026-10-11",
+      "time": "13:19",
+      "title": "History-based wiki checks still work",
+      "done": "The checks that catch edited raw files and stale page dates still work on all of phase 1's history: 13 tests pass, the wiki has no errors, and all 106 raw files match their fingerprints.",
+      "next": "Claude sets up the licence and security-alert check for Rust libraries.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "60c7d03",
+      "covers": [
+        "## [2026-10-11] code | p1.10 git-backed wiki lint rules re-confirmed on the P1 history"
+      ],
+      "phase": "phase-p1-foundation",
+      "category": "Checked",
+      "tags": [
+        "wiki",
+        "testing"
       ]
     }
   ]

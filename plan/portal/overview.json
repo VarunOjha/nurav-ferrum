@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 8 of 17 tasks done. Next: p1.9 design proposals from the experiments.",
+  "summary": "Planning (P0) is done and signed off. Phase 1 is in progress: 9 of 17 tasks done. Next: p1.12 licence and security-alert check.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:d7791530ac615467164fed5ad97515ec233b3e6eebf812449cdeee6060577e9f"
+    "content_hash": "sha256:fea5924ea782956ae3709971dff2122b465df6c0b7356b8ba2ab296821900bd6"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P1 Foundation: in progress, 8 of 17 tasks done",
+      "state": "P1 Foundation: in progress, 9 of 17 tasks done",
       "ref": "phase-p1-foundation"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 1",
-        "state": "8 of 17 tasks done"
+        "state": "9 of 17 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p1.9 design proposals from the experiments"
+        "state": "p1.12 licence and security-alert check"
       }
     ],
-    "why": "Nothing to run. The four experiments are done → Claude turns the results into proposed design decisions (profile route, back/forward, test-robot path) → you choose, and phase 2 is planned on facts.",
+    "why": "Nothing to run. Every library Ferrum uses must have a licence compatible with ours and no known security alert → Claude configures cargo-deny and audits the plan app → problems surface before they ship.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
