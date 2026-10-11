@@ -620,7 +620,7 @@
       "kind": "task",
       "title": "P2 task: Back, forward, refresh",
       "summary": "Basic browsing → use the browser's own history calls and grey out buttons that cannot work → behaves like a normal browser.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4643,6 +4643,14 @@
       "kind": "commit",
       "title": "Commit: Websites load in Ferrum",
       "summary": "The first real website view works: Ferrum creates it itself (your decision 29) and the toolbar follows it: the address, the lock, a loading indicator and the back and forward buttons. Tests load two p",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "094b0b7",
+      "kind": "commit",
+      "title": "Commit: Back, forward and refresh tested",
+      "summary": "Claude built a test robot that drives the real Ferrum window like a person would. Its first test opens two pages, goes back, forward and refreshes; the local test server counts every request, and the ",
       "status": null,
       "related": []
     }

@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 6,
+    "done": 7,
     "total": 18
   },
   "step_order": [
@@ -92,7 +92,7 @@
       "what": "Back, forward and refresh buttons, greyed out when they cannot work.",
       "why": "Without these, every wrong click means retyping an address. Grey buttons stop you pressing something that silently does nothing.",
       "how": "Use the browser's own history calls and its \"history changed\" signal (proposed decision from experiment 3); a test goes from A to B, back, forward and refresh while the test server counts requests.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Basic browsing → use the browser's own history calls and grey out buttons that cannot work → behaves like a normal browser.",
       "check": "A then B: back shows A, forward shows B, refresh reloads B; buttons match history.",
       "script": "scripts/verify/p2.7-back-forward-refresh.ps1"

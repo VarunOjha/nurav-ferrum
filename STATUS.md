@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.7 (back/forward/refresh): self-test A -> B -> back -> forward -> refresh with request counting on the fixture server; button state from HistoryChanged; run scripts/verify/p2.7-*.ps1."
+next_action: "Task p2.8 (loading and error states): spinner while loading; on failure the shell shows an error panel (content hidden, shell band expanded) with Try again; HTTP 404/500 shown as a status in the shell; smoke tests with slow, 404, 500 and unreachable-host fixtures; content URL never the app origin."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -78,6 +78,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.4 done (`a69fa57`): settings model (TOML, adr-0015 validation), 9 tests.
 - p2.5 done (`d3ad7ee`): address-bar normalisation, 36 cases, one real bug fixed.
 - p2.6 done (`2c9d89f`): content web view (adr-0029) with events to the shell; nav and ipc self-tests PASS; the Ferrum-created view has no bridge.
+- p2.7 done (`094b0b7`): back/forward/refresh smoke test; smoke robot; app_quit, shell_layout, data_dir applied.
 
 ## Done this session (s01)
 
@@ -289,7 +290,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.6 verified and committed 2026-10-11 as `2c9d89f`)
+(empty: p2.7 verified and committed 2026-10-11 as `094b0b7`)
 
 ## Blockers
 
@@ -325,11 +326,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 6 of 18 tasks done |
-| Next task | p2.7 back, forward, refresh |
+| Phase 2 | In progress: 7 of 18 tasks done |
+| Next task | p2.8 loading and error states |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. The buttons now exist → Claude tests them end to end on local pages, with the test server counting requests → you can rely on them like in any browser.
+**2. Why, and what it does.** Nothing for you to run now. Pages can be slow, missing or unreachable → Claude shows a clear loading indicator and an error panel drawn by the shell itself → you always know what is happening.
 
 **3. The script:** none for you.
 
@@ -344,4 +345,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 6 of 18 tasks done, last p2.6). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 7 of 18 tasks done, last p2.7). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

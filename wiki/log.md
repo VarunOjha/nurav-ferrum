@@ -1648,3 +1648,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/p2.6-nav-selftest.json, raw/evidence/phase-p2-minimal-container/p2.6-ipc-selftest.json]
 - result: webview-manager gained the tab module and the single raw-COM module webview2 (adr-0019): ContentView from Tauri's environment with profile ferrum-default (adr-0029), navigation, source, completion (HTTP status), history, title and focus events, navigate/back/forward/reload/stop/bounds/focus/close. The app places it below the toolbar, loads settings, exposes tab_* commands to the shell only, and restores page focus on window activation (S1 issue; manual confirmation pending). Self-test nav: two fixture pages each starting -> source changed -> completed (200) in order, received in order by the shell. Self-test ipc: the Ferrum-created view has no bridge at all (settles the adr-0029 / comp-tab-content / P2 claim; tags closed at the exit gate). Checks p2.6 and p2.3 PASS.
 - commit: 2c9d89f
+
+## [2026-10-11] code | p2.7 back, forward, refresh smoke-tested; smoke robot in place
+
+- session: s02
+- time: 18:56
+- pages: [phase-p2-minimal-container, comp-webview-manager, comp-app-shell]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.7.txt]
+- result: Smoke robot (Playwright 1.64.0 over CDP, adr-0031) with an isolated data folder, test server started and stopped by itself, app closed with the shell-only app_quit command; nothing killed. The data_dir setting is now applied to the shell environment (and so to the content view). New shell-only commands app_quit and shell_layout (information band below the toolbar). Spec back-forward-refresh passes: A, B, back, forward, reload counted by the test server; buttons follow HistoryChanged. p2.7 check PASS.
+- commit: 094b0b7

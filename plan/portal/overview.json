@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 6 of 18 tasks done. Next: p2.7 back, forward, refresh.",
+  "summary": "Phase 2 is in progress: 7 of 18 tasks done. Next: p2.8 loading and error states.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b2f976c4301b92fc298d2687d70c78611f925c7c1e109da5256796145cdddf6e"
+    "content_hash": "sha256:b3d965bb58e2fdf30c17d78abd615acbb1a59f1a48a2b3df4aaffe8b8643e8e9"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 6 of 18 tasks done",
+      "state": "P2 First working app: in progress, 7 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "6 of 18 tasks done"
+        "state": "7 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.7 back, forward, refresh"
+        "state": "p2.8 loading and error states"
       }
     ],
-    "why": "Nothing to run. The buttons now exist → Claude tests them end to end on local pages, with the test server counting requests → you can rely on them like in any browser.",
+    "why": "Nothing to run. Pages can be slow, missing or unreachable → Claude shows a clear loading indicator and an error panel drawn by the shell itself → you always know what is happening.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
