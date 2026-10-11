@@ -16,6 +16,15 @@ yet chosen).
 
 No other AI tools are used so far. Any new one is added here before use.
 
+## Use so far, by phase
+
+- **P0 (planning, 2026-10-08 to 2026-10-11):** Claude drafted the wiki and built the read-only plan portal and the
+  check scripts; the owner approved the planning pages in chat ([wiki log](wiki/log.md)).
+- **P1 (foundation, from 2026-10-11):** Claude recorded the toolchain and machine inventory, scaffolded the empty
+  Rust workspace, and wrote and ran the four throw-away spikes (`spikes/`), saving their raw output under
+  `wiki/raw/evidence/phase-p1-foundation/`. Spike reports describe what was observed and contain no performance
+  results. Design choices that follow from the spikes are proposed to the owner, who decides.
+
 ## Categories of assistance
 
 The master prompt permits these categories. The table records where each is used.
@@ -62,7 +71,8 @@ The planning documents written in phase P0 (the wiki pages, `CLAUDE.md`, `STATUS
 the other root documents) were **drafted by Claude**, from the owner's requirements and answers and
 from research notes Claude wrote after fetching primary sources. They become binding only when the
 owner approves them in Claude Code; the approval record is `plan/approvals.json` (adr-0023). Until then they are
-proposals. At the time of writing (2026-10-08) nothing has been approved.
+proposals. The owner approved them in chat between 2026-10-08 and 2026-10-11 (Approval Waves 0 to 2 and the P0
+sign-off, recorded in `plan/approvals.json`); approval means the owner accepted them, not that a human wrote them.
 
 ## Human responsibility
 
