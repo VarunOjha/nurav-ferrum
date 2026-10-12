@@ -6,7 +6,7 @@
   "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
   "status": "Waiting for your review",
   "progress": {
-    "done": 15,
+    "done": 16,
     "total": 23
   },
   "step_order": [
@@ -203,7 +203,7 @@
       "what": "Claude asks you the design questions one at a time, then shows options on a design canvas, light and dark. You pick.",
       "why": "Bookmarks and the address-bar suggestions need a place and a look, and you want the browser fun and comfortable to use.",
       "how": "Questions one by one: overall feel, light and dark, suggestions, where bookmarks live, new-tab page, logo. Then two or three options drawn on a Claude design canvas.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "You ask for a nicer, comfortable browser → Claude asks, then draws options → you choose, and everything after builds that choice.",
       "check": "Your answers and choice are recorded; the chosen design is saved; no app code changes.",
       "script": null

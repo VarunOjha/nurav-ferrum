@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is built; your review is open. The new feature set is planned, and design options from your answers are on a design canvas for you to pick from.",
+  "summary": "Phase 3 is built; your review is open. For the new feature set you picked the Graphite look and the split-tile logo; the plan waits for your approval before building starts.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:9e00af9677324098873f14ca5f5d828724f5982c383a4223d39ab72f481b0fa5"
+    "content_hash": "sha256:a228d94c36bdb57b1f5bc6775662dc83f144f26e2796123c7125dbe7e2c67397"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: feature set design options ready for your pick",
+      "state": "P3 Tabs and sessions: feature set designed; waiting for your plan approval",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -37,17 +37,17 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "Design options",
-        "state": "three looks, three logos, on the canvas"
+        "item": "Design",
+        "state": "picked: Graphite, split-tile logo"
       },
       {
         "item": "Feature set plan",
         "state": "waits for your approval"
       }
     ],
-    "why": "You choose the look before anything is built.",
+    "why": "Nothing is built until you approve the plan.",
     "script": null,
-    "tell_claude": "The look (A, B or C), the logo (1, 2 or 3), any changes, and \"approve the feature set plan\"."
+    "tell_claude": "\"approve the feature set plan\", or what to change."
   },
   "questions_for_you": {
     "open": 23,

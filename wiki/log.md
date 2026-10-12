@@ -2010,3 +2010,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Seven design questions asked one at a time. Owner chose dark and metallic (follows Windows light/dark), grouped address-bar suggestions, bookmarks bar plus sidebar, a new tab with search and favourites, an Fe element-tile logo, and all four comfort touches. Claude drew three dark metallic looks (Graphite, Forge, Steel) in dark and light, the new tab page, three Fe logo versions and compact density on a private Claude design canvas: https://claude.ai/artifact/LaQHpDxGjzdqLuH8FQ7BFW. Sample values only. The new look changes adr-0028's colours (calm warm grey); a look ADR follows the owner's pick.
 - next: owner picks a look (A, B or C) and a logo (1, 2 or 3) and approves the feature set plan and adr-0032.
 - commit: ec63f1b
+
+## [2026-10-12] decide | p3.17 done: owner picks look A Graphite and logo 8; themes as swappable data (adr-0033)
+
+- session: s02
+- time: 15:15
+- pages: [adr-0033, phase-p3-tabs-sessions]
+- sources: [raw/owner/2026-10-12-s02-feature-set-design-pick.md]
+- result: On request Claude added Comet-inspired layouts D, E, F and logos 4 to 9 to the canvas. Owner chose look A with Graphite colours and logo 8 (split tile, "for now"), and asked that themes can be configured in the future. Design frozen under raw/evidence/phase-p3-tabs-sessions/design/. adr-0033 accepted for the quoted choice (elaboration binds on approval): themes as named design tokens, Graphite first, accent and density as settings, safe theme files later. p3.22 updated. Stales approval of phase-p3-tabs-sessions (already stale).
+- next: owner approves the feature set plan (phase-p3-tabs-sessions, adr-0032, adr-0033, ov-project); then p3.18 (local store).
+- commit: 509309d

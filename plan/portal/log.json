@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:954af96530ff887688e1d4785f4fcb18877ca54b470e7c5adea79ce60d561e99"
+    "content_hash": "sha256:d8b5f681949414abcc90dadb60faa735140a7c3d9de314466952714337253af2"
   },
   "entries": [
     {
@@ -3189,6 +3189,44 @@
       "tags": [
         "look & feel",
         "address bar"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-17-pick",
+      "date": "2026-10-12",
+      "time": "15:15",
+      "title": "Your design pick: Graphite and the split-tile logo",
+      "done": "After more layouts inspired by Comet and six more logos, you chose look A in Graphite colours and logo 8, the split tile, for now. Themes will be built as swappable colour sets so more can be added later. The chosen design is saved in the project.",
+      "next": "You approve the feature set plan; then Claude starts building, beginning with the local database.",
+      "decisions": [
+        {
+          "what": "Look A in Graphite colours",
+          "by": "you"
+        },
+        {
+          "what": "Logo 8, the split tile, for now",
+          "by": "you"
+        },
+        {
+          "what": "Themes can be configured in the future",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Feature set plan, storage and backup decision, look decision",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "509309d",
+      "covers": [
+        "## [2026-10-12] decide | p3.17 done: owner picks look A Graphite and logo 8; themes as swappable data (adr-0033)"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Decided",
+      "tags": [
+        "look & feel",
+        "approvals"
       ]
     }
   ]

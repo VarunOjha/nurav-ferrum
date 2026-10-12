@@ -4917,7 +4917,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: design with you",
       "summary": "You ask for a nicer, comfortable browser → Claude asks, then draws options → you choose, and everything after builds that choice.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -5030,6 +5030,14 @@
         "adr-0032",
         "comp-app-shell"
       ]
+    },
+    {
+      "id": "509309d",
+      "kind": "commit",
+      "title": "Commit: Your design pick recorded",
+      "summary": "Look A Graphite, logo 8 split tile, themes as swappable colour sets; design frozen; decision 33.",
+      "status": null,
+      "related": []
     }
   ]
 }

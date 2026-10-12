@@ -80,7 +80,7 @@
       "name": "Tabs and sessions",
       "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
       "status": "Waiting for your review",
-      "tasks_done": 15,
+      "tasks_done": 16,
       "tasks_total": 23,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
