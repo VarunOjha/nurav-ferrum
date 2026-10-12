@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 14 of 15 tasks done. Next: the P3 end check, then your review.",
+  "summary": "Phase 3 (tabs and sessions) is built and passed its end check. Claude stopped for your review, as you asked.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:20849c6bbe8522775d6f320b49d18aa2b87b275d4110fac74cc6f388d5c1678c"
+    "content_hash": "sha256:6ba62fe5d8562222829a622b6b6d2c0615934a3b74a243a9f0e1f5b730e1f124"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 14 of 15 tasks done",
+      "state": "P3 Tabs and sessions: waiting for your review (end check passed)",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -34,20 +34,28 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "14 of 15 tasks done"
+        "state": "15 of 15 tasks built; end check passed"
       },
       {
-        "item": "Next task",
-        "state": "The P3 end check, then your review"
+        "item": "Your part",
+        "state": "checklist, two re-approvals, sign-off"
       }
     ],
-    "why": "Nothing to run. The end check runs every automatic test on one commit; then Claude stops, as you asked.",
-    "script": null,
-    "tell_claude": "Nothing for now. Claude asks when a step needs you."
+    "why": "The automatic checks cannot judge real sites and real hands. You try Ferrum with the checklist, then decide whether phase 3 is done.",
+    "script": {
+      "path": "scripts/open-ferrum.ps1",
+      "parts": [
+        {
+          "code": "pwsh -NoProfile -File scripts/open-ferrum.ps1",
+          "explains": "Opens the release build of Ferrum for your checklist; close it when you are done."
+        }
+      ]
+    },
+    "tell_claude": "Your checklist results, \"re-approve adr-0011 and adr-0015\", and \"Sign off P3\" (or what to fix)."
   },
   "questions_for_you": {
     "open": 23,

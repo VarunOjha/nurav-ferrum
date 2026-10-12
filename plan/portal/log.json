@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:22a6c22e6bdb084e1101b6d58f4e7109cf8bcb65a103ee4d7b759569aa06122e"
+    "content_hash": "sha256:229a00d052161bebda873f9a570c62effcd8e3b2414439f66c8d1df0252b2500"
   },
   "entries": [
     {
@@ -3060,6 +3060,27 @@
       "tags": [
         "phases",
         "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-gate",
+      "date": "2026-10-12",
+      "time": "03:42",
+      "title": "Phase 3 passed its end check; waiting for your review",
+      "done": "All 15 phase 3 tasks are built. The end check passed on one commit: 24 automatic checks, including the release build, all phase 3 tests and all phase 2 tests again. Claude stopped here, as you asked.",
+      "next": "Your review: try the release build with the checklist, re-approve two changed decision pages, and say whether phase 3 is signed off.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "e1cee54",
+      "covers": [
+        "## [2026-10-12] gate | phase-p3-tabs-sessions exit ready for review",
+        "## [2026-10-12] handoff | s02 stopped for the owner's P3 review"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "testing"
       ]
     }
   ]

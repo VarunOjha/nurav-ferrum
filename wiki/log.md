@@ -1958,3 +1958,18 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/research/p3-crate-versions.md]
 - result: README, SECURITY.md, docs/testing/manual-checklist-p3.md, part pages last verified at ebc79ca; scripts/gates/p3-gate.ps1 and the p3.13 check made real. P3-targeted claims: crate versions verified (raw/research/p3-crate-versions.md); risk-r01 claim no longer needed; custom title bar not needed (Q-125); re-targeted to P4 with reasons: OAuth pop-ups (no window.opener in P3), Google refusal, other OAuth providers, Node pin, GitHub CI runner and reproducible-build claims (Q-221). Open for the owner's review: Alt+Tab fix, real mail launch. Stales adr-0011 and adr-0015 (outside the P3 annex: left for the owner's re-approval at the P3 review). Next: the P3 gate with evidence.
 - commit: 6ab7667
+
+## [2026-10-12] gate | phase-p3-tabs-sessions exit ready for review
+
+- session: s02
+- time: 03:42
+- pages: [phase-p3-tabs-sessions]
+- sources: [raw/evidence/phase-p3-tabs-sessions/p3-gate.txt]
+- result: SCHEMA §9.7 exit steps 1 to 5. (1) scripts/gates/p3-gate.ps1 -SaveEvidence on d363adf: RESULT PASS (24 PASS, 2 YOURS; 1031 s); evidence committed in e1cee54 (cargo-fmt, cargo-clippy, cargo-test, cargo-deny, shell-tests, release-build, integration (npm run p3), regression-smoke (npm run p2, 26 passed, plus p2.3), wiki-lint). (2) Every automatic test_gate.evidence file exists; manual-checklist.md waits for the owner. (3) Manual items: docs/testing/manual-checklist-p3.md for the owner. (4) Lint clean; P3-targeted claims closed or re-targeted with reasons except the Alt+Tab fix and the real mail launch (owner's checks). (5) phase-p3-tabs-sessions set to gate-review. adr-0011 and adr-0015 changed in p3.13 and wait for the owner's re-approval (outside the P3 auto-approval). Claude STOPS here (owner: "Stop after the next phase is done").
+
+## [2026-10-12] handoff | s02 stopped for the owner's P3 review
+
+- session: s02
+- time: 03:42
+- pages: [handoff-2026-10-12-s02, status-live]
+- result: Handoff written (operations/handoffs/handoff-2026-10-12-s02.md). No P4 work until the owner signs off P3 and explicitly says go.

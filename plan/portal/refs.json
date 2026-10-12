@@ -42,7 +42,7 @@
       "kind": "phase",
       "title": "P3 Tabs and sessions",
       "summary": "Goal: Many tabs, restored after a restart, with separate data per site. Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
-      "status": "In progress",
+      "status": "Waiting for your review",
       "related": [],
       "aliases": [
         "P3"
@@ -4883,6 +4883,14 @@
       "kind": "commit",
       "title": "Commit: Phase 3 docs and the end check are ready",
       "summary": "The README now explains tabs, shortcuts and the known limits; SECURITY.md lists what phase 3 adds; there is a checklist for your hands-on review. Open claims marked for phase 3 were checked, or moved ",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "e1cee54",
+      "kind": "commit",
+      "title": "Commit: Phase 3 end-check evidence",
+      "summary": "The P3 end-of-phase check passed on one commit: 24 automatic checks; each test output saved as evidence.",
       "status": null,
       "related": []
     }

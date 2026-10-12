@@ -79,12 +79,12 @@
       "short": "P3",
       "name": "Tabs and sessions",
       "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
-      "status": "In progress",
+      "status": "Waiting for your review",
       "tasks_done": 14,
       "tasks_total": 15,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-        "content_hash": "sha256:0eb8a347371a3e82efd5dd49d0b91bab94192294c8833bbe204d2219c55a4dff"
+        "content_hash": "sha256:facf35a63c0547358177cdbfda1f95739be92d89b242216b053845ff55096dc5"
       }
     },
     {
