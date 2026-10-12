@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "Waiting for your review",
   "progress": {
-    "done": 14,
+    "done": 15,
     "total": 16
   },
   "step_order": [
@@ -191,7 +191,7 @@
       "what": "A download a site opens in a new window no longer shows an error page, and the extra tab closes by itself. Tabs show each site's icon. Ferrum gets a clear orange app icon.",
       "why": "In your review a download looked failed although the file had arrived, tabs had no site icons, and the app icon was barely visible, which also made Ferrum hard to spot in Task Manager.",
       "how": "Treat a page that turns into a download as a download, not an error. Take each site's icon from WebView2 (no extra request) and show it in the tab. Draw a new icon and build it into the program.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "Your review found problems → fix each one with a test → they stay fixed when you try the new build.",
       "check": "A download in a new window completes with no error and its tab closes; a site's icon shows in its tab; the program carries the new icon.",
       "script": "scripts/verify/p3.16-review-fixes.ps1"

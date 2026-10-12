@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7de751f8fe80112ff71df25cf377546bce4990dc0b6f77cfa9ac52d3418b7f5b"
+    "content_hash": "sha256:7e30fc60044532b96d8c9a724c0c1ebb04e87ca15bc60d28f8767019202f67a5"
   },
   "entries": [
     {
@@ -3101,6 +3101,31 @@
       "tags": [
         "phases",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-16",
+      "date": "2026-10-12",
+      "time": "12:01",
+      "title": "Fixed: download tabs, site icons, a clear app icon",
+      "done": "A file a site opens in a new window no longer shows an error page, and the extra tab closes by itself. Tabs and the sidebar show each site's icon. Ferrum has a new orange app icon that is easy to see. Each fix has a test, and all pass.",
+      "next": "You close Ferrum so Claude can rebuild it; then you try the new build.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Three pages changed by the fixes (phase 3 page, browser controls, website views)",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "80dc946",
+      "covers": [
+        "## [2026-10-12] code | p3.16 owner review round 1 fixes: download tabs, site icons, app icon"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Fixed",
+      "tags": [
+        "tabs",
+        "look & feel"
       ]
     }
   ]

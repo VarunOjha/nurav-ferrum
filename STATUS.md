@@ -22,8 +22,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
-current_task: p3.16
-next_action: "P3 review fixes in progress (task p3.16, owner feedback 2026-10-12): download tab without error panel, site icons on tabs, a visible app icon, Task Manager. Then the owner's review continues: checklist, re-approve adr-0011 and adr-0015, P3 sign-off. No P4 work."
+current_task: p3.13
+next_action: "Owner: close every Ferrum window and say \"Closed\". Then Claude rebuilds the release build (npm run tauri -- build --no-bundle in apps/desktop), opens it with scripts/open-ferrum.ps1, and the owner checks docs/testing/manual-checklist-p3.md items 1 to 13, re-approves adr-0011, adr-0015, phase-p3-tabs-sessions, comp-app-shell, comp-webview-manager and says whether P3 is signed off. Claude reruns scripts/gates/p3-gate.ps1 -SaveEvidence before recording the sign-off. No P4 work."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -110,6 +110,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 - p3.12 done (0ce0e38): literature batch 3 (eight sources; seed open points F3, G1, G2 closed); check PASS.
 - p3.13 part 1 (`6ab7667`): P3 docs, manual checklist, real P3 gate; P3 claims closed or re-targeted.
 - P3 gate PASS on d363adf (evidence `e1cee54`, 24 PASS); phase-p3-tabs-sessions gate-review; handoff written; STOPPED for the owner's review.
+- p3.16 done (80dc946): owner review fixes (download tab, site icons, app icon); check PASS.
 
 ## Done this session (s01)
 
@@ -321,10 +322,10 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.16 owner review round 1 fixes (P3)
-- intent: (1) a tab that turns into a download shows no error panel; a tab that never showed a page closes when its download ends; (2) site icons in the tab strip and sidebar (WebView2 FaviconChanged + GetFavicon as PNG, no extra request); (3) a new, clearly visible app icon; (4) Task Manager: explain and verify the Ferrum group; add p3.16 to the P3 page with a check script, smoke tests and fixture routes; then the owner's review continues (checklist, re-approvals, sign-off)
-- paths: crates/webview-manager/{Cargo.toml,src/tab.rs,src/webview2.rs}, apps/desktop/src-tauri/{Cargo.toml,src/content.rs,icons/*}, Cargo.lock, apps/desktop/src/{main.ts,style.css,logic.ts,logic.test.ts}, apps/desktop/tests/smoke/{downloads.spec.ts,tabs.spec.ts}, tests/fixtures/server/{src/lib.rs,assets/*}, scripts/verify/p3.16-review-fixes.ps1, wiki/phases/phase-p3-tabs-sessions.md, wiki/architecture/components/{comp-app-shell,comp-webview-manager}.md, plan/portal/*
-- rollback: git checkout of the listed paths (all tracked, Claude-made); new files are Claude's own
+- task: p3.13 docs and exit gate (owner review)
+- intent: p3.16 fixes committed (80dc946). Waiting for the owner: close Ferrum so Claude rebuilds the release build; then the owner's checklist (items 1 to 13), re-approval of adr-0011, adr-0015, phase-p3-tabs-sessions, comp-app-shell, comp-webview-manager, and phase-p3-tabs-sessions#exit. Before the sign-off Claude reruns scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit (code changed after the gate run on d363adf).
+- paths: wiki/raw/owner/*, wiki/raw/evidence/phase-p3-tabs-sessions/*, plan/approvals.json, Alt+Tab and mail claim pages, MANIFEST
+- rollback: nothing destructive; raw files are new files only
 
 ## Blockers
 
@@ -360,16 +361,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | Built; your review found four things to fix |
-| Now | Claude fixes them (download tab, site icons, app icon, Task Manager) |
+| Your review findings | Fixed and tested (download tab, site icons, app icon) |
+| Release build | Not rebuilt yet: your open Ferrum window locks the program file |
 | Phase 4 | Not started: waits for your sign-off and an explicit go |
 
-**2. Why, and what it does.** Nothing for you to run now. Your review found problems → Claude fixes and tests them → then
-you try the new build.
+**2. Why, and what it does.** Windows cannot replace a program that is running → you close Ferrum → Claude rebuilds it
+with the fixes and opens it for you.
 
-**3. The script:** none for you yet. Claude will ask you to close Ferrum before rebuilding it.
+**3. The script:** none. Close every Ferrum window with its X.
 
-**4. What to tell Claude:** nothing for now.
+**4. What to tell Claude:** "Closed".
 
 ## Pending owner approvals
 
@@ -380,4 +381,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 review fixes, task p3.16). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-12, session s02 (P3 review fixes done; waiting for the owner to close Ferrum). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).

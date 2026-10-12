@@ -1981,3 +1981,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [phase-p3-tabs-sessions]
 - sources: [raw/owner/2026-10-12-s02-p3-review-round-1.md]
 - result: Owner feedback transcribed verbatim. Four findings to fix: (1) a download a site opened in a new window was saved complete, but its new tab showed the "could not be loaded" panel, so it looked failed (checked in Ferrum's log and the Downloads folder); (2) tabs show no site icons; (3) the app icon is a plain dark square, barely visible; (4) Task Manager: the owner sees only "WebView2 Manager" (ferrum-desktop.exe, file description "Ferrum", runs and is the parent of its WebView2 processes). Claude adds review task p3.16 to the P3 page for the fixes. Not a sign-off; P3 stays in gate-review.
+
+## [2026-10-12] code | p3.16 owner review round 1 fixes: download tabs, site icons, app icon
+
+- session: s02
+- time: 12:01
+- pages: [phase-p3-tabs-sessions, comp-app-shell, comp-webview-manager]
+- sources: [raw/owner/2026-10-12-s02-p3-review-round-1.md]
+- result: A navigation that turns into a download is no longer shown as an error; a tab that only started a download closes when it ends. Site icons from WebView2 FaviconChanged + GetFavicon (PNG, no own request, at most 256 KB) shown in the tab strip and sidebar. New app icon (icons/app-icon.svg, rust-orange tile with a white F); build.rs reruns on icon changes. Task Manager: ferrum-desktop.exe (description "Ferrum") is the parent of its WebView2 processes; checklist item 13 asks the owner to look again. scripts/verify/p3.16-review-fixes.ps1 PASS (downloads + tabs smoke 7 passed; program icon orange); shell tests 14 pass; cargo fmt, clippy, test pass. Stales approval of phase-p3-tabs-sessions, comp-app-shell and comp-webview-manager. The release build is not yet rebuilt: the owner's Ferrum window is open and locks the program file.
+- commit: 80dc946

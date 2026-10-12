@@ -4899,10 +4899,18 @@
       "kind": "task",
       "title": "P3 task: Fixes from your first review",
       "summary": "Your review found problems → fix each one with a test → they stay fixed when you try the new build.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
+    },
+    {
+      "id": "80dc946",
+      "kind": "commit",
+      "title": "Commit: Fixes from your first phase 3 review",
+      "summary": "A download in a new window shows no error and its tab closes; tabs show site icons; a new orange app icon.",
+      "status": null,
+      "related": []
     }
   ]
 }

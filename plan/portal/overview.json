@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is built. Your first review found four things to fix; Claude is fixing them.",
+  "summary": "Phase 3 is built and your first review's findings are fixed. Close Ferrum so Claude can rebuild it for you.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:2bd61c4f91a6662d13e4cbc685759e866562d2478d982f726ff2616d2d02679b"
+    "content_hash": "sha256:b91ba9d0679b9bc484ad434bec6328e4b77c4c693daace1ef2843d7944c4d4c7"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: fixing your review findings",
+      "state": "P3 Tabs and sessions: review fixes done; waiting for you to close Ferrum",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -34,20 +34,20 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
-        "item": "Phase 3",
-        "state": "built; fixing four review findings"
+        "item": "Review findings",
+        "state": "fixed and tested"
       },
       {
-        "item": "Your part",
-        "state": "nothing right now"
+        "item": "Release build",
+        "state": "waits for Ferrum to be closed"
       }
     ],
-    "why": "Nothing to run. Your review found problems; Claude fixes and tests them, then asks you to try the new build.",
+    "why": "Windows cannot replace a program that is running. Once Ferrum is closed, Claude rebuilds it with the fixes and opens it for you.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude asks you to close Ferrum before rebuilding it."
+    "tell_claude": "\"Closed\" once every Ferrum window is closed."
   },
   "questions_for_you": {
     "open": 23,
