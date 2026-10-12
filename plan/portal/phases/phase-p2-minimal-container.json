@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 11,
+    "done": 12,
     "total": 18
   },
   "step_order": [
@@ -147,7 +147,7 @@
       "what": "Developer tools available in debug builds only.",
       "why": "Anyone with developer tools can read and change what a page holds. Leaving them in the release app would give that power away.",
       "how": "Switch them on with a build setting that exists only in debug builds, so the release build has no way to open them.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Developer tools expose page internals → enable them only in debug builds → the release app stays locked.",
       "check": "The release build cannot open them; the debug build can.",
       "script": "scripts/verify/p2.12-devtools-debug-only.ps1"

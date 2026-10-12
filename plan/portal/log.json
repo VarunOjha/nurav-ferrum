@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:2f2bdf9e1527e05f4375bca99cd875ec6c8c856b07aa08188027f2d9e07328c2"
+    "content_hash": "sha256:ecc60224b5bee885e42e5912f7c1de614a04ee0e4eb0764722934fe3f4a191f0"
   },
   "entries": [
     {
@@ -2459,6 +2459,26 @@
       "commit": "573153c",
       "covers": [
         "## [2026-10-11] code | p2.11 cookies survive closing and reopening Ferrum"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "web views",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-12",
+      "date": "2026-10-11",
+      "time": "20:09",
+      "title": "Developer tools only in test builds",
+      "done": "The real (release) Ferrum no longer lets anyone open the developer tools with F12 or the right-click menu, in the website area or the toolbar; test builds still can. A script proved both by pressing the keys itself. Claude also found that WebView2 still opens them if the app's own code asks, so Ferrum contains no such code.",
+      "next": "Claude adds the Google sign-in policy (task p2.13).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "083561b",
+      "covers": [
+        "## [2026-10-11] code | p2.12 developer tools only in debug builds"
       ],
       "phase": "phase-p2-minimal-container",
       "category": "Built",

@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 11 of 18 tasks done. Next: p2.12 developer tools only in test builds.",
+  "summary": "Phase 2 is in progress: 12 of 18 tasks done. Next: p2.13 Google sign-in banner.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:172277c18a6e54bb4a186a7bea968ece1d20841a279abd5dbde1c4d6c567ffdc"
+    "content_hash": "sha256:ff54dcb2514e17d0968a1e89d563171b92d5d6d780eb4cfdcbe2a22d6eb42d95"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 11 of 18 tasks done",
+      "state": "P2 First working app: in progress, 12 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "11 of 18 tasks done"
+        "state": "12 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.12 developer tools only in test builds"
+        "state": "p2.13 Google sign-in banner"
       }
     ],
-    "why": "Nothing to run. Developer tools let anyone poke inside a page → the version you use must not offer them, while test builds keep them → a normal user cannot open them by accident.",
+    "why": "Nothing to run. Google blocks sign-in inside embedded browsers → Ferrum recognises the Google sign-in address and offers to open it in your normal browser, without tricks → sign-in stays honest and possible.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

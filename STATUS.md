@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.12 (DevTools only in debug builds): set AreDevToolsEnabled=false on the content view and the shell in release builds; scripted check that the release build reports DevTools disabled on both views and the debug build enabled; run scripts/verify/p2.12-devtools-debug-only.ps1."
+next_action: "Task p2.13 (Google OAuth policy): URL classifier in ferrum-core with unit tests on recorded URL patterns plus a test-only pattern; shell banner with an Open in browser button; smoke test with a fixture link to the test-only pattern; run scripts/verify/p2.13-google-sign-in.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -83,6 +83,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.9 done (`e1b725e`): redirects smoke-tested; final-address bug fixed.
 - p2.10 done (`f21caba`): new windows per setting; links to other apps ask first; smoke suite 20 passed.
 - p2.11 done (`573153c`): cookies persist across a restart; smoke suite 21 passed.
+- p2.12 done (`083561b`): DevTools only in debug builds, checked by key presses in release and debug.
 
 ## Done this session (s01)
 
@@ -294,7 +295,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.11 verified and committed 2026-10-11 as `573153c`)
+(empty: p2.12 verified and committed 2026-10-11 as `083561b`)
 
 ## Blockers
 
@@ -330,11 +331,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 11 of 18 tasks done |
-| Next task | p2.12 developer tools only in test builds |
+| Phase 2 | In progress: 12 of 18 tasks done |
+| Next task | p2.13 Google sign-in banner |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Developer tools let anyone poke inside a page → the version you use must not offer them, while test builds keep them → a normal user cannot open them by accident.
+**2. Why, and what it does.** Nothing for you to run now. Google blocks sign-in inside embedded browsers → Ferrum recognises the Google sign-in address and offers to open it in your normal browser, without tricks → sign-in stays honest and possible.
 
 **3. The script:** none for you.
 
@@ -349,4 +350,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 11 of 18 tasks done, last p2.11). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 12 of 18 tasks done, last p2.12). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

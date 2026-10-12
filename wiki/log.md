@@ -1693,3 +1693,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.11.txt]
 - result: Smoke spec keep-cookies: one-day cookie and session cookie set; Ferrum closed normally (exit 0); cookie store found in the profile WV2Profile_ferrum-default inside the data folder; after a restart on the same folder the one-day cookie is sent, the session cookie is not. No app change needed; default data folder seen on disk under local app data (dev.ferrum.desktop). Robot quit() now waits for the debugging port to close. p2.11 check PASS; whole suite 21 passed.
 - commit: 573153c
+
+## [2026-10-11] code | p2.12 developer tools only in debug builds
+
+- session: s02
+- time: 20:09
+- pages: [phase-p2-minimal-container, comp-webview-manager, comp-app-shell]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.12.txt]
+- result: Content view: AreDevToolsEnabled = debug build (WebView2 default is on); shell follows Tauri rule (no devtools feature; wry default on only in debug, read in the sources). Observed: the setting blocks F12 and the context menu but a direct OpenDevToolsWindow call still opens DevTools in release, so Ferrum has no such call. Self-test devtools + check script pressing F12 and Ctrl+Shift+I only while Ferrum is active: release off/off and no window; debug on/on and F12 opens DevTools in the website view. p2.12 check PASS; smoke suite 21 passed; p2.3 re-checked PASS. Process slip: the write-ahead In-flight entry was not filled before this task (committed cleanly; noted here). For SECURITY.md (p2.16): the WebView2 remote-debugging switch in the WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS environment variable still works in release builds (the smoke robot uses it); only someone who can already run programs as the user can set it.
+- commit: 083561b

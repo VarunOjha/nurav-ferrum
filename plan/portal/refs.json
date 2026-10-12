@@ -500,7 +500,7 @@
       "kind": "task",
       "title": "P2 task: Developer tools only in test builds",
       "summary": "Developer tools expose page internals → enable them only in debug builds → the release app stays locked.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4683,6 +4683,14 @@
       "kind": "commit",
       "title": "Commit: Cookies kept across restarts",
       "summary": "Sites that remember you with a cookie still remember you after you close and reopen Ferrum. The test proves it with the local test site, and also shows that short-lived session cookies end with the se",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "083561b",
+      "kind": "commit",
+      "title": "Commit: Developer tools only in test builds",
+      "summary": "The real (release) Ferrum no longer lets anyone open the developer tools with F12 or the right-click menu, in the website area or the toolbar; test builds still can. A script proved both by pressing t",
       "status": null,
       "related": []
     }
