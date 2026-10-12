@@ -22,6 +22,18 @@ const open = async (f: Ferrum, route: string, selector: string) => {
   await expect.poll(() => href(f)).toBe(`${base}${route}`);
   await expect(f.content.locator(selector)).toBeVisible();
 };
+// WCAG contrast ratio between the text colour of `fg` and the background colour of `bg` (both solid rgb()).
+const contrast = (f: Ferrum, fg: string, bg: string) =>
+  f.shell.evaluate(([fgSel, bgSel]) => {
+    const rgb = (c: string) => (c.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
+    const lum = (c: string) => {
+      const [r, g, b] = rgb(c).map((v) => { const s = v / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; });
+      return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
+    };
+    const a = lum(getComputedStyle(document.querySelector(fgSel)!).color);
+    const b = lum(getComputedStyle(document.querySelector(bgSel)!).backgroundColor);
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  }, [fg, bg] as const);
 const dumpOnFailure = (get: () => Ferrum | undefined) =>
   test.afterEach(async ({}, info) => {
     // On failure, keep what the shell saw (its event list) in the report.
@@ -66,6 +78,14 @@ test.describe("default settings (same view, confirm other apps)", () => {
     await expect.poll(() => href(f)).toBe(`${base}/links/schemes`);
     await f.shell.waitForTimeout(500);
     expect(launches(f).length).toBe(before);
+    // Readable in light and dark mode (owner checklist 2026-10-12: it was light-on-light in dark mode).
+    for (const colorScheme of ["light", "dark"] as const) {
+      await f.shell.emulateMedia({ colorScheme });
+      expect(await contrast(f, "#external-text", "#external-bar"), `${colorScheme} text`).toBeGreaterThanOrEqual(4.5);
+      expect(await contrast(f, "#external-cancel", "#external-bar"), `${colorScheme} Cancel`).toBeGreaterThanOrEqual(4.5);
+      expect(await contrast(f, "#external-open", "#external-open"), `${colorScheme} Open`).toBeGreaterThanOrEqual(4.5);
+    }
+    await f.shell.emulateMedia({ colorScheme: null });
     await f.shell.click("#external-cancel");
     await expect(f.shell.locator("#external-bar")).toBeHidden();
     expect(launches(f).length).toBe(before);

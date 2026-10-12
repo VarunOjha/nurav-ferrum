@@ -170,7 +170,9 @@ form.addEventListener("submit", async (e) => {
   address.blur(); // let the address bar follow the page from now on
   const r = await invoke<NavResult>("tab_navigate", { input });
   if (r.outcome === "navigate") {
-    statusEl.textContent = r.note === "upgraded-from-http" ? "Using the secure https address" : "";
+    // The navigation-starting event usually arrives before this reply; keep its "Loading…" (owner checklist 2026-10-12).
+    if (r.note === "upgraded-from-http") statusEl.textContent = "Using the secure https address";
+    else if (!loading) statusEl.textContent = "";
   } else if (r.outcome === "confirm") {
     // The app sends an external-request event; the confirmation bar shows from there.
   } else {

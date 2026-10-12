@@ -20,6 +20,20 @@ test("slow page shows the loading state, then loaded", async () => {
   await go(f, `${base}/slow?ms=2500`);
   await expect(state()).toHaveAttribute("data-state", "loading");
   await expect(f.shell.locator("#reload")).toHaveAttribute("title", "Stop");
+  // Visible while waiting (owner checklist 2026-10-12): "Loading…" in the accent colour and a moving 3px line.
+  await expect(f.shell.locator("#status")).toHaveText("Loading…");
+  const look = await f.shell.evaluate(() => {
+    const css = (sel: string, pseudo?: string) => getComputedStyle(document.querySelector(sel)!, pseudo ?? null);
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+    const probe = document.createElement("i"); probe.style.color = accent; document.body.append(probe);
+    const accentRgb = getComputedStyle(probe).color; probe.remove();
+    return { status: css("#status").color, accentRgb, opacity: css("#progress").opacity, height: css("#progress").height,
+      animation: css("#progress", "::before").animationName };
+  });
+  expect(look.status).toBe(look.accentRgb);
+  expect(look.opacity).toBe("1");
+  expect(look.height).toBe("3px");
+  expect(look.animation).toBe("ferrum-progress");
   await expect(state()).toHaveAttribute("data-state", "loaded", { timeout: 15_000 });
   await expect(f.shell.locator("#reload")).toHaveAttribute("title", "Reload");
 });

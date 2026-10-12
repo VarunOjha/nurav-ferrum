@@ -127,7 +127,10 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
 - **Shell UI** (`apps/desktop/index.html`, `src/main.ts`, `src/style.css`; Vite 8.3.4, TypeScript 7.0.2,
   `@tauri-apps/api` 2.12.3): back, forward, reload/stop, the address bar with the lock (only for a page that loaded
   over https), a status text, a progress bar, the confirmation bar (links that open outside Ferrum; Google sign-in),
-  and the error panel with "Try again".
+  and the error panel with "Try again". After the owner's first checklist round (2026-10-12) the loading signal is a
+  moving 3 px accent line plus "Loading…" in the accent colour (it was a 2 px line, and a typed address cleared the text
+  at once), and the confirmation bar uses the theme colours, so it is readable in dark mode (it was light on light). The
+  smoke suite checks both (the bar's contrast is at least 4.5:1 in light and dark mode).
 - **Tauri host** (`apps/desktop/src-tauri/src/`: `main.rs`, `content.rs`, `external.rs`, `logging.rs`, `selftest.rs`).
   Implemented commands, all shell-only (declared in `build.rs`, granted only by `capabilities/shell.json`, which has no
   `remote` section; [check-p2.3](../../raw/evidence/phase-p2-minimal-container/check-p2.3.txt)): `app_ping`, `app_quit`, `shell_layout`, `shell_cover`,

@@ -22,8 +22,17 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
 #lock { font-size: 12px; opacity: 0.7; }
 #address { flex: 1; border: 0; outline: 0; background: transparent; color: var(--text); font: 13px "IBM Plex Mono", Consolas, monospace; }
 #status { min-width: 0; max-width: 30%; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--accent); opacity: 0; }
-#toolbar[data-state="loading"] #progress { opacity: 1; width: 70%; transition: width 8s cubic-bezier(.1,.7,.3,1); }
+/* Loading signal: a 3px accent line that slides across while a page loads (owner checklist 2026-10-12: the old 2px line
+   was easy to miss during a slow, offline load), plus the "Loading…" text in the accent colour. */
+#progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; overflow: hidden; opacity: 0; }
+#progress::before { content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 40%; background: var(--accent); }
+#toolbar[data-state="loading"] #progress { opacity: 1; }
+#toolbar[data-state="loading"] #progress::before { animation: ferrum-progress 1.2s ease-in-out infinite; }
+#toolbar[data-state="loading"] #status { color: var(--accent); font-weight: 600; }
+@keyframes ferrum-progress { from { left: -40%; } to { left: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  #toolbar[data-state="loading"] #progress::before { animation: none; left: 0; width: 100%; opacity: 0.6; }
+}
 #toolbar[data-state="http-error"] #status { color: var(--accent); }
 #error-panel { padding: 48px 56px; max-width: 640px; }
 #error-panel h1 { font-size: 20px; font-weight: 600; margin: 0 0 12px; }
@@ -31,8 +40,11 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
 #error-address { font: 12px "IBM Plex Mono", Consolas, monospace; word-break: break-all; }
 #error-code { font: 11px "IBM Plex Mono", Consolas, monospace; opacity: 0.7; }
 #error-retry { margin-top: 16px; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; font: inherit; cursor: pointer; }
-#external-bar { display: flex; align-items: center; gap: 12px; height: 44px; box-sizing: border-box; padding: 0 16px; border-bottom: 1px solid var(--line, #d9d6cf); background: var(--panel, #f6f4ef); }
+/* Uses the theme tokens so text and background follow light and dark mode together (owner checklist 2026-10-12: the
+   bar was light-on-light in dark mode). The accent edge marks it as a question from Ferrum, not part of the site. */
+#external-bar { display: flex; align-items: center; gap: 12px; height: 44px; box-sizing: border-box; padding: 0 16px 0 13px; border-bottom: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface); color: var(--text); }
+#external-text { font-weight: 600; white-space: nowrap; }
 #external-bar[hidden] { display: none; }
-#external-uri { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px "IBM Plex Mono", Consolas, monospace; }
-#external-bar button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: inherit; }
+#external-uri { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
+#external-bar button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
 #external-open { background: var(--accent) !important; color: #fff !important; }
