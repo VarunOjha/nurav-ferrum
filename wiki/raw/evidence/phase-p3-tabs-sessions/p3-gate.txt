@@ -1,0 +1,342 @@
+Ferrum check P3-gate: Tabs and sessions: end-of-phase gate
+Why: only a passing gate and your approval let the next phase start.
+Run at 2026-10-12 03:23 on commit d363adf
+------------------------------------------------------------------------
+
+Part 1 - Your approvals for P3 are current
+approvals.json entries: 43
+  APPROVED                 adr-0001
+  APPROVED                 adr-0002
+  APPROVED                 adr-0003
+  APPROVED                 adr-0004
+  APPROVED                 adr-0006
+  APPROVED                 adr-0007
+  APPROVED                 adr-0010
+  STALE                    adr-0011
+  APPROVED                 adr-0012
+  APPROVED                 adr-0014
+  STALE                    adr-0015
+  APPROVED                 adr-0018
+  APPROVED                 adr-0019
+  APPROVED                 adr-0021
+  APPROVED                 adr-0023
+  APPROVED                 adr-0024
+  APPROVED                 adr-0025
+  APPROVED                 adr-0026
+  APPROVED                 adr-0027
+  APPROVED                 adr-0029
+  APPROVED_VOLATILE_DRIFT  adr-0030
+  APPROVED_VOLATILE_DRIFT  adr-0031
+  APPROVED_VOLATILE_DRIFT  comp-app-shell
+  APPROVED_VOLATILE_DRIFT  comp-core
+  APPROVED                 comp-interactive-plan
+  APPROVED                 comp-security-engine
+  APPROVED                 comp-tab-content
+  APPROVED_VOLATILE_DRIFT  comp-webview-manager
+  APPROVED                 comp-webview2-runtime
+  APPROVED                 comp-windows-os
+  APPROVED                 ip-data-contract
+  APPROVED                 ip-routes-and-views
+  APPROVED                 ip-spec
+  APPROVED                 ip-testing
+  APPROVED                 ip-wiki-lint
+  APPROVED                 phase-p0-planning
+  APPROVED                 phase-p0-planning#exit
+  APPROVED_VOLATILE_DRIFT  phase-p1-foundation
+  APPROVED_VOLATILE_DRIFT  phase-p1-foundation#exit
+  APPROVED_VOLATILE_DRIFT  phase-p2-minimal-container
+  APPROVED_VOLATILE_DRIFT  phase-p2-minimal-container#exit
+  APPROVED                 phase-p3-tabs-sessions
+  APPROVED                 schema
+  depends_on phase-p2-minimal-container: status=done exit=APPROVED_VOLATILE_DRIFT
+  APPROVED                 adr-0006
+  APPROVED                 adr-0007
+  APPROVED                 adr-0010
+  APPROVED                 adr-0014
+  APPROVED_VOLATILE_DRIFT  comp-app-shell
+  APPROVED_VOLATILE_DRIFT  comp-core
+  APPROVED_VOLATILE_DRIFT  comp-webview-manager
+  APPROVED                 phase-p3-tabs-sessions
+  APPROVED                 schema
+  registered CONTRADICTION wiki/decisions/adr-0010-isolation-webview2-profiles.md:44 -> Q-107
+ENTRY GATE: PASS
+  PASS   Approvals for P3 recorded and current; no question blocks it
+         all P3 approvals current
+
+Part 2 - Every P3 task, checked
+  PASS   Wiki check (run once, reused by the task checks) (13 s)
+         216 pages: 0 errors
+    --- output of scripts/verify/p3.1-tab-rules.ps1 (exit 0) ---
+Ferrum check p3.1: Tab rules as plain code
+Why: exactly one active tab, ids never reused.
+Run at 2026-10-12 03:23 on commit d363adf
+------------------------------------------------------------------------
+  PASS   The tab model lives in the core crate, which forbids unsafe code
+         crates/core/src/tabs.rs, #![forbid(unsafe_code)]
+  PASS   Tab rule tests pass, including the random operation sequences (4 s)
+         9 required cases pass (test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.68s)
+------------------------------------------------------------------------
+RESULT: PASS - p3.1 (2 PASS; 4 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.1 check passed".
+    --- end of scripts/verify/p3.1-tab-rules.ps1 ---
+  PASS   Task p3.1: Tab rules as plain code (5 s)
+         scripts/verify/p3.1-tab-rules.ps1: RESULT: PASS - p3.1 (2 PASS; 4 s)
+    --- output of scripts/verify/p3.2-view-per-tab.ps1 (exit 0) ---
+Ferrum check p3.2: One website view per tab
+Why: switching is instant and closed tabs leave nothing running.
+Run at 2026-10-12 03:23 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Raw WebView2 code stays in its one module
+         the app forbids unsafe code; COM calls only in crates/webview-manager/src/webview2.rs
+  PASS   Smoke test: 20 tabs, one view each, only the active one shown, all released on close (28 s)
+         tabs: 1 passed
+  PASS   Windows draws the tab view above the shell (32 s)
+         top to bottom: Chrome_WidgetWin_0;WRY_WEBVIEW;
+------------------------------------------------------------------------
+RESULT: PASS - p3.2 (3 PASS; 60 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.2 check passed".
+    --- end of scripts/verify/p3.2-view-per-tab.ps1 ---
+  PASS   Task p3.2: One web view per tab (60 s)
+         scripts/verify/p3.2-view-per-tab.ps1: RESULT: PASS - p3.2 (3 PASS; 60 s)
+    --- output of scripts/verify/p3.3-tab-strip-shortcuts.ps1 (exit 0) ---
+Ferrum check p3.3: Tab strip and keyboard shortcuts
+Why: shortcuts work everywhere, and pages still cannot reach the app.
+Run at 2026-10-12 03:24 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Shortcut table: Rust and shell unit tests
+         ferrum-core shortcuts: 4 passed; shell unit tests pass (shortcut table included)
+  PASS   Smoke test: every shortcut with focus in the shell and in a page (48 s)
+         shortcuts: 9 passed
+  PASS   The p2.3 bridge lockdown test still passes (58 s)
+         p2.3: PASS
+------------------------------------------------------------------------
+RESULT: PASS - p3.3 (3 PASS; 108 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.3 check passed".
+    --- end of scripts/verify/p3.3-tab-strip-shortcuts.ps1 ---
+  PASS   Task p3.3: Tab strip and shortcuts (108 s)
+         scripts/verify/p3.3-tab-strip-shortcuts.ps1: RESULT: PASS - p3.3 (3 PASS; 108 s)
+    --- output of scripts/verify/p3.4-saved-settings-startup.ps1 (exit 0) ---
+Ferrum check p3.4: Saved settings and start-up sites
+Why: an update or a crash never loses or garbles your settings.
+Run at 2026-10-12 03:26 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Settings file unit tests, one per required case
+         5 required cases pass (test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s)
+  PASS   Smoke test: start-up sites in order; broken and newer settings files handled (26 s)
+         startup: 3 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.4 (2 PASS; 26 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.4 check passed".
+    --- end of scripts/verify/p3.4-saved-settings-startup.ps1 ---
+  PASS   Task p3.4: Saved settings and startup sites (27 s)
+         scripts/verify/p3.4-saved-settings-startup.ps1: RESULT: PASS - p3.4 (2 PASS; 26 s)
+    --- output of scripts/verify/p3.5-restore-tabs.ps1 (exit 0) ---
+Ferrum check p3.5: Restore tabs after a restart or a crash
+Why: after a restart or a crash your tabs are back.
+Run at 2026-10-12 03:27 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Session file unit tests (2 s)
+         5 required cases pass
+  PASS   Smoke test: normal exit, crash, unreachable site, restore switched off (34 s)
+         restore: 4 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.5 (2 PASS; 35 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.5 check passed".
+    --- end of scripts/verify/p3.5-restore-tabs.ps1 ---
+  PASS   Task p3.5: Restore tabs after restart or crash (36 s)
+         scripts/verify/p3.5-restore-tabs.ps1: RESULT: PASS - p3.5 (2 PASS; 35 s)
+    --- output of scripts/verify/p3.6-profile-per-site.ps1 (exit 0) ---
+Ferrum check p3.6: A separate profile per site
+Why: cookies stay apart, and you decide when a tab changes site.
+Run at 2026-10-12 03:27 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Site and profile unit tests
+         7 required cases pass
+  PASS   Smoke test: cookies apart (with a shared-profile control), sharing rules, the cross-site bar, settings after a restart (36 s)
+         profiles: 5 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.6 (2 PASS; 37 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.6 check passed".
+    --- end of scripts/verify/p3.6-profile-per-site.ps1 ---
+  PASS   Task p3.6: Separate profile per site (37 s)
+         scripts/verify/p3.6-profile-per-site.ps1: RESULT: PASS - p3.6 (2 PASS; 37 s)
+    --- output of scripts/verify/p3.7-history.ps1 (exit 0) ---
+Ferrum check p3.7: Browsing history
+Why: useful, private, never in the project files.
+Run at 2026-10-12 03:28 on commit d363adf
+------------------------------------------------------------------------
+  PASS   History unit tests
+         5 required cases pass
+  PASS   Smoke test: recorded, searched, cleared (list and file); back/forward per tab (26 s)
+         history: 3 passed
+  PASS   History files are never part of the project
+         no history.json or session.json in git
+------------------------------------------------------------------------
+RESULT: PASS - p3.7 (3 PASS; 27 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.7 check passed".
+    --- end of scripts/verify/p3.7-history.ps1 ---
+  PASS   Task p3.7: History (28 s)
+         scripts/verify/p3.7-history.ps1: RESULT: PASS - p3.7 (3 PASS; 27 s)
+    --- output of scripts/verify/p3.8-basic-downloads.ps1 (exit 0) ---
+Ferrum check p3.8: Basic downloads
+Why: you know where each file is and whether it arrived whole.
+Run at 2026-10-12 03:28 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Test server download pages (8 s)
+         downloads_are_deterministic_and_named: ok
+  PASS   Smoke test: size and SHA-256, no replaced files, broken download failed, list cleared (29 s)
+         downloads: 4 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.8 (2 PASS; 37 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.8 check passed".
+    --- end of scripts/verify/p3.8-basic-downloads.ps1 ---
+  PASS   Task p3.8: Basic downloads (37 s)
+         scripts/verify/p3.8-basic-downloads.ps1: RESULT: PASS - p3.8 (2 PASS; 37 s)
+    --- output of scripts/verify/p3.9-shell-stays-responsive.ps1 (exit 0) ---
+Ferrum check p3.9: The toolbar stays responsive while a tab is busy
+Why: you can always switch away from, or close, a stuck tab.
+Run at 2026-10-12 03:29 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Smoke test: switch and type within 5 s while a tab spins; the busy tab closes (28 s)
+         responsive: 1 passed; p3.9 result: switch 58 ms, type-and-load 55 ms (threshold 5000 ms each) (test log, not a measurement)
+------------------------------------------------------------------------
+RESULT: PASS - p3.9 (1 PASS; 28 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.9 check passed".
+    --- end of scripts/verify/p3.9-shell-stays-responsive.ps1 ---
+  PASS   Task p3.9: Shell stays responsive (29 s)
+         scripts/verify/p3.9-shell-stays-responsive.ps1: RESULT: PASS - p3.9 (1 PASS; 28 s)
+    --- output of scripts/verify/p3.10-guard-against-freeze.ps1 (exit 0) ---
+Ferrum check p3.10: A guard against freezes when tabs are created
+Why: the app cannot hang on a new tab.
+Run at 2026-10-12 03:29 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Code scan: tab-creating commands are async; nothing blocks on a reply
+         25 commands scanned; tab-creating ones are async; no blocking call outside test_stats
+  PASS   The review checklist has the item
+         docs/developer/code-review-checklist.md: present
+  PASS   Smoke test: a burst of tab commands settles; pop-ups still open tabs (30 s)
+         no-freeze: 1 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.10 (3 PASS; 31 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.10 check passed".
+    --- end of scripts/verify/p3.10-guard-against-freeze.ps1 ---
+  PASS   Task p3.10: Guard against the freeze bug (31 s)
+         scripts/verify/p3.10-guard-against-freeze.ps1: RESULT: PASS - p3.10 (3 PASS; 31 s)
+    --- output of scripts/verify/p3.14-settings-screen.ps1 (exit 0) ---
+Ferrum check p3.14: The settings screen
+Why: you can change Ferrum safely, and no website can change it.
+Run at 2026-10-12 03:30 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Shell unit tests (settings form logic included)
+         npm test: pass (start-up box test included)
+  PASS   Smoke test: change, take effect, restart, refuse bad input with the file unchanged (30 s)
+         settings: 2 passed
+  PASS   Websites cannot call the settings commands (p2.3 test, probe includes settings_set) (58 s)
+         p2.3: PASS (settings_set refused for a website; no bridge in tab views)
+------------------------------------------------------------------------
+RESULT: PASS - p3.14 (3 PASS; 89 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.14 check passed".
+    --- end of scripts/verify/p3.14-settings-screen.ps1 ---
+  PASS   Task p3.14: Settings screen (90 s)
+         scripts/verify/p3.14-settings-screen.ps1: RESULT: PASS - p3.14 (3 PASS; 89 s)
+    --- output of scripts/verify/p3.15-sidebar-tabs-history.ps1 (exit 0) ---
+Ferrum check p3.15: The sidebar with open tabs and history
+Why: tabs and history at a glance without hiding the page.
+Run at 2026-10-12 03:31 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Shell unit tests (sidebar history list included)
+         npm test: pass (sidebar test included)
+  PASS   Smoke test: bounds shrink and grow, tab and history choices, Ctrl+Shift+S from the toolbar and a page (27 s)
+         sidebar: 3 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.15 (2 PASS; 28 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.15 check passed".
+    --- end of scripts/verify/p3.15-sidebar-tabs-history.ps1 ---
+  PASS   Task p3.15: Sidebar of tabs and history (28 s)
+         scripts/verify/p3.15-sidebar-tabs-history.ps1: RESULT: PASS - p3.15 (2 PASS; 28 s)
+    --- output of scripts/verify/p3.11-integration-suite.ps1 (exit 0) ---
+Ferrum check p3.11: The P3 test suite in one command
+Why: the P3 gate and any later change can re-run everything at once.
+Run at 2026-10-12 03:32 on commit d363adf
+------------------------------------------------------------------------
+  PASS   Rust unit tests of the P3 parts (5 s)
+         ferrum-core P3 tests: 45 passed
+  PASS   App tests of p3.2 to p3.9, p3.14 and p3.15 (npm run p3) (113 s)
+         npm run p3: 36 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.11 (2 PASS; 118 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.11 check passed".
+    --- end of scripts/verify/p3.11-integration-suite.ps1 ---
+  PASS   Task p3.11: One integration suite (119 s)
+         scripts/verify/p3.11-integration-suite.ps1: RESULT: PASS - p3.11 (2 PASS; 118 s)
+    --- output of scripts/verify/p3.12-literature-batch-3.ps1 (exit 0) ---
+Ferrum check p3.12: Literature batch 3
+Why: later claims about tab sleeping and lifecycles can cite something real.
+Run at 2026-10-12 03:34 on commit d363adf
+------------------------------------------------------------------------
+  PASS   New dated note with its web sources, fingerprinted in the raw manifest
+         access date stated; 9 web sources; manifest line present
+  PASS   Every source entry says whether it was read (VERIFIED or UNCERTAIN)
+         8 entries, each labelled
+  PASS   Seed-list open points: closed with a source, or still flagged
+         F3, G1, G2 closed with batch 3 sources (note and seed summary page)
+  PASS   Reading log has a row for batch 3; wiki check clean
+         batch 3 row present; npm run lint:wiki: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p3.12 (4 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.12 check passed".
+    --- end of scripts/verify/p3.12-literature-batch-3.ps1 ---
+  PASS   Task p3.12: Literature batch 3
+         scripts/verify/p3.12-literature-batch-3.ps1: RESULT: PASS - p3.12 (4 PASS; 0 s)
+
+Part 3 - Test gate on one commit
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/cargo-fmt.txt
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/cargo-clippy.txt
+  PASS   Formatting and code warnings (4 s)
+         cargo fmt --check and cargo clippy -D warnings: exit 0
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/cargo-test.txt
+  PASS   Rust tests (26 s)
+         cargo test --workspace: exit 0
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/cargo-deny.txt
+  PASS   Licences and alerts (13 s)
+         cargo deny check: exit 0
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/shell-tests.txt
+  PASS   Shell checks (lint, types, unit tests) (2 s)
+         npm run lint, typecheck, test: exit 0
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/release-build.txt
+  PASS   Release build (92 s)
+         npm run tauri -- build --no-bundle: exit 0 (target/release/ferrum-desktop.exe)
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/integration.txt
+  PASS   P3 integration suite (npm run p3) (117 s)
+         npm run p3: 36 passed
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/regression-smoke.txt
+  PASS   Earlier tests again: P2 app tests (npm run p2) and the bridge lockdown test (116 s)
+         npm run p2: 26 passed; p2.3: PASS
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/wiki-lint.txt
+  PASS   Wiki check (13 s)
+         lint: 0 errors, 39 warnings, 3 info (pages: 216)
+
+Part 4 - Your part (task p3.13)
+  YOURS  Your checklist
+         You used the release build with eight or more tabs, every shortcut, an end from Task Manager and a real download, plus the open P2 items (docs/testing/manual-checklist-p3.md), and told Claude the results.
+  YOURS  Your review
+         You looked at the changed pages and the evidence, and said whether P3 is signed off.
+------------------------------------------------------------------------
+RESULT: PASS - P3-gate (24 PASS, 2 YOURS; 1031 s)
+All automatic P3 checks passed on one commit.
+Still yours to do by hand: Your checklist; Your review.
+What to tell Claude: "P3 gate passed".

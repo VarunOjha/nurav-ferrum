@@ -1,0 +1,229 @@
+Command output saved by scripts/gates/p3-gate.ps1 on 2026-10-12 03:34 at commit d363adf (with uncommitted changes)
+Exit code: 0
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 3 tests
+test site_keeps_only_scheme_and_host ... ok
+test malformed_never_navigates ... ok
+test every_input_class ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 14 tests
+test missing_file_gives_defaults ... ok
+test hash_is_stable_and_sensitive ... ok
+test http_start_url_is_upgraded_by_default ... ok
+test invalid_start_url_is_refused ... ok
+test override_layer_wins ... ok
+test newer_version_is_refused_with_a_clear_error ... ok
+test save_replaces_an_existing_file ... ok
+test corrupted_file_is_backed_up ... ok
+test version_one_file_is_migrated_and_keeps_its_behaviour ... ok
+test non_web_start_urls_are_refused ... ok
+test save_then_load_round_trips ... ok
+test unknown_keys_and_bad_values_fail_loudly ... ok
+test http_start_url_is_kept_with_a_warning_when_policy_is_warn ... ok
+test valid_file_is_read ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+
+running 5 tests
+test titles_attach_to_the_newest_entry ... ok
+test search_matches_address_or_title_any_case ... ok
+test visits_are_newest_first_and_repeats_merge ... ok
+test the_history_is_bounded ... ok
+test save_load_and_clear ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 3 tests
+test test_pattern_only_when_given ... ok
+test other_addresses_do_not_match ... ok
+test google_authorization_requests_match ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test user_labels_are_restricted ... ok
+test profile_names_follow_microsofts_rules ... ok
+test subdomains_share_and_other_sites_differ ... ok
+test version_one_files_keep_one_shared_profile ... ok
+test a_site_is_its_registrable_domain ... ok
+test settings_choose_the_profile ... ok
+test bad_site_settings_are_refused ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 5 tests
+test missing_file_is_no_session ... ok
+test newer_or_broken_files_are_refused ... ok
+test an_active_index_outside_the_list_is_dropped ... ok
+test save_then_load_round_trips ... ok
+test saving_never_leaves_half_a_file ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.12s
+
+
+running 4 tests
+test every_browser_shortcut_maps ... ok
+test names_are_stable ... ok
+test only_tab_switching_repeats ... ok
+test page_keys_stay_with_the_page ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 10 tests
+test closed_stack_is_bounded ... ok
+test move_keeps_the_active_tab_and_clamps ... ok
+test closing_another_tab_keeps_the_active_one ... ok
+test first_tab_is_active_and_ids_count_up ... ok
+test new_tab_after_active ... ok
+test closing_the_active_tab_activates_a_neighbour ... ok
+test unknown_ids_change_nothing ... ok
+test ids_are_never_reused_even_after_reopen ... ok
+test next_and_previous_wrap_around ... ok
+test random_operation_sequences_keep_every_rule ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.47s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test tests::crate_name_matches_package ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test tests::crate_name_matches_package ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test tests::crate_name_matches_package ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test tests::crate_name_matches_package ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test error::tests::errors_print_as_one_line ... ok
+test tab::tests::gate_allows_web_pages_only ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test link_pages_contain_their_links ... ok
+test downloads_are_deterministic_and_named ... ok
+test cookie_is_set_secure_and_read_back ... ok
+test frames_and_links_only_point_to_https_or_this_site ... ok
+test redirects_point_where_documented ... ok
+test every_route_returns_its_documented_status ... ok
+test slow_page_waits_and_is_capped ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+
+running 2 tests
+test the_dev_ca_cannot_vouch_for_other_hosts ... ok
+test https_on_localhost_works_with_the_dev_ca ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Compiling fixture-server v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\tests\fixtures\server)
+   Compiling ferrum-webview-manager v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\webview-manager)
+   Compiling ferrum-core v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\core)
+   Compiling ferrum-desktop v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\src-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 15.92s
+     Running unittests src\lib.rs (target\debug\deps\ferrum_core-750913a78b120e61.exe)
+     Running tests\address.rs (target\debug\deps\address-bb2dd7226683ad41.exe)
+     Running tests\config.rs (target\debug\deps\config-c949c3557d568953.exe)
+     Running tests\history.rs (target\debug\deps\history-4841fdadb08675cd.exe)
+     Running tests\oauth.rs (target\debug\deps\oauth-817d5e28a2685eb3.exe)
+     Running tests\profiles.rs (target\debug\deps\profiles-2d81a5f485699e06.exe)
+     Running tests\session.rs (target\debug\deps\session-5576e2b79590a33b.exe)
+     Running tests\shortcuts.rs (target\debug\deps\shortcuts-1514161aa9beedb0.exe)
+     Running tests\tabs.rs (target\debug\deps\tabs-2c614ada1b908a6f.exe)
+     Running unittests src\main.rs (target\debug\deps\ferrum_desktop-c1e6e24b97acb1fb.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_network_logger-72ec03427278632c.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_resource_manager-6919822dd7625b27.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_security-f3924d196132d01c.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_telemetry-f870915fed86f145.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_webview_manager-dd0e811731d98b5f.exe)
+     Running unittests src\lib.rs (target\debug\deps\fixture_server-1db3e24ecb0cdd4e.exe)
+     Running unittests src\main.rs (target\debug\deps\fixture_server-0fb406af6371c8ae.exe)
+     Running tests\routes.rs (target\debug\deps\routes-c24f5cad19f73450.exe)
+     Running tests\tls.rs (target\debug\deps\tls-2e489998227f0fff.exe)
+   Doc-tests ferrum_core
+   Doc-tests ferrum_network_logger
+   Doc-tests ferrum_resource_manager
+   Doc-tests ferrum_security
+   Doc-tests ferrum_telemetry
+   Doc-tests ferrum_webview_manager
+   Doc-tests fixture_server

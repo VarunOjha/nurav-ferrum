@@ -1,0 +1,51 @@
+Command output saved by scripts/gates/p3-gate.ps1 on 2026-10-12 03:38 at commit d363adf (with uncommitted changes)
+Exit code: 0
+
+
+Running 36 tests using 1 worker
+
+  ✓   1 downloads.spec.ts:28:1 › a download lands in the folder with the right size and contents; the shell shows it done (442ms)
+  ✓   2 downloads.spec.ts:41:1 › the same file again gets a new name; nothing is replaced (248ms)
+  ✓   3 downloads.spec.ts:50:1 › a download that breaks off shows as failed (2.0s)
+  ✓   4 downloads.spec.ts:63:1 › Clear removes finished downloads from the list (43ms)
+  ✓   5 history.spec.ts:24:1 › visits are recorded newest first with their titles, searchable, and saved to the data folder (1.3s)
+  ✓   6 history.spec.ts:38:1 › back and forward follow the active tab (234ms)
+  ✓   7 history.spec.ts:52:1 › clearing empties the list and the file at once (28ms)
+  ✓   8 no-freeze.spec.ts:12:1 › a burst of tab commands settles without hanging (5.0s)
+  ✓   9 profiles.spec.ts:41:3 › cookies across sites: per-site (2.4s)
+  ✓  10 profiles.spec.ts:41:3 › cookies across sites: shared (control) (2.2s)
+  ✓  11 profiles.spec.ts:57:1 › one site in two tabs shares one profile; subdomains share; other sites do not (3.4s)
+  ✓  12 profiles.spec.ts:72:1 › a link to another site asks first; Cancel stays, Continue moves the tab (2.6s)
+  ✓  13 profiles.spec.ts:100:1 › per-site settings choose the profile and survive a restart (3.5s)
+p3.9 result: switch 45 ms, type-and-load 46 ms (threshold 5000 ms each)
+  ✓  14 responsive.spec.ts:15:1 › a busy tab does not block switching tabs or typing in the address bar (1.7s)
+  ✓  15 restore.spec.ts:34:1 › tabs come back after a normal exit, with the same active tab (3.7s)
+  ✓  16 restore.spec.ts:45:1 › tabs come back after a crash (the last save) (4.4s)
+  ✓  17 restore.spec.ts:62:1 › a restored tab whose site is unreachable shows the error panel (1.6s)
+  ✓  18 restore.spec.ts:74:1 › restore_on_startup = false opens the start-up pages instead (1.5s)
+  ✓  19 settings.spec.ts:18:1 › change settings, see them take effect, restart, still there (4.2s)
+  ✓  20 settings.spec.ts:65:1 › invalid input is refused with plain messages; the file is unchanged (1.7s)
+  ✓  21 shortcuts.spec.ts:60:5 › focus in the shell › switching: Ctrl+1, Ctrl+9, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Page Down, Ctrl+Page Up (849ms)
+  ✓  22 shortcuts.spec.ts:75:5 › focus in the shell › new, close, reopen: Ctrl+T, Ctrl+W, Ctrl+Shift+T (823ms)
+  ✓  23 shortcuts.spec.ts:88:5 › focus in the shell › address bar: Ctrl+L, Alt+D, F6 (650ms)
+  ✓  24 shortcuts.spec.ts:96:5 › focus in the shell › back, forward, reload: Alt+Left, Alt+Right, F5, Ctrl+R (776ms)
+
+  ✓  25 shortcuts.spec.ts:60:5 › focus in the page › switching: Ctrl+1, Ctrl+9, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Page Down, Ctrl+Page Up (6.7s)
+
+  ✓  26 shortcuts.spec.ts:75:5 › focus in the page › new, close, reopen: Ctrl+T, Ctrl+W, Ctrl+Shift+T (4.2s)
+
+  ✓  27 shortcuts.spec.ts:88:5 › focus in the page › address bar: Ctrl+L, Alt+D, F6 (3.8s)
+
+  ✓  28 shortcuts.spec.ts:96:5 › focus in the page › back, forward, reload: Alt+Left, Alt+Right, F5, Ctrl+R (4.6s)
+
+  ✓  29 shortcuts.spec.ts:117:1 › inside a page, Ferrum's shortcuts never reach the page; ordinary keys do (2.2s)
+  ✓  30 sidebar.spec.ts:25:1 › open and close: the tab view shrinks and grows, never overlapping (270ms)
+  ✓  31 sidebar.spec.ts:41:1 › choosing a tab or a history entry in the sidebar (402ms)
+
+  ✓  32 sidebar.spec.ts:60:1 › Ctrl+Shift+S toggles it from the shell and from inside a page (2.1s)
+  ✓  33 startup.spec.ts:18:1 › start-up sites open as tabs, in order, the first active (1.8s)
+  ✓  34 startup.spec.ts:28:1 › an unreadable user settings file is backed up; Ferrum starts with the defaults (1.6s)
+  ✓  35 startup.spec.ts:42:1 › a settings file from a newer Ferrum is left untouched (1.7s)
+  ✓  36 tabs.spec.ts:19:1 › 20 tabs: one view each, only the active one shown, all released on close (3.9s)
+
+  36 passed (1.8m)

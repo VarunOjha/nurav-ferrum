@@ -1,0 +1,51 @@
+Command output saved by scripts/gates/p3-gate.ps1 on 2026-10-12 03:40 at commit d363adf (with uncommitted changes)
+Exit code: 0
+
+### npm run p2 (exit 0)
+
+Running 26 tests using 1 worker
+
+  ✓   1 back-forward-refresh.spec.ts:13:1 › back, forward and refresh behave like a browser (530ms)
+  ✓   2 google-sign-in.spec.ts:22:1 › the sign-in link shows the banner and does not load in Ferrum (850ms)
+  ✓   3 google-sign-in.spec.ts:35:1 › Dismiss opens nothing; Open in browser opens exactly the sign-in address (137ms)
+  ✓   4 google-sign-in.spec.ts:46:1 › a typed sign-in address is offered the same way (75ms)
+  ✓   5 google-sign-in.spec.ts:55:1 › the real Google sign-in address is caught too (119ms)
+  ✓   6 keep-cookies.spec.ts:9:1 › a persistent cookie survives closing and reopening Ferrum (3.5s)
+  ✓   7 loading-errors.spec.ts:19:1 › slow page shows the loading state, then loaded (3.0s)
+  ✓   8 loading-errors.spec.ts:42:3 › HTTP 404 is shown as a toolbar status, the site's page stays (103ms)
+  ✓   9 loading-errors.spec.ts:42:3 › HTTP 500 is shown as a toolbar status, the site's page stays (114ms)
+  ✓  10 loading-errors.spec.ts:51:1 › unreachable host shows the shell's error panel, and the app recovers (449ms)
+  ✓  11 loading-errors.spec.ts:69:1 › the content view never showed the app's own origin (1ms)
+  ✓  12 new-windows-links.spec.ts:58:3 › default settings (new tab, confirm other apps) › target=_blank opens a new active tab next to the page; the page stays (1.7s)
+  ✓  13 new-windows-links.spec.ts:71:3 › default settings (new tab, confirm other apps) › window.open from a click opens a new tab (1.4s)
+  ✓  14 new-windows-links.spec.ts:79:3 › default settings (new tab, confirm other apps) › a pop-up opened by script opens one new tab at most; a flood is blocked (5.8s)
+  ✓  15 new-windows-links.spec.ts:100:3 › default settings (new tab, confirm other apps) › mailto link asks first; Cancel launches nothing (839ms)
+  ✓  16 new-windows-links.spec.ts:123:3 › default settings (new tab, confirm other apps) › custom-scheme link: Open launches exactly that link, once (277ms)
+  ✓  17 new-windows-links.spec.ts:138:3 › default settings (new tab, confirm other apps) › a typed link to another app asks too (89ms)
+  ✓  18 new-windows-links.spec.ts:156:3 › new_window = same-view (the P2 default) › target=_blank opens in the same view, no extra tab or window (367ms)
+  ✓  19 new-windows-links.spec.ts:173:3 › new_window = system-browser › target=_blank goes to the system browser; the page stays (310ms)
+  ✓  20 redirects.spec.ts:12:3 › redirect 301 shows the final address (192ms)
+  ✓  21 redirects.spec.ts:12:3 › redirect 302 shows the final address (110ms)
+  ✓  22 redirects.spec.ts:12:3 › redirect 303 shows the final address (91ms)
+  ✓  23 redirects.spec.ts:12:3 › redirect 307 shows the final address (89ms)
+  ✓  24 redirects.spec.ts:12:3 › redirect 308 shows the final address (112ms)
+  ✓  25 redirects.spec.ts:12:3 › redirect chain shows the final address (141ms)
+  ✓  26 redirects.spec.ts:21:1 › a redirect loop ends in the error state (508ms)
+
+  26 passed (46.0s)
+
+### scripts/verify/p2.3-lock-bridge-app.ps1 (exit 0)
+Ferrum check p2.3: Lock the bridge to the app
+Why: a website cannot control Ferrum.
+Run at 2026-10-12 03:39 on commit d363adf (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Only the shell has a capability, and none allows remote pages
+         shell.json: webviews ["shell"], no remote section
+  PASS   The app declares its commands at build time
+         build.rs: AppManifest commands declared
+  PASS   Self-test: website calls refused in a Tauri view; no bridge at all in the Ferrum-created view; the shell works (59 s)
+         Tauri view: 3 calls refused; content view: no bridge; shell pings: 1
+------------------------------------------------------------------------
+RESULT: PASS - p2.3 (3 PASS; 59 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.3 check passed".
