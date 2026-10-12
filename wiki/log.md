@@ -1973,3 +1973,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 03:42
 - pages: [handoff-2026-10-12-s02, status-live]
 - result: Handoff written (operations/handoffs/handoff-2026-10-12-s02.md). No P4 work until the owner signs off P3 and explicitly says go.
+
+## [2026-10-12] ingest | Owner's first P3 review feedback: download looked failed, no site icons, faint app icon, Task Manager
+
+- session: s02
+- time: 11:48
+- pages: [phase-p3-tabs-sessions]
+- sources: [raw/owner/2026-10-12-s02-p3-review-round-1.md]
+- result: Owner feedback transcribed verbatim. Four findings to fix: (1) a download a site opened in a new window was saved complete, but its new tab showed the "could not be loaded" panel, so it looked failed (checked in Ferrum's log and the Downloads folder); (2) tabs show no site icons; (3) the app icon is a plain dark square, barely visible; (4) Task Manager: the owner sees only "WebView2 Manager" (ferrum-desktop.exe, file description "Ferrum", runs and is the parent of its WebView2 processes). Claude adds review task p3.16 to the P3 page for the fixes. Not a sign-off; P3 stays in gate-review.

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:229a00d052161bebda873f9a570c62effcd8e3b2414439f66c8d1df0252b2500"
+    "content_hash": "sha256:7de751f8fe80112ff71df25cf377546bce4990dc0b6f77cfa9ac52d3418b7f5b"
   },
   "entries": [
     {
@@ -3078,6 +3078,26 @@
       ],
       "phase": "phase-p3-tabs-sessions",
       "category": "Checked",
+      "tags": [
+        "phases",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-review-1",
+      "date": "2026-10-12",
+      "time": "11:48",
+      "title": "Your first review of phase 3: four things to fix",
+      "done": "Claude saved your feedback word for word. Your download did arrive complete in the Downloads folder, but the new tab the site opened showed an error page, so it looked failed. Also to fix: no site icons on tabs, a faint app icon, and Ferrum is hard to find in Task Manager.",
+      "next": "Claude fixes the four points as one extra phase 3 task, then asks you to try again.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-12] ingest | Owner's first P3 review feedback: download looked failed, no site icons, faint app icon, Task Manager"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Planned",
       "tags": [
         "phases",
         "testing"

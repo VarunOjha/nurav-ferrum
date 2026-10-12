@@ -22,8 +22,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
-current_task: p3.13
-next_action: "STOPPED for the owner's P3 review: (1) owner runs target\\release\\ferrum-desktop.exe through docs/testing/manual-checklist-p3.md and reports; (2) owner re-approves adr-0011 and adr-0015; (3) owner says whether P3 is signed off. Then Claude records the words, approvals and phase-p3-tabs-sessions#exit, runs scripts/verify/p3.13-docs-gate-review.ps1, sets P3 done, and PAUSES until an explicit go for P4."
+current_task: p3.16
+next_action: "P3 review fixes in progress (task p3.16, owner feedback 2026-10-12): download tab without error panel, site icons on tabs, a visible app icon, Task Manager. Then the owner's review continues: checklist, re-approve adr-0011 and adr-0015, P3 sign-off. No P4 work."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -321,10 +321,10 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.13 docs and exit gate (owner review)
-- intent: gate PASS on d363adf (evidence e1cee54); waiting for the owner: manual checklist results, re-approval of adr-0011 and adr-0015, and phase-p3-tabs-sessions#exit. Then: transcribe, save manual-checklist.md, record approvals, close the Alt+Tab and mail claims, run the p3.13 check, set the phase to done, PAUSE.
-- paths: wiki/raw/owner/*, wiki/raw/evidence/phase-p3-tabs-sessions/manual-checklist.md, plan/approvals.json, Alt+Tab and mail claim pages, MANIFEST
-- rollback: nothing destructive; raw files are new files only
+- task: p3.16 owner review round 1 fixes (P3)
+- intent: (1) a tab that turns into a download shows no error panel; a tab that never showed a page closes when its download ends; (2) site icons in the tab strip and sidebar (WebView2 FaviconChanged + GetFavicon as PNG, no extra request); (3) a new, clearly visible app icon; (4) Task Manager: explain and verify the Ferrum group; add p3.16 to the P3 page with a check script, smoke tests and fixture routes; then the owner's review continues (checklist, re-approvals, sign-off)
+- paths: crates/webview-manager/{Cargo.toml,src/tab.rs,src/webview2.rs}, apps/desktop/src-tauri/{Cargo.toml,src/content.rs,icons/*}, Cargo.lock, apps/desktop/src/{main.ts,style.css,logic.ts,logic.test.ts}, apps/desktop/tests/smoke/{downloads.spec.ts,tabs.spec.ts}, tests/fixtures/server/{src/lib.rs,assets/*}, scripts/verify/p3.16-review-fixes.ps1, wiki/phases/phase-p3-tabs-sessions.md, wiki/architecture/components/{comp-app-shell,comp-webview-manager}.md, plan/portal/*
+- rollback: git checkout of the listed paths (all tracked, Claude-made); new files are Claude's own
 
 ## Blockers
 
@@ -360,22 +360,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | All 15 tasks built; end check PASSED (24 checks) |
-| Your part | The hands-on checklist, two page re-approvals, the sign-off |
+| Phase 3 | Built; your review found four things to fix |
+| Now | Claude fixes them (download tab, site icons, app icon, Task Manager) |
 | Phase 4 | Not started: waits for your sign-off and an explicit go |
 
-**2. Why, and what it does.** The automatic checks cannot judge real sites and real hands → you use Ferrum for a while
-with the checklist → then you decide whether phase 3 is done.
+**2. Why, and what it does.** Nothing for you to run now. Your review found problems → Claude fixes and tests them → then
+you try the new build.
 
-**3. The script** (opens the release build Claude made; close it when done; or run `pwsh -NoProfile -File scripts/open-ferrum.ps1`):
+**3. The script:** none for you yet. Claude will ask you to close Ferrum before rebuilding it.
 
-```powershell
-cd "C:\Users\Varun Ojha\Documents\Projects\ferrum-rust-webclient"   # the project folder
-& ".\target\release\ferrum-desktop.exe"                                 # opens Ferrum (release build)
-```
-
-**4. What to tell Claude:** your checklist results (docs/testing/manual-checklist-p3.md), "re-approve adr-0011 and
-adr-0015" (or what to change), and "Sign off P3" (or what to fix).
+**4. What to tell Claude:** nothing for now.
 
 ## Pending owner approvals
 
@@ -386,4 +380,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 gate passed; waiting for the owner's review). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-12, session s02 (P3 review fixes, task p3.16). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
