@@ -1832,3 +1832,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.1.txt]
 - result: crates/core/src/tabs.rs: Tabs<T> (ids never reused; one active tab when any exist; close activates the right neighbour, else the left; open at end or after active; move; next/previous with wrap; closed-tab stack of 25 with reopen; check()). crates/core/tests/tabs.rs: 9 fixed cases and 200 seeded random sequences of 500 operations, every rule checked after every step. cargo test 10 passed; clippy and fmt clean; p3.1 check PASS. comp-core updated (stales its approval; re-recorded by the owner's directive of 2026-10-12).
 - commit: ac0361b
+
+## [2026-10-12] code | p3.2 one WebView per tab
+
+- session: s02
+- time: 01:32
+- pages: [phase-p3-tabs-sessions, comp-webview-manager, comp-app-shell, comp-core]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.2.txt]
+- result: One WebView2 controller per tab on the UI thread (VIEWS map; environment saved from the shell); tab list from ferrum_core::tabs; async tab-creating commands queue UI-thread work only; tab_* commands, tabs/tab/link events; shell fills the window and reports its insets; tab strip and per-tab toolbar. new_window = new-tab (default) with a one-new-tab-per-second limit per tab; WebView2's user-initiated flag was true for a script-only pop-up, so it is not used. Found: the full-window shell stayed above the tab views in the stacking order and hid the page (screenshot and child-window order; CDP tests could not see it); fixed with send_to_back, checked by the p3.2 script. Smoke suite 27 passed; p2.3/p2.6/p2.12/p2.14 PASS; p3.2 PASS. Stales approval of comp-app-shell, comp-core, comp-webview-manager (re-recorded by the owner's directive of 2026-10-12).
+- commit: 7c4b532

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:80dd8cb6b773181432ceb6607b470f312596727eb52b674af1344d9d09e746ec"
+    "content_hash": "sha256:65041124e0c69b798326e73a06c2944c8b0d26b0b79e6c648bc1cc0367c50ab7"
   },
   "entries": [
     {
@@ -2780,6 +2780,26 @@
       "tags": [
         "tabs",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-2",
+      "date": "2026-10-12",
+      "time": "01:32",
+      "title": "Each tab has its own website view",
+      "done": "Ferrum now has real tabs: each one has its own website view, only the active one is shown, and closing a tab releases everything it used (checked with 20 tabs). Links that open a new window open a new tab, at most one per second per tab. Claude also found and fixed a hidden problem: the toolbar's window sat above the page and hid it.",
+      "next": "The tab strip and keyboard shortcuts (task p3.3).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "7c4b532",
+      "covers": [
+        "## [2026-10-12] code | p3.2 one WebView per tab"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "tabs",
+        "web views"
       ]
     }
   ]

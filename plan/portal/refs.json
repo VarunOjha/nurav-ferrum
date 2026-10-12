@@ -720,7 +720,7 @@
       "kind": "task",
       "title": "P3 task: One web view per tab",
       "summary": "Each tab needs its own view → create views only from non-blocking code, hide and show on switch, release fully on close → no freezes or leftover processes.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4771,6 +4771,14 @@
       "kind": "commit",
       "title": "Commit: Tab rules written and tested",
       "summary": "The rules for tabs now exist as plain code, without any window: exactly one active tab, ids never reused, closing the active tab picks its neighbour, and up to 25 closed tabs can be reopened. 200 rand",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "7c4b532",
+      "kind": "commit",
+      "title": "Commit: Each tab has its own website view",
+      "summary": "Ferrum now has real tabs: each one has its own website view, only the active one is shown, and closing a tab releases everything it used (checked with 20 tabs). Links that open a new window open a new",
       "status": null,
       "related": []
     }

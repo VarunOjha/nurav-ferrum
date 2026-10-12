@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 1,
+    "done": 2,
     "total": 15
   },
   "step_order": [
@@ -37,7 +37,7 @@
       "what": "Each tab gets its own website view: hidden or shown when you switch, resized with the window, fully closed with the tab.",
       "why": "If a closed tab leaves its processes behind, memory slowly fills up, and a freeze while opening tabs would make the app unusable.",
       "how": "Create views only from non-blocking code (blocking code freezes on Windows), hide and show them on switch, release everything on close. A test opens and closes 20 tabs.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Each tab needs its own view → create views only from non-blocking code, hide and show on switch, release fully on close → no freezes or leftover processes.",
       "check": "Open 20 tabs, switch, close all: view count back to zero, no leftover processes.",
       "script": "scripts/verify/p3.2-view-per-tab.ps1"
