@@ -2047,3 +2047,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-feature-set-plan-approval.md]
 - result: ferrum_core::store (rusqlite 0.40.2 bundled, FTS5 confirmed): ferrum.db with history and bookmarks, word indexes, limit 50 000, clear leaves nothing in the file, only http(s); app library.rs imports history.json once (renamed history.json.imported). scripts/verify/p3.18-store.ps1 PASS (12 store tests, cargo deny ok, history smoke 4 passed); cargo test --workspace, clippy, fmt clean. Stales approval of comp-app-shell and comp-core.
 - commit: 0108da1
+
+## [2026-10-12] code | p3.19 bookmarks: star, bar, editor, sidebar folders, shortcuts
+
+- session: s02
+- time: 15:53
+- pages: [phase-p3-tabs-sessions, comp-app-shell, comp-core, ov-arch-configuration]
+- sources: [raw/owner/2026-10-12-s02-feature-set-design-answers.md]
+- result: Bookmark and appearance commands (shell only); star adds to Favourites bar and opens the editor bar; bookmarks bar ([appearance] bookmarks_bar) and editor in the top band; sidebar Bookmarks section; Ctrl+D, Ctrl+Shift+B, Ctrl+Shift+O. scripts/verify/p3.19-bookmarks.ps1 PASS (core tests, 15 shell unit tests, smoke bookmarks + sidebar + settings 10 passed). A first run failed only because the test started Ferrum with an override settings file that replaces the saved one; the test now uses the user file only, as the settings test does. Stales approval of comp-app-shell and comp-core.
+- commit: 38e294f

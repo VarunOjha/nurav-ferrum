@@ -6,7 +6,7 @@
   "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
   "status": "In progress",
   "progress": {
-    "done": 17,
+    "done": 18,
     "total": 23
   },
   "step_order": [
@@ -225,7 +225,7 @@
       "what": "A star in the address bar bookmarks the page; your bookmarks show where you chose in the design; rename, move and delete.",
       "why": "You asked for bookmarks.",
       "how": "Star to add or edit; list in the sidebar and/or a bar, as designed; only web addresses are accepted.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "You asked for bookmarks → star and list → your favourite sites are one click away.",
       "check": "Tests: star, rename, delete, open, survive a restart; websites cannot touch your bookmarks.",
       "script": "scripts/verify/p3.19-bookmarks.ps1"
@@ -236,7 +236,7 @@
       "what": "As you type, the address bar suggests matching bookmarks, pages from your history and open tabs. Arrow keys and Enter open one.",
       "why": "You asked for search of the past on the address bar.",
       "how": "Best matches first, keyboard first. Pages are drawn above Ferrum's own controls, so the list is never hidden under the page: the page moves aside while the list is open, or the list gets its own small window.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "You remember part of a page title → type it → Ferrum finds the page.",
       "check": "Tests: typing finds a visited page; arrows, Enter and Esc work; the list is never hidden under the page.",
       "script": null

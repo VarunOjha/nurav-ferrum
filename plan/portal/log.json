@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7e92b5295bd0bd9f1f3386b121c0c053cae3aa5f92107452ae52dcec053bea39"
+    "content_hash": "sha256:466e8df2ac3d74cdcd2be5f3a879902643ea57b2e3691f27a24b1e67bdedf40c"
   },
   "entries": [
     {
@@ -3317,6 +3317,26 @@
       "tags": [
         "address bar",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-19",
+      "date": "2026-10-12",
+      "time": "15:53",
+      "title": "Built: bookmarks",
+      "done": "A star in the address bar bookmarks the page and lets you rename it or put it in a folder. A bookmarks bar under the toolbar shows your favourites (Ctrl+Shift+B hides it). The sidebar lists every folder. Ctrl+D bookmarks the page. Websites cannot touch your bookmarks.",
+      "next": "Claude builds the address-bar suggestions next.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "38e294f",
+      "covers": [
+        "## [2026-10-12] code | p3.19 bookmarks: star, bar, editor, sidebar folders, shortcuts"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "address bar",
+        "look & feel"
       ]
     }
   ]

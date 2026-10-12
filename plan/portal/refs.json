@@ -4939,7 +4939,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: bookmarks",
       "summary": "You asked for bookmarks → star and list → your favourite sites are one click away.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -4950,7 +4950,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: search the past from the address bar",
       "summary": "You remember part of a page title → type it → Ferrum finds the page.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -5044,6 +5044,14 @@
       "kind": "commit",
       "title": "Commit: Built: a local database for history and bookmarks",
       "summary": "History now lives in one database file on your PC with a fast word search, up to 50,000 entries. Clearing it leaves nothing behind inside the file. Your existing history was carried over. Bookmarks ha",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "38e294f",
+      "kind": "commit",
+      "title": "Commit: Built: bookmarks",
+      "summary": "A star in the address bar bookmarks the page and lets you rename it or put it in a folder. A bookmarks bar under the toolbar shows your favourites (Ctrl+Shift+B hides it). The sidebar lists every fold",
       "status": null,
       "related": []
     }
