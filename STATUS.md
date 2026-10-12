@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: null
-next_action: "Phase 3 in progress: next task p3.13 (component pages, README, known limitations, manual checklist, p3-gate.ps1; then stop for the owner's review)."
+next_action: "P3: run pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit, record the gate, then STOP for the owner's review (manual checklist docs/testing/manual-checklist-p3.md, re-approval of adr-0011 and adr-0015, phase-p3-tabs-sessions#exit)."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -108,6 +108,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 - p3.15 done (0bb71c9): sidebar with tabs and history; check PASS.
 - p3.11 done (`ebc79ca`): P3 suite in one command (45 Rust, 36 app tests); P2 regression group 26 passed; check PASS.
 - p3.12 done (0ce0e38): literature batch 3 (eight sources; seed open points F3, G1, G2 closed); check PASS.
+- p3.13 part 1 (`6ab7667`): P3 docs, manual checklist, real P3 gate; P3 claims closed or re-targeted.
 
 ## Done this session (s01)
 
@@ -319,7 +320,10 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p3.12 verified and committed 2026-10-12 as `0ce0e38`)
+- task: p3.13 docs and exit gate (part 2: gate run and owner review)
+- intent: done: docs, checklist, gate scripts (6ab7667). Now: run scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit, commit the evidence, log the gate, set the phase to gate-review, write a handoff, then STOP: the owner reviews (manual checklist, re-approve adr-0011 and adr-0015, phase-p3-tabs-sessions#exit). No P4 work.
+- paths: wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, wiki/phases/phase-p3-tabs-sessions.md (status), wiki/operations/handoffs/*, plan/portal/*
+- rollback: nothing destructive; raw files are new files only
 
 ## Blockers
 
@@ -356,10 +360,10 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | In progress: 14 of 15 tasks done |
-| Next task | Docs and the P3 end check (p3.13) |
+| Next task | The P3 end check, then your review |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. The last P3 task: docs, the end-of-phase check, then Claude stops for your review.
+**2. Why, and what it does.** Nothing for you to run now. The end check runs every automatic test on one commit; then Claude stops, as you asked.
 
 **3. The script:** none for you.
 
@@ -374,4 +378,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 in progress: 14 of 15 tasks done, last p3.12). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-12, session s02 (P3 in progress: 14 of 15 tasks done, last p3.13). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

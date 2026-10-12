@@ -1949,3 +1949,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/research/literature-batch-3.md, raw/evidence/phase-p3-tabs-sessions/check-p3.12.txt]
 - result: raw/research/literature-batch-3.md: eight sources read 2026-10-12 (tab usage: Chang et al. 2021 abstract via a secondary record, two more papers metadata only; Chrome Memory Saver; Edge SleepingTabsTimeout default 15 minutes; Android process importance and cached processes; Apple memory warnings; Cao and Irani GreedyDual-Size and its Young reference). Closes seed open points F3, G1, G2; reading log row and findings; p3.12 check PASS.
 - commit: 0ce0e38
+
+## [2026-10-12] code | p3.13 (part 1) P3 docs, manual checklist, real P3 gate
+
+- session: s02
+- time: 03:23
+- pages: [phase-p3-tabs-sessions, comp-app-shell, comp-core, comp-webview-manager, ov-arch-crate-graph, ov-arch-trust-boundaries, adr-0011, adr-0015, adr-0028, risk-r01, risk-r10, risk-r20, qual-ci-plan, qual-testing-strategy, ov-open-questions]
+- sources: [raw/research/p3-crate-versions.md]
+- result: README, SECURITY.md, docs/testing/manual-checklist-p3.md, part pages last verified at ebc79ca; scripts/gates/p3-gate.ps1 and the p3.13 check made real. P3-targeted claims: crate versions verified (raw/research/p3-crate-versions.md); risk-r01 claim no longer needed; custom title bar not needed (Q-125); re-targeted to P4 with reasons: OAuth pop-ups (no window.opener in P3), Google refusal, other OAuth providers, Node pin, GitHub CI runner and reproducible-build claims (Q-221). Open for the owner's review: Alt+Tab fix, real mail launch. Stales adr-0011 and adr-0015 (outside the P3 annex: left for the owner's re-approval at the P3 review). Next: the P3 gate with evidence.
+- commit: 6ab7667

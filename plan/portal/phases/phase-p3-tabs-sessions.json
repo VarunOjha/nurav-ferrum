@@ -180,7 +180,7 @@
       "what": "Update the docs, run the phase gate and hand over for your review.",
       "why": "Tests show the features work; only real use shows whether Ferrum is pleasant to work in. You decide whether that is good enough.",
       "how": "Update part pages, the README features and known limits, save all evidence. Then you do the hand checks: eight or more tabs, shortcuts, kill and restore, a real download.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
       "check": "All evidence saved; wiki clean; you approved the P3 exit.",
       "script": "scripts/verify/p3.13-docs-gate-review.ps1"

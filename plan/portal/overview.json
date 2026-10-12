@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 14 of 15 tasks done. Next: docs and the P3 end check (p3.13).",
+  "summary": "Phase 3 is in progress: 14 of 15 tasks done. Next: the P3 end check, then your review.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:2d2f97f15996536568d80dae8877f2235a96217db2e1d0c91faea9428d60e06f"
+    "content_hash": "sha256:20849c6bbe8522775d6f320b49d18aa2b87b275d4110fac74cc6f388d5c1678c"
   },
   "updated": "2026-10-12",
   "where_we_are": [
@@ -42,10 +42,10 @@
       },
       {
         "item": "Next task",
-        "state": "Docs and the P3 end check (p3.13)"
+        "state": "The P3 end check, then your review"
       }
     ],
-    "why": "Nothing to run. The last P3 task: docs, the end-of-phase check, then Claude stops for your review.",
+    "why": "Nothing to run. The end check runs every automatic test on one commit; then Claude stops, as you asked.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

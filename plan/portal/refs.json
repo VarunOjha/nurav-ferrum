@@ -690,7 +690,7 @@
       "kind": "task",
       "title": "P3 task: Docs, gate, your review",
       "summary": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4875,6 +4875,14 @@
       "kind": "commit",
       "title": "Commit: Reading batch 3: tab habits, tab sleeping, phone apps",
       "summary": "Claude read eight sources on how people use tabs, how Chrome and Edge put idle tabs to sleep today (Edge: after 15 minutes by default), how Android and iOS free memory from background apps, and the or",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "6ab7667",
+      "kind": "commit",
+      "title": "Commit: Phase 3 docs and the end check are ready",
+      "summary": "The README now explains tabs, shortcuts and the known limits; SECURITY.md lists what phase 3 adds; there is a checklist for your hands-on review. Open claims marked for phase 3 were checked, or moved ",
       "status": null,
       "related": []
     }

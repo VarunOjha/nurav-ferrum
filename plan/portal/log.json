@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5a2b0f695e577f8749402b1e18313668a2f9bb2e0c81f961738c938c061987be"
+    "content_hash": "sha256:22a6c22e6bdb084e1101b6d58f4e7109cf8bcb65a103ee4d7b759569aa06122e"
   },
   "entries": [
     {
@@ -3040,6 +3040,26 @@
       "tags": [
         "paper",
         "tab sleeping"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-13",
+      "date": "2026-10-12",
+      "time": "03:23",
+      "title": "Phase 3 docs and the end check are ready",
+      "done": "The README now explains tabs, shortcuts and the known limits; SECURITY.md lists what phase 3 adds; there is a checklist for your hands-on review. Open claims marked for phase 3 were checked, or moved to phase 4 with a reason. Two decision pages outside phase 3 changed and need your new look.",
+      "next": "Claude runs the full phase 3 end check, then stops for your review.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "6ab7667",
+      "covers": [
+        "## [2026-10-12] code | p3.13 (part 1) P3 docs, manual checklist, real P3 gate"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "phases",
+        "check scripts"
       ]
     }
   ]
