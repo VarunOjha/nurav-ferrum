@@ -34,11 +34,9 @@ pub struct ProgressTimes(pub Mutex<HashMap<u64, Instant>>);
 /// The folder downloads go to.
 pub fn folder(app: &AppHandle) -> Option<PathBuf> {
     app.state::<AppConfig>()
-        .0
-        .config
+        .get()
         .downloads
         .folder
-        .clone()
         .or_else(|| app.path().download_dir().ok())
 }
 

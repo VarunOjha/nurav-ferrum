@@ -27,6 +27,8 @@
     "allow-test-crash",
     "allow-history-list",
     "allow-history-clear",
+    "allow-settings-get",
+    "allow-settings-set",
     "allow-shell-focused",
     "allow-external-open-confirm",
     "allow-external-cancel",

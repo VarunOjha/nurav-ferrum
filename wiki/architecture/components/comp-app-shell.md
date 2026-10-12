@@ -195,6 +195,14 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   blocks on a reply except the debug-only `test_stats` (off the UI thread). Review checklist:
   `docs/developer/code-review-checklist.md`. A burst of about 40 tab commands settles and pop-ups still open tabs
   ([check-p3.10](../../raw/evidence/phase-p3-tabs-sessions/check-p3.10.txt)).
+- p3.14, settings screen: a toolbar button (⚙) and Ctrl+Comma open it in the content area (the active tab's view is
+  hidden meanwhile; switching tabs closes it). It edits start-up sites (one per line), "reopen the tabs from last
+  time", per-site named profiles and the download folder, and shows whether isolation is per site. The shell never
+  writes the file: `settings_get` and `settings_set` (`settings.rs`) check every value (address rules, settings rules,
+  the folder must exist), list every problem in plain words, and only then write the user settings file atomically
+  and apply the settings (`AppConfig` is behind a lock: profiles and the folder at once, start-up sites at the next
+  start). The p2.3 probe page now also tries `settings_set`: refused for a website ("allowed on: webviews shell"),
+  and tab views have no bridge ([check-p3.14](../../raw/evidence/phase-p3-tabs-sessions/check-p3.14.txt)).
 - New windows: `new_window = "new-tab"` is the new default (`same-view` and `system-browser` stay). One tab may open
   at most one new tab per second; further requests are blocked with "Pop-up blocked" on that tab. WebView2's
   user-initiated flag is not used (it was `true` for a script-only pop-up). A real pop-up policy is P4 work.

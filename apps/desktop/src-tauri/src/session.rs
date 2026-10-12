@@ -96,7 +96,7 @@ pub fn start_saver(app: AppHandle) {
 /// The tabs to open at start, as (address, active): the last session when restoring is on and one was saved, else
 /// the start-up pages (an empty tab when there are none).
 pub fn start_tabs(app: &AppHandle) -> Vec<(String, bool)> {
-    let cfg = &app.state::<AppConfig>().0.config.session;
+    let cfg = app.state::<AppConfig>().get().session;
     if cfg.restore_on_startup
         && let Some(saved) = read(app)
         && !saved.tabs.is_empty()

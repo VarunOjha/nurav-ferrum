@@ -146,7 +146,7 @@ pub fn on_page_navigation(app: &AppHandle, security: &Security, uri: &str) {
 /// smoke runs found unreliable for script pop-ups). System browser: a click opens the browser; anything else is
 /// offered on the confirmation bar first, so nothing leaves Ferrum silently.
 pub fn on_new_window(app: &AppHandle, tab: u64, uri: &str, user_initiated: bool) {
-    let security = app.state::<AppConfig>().0.config.security.clone();
+    let security = app.state::<AppConfig>().get().security;
     match normalize(uri, &security) {
         Outcome::Navigate { url, .. } => match security.new_window {
             NewWindow::NewTab => {
@@ -223,11 +223,11 @@ pub fn external_open_confirm(
         // A Google sign-in the app offered (the address is opened exactly as the page asked for it).
         return launch(&uri);
     }
-    match normalize(&uri, &cfg.0.config.security) {
+    match normalize(&uri, &cfg.get().security) {
         Outcome::Confirm { url } => launch(url.as_str()),
         // A web page offered for the system browser (new_window = system-browser, see on_new_window).
         Outcome::Navigate { url, .. }
-            if cfg.0.config.security.new_window == NewWindow::SystemBrowser =>
+            if cfg.get().security.new_window == NewWindow::SystemBrowser =>
         {
             launch(url.as_str())
         }

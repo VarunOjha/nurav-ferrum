@@ -79,9 +79,14 @@ fn all_refused(report: &Option<Value>) -> bool {
     if r["bridge"] != json!(true) {
         return true; // no bridge: nothing can be called
     }
-    ["app_command", "event_listen", "event_emit"]
-        .iter()
-        .all(|k| r[*k]["ok"] == json!(false))
+    [
+        "app_command",
+        "event_listen",
+        "event_emit",
+        "settings_command",
+    ]
+    .iter()
+    .all(|k| r[*k]["ok"] == json!(false))
 }
 
 /// Starts the IPC lockdown self-test on a background thread.

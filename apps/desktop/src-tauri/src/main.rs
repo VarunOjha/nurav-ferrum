@@ -13,6 +13,7 @@ mod history;
 mod logging;
 mod selftest;
 mod session;
+mod settings;
 mod shortcuts;
 
 use std::path::PathBuf;
@@ -187,6 +188,8 @@ fn main() {
             session::test_crash,
             history::history_list,
             history::history_clear,
+            settings::settings_get,
+            settings::settings_set,
             content::shell_focused
         ])
         .setup(|app| {
@@ -222,7 +225,7 @@ fn main() {
                 tracing::warn!(target: "ferrum::config", error = %e, "settings not used; using the defaults");
             }
             let data_dir = loaded.config.storage.data_dir.clone();
-            app.manage(AppConfig(loaded));
+            app.manage(AppConfig(std::sync::RwLock::new(loaded)));
             app.manage(session::store(app, data_dir.clone()));
             app.manage(history::store(app, data_dir));
             session::start_saver(app.handle().clone());
@@ -252,7 +255,7 @@ fn main() {
                 });
             // A configured data folder (settings [storage] data_dir) holds the WebView2 data of the shell and, since
             // the content view is created from the same environment (adr-0029), of the pages too (p2.11).
-            if let Some(dir) = app.state::<AppConfig>().0.config.storage.data_dir.clone() {
+            if let Some(dir) = app.state::<AppConfig>().get().storage.data_dir {
                 shell = shell.data_directory(dir);
             }
             window.add_child(

@@ -44,6 +44,9 @@ export type LaunchOptions = {
   data?: string;
   extraSettings?: string;
   env?: Record<string, string>;
+  /** Put the run's settings in the user settings file only (no --config override), so settings saved by Ferrum's
+   * settings screen apply after a restart (p3.14). */
+  userFileOnly?: boolean;
   /** Use per-site profiles (Ferrum's default); otherwise the run shares one profile. */
   perSite?: boolean;
   /** Extra command-line arguments (default: `--user-config <data>/user-config.toml`, never the real settings file). */
@@ -55,9 +58,11 @@ export type LaunchOptions = {
 export async function launch(name: string, opts: LaunchOptions = {}): Promise<Ferrum> {
   const data = opts.data ?? dataDir(name);
   const config = settings(data, opts.extraSettings ?? "", opts.perSite ?? false);
+  const userFile = path.join(data, "user-config.toml");
+  if (opts.userFileOnly && !fs.existsSync(userFile)) fs.copyFileSync(config, userFile);
   // The user settings file is the run's own (never the real one in %APPDATA%), unless the test names another.
-  const args = opts.args ?? ["--user-config", path.join(data, "user-config.toml")];
-  const proc = spawn(ferrumExe, ["--config", config, ...args], {
+  const args = opts.args ?? ["--user-config", userFile];
+  const proc = spawn(ferrumExe, [...(opts.userFileOnly ? [] : ["--config", config]), ...args], {
     env: {
       ...process.env,
       WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${cdpPort}`,

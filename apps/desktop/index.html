@@ -23,6 +23,7 @@
           <input id="address" type="text" spellcheck="false" placeholder="Enter an address" aria-label="Address" />
         </form>
         <span id="status" aria-live="polite"></span>
+        <button id="settings-btn" class="nav" type="button" title="Settings (Ctrl+,)" aria-label="Settings">&#x2699;</button>
         <div id="progress" aria-hidden="true"></div>
       </header>
       <div id="external-bar" role="alertdialog" aria-labelledby="external-text" hidden>
@@ -44,6 +45,38 @@
         <p id="error-address"></p>
         <button id="error-retry" type="button">Try again</button>
         <p id="error-code"></p>
+      </section>
+      <section id="settings-panel" aria-labelledby="settings-title" hidden>
+        <h1 id="settings-title">Settings</h1>
+        <form id="settings-form" autocomplete="off">
+          <fieldset>
+            <legend>Start-up</legend>
+            <label for="set-startup">Sites to open at start, one per line</label>
+            <textarea id="set-startup" rows="4" spellcheck="false"></textarea>
+            <label class="check"><input id="set-restore" type="checkbox" /> Reopen the tabs from last time instead (when there are any)</label>
+          </fieldset>
+          <fieldset>
+            <legend>Sites and profiles</legend>
+            <p class="hint" id="set-isolation"></p>
+            <table id="set-sites">
+              <thead><tr><th scope="col">Site (main domain)</th><th scope="col">Named profile (empty: its own)</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+            <button id="set-add-site" type="button">Add a site</button>
+          </fieldset>
+          <fieldset>
+            <legend>Downloads</legend>
+            <label for="set-folder">Download folder (empty: your Downloads folder)</label>
+            <input id="set-folder" type="text" spellcheck="false" />
+          </fieldset>
+          <ul id="settings-errors" role="alert"></ul>
+          <div class="settings-actions">
+            <button id="settings-save" type="submit">Save</button>
+            <button id="settings-close" type="button">Close</button>
+            <span id="settings-status" aria-live="polite"></span>
+          </div>
+          <p class="hint" id="set-file"></p>
+        </form>
       </section>
       <section id="empty-panel" hidden>
         <h1>No tabs open</h1>

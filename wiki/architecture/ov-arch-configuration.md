@@ -137,6 +137,10 @@ defaults are used, so nothing the user wrote is lost. `--user-config <path>` rep
 tests use their own file); the override layer (`--config`) still applies when the user file fails. Every start-up site
 opens as a tab, in order, the first active ([check-p3.4](../raw/evidence/phase-p3-tabs-sessions/check-p3.4.txt)).
 
+The settings screen (P3, p3.14) edits the user file through the host only (`settings_set`: every value checked, then
+one atomic write; nothing is written on any problem). It edits start-up sites, `restore_on_startup`, `[[sites]]` and
+`[downloads] folder`; per-site profiles and the folder apply at once, start-up sites at the next start.
+
 `[session] restore_on_startup` is on by default from version 2: the last session's tabs open again, else the start-up
 pages (a version-1 file keeps it off, the P2 behaviour). The session itself is runtime state (section 5).
 

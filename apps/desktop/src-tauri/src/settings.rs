@@ -1,0 +1,161 @@
+//! The settings screen's host side (P3 task p3.14). The shell shows the settings and sends changes here; it never
+//! touches the file. `settings_set` checks every value first (start-up sites by the address-bar rules, per-site
+//! entries by the settings rules, the download folder must exist) and only then writes the user settings file in one
+//! step (`ferrum_core::config::save`, atomic) and applies the new settings: per-site profiles and the download folder
+//! at once, start-up sites and restore at the next start. Invalid input changes nothing. Only the shell may call these
+//! commands (capability `shell.json`); pages have no bridge (p2.3 test).
+
+use std::path::PathBuf;
+
+use ferrum_core::address::{Outcome, normalize};
+use ferrum_core::config::{self, Config, SiteSettings};
+use serde::{Deserialize, Serialize};
+use tauri::{AppHandle, Manager};
+
+use crate::UserConfigPath;
+use crate::content::AppConfig;
+
+/// One per-site entry as the screen shows it.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SiteRow {
+    /// The site (its main domain).
+    pub site: String,
+    /// A named profile, or empty for the site's own.
+    pub profile: String,
+}
+
+/// What the settings screen shows and edits.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SettingsView {
+    /// Start-up sites, in order.
+    pub startup_urls: Vec<String>,
+    /// Reopen the last session at start.
+    pub restore_on_startup: bool,
+    /// Per-site entries.
+    pub sites: Vec<SiteRow>,
+    /// The chosen download folder (empty = the Windows Downloads folder).
+    pub download_folder: String,
+    /// Shown only: the folder used when none is chosen.
+    #[serde(default)]
+    pub default_download_folder: String,
+    /// Shown only: whether sites are kept apart ("per-site" or "shared").
+    #[serde(default)]
+    pub isolation: String,
+    /// Shown only: the settings file that is written.
+    #[serde(default)]
+    pub file: String,
+}
+
+fn view_of(app: &AppHandle, c: &Config) -> SettingsView {
+    SettingsView {
+        startup_urls: c.session.startup_urls.clone(),
+        restore_on_startup: c.session.restore_on_startup,
+        sites: c
+            .sites
+            .iter()
+            .map(|s| SiteRow {
+                site: s.site.clone(),
+                profile: s.profile.clone().unwrap_or_default(),
+            })
+            .collect(),
+        download_folder: c
+            .downloads
+            .folder
+            .as_ref()
+            .map(|p| p.display().to_string())
+            .unwrap_or_default(),
+        default_download_folder: app
+            .path()
+            .download_dir()
+            .map(|p| p.display().to_string())
+            .unwrap_or_default(),
+        isolation: match c.isolation.mode {
+            config::IsolationMode::PerSite => "per-site".into(),
+            config::IsolationMode::Shared => "shared".into(),
+        },
+        file: app
+            .state::<UserConfigPath>()
+            .0
+            .as_ref()
+            .map(|p| p.display().to_string())
+            .unwrap_or_default(),
+    }
+}
+
+/// The settings in effect, for the settings screen.
+#[tauri::command]
+pub fn settings_get(app: AppHandle) -> SettingsView {
+    view_of(&app, &app.state::<AppConfig>().get())
+}
+
+/// Checks `input` against the settings rules and returns the new settings, or every problem found (plain words).
+pub fn apply(current: &Config, input: &SettingsView) -> Result<Config, Vec<String>> {
+    let mut problems = Vec::new();
+    let mut next = current.clone();
+    let mut urls = Vec::new();
+    for raw in input
+        .startup_urls
+        .iter()
+        .map(|s| s.trim())
+        .filter(|s| !s.is_empty())
+    {
+        if raw == "about:blank" {
+            urls.push(raw.to_string());
+            continue;
+        }
+        match normalize(raw, &current.security) {
+            Outcome::Navigate { url, .. } => urls.push(url.to_string()),
+            _ => problems.push(format!("Start-up site \"{raw}\" is not a web address.")),
+        }
+    }
+    next.session.startup_urls = urls;
+    next.session.restore_on_startup = input.restore_on_startup;
+    next.sites = input
+        .sites
+        .iter()
+        .filter(|r| !r.site.trim().is_empty())
+        .map(|r| SiteSettings {
+            site: r.site.trim().to_ascii_lowercase(),
+            profile: Some(r.profile.trim().to_string()).filter(|p| !p.is_empty()),
+        })
+        .collect();
+    let folder = input.download_folder.trim();
+    next.downloads.folder = if folder.is_empty() {
+        None
+    } else {
+        let p = PathBuf::from(folder);
+        if !p.is_absolute() || !p.is_dir() {
+            problems.push(format!(
+                "Download folder \"{folder}\" does not exist (use a full path to an existing folder)."
+            ));
+        }
+        Some(p)
+    };
+    // The same rules as a settings file (sites, labels, start pages).
+    if let Err(e) = config::validate(next.clone()) {
+        problems.push(e.to_string());
+    }
+    if problems.is_empty() {
+        Ok(next)
+    } else {
+        Err(problems)
+    }
+}
+
+/// Saves the settings from the settings screen: everything is checked first; then the user settings file is written
+/// in one step and the new settings apply. On any problem nothing changes and the problems are returned.
+#[tauri::command]
+pub fn settings_set(app: AppHandle, input: SettingsView) -> Result<SettingsView, Vec<String>> {
+    let current = app.state::<AppConfig>().get();
+    let next = apply(&current, &input)?;
+    let Some(path) = app.state::<UserConfigPath>().0.clone() else {
+        return Err(vec![
+            "Ferrum does not know where its settings file is.".into(),
+        ]);
+    };
+    let loaded = config::validate(next.clone()).map_err(|e| vec![e.to_string()])?;
+    config::save(&path, &loaded.config).map_err(|e| vec![e.to_string()])?;
+    tracing::info!(target: "ferrum::config", config_hash = %config::hash(&loaded.config), "settings saved from the settings screen");
+    *app.state::<AppConfig>().0.write().unwrap() = loaded;
+    Ok(view_of(&app, &next))
+}

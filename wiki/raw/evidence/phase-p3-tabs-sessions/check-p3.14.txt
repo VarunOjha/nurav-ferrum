@@ -1,0 +1,18 @@
+Ferrum check p3.14: The settings screen
+Why: you can change Ferrum safely, and no website can change it.
+Run at 2026-10-12 03:01 on commit 9700072 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Shell unit tests (settings form logic included)
+         npm test: pass (start-up box test included)
+Running 2 tests using 1 worker
+  ✓  1 settings.spec.ts:18:1 › change settings, see them take effect, restart, still there (5.5s)
+  ✓  2 settings.spec.ts:65:1 › invalid input is refused with plain messages; the file is unchanged (1.8s)
+  2 passed (21.0s)
+  PASS   Smoke test: change, take effect, restart, refuse bad input with the file unchanged (32 s)
+         settings: 2 passed
+  PASS   Websites cannot call the settings commands (p2.3 test, probe includes settings_set) (61 s)
+         p2.3: PASS (settings_set refused for a website; no bridge in tab views)
+------------------------------------------------------------------------
+RESULT: PASS - p3.14 (3 PASS; 94 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.14 check passed".

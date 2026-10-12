@@ -4,7 +4,7 @@
 // P3 tasks p3.2 (tabs) and p3.3 (strip and shortcuts).
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { addressText, blockedText, downloadText, finished, lockFor, shortcutFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
+import { addressText, blockedText, downloadText, finished, linesOf, lockFor, shortcutFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -68,6 +68,8 @@ const errorCode = $<HTMLParagraphElement>("error-code");
 const retry = $<HTMLButtonElement>("error-retry");
 
 const ui = new Map<number, TabUi>();
+/** The tab the settings screen covers (p3.14), if it is open. */
+let settingsCovering: number | null = null;
 let list: TabList = { active: null, tabs: [] };
 const uiOf = (id: number): TabUi => {
   let u = ui.get(id);
@@ -162,6 +164,10 @@ function renderStrip(): void {
 }
 
 function applyList(next: TabList): void {
+  // Switching tabs closes the settings screen (it covers the tab that was active). Looked up directly: tab lists can
+  // arrive while this script is still starting, before the settings code below has run.
+  const sp = document.getElementById("settings-panel");
+  if (sp && !sp.hidden && next.active !== settingsCovering) void closeSettings();
   // A switch between two tabs (not the first tab list at start, which must not wipe an address being typed).
   const switched = list.active !== null && next.active !== list.active;
   list = next;
@@ -376,8 +382,103 @@ async function runShortcut(name: string): Promise<void> {
 /** Shell-only actions: also sent by the app for shortcuts pressed inside a page. */
 function shellCommand(action: string): void {
   if (action === "focus-address") focusAddress();
-  // "toggle-sidebar" (p3.15) and "settings" (p3.14) are added with their tasks.
+  if (action === "settings") void openSettings();
+  // "toggle-sidebar" (p3.15) is added with its task.
 }
+
+// --- Settings (p3.14): shown in the content area; the app checks and saves (settings.rs). ---
+type SiteRow = { site: string; profile: string };
+type SettingsView = {
+  startup_urls: string[]; restore_on_startup: boolean; sites: SiteRow[]; download_folder: string;
+  default_download_folder: string; isolation: string; file: string;
+};
+const settingsPanel = $<HTMLElement>("settings-panel");
+const settingsForm = $<HTMLFormElement>("settings-form");
+const setStartup = $<HTMLTextAreaElement>("set-startup");
+const setRestore = $<HTMLInputElement>("set-restore");
+const setSitesBody = document.querySelector("#set-sites tbody") as HTMLTableSectionElement;
+const setFolder = $<HTMLInputElement>("set-folder");
+const settingsErrors = $<HTMLUListElement>("settings-errors");
+const settingsStatus = $<HTMLSpanElement>("settings-status");
+function siteRow(r: SiteRow): HTMLTableRowElement {
+  const tr = document.createElement("tr");
+  const cell = (value: string, cls: string, label: string) => {
+    const td = document.createElement("td");
+    const i = document.createElement("input");
+    i.type = "text";
+    i.className = cls;
+    i.value = value;
+    i.spellcheck = false;
+    i.setAttribute("aria-label", label);
+    td.append(i);
+    return td;
+  };
+  const del = document.createElement("td");
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = "Remove";
+  b.addEventListener("click", () => tr.remove());
+  del.append(b);
+  tr.append(cell(r.site, "set-site", "Site"), cell(r.profile, "set-profile", "Named profile"), del);
+  return tr;
+}
+function fillSettings(v: SettingsView): void {
+  setStartup.value = v.startup_urls.join("\n");
+  setRestore.checked = v.restore_on_startup;
+  setSitesBody.replaceChildren(...v.sites.map(siteRow));
+  setFolder.value = v.download_folder;
+  setFolder.placeholder = v.default_download_folder;
+  $<HTMLParagraphElement>("set-isolation").textContent =
+    v.isolation === "per-site" ? "Each site keeps its own cookies and storage. Sites given the same named profile share one."
+      : "All sites share one profile (isolation is off in the settings file).";
+  $<HTMLParagraphElement>("set-file").textContent = v.file ? `Saved to ${v.file}` : "";
+}
+async function openSettings(): Promise<void> {
+  fillSettings(await invoke<SettingsView>("settings_get"));
+  settingsErrors.replaceChildren();
+  settingsStatus.textContent = "";
+  settingsPanel.hidden = false;
+  if (list.active !== null && settingsCovering === null) {
+    settingsCovering = list.active;
+    await invoke("shell_cover", { cover: true, tab: settingsCovering });
+  }
+  setStartup.focus();
+}
+async function closeSettings(): Promise<void> {
+  if (settingsPanel.hidden) return;
+  settingsPanel.hidden = true;
+  if (settingsCovering !== null) {
+    const id = settingsCovering;
+    settingsCovering = null;
+    // Keep the tab hidden if its own error panel still covers it.
+    if (!uiOf(id).panel) await invoke("shell_cover", { cover: false, tab: id });
+  }
+}
+settingsForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input: SettingsView = {
+    startup_urls: linesOf(setStartup.value),
+    restore_on_startup: setRestore.checked,
+    sites: [...setSitesBody.querySelectorAll("tr")].map((tr) => ({
+      site: (tr.querySelector(".set-site") as HTMLInputElement).value,
+      profile: (tr.querySelector(".set-profile") as HTMLInputElement).value,
+    })),
+    download_folder: setFolder.value,
+    default_download_folder: "", isolation: "", file: "",
+  };
+  try {
+    fillSettings(await invoke<SettingsView>("settings_set", { input }));
+    settingsErrors.replaceChildren();
+    settingsStatus.textContent = "Saved";
+  } catch (err) {
+    const problems = Array.isArray(err) ? (err as string[]) : [String(err)];
+    settingsErrors.replaceChildren(...problems.map((p) => Object.assign(document.createElement("li"), { textContent: p })));
+    settingsStatus.textContent = "Not saved";
+  }
+});
+$<HTMLButtonElement>("set-add-site").addEventListener("click", () => setSitesBody.append(siteRow({ site: "", profile: "" })));
+$<HTMLButtonElement>("settings-close").addEventListener("click", () => void closeSettings());
+$<HTMLButtonElement>("settings-btn").addEventListener("click", () => void openSettings());
 document.addEventListener("keydown", (e) => {
   const name = shortcutFor({ key: e.key, ctrl: e.ctrlKey, shift: e.shiftKey, alt: e.altKey });
   if (!name) return;

@@ -104,6 +104,11 @@ export function downloadText(state: "running" | "completed" | "failed", received
   return `${sizeText(received)} so far`;
 }
 
+/** The start-up sites box: one address per line, blank lines and surrounding spaces dropped. */
+export function linesOf(text: string): string[] {
+  return text.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0);
+}
+
 /** A key press in the shell (the parts of a KeyboardEvent the shortcut table needs). */
 export type ShellKey = { key: string; ctrl: boolean; shift: boolean; alt: boolean };
 

@@ -29,8 +29,15 @@ use crate::external;
 /// The address of an empty tab.
 pub const BLANK: &str = "about:blank";
 
-/// The loaded settings.
-pub struct AppConfig(pub Loaded);
+/// The settings in effect. Behind a lock because the settings screen (p3.14) changes them while Ferrum runs.
+pub struct AppConfig(pub std::sync::RwLock<Loaded>);
+
+impl AppConfig {
+    /// The settings in effect now.
+    pub fn get(&self) -> ferrum_core::config::Config {
+        self.0.read().unwrap().config.clone()
+    }
+}
 
 /// Where keyboard focus was last put on purpose (for restoring it after Alt+Tab).
 #[derive(Default)]
@@ -190,7 +197,7 @@ pub fn content_rect<R: Runtime>(window: &Window<R>) -> tauri::Result<RECT> {
 /// The WebView2 profile a tab showing `url` uses (p3.6): its site's own profile, a profile named in `[[sites]]`, or
 /// the shared one (no site yet, or isolation off).
 pub fn profile_for(app: &AppHandle, url: &str) -> String {
-    ferrum_core::profiles::profile_for_url(&app.state::<AppConfig>().0.config, url)
+    ferrum_core::profiles::profile_for_url(&app.state::<AppConfig>().get(), url)
 }
 
 /// The tab list as the shell shows it.
@@ -435,7 +442,7 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
                 user_initiated,
             } => external::on_new_window(&h, id, uri, *user_initiated),
             TabEvent::ExternalSchemeRequested { uri, .. } => {
-                let security = h.state::<AppConfig>().0.config.security.clone();
+                let security = h.state::<AppConfig>().get().security;
                 external::on_page_navigation(&h, &security, uri);
             }
             _ => {}
@@ -450,7 +457,7 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
 /// profile (the server, not the page, chose it; moving mid-redirect would break sign-in flows).
 fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
     let h = app.clone();
-    let security = app.state::<AppConfig>().0.config.security.clone();
+    let security = app.state::<AppConfig>().get().security;
     Rc::new(move |r: &NavRequest| {
         let d = web_gate(&r.uri);
         if d == NavDecision::Cancel {
@@ -662,7 +669,7 @@ pub struct NavResult {
 /// open). Async, so it never runs on the UI thread while a view is made (p3.10).
 #[tauri::command]
 pub async fn tab_navigate(app: AppHandle, input: String) -> NavResult {
-    let security = app.state::<AppConfig>().0.config.security.clone();
+    let security = app.state::<AppConfig>().get().security;
     match normalize(&input, &security) {
         Outcome::Navigate { url, note } => {
             let target = url.to_string();
@@ -713,7 +720,7 @@ pub async fn tab_new(app: AppHandle, url: Option<String>) -> Result<u64, String>
     let target = match url.as_deref().map(str::trim) {
         None | Some("") | Some(BLANK) => BLANK.to_string(),
         Some(input) => {
-            let security = app.state::<AppConfig>().0.config.security.clone();
+            let security = app.state::<AppConfig>().get().security;
             match normalize(input, &security) {
                 Outcome::Navigate { url, .. } => url.to_string(),
                 _ => return Err("not a web address".into()),

@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, blockedText, downloadText, finished, lockFor, shortcutFor, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, blockedText, downloadText, finished, linesOf, lockFor, shortcutFor, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -86,4 +86,11 @@ test("download lines: sizes in plain units, percent while running, done or faile
   assert.equal(downloadText("running", 2048, -1), "2.0 KB so far");
   assert.equal(downloadText("completed", 300000, 300000), "Done, 293.0 KB");
   assert.equal(downloadText("failed", 4096, 1048576), "Failed after 4.0 KB");
+});
+
+test("the start-up box takes one address per line", () => {
+  assert.deepEqual(linesOf("https://a.example/\n\n  https://b.example/x  \r\nabout:blank\n"), [
+    "https://a.example/", "https://b.example/x", "about:blank",
+  ]);
+  assert.deepEqual(linesOf("   \n"), []);
 });

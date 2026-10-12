@@ -457,6 +457,7 @@ const IPC_PROBE: &str = r#"<p id="r">probing</p><script>
     r.app_command = await tryCall("app_ping");
     r.event_listen = await tryCall("plugin:event|listen", { event: "ferrum-probe", target: { kind: "Any" }, handler: 1 });
     r.event_emit = await tryCall("plugin:event|emit", { event: "ferrum-probe", payload: "x" });
+    r.settings_command = await tryCall("settings_set", { input: { startup_urls: ["https://evil.example/"], restore_on_startup: false, sites: [], download_folder: "" } });
   }
   document.getElementById("r").textContent = JSON.stringify(r);
   document.title = "IPC-PROBE:" + JSON.stringify(r);
