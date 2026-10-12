@@ -7,7 +7,7 @@ use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use ferrum_core::address::{Note, Outcome, Refusal, normalize};
-use ferrum_core::config::Loaded;
+use ferrum_core::config::{GoogleOauth, Loaded};
 use ferrum_webview_manager::tab::{NavDecision, TabEvent, p2_gate};
 use ferrum_webview_manager::webview2::{CONTENT, ContentView};
 use serde::Serialize;
@@ -142,6 +142,14 @@ pub fn create(app: &AppHandle, window: &Window) -> tauri::Result<()> {
             let d = p2_gate(uri);
             if d == NavDecision::Cancel {
                 external::on_page_navigation(&h4, &security, uri);
+                return d;
+            }
+            // Google sign-in (p2.13): not loaded here; the shell offers the normal browser. The setting has one
+            // value today (offer-system-browser, owner answer Q-109).
+            let GoogleOauth::OfferSystemBrowser = security.google_oauth;
+            if external::is_sign_in(uri) {
+                external::offer_sign_in(&h4, uri);
+                return NavDecision::Cancel;
             }
             d
         });

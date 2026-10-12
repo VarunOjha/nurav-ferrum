@@ -6,6 +6,7 @@ use std::sync::Mutex;
 
 use ferrum_core::address::{Outcome, normalize};
 use ferrum_core::config::{NewWindow, Security};
+use ferrum_core::oauth::{TestPattern, classify};
 use serde_json::json;
 use tauri::{AppHandle, Emitter, Manager};
 
@@ -27,6 +28,36 @@ pub fn request(app: &AppHandle, url: String) {
             "tab",
             json!({"kind": "external-request", "uri": url, "scheme": scheme}),
         );
+    });
+}
+
+/// The extra address that counts as a Google sign-in start in debug builds (the smoke test's fixture link); none
+/// in release builds.
+pub fn sign_in_test_pattern() -> Option<TestPattern> {
+    if cfg!(debug_assertions) {
+        Some(TestPattern {
+            host: "localhost".into(),
+            path_prefix: "/oauth-test/".into(),
+        })
+    } else {
+        None
+    }
+}
+
+/// True when `uri` starts a Google sign-in (p2.13).
+pub fn is_sign_in(uri: &str) -> bool {
+    classify(uri, sign_in_test_pattern().as_ref()).is_some()
+}
+
+/// Offers to open a Google sign-in in the user's normal browser (owner answer Q-109): the shell shows a bar with
+/// "Open in browser"; nothing opens without that click. Ferrum never changes its user agent or works around
+/// Google's rule against embedded browsers (adr-0015).
+pub fn offer_sign_in(app: &AppHandle, uri: &str) {
+    *app.state::<PendingExternal>().0.lock().unwrap() = Some(uri.to_string());
+    let h = app.clone();
+    let uri = uri.to_string();
+    let _ = app.run_on_main_thread(move || {
+        let _ = h.emit_to("shell", "tab", json!({"kind": "sign-in-offer", "uri": uri}));
     });
 }
 
@@ -113,6 +144,10 @@ pub fn external_open_confirm(
     let asked = pending.0.lock().unwrap().take();
     if asked.as_deref() != Some(uri.as_str()) {
         return Err("not the link Ferrum asked about".into());
+    }
+    if is_sign_in(&uri) {
+        // A Google sign-in the app offered (the address is opened exactly as the page asked for it).
+        return launch(&uri);
     }
     match normalize(&uri, &cfg.0.config.security) {
         Outcome::Confirm { url } => launch(url.as_str()),

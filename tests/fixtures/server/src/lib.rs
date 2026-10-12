@@ -84,6 +84,11 @@ pub const ROUTES: &[Route] = &[
         purpose: "opens a window from script alone, without a click (pop-up)",
     },
     Route {
+        path: "/links/google",
+        status: 200,
+        purpose: "a sign-in link to the test-only Google sign-in pattern (/oauth-test/o/oauth2/v2/auth)",
+    },
+    Route {
         path: "/links/schemes",
         status: 200,
         purpose: "mailto: and custom-scheme (ferrum-test:) links",
@@ -193,6 +198,21 @@ async fn links_popup() -> Html<String> {
     page(
         "Pop-up",
         "<p id=\"popup\">This page tries to open /landing in a new window without a click.</p>         <script>addEventListener('load', function () { setTimeout(function () { window.open('/landing'); }, 800); });</script>",
+    )
+}
+
+async fn links_google() -> Html<String> {
+    page(
+        "Sign in",
+        "<p><a id=\"google\" href=\"/oauth-test/o/oauth2/v2/auth?client_id=fixture&amp;response_type=code\">         Sign in with Google (test pattern)</a></p>",
+    )
+}
+
+/// Served only if a browser loads the test sign-in address anyway (Ferrum must not: p2.13).
+async fn oauth_test() -> Html<String> {
+    page(
+        "Test sign-in page",
+        "<p id=\"oauth-test\">This page should never load inside Ferrum.</p>",
     )
 }
 
@@ -332,6 +352,8 @@ pub fn router() -> Router {
         .route("/redirect/{code}", get(redirect))
         .route("/links/blank", get(links_blank))
         .route("/links/popup", get(links_popup))
+        .route("/links/google", get(links_google))
+        .route("/oauth-test/{*rest}", get(oauth_test))
         .route("/links/schemes", get(links_schemes))
         .route("/cookie/set", get(cookie_set))
         .route("/cookie/read", get(cookie_read))

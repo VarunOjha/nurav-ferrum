@@ -13,19 +13,24 @@ type TabEvent =
   | { kind: "new-window"; uri: string; user_initiated: boolean }
   | { kind: "external-scheme"; uri: string; user_initiated: boolean }
   | { kind: "external-request"; uri: string; scheme: string }
+  | { kind: "sign-in-offer"; uri: string }
   | { kind: "blocked"; uri: string; why: string };
 
 type NavResult = { outcome: "navigate" | "confirm" | "refused"; url: string | null; note: string | null; reason: string | null };
 
 const statusEl = document.getElementById("status") as HTMLSpanElement;
 const extBar = document.getElementById("external-bar") as HTMLDivElement;
+const extText = document.getElementById("external-text") as HTMLSpanElement;
 const extUri = document.getElementById("external-uri") as HTMLElement;
 const extOpen = document.getElementById("external-open") as HTMLButtonElement;
 const extCancel = document.getElementById("external-cancel") as HTMLButtonElement;
 const EXT_BAR_H = 44;
 
 /** The confirmation bar for links to other apps (p2.10): the shell band grows so the bar never covers the page. */
-async function showExternal(uri: string): Promise<void> {
+async function showExternal(uri: string, signIn = false): Promise<void> {
+  extBar.dataset.kind = signIn ? "sign-in" : "external";
+  extText.textContent = signIn ? "Google sign-in must open in your normal browser." : "Open this link outside Ferrum?";
+  extOpen.textContent = signIn ? "Open in browser" : "Open";
   extUri.textContent = uri;
   extUri.title = uri;
   extBar.hidden = false;
@@ -175,6 +180,10 @@ await listen<TabEvent>("tab", async (e) => {
     case "external-request":
       statusEl.textContent = "";
       await showExternal(ev.uri);
+      break;
+    case "sign-in-offer":
+      statusEl.textContent = "";
+      await showExternal(ev.uri, true);
       break;
     case "blocked":
       statusEl.textContent = "Blocked: " + ev.uri.split(":")[0] + " address";

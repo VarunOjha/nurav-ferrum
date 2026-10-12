@@ -7,3 +7,4 @@
 pub mod config;
 
 pub mod address;
+pub mod oauth;

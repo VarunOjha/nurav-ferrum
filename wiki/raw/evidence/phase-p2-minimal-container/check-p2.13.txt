@@ -1,0 +1,26 @@
+Ferrum check p2.13: Google sign-in opens in your normal browser
+Why: sign-in stays honest and possible.
+Run at 2026-10-11 20:13 on commit 93dd0db (with uncommitted changes)
+------------------------------------------------------------------------
+test test_pattern_only_when_given ... ok
+test other_addresses_do_not_match ... ok
+test google_authorization_requests_match ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running tests\oauth.rs (target\debug\deps\oauth-42f0495e2879526e.exe)}
+  PASS   Unit tests of the sign-in address checker (recorded Google addresses, look-alikes, test pattern)
+         ferrum-core oauth tests: 3 passed
+Running 4 tests using 1 worker
+  ✓  1 google-sign-in.spec.ts:22:1 › the sign-in link shows the banner and does not load in Ferrum (853ms)
+  ✓  2 google-sign-in.spec.ts:35:1 › Dismiss opens nothing; Open in browser opens exactly the sign-in address (259ms)
+  ✓  3 google-sign-in.spec.ts:46:1 › a typed sign-in address is offered the same way (137ms)
+  ✓  4 google-sign-in.spec.ts:55:1 › the real Google sign-in address is caught too (140ms)
+  4 passed (8.7s)
+  PASS   Smoke test: sign-in links show the bar and never load inside Ferrum; only the click opens them (18 s)
+         google-sign-in: 4 passed
+  PASS   No user-agent change anywhere in Ferrum's code
+         no SetUserAgent / user_agent( / --user-agent in crates or apps/desktop
+------------------------------------------------------------------------
+RESULT: PASS - p2.13 (3 PASS; 19 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.13 check passed".
