@@ -74,3 +74,11 @@ export function addressText(uri: string): string {
 export function blockedText(uri: string): string {
   return "Blocked: " + uri.split(":")[0] + " address";
 }
+
+/** The tab strip label: the page title, else the address without its scheme, else "New tab". */
+export function tabLabel(title: string, url: string): string {
+  const t = title.trim();
+  if (t) return t;
+  if (!url || url === "about:blank") return "New tab";
+  return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+}

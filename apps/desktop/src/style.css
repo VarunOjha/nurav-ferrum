@@ -13,7 +13,27 @@
   :root { --bg: #232220; --surface: #2d2c2a; --text: #ecebe8; --muted: #a8a49c; --border: #3d3b38; }
 }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); overflow: hidden; }
-#toolbar { position: relative; display: flex; align-items: center; gap: 6px; height: 52px; padding: 0 10px; box-sizing: border-box; border-bottom: 1px solid var(--border); }
+/* The shell fills the window; tab views are placed over #content-area by the app (the top band's height is reported
+   with shell_layout), so nothing of the shell is ever drawn under a page. */
+body { display: flex; flex-direction: column; }
+#top { flex: none; }
+#content-area { flex: 1; position: relative; overflow: auto; background: var(--surface); }
+/* Tab strip (P3): one row under the normal Windows title bar (owner answer Q-125). */
+#tabstrip { display: flex; align-items: flex-end; gap: 4px; height: 36px; padding: 0 8px; box-sizing: border-box; }
+#tabs { display: flex; gap: 2px; min-width: 0; overflow: hidden; }
+.tab { display: flex; align-items: center; gap: 6px; width: 200px; min-width: 48px; flex: 0 1 auto; height: 30px; padding: 0 6px 0 12px; box-sizing: border-box; border-radius: 8px 8px 0 0; color: var(--muted); cursor: default; user-select: none; }
+.tab:hover { background: var(--surface); }
+.tab[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: inset 0 2px 0 var(--accent); }
+.tab-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tab.loading .tab-label::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--accent); animation: ferrum-pulse 1s ease-in-out infinite alternate; }
+@keyframes ferrum-pulse { from { opacity: 0.25; } to { opacity: 1; } }
+.tab-close { width: 20px; height: 20px; border: 0; border-radius: 6px; background: transparent; color: inherit; font-size: 14px; line-height: 1; cursor: pointer; }
+.tab-close:hover { background: var(--border); }
+.strip-btn { width: 28px; height: 28px; margin-bottom: 1px; border: 0; border-radius: 8px; background: transparent; color: var(--text); font-size: 18px; cursor: pointer; }
+.strip-btn:hover { background: var(--surface); }
+#empty-panel { padding: 48px 56px; color: var(--muted); }
+#empty-panel h1 { font-size: 20px; font-weight: 600; margin: 0 0 12px; color: var(--text); }
+#toolbar { position: relative; display: flex; align-items: center; gap: 6px; height: 52px; padding: 0 10px; box-sizing: border-box; border-bottom: 1px solid var(--border); background: var(--surface); }
 .nav { width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--text); font-size: 16px; cursor: pointer; }
 .nav:hover:not(:disabled) { background: var(--surface); }
 .nav:disabled { color: var(--muted); opacity: 0.5; cursor: default; }

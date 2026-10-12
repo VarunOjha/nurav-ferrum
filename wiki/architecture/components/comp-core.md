@@ -54,5 +54,6 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   after the active tab, `close` (the active tab's right-hand neighbour takes over, else the left one), `activate`,
   `move_to`, `activate_next`/`activate_previous` (wrap around), a closed-tab stack of at most 25 with `reopen_closed`,
   and `check` for the rules. Tested with fixed cases and 200 random sequences of 500 operations
-  ([check-p3.1](../../raw/evidence/phase-p3-tabs-sessions/check-p3.1.txt)). Not yet built: shared ids, event and record types, and the
+  ([check-p3.1](../../raw/evidence/phase-p3-tabs-sessions/check-p3.1.txt)).
+- `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default). Not yet built: shared ids, event and record types, and the
 `LifecycleActuator` and `Clock` traits (later phases).

@@ -16,7 +16,7 @@ use std::time::{Duration, Instant};
 use serde_json::{Value, json};
 use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewBuilder, WebviewUrl};
 
-use crate::content::{ContentReady, EventLog, ShellTitle, with_content};
+use crate::content::{EventLog, ShellTitle, active_ready, with_content};
 use crate::{BridgeStats, TOOLBAR_H};
 
 fn base() -> String {
@@ -90,7 +90,7 @@ pub fn start_ipc(app: AppHandle, width: f64, height: f64) {
     let title: Arc<Mutex<Option<String>>> = Arc::default();
     let t2 = title.clone();
     std::thread::spawn(move || {
-        let ready = wait_for(20, || app.state::<ContentReady>().0.load(Ordering::SeqCst));
+        let ready = wait_for(20, || active_ready(&app));
         // (b) the Ferrum-created content view: must have no bridge.
         let content_events = if ready {
             visit(&app, &url, 20)
@@ -185,7 +185,7 @@ fn in_order(evs: &[Value], url: &str) -> (bool, Value) {
 /// Starts the navigation self-test on a background thread.
 pub fn start_nav(app: AppHandle) {
     std::thread::spawn(move || {
-        let ready = wait_for(20, || app.state::<ContentReady>().0.load(Ordering::SeqCst));
+        let ready = wait_for(20, || active_ready(&app));
         // Let the start page (about:blank) settle so its events do not mix with the visits.
         std::thread::sleep(Duration::from_millis(800));
         let pages = [
@@ -245,7 +245,7 @@ pub fn start_devtools(app: AppHandle) {
     use ferrum_webview_manager::webview2::{controller_devtools_enabled, controller_focus};
     std::thread::spawn(move || {
         let out = std::env::var("FERRUM_SELFTEST_OUT").unwrap_or_default();
-        let ready = wait_for(20, || app.state::<ContentReady>().0.load(Ordering::SeqCst));
+        let ready = wait_for(20, || active_ready(&app));
         let (tx, rx) = std::sync::mpsc::channel::<(
             &'static str,
             Result<bool, ferrum_webview_manager::Error>,

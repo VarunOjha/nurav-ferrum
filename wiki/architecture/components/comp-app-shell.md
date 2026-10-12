@@ -144,7 +144,22 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   builds ([check-p2.12](../../raw/evidence/phase-p2-minimal-container/check-p2.12.txt)).
 - **Logs**: `ferrum.jsonl`, JSON lines, sites as scheme and host only ([check-p2.14](../../raw/evidence/phase-p2-minimal-container/check-p2.14.txt)).
 
-Known limitations of this first version: one view and no tabs (P3); the normal Windows title bar; the Alt+Tab focus
+## Implementation status (P3, tabs and sessions)
+
+- p3.2, tabs: the shell web view now fills the window and reports the space it keeps (`shell_layout { top, left }`);
+  tab views fill the rest and are drawn above it. Top band: the tab strip (36 px, under the normal Windows title bar,
+  owner answer Q-125), the toolbar and the confirmation bar. The app keeps the tab list (`ferrum_core::tabs`, p3.1)
+  and one view per tab (`content.rs`); only the active tab's view is shown. New commands, all shell-only: `tab_new`,
+  `tab_close`, `tab_activate`, `tab_move`, `tab_next`, `tab_previous`, `tab_reopen`, `tab_list`, and `test_stats`
+  (debug builds only; a release build refuses). Events: `tabs` (the tab list), `tab` (one view's events, now with
+  the tab id) and `link` (links to other apps, Google sign-in, blocked requests). `shell_cover` takes the tab id. Tab
+  creation is never awaited by a caller: commands that create views are async and only queue the work on the UI
+  thread (p3.10).
+- New windows: `new_window = "new-tab"` is the new default (`same-view` and `system-browser` stay). One tab may open
+  at most one new tab per second; further requests are blocked with "Pop-up blocked" on that tab. WebView2's
+  user-initiated flag is not used (it was `true` for a script-only pop-up). A real pop-up policy is P4 work.
+
+Known limitations of the P2 version (the tab-related ones are lifted above): one view and no tabs (P3); the normal Windows title bar; the Alt+Tab focus
 fix (`restore_focus`) awaits the owner's manual check (moved to P3); opening a link in another app has been tested only with a
 stand-in launcher (the owner's manual mailto check). The smoke robot uses WebView2's remote-debugging switch
 (adr-0031); it is an environment variable that also works on release builds.

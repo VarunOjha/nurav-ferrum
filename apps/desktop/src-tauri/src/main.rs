@@ -1,6 +1,8 @@
-//! Ferrum: the Tauri application. One window with the trusted shell (a Tauri child web view labelled `shell`,
-//! holding the toolbar) above the content web view (a WebView2 controller Ferrum creates itself, adr-0029).
+//! Ferrum: the Tauri application. One window with the trusted shell (a Tauri child web view labelled `shell`, the
+//! size of the window) and one tab web view per tab (WebView2 controllers Ferrum creates itself, adr-0029), placed in
+//! the content area the shell leaves free (they are drawn above it).
 //! P2: p2.2 window and shell; p2.3 bridge locked to the shell; p2.4/p2.5 settings and address bar; p2.6 content view.
+//! P3: p3.2 one view per tab.
 #![forbid(unsafe_code)]
 #![windows_subsystem = "windows"]
 
@@ -11,6 +13,8 @@ mod selftest;
 
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
+
+use ferrum_core::tabs::Place;
 use std::time::Duration;
 
 use ferrum_core::config;
@@ -18,46 +22,37 @@ use tauri::{
     LogicalPosition, LogicalSize, Manager, Rect, WebviewBuilder, WebviewUrl, Window, WindowEvent,
 };
 
-use content::{AppConfig, ContentReady, EventLog, FocusState, ShellTitle};
+use content::{AppConfig, EventLog, FocusState, Insets, MainHwnd, ShellTitle, TabsState};
 
-/// Height of the shell toolbar band in logical pixels. The content area fills the rest; the shell never
-/// overlaps it (spike S1: child views are drawn on top).
+/// Height of the P2 toolbar in logical pixels (the self-test's probe view is placed below it).
 pub const TOOLBAR_H: f64 = 52.0;
 
-/// Extra height (logical px) the shell currently needs below the toolbar for an information bar (0 = none).
-/// The content view always starts below the whole shell band, so the two never overlap (spike S1).
-#[derive(Default)]
-pub struct ShellBand(pub std::sync::Mutex<f64>);
+/// The shell's top band until it reports its real size: tab strip (36 px) plus toolbar.
+pub const DEFAULT_TOP: f64 = 36.0 + TOOLBAR_H;
 
-/// Current height of the shell band in logical pixels.
-pub fn band_height<R: tauri::Runtime>(app: &tauri::AppHandle<R>) -> f64 {
-    TOOLBAR_H + *app.state::<ShellBand>().0.lock().unwrap()
-}
-
-/// The shell asks for room below the toolbar (an information bar), or gives it back with 0. At most 240 px.
+/// The shell reports the space it keeps for itself (logical px): `top` for the tab strip, toolbar and bars, `left`
+/// for the sidebar. Tab views fill the rest, so the shell never draws under a page. Clamped to sane ranges.
 #[tauri::command]
-fn shell_layout(window: Window, band: tauri::State<'_, ShellBand>, extra: f64) {
-    *band.0.lock().unwrap() = extra.clamp(0.0, 240.0);
+fn shell_layout(window: Window, insets: tauri::State<'_, Insets>, top: f64, left: f64) {
+    let clamp = |v: f64, max: f64| {
+        if v.is_finite() {
+            v.clamp(0.0, max)
+        } else {
+            0.0
+        }
+    };
+    *insets.0.lock().unwrap() = (clamp(top, 400.0), clamp(left, 600.0));
     let w = window.clone();
     let _ = window.run_on_main_thread(move || {
         let _ = relayout(&w);
     });
 }
 
-/// True while the shell's error panel covers the content area (p2.8): the content view is hidden and the shell
-/// gets the whole window, so error pages are drawn by the shell and never loaded into the content view.
-#[derive(Default)]
-pub struct Covered(pub std::sync::atomic::AtomicBool);
-
-/// The shell shows (true) or removes (false) its full error panel.
+/// The shell shows (true) or removes (false) its full error panel for tab `tab` (the active one when missing): the
+/// tab's view is hidden meanwhile, so error pages are drawn by the shell and never loaded into a tab view (p2.8).
 #[tauri::command]
-fn shell_cover(window: Window, covered: tauri::State<'_, Covered>, cover: bool) {
-    covered.0.store(cover, Ordering::SeqCst);
-    let w = window.clone();
-    let _ = window.run_on_main_thread(move || {
-        content::set_content_visible(!cover);
-        let _ = relayout(&w);
-    });
+fn shell_cover(app: tauri::AppHandle, cover: bool, tab: Option<u64>) {
+    content::set_covered(&app, tab, cover);
 }
 
 /// Closes Ferrum (the shell's quit action; the smoke tests use it to end the app cleanly instead of killing it).
@@ -82,25 +77,15 @@ fn app_ping(stats: tauri::State<'_, BridgeStats>) -> &'static str {
     "pong"
 }
 
-/// Lays the shell band and the content view out for the window's current size (UI thread).
+/// Lays the shell (the whole window) and the tab views (the content area) out for the window's size (UI thread).
 fn relayout(window: &Window) -> tauri::Result<()> {
     let size = window
         .inner_size()?
         .to_logical::<f64>(window.scale_factor()?);
     if let Some(shell) = window.app_handle().get_webview("shell") {
-        let covered = window
-            .app_handle()
-            .state::<Covered>()
-            .0
-            .load(Ordering::SeqCst);
-        let height = if covered {
-            size.height
-        } else {
-            band_height(window.app_handle())
-        };
         shell.set_bounds(Rect {
             position: LogicalPosition::new(0.0, 0.0).into(),
-            size: LogicalSize::new(size.width, height).into(),
+            size: LogicalSize::new(size.width, size.height).into(),
         })?;
     }
     content::relayout(window);
@@ -134,13 +119,14 @@ fn load_config(app: &tauri::App) -> (config::Loaded, Option<String>) {
 fn main() {
     tauri::Builder::default()
         .manage(BridgeStats::default())
-        .manage(ShellBand::default())
-        .manage(Covered::default())
+        .manage(Insets::default())
+        .manage(MainHwnd::default())
+        .manage(TabsState::default())
         .manage(external::PendingExternal::default())
+        .manage(external::PopupTimes::default())
         .manage(FocusState::default())
         .manage(EventLog::default())
         .manage(ShellTitle::default())
-        .manage(ContentReady::default())
         .invoke_handler(tauri::generate_handler![
             app_ping,
             app_quit,
@@ -153,6 +139,15 @@ fn main() {
             content::tab_forward,
             content::tab_reload,
             content::tab_stop,
+            content::tab_new,
+            content::tab_close,
+            content::tab_activate,
+            content::tab_move,
+            content::tab_next,
+            content::tab_previous,
+            content::tab_reopen,
+            content::tab_list,
+            content::test_stats,
             content::shell_focused
         ])
         .setup(|app| {
@@ -213,9 +208,34 @@ fn main() {
             window.add_child(
                 shell,
                 LogicalPosition::new(0.0, 0.0),
-                LogicalSize::new(size.width, TOOLBAR_H),
+                LogicalSize::new(size.width, size.height),
             )?;
-            content::create(app.handle(), &window)?;
+            app.state::<MainHwnd>()
+                .0
+                .store(window.hwnd()?.0 as isize, Ordering::SeqCst);
+            // Tab views come from the shell's WebView2 environment (adr-0029): save it on the UI thread, then open the
+            // start tab (the first start page, or an empty tab).
+            let shell_view = app
+                .get_webview("shell")
+                .ok_or(tauri::Error::WebviewNotFound)?;
+            let handle = app.handle().clone();
+            shell_view.with_webview(move |pw| {
+                ferrum_webview_manager::webview2::save_environment(&pw.environment());
+                // The shell fills the window; tab views must be drawn above it.
+                if let Err(e) = ferrum_webview_manager::webview2::send_to_back(&pw.controller()) {
+                    tracing::warn!(target: "ferrum::app", error = %e, "shell not moved behind the tab views");
+                }
+                let start = handle
+                    .state::<AppConfig>()
+                    .0
+                    .config
+                    .session
+                    .startup_urls
+                    .first()
+                    .cloned()
+                    .unwrap_or_else(|| content::BLANK.to_string());
+                content::open_tab(&handle, start, Place::End, true);
+            })?;
             match std::env::var("FERRUM_SELFTEST").as_deref() {
                 Ok("ipc") => selftest::start_ipc(app.handle().clone(), size.width, size.height),
                 Ok("nav") => selftest::start_nav(app.handle().clone()),

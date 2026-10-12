@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:7e91e07b0ea2c39bd03a1eca7225bd846fcadae0710a23e044b382afd4ce307e"
+        "content_hash": "sha256:aacea7ee8c45690307eae0ca3e25031d424b4021e53aed8a12a1520b30339ecb"
       }
     },
     {
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:b7a0c98607d308382d5d24a51faf9abbdd2ba486dfb1def4489222d1810e0795"
+        "content_hash": "sha256:2ee35de99d8702fa4cda9d551f59488c83099913e666ceea45a92931fd399783"
       }
     },
     {
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:af1dcffb140bd836cc1cee56e493b2d0c5472a2caa21e418f2daadd0d9a9c5bc"
+        "content_hash": "sha256:22827ab84707c4f3a1107d50ca59e19ab8da393e20620720049929305be31bf8"
       }
     },
     {

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-test-stats"
+description = "Enables the test_stats command without any pre-configured scope."
+commands.allow = ["test_stats"]
+
+[[permission]]
+identifier = "deny-test-stats"
+description = "Denies the test_stats command without any pre-configured scope."
+commands.deny = ["test_stats"]

@@ -1,0 +1,18 @@
+Ferrum check p3.2: One website view per tab
+Why: switching is instant and closed tabs leave nothing running.
+Run at 2026-10-12 01:30 on commit 3db77b8 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Raw WebView2 code stays in its one module
+         the app forbids unsafe code; COM calls only in crates/webview-manager/src/webview2.rs
+Running 1 test using 1 worker
+  ✓  1 tabs.spec.ts:19:1 › 20 tabs: one view each, only the active one shown, all released on close (4.3s)
+  1 passed (15.1s)
+  PASS   Smoke test: 20 tabs, one view each, only the active one shown, all released on close (29 s)
+         tabs: 1 passed
+child windows, top to bottom: Chrome_WidgetWin_0;WRY_WEBVIEW;
+  PASS   Windows draws the tab view above the shell (32 s)
+         top to bottom: Chrome_WidgetWin_0;WRY_WEBVIEW;
+------------------------------------------------------------------------
+RESULT: PASS - p3.2 (3 PASS; 61 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.2 check passed".

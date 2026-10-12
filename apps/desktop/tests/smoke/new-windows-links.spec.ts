@@ -1,11 +1,12 @@
-// p2.10: target=_blank and window.open follow the new_window setting (same view, or the system browser); links to
-// other apps show the shell's confirmation bar and launch nothing without the user's click. The launcher is mocked
+// p2.10, updated in p3.2: target=_blank and window.open follow the new_window setting (a new tab by default since P3,
+// the same view, or the system browser); links to other apps show the shell's confirmation bar and launch nothing
+// without the user's click. The launcher is mocked
 // (FERRUM_LAUNCHER_LOG, debug builds only): a "launch" is a line in a file; nothing opens. Every test sets up its own
 // page, so one failure does not hide the next.
 import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
-import { launch, go, type Ferrum } from "./ferrum.ts";
+import { launch, go, call, tabList, type Ferrum } from "./ferrum.ts";
 import { base } from "./paths.ts";
 
 // The page's own address (after a navigation Ferrum cancelled on purpose, Playwright's cached page URL is empty).
@@ -40,32 +41,60 @@ const dumpOnFailure = (get: () => Ferrum | undefined) =>
     if (info.status !== info.expectedStatus) console.log("shell events:", await get()?.shell.evaluate(() => document.title).catch(String));
   });
 
-test.describe("default settings (same view, confirm other apps)", () => {
+// After a test opened a second tab: close every tab but the first, so `f.content` is one page again.
+const backToOneTab = async (f: Ferrum) => {
+  const l = await tabList(f);
+  for (const t of l.tabs.slice(1)) await call(f, "tab_close", { id: t.id });
+  await expect.poll(() => f.pages().length).toBe(1);
+  await f.shell.waitForTimeout(1100); // past the one-new-tab-per-second limit of the remaining tab
+};
+
+test.describe("default settings (new tab, confirm other apps)", () => {
   let f: Ferrum;
   test.beforeAll(async () => { f = await launch("links", { envFromData: mockLauncher }); });
   test.afterAll(async () => { await f?.quit(); });
   dumpOnFailure(() => f);
 
-  test("target=_blank opens in the same view, no extra window", async () => {
+  test("target=_blank opens a new active tab next to the page; the page stays", async () => {
     await open(f, "/links/blank", "#blank");
+    const first = (await tabList(f)).tabs[0]!.id;
     await f.content.click("#blank");
-    await expect.poll(() => href(f)).toBe(`${base}/landing`);
+    await expect.poll(async () => (await tabList(f)).tabs.map((t) => t.url)).toEqual([`${base}/links/blank`, `${base}/landing`]);
+    const l = await tabList(f);
+    expect(l.active).toBe(l.tabs[1]!.id);
+    expect(l.tabs[0]!.id).toBe(first);
     await expect(f.shell.locator("#address")).toHaveValue(`${base}/landing`);
-    expect(pageCount(f)).toBe(2);
+    await expect.poll(() => pageCount(f)).toBe(3);
+    await backToOneTab(f);
   });
 
-  test("window.open from a click opens in the same view", async () => {
+  test("window.open from a click opens a new tab", async () => {
     await open(f, "/links/blank", "#open");
     await f.content.click("#open");
-    await expect.poll(() => href(f)).toBe(`${base}/landing`);
-    expect(pageCount(f)).toBe(2);
+    await expect.poll(async () => (await tabList(f)).tabs.length).toBe(2);
+    expect((await tabList(f)).tabs[1]!.url).toBe(`${base}/landing`);
+    await backToOneTab(f);
   });
 
-  test("a pop-up opened by script alone also stays in the same view (no new window)", async () => {
+  test("a pop-up opened by script opens one new tab at most; a flood is blocked", async () => {
     await open(f, "/links/popup", "#popup");
-    await expect.poll(() => href(f)).toBe(`${base}/landing`);
-    expect(pageCount(f)).toBe(2);
+    // WebView2 reports this script-only pop-up as user-initiated, so Ferrum does not rely on that flag; the per-tab
+    // rate limit (one new tab per second) applies to every request.
+    await expect.poll(async () => (await tabList(f)).tabs.length).toBe(2);
+    await f.shell.waitForTimeout(1500);
+    expect((await tabList(f)).tabs.length).toBe(2);
     expect(launches(f)).toEqual([]);
+    await backToOneTab(f);
+    // Five window.open calls at once: only the first becomes a tab; the rest are blocked with a toolbar note.
+    await f.content.evaluate(() => { for (let i = 0; i < 5; i++) window.open(`/landing?flood=${i}`); });
+    await expect.poll(async () => (await tabList(f)).tabs.length).toBe(2);
+    await f.shell.waitForTimeout(800);
+    expect((await tabList(f)).tabs.length).toBe(2);
+    expect((await tabList(f)).tabs[1]!.url).toBe(`${base}/landing?flood=0`);
+    await call(f, "tab_activate", { id: (await tabList(f)).tabs[0]!.id });
+    await expect(f.shell.locator("#status")).toHaveText("Pop-up blocked");
+    expect(launches(f)).toEqual([]);
+    await backToOneTab(f);
   });
 
   test("mailto link asks first; Cancel launches nothing", async () => {
@@ -113,6 +142,23 @@ test.describe("default settings (same view, confirm other apps)", () => {
     await f.shell.click("#external-cancel");
     await expect(f.shell.locator("#external-bar")).toBeHidden();
     expect(launches(f).length).toBe(before);
+  });
+});
+
+test.describe("new_window = same-view (the P2 default)", () => {
+  let f: Ferrum;
+  test.beforeAll(async () => {
+    f = await launch("links-same", { extraSettings: '[security]\nnew_window = "same-view"\n', envFromData: mockLauncher });
+  });
+  test.afterAll(async () => { await f?.quit(); });
+  dumpOnFailure(() => f);
+
+  test("target=_blank opens in the same view, no extra tab or window", async () => {
+    await open(f, "/links/blank", "#blank");
+    await f.content.click("#blank");
+    await expect.poll(() => href(f)).toBe(`${base}/landing`);
+    await expect(f.shell.locator("#address")).toHaveValue(`${base}/landing`);
+    expect(pageCount(f)).toBe(2);
   });
 });
 

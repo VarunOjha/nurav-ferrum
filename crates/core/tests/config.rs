@@ -22,7 +22,7 @@ fn missing_file_gives_defaults() {
     assert!(l.warnings.is_empty());
     assert_eq!(l.config.security.http_policy, HttpPolicy::Upgrade);
     assert_eq!(l.config.security.external_schemes, ExternalSchemes::Confirm);
-    assert_eq!(l.config.security.new_window, NewWindow::SameView);
+    assert_eq!(l.config.security.new_window, NewWindow::NewTab);
     assert!(l.config.session.startup_urls.is_empty());
 }
 

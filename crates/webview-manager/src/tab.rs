@@ -65,6 +65,17 @@ pub enum TabEvent {
     },
 }
 
+/// A top-level navigation that is about to start, as the navigation gate sees it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct NavRequest {
+    /// Target address.
+    pub uri: String,
+    /// Started by the user (link click, typed address) rather than by script.
+    pub user_initiated: bool,
+    /// Part of a redirect chain (the server chose the target, not the page).
+    pub redirected: bool,
+}
+
 /// The navigation gate's answer for a starting navigation.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum NavDecision {
@@ -74,10 +85,10 @@ pub enum NavDecision {
     Cancel,
 }
 
-/// The P2 navigation gate for page-started navigations: web pages (`https:`, `http:`) and `about:blank` may load;
+/// The base navigation gate (P2, kept in P3) for page-started navigations: web pages (`https:`, `http:`) and `about:blank` may load;
 /// every other scheme is cancelled here (the app asks before links to other apps are opened, p2.10). The full policy
 /// engine (blocklist, adr-0015) arrives in P4.
-pub fn p2_gate(uri: &str) -> NavDecision {
+pub fn web_gate(uri: &str) -> NavDecision {
     let scheme = uri.split(':').next().unwrap_or("").to_ascii_lowercase();
     match scheme.as_str() {
         "https" | "http" => NavDecision::Allow,
@@ -88,13 +99,13 @@ pub fn p2_gate(uri: &str) -> NavDecision {
 
 #[cfg(test)]
 mod tests {
-    use super::{NavDecision, p2_gate};
+    use super::{NavDecision, web_gate};
 
     #[test]
     fn gate_allows_web_pages_only() {
-        assert_eq!(p2_gate("https://example.org/"), NavDecision::Allow);
-        assert_eq!(p2_gate("http://example.org/"), NavDecision::Allow);
-        assert_eq!(p2_gate("about:blank"), NavDecision::Allow);
+        assert_eq!(web_gate("https://example.org/"), NavDecision::Allow);
+        assert_eq!(web_gate("http://example.org/"), NavDecision::Allow);
+        assert_eq!(web_gate("about:blank"), NavDecision::Allow);
         for u in [
             "javascript:alert(1)",
             "file:///C:/x",
@@ -103,7 +114,7 @@ mod tests {
             "about:settings",
             "ferrum-test:x",
         ] {
-            assert_eq!(p2_gate(u), NavDecision::Cancel, "{u}");
+            assert_eq!(web_gate(u), NavDecision::Cancel, "{u}");
         }
     }
 }

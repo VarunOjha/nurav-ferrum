@@ -34,12 +34,14 @@ pub enum ExternalSchemes {
     Deny,
 }
 
-/// What Ferrum does when a page opens a new window (`target=_blank`, `window.open`) in P2 (no tabs yet).
+/// What Ferrum does when a page opens a new window (`target=_blank`, `window.open`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "kebab-case")]
 pub enum NewWindow {
-    /// Load the new window's address in the same view (default).
+    /// Open it in a new tab next to the page's tab (default since P3).
     #[default]
+    NewTab,
+    /// Load the new window's address in the same view (the P2 default).
     SameView,
     /// Open it in the user's normal browser.
     SystemBrowser,
@@ -74,7 +76,7 @@ pub struct Security {
     pub external_schemes: ExternalSchemes,
     /// Google sign-in handling.
     pub google_oauth: GoogleOauth,
-    /// New windows in P2.
+    /// New windows.
     pub new_window: NewWindow,
 }
 

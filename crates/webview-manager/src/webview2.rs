@@ -15,6 +15,7 @@
 #![allow(unsafe_code)]
 
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::rc::Rc;
 
 use webview2_com::Microsoft::Web::WebView2::Win32::*;
@@ -28,12 +29,12 @@ use windows::Win32::Foundation::{HWND, RECT};
 use windows_core::{BOOL, HSTRING, Interface, PWSTR};
 
 use crate::Error;
-use crate::tab::{NavDecision, TabEvent};
+use crate::tab::{NavDecision, NavRequest, TabEvent};
 
 /// Receives tab events (UI thread).
 pub type EventSink = Rc<dyn Fn(TabEvent)>;
-/// Decides whether a page-started navigation may start (UI thread).
-pub type NavGate = Rc<dyn Fn(&str) -> NavDecision>;
+/// Decides whether a top-level navigation may start (UI thread).
+pub type NavGate = Rc<dyn Fn(&NavRequest) -> NavDecision>;
 
 fn hr<T>(r: windows_core::Result<T>) -> Result<T, Error> {
     r.map_err(|e| Error::Com {
@@ -131,7 +132,11 @@ impl ContentView {
                     let _ = args.IsRedirected(&mut redir);
                     take_pwstr(uri)
                 };
-                let decision = gate(&uri);
+                let decision = gate(&NavRequest {
+                    uri: uri.clone(),
+                    user_initiated: user.as_bool(),
+                    redirected: redir.as_bool(),
+                });
                 if decision == NavDecision::Cancel {
                     // SAFETY: COM-1; cancelling inside the NavigationStarting callback is the documented use.
                     let _ = unsafe { args.SetCancel(true) };
@@ -348,6 +353,14 @@ impl ContentView {
         hr(unsafe { self.controller.SetIsVisible(visible) })
     }
 
+    /// Whether the view is shown (`IsVisible`).
+    pub fn is_visible(&self) -> Result<bool, Error> {
+        let mut v = BOOL(0);
+        // SAFETY: COM-1; the out-pointer is a local.
+        hr(unsafe { self.controller.IsVisible(&mut v) })?;
+        Ok(v.as_bool())
+    }
+
     /// Gives the page keyboard focus (used when the window becomes active again; S1 Alt+Tab issue).
     pub fn focus(&self) -> Result<(), Error> {
         // SAFETY: COM-1.
@@ -412,13 +425,69 @@ pub fn controller_devtools_enabled(controller: &ICoreWebView2Controller) -> Resu
     Ok(on.as_bool())
 }
 
+/// Puts the window that hosts `controller`'s web view at the bottom of its siblings' stacking order. Used for Tauri's
+/// shell view, which fills the window: the tab views must be drawn above it (observed in P3: without this, the
+/// shell's window stayed on top and covered the page).
+pub fn send_to_back(controller: &ICoreWebView2Controller) -> Result<(), Error> {
+    use windows::Win32::UI::WindowsAndMessaging::{
+        HWND_BOTTOM, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE, SetWindowPos,
+    };
+    let mut host = HWND::default();
+    // SAFETY: COM-1; `controller` is live; the out-pointer is a local.
+    hr(unsafe { controller.ParentWindow(&mut host) })?;
+    // SAFETY: COM-1 (UI thread, which owns the window); `host` is the live window WebView2 just named; only the
+    // stacking order changes (no move, no resize, no activation).
+    hr(unsafe {
+        SetWindowPos(
+            host,
+            Some(HWND_BOTTOM),
+            0,
+            0,
+            0,
+            0,
+            SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+        )
+    })
+}
+
 /// Gives keyboard focus to the web view of `controller` (used by the developer-tools self-test for the shell).
 pub fn controller_focus(controller: &ICoreWebView2Controller) -> Result<(), Error> {
     // SAFETY: COM-1; `controller` is live.
     hr(unsafe { controller.MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC) })
 }
 
+/// Number of WebView2 renderer processes of `env`'s browser (shell and tabs together), from `GetProcessInfos`
+/// (ICoreWebView2Environment8, as in spike S3). Used by the tab tests: after all tabs close, the count must fall back
+/// to what the shell alone needs.
+pub fn renderer_process_count(env: &ICoreWebView2Environment) -> Result<u32, Error> {
+    let env8: ICoreWebView2Environment8 = hr(env.cast())?;
+    // SAFETY: COM-1; `env8` is live.
+    let infos = hr(unsafe { env8.GetProcessInfos() })?;
+    let mut n = 0u32;
+    // SAFETY: COM-1; the out-pointer is a local.
+    hr(unsafe { infos.Count(&mut n) })?;
+    let mut renderers = 0;
+    for i in 0..n {
+        // SAFETY: COM-1; `i` is below Count.
+        let info = hr(unsafe { infos.GetValueAtIndex(i) })?;
+        let mut kind = COREWEBVIEW2_PROCESS_KIND::default();
+        // SAFETY: COM-1; the out-pointer is a local.
+        hr(unsafe { info.Kind(&mut kind) })?;
+        if kind == COREWEBVIEW2_PROCESS_KIND_RENDERER {
+            renderers += 1;
+        }
+    }
+    Ok(renderers)
+}
+
+/// Saves Tauri's WebView2 environment for later tab views (call on the UI thread, from the shell's `with_webview`).
+pub fn save_environment(env: &ICoreWebView2Environment) {
+    ENVIRONMENT.with(|e| *e.borrow_mut() = Some(env.clone()));
+}
+
 thread_local! {
-    /// The content view of this UI thread (P2 has one). Lives on the UI thread only (COM-1).
-    pub static CONTENT: RefCell<Option<ContentView>> = const { RefCell::new(None) };
+    /// The tab views of this UI thread, by tab id (P3: one view per tab). UI thread only (COM-1).
+    pub static VIEWS: RefCell<HashMap<u64, ContentView>> = RefCell::new(HashMap::new());
+    /// Tauri's WebView2 environment, saved when the first tab view is created (every tab view comes from it, COM-7).
+    pub static ENVIRONMENT: RefCell<Option<ICoreWebView2Environment>> = const { RefCell::new(None) };
 }

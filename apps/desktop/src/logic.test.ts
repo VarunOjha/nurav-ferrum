@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, blockedText, finished, lockFor, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, blockedText, finished, lockFor, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -50,4 +50,12 @@ test("address text and blocked note", () => {
   assert.equal(addressText("about:blank"), "");
   assert.equal(addressText("https://example.org/a?b"), "https://example.org/a?b");
   assert.equal(blockedText("javascript:alert(1)"), "Blocked: javascript address");
+});
+
+test("tab labels: title first, then the address without its scheme, else New tab", () => {
+  assert.equal(tabLabel("  Example  ", "https://example.org/"), "Example");
+  assert.equal(tabLabel("", "https://example.org/"), "example.org");
+  assert.equal(tabLabel("", "https://example.org/a/b"), "example.org/a/b");
+  assert.equal(tabLabel("", "about:blank"), "New tab");
+  assert.equal(tabLabel("", ""), "New tab");
 });

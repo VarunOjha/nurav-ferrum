@@ -10,7 +10,13 @@ use ferrum_core::oauth::{TestPattern, classify};
 use serde_json::json;
 use tauri::{AppHandle, Emitter, Manager};
 
-use crate::content::{AppConfig, with_content};
+use ferrum_core::tabs::Place;
+
+use crate::content::{AppConfig, navigate_tab, open_tab};
+
+/// When each tab last opened a new tab for a page (pop-up rate limit, see `on_new_window`).
+#[derive(Default)]
+pub struct PopupTimes(pub Mutex<std::collections::HashMap<u64, std::time::Instant>>);
 
 /// The link the shell is currently asking about (at most one).
 #[derive(Default)]
@@ -26,7 +32,7 @@ pub fn request(app: &AppHandle, url: String) {
     let _ = app.run_on_main_thread(move || {
         let _ = h.emit_to(
             "shell",
-            "tab",
+            "link",
             json!({"kind": "external-request", "uri": url, "scheme": scheme}),
         );
     });
@@ -59,19 +65,23 @@ pub fn offer_sign_in(app: &AppHandle, uri: &str) {
     let h = app.clone();
     let uri = uri.to_string();
     let _ = app.run_on_main_thread(move || {
-        let _ = h.emit_to("shell", "tab", json!({"kind": "sign-in-offer", "uri": uri}));
+        let _ = h.emit_to(
+            "shell",
+            "link",
+            json!({"kind": "sign-in-offer", "uri": uri}),
+        );
     });
 }
 
-/// Tells the shell something was blocked (shown as a toolbar status).
-fn blocked(app: &AppHandle, uri: &str, why: &str) {
+/// Tells the shell something tab `tab` asked for was blocked (shown as that tab's toolbar status).
+fn blocked(app: &AppHandle, tab: u64, uri: &str, why: &str) {
     let h = app.clone();
     let (uri, why) = (uri.to_string(), why.to_string());
     let _ = app.run_on_main_thread(move || {
         let _ = h.emit_to(
             "shell",
-            "tab",
-            json!({"kind": "blocked", "uri": uri, "why": why}),
+            "link",
+            json!({"kind": "blocked", "tab": tab, "uri": uri, "why": why}),
         );
     });
 }
@@ -84,22 +94,40 @@ pub fn on_page_navigation(app: &AppHandle, security: &Security, uri: &str) {
     }
 }
 
-/// A page asked for a new window (WebView2 opened none).
+/// A page in tab `tab` asked for a new window (WebView2 opened none).
 ///
-/// Same view: the address loads in the page's own view, gesture or not. A page can already change its own address
+/// New tab (default since P3): the address opens in a new tab next to the active one, which becomes active. One tab
+/// may open at most one new tab per second; further requests are blocked with a toolbar note. The limit does not use
+/// WebView2's user-initiated flag, which reported a script-only pop-up as user-initiated in the P2 and P3 smoke runs;
+/// a real pop-up policy belongs to the P4 policy engine. Same view: the address loads in the page's own view, gesture or not. A page can already change its own address
 /// by script, so this gives it nothing new (and does not depend on WebView2's user-initiated flag, which the p2.10
 /// smoke runs found unreliable for script pop-ups). System browser: a click opens the browser; anything else is
 /// offered on the confirmation bar first, so nothing leaves Ferrum silently.
-pub fn on_new_window(app: &AppHandle, uri: &str, user_initiated: bool) {
+pub fn on_new_window(app: &AppHandle, tab: u64, uri: &str, user_initiated: bool) {
     let security = app.state::<AppConfig>().0.config.security.clone();
     match normalize(uri, &security) {
         Outcome::Navigate { url, .. } => match security.new_window {
-            NewWindow::SameView => {
-                let target = url.to_string();
-                with_content(app, move |v| {
-                    let _ = v.navigate(&target);
-                });
+            NewWindow::NewTab => {
+                let now = std::time::Instant::now();
+                let allowed = {
+                    let times = app.state::<PopupTimes>();
+                    let mut times = times.0.lock().unwrap();
+                    let recent = times.get(&tab).is_some_and(|t| {
+                        now.duration_since(*t) < std::time::Duration::from_secs(1)
+                    });
+                    if !recent {
+                        times.insert(tab, now);
+                    }
+                    !recent
+                };
+                if allowed {
+                    open_tab(app, url.to_string(), Place::AfterActive, true);
+                } else {
+                    tracing::info!(target: "ferrum::external", tab, site = %site(uri), "pop-up blocked (rate limit)");
+                    blocked(app, tab, uri, "pop-up");
+                }
             }
+            NewWindow::SameView => navigate_tab(app, tab, url.to_string()),
             NewWindow::SystemBrowser if user_initiated => {
                 if let Err(e) = launch(url.as_str()) {
                     tracing::warn!(target: "ferrum::external", error = %e, "system browser not opened");
@@ -108,7 +136,7 @@ pub fn on_new_window(app: &AppHandle, uri: &str, user_initiated: bool) {
             NewWindow::SystemBrowser => request(app, url.to_string()),
         },
         Outcome::Confirm { url } => request(app, url.to_string()),
-        Outcome::Refuse(_) => blocked(app, uri, "new-window"),
+        Outcome::Refuse(_) => blocked(app, tab, uri, "new-window"),
     }
 }
 

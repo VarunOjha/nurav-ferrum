@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-tab-next"
+description = "Enables the tab_next command without any pre-configured scope."
+commands.allow = ["tab_next"]
+
+[[permission]]
+identifier = "deny-tab-next"
+description = "Denies the tab_next command without any pre-configured scope."
+commands.deny = ["tab_next"]

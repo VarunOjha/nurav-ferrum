@@ -6,7 +6,17 @@ import path from "node:path";
 import { chromium, type Browser, type Page } from "@playwright/test";
 import { ferrumExe, cdpPort, dataDir } from "./paths.ts";
 
-export type Ferrum = { proc: ChildProcess; browser: Browser; shell: Page; content: Page; data: string; quit: () => Promise<void> };
+export type Ferrum = {
+  proc: ChildProcess;
+  browser: Browser;
+  shell: Page;
+  /** The page of the only open tab view (throws when several tab views are open: use `pages()` then). */
+  readonly content: Page;
+  /** Every open tab view's page (not the shell). */
+  pages: () => Page[];
+  data: string;
+  quit: () => Promise<void>;
+};
 
 /** Writes a settings file for the run and returns its path. */
 export function settings(data: string, extra = ""): string {
@@ -51,18 +61,17 @@ export async function launch(name: string, opts: LaunchOptions = {}): Promise<Fe
   });
   await waitCdp(30_000);
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
-  const pages = async () => browser.contexts().flatMap((c) => c.pages());
-  // Wait until there are two views and one of them has loaded the shell (while it starts, the shell's address is
-  // briefly about:blank like the content view's, so the content view is only chosen once the shell is known).
+  const all = () => browser.contexts().flatMap((c) => c.pages()).filter((p) => !p.isClosed());
+  // Wait until the shell has loaded and the first tab's view exists (while it starts, the shell's address is briefly
+  // about:blank like a tab view's, so tab views are only counted once the shell is known).
   let shell: Page | undefined;
-  let content: Page | undefined;
-  for (let i = 0; i < 120 && !(shell && content); i++) {
-    const all = await pages();
-    shell = all.find((p) => p.url().startsWith("http://tauri.localhost"));
-    content = shell && all.length >= 2 ? all.find((p) => p !== shell) : undefined;
-    if (!(shell && content)) await new Promise((r) => setTimeout(r, 250));
+  for (let i = 0; i < 120; i++) {
+    shell = all().find((p) => p.url().startsWith("http://tauri.localhost"));
+    if (shell && all().length >= 2) break;
+    await new Promise((r) => setTimeout(r, 250));
   }
-  if (!shell || !content || shell === content) throw new Error("shell or content view not found over CDP");
+  if (!shell || all().length < 2) throw new Error("shell or first tab view not found over CDP");
+  const tabPages = () => all().filter((p) => p !== shell);
   const quit = async () => {
     await shell!.evaluate(() => (window as any).__TAURI_INTERNALS__.invoke("app_quit")).catch(() => {});
     await browser.close().catch(() => {}); // over CDP this only disconnects
@@ -79,7 +88,14 @@ export async function launch(name: string, opts: LaunchOptions = {}): Promise<Fe
       await new Promise((r) => setTimeout(r, 250));
     }
   };
-  return { proc, browser, shell, content, data, quit };
+  return {
+    proc, browser, shell: shell!, data, quit, pages: tabPages,
+    get content(): Page {
+      const p = tabPages();
+      if (p.length !== 1) throw new Error(`${p.length} tab views are open; pick one with pages()`);
+      return p[0]!;
+    },
+  };
 }
 
 /** Types into the shell's address bar and presses Enter. */
@@ -87,3 +103,13 @@ export async function go(f: Ferrum, input: string): Promise<void> {
   await f.shell.fill("#address", input);
   await f.shell.press("#address", "Enter");
 }
+
+/** Calls an app command from the shell (the only web view allowed to). */
+export function call<T = unknown>(f: Ferrum, cmd: string, args: Record<string, unknown> = {}): Promise<T> {
+  return f.shell.evaluate(([c, a]) => (window as any).__TAURI_INTERNALS__.invoke(c, a), [cmd, args] as const) as Promise<T>;
+}
+
+export type TabList = { active: number | null; tabs: { id: number; url: string; title: string; loading: boolean; profile: string }[] };
+
+/** The app's tab list. */
+export const tabList = (f: Ferrum) => call<TabList>(f, "tab_list");

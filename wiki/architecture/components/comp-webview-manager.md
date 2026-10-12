@@ -129,5 +129,18 @@ of it:
   redirect back to the current address raises no `SourceChanged`, so `NavigationCompleted` carries the final address
   ([check-p2.9](../../raw/evidence/phase-p2-minimal-container/check-p2.9.txt)).
 
-Not yet built: `TabHost`, many tabs, sessions and downloads (P3); the security engine's fail-closed gate, frame
-navigations and permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).
+## Implementation status (P3, tabs and sessions)
+
+- p3.2, one view per tab: `VIEWS` (a UI-thread map from tab id to `ContentView`) and `ENVIRONMENT` (Tauri's WebView2
+  environment, saved once from the shell, `save_environment`; every tab view comes from it, COM-7). The navigation
+  gate now receives a `NavRequest` (address, user-initiated, redirected). New: `is_visible`, `renderer_process_count`
+  (counts renderer processes with `GetProcessInfos`, as in spike S3) and `send_to_back`.
+- Observed in P3 (p3.2): with the shell filling the window, Windows kept the shell's window above the tab views, so the
+  page was hidden under the shell (the CDP smoke tests could not see this; a screenshot and the child-window order
+  did). `send_to_back` moves the shell's host window to the bottom of the stacking order at start and after each
+  new tab view; the p3.2 check reads the order ([check-p3.2](../../raw/evidence/phase-p3-tabs-sessions/check-p3.2.txt)).
+- Observed in P3: WebView2's `IsUserInitiated` was `true` for a pop-up a script opened 800 ms after load, without a
+  click, so Ferrum's new-tab rule does not rely on it (comp-app-shell).
+
+Not yet built: sessions and downloads (rest of P3); the security engine's fail-closed gate, frame navigations and
+permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

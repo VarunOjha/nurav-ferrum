@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-tab-previous"
+description = "Enables the tab_previous command without any pre-configured scope."
+commands.allow = ["tab_previous"]
+
+[[permission]]
+identifier = "deny-tab-previous"
+description = "Denies the tab_previous command without any pre-configured scope."
+commands.deny = ["tab_previous"]
