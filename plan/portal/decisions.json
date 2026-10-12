@@ -965,6 +965,34 @@
         "wiki_path": "wiki/decisions/adr-0032-local-sqlite-store-encrypted-backup.md",
         "content_hash": "sha256:bf634a1259871cb668c42f8f8fa12548beb7606575b76f86ce3c4ef752c621d4"
       }
+    },
+    {
+      "id": "adr-0033",
+      "number": 33,
+      "title": "New look: Graphite, split-tile logo, themes ready",
+      "summary": "Your pick: look A in Graphite colours, dark and metallic, light or dark following Windows; logo 8, the split tile, for now. Themes are built as swappable colour sets, so more themes can be added later without rewriting the browser.",
+      "why": "You chose it on the design canvas, and asked that themes can be configured in the future.",
+      "catch": "It replaces the calm warm-grey colours of 10 Oct (the layout stays). Only Graphite ships now; a theme picker comes when a second theme exists.",
+      "status": "Accepted",
+      "decided_by": "you",
+      "date": "2026-10-12",
+      "replaced_by": null,
+      "category": "The app",
+      "tags": [
+        "look & feel",
+        "tabs"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0028",
+        "adr-0032",
+        "comp-app-shell"
+      ],
+      "source": {
+        "wiki_path": "wiki/decisions/adr-0033-graphite-look-split-tile-logo-themes.md",
+        "content_hash": "sha256:4fdf4b5b07833b52e14b7cc18e1ddeb65b3910ecaf6a18db27eece0b53868b54"
+      }
     }
   ]
 }

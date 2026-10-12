@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ferrum browser window</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#F97316}a:hover{color:#FDBA74}
+</style>
+</helmet>
+<div style="--bg: {{t.bg}}; --chrome: {{t.chrome}}; --metal: {{t.metal}}; --raised: {{t.raised}}; --field: {{t.field}}; --border: {{t.border}}; --text: {{t.text}}; --muted: {{t.muted}}; --sel: {{t.sel}}; --page: {{t.page}}; --block: {{t.block}}; --accent: {{accent}}; --accentText: {{accentText}}; --glow: {{t.glow}}; --brush: {{t.brush}}; --tabH: {{d.tabH}}; --barH: {{d.barH}}; --bmH: {{d.bmH}}; --fs: {{d.fs}}; width: 1280px; height: 800px; box-sizing: border-box; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif; font-size: var(--fs); border: 1px solid var(--border); border-radius: 10px; position: relative">
+
+<!-- Windows title bar -->
+<div style="height: 32px; flex: none; display: flex; align-items: center; justify-content: space-between; padding-left: 12px; background: var(--chrome); border-bottom: 1px solid var(--border)">
+<div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted)">
+<div style="width: 16px; height: 16px; border-radius: 4px; background: var(--brush), linear-gradient(160deg, #5A6068, #2A2E33); box-shadow: inset 0 0 0 1px var(--accent); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: #F4F5F6; letter-spacing: -0.2px">Fe</div>
+<span>Ferrum</span>
+</div>
+<div style="display: flex; height: 32px">
+<div style="width: 46px; display: flex; align-items: center; justify-content: center; color: var(--muted)"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M0 5h10" stroke="currentColor" stroke-width="1"></path></svg></div>
+<div style="width: 46px; display: flex; align-items: center; justify-content: center; color: var(--muted)"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1"></rect></svg></div>
+<div style="width: 46px; display: flex; align-items: center; justify-content: center; color: var(--muted)"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M0 0l10 10M10 0L0 10" stroke="currentColor" stroke-width="1"></path></svg></div>
+</div>
+</div>
+
+<!-- Tab strip -->
+<div style="height: var(--tabH); flex: none; display: flex; align-items: flex-end; gap: 4px; padding: 0 8px; background: var(--brush), linear-gradient(180deg, var(--metal), var(--chrome))">
+<sc-for list="{{tabs}}" as="tab" hint-placeholder-count="5">
+<div style="{{tab.style}}">
+<div style="width: 16px; height: 16px; flex: none; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #FFFFFF; background: {{tab.color}}">{{tab.letter}}</div>
+<span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{tab.title}}</span>
+<button aria-label="Close tab" style="width: 20px; height: 20px; flex: none; border: 0; padding: 0; border-radius: 4px; background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path></svg></button>
+</div>
+</sc-for>
+<button aria-label="New tab" style="width: 28px; height: 28px; margin-bottom: 4px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg></button>
+</div>
+
+<!-- Toolbar -->
+<div style="height: var(--barH); flex: none; display: flex; align-items: center; gap: 6px; padding: 0 10px; background: var(--raised); border-bottom: 1px solid var(--border)">
+<button aria-label="Back" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--text); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+<button aria-label="Forward" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+<button aria-label="Reload" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--text); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5V5h-2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+
+<div style="{{addressStyle}}">
+<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="color: var(--muted); flex: none"><sc-if value="{{typing}}" hint-placeholder-val="{{ true }}"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.6"></circle><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></sc-if><sc-if value="{{notTyping}}" hint-placeholder-val="{{ false }}"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"></rect><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.5"></path></sc-if></svg>
+<label for="addr" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Address and search</label>
+<sc-if value="{{typing}}" hint-placeholder-val="{{ true }}">
+<div style="flex: 1; display: flex; align-items: center; font-size: 14px; color: var(--text)"><span>ferr</span><span style="display: inline-block; width: 1.5px; height: 17px; margin-left: 1px; background: var(--accent)"></span><span style="margin-left: 10px; color: var(--muted); font-size: 12px">Search your tabs, bookmarks and history, or type an address</span></div>
+</sc-if>
+<sc-if value="{{notTyping}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden"><span style="color: var(--muted)">https://</span>github.com/you/ferrum</div>
+</sc-if>
+<button aria-label="Bookmark this page (Ctrl+D)" style="width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: var(--accent); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.6l-3.8 2 .7-4.3-3.1-3 4.3-.6z" fill="{{starFill}}" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path></svg></button>
+</div>
+
+<button aria-label="Blocked on this page" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5l5.5 2v4c0 3.5-2.4 5.9-5.5 7-3.1-1.1-5.5-3.5-5.5-7v-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path></svg></button>
+<button aria-label="Show or hide the sidebar" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: {{sideBtnBg}}; color: var(--text); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" stroke="currentColor" stroke-width="1.5"></rect><path d="M6 2.5v11" stroke="currentColor" stroke-width="1.5"></path></svg></button>
+<button aria-label="Ferrum panel" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" stroke="currentColor" stroke-width="1.5"></rect><path d="M10 2.5v11" stroke="currentColor" stroke-width="1.5"></path></svg></button>
+<button aria-label="Menu" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="3.5" r="1.3" fill="currentColor"></circle><circle cx="8" cy="8" r="1.3" fill="currentColor"></circle><circle cx="8" cy="12.5" r="1.3" fill="currentColor"></circle></svg></button>
+</div>
+
+<!-- Bookmarks bar -->
+<div style="height: var(--bmH); flex: none; display: flex; align-items: center; gap: 2px; padding: 0 10px; background: var(--raised); border-bottom: 1px solid var(--border)">
+<sc-for list="{{favs}}" as="fav" hint-placeholder-count="7">
+<a href="#" style="display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px; border-radius: 6px; color: var(--text); text-decoration: none; font-size: 12px; white-space: nowrap"><span style="width: 14px; height: 14px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #FFFFFF; background: {{fav.color}}">{{fav.letter}}</span>{{fav.label}}</a>
+</sc-for>
+<div style="flex: 1"></div>
+<span style="font-size: 11px; color: var(--muted); font-family: 'IBM Plex Mono', monospace">Ctrl+Shift+B hides this bar</span>
+</div>
+
+<!-- Body -->
+<div style="flex: 1; min-height: 0; display: flex; position: relative">
+
+<sc-if value="{{showSide}}" hint-placeholder-val="{{ true }}">
+<div style="width: 264px; flex: none; display: flex; flex-direction: column; background: var(--chrome); border-right: 1px solid var(--border)">
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: 10px; padding: 3px; border-radius: 8px; background: var(--field); border: 1px solid var(--border)">
+<button style="height: 28px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); font: inherit; font-size: 12px">Tabs</button>
+<button style="height: 28px; border: 0; border-radius: 6px; background: var(--raised); color: var(--text); font: inherit; font-size: 12px; font-weight: 600; box-shadow: var(--glow)">Bookmarks</button>
+<button style="height: 28px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); font: inherit; font-size: 12px">History</button>
+</div>
+<div style="flex: 1; overflow: hidden; padding: 0 8px; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{folders}}" as="f" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 8px; border-radius: 6px; color: var(--text); font-size: 13px">
+<svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true" style="color: var(--muted); transform: {{f.rot}}"><path d="M3 1.5L6.5 5 3 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="color: var(--accentText)"><path d="M1.5 4.5a1 1 0 0 1 1-1h3.5l1.5 1.5h6a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"></path></svg>
+<span style="flex: 1">{{f.label}}</span><span style="font-size: 11px; color: var(--muted); font-family: 'IBM Plex Mono', monospace">{{f.count}}</span>
+</div>
+<sc-for list="{{f.items}}" as="b" hint-placeholder-count="0">
+<div style="{{b.style}}">
+<span style="width: 14px; height: 14px; flex: none; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #FFFFFF; background: {{b.color}}">{{b.letter}}</span>
+<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{b.label}}</span>
+</div>
+</sc-for>
+</sc-for>
+</div>
+<div style="padding: 10px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px">
+<button style="height: 32px; border: 1px solid var(--border); border-radius: 8px; background: var(--raised); color: var(--text); font: inherit; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"></rect><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.5"></path></svg>Backup and restore…</button>
+</div>
+</div>
+</sc-if>
+
+<!-- Website area (placeholder: a website draws here) -->
+<div style="flex: 1; min-width: 0; background: var(--page); display: flex; flex-direction: column; gap: 18px; padding: 36px 56px; box-sizing: border-box">
+<div style="height: 22px; width: 38%; border-radius: 6px; background: var(--block)"></div>
+<div style="height: 12px; width: 72%; border-radius: 4px; background: var(--block)"></div>
+<div style="height: 12px; width: 64%; border-radius: 4px; background: var(--block)"></div>
+<div style="height: 12px; width: 68%; border-radius: 4px; background: var(--block)"></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 8px">
+<div style="height: 140px; border-radius: 10px; background: var(--block)"></div>
+<div style="height: 140px; border-radius: 10px; background: var(--block)"></div>
+<div style="height: 140px; border-radius: 10px; background: var(--block)"></div>
+</div>
+<div style="height: 12px; width: 58%; border-radius: 4px; background: var(--block)"></div>
+<div style="height: 12px; width: 66%; border-radius: 4px; background: var(--block)"></div>
+<div style="font-size: 12px; color: var(--muted); font-family: 'IBM Plex Mono', monospace">[ the website draws here ]</div>
+</div>
+
+<!-- Suggestions -->
+<sc-if value="{{showSugg}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; top: -4px; left: {{suggLeft}}; width: 760px; box-sizing: border-box; padding: 6px; border-radius: 0 0 12px 12px; background: var(--raised); border: 1px solid var(--border); border-top: 0; box-shadow: 0 18px 40px rgba(0,0,0,0.35)">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+<div style="padding: 8px 10px 4px; font-size: 10.5px; font-weight: 600; letter-spacing: 1px; color: var(--muted); font-family: 'IBM Plex Mono', monospace">{{g.label}}</div>
+<sc-for list="{{g.rows}}" as="r" hint-placeholder-count="2">
+<div style="{{r.style}}">
+<span style="width: 18px; height: 18px; flex: none; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #FFFFFF; background: {{r.color}}">{{r.letter}}</span>
+<span style="white-space: nowrap"><b style="color: var(--accentText); font-weight: 700">{{r.m}}</b>{{r.rest}}</span>
+<span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--muted); font-size: 12px">· {{r.url}}</span>
+<span style="{{r.tagStyle}}">{{r.tag}}</span>
+</div>
+</sc-for>
+</sc-for>
+<div style="display: flex; gap: 14px; padding: 8px 10px 4px; margin-top: 4px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); font-family: 'IBM Plex Mono', monospace"><span>↑ ↓ choose</span><span>Enter open</span><span>Shift+Del remove from history</span><span>Esc close</span></div>
+</div>
+</sc-if>
+
+<!-- New tab page -->
+<sc-if value="{{isNewtab}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: var(--page); display: flex; flex-direction: column; align-items: center; padding-top: 72px; gap: 28px">
+<div style="width: 72px; height: 72px; border-radius: 16px; background: var(--brush), linear-gradient(160deg, #5A6068, #24272B); box-shadow: inset 0 0 0 2px var(--accent), var(--glow); position: relative; display: flex; align-items: center; justify-content: center; color: #F4F5F6; font-size: 34px; font-weight: 700; letter-spacing: -1px"><span style="position: absolute; top: 6px; left: 8px; font-size: 11px; font-weight: 500; font-family: 'IBM Plex Mono', monospace; color: #C9CDD2">26</span>Fe</div>
+<div style="width: 600px; height: 52px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 18px; border-radius: 26px; background: var(--field); border: 1px solid var(--border); box-shadow: 0 0 0 3px var(--sel); font-size: 15px; color: var(--muted)"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.6"></circle><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>Search your bookmarks and history, or type an address</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 12px">
+<div style="font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--muted); font-family: 'IBM Plex Mono', monospace">FAVOURITES</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px">
+<sc-for list="{{tiles}}" as="ti" hint-placeholder-count="6">
+<a href="#" style="width: 96px; height: 96px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; border-radius: 14px; background: var(--raised); border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 12px"><span style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #FFFFFF; background: {{ti.color}}">{{ti.letter}}</span>{{ti.label}}</a>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+<div style="font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--muted); font-family: 'IBM Plex Mono', monospace">MOST VISITED</div>
+<div style="display: flex; gap: 10px">
+<sc-for list="{{most}}" as="mv" hint-placeholder-count="4">
+<a href="#" style="display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border-radius: 17px; background: var(--raised); border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 12px"><span style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #FFFFFF; background: {{mv.color}}">{{mv.letter}}</span>{{mv.label}}</a>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["graphite","forge","steel"],"default":"graphite"},"mode":{"editor":"enum","options":["dark","light"],"default":"dark"},"view":{"editor":"enum","options":["typing","browse","newtab"],"default":"typing"},"density":{"editor":"enum","options":["roomy","compact"],"default":"roomy"},"accent":{"editor":"color","options":["#F97316","#3B82F6","#22C55E","#8B5CF6"],"default":"#F97316"},"sidebar":{"editor":"boolean","default":true},"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const T = {
+      graphite: {
+        dark: { bg: '#141619', chrome: '#1D2024', metal: '#2B2F34', raised: '#24282C', field: '#111316', border: '#383D43', text: '#E9ECEF', muted: '#A2A9B1', sel: '#31363C', page: '#1A1C1F', block: '#262A2F', glow: '0 0 0 0 transparent', accent: '#F97316' },
+        light: { bg: '#F2F3F4', chrome: '#E4E6E8', metal: '#F7F8F9', raised: '#FFFFFF', field: '#FFFFFF', border: '#C9CED3', text: '#1A1D20', muted: '#59616A', sel: '#E8EBEE', page: '#FFFFFF', block: '#ECEEF0', glow: '0 0 0 0 transparent', accent: '#F97316' }
+      },
+      forge: {
+        dark: { bg: '#0D0C0B', chrome: '#161412', metal: '#24201C', raised: '#1D1A17', field: '#0A0908', border: '#36302A', text: '#F3EEE7', muted: '#A99F94', sel: '#2C2620', page: '#141210', block: '#221E1A', glow: '0 0 0 1px rgba(255,122,26,0.45), 0 0 22px rgba(255,122,26,0.22)', accent: '#FF7A1A' },
+        light: { bg: '#F5F1EB', chrome: '#E8E0D6', metal: '#F8F4EE', raised: '#FFFDFA', field: '#FFFFFF', border: '#D3C7B8', text: '#1E1914', muted: '#685D52', sel: '#F1E8DD', page: '#FFFDFA', block: '#F0E9E0', glow: '0 0 0 1px rgba(194,65,12,0.35)', accent: '#FF7A1A' }
+      },
+      steel: {
+        dark: { bg: '#10161D', chrome: '#18212B', metal: '#263240', raised: '#1D2834', field: '#0C1117', border: '#33414F', text: '#E7EDF3', muted: '#9AA8B7', sel: '#2A3949', page: '#141B23', block: '#1F2A36', glow: '0 0 0 0 transparent', accent: '#F28C38' },
+        light: { bg: '#EDF1F5', chrome: '#DFE6ED', metal: '#F5F8FA', raised: '#FFFFFF', field: '#FFFFFF', border: '#C3CDD8', text: '#15202B', muted: '#536271', sel: '#E6ECF2', page: '#FFFFFF', block: '#E9EEF3', glow: '0 0 0 0 transparent', accent: '#F28C38' }
+      }
+    };
+    const theme = T[this.props.theme] ? this.props.theme : 'graphite';
+    const mode = this.props.mode === 'light' ? 'light' : 'dark';
+    const t = Object.assign({}, T[theme][mode]);
+    t.brush = mode === 'dark'
+      ? 'repeating-linear-gradient(90deg, rgba(255,255,255,0.022) 0px, rgba(255,255,255,0.022) 1px, transparent 1px, transparent 3px)'
+      : 'repeating-linear-gradient(90deg, rgba(0,0,0,0.018) 0px, rgba(0,0,0,0.018) 1px, transparent 1px, transparent 3px)';
+    const picked = this.props.accent && this.props.accent !== '#F97316' ? this.props.accent : t.accent;
+    const darker = { '#F97316': '#C2410C', '#FF7A1A': '#C2410C', '#F28C38': '#B4530F', '#3B82F6': '#1D4ED8', '#22C55E': '#15803D', '#8B5CF6': '#6D28D9' };
+    const accent = mode === 'light' ? (darker[picked] || picked) : picked;
+    const accentText = accent;
+    const compact = this.props.density === 'compact';
+    const d = compact ? { tabH: '36px', barH: '42px', bmH: '30px', fs: '12px' } : { tabH: '42px', barH: '50px', bmH: '34px', fs: '13px' };
+    const view = ['typing', 'browse', 'newtab'].includes(this.props.view) ? this.props.view : 'typing';
+    const showSide = this.props.sidebar !== false && view !== 'newtab';
+    const typing = view === 'typing';
+
+    const C = { G: '#3F4954', T: '#C2410C', D: '#2F6F4F', M: '#1F5FAF', C: '#7A3FB0', N: '#9A5B13', W: '#4B5563', R: '#0E7490' };
+    const tabDefs = [
+      { title: view === 'newtab' ? 'New tab' : 'you/ferrum · GitHub', letter: view === 'newtab' ? '+' : 'G', active: true },
+      { title: 'Tauri 2 guides', letter: 'T' },
+      { title: 'rusqlite · docs.rs', letter: 'D' },
+      { title: 'MDN Web Docs', letter: 'M' },
+      { title: 'Calendar', letter: 'C' }
+    ];
+    const tabs = tabDefs.map((x) => ({
+      title: x.title, letter: x.letter, color: C[x.letter] || '#4B5563',
+      style: 'height: calc(var(--tabH) - 6px); width: 196px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 10px; border-radius: 8px 8px 0 0; font-size: 12.5px; ' +
+        (x.active
+          ? 'background: var(--raised); color: var(--text); box-shadow: inset 0 2px 0 var(--accent), var(--glow); font-weight: 500'
+          : 'background: transparent; color: var(--muted)')
+    }));
+    const favs = [['GitHub', 'G'], ['Ferrum issues', 'G'], ['docs.rs', 'D'], ['Tauri', 'T'], ['MDN', 'M'], ['Calendar', 'C'], ['News', 'N']]
+      .map(([label, letter]) => ({ label, letter, color: C[letter] }));
+    const bm = (label, letter, on) => ({
+      label, letter, color: C[letter],
+      style: 'display: flex; align-items: center; gap: 8px; height: 28px; padding: 0 8px 0 44px; border-radius: 6px; font-size: 12.5px; ' + (on ? 'background: var(--sel); color: var(--text)' : 'color: var(--text)')
+    });
+    const folders = [
+      { label: 'Favourites bar', count: '7', rot: 'rotate(0deg)', items: [] },
+      { label: 'Work', count: '4', rot: 'rotate(90deg)', items: [bm('Ferrum issues', 'G', true), bm('Ferrum release plan', 'G'), bm('CI runs', 'G'), bm('Team calendar', 'C')] },
+      { label: 'Research', count: '12', rot: 'rotate(0deg)', items: [] },
+      { label: 'Reading', count: '5', rot: 'rotate(90deg)', items: [bm('WebView2 release notes', 'M'), bm('SQLite FTS5', 'W')] }
+    ];
+    const tag = (kind) => 'flex: none; font-size: 11px; ' + (kind === 'tab'
+      ? 'padding: 3px 8px; border-radius: 10px; background: var(--sel); color: var(--text)'
+      : 'color: var(--muted); font-family: \'IBM Plex Mono\', monospace');
+    const row = (m, rest, url, letter, tg, kind, sel) => ({
+      m, rest, url, letter, color: C[letter], tag: tg, tagStyle: tag(kind),
+      style: 'display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; font-size: 13px; ' + (sel ? 'background: var(--sel); box-shadow: inset 2px 0 0 var(--accent)' : '')
+    });
+    const groups = [
+      { label: 'OPEN TABS', rows: [row('Ferr', 'um · GitHub', 'github.com/you/ferrum', 'G', 'Switch to tab →', 'tab', true)] },
+      { label: 'BOOKMARKS', rows: [row('Ferr', 'um issues', 'github.com/you/ferrum/issues', 'G', '★ Work', 'bm'), row('Ferr', 'um release plan', 'github.com/you/ferrum/milestones', 'G', '★ Work', 'bm')] },
+      { label: 'HISTORY', rows: [row('Ferr', 'um pull request #12', 'github.com/you/ferrum/pull/12', 'G', '2 h ago', 'h'), row('Ferr', 'ous systems blog', 'ferrous-systems.com/blog', 'R', 'yesterday', 'h')] }
+    ];
+    const tiles = favs.slice(0, 6).map((f) => ({ label: f.label.length > 11 ? f.label.slice(0, 10) + '…' : f.label, letter: f.letter, color: f.color }));
+    const most = [['GitHub', 'G'], ['docs.rs', 'D'], ['Tauri guides', 'T'], ['MDN', 'M']].map(([label, letter]) => ({ label, letter, color: C[letter] }));
+    const addressStyle = 'flex: 1; height: 36px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 14px; margin: 0 6px; position: relative; ' +
+      (typing
+        ? 'border-radius: 12px 12px 0 0; background: var(--field); border: 1px solid var(--border); border-bottom-color: transparent; box-shadow: 0 0 0 2px var(--accent)'
+        : 'border-radius: 18px; background: var(--field); border: 1px solid var(--border)');
+    return {
+      t, d, accent, accentText, tabs, favs, folders, groups, tiles, most, addressStyle,
+      typing, notTyping: !typing, showSugg: typing, showSide, isNewtab: view === 'newtab',
+      suggLeft: '132px',
+      starFill: view === 'browse' ? accent : 'none',
+      sideBtnBg: showSide ? 'var(--sel)' : 'transparent'
+    };
+  }
+}
+</script>
+</body>
+</html>

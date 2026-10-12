@@ -12,7 +12,9 @@ sources:
   - raw/owner/2026-10-12-s02-p3-questions.md
   - raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md
   - raw/owner/2026-10-12-s02-feature-set-request.md
-related: [phase-p2-minimal-container, phase-p4-security, ov-open-questions, comp-app-shell, comp-webview-manager, comp-core, risk-r01, risk-r02, adr-0007, adr-0010, adr-0028, adr-0032]
+  - raw/owner/2026-10-12-s02-feature-set-design-answers.md
+  - raw/owner/2026-10-12-s02-feature-set-design-pick.md
+related: [phase-p2-minimal-container, phase-p4-security, ov-open-questions, comp-app-shell, comp-webview-manager, comp-core, risk-r01, risk-r02, adr-0007, adr-0010, adr-0028, adr-0032, adr-0033]
 approvable: true
 phase: phase-p3-tabs-sessions
 tags: [milestone-m2, tabs, sessions, profiles, downloads, feature-set-bookmarks]
@@ -92,8 +94,8 @@ tasks:
     title: "Feature set, backup (adr-0032): Export writes one passphrase-encrypted .ferrum-backup file (bookmarks and history, format version); Import asks for the passphrase, shows what is inside, then merge or replace (replace keeps a dated copy of ferrum.db first); cookies, logins and site data are never included"
     verify: "Unit tests: round trip; wrong passphrase, a changed byte and a truncated file are each refused with nothing changed; a javascript: bookmark inside a backup is dropped; size limit enforced; smoke test: export from one data folder, import into a fresh one, bookmarks and history match; the passphrase appears in no log."
   - id: p3.22
-    title: "Feature set, look and logo: apply the design chosen in p3.17 to the shell (colours, light and dark, IBM Plex fonts bundled with the app, spacing, tab and toolbar styling, new-tab page if chosen) and the chosen logo to the program and window icons"
-    verify: "Shell unit tests and smoke suite pass; screenshots in light and dark saved and compared with the frozen design by the owner; the program file carries the new icon; no remote fonts or images are loaded by the shell (CSP unchanged)."
+    title: "Feature set, look and logo (adr-0033): the Graphite look in light and dark following Windows, built as a theme of named design tokens so more themes can be added later as data; accent colour and compact/roomy density as settings; IBM Plex fonts bundled; new-tab page with search, favourites and most visited; gentle motion off under Windows' reduce-animations; logo 8 (split tile) from one SVG source for the program, window and taskbar icons"
+    verify: "Shell unit tests and smoke suite pass; a test fails if any shell colour is written outside the theme tokens; switching accent and density changes the shell without restart; screenshots in light and dark saved and compared with the frozen design by the owner; the program file carries the split-tile icon; no remote fonts or images are loaded by the shell (CSP unchanged)."
   - id: p3.23
     title: "Feature set, integration and owner checklist: p3.18 to p3.22 added to the P3 integration suite and gate; new owner checklist items for bookmarks, address-bar search, backup and look"
     verify: "The P3 gate runs the new tests and passes; docs/testing/manual-checklist-p3.md has the new items."
@@ -141,7 +143,7 @@ exit_criteria:
   - "Feature set (p3.17 to p3.23) built and checked, or explicitly moved out by the owner."
   - "Owner approved phase-p3-tabs-sessions#exit."
 risks: [risk-r01, risk-r02, risk-r09]
-decisions: [adr-0006, adr-0007, adr-0010, adr-0014, adr-0032]
+decisions: [adr-0006, adr-0007, adr-0010, adr-0014, adr-0032, adr-0033]
 experiments: []
 components: [comp-app-shell, comp-webview-manager, comp-core]
 unverified:
@@ -188,7 +190,9 @@ not a measurement), and the P3 sign-off covers it.
 Order and why:
 
 1. **Design first (p3.17).** Questions one at a time, then options on a design canvas. Bookmarks placement and the
-   suggestion list's look decide what p3.19 and p3.20 build.
+   suggestion list's look decide what p3.19 and p3.20 build. Done 2026-10-12: the owner chose look A, Graphite, and
+   logo 8, the split tile, and asked that themes can be configured later
+   ([adr-0033](../decisions/adr-0033-graphite-look-split-tile-logo-themes.md)).
 2. **Store (p3.18).** Bookmarks, search and backup all read and write it.
 3. **Bookmarks (p3.19), address-bar search (p3.20), backup (p3.21).** Independent of each other once the store exists.
 4. **Look and logo (p3.22)** last, over the finished parts, so styling is done once.

@@ -1,0 +1,35 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-10-12T19:45:03Z"},
+  "title": "Ferrum feature set design",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1280, "h": 800, "title": "A · Graphite, dark"},
+    "ForgeDark.dc.html": {"x": 1360, "y": 0, "w": 1280, "h": 800, "title": "B · Forge, dark"},
+    "SteelDark.dc.html": {"x": 2720, "y": 0, "w": 1280, "h": 800, "title": "C · Steel, dark"},
+    "GraphiteLight.dc.html": {"x": 0, "y": 1150, "w": 1280, "h": 800, "title": "A · Graphite, light"},
+    "ForgeLight.dc.html": {"x": 1360, "y": 1150, "w": 1280, "h": 800, "title": "B · Forge, light"},
+    "SteelLight.dc.html": {"x": 2720, "y": 1150, "w": 1280, "h": 800, "title": "C · Steel, light"},
+    "NewTabDark.dc.html": {"x": 0, "y": 2300, "w": 1280, "h": 800, "title": "New tab · dark"},
+    "NewTabLight.dc.html": {"x": 1360, "y": 2300, "w": 1280, "h": 800, "title": "New tab · light"},
+    "Logos.dc.html": {"x": 2720, "y": 2300, "w": 1280, "h": 800, "title": "Logo · three Fe tiles"},
+    "Logos2.dc.html": {"x": 4080, "y": 2300, "w": 1280, "h": 920, "title": "Logo · six more options (4 to 9)"},
+    "CompactDark.dc.html": {"x": 0, "y": 3450, "w": 1280, "h": 800, "title": "Compact density, blue accent"},
+    "Concept.dc.html": {"x": 0, "y": 4600, "w": 1280, "h": 800, "title": "D · Library panel on the right (Comet-style), Forge dark"},
+    "RailDark.dc.html": {"x": 1360, "y": 4600, "w": 1280, "h": 800, "title": "E · Tabs down the left side, Forge dark"},
+    "SearchNewTab.dc.html": {"x": 2720, "y": 4600, "w": 1280, "h": 800, "title": "F · Search-first new tab (Comet-style), Forge dark"},
+    "ConceptLight.dc.html": {"x": 0, "y": 5520, "w": 1280, "h": 800, "title": "D · Library panel, Forge light"},
+    "RailSteel.dc.html": {"x": 1360, "y": 5520, "w": 1280, "h": 800, "title": "E · Tabs down the left side, Steel dark"},
+    "SearchNewTabGraphite.dc.html": {"x": 2720, "y": 5520, "w": 1280, "h": 800, "title": "F · Search-first new tab, Graphite dark"}
+  },
+  "order": ["Main.dc.html", "ForgeDark.dc.html", "SteelDark.dc.html", "GraphiteLight.dc.html", "ForgeLight.dc.html", "SteelLight.dc.html", "NewTabDark.dc.html", "NewTabLight.dc.html", "Logos.dc.html", "Logos2.dc.html", "CompactDark.dc.html", "Concept.dc.html", "RailDark.dc.html", "SearchNewTab.dc.html", "ConceptLight.dc.html", "RailSteel.dc.html", "SearchNewTabGraphite.dc.html"],
+  "notes": {
+    "row1": {"x": 0, "y": -260, "text": "Three dark, metallic looks · typing \"ferr\" shows grouped suggestions", "kind": "title1", "maxW": 4000},
+    "row2": {"x": 0, "y": 890, "text": "The same three in light (Ferrum follows Windows)", "kind": "title1", "maxW": 4000},
+    "row3": {"x": 0, "y": 2040, "text": "New tab page and the Fe logo", "kind": "title1", "maxW": 4000},
+    "row4": {"x": 0, "y": 3190, "text": "Comfort: compact density and another accent colour", "kind": "title1", "maxW": 4000},
+    "row5": {"x": 0, "y": 4340, "text": "More layouts, taking cues from Comet: one search box, a side panel, a search-first new tab", "kind": "title1", "maxW": 4000}
+  },
+  "designSystems": []
+}

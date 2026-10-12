@@ -203,7 +203,7 @@
       "what": "Claude asks you the design questions one at a time, then shows options on a design canvas, light and dark. You pick.",
       "why": "Bookmarks and the address-bar suggestions need a place and a look, and you want the browser fun and comfortable to use.",
       "how": "Questions one by one: overall feel, light and dark, suggestions, where bookmarks live, new-tab page, logo. Then two or three options drawn on a Claude design canvas.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "You ask for a nicer, comfortable browser → Claude asks, then draws options → you choose, and everything after builds that choice.",
       "check": "Your answers and choice are recorded; the chosen design is saved; no app code changes.",
       "script": null
@@ -255,12 +255,12 @@
     {
       "id": "p3.22",
       "title": "Feature set: new look and logo",
-      "what": "Apply the look and logo you chose: colours, light and dark, fonts built into the app, tabs and toolbar styling.",
+      "what": "Apply your pick: the Graphite look, light or dark following Windows, accent colour and compact or roomy settings, the new tab page, gentle motion, and the split-tile logo.",
       "why": "You want the browser to be fun to use and comfortable, with a better logo.",
-      "how": "Styling is done last, over the finished parts, so it is done once. The fonts are part of the app, so the shell still loads nothing from the internet.",
+      "how": "Colours live only in a theme (a set of named colours), so more themes can be added later as data. Fonts are part of the app. The logo is one drawing from which every icon size is made.",
       "status": "Not started",
       "chain": "You chose a design → Claude applies it everywhere → Ferrum looks the way you picked.",
-      "check": "Tests still pass; light and dark screenshots saved for you to compare with the design; the program shows the new logo.",
+      "check": "Tests pass; a test fails if a colour is written outside the theme; light and dark screenshots for you to compare with the design; the program shows the split-tile logo.",
       "script": null
     },
     {
@@ -325,10 +325,11 @@
     "adr-0007",
     "adr-0010",
     "risk-r01",
-    "adr-0032"
+    "adr-0032",
+    "adr-0033"
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:432b17f2f113af9556f840831b3049f4e1253e3d68635d102b332af1092f91f1"
+    "content_hash": "sha256:4a45c0379041971287c057a2920870494503c74ba33ca822db21ca3945459b8d"
   }
 }

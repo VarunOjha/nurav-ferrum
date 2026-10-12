@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>More Ferrum logo options</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 1280px; height: 920px; box-sizing: border-box; padding: 40px 48px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; background: #141619; color: #E9ECEF; font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif; border-radius: 10px">
+<sc-for list="{{versions}}" as="v" hint-placeholder-count="6">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 22px 18px; border-radius: 16px; background: #1D2024; border: 1px solid #383D43">
+<div style="height: 150px; display: flex; align-items: center; justify-content: center">
+<div style="{{v.big.outer}}"><div style="{{v.big.inner}}"><span style="{{v.big.num}}">26</span><span style="{{v.big.f}}">F</span><span style="{{v.big.e}}">e</span><span style="{{v.big.word}}">Ferrum</span></div></div>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 2px">
+<div style="font-size: 16px; font-weight: 600">{{v.title}}</div>
+<div style="font-size: 12.5px; color: #A2A9B1; text-align: center; max-width: 320px">{{v.blurb}}</div>
+</div>
+<div style="width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div style="height: 52px; border-radius: 10px; background: #202020; display: flex; align-items: center; justify-content: space-evenly">
+<sc-for list="{{v.small}}" as="s" hint-placeholder-count="3">
+<div style="{{s.outer}}"><div style="{{s.inner}}"><span style="{{s.num}}">26</span><span style="{{s.f}}">F</span><span style="{{s.e}}">e</span><span style="{{s.word}}">Ferrum</span></div></div>
+</sc-for>
+</div>
+<div style="height: 52px; border-radius: 10px; background: #F3F3F3; display: flex; align-items: center; justify-content: space-evenly">
+<sc-for list="{{v.small}}" as="s" hint-placeholder-count="3">
+<div style="{{s.outer}}"><div style="{{s.inner}}"><span style="{{s.num}}">26</span><span style="{{s.f}}">F</span><span style="{{s.e}}">e</span><span style="{{s.word}}">Ferrum</span></div></div>
+</sc-for>
+</div>
+</div>
+<div style="font-size: 10.5px; color: #A2A9B1; font-family: 'IBM Plex Mono', monospace">dark and light taskbar · 32, 24, 16 px</div>
+</div>
+</sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","options":["#F97316","#3B82F6","#22C55E","#8B5CF6"],"default":"#F97316"},"$preview":{"width":1280,"height":920}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const acc = this.props.accent || '#F97316';
+    const brush = 'repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 3px)';
+    const metal = brush + ', linear-gradient(155deg, #6A717A 0%, #3A3F45 45%, #1F2226 100%)';
+    const hex = 'polygon(25% 4%, 75% 4%, 100% 50%, 75% 96%, 25% 96%, 0% 50%)';
+    const ingot = 'polygon(14% 16%, 86% 16%, 100% 84%, 0% 84%)';
+    const K = {
+      mono: { radius: 0.24, clip: 'none', edge: '#2A2E33', fill: metal, f: '#F4F5F6', e: acc, edgeW: 0.02 },
+      periodic: { radius: 0.1, clip: 'none', edge: '#8A9099', fill: metal, f: '#F4F5F6', e: '#F4F5F6', edgeW: 0.025, num: true, word: true, fontK: 0.4, shiftUp: true },
+      hex: { radius: 0, clip: hex, edge: acc, fill: metal, f: '#F4F5F6', e: '#F4F5F6', edgeW: 0.06, fontK: 0.4 },
+      ingot: { radius: 0, clip: ingot, edge: acc, fill: brush + ', linear-gradient(180deg, #7A818A 0%, #454A51 50%, #2A2E33 100%)', f: '#F4F5F6', e: '#F4F5F6', edgeW: 0.05, fontK: 0.34 },
+      split: { radius: 0.24, clip: 'none', edge: '#1F2226', fill: 'linear-gradient(135deg, ' + acc + ' 0%, ' + acc + ' 50%, #2A2E33 50%, #1F2226 100%)', f: '#1A1D20', e: '#F4F5F6', edgeW: 0.02 },
+      coin: { radius: 0.5, clip: 'none', edge: acc, fill: brush + ', radial-gradient(circle at 35% 30%, #7A818A 0%, #3A3F45 55%, #1F2226 100%)', f: acc, e: acc, edgeW: 0.05, fontK: 0.42 }
+    };
+    const tile = (k, s) => {
+      const c = K[k];
+      const ew = Math.max(1, Math.round(s * c.edgeW));
+      const r = Math.round(s * c.radius);
+      const fs = Math.round(s * (s <= 24 ? (c.fontK ? c.fontK + 0.1 : 0.56) : (c.fontK || 0.46)));
+      const clip = c.clip === 'none' ? '' : 'clip-path: ' + c.clip + '; ';
+      const letter = 'font-weight: 700; font-size: ' + fs + 'px; line-height: 1; letter-spacing: ' + (-s / 70) + 'px; ';
+      return {
+        outer: 'width: ' + s + 'px; height: ' + s + 'px; flex: none; box-sizing: border-box; padding: ' + ew + 'px; border-radius: ' + r + 'px; background: ' + c.edge + '; ' + clip,
+        inner: 'width: 100%; height: 100%; box-sizing: border-box; position: relative; border-radius: ' + Math.max(0, r - ew) + 'px; background: ' + c.fill + '; display: flex; align-items: center; justify-content: center; ' + (c.shiftUp && s >= 64 ? 'padding-bottom: ' + Math.round(s * 0.12) + 'px; ' : '') + clip,
+        f: letter + 'color: ' + c.f,
+        e: letter + 'color: ' + c.e + (k === 'coin' ? '; text-shadow: 0 0 ' + Math.max(2, Math.round(s / 12)) + 'px ' + acc : ''),
+        num: c.num && s >= 32 ? 'position: absolute; top: ' + Math.round(s * 0.07) + 'px; left: ' + Math.round(s * 0.09) + 'px; font-size: ' + Math.round(s * 0.13) + 'px; font-weight: 500; font-family: \'IBM Plex Mono\', monospace; color: #C9CDD2' : 'display: none',
+        word: c.word && s >= 64 ? 'position: absolute; bottom: ' + Math.round(s * 0.09) + 'px; left: 0; right: 0; text-align: center; font-size: ' + Math.round(s * 0.11) + 'px; font-weight: 500; letter-spacing: 0.5px; color: ' + acc : 'display: none'
+      };
+    };
+    const v = (k, title, blurb) => ({ title, blurb, big: tile(k, k === 'ingot' ? 150 : 128), small: [32, 24, 16].map((s) => tile(k, s)) });
+    return {
+      versions: [
+        v('mono', '4 · Two-tone monogram', 'Graphite tile; the F in white, the e in orange. Calm, and still clear at 16 px.'),
+        v('periodic', '5 · Full element tile', 'Like the periodic table: 26, Fe and the word Ferrum. The detail shows only at large sizes.'),
+        v('hex', '6 · Hex nut', 'A six-sided iron nut with an orange rim. A distinctive shape in the taskbar.'),
+        v('ingot', '7 · Iron ingot', 'A cast iron bar with an orange edge, Fe stamped on it.'),
+        v('split', '8 · Split tile', 'Half orange, half graphite, cut on the diagonal. Bold and easy to spot.'),
+        v('coin', '9 · Iron coin', 'A round brushed-metal coin with glowing orange letters.')
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

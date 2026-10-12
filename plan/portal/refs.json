@@ -4917,7 +4917,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: design with you",
       "summary": "You ask for a nicer, comfortable browser → Claude asks, then draws options → you choose, and everything after builds that choice.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -5017,6 +5017,19 @@
       "summary": "Seven design answers for the new feature set; options drawn on a design canvas.",
       "status": null,
       "related": []
+    },
+    {
+      "id": "adr-0033",
+      "kind": "decision",
+      "title": "Decision 33: New look: Graphite, split-tile logo, themes ready",
+      "summary": "Your pick: look A in Graphite colours, dark and metallic, light or dark following Windows; logo 8, the split tile, for now. Themes are built as swappable colour sets, so more themes can be added later without rewriting the browser.",
+      "status": "Accepted",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0028",
+        "adr-0032",
+        "comp-app-shell"
+      ]
     }
   ]
 }
