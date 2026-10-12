@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b9e677b976856789f54969223dcc2589bf7fb4583623ace9e91db11e99c9a7f8"
+    "content_hash": "sha256:d29b6a8d455109871f957d99f4253d53898d1e46d35e80e23035ea47a2265048"
   },
   "entries": [
     {
@@ -3262,6 +3262,35 @@
       "commit": null,
       "covers": [
         "## [2026-10-12] approval | feature set plan approved: phase-p3-tabs-sessions, adr-0032, adr-0033, ov-project"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-part-pages-reapproved",
+      "date": "2026-10-12",
+      "time": "15:23",
+      "title": "Part pages re-approved; building the feature set",
+      "done": "Your re-approval of the browser controls and website views pages is recorded. Building the feature set starts now; Claude stops after the Phase 3 end check and reports.",
+      "next": "Claude builds the local database first.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls and website views part pages",
+          "status": "Approved"
+        },
+        {
+          "what": "Git and licence decision, open browsing decision",
+          "status": "Outdated"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-12] approval | comp-app-shell and comp-webview-manager re-approved; owner: complete P3, then stop"
       ],
       "phase": "phase-p3-tabs-sessions",
       "category": "Decided",

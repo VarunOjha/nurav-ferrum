@@ -4928,7 +4928,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: local database",
       "summary": "You want bookmarks and search of the past → one safe local database → every new feature uses it.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"

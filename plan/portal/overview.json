@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "You approved the feature set plan. Before building starts, two part pages changed by the review fixes need your re-approval.",
+  "summary": "Phase 3's feature set is approved and being built. Claude stops after the Phase 3 end check and reports.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:bb8a42355a2524a1572efab0a0561621540d19a600dbb0ea304bdfbeda21364a"
+    "content_hash": "sha256:9f4521473f0ef1f5237329500a83c4a5ac3fa463858d80ec45c1f8c829c25423"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress again for the feature set",
+      "state": "P3 Tabs and sessions: building the feature set",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -34,20 +34,20 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
-        "item": "Feature set plan",
-        "state": "approved"
+        "item": "Feature set",
+        "state": "being built"
       },
       {
-        "item": "Part pages",
-        "state": "browser controls and website views need re-approval"
+        "item": "Next for you",
+        "state": "the review after the end check"
       }
     ],
-    "why": "Building changes the browser controls page, so its approval must be current first.",
+    "why": "Nothing to run. Claude builds and checks each part, then reports.",
     "script": null,
-    "tell_claude": "\"re-approve the part pages\", or what to change."
+    "tell_claude": "Nothing for now. Claude reports when Phase 3 is ready for your review."
   },
   "questions_for_you": {
     "open": 23,
