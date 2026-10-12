@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.15 (smoke suite): add npm script \"smoke\" in apps/desktop/tests/smoke running the whole Playwright suite; save its output as evidence; write the manual checklist (five HTTPS sites, a mailto prompt with a real mail app, sign-in kept after restart, network disconnect, Alt+Tab focus) as a wiki page; run scripts/verify/p2.15-quick-whole-app.ps1."
+next_action: "Task p2.16 (docs): README build and run instructions; SECURITY.md M1 section and known limitations; component pages comp-app-shell, comp-webview-manager, comp-core set to status implemented with last_verified_commit; run scripts/verify/p2.16-update-docs.ps1 (wiki lint clean)."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -86,6 +86,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.12 done (`083561b`): DevTools only in debug builds, checked by key presses in release and debug.
 - p2.13 done (`e8bc194`): Google sign-in bar, classifier with unit tests, smoke suite 25 passed.
 - p2.14 done (`9df1157`): JSON-lines logs, typed errors, crash records; smoke suite 25 passed.
+- p2.15 done (`6ed6c9a`): whole smoke suite in one command (25 passed); manual checklist written.
 
 ## Done this session (s01)
 
@@ -297,7 +298,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.14 verified and committed 2026-10-11 as `9df1157`)
+(empty: p2.15 verified and committed 2026-10-11 as `6ed6c9a`)
 
 ## Blockers
 
@@ -333,11 +334,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 14 of 18 tasks done |
-| Next task | p2.15 full test suite and manual checklist |
+| Phase 2 | In progress: 15 of 18 tasks done |
+| Next task | p2.16 documentation |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Each feature has its own test → one command must run them all, and some things only a person can judge → you get a short checklist for the end of the phase.
+**2. Why, and what it does.** Nothing for you to run now. Code changed a lot in this phase → the README, the security notes and the component pages must say what is now built and what is still limited → the next reader is not misled.
 
 **3. The script:** none for you.
 
@@ -352,4 +353,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 14 of 18 tasks done, last p2.14). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 15 of 18 tasks done, last p2.15). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

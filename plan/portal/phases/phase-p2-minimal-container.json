@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 14,
+    "done": 15,
     "total": 18
   },
   "step_order": [
@@ -180,7 +180,7 @@
       "what": "One quick test suite that drives the shell and the website view together.",
       "why": "Features that pass alone can break each other. Without one quick whole-app run, such breaks are found only by you, by hand.",
       "how": "Playwright over the debugging channel, which experiment 4 showed works (proposed decision), plus a manual checklist.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Features interact → one suite drives shell and website view with Playwright, plus a manual list → one command shows the first milestone works.",
       "check": "The suite command passes; output saved.",
       "script": "scripts/verify/p2.15-quick-whole-app.ps1"

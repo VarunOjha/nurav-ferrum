@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5c0536ddf2bd0d5ed471f62a305d422af5a1bea9518e550c1e9ce697eb61e533"
+    "content_hash": "sha256:f65f6809215cd4c53e1729e07e9264f13396dc6e8bb62f25db2c8d0ed785b6df"
   },
   "entries": [
     {
@@ -2545,6 +2545,26 @@
       "tags": [
         "testing",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-15",
+      "date": "2026-10-11",
+      "time": "20:28",
+      "title": "All tests in one command; your checklist",
+      "done": "All of Ferrum's automatic browser tests now run with one command, and all 25 pass. Claude also wrote the short list of five things you will try yourself at the end of this phase, such as visiting real sites and checking that a mail link asks first.",
+      "next": "Claude updates the documentation (task p2.16).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "6ed6c9a",
+      "covers": [
+        "## [2026-10-11] code | p2.15 whole smoke suite in one command; manual checklist written"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Checked",
+      "tags": [
+        "testing",
+        "check scripts"
       ]
     }
   ]

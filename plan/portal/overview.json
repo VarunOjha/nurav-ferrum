@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 14 of 18 tasks done. Next: p2.15 full test suite and manual checklist.",
+  "summary": "Phase 2 is in progress: 15 of 18 tasks done. Next: p2.16 documentation.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:2fe4b5e2c4c3a33e0adf930b9a2b4c4a761c6c82970daf595596130220345020"
+    "content_hash": "sha256:b7b61f5e639e5ded0df3e5392bdc19a9735e02c88c34249ef5773ca46d532c2e"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 14 of 18 tasks done",
+      "state": "P2 First working app: in progress, 15 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "14 of 18 tasks done"
+        "state": "15 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.15 full test suite and manual checklist"
+        "state": "p2.16 documentation"
       }
     ],
-    "why": "Nothing to run. Each feature has its own test → one command must run them all, and some things only a person can judge → you get a short checklist for the end of the phase.",
+    "why": "Nothing to run. Code changed a lot in this phase → the README, the security notes and the component pages must say what is now built and what is still limited → the next reader is not misled.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

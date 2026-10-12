@@ -530,7 +530,7 @@
       "kind": "task",
       "title": "P2 task: Quick whole-app tests",
       "summary": "Features interact → one suite drives shell and website view with Playwright, plus a manual list → one command shows the first milestone works.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4707,6 +4707,14 @@
       "kind": "commit",
       "title": "Commit: Logs and crash records",
       "summary": "Ferrum now keeps a tidy log, one line per event, so problems can be traced. It records only which site was involved, never the full page address, so the log is not a browsing history. If part of Ferru",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "6ed6c9a",
+      "kind": "commit",
+      "title": "Commit: All tests in one command; your checklist",
+      "summary": "All of Ferrum's automatic browser tests now run with one command, and all 25 pass. Claude also wrote the short list of five things you will try yourself at the end of this phase, such as visiting real",
       "status": null,
       "related": []
     }

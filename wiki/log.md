@@ -1728,3 +1728,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.14.txt]
 - result: tracing =0.1.44 and tracing-subscriber =0.3.23 (json): ferrum.jsonl in the app log folder or <data_dir>/logs; events for start, settings, content view, navigation outcomes, offers, launches, quit; addresses as scheme and host only (ferrum_core::address::site); panic hook writes a panic event. webview-manager typed Error. p2.14 check PASS: smoke suite 25 passed, 7 log files, 96 JSON lines, 0 panics, no address with path or query; deliberate test crash logged once, exit 0. cargo deny ok with the new crates. To close at the exit review: the tracing-subscriber version tag on ov-arch-crate-graph (now pinned =0.3.23, cargo deny clean).
 - commit: 9df1157
+
+## [2026-10-11] code | p2.15 whole smoke suite in one command; manual checklist written
+
+- session: s02
+- time: 20:28
+- pages: [phase-p2-minimal-container]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.15.txt]
+- result: npm run smoke runs all six smoke specs (p2.7 to p2.11 and p2.13; p2.12 is checked on the release build by its own script). docs/testing/manual-checklist-p2.md lists the owner's five end-of-phase checks (five HTTPS sites, mailto with a real mail app, sign-in kept after restart, network loss and recovery, Alt+Tab focus). p2.15 check PASS: suite exit 0, 25 passed.
+- commit: 6ed6c9a
