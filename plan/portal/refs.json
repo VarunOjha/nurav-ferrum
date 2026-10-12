@@ -4950,7 +4950,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: search the past from the address bar",
       "summary": "You remember part of a page title → type it → Ferrum finds the page.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -4961,7 +4961,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: encrypted backup and restore",
       "summary": "You set up a second PC → export, carry the file, import → same bookmarks and history there.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -5052,6 +5052,14 @@
       "kind": "commit",
       "title": "Commit: Built: bookmarks",
       "summary": "A star in the address bar bookmarks the page and lets you rename it or put it in a folder. A bookmarks bar under the toolbar shows your favourites (Ctrl+Shift+B hides it). The sidebar lists every fold",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "d03784b",
+      "kind": "commit",
+      "title": "Commit: Built: search of the past from the address bar",
+      "summary": "As you type in the address bar, Ferrum suggests matching open tabs, bookmarks and pages from your history, in groups, with the matching letters highlighted. Arrow keys and Enter open one; Shift+Delete",
       "status": null,
       "related": []
     }

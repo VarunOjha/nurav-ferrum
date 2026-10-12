@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 18 of 23 tasks done. Next: address-bar search of the past.",
+  "summary": "Phase 3 is in progress: 19 of 23 tasks done. Next: encrypted backup and restore.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b0594813abc0fb3c8e4c4d5fe3525ff3147095adbd16b55608e5d553478b1798"
+    "content_hash": "sha256:919fd95c7b14f8555aba75c598c13d51505ab1b891fa823d9d2357a6ca82b56f"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 18 of 23 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 19 of 23 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "18 of 23 tasks done"
+        "state": "19 of 23 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Address-bar search of the past"
+        "state": "Encrypted backup and restore"
       }
     ],
-    "why": "Nothing to run. Claude builds the grouped suggestions in the address bar next.",
+    "why": "Nothing to run. Claude builds the passphrase-locked backup file and its import next.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

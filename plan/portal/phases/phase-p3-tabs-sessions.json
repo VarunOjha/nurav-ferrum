@@ -6,7 +6,7 @@
   "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
   "status": "In progress",
   "progress": {
-    "done": 18,
+    "done": 19,
     "total": 23
   },
   "step_order": [
@@ -236,7 +236,7 @@
       "what": "As you type, the address bar suggests matching bookmarks, pages from your history and open tabs. Arrow keys and Enter open one.",
       "why": "You asked for search of the past on the address bar.",
       "how": "Best matches first, keyboard first. Pages are drawn above Ferrum's own controls, so the list is never hidden under the page: the page moves aside while the list is open, or the list gets its own small window.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "You remember part of a page title → type it → Ferrum finds the page.",
       "check": "Tests: typing finds a visited page; arrows, Enter and Esc work; the list is never hidden under the page.",
       "script": "scripts/verify/p3.20-address-search.ps1"
@@ -247,7 +247,7 @@
       "what": "Export your bookmarks and history to one file locked with your passphrase. Import it on another Ferrum: see what's inside, then merge or replace.",
       "why": "You want a manual, secure dump to load into another Ferrum.",
       "how": "Standard, published encryption; a wrong passphrase or a changed file is refused with nothing changed. Replace keeps a copy of your old data first. Cookies and logins are never in the file.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "You set up a second PC → export, carry the file, import → same bookmarks and history there.",
       "check": "Tests: export and import match; wrong passphrase, damaged file and hidden script addresses are refused; the passphrase is never logged.",
       "script": null

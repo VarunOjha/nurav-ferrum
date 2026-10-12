@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:466e8df2ac3d74cdcd2be5f3a879902643ea57b2e3691f27a24b1e67bdedf40c"
+    "content_hash": "sha256:450ef62322e4902806eee203893084eba688520993c711225e69362f9a84b636"
   },
   "entries": [
     {
@@ -3331,6 +3331,26 @@
       "commit": "38e294f",
       "covers": [
         "## [2026-10-12] code | p3.19 bookmarks: star, bar, editor, sidebar folders, shortcuts"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "address bar",
+        "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-20",
+      "date": "2026-10-12",
+      "time": "15:59",
+      "title": "Built: search of the past from the address bar",
+      "done": "As you type in the address bar, Ferrum suggests matching open tabs, bookmarks and pages from your history, in groups, with the matching letters highlighted. Arrow keys and Enter open one; Shift+Delete forgets a page. The list never hides under the website.",
+      "next": "Claude builds the encrypted backup next.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "d03784b",
+      "covers": [
+        "## [2026-10-12] code | p3.20 address-bar search of the past"
       ],
       "phase": "phase-p3-tabs-sessions",
       "category": "Built",

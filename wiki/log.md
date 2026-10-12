@@ -2056,3 +2056,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-feature-set-design-answers.md]
 - result: Bookmark and appearance commands (shell only); star adds to Favourites bar and opens the editor bar; bookmarks bar ([appearance] bookmarks_bar) and editor in the top band; sidebar Bookmarks section; Ctrl+D, Ctrl+Shift+B, Ctrl+Shift+O. scripts/verify/p3.19-bookmarks.ps1 PASS (core tests, 15 shell unit tests, smoke bookmarks + sidebar + settings 10 passed). A first run failed only because the test started Ferrum with an override settings file that replaces the saved one; the test now uses the user file only, as the settings test does. Stales approval of comp-app-shell and comp-core.
 - commit: 38e294f
+
+## [2026-10-12] code | p3.20 address-bar search of the past
+
+- session: s02
+- time: 15:59
+- pages: [phase-p3-tabs-sessions, comp-app-shell, comp-core]
+- sources: [raw/owner/2026-10-12-s02-feature-set-design-answers.md]
+- result: library_suggest and history_remove commands; store suggest_history and remove_history_url; shell groups Open tabs / Bookmarks / History with highlighted word starts, arrows, Enter, Esc, Shift+Delete, click; the list is in the top band so the page view moves down. scripts/verify/p3.20-address-search.ps1 PASS (13 store tests, 18 shell unit tests, smoke address-search + history + bookmarks 12 passed). Stales approval of comp-app-shell and comp-core.
+- commit: d03784b
