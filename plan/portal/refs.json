@@ -680,7 +680,7 @@
       "kind": "task",
       "title": "P3 task: Literature batch 3",
       "summary": "Tab lifecycle is the core research idea → read tab-usage studies and Chrome and Edge lifecycle policies → prior art for P7.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4867,6 +4867,14 @@
       "kind": "commit",
       "title": "Commit: All phase 3 tests in one command",
       "summary": "One command now runs every phase 3 test: 45 checks of the tab, settings, session, profile and history rules, and 36 tests of the running app. A second command re-runs the 26 phase 2 tests.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "0ce0e38",
+      "kind": "commit",
+      "title": "Commit: Reading batch 3: tab habits, tab sleeping, phone apps",
+      "summary": "Claude read eight sources on how people use tabs, how Chrome and Edge put idle tabs to sleep today (Edge: after 15 minutes by default), how Android and iOS free memory from background apps, and the or",
       "status": null,
       "related": []
     }

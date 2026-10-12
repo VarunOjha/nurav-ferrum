@@ -1940,3 +1940,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.11.txt, raw/evidence/phase-p3-tabs-sessions/p3.11-suite.txt]
 - result: npm run p3 (11 P3 app test files) and npm run p2 (the P2 files, for the gate's regression row); Invoke-FerrumSmoke takes several spec names; the p3.11 check runs the Rust tests of the P3 parts and npm run p3 and saves the whole output (raw/evidence/phase-p3-tabs-sessions/p3.11-suite.txt). p3.11 PASS: ferrum-core P3 tests 45 passed, npm run p3 36 passed. npm run p2: 26 passed. Correction: the commit message of ebc79ca says 27 for npm run p2; the run printed 26 passed (P2's 25 plus the same-view test added in p3.2).
 - commit: ebc79ca
+
+## [2026-10-12] code | p3.12 literature batch 3
+
+- session: s02
+- time: 03:17
+- pages: [phase-p3-tabs-sessions, ov-research-literature-log, ov-research-related-work-seed]
+- sources: [raw/research/literature-batch-3.md, raw/evidence/phase-p3-tabs-sessions/check-p3.12.txt]
+- result: raw/research/literature-batch-3.md: eight sources read 2026-10-12 (tab usage: Chang et al. 2021 abstract via a secondary record, two more papers metadata only; Chrome Memory Saver; Edge SleepingTabsTimeout default 15 minutes; Android process importance and cached processes; Apple memory warnings; Cao and Irani GreedyDual-Size and its Young reference). Closes seed open points F3, G1, G2; reading log row and findings; p3.12 check PASS.
+- commit: 0ce0e38

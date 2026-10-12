@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:381310baa5afb9d8a89f6a4048f7ab9eefeb37f943b1836c2a6e5556fdd51bd9"
+    "content_hash": "sha256:5a2b0f695e577f8749402b1e18313668a2f9bb2e0c81f961738c938c061987be"
   },
   "entries": [
     {
@@ -3020,6 +3020,26 @@
       "tags": [
         "testing",
         "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-12",
+      "date": "2026-10-12",
+      "time": "03:17",
+      "title": "Reading batch 3: tab habits, tab sleeping, phone apps",
+      "done": "Claude read eight sources on how people use tabs, how Chrome and Edge put idle tabs to sleep today (Edge: after 15 minutes by default), how Android and iOS free memory from background apps, and the original cost-aware caching algorithm Ferrum's adaptive policy will be compared with. Three open questions from the first reading list are now settled from primary sources.",
+      "next": "Docs and the phase 3 end check (task p3.13).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "0ce0e38",
+      "covers": [
+        "## [2026-10-12] code | p3.12 literature batch 3"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Planned",
+      "tags": [
+        "paper",
+        "tab sleeping"
       ]
     }
   ]

@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 13,
+    "done": 14,
     "total": 15
   },
   "step_order": [
@@ -169,7 +169,7 @@
       "what": "A batch of reading: studies of how people use tabs, Chrome and Edge rules for sleeping tabs, and similar ideas on phones.",
       "why": "Chrome and Edge already put tabs to sleep. Without reading how, P7 could repeat known work or miss a better idea, and the paper could overclaim.",
       "how": "Read the studies and the browsers' own descriptions, write one dated note per source, and re-check the uncertain entries of the starting reading list.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Tab lifecycle is the core research idea → read tab-usage studies and Chrome and Edge lifecycle policies → prior art for P7.",
       "check": "New dated notes; uncertain seed entries checked or still flagged.",
       "script": "scripts/verify/p3.12-literature-batch-3.ps1"
