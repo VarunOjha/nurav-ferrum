@@ -710,7 +710,7 @@
       "kind": "task",
       "title": "P3 task: Sidebar of tabs and history",
       "summary": "Website views are always drawn over the shell → place the sidebar beside them, never on top → nothing is hidden or overlapped.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4851,6 +4851,14 @@
       "kind": "commit",
       "title": "Commit: A settings screen",
       "summary": "Ferrum has a settings screen (the gear button or Ctrl+,): start-up sites, whether to reopen last session's tabs, which sites share a named profile, and the download folder. The app checks every value ",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "0bb71c9",
+      "kind": "commit",
+      "title": "Commit: A sidebar with your tabs and history",
+      "summary": "A panel on the left (the menu button or Ctrl+Shift+S) lists your open tabs and your history, with a search box. Pages make room for it instead of being covered.",
       "status": null,
       "related": []
     }

@@ -738,10 +738,10 @@
     "comp-app-shell": {
       "status": "approved",
       "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T03:03:37-05:00",
+      "timestamp": "2026-10-12T03:08:49-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:cba7697170b3f398b629ed6a209f8713bb6f1b46a24d23d418a0589b4d752542",
-      "scope_hash": "sha256:3e060614f43acbdddc7ccfe913f9750b14afcea5045e33362f73c740d410783f",
+      "content_hash": "sha256:efbe52b8f90b5df0c2e9ff19a86cf8ef9e3cc53fb327ee0da7694f4a940a88b8",
+      "scope_hash": "sha256:eded258217d1910d013deb80c1c607fc32ec17355e4f2038e815bf21b488f9fb",
       "approved_by": "owner",
       "recorded_by": "claude",
       "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md",
@@ -852,6 +852,17 @@
           "path": "wiki/architecture/components/comp-app-shell.md",
           "content_hash": "sha256:ca6de3c7fd195ce0cc7ad212e1a517158f63e5f9dc03da4ad8377a05b37a8cfc",
           "scope_hash": "sha256:db1c4f07a7b615884baa0c1099a58c37eb4762d0913c00a37a55094a033f77ea",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T03:03:37-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:cba7697170b3f398b629ed6a209f8713bb6f1b46a24d23d418a0589b4d752542",
+          "scope_hash": "sha256:3e060614f43acbdddc7ccfe913f9750b14afcea5045e33362f73c740d410783f",
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md"

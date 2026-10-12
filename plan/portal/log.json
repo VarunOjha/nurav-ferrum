@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:867368d6d944f7d7dd36e8ff2bf32b60192f82e4ec3bd30d4996a294ba56ac21"
+    "content_hash": "sha256:137c9fae19e4d05f3af3d5d90c2f4f29d2994d960e50a6b9a07ab571db8f746b"
   },
   "entries": [
     {
@@ -2980,6 +2980,26 @@
       "tags": [
         "look & feel",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-15",
+      "date": "2026-10-12",
+      "time": "03:08",
+      "title": "A sidebar with your tabs and history",
+      "done": "A panel on the left (the menu button or Ctrl+Shift+S) lists your open tabs and your history, with a search box. Pages make room for it instead of being covered.",
+      "next": "The combined test suite for phase 3 (task p3.11).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "0bb71c9",
+      "covers": [
+        "## [2026-10-12] code | p3.15 sidebar with open tabs and history"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "tabs",
+        "look & feel"
       ]
     }
   ]

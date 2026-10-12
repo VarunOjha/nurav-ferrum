@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 11,
+    "done": 12,
     "total": 15
   },
   "step_order": [
@@ -147,7 +147,7 @@
       "what": "A sidebar you can open and close, listing open tabs and your history.",
       "why": "A sidebar drawn over the website area would be hidden behind the page, so it would look broken. Placing it beside the page avoids that.",
       "how": "Place the sidebar beside the website area and shrink the tab view when it opens, so the two never overlap. A keyboard shortcut toggles it.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Website views are always drawn over the shell → place the sidebar beside them, never on top → nothing is hidden or overlapped.",
       "check": "Toggling the sidebar resizes the tab view with no overlap; choosing an entry opens it.",
       "script": "scripts/verify/p3.15-sidebar-tabs-history.ps1"

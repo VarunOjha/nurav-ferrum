@@ -1922,3 +1922,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.14.txt]
 - result: Settings screen in the shell (toolbar button, Ctrl+Comma; the tab's view hidden meanwhile): start-up sites, reopen last tabs, per-site named profiles, download folder. Host commands settings_get/settings_set check every value and list problems in plain words; on success one atomic write of the user settings file, applied at once (profiles, folder) or at next start (start-up sites). The IPC probe now tries settings_set: refused for a website by Tauri's ACL; tab views have no bridge. Settings smoke 2 passed; whole suite 59 passed; p3.14 PASS. Stales comp-app-shell (re-recorded through the annex).
 - commit: 0b1bd6a
+
+## [2026-10-12] code | p3.15 sidebar with open tabs and history
+
+- session: s02
+- time: 03:08
+- pages: [phase-p3-tabs-sessions, comp-app-shell]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.15.txt]
+- result: Shell sidebar (toolbar button; Ctrl+Shift+S from the toolbar or a page): open tabs (choose to switch) and history (search, choose to open in the active tab, clear). The shell reports its width so tab views start to its right and never overlap. Sidebar smoke 3 passed; whole suite 62 passed; p3.15 check PASS. Stales comp-app-shell (re-recorded through the annex).
+- commit: 0bb71c9
