@@ -67,7 +67,7 @@
       "name": "First working app",
       "one_line_goal": "One window browses websites safely: address bar, back, forward, refresh",
       "status": "In progress",
-      "tasks_done": 16,
+      "tasks_done": 17,
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p2-minimal-container.md",

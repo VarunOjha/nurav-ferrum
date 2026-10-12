@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.17 (literature batch 2): new raw research note(s) with access dates on WebView2 and Chromium process model, page lifecycle and embedded-webview resource studies; update ov-research-literature-log; no unverified citation; run scripts/verify/p2.17-literature-batch-2.ps1."
+next_action: "Task p2.18 (exit review): add shell lint and test scripts; run scripts/gates/p2-gate.ps1 (every task check, cargo fmt, clippy, test, deny, shell checks, release build, IPC denial, smoke, wiki lint) on one commit with evidence; close the P2-targeted UNVERIFIED tags; prepare the owner review: manual checklist, re-approval of the three part pages and phase-p2-minimal-container#exit; then pause."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -88,6 +88,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.14 done (`9df1157`): JSON-lines logs, typed errors, crash records; smoke suite 25 passed.
 - p2.15 done (`6ed6c9a`): whole smoke suite in one command (25 passed); manual checklist written.
 - p2.16 done (`a586e34`): docs updated; three part pages implemented (approvals now outdated, re-approval at exit).
+- p2.17 done (`3b057f0`): literature batch 2 (eight labelled sources); seed snippet corrected.
 
 ## Done this session (s01)
 
@@ -299,7 +300,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.16 verified and committed 2026-10-11 as `a586e34`)
+(empty: p2.17 verified and committed 2026-10-11 as `3b057f0`)
 
 ## Blockers
 
@@ -335,11 +336,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 16 of 18 tasks done |
-| Next task | p2.17 literature batch 2 |
+| Phase 2 | In progress: 17 of 18 tasks done |
+| Next task | p2.18 end-of-phase review |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. The paper needs sources → Claude reads primary sources on WebView2 and Chromium processes, page lifecycle and embedded-browser resource use → every later claim can cite something real.
+**2. Why, and what it does.** Nothing for you to run now. All P2 tasks are done → Claude runs every automatic check on one commit, saves the evidence and closes the open notes → you can review the first working app and decide whether to sign it off.
 
 **3. The script:** none for you.
 
@@ -354,4 +355,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 16 of 18 tasks done, last p2.16). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 17 of 18 tasks done, last p2.17). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

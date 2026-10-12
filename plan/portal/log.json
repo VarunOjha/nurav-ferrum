@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:1c93c1cb64aa1304fb75d13e7d4700e80ab4f2b482ae6f3100cd527aeb7edb42"
+    "content_hash": "sha256:1714b492bcb777eab69a501d066f6006f156d33b19bd12c3304c0f6dd83ff324"
   },
   "entries": [
     {
@@ -2590,6 +2590,26 @@
       "tags": [
         "wiki",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-17",
+      "date": "2026-10-11",
+      "time": "20:36",
+      "title": "Second batch of research reading",
+      "done": "Claude read eight real sources for the paper, such as how WebView2 groups its processes, how Chrome keeps sites apart, and a 2024 study comparing desktop and web versions of chat apps. Each source is marked as really read or not. Claude also found that an earlier note had the wrong date and numbers for Microsoft's sleeping-tabs claim, and corrected it.",
+      "next": "Claude runs the end-of-phase checks and prepares your review (task p2.18).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "3b057f0",
+      "covers": [
+        "## [2026-10-11] code | p2.17 literature batch 2: process model, site isolation, tab sleeping, Electron study"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Planned",
+      "tags": [
+        "paper",
+        "wiki"
       ]
     }
   ]

@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 16,
+    "done": 17,
     "total": 18
   },
   "step_order": [
@@ -202,7 +202,7 @@
       "what": "Reading notes on WebView2 and Chromium processes, page lifecycle and studies of embedded-view resource use.",
       "why": "Reading only at the end would leave later experiments without a basis in what others found, and the paper would cite work too late to use it.",
       "how": "Read papers and official documents on the listed topics, write one dated note per source, and add each to the reading log.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Research runs alongside code → read on WebView2 and Chromium processes, page lifecycle and embedded-view resource studies → evidence for later experiments.",
       "check": "New dated notes; the reading log is updated; no unchecked citation.",
       "script": "scripts/verify/p2.17-literature-batch-2.ps1"

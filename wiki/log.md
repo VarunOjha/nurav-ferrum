@@ -1746,3 +1746,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.16.txt]
 - result: comp-app-shell, comp-webview-manager, comp-core: status implemented (last_verified_commit 9df1157) with an Implementation status (P2) section each; portal records and index updated. Stales approval of comp-app-shell, comp-webview-manager and comp-core (re-approval at the P2 exit review). README build, run and test instructions; SECURITY.md M1 section with known limitations; debug-port note corrected (environment switch also works on release builds). p2.16 check PASS (wiki lint 0 errors after the index status column was fixed).
 - commit: a586e34
+
+## [2026-10-11] code | p2.17 literature batch 2: process model, site isolation, tab sleeping, Electron study
+
+- session: s02
+- time: 20:36
+- pages: [phase-p2-minimal-container, ov-research-literature-log]
+- sources: [raw/research/literature-batch-2.md, raw/evidence/phase-p2-minimal-container/check-p2.17.txt]
+- result: New raw note raw/research/literature-batch-2.md with eight labelled sources (WebView2 process model, Chromium site isolation, Reis et al. 2019 and 2009, Edge sleeping tabs 2022 as a vendor claim, Chrome tab discarding 2015 as historical, Horn et al. 2023, Thangadurai et al. 2024 read in full). The seed list snippet about the Edge post was wrong and is corrected in the note. ov-research-literature-log updated. p2.17 check PASS.
+- commit: 3b057f0

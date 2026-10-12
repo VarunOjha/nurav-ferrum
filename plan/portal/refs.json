@@ -550,7 +550,7 @@
       "kind": "task",
       "title": "P2 task: Literature batch 2",
       "summary": "Research runs alongside code → read on WebView2 and Chromium processes, page lifecycle and embedded-view resource studies → evidence for later experiments.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4723,6 +4723,14 @@
       "kind": "commit",
       "title": "Commit: Documentation brought up to date",
       "summary": "The README now explains how to build, run and test Ferrum; the security notes list what this first version protects against and what it does not yet do; the pages for the three parts built in this pha",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "3b057f0",
+      "kind": "commit",
+      "title": "Commit: Second batch of research reading",
+      "summary": "Claude read eight real sources for the paper, such as how WebView2 groups its processes, how Chrome keeps sites apart, and a 2024 study comparing desktop and web versions of chat apps. Each source is ",
       "status": null,
       "related": []
     }
