@@ -210,6 +210,20 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   never logged (the smoke test reads every log). The Backup and restore screen (from the sidebar) covers the active
   tab like Settings: make a backup (passphrase twice), look inside, Merge into mine, Replace mine (asked twice)
   ([check-p3.21](../../raw/evidence/phase-p3-tabs-sessions/check-p3.21.20261012-1618.txt)).
+- p3.22, look and logo (adr-0033): `src/themes.ts` holds the themes as data (Graphite: named colour tokens for light
+  and dark), the accents (orange, blue, green, violet; a brighter shade in dark mode, a darker one in light mode) and
+  the densities (roomy, compact); `applyLook` sets them as CSS custom properties on the root element, and light or
+  dark follows Windows (`prefers-color-scheme`, live). `style.css` writes no colour of its own (a unit test checks, and
+  another that every token it uses is set). `appearance_get`/`appearance_set` carry `theme`, `accent`, `density`
+  (`[appearance]`), changed at once from Settings (Appearance). IBM Plex Sans and Mono are bundled from
+  `@fontsource` 5.3.0 (OFL-1.1, Latin subset), so the shell loads no remote fonts (CSP unchanged). The new-tab page
+  covers an empty tab (logo, a search box that opens the address bar, favourites from the bookmarks bar's folder,
+  most visited) and refreshes each time it appears. Gentle fades and transitions, all off under
+  `prefers-reduced-motion`. Logo 8, the split tile, is `icons/app-icon.svg` (also `public/logo.svg`), from which
+  `icon.ico` and `icon.png` are generated; the p3.16 check samples the orange half
+  ([check-p3.22](../../raw/evidence/phase-p3-tabs-sessions/check-p3.22.txt); screenshots
+  [dark](../../raw/evidence/phase-p3-tabs-sessions/design/p3.22-look-dark.png) and
+  [light](../../raw/evidence/phase-p3-tabs-sessions/design/p3.22-look-light.png)).
 - p3.8, downloads (`downloads.rs`): files go to `[downloads] folder` (else the Windows Downloads folder) under the
   name WebView2 suggests (the file name only; a name already on disk or already given out in this run gets
   ` (1)`, ` (2)`, ...: nothing is ever replaced). The shell's downloads bar (top band) shows each download: percent and

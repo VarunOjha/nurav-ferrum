@@ -134,18 +134,64 @@ pub struct Downloads {
     pub folder: Option<PathBuf>,
 }
 
-/// `[appearance]`: how the shell looks (P3 feature set: p3.19 bookmarks bar; p3.22 theme, accent, density).
+/// A theme: a named set of colours for light and dark (adr-0033). The shell holds the colours; a new theme is a new
+/// name here and its colour record in the shell.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "kebab-case")]
+pub enum Theme {
+    /// Dark and metallic, neutral brushed grey (the owner's pick).
+    #[default]
+    Graphite,
+}
+
+/// The accent colour, applied on top of any theme.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "kebab-case")]
+pub enum Accent {
+    /// Orange (Ferrum's own).
+    #[default]
+    Orange,
+    /// Blue.
+    Blue,
+    /// Green.
+    Green,
+    /// Violet.
+    Violet,
+}
+
+/// How much room the browser's controls take.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "kebab-case")]
+pub enum Density {
+    /// Bigger click targets.
+    #[default]
+    Roomy,
+    /// More room for pages.
+    Compact,
+}
+
+/// `[appearance]`: how the shell looks (P3 feature set: p3.19 bookmarks bar; p3.22 theme, accent, density; adr-0033).
+/// Light or dark follows Windows; it is not a setting.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields, default)]
 pub struct Appearance {
     /// Show the bookmarks bar under the toolbar (Ctrl+Shift+B toggles it).
     pub bookmarks_bar: bool,
+    /// The theme.
+    pub theme: Theme,
+    /// The accent colour.
+    pub accent: Accent,
+    /// Roomy or compact.
+    pub density: Density,
 }
 
 impl Default for Appearance {
     fn default() -> Self {
         Appearance {
             bookmarks_bar: true,
+            theme: Theme::default(),
+            accent: Accent::default(),
+            density: Density::default(),
         }
     }
 }

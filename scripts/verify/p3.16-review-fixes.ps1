@@ -23,7 +23,7 @@
                    scripts/lib/Ferrum.Check.psm1, scripts/lib/Ferrum.SelfTest.ps1). Phase-page verify field:
     Shell unit tests cover the icon and page rules; smoke tests: a download opened in a new window completes, its
     extra tab closes and no error panel shows; a page's own icon appears in its tab, a page without one shows none;
-    the program file carries the new icon (orange, not the old dark square).
+    the program file carries the new icon (orange, not the old dark square; since p3.22 the split tile's orange half).
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
@@ -60,8 +60,9 @@ Invoke-Step 'The program file carries the new app icon' {
     if (-not (Test-Path -LiteralPath $exe)) { Stop-Fail 'target/debug/ferrum-desktop.exe is missing.' }
     $bmp = [System.Drawing.Icon]::ExtractAssociatedIcon($exe).ToBitmap()
     try {
-        # A point on the orange tile, away from the white F (upper right).
-        $p = $bmp.GetPixel([int]($bmp.Width * 0.85), [int]($bmp.Height * 0.2))
+        # A point on the orange part, away from the letters (upper left; since p3.22 the logo is the split tile,
+        # orange top-left and graphite bottom-right, adr-0033).
+        $p = $bmp.GetPixel([int]($bmp.Width * 0.25), [int]($bmp.Height * 0.12))
     } finally { $bmp.Dispose() }
     if (-not ($p.R -ge 180 -and $p.G -ge 50 -and $p.G -le 150 -and $p.B -le 80)) {
         Stop-Fail "The program's icon is not the new orange one (sampled colour R$($p.R) G$($p.G) B$($p.B))."

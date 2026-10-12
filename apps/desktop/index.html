@@ -97,6 +97,16 @@
             <button id="set-add-site" type="button">Add a site</button>
           </fieldset>
           <fieldset>
+            <legend>Appearance</legend>
+            <p class="hint">Light or dark follows Windows. Changes apply at once.</p>
+            <label for="set-theme">Theme</label>
+            <select id="set-theme"></select>
+            <span id="set-accent-label">Accent colour</span>
+            <div id="set-accents" role="radiogroup" aria-labelledby="set-accent-label"></div>
+            <label for="set-density">Density</label>
+            <select id="set-density"></select>
+          </fieldset>
+          <fieldset>
             <legend>Downloads</legend>
             <label for="set-folder">Download folder (empty: your Downloads folder)</label>
             <input id="set-folder" type="text" spellcheck="false" />
@@ -149,6 +159,19 @@
           </fieldset>
         </form>
         <div class="settings-actions"><button id="backup-close" type="button">Close</button></div>
+      </section>
+      <!-- New-tab page (p3.22, adr-0033): covers an empty tab. -->
+      <section id="newtab-panel" aria-label="New tab" hidden>
+        <img class="nt-logo" src="/logo.svg" alt="Ferrum" />
+        <button id="nt-search" type="button">&#x1F50D;&#xFE0E; Search your bookmarks and history, or type an address</button>
+        <div>
+          <h2>Favourites</h2>
+          <div id="nt-tiles"></div>
+        </div>
+        <div>
+          <h2>Most visited</h2>
+          <div id="nt-most"></div>
+        </div>
       </section>
       <section id="empty-panel" hidden>
         <h1>No tabs open</h1>

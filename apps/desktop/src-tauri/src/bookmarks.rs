@@ -3,7 +3,7 @@
 //! addresses are accepted (`ferrum_core::store::check_url`). The bookmarks bar shows the "Favourites bar" folder; its
 //! visibility is `[appearance] bookmarks_bar` in the settings file.
 
-use ferrum_core::config;
+use ferrum_core::config::{self, Accent, Density, Theme};
 use ferrum_core::store::{BAR_FOLDER, Bookmark};
 use serde::Serialize;
 use tauri::{AppHandle, Manager};
@@ -74,34 +74,62 @@ pub fn bookmark_remove(lib: tauri::State<'_, Library>, id: i64) -> Result<bool, 
     Ok(gone)
 }
 
-/// What the shell needs to draw itself (p3.19; p3.22 adds the theme).
+/// What the shell needs to draw itself (p3.19 bookmarks bar; p3.22 theme, accent, density; adr-0033).
 #[derive(Debug, Clone, Serialize)]
 pub struct AppearanceView {
     /// Show the bookmarks bar.
     pub bookmarks_bar: bool,
     /// The folder the bookmarks bar shows.
     pub bar_folder: &'static str,
+    /// The theme's name.
+    pub theme: Theme,
+    /// The accent colour's name.
+    pub accent: Accent,
+    /// "roomy" or "compact".
+    pub density: Density,
 }
 
 /// The current appearance settings.
 #[tauri::command]
 pub fn appearance_get(app: AppHandle) -> AppearanceView {
-    let c = app.state::<AppConfig>().get();
+    let a = app.state::<AppConfig>().get().appearance;
     AppearanceView {
-        bookmarks_bar: c.appearance.bookmarks_bar,
+        bookmarks_bar: a.bookmarks_bar,
         bar_folder: BAR_FOLDER,
+        theme: a.theme,
+        accent: a.accent,
+        density: a.density,
     }
 }
 
-/// Changes appearance settings given (others stay) and saves them to the user settings file.
+/// A setting's value by its name in the settings file ("graphite", "violet", "compact"); unknown names are refused.
+fn named<T: serde::de::DeserializeOwned>(what: &str, name: &str) -> Result<T, String> {
+    serde_json::from_value(serde_json::Value::String(name.to_string()))
+        .map_err(|_| format!("unknown {what}: {name}"))
+}
+
+/// Changes the appearance settings given (the others stay) and saves them to the user settings file.
 #[tauri::command]
 pub fn appearance_set(
     app: AppHandle,
     bookmarks_bar: Option<bool>,
+    theme: Option<String>,
+    accent: Option<String>,
+    density: Option<String>,
 ) -> Result<AppearanceView, String> {
     let mut next = app.state::<AppConfig>().get();
+    let a = &mut next.appearance;
     if let Some(b) = bookmarks_bar {
-        next.appearance.bookmarks_bar = b;
+        a.bookmarks_bar = b;
+    }
+    if let Some(t) = &theme {
+        a.theme = named("theme", t)?;
+    }
+    if let Some(c) = &accent {
+        a.accent = named("accent colour", c)?;
+    }
+    if let Some(d) = &density {
+        a.density = named("density", d)?;
     }
     let Some(path) = app.state::<UserConfigPath>().0.clone() else {
         return Err("Ferrum does not know where its settings file is.".into());
@@ -109,6 +137,6 @@ pub fn appearance_set(
     let loaded = config::validate(next).map_err(|e| e.to_string())?;
     config::save(&path, &loaded.config).map_err(|e| e.to_string())?;
     *app.state::<AppConfig>().0.write().unwrap() = loaded;
-    tracing::info!(target: "ferrum::config", ?bookmarks_bar, "appearance saved");
+    tracing::info!(target: "ferrum::config", ?bookmarks_bar, ?theme, ?accent, ?density, "appearance saved");
     Ok(appearance_get(app))
 }

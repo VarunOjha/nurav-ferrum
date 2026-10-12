@@ -2,8 +2,15 @@
 // (tab_*) and shows what they report: event "tabs" (the tab list) and event "tab" (one tab view's events, with its
 // tab id). The toolbar always describes the active tab; every tab keeps its own toolbar state. P2 tasks p2.2-p2.8,
 // P3 tasks p3.2 (tabs) and p3.3 (strip and shortcuts).
+import "@fontsource/ibm-plex-sans/latin-400.css";
+import "@fontsource/ibm-plex-sans/latin-500.css";
+import "@fontsource/ibm-plex-sans/latin-600.css";
+import "@fontsource/ibm-plex-sans/latin-700.css";
+import "@fontsource/ibm-plex-mono/latin-400.css";
+import "@fontsource/ibm-plex-mono/latin-500.css";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { ACCENTS, DENSITIES, THEMES, applyLook } from "./themes.ts";
 import { addressText, agoText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
@@ -54,6 +61,14 @@ const newUi = (): TabUi => ({
 const DOWNLOAD_GRACE_MS = 3000;
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+
+// --- Look (p3.22, adr-0033): the theme's tokens are set before anything else draws; light or dark follows Windows. ---
+type Appearance = { bookmarks_bar: boolean; bar_folder: string; theme: string; accent: string; density: string };
+const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+let look = { theme: "graphite", accent: "orange", density: "roomy" };
+const paint = () => applyLook(document.documentElement, { ...look, mode: darkQuery.matches ? "dark" : "light" });
+paint();
+darkQuery.addEventListener("change", paint);
 const top = $<HTMLDivElement>("top");
 const tabsEl = $<HTMLDivElement>("tabs");
 const newTab = $<HTMLButtonElement>("new-tab");
@@ -131,6 +146,7 @@ function render(): void {
   statusEl.textContent = u?.status ?? "";
   // The star follows the active tab's page (an event: render can run before the bookmark code below has started).
   document.getElementById("star")?.dispatchEvent(new Event("ferrum-render"));
+  renderNewTab();
   if (u?.panel) {
     errorText.textContent = webErrorText(u.panel.webError);
     errorAddress.textContent = u.panel.uri;
@@ -517,7 +533,7 @@ $<HTMLButtonElement>("side-clear").addEventListener("click", async () => {
 
 // --- Bookmarks (p3.19, adr-0032): kept by the app in ferrum.db; the star, the bookmarks bar (the bar's folder), the
 // editor bar (both in the top band, so never under a page) and the sidebar's folders. ---
-type AppearanceView = { bookmarks_bar: boolean; bar_folder: string };
+type AppearanceView = Appearance;
 const star = $<HTMLButtonElement>("star");
 const bmBar = $<HTMLElement>("bookmarks-bar");
 const bmEditor = $<HTMLDivElement>("bm-editor");
@@ -527,7 +543,7 @@ const bmFolders = $<HTMLDataListElement>("bm-folders");
 const bmError = $<HTMLSpanElement>("bm-error");
 const sideBookmarks = $<HTMLDivElement>("side-bookmarks");
 let bookmarks: Bookmark[] = [];
-let appearance: AppearanceView = { bookmarks_bar: true, bar_folder: "Favourites bar" };
+let appearance: AppearanceView = { bookmarks_bar: true, bar_folder: "Favourites bar", theme: "graphite", accent: "orange", density: "roomy" };
 /** The bookmark the editor shows. */
 let editing: number | null = null;
 const activeUrl = (): string => activeUi()?.uri ?? "";
@@ -613,6 +629,15 @@ async function loadBookmarks(): Promise<void> {
   renderBar();
   renderSideBookmarks();
   renderStar();
+  void fillNewTab();
+}
+/** Takes the look from the app's appearance settings and repaints. */
+function useAppearance(a: AppearanceView): void {
+  appearance = a;
+  look = { theme: a.theme, accent: a.accent, density: a.density };
+  paint();
+  renderBar();
+  reportLayout();
 }
 function openEditor(b: Bookmark): void {
   editing = b.id;
@@ -654,8 +679,7 @@ async function bookmarkPage(): Promise<void> {
   openEditor(b);
 }
 async function toggleBookmarksBar(): Promise<void> {
-  appearance = await invoke<AppearanceView>("appearance_set", { bookmarksBar: !appearance.bookmarks_bar });
-  renderBar();
+  useAppearance(await invoke<AppearanceView>("appearance_set", { bookmarksBar: !appearance.bookmarks_bar }));
 }
 async function showBookmarks(): Promise<void> {
   if (sidebar.hidden) await toggleSidebar();
@@ -856,6 +880,8 @@ async function closeBackup(): Promise<void> {
     settingsCovering = null;
     if (!uiOf(id).panel) await invoke("shell_cover", { cover: false, tab: id });
   }
+  newtabCovering = null;
+  render();
 }
 $<HTMLFormElement>("bk-export-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -913,6 +939,100 @@ bkReplace.addEventListener("click", () => {
 $<HTMLButtonElement>("backup-close").addEventListener("click", () => void closeBackup());
 $<HTMLButtonElement>("side-backup").addEventListener("click", () => void openBackup());
 
+// --- New-tab page (p3.22, adr-0033): over an empty tab, the logo, a search box that opens the address bar, the
+// bookmarks bar's favourites and the most visited pages. The empty tab's view is hidden meanwhile (shell_cover). ---
+let newtabCovering: number | null = null;
+function isBlank(u: TabUi | undefined): boolean {
+  return Boolean(u) && (u!.uri === "" || u!.uri === "about:blank") && !u!.loading && !u!.panel;
+}
+function renderNewTab(): void {
+  const nt = document.getElementById("newtab-panel");
+  if (!nt) return; // render can run before the page's script has reached this point
+  const otherPanel = !(document.getElementById("settings-panel")?.hidden ?? true) || !(document.getElementById("backup-panel")?.hidden ?? true);
+  const show = list.active !== null && isBlank(activeUi()) && !otherPanel;
+  nt.hidden = !show;
+  const want = show ? list.active : null;
+  if (want === newtabCovering) return;
+  const before = newtabCovering;
+  newtabCovering = want;
+  if (before !== null && list.tabs.some((t) => t.id === before) && !uiOf(before).panel && settingsCovering !== before) {
+    void invoke("shell_cover", { cover: false, tab: before });
+  }
+  if (want !== null) {
+    void invoke("shell_cover", { cover: true, tab: want });
+    // Fresh favourites and most visited each time the page appears.
+    void loadBookmarks();
+  }
+}
+function letterTile(label: string): HTMLSpanElement {
+  const s = document.createElement("span");
+  s.className = "nt-letter";
+  s.textContent = (label.trim()[0] ?? "?").toUpperCase();
+  return s;
+}
+async function fillNewTab(): Promise<void> {
+  const tiles = document.getElementById("nt-tiles");
+  const most = document.getElementById("nt-most");
+  if (!tiles || !most) return;
+  const favs = bookmarkFolders(bookmarks, appearance.bar_folder)[0]!.items.slice(0, 12);
+  tiles.replaceChildren(...(favs.length ? favs.map((b) => {
+    const a = document.createElement("a");
+    a.href = "#";
+    a.title = b.url;
+    const name = Object.assign(document.createElement("span"), { className: "nt-name", textContent: b.title });
+    a.append(letterTile(b.title), name);
+    a.addEventListener("click", (e) => { e.preventDefault(); openUrl(b.url, e); });
+    return a;
+  }) : [Object.assign(document.createElement("p"), { className: "nt-empty", textContent: "Star a page (Ctrl+D) and it appears here." })]));
+  const entries = await invoke<HistoryEntry[]>("history_list", { query: null, limit: 500 });
+  const counts = new Map<string, { n: number; title: string }>();
+  for (const e of entries) {
+    const c = counts.get(e.url) ?? { n: 0, title: e.title };
+    c.n += 1;
+    if (!c.title) c.title = e.title;
+    counts.set(e.url, c);
+  }
+  const favUrls = new Set(favs.map((b) => b.url));
+  const top = [...counts.entries()].filter(([u]) => !favUrls.has(u)).sort((a, b) => b[1].n - a[1].n).slice(0, 6);
+  most.replaceChildren(...(top.length ? top.map(([url, c]) => {
+    const a = document.createElement("a");
+    a.href = "#";
+    a.title = url;
+    a.textContent = c.title || addressText(url);
+    a.addEventListener("click", (e) => { e.preventDefault(); openUrl(url, e); });
+    return a;
+  }) : [Object.assign(document.createElement("p"), { className: "nt-empty", textContent: "Pages you visit often appear here." })]));
+}
+$<HTMLButtonElement>("nt-search").addEventListener("click", () => focusAddress());
+
+// --- Appearance in the settings screen (p3.22): applied and saved at once. ---
+const setTheme = $<HTMLSelectElement>("set-theme");
+const setDensity = $<HTMLSelectElement>("set-density");
+const setAccents = $<HTMLDivElement>("set-accents");
+function fillAppearance(): void {
+  setTheme.replaceChildren(...Object.values(THEMES).map((t) => Object.assign(document.createElement("option"), { value: t.name, textContent: t.label, selected: t.name === appearance.theme })));
+  setDensity.replaceChildren(...Object.entries(DENSITIES).map(([k, d]) => Object.assign(document.createElement("option"), { value: k, textContent: d.label, selected: k === appearance.density })));
+  setAccents.replaceChildren(...Object.entries(ACCENTS).map(([k, a]) => {
+    const label = document.createElement("label");
+    const input = Object.assign(document.createElement("input"), { type: "radio", name: "set-accent", value: k, checked: k === appearance.accent });
+    const sw = document.createElement("span");
+    sw.className = "swatch";
+    sw.style.background = darkQuery.matches ? a.dark : a.light;
+    input.addEventListener("change", () => void saveAppearance({ accent: k }));
+    label.append(input, sw, a.label);
+    return label;
+  }));
+}
+async function saveAppearance(change: { theme?: string; accent?: string; density?: string }): Promise<void> {
+  try {
+    useAppearance(await invoke<AppearanceView>("appearance_set", change));
+  } catch (err) {
+    settingsStatus.textContent = String(err);
+  }
+}
+setTheme.addEventListener("change", () => void saveAppearance({ theme: setTheme.value }));
+setDensity.addEventListener("change", () => void saveAppearance({ density: setDensity.value }));
+
 // --- Settings (p3.14): shown in the content area; the app checks and saves (settings.rs). ---
 type SiteRow = { site: string; profile: string };
 type SettingsView = {
@@ -963,6 +1083,7 @@ function fillSettings(v: SettingsView): void {
 async function openSettings(): Promise<void> {
   await closeBackup();
   fillSettings(await invoke<SettingsView>("settings_get"));
+  fillAppearance();
   settingsErrors.replaceChildren();
   settingsStatus.textContent = "";
   settingsPanel.hidden = false;
@@ -981,6 +1102,9 @@ async function closeSettings(): Promise<void> {
     // Keep the tab hidden if its own error panel still covers it.
     if (!uiOf(id).panel) await invoke("shell_cover", { cover: false, tab: id });
   }
+  // An empty tab gets its new-tab page back.
+  newtabCovering = null;
+  render();
 }
 settingsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -1111,7 +1235,7 @@ newTab.addEventListener("click", async () => {
 
 // Start: the tab list the app already has, the bookmarks, then report the layout.
 applyList(await invoke<TabList>("tab_list"));
-appearance = await invoke<AppearanceView>("appearance_get");
+useAppearance(await invoke<AppearanceView>("appearance_get"));
 await loadBookmarks();
 reportLayout();
 

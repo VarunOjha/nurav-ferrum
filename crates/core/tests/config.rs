@@ -301,3 +301,38 @@ fn appearance_defaults_and_round_trip() {
         .is_err()
     );
 }
+
+#[test]
+fn appearance_theme_accent_density() {
+    // p3.22 (adr-0033): Graphite, orange and roomy by default; known names only.
+    use ferrum_core::config::{Accent, Density, Theme};
+    let c = ferrum_core::config::parse("version = 2\n", Path::new("t.toml")).unwrap();
+    assert_eq!(
+        (
+            c.appearance.theme,
+            c.appearance.accent,
+            c.appearance.density
+        ),
+        (Theme::Graphite, Accent::Orange, Density::Roomy)
+    );
+    let c = ferrum_core::config::parse(
+        "version = 2\n[appearance]\ntheme = \"graphite\"\naccent = \"violet\"\ndensity = \"compact\"\n",
+        Path::new("t.toml"),
+    )
+    .unwrap();
+    assert_eq!(
+        (c.appearance.accent, c.appearance.density),
+        (Accent::Violet, Density::Compact)
+    );
+    for bad in [
+        "theme = \"neon\"",
+        "accent = \"pink\"",
+        "density = \"huge\"",
+    ] {
+        let text = format!("version = 2\n[appearance]\n{bad}\n");
+        assert!(
+            ferrum_core::config::parse(&text, Path::new("t.toml")).is_err(),
+            "{bad}"
+        );
+    }
+}

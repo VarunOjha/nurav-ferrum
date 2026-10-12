@@ -1,0 +1,30 @@
+Ferrum check p3.22: The Graphite look and the split-tile logo
+Why: the look must match your pick, and every colour must come from a theme.
+Run at 2026-10-12 16:30 on commit bea2754 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Settings tests: theme, accent, density
+         appearance_theme_accent_density: ok
+  PASS   Shell unit tests: themes are data, no colour outside a theme
+         npm test: pass
+  ✓  15 look.spec.ts:29:1 › an empty tab shows the new-tab page; its search box opens the address bar (970ms)
+  ✓  16 look.spec.ts:53:1 › accent colour and density change at once from Settings and are saved (637ms)
+  ✓  17 look.spec.ts:71:1 › the shell loads only its own fonts and files; less motion when Windows asks (39ms)
+  ✓  18 settings.spec.ts:18:1 › change settings, see them take effect, restart, still there (4.4s)
+  ✓  19 settings.spec.ts:65:1 › invalid input is refused with plain messages; the file is unchanged (2.1s)
+  ✓  20 sidebar.spec.ts:25:1 › open and close: the tab view shrinks and grows, never overlapping (424ms)
+  ✓  21 sidebar.spec.ts:41:1 › choosing a tab or a history entry in the sidebar (683ms)
+  ✓  22 sidebar.spec.ts:60:1 › Ctrl+Shift+S toggles it from the shell and from inside a page (2.5s)
+  ✓  23 startup.spec.ts:18:1 › start-up sites open as tabs, in order, the first active (2.1s)
+  ✓  24 startup.spec.ts:28:1 › an unreadable user settings file is backed up; Ferrum starts with the defaults (1.6s)
+  ✓  25 startup.spec.ts:42:1 › a settings file from a newer Ferrum is left untouched (1.7s)
+  ✓  26 tabs.spec.ts:20:1 › 20 tabs: one view each, only the active one shown, all released on close (4.1s)
+  ✓  27 tabs.spec.ts:69:1 › a tab shows its site's icon (p3.16) (1.5s)
+  27 passed (1.0m)
+  PASS   Smoke tests: the look, and the parts it could disturb (72 s)
+         look and neighbours: 27 passed
+  PASS   The program file carries the split-tile logo
+         orange (R248 G134 B50) and graphite (R40 G43 B48)
+------------------------------------------------------------------------
+RESULT: PASS - p3.22 (4 PASS; 73 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.22 check passed".

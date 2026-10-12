@@ -1,13 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <!-- Ferrum app icon (p3.16): a solid rust-orange tile with a white F, readable on light and dark taskbars.
-       Source of icon.ico and icon.png (Tauri CLI: tauri icon icons/app-icon.svg). -->
+  <!-- Ferrum app icon, logo 8 "split tile" (p3.22, adr-0033): a rounded tile cut on the diagonal, orange top-left and
+       graphite bottom-right, with Fe (F dark on orange, e light on graphite). Source of icon.ico and icon.png
+       (Tauri CLI: tauri icon icons/app-icon.svg). -->
   <defs>
-    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#F97316"/>
-      <stop offset="1" stop-color="#C2410C"/>
+    <clipPath id="tile"><rect x="40" y="40" width="944" height="944" rx="200"/></clipPath>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FB923C"/>
+      <stop offset="1" stop-color="#EA580C"/>
+    </linearGradient>
+    <linearGradient id="graphite" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#454A51"/>
+      <stop offset="1" stop-color="#1F2226"/>
     </linearGradient>
   </defs>
-  <rect x="40" y="40" width="944" height="944" rx="200" fill="url(#tile)"/>
-  <rect x="48" y="48" width="928" height="928" rx="192" fill="none" stroke="#7C2D12" stroke-opacity="0.45" stroke-width="16"/>
-  <path fill="#FFFFFF" d="M318 232h420v136H466v120h236v132H466v172H318z"/>
+  <g clip-path="url(#tile)">
+    <rect x="0" y="0" width="1024" height="1024" fill="url(#graphite)"/>
+    <polygon points="0,0 1024,0 0,1024" fill="url(#orange)"/>
+  </g>
+  <rect x="48" y="48" width="928" height="928" rx="192" fill="none" stroke="#111316" stroke-opacity="0.5" stroke-width="16"/>
+  <!-- F, on the orange half. -->
+  <path fill="#1A1D20" d="M190 210h370v100H300v90h170v90H300v170H190z"/>
+  <!-- e, on the graphite half. -->
+  <path fill="none" stroke="#F4F5F6" stroke-width="78" stroke-linecap="butt" d="M850 700A150 150 0 1 0 823 786"/>
+  <path fill="none" stroke="#F4F5F6" stroke-width="78" d="M552 700H889"/>
 </svg>

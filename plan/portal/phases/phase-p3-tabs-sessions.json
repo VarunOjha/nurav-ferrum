@@ -261,7 +261,7 @@
       "status": "In progress",
       "chain": "You chose a design → Claude applies it everywhere → Ferrum looks the way you picked.",
       "check": "Tests pass; a test fails if a colour is written outside the theme; light and dark screenshots for you to compare with the design; the program shows the split-tile logo.",
-      "script": null
+      "script": "scripts/verify/p3.22-look.ps1"
     },
     {
       "id": "p3.23",

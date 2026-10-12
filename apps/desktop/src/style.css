@@ -1,16 +1,9 @@
-/* Ferrum shell (adr-0028 look, P2 subset: toolbar only). Calm warm grey, one rust-orange accent. */
+/* Ferrum shell. Look: adr-0033 (Graphite, dark and metallic, following Windows light and dark), layout adr-0028.
+   Every colour and size below is a theme token (--name), set by src/themes.ts from the theme, the accent colour and
+   the density in the settings; this file writes no colour of its own (a unit test checks). Fonts: IBM Plex, bundled
+   with the app (no remote fonts). */
 :root {
-  --bg: #ecebe8;
-  --surface: #f7f6f4;
-  --text: #2b2a28;
-  --muted: #6f6c66;
-  --accent: #b5562a;
-  --border: #d6d3cd;
-  font: 13px "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  color-scheme: light dark;
-}
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #232220; --surface: #2d2c2a; --text: #ecebe8; --muted: #a8a49c; --border: #3d3b38; }
+  font: var(--font-size, 13px) "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
 }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); overflow: hidden; }
 /* The shell fills the window; tab views are placed over #content-area by the app (the top band's height is reported
@@ -18,23 +11,23 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
 body { display: flex; flex-direction: column; }
 #top { flex: none; }
 #middle { flex: 1; display: flex; min-height: 0; }
-#content-area { flex: 1; position: relative; overflow: auto; background: var(--surface); min-width: 0; }
+#content-area { flex: 1; position: relative; overflow: auto; background: var(--page); min-width: 0; }
 /* Sidebar (p3.15). */
-#sidebar { flex: none; width: 260px; box-sizing: border-box; padding: 12px; border-right: 1px solid var(--border); overflow: auto; background: var(--bg); }
+#sidebar { flex: none; width: 264px; box-sizing: border-box; padding: 12px; border-right: 1px solid var(--border); overflow: auto; background: var(--chrome); }
 #sidebar[hidden] { display: none; }
 #sidebar h2 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 8px 0 6px; }
 #sidebar ul { list-style: none; margin: 0 0 12px; padding: 0; }
 #sidebar li button { display: block; width: 100%; text-align: left; padding: 6px 8px; border: 0; border-radius: 8px; background: transparent; color: var(--text); font: inherit; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#sidebar li button:hover { background: var(--surface); }
-#sidebar li button[aria-current="true"] { box-shadow: inset 3px 0 0 var(--accent); background: var(--surface); }
+#sidebar li button:hover { background: var(--sel); }
+#sidebar li button[aria-current="true"] { box-shadow: inset 3px 0 0 var(--accent); background: var(--sel); }
 #sidebar li .side-url { display: block; font: 11px "IBM Plex Mono", Consolas, monospace; color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
-#side-search { width: 100%; box-sizing: border-box; margin-bottom: 6px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; }
+#side-search { width: 100%; box-sizing: border-box; margin-bottom: 6px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--field); color: var(--text); font: inherit; }
 #side-clear { padding: 4px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
 /* Tab strip (P3): one row under the normal Windows title bar (owner answer Q-125). */
-#tabstrip { display: flex; align-items: flex-end; gap: 4px; height: 36px; padding: 0 8px; box-sizing: border-box; }
+#tabstrip { display: flex; align-items: flex-end; gap: 4px; height: var(--tab-h); padding: 0 8px; box-sizing: border-box; background: var(--brush), linear-gradient(180deg, var(--raised), var(--chrome)); }
 #tabs { display: flex; gap: 2px; min-width: 0; overflow: hidden; }
-.tab { display: flex; align-items: center; gap: 6px; width: 200px; min-width: 48px; flex: 0 1 auto; height: 30px; padding: 0 6px 0 12px; box-sizing: border-box; border-radius: 8px 8px 0 0; color: var(--muted); cursor: default; user-select: none; }
-.tab:hover { background: var(--surface); }
+.tab { display: flex; align-items: center; gap: 8px; width: 200px; min-width: 48px; flex: 0 1 auto; height: calc(var(--tab-h) - 6px); padding: 0 6px 0 10px; box-sizing: border-box; border-radius: 8px 8px 0 0; color: var(--muted); cursor: default; user-select: none; transition: background-color 120ms ease, color 120ms ease; }
+.tab:hover { background: var(--sel); }
 .tab[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: inset 0 2px 0 var(--accent); }
 .tab.dragging { opacity: 0.5; }
 .tab-icon { width: 16px; height: 16px; flex: none; object-fit: contain; }
@@ -45,7 +38,7 @@ body { display: flex; flex-direction: column; }
 .tab-close { width: 20px; height: 20px; border: 0; border-radius: 6px; background: transparent; color: inherit; font-size: 14px; line-height: 1; cursor: pointer; }
 .tab-close:hover { background: var(--border); }
 .strip-btn { width: 28px; height: 28px; margin-bottom: 1px; border: 0; border-radius: 8px; background: transparent; color: var(--text); font-size: 18px; cursor: pointer; }
-.strip-btn:hover { background: var(--surface); }
+.strip-btn:hover { background: var(--sel); }
 #empty-panel { padding: 48px 56px; color: var(--muted); }
 /* Settings (p3.14): drawn in the content area while the active tab's view is hidden. */
 #settings-panel { padding: 32px 56px; max-width: 760px; }
@@ -54,22 +47,22 @@ body { display: flex; flex-direction: column; }
 #settings-panel legend { font-weight: 600; padding: 0 6px; }
 #settings-panel label { display: block; margin: 6px 0 4px; }
 #settings-panel label.check { display: flex; gap: 8px; align-items: center; }
-#settings-panel textarea, #settings-panel input[type="text"] { width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: 13px "IBM Plex Mono", Consolas, monospace; }
+#settings-panel textarea, #settings-panel input[type="text"], #settings-panel select { width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--field); color: var(--text); font: 13px "IBM Plex Mono", Consolas, monospace; }
 #settings-panel table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
 #settings-panel th { text-align: left; font-weight: 600; color: var(--muted); padding: 4px; }
 #settings-panel td { padding: 2px 4px; }
 #settings-panel button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
-#settings-save { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+#settings-save { background: var(--accent) !important; border-color: var(--accent) !important; color: var(--on-accent) !important; }
 #settings-errors { color: var(--accent); margin: 0 0 8px; padding-left: 18px; }
 .settings-actions { display: flex; gap: 8px; align-items: center; }
 #settings-panel .hint { color: var(--muted); }
 #empty-panel h1 { font-size: 20px; font-weight: 600; margin: 0 0 12px; color: var(--text); }
-#toolbar { position: relative; display: flex; align-items: center; gap: 6px; height: 52px; padding: 0 10px; box-sizing: border-box; border-bottom: 1px solid var(--border); background: var(--surface); }
+#toolbar { position: relative; display: flex; align-items: center; gap: 6px; height: var(--bar-h); padding: 0 10px; box-sizing: border-box; border-bottom: 1px solid var(--border); background: var(--surface); }
 .nav { width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--text); font-size: 16px; cursor: pointer; }
-.nav:hover:not(:disabled) { background: var(--surface); }
+.nav:hover:not(:disabled) { background: var(--sel); }
 .nav:disabled { color: var(--muted); opacity: 0.5; cursor: default; }
-#address-form { flex: 1; display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 17px; background: var(--surface); border: 1px solid var(--border); }
-#address-form:focus-within { border-color: var(--accent); }
+#address-form { flex: 1; display: flex; align-items: center; gap: 6px; height: calc(var(--bar-h) - 16px); padding: 0 6px 0 14px; border-radius: 18px; background: var(--field); border: 1px solid var(--border); transition: border-color 120ms ease, box-shadow 120ms ease; }
+#address-form:focus-within { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 #lock { font-size: 12px; opacity: 0.7; }
 #address { flex: 1; border: 0; outline: 0; background: transparent; color: var(--text); font: 13px "IBM Plex Mono", Consolas, monospace; }
 #status { min-width: 0; max-width: 30%; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -90,7 +83,7 @@ body { display: flex; flex-direction: column; }
 #error-panel p { color: var(--muted); line-height: 1.5; margin: 8px 0; }
 #error-address { font: 12px "IBM Plex Mono", Consolas, monospace; word-break: break-all; }
 #error-code { font: 11px "IBM Plex Mono", Consolas, monospace; opacity: 0.7; }
-#error-retry { margin-top: 16px; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; font: inherit; cursor: pointer; }
+#error-retry { margin-top: 16px; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); font: inherit; cursor: pointer; }
 /* Uses the theme tokens so text and background follow light and dark mode together (owner checklist 2026-10-12: the
    bar was light-on-light in dark mode). The accent edge marks it as a question from Ferrum, not part of the site. */
 #external-bar { display: flex; align-items: center; gap: 12px; height: 44px; box-sizing: border-box; padding: 0 16px 0 13px; border-bottom: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface); color: var(--text); }
@@ -107,26 +100,26 @@ body { display: flex; flex-direction: column; }
 #downloads button { padding: 4px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
 #external-uri { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
 #external-bar button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
-#external-open { background: var(--accent) !important; color: #fff !important; }
+#external-open { background: var(--accent) !important; color: var(--on-accent) !important; }
 
 /* Bookmarks (p3.19): star in the address bar, the bookmarks bar, the editor bar and the sidebar's folders. */
 #star { flex: none; width: 26px; height: 26px; border: 0; border-radius: 13px; background: transparent; color: var(--muted); font-size: 16px; line-height: 1; cursor: pointer; }
 #star[aria-pressed="true"] { color: var(--accent); }
 #star:disabled { opacity: 0.35; cursor: default; }
-#bookmarks-bar { display: flex; align-items: center; gap: 2px; height: 32px; box-sizing: border-box; padding: 0 10px; border-bottom: 1px solid var(--border); background: var(--bg); overflow: hidden; }
+#bookmarks-bar { display: flex; align-items: center; gap: 2px; height: var(--bm-h); box-sizing: border-box; padding: 0 10px; border-bottom: 1px solid var(--border); background: var(--surface); overflow: hidden; }
 #bookmarks-bar[hidden] { display: none; }
 #bookmarks-bar a { display: flex; align-items: center; gap: 6px; height: 24px; max-width: 180px; padding: 0 8px; border-radius: 6px; color: var(--text); text-decoration: none; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#bookmarks-bar a:hover, #bookmarks-bar a:focus-visible { background: var(--surface); }
+#bookmarks-bar a:hover, #bookmarks-bar a:focus-visible { background: var(--sel); }
 #bookmarks-bar .bm-empty { font-size: 12px; color: var(--muted); }
 #bm-editor { display: flex; align-items: center; gap: 8px; height: 44px; box-sizing: border-box; padding: 0 16px 0 13px; border-bottom: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface); color: var(--text); font-size: 13px; }
 #bm-editor[hidden] { display: none; }
 #bm-editor-title { font-weight: 600; }
-#bm-editor input { width: 220px; height: 28px; box-sizing: border-box; padding: 0 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; }
+#bm-editor input { width: 220px; height: 28px; box-sizing: border-box; padding: 0 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--field); color: var(--text); font: inherit; }
 #bm-editor button { padding: 5px 12px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
 #bm-error { color: var(--accent); font-size: 12px; }
 #side-bookmarks details { margin: 0 0 4px; }
 #side-bookmarks summary { padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 13px; }
-#side-bookmarks summary:hover { background: var(--surface); }
+#side-bookmarks summary:hover { background: var(--sel); }
 #side-bookmarks ul { margin: 0 0 6px 12px; }
 #side-bookmarks li { display: flex; align-items: center; }
 #side-bookmarks li > button.bm-open { flex: 1; min-width: 0; }
@@ -138,22 +131,50 @@ body { display: flex; flex-direction: column; }
 #suggest[hidden] { display: none; }
 #suggest .sg-head { padding: 8px 10px 4px; font: 600 10.5px "IBM Plex Mono", Consolas, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 #suggest .sg-row { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 8px; cursor: pointer; }
-#suggest .sg-row[aria-selected="true"] { background: var(--bg); box-shadow: inset 2px 0 0 var(--accent); }
-#suggest .sg-row:hover { background: var(--bg); }
+#suggest .sg-row[aria-selected="true"] { background: var(--sel); box-shadow: inset 2px 0 0 var(--accent); }
+#suggest .sg-row:hover { background: var(--sel); }
 #suggest .sg-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 45%; }
 #suggest .sg-title mark { background: transparent; color: var(--accent); font-weight: 700; }
 #suggest .sg-url { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--muted); font-size: 12px; }
 #suggest .sg-tag { flex: none; font: 11px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
-#suggest .sg-tag.sg-switch { padding: 2px 8px; border-radius: 10px; background: var(--bg); color: var(--text); font-family: inherit; }
+#suggest .sg-tag.sg-switch { padding: 2px 8px; border-radius: 10px; background: var(--sel); color: var(--text); font-family: inherit; }
 #suggest .sg-hints { display: flex; gap: 14px; padding: 8px 10px 2px; margin-top: 4px; border-top: 1px solid var(--border); font: 11px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
 
 /* Backup and restore (p3.21): laid out like the settings screen. */
 #backup-panel { max-width: 720px; margin: 0 auto; padding: 24px 32px; }
 #backup-panel[hidden] { display: none; }
 #backup-panel fieldset { display: flex; flex-direction: column; gap: 6px; margin: 0 0 18px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; }
-#backup-panel input { height: 30px; box-sizing: border-box; padding: 0 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: 13px "IBM Plex Mono", Consolas, monospace; }
+#backup-panel input { height: 30px; box-sizing: border-box; padding: 0 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--field); color: var(--text); font: 13px "IBM Plex Mono", Consolas, monospace; }
 #backup-panel button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
 #backup-panel [role="status"] { font-size: 13px; }
 #backup-panel .bad { color: var(--accent); }
 #side-backup { margin-top: 8px; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
 #backup-panel [hidden] { display: none; }
+
+/* New-tab page (p3.22, adr-0033): shown over an empty tab: the logo, a search box that opens the address bar,
+   favourites (the bookmarks bar's folder) and the most visited pages. */
+#newtab-panel { display: flex; flex-direction: column; align-items: center; gap: 26px; padding: 72px 24px 24px; }
+#newtab-panel[hidden] { display: none; }
+#newtab-panel .nt-logo { width: 72px; height: 72px; }
+#nt-search { width: min(600px, 100%); height: 52px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 18px; border-radius: 26px; border: 1px solid var(--border); background: var(--field); color: var(--muted); font: 15px "IBM Plex Sans", "Segoe UI", sans-serif; text-align: left; cursor: text; box-shadow: 0 0 0 3px var(--sel); }
+#nt-search:hover, #nt-search:focus-visible { border-color: var(--accent); outline: none; }
+#newtab-panel h2 { margin: 0 0 10px; text-align: center; font: 600 11px "IBM Plex Mono", Consolas, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#nt-tiles { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; max-width: 660px; }
+#nt-tiles a { width: 96px; height: 96px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 0 6px; border-radius: 14px; border: 1px solid var(--border); background: var(--raised); color: var(--text); text-decoration: none; font-size: 12px; transition: border-color 120ms ease, transform 120ms ease; }
+#nt-tiles a:hover, #nt-tiles a:focus-visible { border-color: var(--accent); transform: translateY(-1px); outline: none; }
+#nt-tiles .nt-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nt-letter { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: var(--sel); color: var(--text); font-weight: 600; font-size: 15px; }
+#nt-most { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+#nt-most a { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border-radius: 17px; border: 1px solid var(--border); background: var(--raised); color: var(--text); text-decoration: none; font-size: 12px; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#nt-most a:hover, #nt-most a:focus-visible { border-color: var(--accent); outline: none; }
+.nt-empty { color: var(--muted); font-size: 12px; text-align: center; }
+/* Appearance in the settings screen (p3.22). */
+#set-accents { display: flex; gap: 10px; }
+#set-accents label { display: flex !important; align-items: center; gap: 6px; margin: 0 !important; }
+.swatch { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid var(--border); }
+/* Gentle motion; none when Windows' "Animation effects" is off (prefers-reduced-motion). */
+#suggest:not([hidden]), #bm-editor:not([hidden]), #newtab-panel:not([hidden]) { animation: ferrum-fade 120ms ease-out; }
+@keyframes ferrum-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
