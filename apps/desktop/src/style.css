@@ -24,6 +24,7 @@ body { display: flex; flex-direction: column; }
 .tab { display: flex; align-items: center; gap: 6px; width: 200px; min-width: 48px; flex: 0 1 auto; height: 30px; padding: 0 6px 0 12px; box-sizing: border-box; border-radius: 8px 8px 0 0; color: var(--muted); cursor: default; user-select: none; }
 .tab:hover { background: var(--surface); }
 .tab[aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: inset 0 2px 0 var(--accent); }
+.tab.dragging { opacity: 0.5; }
 .tab-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tab.loading .tab-label::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--accent); animation: ferrum-pulse 1s ease-in-out infinite alternate; }
 @keyframes ferrum-pulse { from { opacity: 0.25; } to { opacity: 1; } }

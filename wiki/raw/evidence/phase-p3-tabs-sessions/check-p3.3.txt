@@ -1,0 +1,25 @@
+Ferrum check p3.3: Tab strip and keyboard shortcuts
+Why: shortcuts work everywhere, and pages still cannot reach the app.
+Run at 2026-10-12 01:40 on commit a2bd5fe (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Shortcut table: Rust and shell unit tests (1 s)
+         ferrum-core shortcuts: 4 passed; shell unit tests pass (shortcut table included)
+Running 9 tests using 1 worker
+  ✓  1 shortcuts.spec.ts:60:5 › focus in the shell › switching: Ctrl+1, Ctrl+9, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Page Down, Ctrl+Page Up (733ms)
+  ✓  2 shortcuts.spec.ts:75:5 › focus in the shell › new, close, reopen: Ctrl+T, Ctrl+W, Ctrl+Shift+T (827ms)
+  ✓  3 shortcuts.spec.ts:88:5 › focus in the shell › address bar: Ctrl+L, Alt+D, F6 (663ms)
+  ✓  4 shortcuts.spec.ts:96:5 › focus in the shell › back, forward, reload: Alt+Left, Alt+Right, F5, Ctrl+R (937ms)
+  ✓  5 shortcuts.spec.ts:60:5 › focus in the page › switching: Ctrl+1, Ctrl+9, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Page Down, Ctrl+Page Up (7.5s)
+  ✓  6 shortcuts.spec.ts:75:5 › focus in the page › new, close, reopen: Ctrl+T, Ctrl+W, Ctrl+Shift+T (4.2s)
+  ✓  7 shortcuts.spec.ts:88:5 › focus in the page › address bar: Ctrl+L, Alt+D, F6 (4.4s)
+  ✓  8 shortcuts.spec.ts:96:5 › focus in the page › back, forward, reload: Alt+Left, Alt+Right, F5, Ctrl+R (5.1s)
+  ✓  9 shortcuts.spec.ts:117:1 › inside a page, Ferrum's shortcuts never reach the page; ordinary keys do (2.4s)
+  9 passed (37.3s)
+  PASS   Smoke test: every shortcut with focus in the shell and in a page (60 s)
+         shortcuts: 9 passed
+  PASS   The p2.3 bridge lockdown test still passes (59 s)
+         p2.3: PASS
+------------------------------------------------------------------------
+RESULT: PASS - p3.3 (3 PASS; 120 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.3 check passed".

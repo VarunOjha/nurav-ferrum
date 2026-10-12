@@ -155,6 +155,14 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   the tab id) and `link` (links to other apps, Google sign-in, blocked requests). `shell_cover` takes the tab id. Tab
   creation is never awaited by a caller: commands that create views are async and only queue the work on the UI
   thread (p3.10).
+- p3.3, shortcuts and strip: Ctrl+T new tab (cursor in the address bar), Ctrl+W or Ctrl+F4 close, Ctrl+Tab or
+  Ctrl+Page Down next, Ctrl+Shift+Tab or Ctrl+Page Up previous, Ctrl+Shift+T reopen, Ctrl+1 to Ctrl+8 a tab by
+  position, Ctrl+9 the last tab, Ctrl+L, Alt+D or F6 the address bar, Alt+Left back, Alt+Right forward, F5 or Ctrl+R
+  reload; Ctrl+Shift+S (sidebar) and Ctrl+Comma (settings) arrive with p3.15 and p3.14. Keys pressed in the shell are
+  handled by the shell (`logic.ts`, `shortcutFor`); keys pressed in a page by the app (`shortcuts.rs`, through
+  WebView2's accelerator-key hook; the page never sees them). Event `shell-command` asks the shell to focus its
+  address bar. Tabs can be dragged to reorder them and closed with a middle click. Debug-only `test_focus` puts
+  focus in a page or the shell for the real-key smoke tests ([check-p3.3](../../raw/evidence/phase-p3-tabs-sessions/check-p3.3.txt)).
 - New windows: `new_window = "new-tab"` is the new default (`same-view` and `system-browser` stay). One tab may open
   at most one new tab per second; further requests are blocked with "Pop-up blocked" on that tab. WebView2's
   user-initiated flag is not used (it was `true` for a script-only pop-up). A real pop-up policy is P4 work.

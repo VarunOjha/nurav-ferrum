@@ -82,3 +82,43 @@ export function tabLabel(title: string, url: string): string {
   if (!url || url === "about:blank") return "New tab";
   return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
+
+/** A key press in the shell (the parts of a KeyboardEvent the shortcut table needs). */
+export type ShellKey = { key: string; ctrl: boolean; shift: boolean; alt: boolean };
+
+/**
+ * Ferrum's shortcut for a key pressed in the shell, by name, or null when the key is the shell's normal typing.
+ * The same table as `ferrum_core::shortcuts` (keys pressed inside a page are handled there).
+ */
+export function shortcutFor(k: ShellKey): string | null {
+  const key = k.key.length === 1 ? k.key.toLowerCase() : k.key;
+  if (k.ctrl && !k.shift && !k.alt) {
+    if (key === "t") return "new-tab";
+    if (key === "w" || key === "F4") return "close-tab";
+    if (key === "Tab" || key === "PageDown") return "next-tab";
+    if (key === "PageUp") return "previous-tab";
+    if (key === "l") return "focus-address";
+    if (key === "r") return "reload";
+    if (key === ",") return "settings";
+    if (/^[1-8]$/.test(key)) return `select-tab-${key}`;
+    if (key === "9") return "last-tab";
+    return null;
+  }
+  if (k.ctrl && k.shift && !k.alt) {
+    if (key === "Tab") return "previous-tab";
+    if (key === "t") return "reopen-tab";
+    if (key === "s") return "toggle-sidebar";
+    return null;
+  }
+  if (!k.ctrl && !k.shift && k.alt) {
+    if (key === "ArrowLeft") return "back";
+    if (key === "ArrowRight") return "forward";
+    if (key === "d") return "focus-address";
+    return null;
+  }
+  if (!k.ctrl && !k.shift && !k.alt) {
+    if (key === "F5") return "reload";
+    if (key === "F6") return "focus-address";
+  }
+  return null;
+}

@@ -20,21 +20,34 @@ use std::rc::Rc;
 
 use webview2_com::Microsoft::Web::WebView2::Win32::*;
 use webview2_com::{
-    CreateCoreWebView2ControllerCompletedHandler, DocumentTitleChangedEventHandler,
-    FocusChangedEventHandler, HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
-    NavigationCompletedEventHandler, NavigationStartingEventHandler,
-    NewWindowRequestedEventHandler, SourceChangedEventHandler, take_pwstr,
+    AcceleratorKeyPressedEventHandler, CreateCoreWebView2ControllerCompletedHandler,
+    DocumentTitleChangedEventHandler, FocusChangedEventHandler, HistoryChangedEventHandler,
+    LaunchingExternalUriSchemeEventHandler, NavigationCompletedEventHandler,
+    NavigationStartingEventHandler, NewWindowRequestedEventHandler, SourceChangedEventHandler,
+    take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows_core::{BOOL, HSTRING, Interface, PWSTR};
 
 use crate::Error;
-use crate::tab::{NavDecision, NavRequest, TabEvent};
+use crate::tab::{KeyDown, NavDecision, NavRequest, TabEvent};
 
 /// Receives tab events (UI thread).
 pub type EventSink = Rc<dyn Fn(TabEvent)>;
 /// Decides whether a top-level navigation may start (UI thread).
 pub type NavGate = Rc<dyn Fn(&NavRequest) -> NavDecision>;
+/// Decides whether a key pressed in the view is Ferrum's (true: handled, the page never sees it) (UI thread).
+pub type KeyFilter = Rc<dyn Fn(KeyDown) -> bool>;
+
+/// What a tab view reports to, and asks of, the app.
+pub struct Handlers {
+    /// Receives the view's events.
+    pub sink: EventSink,
+    /// Decides each top-level navigation.
+    pub gate: NavGate,
+    /// Takes Ferrum's keyboard shortcuts.
+    pub keys: KeyFilter,
+}
 
 fn hr<T>(r: windows_core::Result<T>) -> Result<T, Error> {
     r.map_err(|e| Error::Com {
@@ -53,6 +66,7 @@ enum Ev {
     GotFocus,
     NewWindow,
     LaunchExternal,
+    Accelerator,
 }
 
 /// One tab web view: a WebView2 controller Ferrum created (adr-0029). `!Send` by construction (COM-1).
@@ -66,15 +80,13 @@ impl ContentView {
     /// Starts creating a content view in `parent` (the Tauri window) from `env` (Tauri's environment), with its own
     /// WebView2 profile `profile`. `devtools` allows the developer tools (WebView2's default is on; Ferrum passes
     /// true only in debug builds, p2.12). `done` receives the view once WebView2 has created it.
-    #[allow(clippy::too_many_arguments)]
     pub fn create(
         env: &ICoreWebView2Environment,
         parent: isize,
         bounds: RECT,
         profile: &str,
         devtools: bool,
-        sink: EventSink,
-        gate: NavGate,
+        handlers: Handlers,
         done: Box<dyn FnOnce(Result<ContentView, Error>)>,
     ) -> Result<(), Error> {
         let env10: ICoreWebView2Environment10 = hr(env.cast())?;
@@ -99,7 +111,7 @@ impl ContentView {
                         core,
                         tokens: Vec::new(),
                     };
-                    view.register(sink, gate)?;
+                    view.register(handlers)?;
                     view.set_bounds(bounds)?;
                     // SAFETY: COM-1; live controller.
                     hr(unsafe { view.controller.SetIsVisible(true) })?;
@@ -115,7 +127,8 @@ impl ContentView {
         })
     }
 
-    fn register(&mut self, sink: EventSink, gate: NavGate) -> Result<(), Error> {
+    fn register(&mut self, handlers: Handlers) -> Result<(), Error> {
+        let Handlers { sink, gate, keys } = handlers;
         let core = self.core.clone();
 
         let s = sink.clone();
@@ -299,6 +312,42 @@ impl ContentView {
             self.tokens.push((Ev::LaunchExternal, t));
         }
 
+        // Keyboard shortcuts while the page has focus (p3.3): WebView2 asks the host before the page sees an
+        // accelerator key; a key Ferrum takes is marked handled and never reaches the page. Nothing is injected into
+        // the page, so it gains no way to reach the app.
+        let h = AcceleratorKeyPressedEventHandler::create(Box::new(move |_sender, args| {
+            if let Some(args) = args {
+                let (mut kind, mut vk) = (COREWEBVIEW2_KEY_EVENT_KIND::default(), 0u32);
+                let mut status = COREWEBVIEW2_PHYSICAL_KEY_STATUS::default();
+                // SAFETY: COM-1, UI-thread callback; out-pointers are locals.
+                unsafe {
+                    let _ = args.KeyEventKind(&mut kind);
+                    let _ = args.VirtualKey(&mut vk);
+                    let _ = args.PhysicalKeyStatus(&mut status);
+                }
+                if kind == COREWEBVIEW2_KEY_EVENT_KIND_KEY_DOWN
+                    || kind == COREWEBVIEW2_KEY_EVENT_KIND_SYSTEM_KEY_DOWN
+                {
+                    let key = KeyDown {
+                        vk,
+                        ctrl: key_held(0x11),
+                        shift: key_held(0x10),
+                        alt: status.IsMenuKeyDown.as_bool(),
+                        repeat: status.WasKeyDown.as_bool(),
+                    };
+                    if keys(key) {
+                        // SAFETY: COM-1; marking the key handled inside its callback is the documented use.
+                        let _ = unsafe { args.SetHandled(true) };
+                    }
+                }
+            }
+            Ok(())
+        }));
+        let mut t = 0i64;
+        // SAFETY: COM-1, COM-4: AcceleratorKeyPressed lives on the controller; token kept for close().
+        hr(unsafe { self.controller.add_AcceleratorKeyPressed(&h, &mut t) })?;
+        self.tokens.push((Ev::Accelerator, t));
+
         let s = sink;
         let h = FocusChangedEventHandler::create(Box::new(move |_sender, _args| {
             s(TabEvent::GotFocus);
@@ -397,6 +446,7 @@ impl ContentView {
                     Ev::History => self.core.remove_HistoryChanged(*t),
                     Ev::Title => self.core.remove_DocumentTitleChanged(*t),
                     Ev::GotFocus => self.controller.remove_GotFocus(*t),
+                    Ev::Accelerator => self.controller.remove_AcceleratorKeyPressed(*t),
                     Ev::NewWindow => self.core.remove_NewWindowRequested(*t),
                     Ev::LaunchExternal => match self.core.cast::<ICoreWebView2_18>() {
                         Ok(c18) => c18.remove_LaunchingExternalUriScheme(*t),
@@ -408,6 +458,13 @@ impl ContentView {
         // SAFETY: COM-1, COM-4.
         let _ = unsafe { self.controller.Close() };
     }
+}
+
+/// Whether virtual key `vk` is held down right now, for the thread's keyboard state (Ctrl 0x11, Shift 0x10).
+fn key_held(vk: i32) -> bool {
+    // SAFETY: COM-1 (UI thread, inside a key callback); GetKeyState only reads this thread's keyboard state.
+    let state = unsafe { windows::Win32::UI::Input::KeyboardAndMouse::GetKeyState(vk) };
+    state < 0
 }
 
 /// Whether the developer tools are allowed in the web view of `controller` (also used for Tauri's shell view).

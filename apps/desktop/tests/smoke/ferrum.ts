@@ -1,6 +1,6 @@
 // Launches Ferrum for a smoke test and connects Playwright over CDP (adr-0031). Ferrum is closed with the shell's
 // app_quit command (and FERRUM_EXIT_AFTER as a safety net), never killed.
-import { spawn, type ChildProcess } from "node:child_process";
+import { execFileSync, spawn, type ChildProcess } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { chromium, type Browser, type Page } from "@playwright/test";
@@ -113,3 +113,19 @@ export type TabList = { active: number | null; tabs: { id: number; url: string; 
 
 /** The app's tab list. */
 export const tabList = (f: Ferrum) => call<TabList>(f, "tab_list");
+
+/**
+ * Presses real keys (Windows SendKeys syntax: ^ Ctrl, + Shift, % Alt, {TAB}, {F5}, ...) while Ferrum is the active
+ * window. Real keys are needed for keys pressed inside a page: CDP key events go straight to the page and never reach
+ * WebView2's accelerator-key hook (observed in p3.3). Throws when Ferrum is not in front (nothing is sent then).
+ */
+export function realKeys(f: Ferrum, keys: string): void {
+  const script =
+    "Add-Type -Name U -Namespace FerrumKeys -MemberDefinition '[DllImport(\"user32.dll\")] public static extern System.IntPtr GetForegroundWindow(); [DllImport(\"user32.dll\")] public static extern uint GetWindowThreadProcessId(System.IntPtr h, out uint p);';" +
+    "$p = 0; [void][FerrumKeys.U]::GetWindowThreadProcessId([FerrumKeys.U]::GetForegroundWindow(), [ref]$p);" +
+    `if ($p -ne ${f.proc.pid}) { 'NOT-FRONT' } else { (New-Object -ComObject WScript.Shell).SendKeys($env:FERRUM_KEYS); 'SENT' }`;
+  const out = execFileSync("powershell.exe", ["-NoProfile", "-Command", script], { env: { ...process.env, FERRUM_KEYS: keys } })
+    .toString()
+    .trim();
+  if (out !== "SENT") throw new Error(`Ferrum was not the active window, so the keys ${keys} were not sent (${out})`);
+}

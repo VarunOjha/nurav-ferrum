@@ -10,6 +10,7 @@ mod content;
 mod external;
 mod logging;
 mod selftest;
+mod shortcuts;
 
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -148,6 +149,7 @@ fn main() {
             content::tab_reopen,
             content::tab_list,
             content::test_stats,
+            content::test_focus,
             content::shell_focused
         ])
         .setup(|app| {

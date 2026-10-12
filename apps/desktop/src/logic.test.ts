@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, blockedText, finished, lockFor, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, blockedText, finished, lockFor, shortcutFor, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -58,4 +58,20 @@ test("tab labels: title first, then the address without its scheme, else New tab
   assert.equal(tabLabel("", "https://example.org/a/b"), "example.org/a/b");
   assert.equal(tabLabel("", "about:blank"), "New tab");
   assert.equal(tabLabel("", ""), "New tab");
+});
+
+test("shell shortcuts follow the same table as the app", () => {
+  const k = (key: string, mods = "") => ({ key, ctrl: mods.includes("c"), shift: mods.includes("s"), alt: mods.includes("a") });
+  const cases: [ReturnType<typeof k>, string][] = [
+    [k("t", "c"), "new-tab"], [k("w", "c"), "close-tab"], [k("F4", "c"), "close-tab"], [k("Tab", "c"), "next-tab"],
+    [k("PageDown", "c"), "next-tab"], [k("Tab", "cs"), "previous-tab"], [k("PageUp", "c"), "previous-tab"],
+    [k("T", "cs"), "reopen-tab"], [k("1", "c"), "select-tab-1"], [k("8", "c"), "select-tab-8"], [k("9", "c"), "last-tab"],
+    [k("l", "c"), "focus-address"], [k("d", "a"), "focus-address"], [k("F6"), "focus-address"], [k("ArrowLeft", "a"), "back"],
+    [k("ArrowRight", "a"), "forward"], [k("F5"), "reload"], [k("r", "c"), "reload"], [k("S", "cs"), "toggle-sidebar"],
+    [k(",", "c"), "settings"],
+  ];
+  for (const [key, want] of cases) assert.equal(shortcutFor(key), want, JSON.stringify(key));
+  for (const key of [k("t"), k("c", "c"), k("v", "c"), k("z", "c"), k("a", "c"), k("ArrowLeft"), k("Tab"), k("0", "c")]) {
+    assert.equal(shortcutFor(key), null, JSON.stringify(key));
+  }
 });

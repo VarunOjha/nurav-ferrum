@@ -139,6 +139,10 @@ of it:
   page was hidden under the shell (the CDP smoke tests could not see this; a screenshot and the child-window order
   did). `send_to_back` moves the shell's host window to the bottom of the stacking order at start and after each
   new tab view; the p3.2 check reads the order ([check-p3.2](../../raw/evidence/phase-p3-tabs-sessions/check-p3.2.txt)).
+- p3.3: `ContentView::create` takes `Handlers { sink, gate, keys }`; `AcceleratorKeyPressed` (on the controller,
+  token removed in `close`) hands each key-down to `keys` (`KeyDown`: virtual key, Ctrl and Shift from
+  `GetKeyState`, Alt from `IsMenuKeyDown`, repeat from `WasKeyDown`) and marks Ferrum's keys handled. Observed: CDP
+  key events never reach this hook; real key presses do.
 - Observed in P3: WebView2's `IsUserInitiated` was `true` for a pop-up a script opened 800 ms after load, without a
   click, so Ferrum's new-tab rule does not rely on it (comp-app-shell).
 

@@ -8,4 +8,5 @@ pub mod config;
 
 pub mod address;
 pub mod oauth;
+pub mod shortcuts;
 pub mod tabs;

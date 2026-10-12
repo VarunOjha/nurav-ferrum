@@ -16,7 +16,9 @@ use ferrum_core::address::{Note, Outcome, Refusal, normalize, site};
 use ferrum_core::config::{GoogleOauth, Loaded};
 use ferrum_core::tabs::{Place, TabId, Tabs};
 use ferrum_webview_manager::tab::{NavDecision, NavRequest, TabEvent, web_gate};
-use ferrum_webview_manager::webview2::{ContentView, ENVIRONMENT, VIEWS, renderer_process_count};
+use ferrum_webview_manager::webview2::{
+    ContentView, ENVIRONMENT, Handlers, VIEWS, renderer_process_count,
+};
 use serde::Serialize;
 use serde_json::{Value, json};
 use tauri::{AppHandle, Emitter, Manager, Runtime, Window};
@@ -280,8 +282,11 @@ fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
             &profile,
             // Developer tools only in debug builds (p2.12); the shell gets the same rule from Tauri.
             cfg!(debug_assertions),
-            sink(&h, id),
-            gate(&h, id),
+            Handlers {
+                sink: sink(&h, id),
+                gate: gate(&h, id),
+                keys: crate::shortcuts::filter(&h),
+            },
             Box::new({
                 let h = h.clone();
                 let profile = profile.clone();
@@ -697,38 +702,53 @@ pub fn tab_move(app: AppHandle, id: u64, to: usize) -> bool {
 }
 
 /// Switches to the next tab to the right (wraps around).
-#[tauri::command]
-pub fn tab_next(app: AppHandle) {
-    if app
+pub fn activate_next(app: &AppHandle) {
+    let moved = app
         .state::<TabsState>()
         .0
         .lock()
         .unwrap()
         .activate_next()
-        .is_some()
-    {
-        after_switch(&app);
+        .is_some();
+    if moved {
+        after_switch(app);
     }
 }
 
 /// Switches to the next tab to the left (wraps around).
-#[tauri::command]
-pub fn tab_previous(app: AppHandle) {
-    if app
+pub fn activate_previous(app: &AppHandle) {
+    let moved = app
         .state::<TabsState>()
         .0
         .lock()
         .unwrap()
         .activate_previous()
-        .is_some()
-    {
-        after_switch(&app);
+        .is_some();
+    if moved {
+        after_switch(app);
     }
+}
+
+/// Switches to the next tab to the right (wraps around).
+#[tauri::command]
+pub fn tab_next(app: AppHandle) {
+    activate_next(&app);
+}
+
+/// Switches to the next tab to the left (wraps around).
+#[tauri::command]
+pub fn tab_previous(app: AppHandle) {
+    activate_previous(&app);
 }
 
 /// Reopens the most recently closed tab (its last address, in a new view).
 #[tauri::command]
 pub async fn tab_reopen(app: AppHandle) -> Option<u64> {
+    reopen(&app)
+}
+
+/// Reopens the most recently closed tab (its last address, in a new view) and makes it active.
+pub fn reopen(app: &AppHandle) -> Option<u64> {
     let (id, url, profile) = {
         let t = app.state::<TabsState>();
         let mut t = t.0.lock().unwrap();
@@ -744,9 +764,9 @@ pub async fn tab_reopen(app: AppHandle) -> Option<u64> {
         };
         (id.0, url, info.profile.clone())
     };
-    emit_tabs(&app);
-    create_view(&app, id, profile, url);
-    after_switch(&app);
+    emit_tabs(app);
+    create_view(app, id, profile, url);
+    after_switch(app);
     Some(id)
 }
 
@@ -792,6 +812,34 @@ pub fn tab_stop(app: AppHandle) {
 #[tauri::command]
 pub fn shell_focused(focus: tauri::State<'_, FocusState>) {
     focus.content_last.store(false, Ordering::SeqCst);
+}
+
+/// Test helper (debug builds only; a release build refuses): brings Ferrum's window to the front and puts keyboard
+/// focus in the active tab's page (`target = "content"`) or in the shell (`"shell"`), so a test can press real keys.
+#[tauri::command]
+pub fn test_focus(app: AppHandle, target: String) -> Result<(), String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    if let Some(w) = app.get_window("main") {
+        w.set_focus().map_err(|e| e.to_string())?;
+    }
+    match target.as_str() {
+        "content" => {
+            app.state::<FocusState>()
+                .content_last
+                .store(true, Ordering::SeqCst);
+            with_content(&app, |v| {
+                let _ = v.focus();
+            });
+            Ok(())
+        }
+        "shell" => {
+            crate::shortcuts::focus_address(&app);
+            Ok(())
+        }
+        other => Err(format!("unknown focus target {other:?}")),
+    }
 }
 
 /// Test counters (debug builds only; a release build refuses): tabs in the list, views alive, and WebView2 renderer

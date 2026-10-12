@@ -25,6 +25,7 @@ fn main() {
             "tab_reopen",
             "tab_list",
             "test_stats",
+            "test_focus",
             "shell_focused",
             "external_open_confirm",
             "external_cancel",

@@ -76,6 +76,22 @@ pub struct NavRequest {
     pub redirected: bool,
 }
 
+/// A key pressed while a tab view had focus, as WebView2 reports it before the page sees it (accelerator keys:
+/// combinations with Ctrl or Alt, and function keys).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct KeyDown {
+    /// Windows virtual-key code.
+    pub vk: u32,
+    /// Ctrl held.
+    pub ctrl: bool,
+    /// Shift held.
+    pub shift: bool,
+    /// Alt held.
+    pub alt: bool,
+    /// The key was already down (auto-repeat).
+    pub repeat: bool,
+}
+
 /// The navigation gate's answer for a starting navigation.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum NavDecision {

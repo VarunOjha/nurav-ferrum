@@ -23,6 +23,7 @@
     "allow-tab-reopen",
     "allow-tab-list",
     "allow-test-stats",
+    "allow-test-focus",
     "allow-shell-focused",
     "allow-external-open-confirm",
     "allow-external-cancel"

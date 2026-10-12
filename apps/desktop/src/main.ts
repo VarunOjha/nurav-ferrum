@@ -1,10 +1,10 @@
 // Ferrum shell (trusted web view, label "shell"): tab strip and toolbar. It drives the tabs through the app's commands
 // (tab_*) and shows what they report: event "tabs" (the tab list) and event "tab" (one tab view's events, with its
 // tab id). The toolbar always describes the active tab; every tab keeps its own toolbar state. P2 tasks p2.2-p2.8,
-// P3 task p3.2.
+// P3 tasks p3.2 (tabs) and p3.3 (strip and shortcuts).
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { addressText, blockedText, finished, lockFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
+import { addressText, blockedText, finished, lockFor, shortcutFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -137,6 +137,20 @@ function renderStrip(): void {
         void invoke("tab_close", { id: t.id });
       });
       el.addEventListener("click", () => void invoke("tab_activate", { id: t.id }));
+      // Drag a tab to reorder the strip.
+      el.draggable = true;
+      el.addEventListener("dragstart", (e) => {
+        e.dataTransfer?.setData("text/x-ferrum-tab", String(t.id));
+        el.classList.add("dragging");
+      });
+      el.addEventListener("dragend", () => el.classList.remove("dragging"));
+      el.addEventListener("dragover", (e) => e.preventDefault());
+      el.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const from = Number(e.dataTransfer?.getData("text/x-ferrum-tab"));
+        const to = list.tabs.findIndex((x) => x.id === t.id);
+        if (from && from !== t.id && to >= 0) void invoke("tab_move", { id: from, to });
+      });
       el.addEventListener("auxclick", (e) => {
         if (e.button === 1) void invoke("tab_close", { id: t.id });
       });
@@ -247,6 +261,71 @@ await listen<LinkEvent>("link", async (e) => {
 });
 
 await listen<TabList>("tabs", (e) => applyList(e.payload));
+
+// --- Keyboard shortcuts (p3.3). Keys pressed inside a page are handled by the app (WebView2 accelerator keys); keys
+// pressed in the shell are handled here, with the same table (logic.ts). ---
+function focusAddress(): void {
+  address.focus();
+  address.select();
+}
+async function runShortcut(name: string): Promise<void> {
+  const select = name.match(/^select-tab-(\d)$/);
+  if (select) {
+    const t = list.tabs[Number(select[1]) - 1];
+    if (t) await invoke("tab_activate", { id: t.id });
+    return;
+  }
+  switch (name) {
+    case "new-tab":
+      await invoke("tab_new", { url: null });
+      focusAddress();
+      break;
+    case "close-tab":
+      await invoke("tab_close", { id: null });
+      break;
+    case "next-tab":
+      await invoke("tab_next");
+      break;
+    case "previous-tab":
+      await invoke("tab_previous");
+      break;
+    case "reopen-tab":
+      await invoke("tab_reopen");
+      break;
+    case "last-tab": {
+      const t = list.tabs[list.tabs.length - 1];
+      if (t) await invoke("tab_activate", { id: t.id });
+      break;
+    }
+    case "focus-address":
+      focusAddress();
+      break;
+    case "back":
+      await invoke("tab_back");
+      break;
+    case "forward":
+      await invoke("tab_forward");
+      break;
+    case "reload":
+      await invoke("tab_reload");
+      break;
+    default:
+      shellCommand(name);
+  }
+}
+/** Shell-only actions: also sent by the app for shortcuts pressed inside a page. */
+function shellCommand(action: string): void {
+  if (action === "focus-address") focusAddress();
+  // "toggle-sidebar" (p3.15) and "settings" (p3.14) are added with their tasks.
+}
+document.addEventListener("keydown", (e) => {
+  const name = shortcutFor({ key: e.key, ctrl: e.ctrlKey, shift: e.shiftKey, alt: e.altKey });
+  if (!name) return;
+  e.preventDefault(); // also stops the shell web view's own handling (F5 must not reload the shell)
+  if (e.repeat && name !== "next-tab" && name !== "previous-tab") return;
+  void runShortcut(name);
+});
+await listen<{ action: string }>("shell-command", (e) => shellCommand(e.payload.action));
 
 // --- The confirmation bar for links to other apps (p2.10): part of the top band, so it never covers a page. ---
 async function showExternal(uri: string, signIn = false): Promise<void> {

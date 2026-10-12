@@ -9,7 +9,7 @@ publish.workspace = true
 
 [target.'cfg(windows)'.dependencies]
 webview2-com = "=0.39.1"
-windows = { version = "=0.62.2", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging"] }
+windows = { version = "=0.62.2", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_UI_Input_KeyboardAndMouse"] }
 windows-core = "=0.62.2"
 
 [lints]
