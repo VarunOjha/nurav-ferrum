@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:137c9fae19e4d05f3af3d5d90c2f4f29d2994d960e50a6b9a07ab571db8f746b"
+    "content_hash": "sha256:381310baa5afb9d8a89f6a4048f7ab9eefeb37f943b1836c2a6e5556fdd51bd9"
   },
   "entries": [
     {
@@ -3000,6 +3000,26 @@
       "tags": [
         "tabs",
         "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-11",
+      "date": "2026-10-12",
+      "time": "03:13",
+      "title": "All phase 3 tests in one command",
+      "done": "One command now runs every phase 3 test: 45 checks of the tab, settings, session, profile and history rules, and 36 tests of the running app. A second command re-runs the 26 phase 2 tests.",
+      "next": "Literature batch 3 (task p3.12).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "ebc79ca",
+      "covers": [
+        "## [2026-10-12] code | p3.11 P3 integration suite in one command"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "testing",
+        "check scripts"
       ]
     }
   ]

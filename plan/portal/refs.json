@@ -670,7 +670,7 @@
       "kind": "task",
       "title": "P3 task: One integration suite",
       "summary": "Many features → one command runs every P3 test → a single green run proves the milestone.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4859,6 +4859,14 @@
       "kind": "commit",
       "title": "Commit: A sidebar with your tabs and history",
       "summary": "A panel on the left (the menu button or Ctrl+Shift+S) lists your open tabs and your history, with a search box. Pages make room for it instead of being covered.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "ebc79ca",
+      "kind": "commit",
+      "title": "Commit: All phase 3 tests in one command",
+      "summary": "One command now runs every phase 3 test: 45 checks of the tab, settings, session, profile and history rules, and 36 tests of the running app. A second command re-runs the 26 phase 2 tests.",
       "status": null,
       "related": []
     }

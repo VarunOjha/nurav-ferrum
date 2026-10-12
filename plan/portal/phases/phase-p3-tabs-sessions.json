@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 12,
+    "done": 13,
     "total": 15
   },
   "step_order": [
@@ -158,7 +158,7 @@
       "what": "One test suite combining the tests for tabs, restore, profiles, history, downloads, settings screen and sidebar.",
       "why": "Running each feature's tests on its own can hide a clash between features. One combined run shows they work together.",
       "how": "Collect the tests of every P3 feature into one suite that starts with a single command.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Many features → one command runs every P3 test → a single green run proves the milestone.",
       "check": "The suite passes; output saved.",
       "script": "scripts/verify/p3.11-integration-suite.ps1"

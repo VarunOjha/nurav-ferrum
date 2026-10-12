@@ -1931,3 +1931,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.15.txt]
 - result: Shell sidebar (toolbar button; Ctrl+Shift+S from the toolbar or a page): open tabs (choose to switch) and history (search, choose to open in the active tab, clear). The shell reports its width so tab views start to its right and never overlap. Sidebar smoke 3 passed; whole suite 62 passed; p3.15 check PASS. Stales comp-app-shell (re-recorded through the annex).
 - commit: 0bb71c9
+
+## [2026-10-12] code | p3.11 P3 integration suite in one command
+
+- session: s02
+- time: 03:13
+- pages: [phase-p3-tabs-sessions]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.11.txt, raw/evidence/phase-p3-tabs-sessions/p3.11-suite.txt]
+- result: npm run p3 (11 P3 app test files) and npm run p2 (the P2 files, for the gate's regression row); Invoke-FerrumSmoke takes several spec names; the p3.11 check runs the Rust tests of the P3 parts and npm run p3 and saves the whole output (raw/evidence/phase-p3-tabs-sessions/p3.11-suite.txt). p3.11 PASS: ferrum-core P3 tests 45 passed, npm run p3 36 passed. npm run p2: 26 passed. Correction: the commit message of ebc79ca says 27 for npm run p2; the run printed 26 passed (P2's 25 plus the same-view test added in p3.2).
+- commit: ebc79ca
