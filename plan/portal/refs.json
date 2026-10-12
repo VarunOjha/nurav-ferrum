@@ -740,7 +740,7 @@
       "kind": "task",
       "title": "P3 task: Saved settings and startup sites",
       "summary": "Settings must survive crashes and upgrades → a versioned file, written safely, with migration → never lost or half-written.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4787,6 +4787,14 @@
       "kind": "commit",
       "title": "Commit: Keyboard shortcuts work everywhere",
       "summary": "Browser shortcuts now work whether you are in the toolbar or typing in a page: Ctrl+T, Ctrl+W, Ctrl+Tab, Ctrl+Shift+T, Ctrl+1 to 9, Ctrl+L, Alt+Left and Right, F5. Pages never see these keys and still",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "719adb4",
+      "kind": "commit",
+      "title": "Commit: Settings are saved safely; start-up sites open as tabs",
+      "summary": "The settings file now has a version number, so later versions can upgrade it, and it is written in one step, so a crash cannot leave half a file. A file Ferrum cannot read is copied aside instead of l",
       "status": null,
       "related": []
     }

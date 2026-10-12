@@ -495,10 +495,10 @@
     "comp-core": {
       "status": "approved",
       "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T01:43:08-05:00",
+      "timestamp": "2026-10-12T01:49:32-05:00",
       "path": "wiki/architecture/components/comp-core.md",
-      "content_hash": "sha256:743b77426268a210b695299fb9c8a99c3ecfe2b777a08908494e74d09f5df82d",
-      "scope_hash": "sha256:beccf022a6a0218b943dd459ba0158afd2c5dd6d739012ccff9cb18e03594872",
+      "content_hash": "sha256:b62fb6c7d0673d9d1f18253fa00c66cb7f0dff89a5d87b43314a57c9999dfecb",
+      "scope_hash": "sha256:c691dbcfbb9f201aa569e03b93e914565858956e95155cd2a657191ac406ec74",
       "approved_by": "owner",
       "recorded_by": "claude",
       "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md",
@@ -543,6 +543,17 @@
           "path": "wiki/architecture/components/comp-core.md",
           "content_hash": "sha256:22827ab84707c4f3a1107d50ca59e19ab8da393e20620720049929305be31bf8",
           "scope_hash": "sha256:4d90ff3fe8d6cab717bf0aa8aed40ba6e4060e0c74c5ba1c2023a6d4b31234d8",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T01:43:08-05:00",
+          "path": "wiki/architecture/components/comp-core.md",
+          "content_hash": "sha256:743b77426268a210b695299fb9c8a99c3ecfe2b777a08908494e74d09f5df82d",
+          "scope_hash": "sha256:beccf022a6a0218b943dd459ba0158afd2c5dd6d739012ccff9cb18e03594872",
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"

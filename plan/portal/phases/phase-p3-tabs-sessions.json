@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 3,
+    "done": 4,
     "total": 15
   },
   "step_order": [
@@ -59,7 +59,7 @@
       "what": "A saved settings file, including the websites that open at startup.",
       "why": "A crash in the middle of saving could wipe all your settings, and an upgrade that cannot read the old file would make you set everything up again.",
       "how": "A versioned file in the app's config folder, written to a temporary file and then swapped in, with an upgrade path. A damaged file falls back to defaults and keeps a backup.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Settings must survive crashes and upgrades → a versioned file, written safely, with migration → never lost or half-written.",
       "check": "Round trip works; a future version is refused clearly; a corrupt file falls back with a backup; startup sites open in order.",
       "script": "scripts/verify/p3.4-saved-settings-startup.ps1"

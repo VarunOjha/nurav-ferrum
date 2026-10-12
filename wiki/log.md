@@ -1850,3 +1850,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.3.txt]
 - result: Shortcut table in ferrum_core::shortcuts and the same table in the shell's logic.ts; WebView2 AcceleratorKeyPressed on each tab view hands keys to the app before the page sees them (Ferrum's keys marked handled; nothing injected into pages); actions queued off the key callback; strip drag-to-reorder and middle-click close. Observed: CDP key events never reach the accelerator hook, so the page-focus tests press real keys. Whole smoke suite 36 passed; p3.3 check PASS (shortcuts 9 passed, p2.3 IPC PASS). P3-page claim on capturing shortcuts closed with check-p3.3. Stales approval of comp-app-shell, comp-core, comp-webview-manager, phase-p3-tabs-sessions (re-recorded by the owner's directive of 2026-10-12).
 - commit: 86f1717
+
+## [2026-10-12] code | p3.4 versioned settings file and start-up tabs
+
+- session: s02
+- time: 01:49
+- pages: [phase-p3-tabs-sessions, comp-core, ov-arch-configuration]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.4.txt]
+- result: Settings file version 2; version-1 (P2) files migrated (a file that did not choose new_window keeps same-view); newer versions refused with a clear message and never written; atomic save (temp file then rename); an unreadable user file is copied aside and skipped (override layer still applies); --user-config for tests; start-up sites open as tabs in order. Core config tests 14 passed; startup smoke 3 passed; whole suite 39 passed; p3.4 check PASS. comp-core and ov-arch-configuration updated (stales comp-core; re-recorded by the owner's directive of 2026-10-12).
+- commit: 719adb4

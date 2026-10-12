@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:cce1a5c8ff2b92d47d828ee6b21145a537a668c373840e8dfea89bfd6beb71a9"
+    "content_hash": "sha256:c3740240b251965b73534027abeb16504c73d40da5f03f7006605e7fe1fcea9c"
   },
   "entries": [
     {
@@ -2820,6 +2820,26 @@
       "tags": [
         "tabs",
         "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-4",
+      "date": "2026-10-12",
+      "time": "01:49",
+      "title": "Settings are saved safely; start-up sites open as tabs",
+      "done": "The settings file now has a version number, so later versions can upgrade it, and it is written in one step, so a crash cannot leave half a file. A file Ferrum cannot read is copied aside instead of lost. Start-up sites open as tabs, in order.",
+      "next": "Restoring tabs after closing or a crash (task p3.5).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "719adb4",
+      "covers": [
+        "## [2026-10-12] code | p3.4 versioned settings file and start-up tabs"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "sessions",
+        "testing"
       ]
     }
   ]
