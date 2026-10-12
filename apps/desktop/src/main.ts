@@ -2,6 +2,7 @@
 // commands (tab_*) and shows what the content view reports (event "tab"). P2 tasks p2.2-p2.8.
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { addressText, blockedText, finished, lockFor, webErrorText, type ToolbarState } from "./logic.ts";
 
 type TabEvent =
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -59,35 +60,13 @@ let loading = false;
 let lastUri = "";
 let covered = false;
 
-type State = "idle" | "loading" | "loaded" | "http-error" | "failed";
-function setState(st: State): void {
+function setState(st: ToolbarState): void {
   toolbar.dataset.state = st;
 }
 
-// WebView2 web error status codes (COREWEBVIEW2_WEB_ERROR_STATUS) in plain words. 14 = cancelled (not an error).
-const WEB_ERRORS: Record<number, string> = {
-  1: "The site's certificate does not match its name. Ferrum does not offer a way around certificate errors.",
-  2: "The site's certificate has expired. Ferrum does not offer a way around certificate errors.",
-  3: "The client certificate has errors.",
-  4: "The site's certificate was revoked. Ferrum does not offer a way around certificate errors.",
-  5: "The site's certificate is not valid. Ferrum does not offer a way around certificate errors.",
-  6: "The server could not be reached.",
-  7: "The server took too long to answer.",
-  8: "The server sent an answer Ferrum could not read.",
-  9: "The connection was interrupted.",
-  10: "The connection was reset.",
-  11: "The connection was lost. Check the network and try again.",
-  12: "Ferrum could not connect to the server.",
-  13: "The site's name could not be found. Check the address or the network.",
-  15: "The site redirected too many times (a redirect loop).",
-  16: "Something unexpected went wrong.",
-  17: "The site asks for a sign-in Ferrum cannot show yet.",
-  18: "The proxy asks for a sign-in.",
-};
-
 /** Shows or hides the shell's own error panel; the app hides the content view while the panel covers it. */
 async function showPanel(uri: string, webError: number): Promise<void> {
-  errorText.textContent = WEB_ERRORS[webError] ?? "The page could not be loaded.";
+  errorText.textContent = webErrorText(webError);
   errorAddress.textContent = uri;
   errorCode.textContent = `WebView2 error status ${webError}`;
   panel.hidden = false;
@@ -115,15 +94,14 @@ function setLoading(on: boolean): void {
 let currentUri = "";
 function showAddress(uri: string): void {
   currentUri = uri;
-  if (document.activeElement !== address) address.value = uri === "about:blank" ? "" : uri;
+  if (document.activeElement !== address) address.value = addressText(uri);
 }
 
 /** The lock describes a page that actually loaded: set on success, cleared otherwise. */
 function showLock(loaded: boolean): void {
-  const secure = loaded && currentUri.startsWith("https:");
-  const insecure = loaded && currentUri.startsWith("http:");
-  lock.textContent = secure ? "\u{1f512}" : insecure ? "⚠" : "";
-  lock.title = secure ? "Secure connection" : insecure ? "Not secure" : "";
+  const l = lockFor(currentUri, loaded);
+  lock.textContent = l.text;
+  lock.title = l.title;
 }
 
 await listen<TabEvent>("tab", async (e) => {
@@ -142,7 +120,7 @@ await listen<TabEvent>("tab", async (e) => {
         statusEl.textContent = "Loading…";
       } else if (extBar.hidden || extUri.textContent !== ev.uri) {
         // (A link to another app is not "blocked": the confirmation bar is asking about it.)
-        statusEl.textContent = "Blocked: " + ev.uri.split(":")[0] + " address";
+        statusEl.textContent = blockedText(ev.uri);
       }
       break;
     case "source-changed":
@@ -152,21 +130,13 @@ await listen<TabEvent>("tab", async (e) => {
       setLoading(false);
       // The final address (after redirects): a redirect back to the current address raises no source-changed.
       if (ev.uri) showAddress(ev.uri);
-      if (ev.http_status >= 400) {
-        // The site answered with an error page of its own: show it, and say so in the toolbar.
-        setState("http-error");
-        statusEl.textContent = `This page answered ${ev.http_status}`;
-        showLock(true);
-      } else if (!ev.success && ev.web_error_status !== 14) {
-        // No page at all (network, name, certificate, redirect loop): the shell draws the error itself.
-        setState("failed");
-        statusEl.textContent = "Not loaded";
-        showLock(false); // no page was loaded, so there is no secure connection to show
-        await showPanel(lastUri, ev.web_error_status);
-      } else {
-        setState(ev.success ? "loaded" : "idle");
-        statusEl.textContent = "";
-        showLock(ev.success);
+      {
+        // A site's own error page stays with a toolbar note; no page at all gets the shell's panel (logic.ts).
+        const f = finished(ev.success, ev.http_status, ev.web_error_status);
+        setState(f.state);
+        statusEl.textContent = f.status;
+        showLock(f.pageLoaded);
+        if (f.panel) await showPanel(lastUri, ev.web_error_status);
       }
       break;
     case "history-changed":
@@ -186,7 +156,7 @@ await listen<TabEvent>("tab", async (e) => {
       await showExternal(ev.uri, true);
       break;
     case "blocked":
-      statusEl.textContent = "Blocked: " + ev.uri.split(":")[0] + " address";
+      statusEl.textContent = blockedText(ev.uri);
       break;
     case "new-window":
     case "external-scheme":

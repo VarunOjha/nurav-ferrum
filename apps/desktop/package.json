@@ -8,7 +8,9 @@
   "scripts": {
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "lint": "tsc --noEmit -p tsconfig.lint.json",
+    "test": "node --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@tauri-apps/api": "2.12.3"
