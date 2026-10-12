@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:9273b0b9015da82646f6444f36188e1e06af5059f3b2d57a06e65495eefc20af"
+    "content_hash": "sha256:e79bd8a60fd144ff5c253103cd93707d30945d04508fed5e946c68a6c6b98f95"
   },
   "entries": [
     {
@@ -2635,6 +2635,26 @@
       "tags": [
         "approvals",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-18-probe",
+      "date": "2026-10-11",
+      "time": "20:48",
+      "title": "Gate trial run found one stale test record",
+      "done": "Claude started a trial run of the end-of-phase gate. The computer ran low on memory and Claude Code stopped it part-way; nothing was left running. Before that it found one real problem: a saved test record from early in the phase did not cover two test pages added later. Claude repeated that test into a new record, and the check passes again.",
+      "next": "You look at the ten changed pages and try the release build with the checklist; then Claude runs the full gate when you say so.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "a707e8c",
+      "covers": [
+        "## [2026-10-11] code | p2.18 (part 2) p2.1 probe repeated; gate dry run stopped for low memory"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Fixed",
+      "tags": [
+        "testing",
+        "check scripts"
       ]
     }
   ]

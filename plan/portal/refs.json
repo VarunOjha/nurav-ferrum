@@ -4741,6 +4741,14 @@
       "summary": "Claude added checks for the toolbar code, made the end-of-phase gate real and settled the open notes the plan said this phase would answer: most are now proven with this phase's evidence, a few are mo",
       "status": null,
       "related": []
+    },
+    {
+      "id": "a707e8c",
+      "kind": "commit",
+      "title": "Commit: Gate trial run found one stale test record",
+      "summary": "The p2.1 check now reads a fresh HTTPS probe that covers the two test pages added later in P2.",
+      "status": null,
+      "related": []
     }
   ]
 }
