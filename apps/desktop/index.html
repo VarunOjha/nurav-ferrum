@@ -15,18 +15,33 @@
         <button id="new-tab" class="strip-btn" type="button" title="New tab (Ctrl+T)" aria-label="New tab">+</button>
       </nav>
       <header id="toolbar" role="toolbar" aria-label="Navigation" data-state="idle">
-        <button id="sidebar-btn" class="nav" type="button" title="Tabs and history (Ctrl+Shift+S)" aria-label="Tabs and history" aria-expanded="false" aria-controls="sidebar">&#x2630;</button>
+        <button id="sidebar-btn" class="nav" type="button" title="Tabs, bookmarks and history (Ctrl+Shift+S)" aria-label="Tabs, bookmarks and history" aria-expanded="false" aria-controls="sidebar">&#x2630;</button>
         <button id="back" class="nav" title="Back" aria-label="Back" disabled>&#x2190;</button>
         <button id="forward" class="nav" title="Forward" aria-label="Forward" disabled>&#x2192;</button>
         <button id="reload" class="nav" title="Reload" aria-label="Reload" disabled>&#x21bb;</button>
         <form id="address-form" autocomplete="off">
           <span id="lock" aria-hidden="true">&#x1f512;</span>
           <input id="address" type="text" spellcheck="false" placeholder="Enter an address" aria-label="Address" />
+          <button id="star" type="button" title="Bookmark this page (Ctrl+D)" aria-label="Bookmark this page" aria-pressed="false" disabled>&#x2606;</button>
         </form>
         <span id="status" aria-live="polite"></span>
         <button id="settings-btn" class="nav" type="button" title="Settings (Ctrl+,)" aria-label="Settings">&#x2699;</button>
         <div id="progress" aria-hidden="true"></div>
       </header>
+      <!-- Bookmarks bar (p3.19): the "Favourites bar" folder; Ctrl+Shift+B shows or hides it. Part of the top band. -->
+      <nav id="bookmarks-bar" aria-label="Bookmarks bar" hidden></nav>
+      <!-- Bookmark editor (p3.19): opened by the star or Ctrl+D; in the top band, so it never sits under a page. -->
+      <div id="bm-editor" role="dialog" aria-labelledby="bm-editor-title" hidden>
+        <span id="bm-editor-title">Bookmark</span>
+        <label for="bm-name">Name</label>
+        <input id="bm-name" type="text" spellcheck="false" />
+        <label for="bm-folder">Folder</label>
+        <input id="bm-folder" type="text" list="bm-folders" spellcheck="false" />
+        <datalist id="bm-folders"></datalist>
+        <button id="bm-done" type="button">Done</button>
+        <button id="bm-remove" type="button">Remove</button>
+        <span id="bm-error" role="alert"></span>
+      </div>
       <div id="external-bar" role="alertdialog" aria-labelledby="external-text" hidden>
         <span id="external-text">Open this link outside Ferrum?</span>
         <code id="external-uri"></code>
@@ -40,9 +55,11 @@
     </div>
     <div id="middle">
     <!-- The sidebar (p3.15): left of the content area; its width is reported to the app, so tab views never overlap it. -->
-    <aside id="sidebar" aria-label="Tabs and history" hidden>
+    <aside id="sidebar" aria-label="Tabs, bookmarks and history" hidden>
       <h2>Open tabs</h2>
       <ul id="side-tabs"></ul>
+      <h2 id="side-bm-title">Bookmarks</h2>
+      <div id="side-bookmarks"></div>
       <h2>History</h2>
       <input id="side-search" type="search" placeholder="Search history" aria-label="Search history" spellcheck="false" />
       <ul id="side-history"></ul>

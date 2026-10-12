@@ -33,6 +33,12 @@ pub enum Shortcut {
     ToggleSidebar,
     /// Ctrl+Comma: settings (p3.14).
     Settings,
+    /// Ctrl+D: bookmark the page, or edit its bookmark (p3.19).
+    BookmarkPage,
+    /// Ctrl+Shift+B: show or hide the bookmarks bar (p3.19).
+    ToggleBookmarksBar,
+    /// Ctrl+Shift+O: all bookmarks, in the sidebar (p3.19).
+    ShowBookmarks,
 }
 
 /// Windows virtual-key codes used by the table.
@@ -84,6 +90,7 @@ pub fn for_key(k: KeyPress) -> Option<Shortcut> {
             _ if letter(b'L') => Some(FocusAddress),
             _ if letter(b'R') => Some(Reload),
             vk::COMMA => Some(Settings),
+            _ if letter(b'D') => Some(BookmarkPage),
             0x31..=0x38 => Some(SelectTab((k.vk - 0x31) as usize)),
             0x39 => Some(LastTab),
             _ => None,
@@ -92,6 +99,8 @@ pub fn for_key(k: KeyPress) -> Option<Shortcut> {
             vk::TAB => Some(PreviousTab),
             _ if letter(b'T') => Some(ReopenTab),
             _ if letter(b'S') => Some(ToggleSidebar),
+            _ if letter(b'B') => Some(ToggleBookmarksBar),
+            _ if letter(b'O') => Some(ShowBookmarks),
             _ => None,
         },
         (false, false, true) => match k.vk {
@@ -131,5 +140,8 @@ pub fn name(s: Shortcut) -> String {
         Reload => "reload".into(),
         ToggleSidebar => "toggle-sidebar".into(),
         Settings => "settings".into(),
+        BookmarkPage => "bookmark-page".into(),
+        ToggleBookmarksBar => "toggle-bookmarks-bar".into(),
+        ShowBookmarks => "show-bookmarks".into(),
     }
 }

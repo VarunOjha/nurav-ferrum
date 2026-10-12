@@ -134,6 +134,22 @@ pub struct Downloads {
     pub folder: Option<PathBuf>,
 }
 
+/// `[appearance]`: how the shell looks (P3 feature set: p3.19 bookmarks bar; p3.22 theme, accent, density).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields, default)]
+pub struct Appearance {
+    /// Show the bookmarks bar under the toolbar (Ctrl+Shift+B toggles it).
+    pub bookmarks_bar: bool,
+}
+
+impl Default for Appearance {
+    fn default() -> Self {
+        Appearance {
+            bookmarks_bar: true,
+        }
+    }
+}
+
 /// `[storage]`: where Ferrum keeps its data.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(deny_unknown_fields, default)]
@@ -168,6 +184,8 @@ pub struct Config {
     pub sites: Vec<SiteSettings>,
     /// Downloads.
     pub downloads: Downloads,
+    /// How the shell looks.
+    pub appearance: Appearance,
 }
 
 impl Default for Config {
@@ -180,6 +198,7 @@ impl Default for Config {
             isolation: Isolation::default(),
             sites: Vec::new(),
             downloads: Downloads::default(),
+            appearance: Appearance::default(),
         }
     }
 }

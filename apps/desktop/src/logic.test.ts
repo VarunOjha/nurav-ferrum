@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, blockedText, downloadText, finished, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -68,7 +68,8 @@ test("shell shortcuts follow the same table as the app", () => {
     [k("T", "cs"), "reopen-tab"], [k("1", "c"), "select-tab-1"], [k("8", "c"), "select-tab-8"], [k("9", "c"), "last-tab"],
     [k("l", "c"), "focus-address"], [k("d", "a"), "focus-address"], [k("F6"), "focus-address"], [k("ArrowLeft", "a"), "back"],
     [k("ArrowRight", "a"), "forward"], [k("F5"), "reload"], [k("r", "c"), "reload"], [k("S", "cs"), "toggle-sidebar"],
-    [k(",", "c"), "settings"],
+    [k(",", "c"), "settings"], [k("d", "c"), "bookmark-page"], [k("B", "cs"), "toggle-bookmarks-bar"],
+    [k("O", "cs"), "show-bookmarks"],
   ];
   for (const [key, want] of cases) assert.equal(shortcutFor(key), want, JSON.stringify(key));
   for (const key of [k("t"), k("c", "c"), k("v", "c"), k("z", "c"), k("a", "c"), k("ArrowLeft"), k("Tab"), k("0", "c")]) {
@@ -117,4 +118,16 @@ test("sidebar history lists each address once, newest first, with its title", ()
     { label: "b.example/x", url: "https://b.example/x" },
   ]);
   assert.equal(historyLines(Array.from({ length: 80 }, (_, i) => e(`https://e.example/${i}`, "", i)), 50).length, 50);
+});
+
+test("bookmarks: only web pages; grouped by folder, the bar first, in saved order", () => {
+  assert.equal(canBookmark("https://example.org/"), true);
+  assert.equal(canBookmark("http://example.org/"), true);
+  for (const u of ["about:blank", "", "file:///C:/x", "javascript:alert(1)"]) assert.equal(canBookmark(u), false, u);
+  const b = (id: number, folder: string, position: number) => ({ id, url: `https://e.example/${id}`, title: `B${id}`, folder, position, created_at: 0 });
+  const g = bookmarkFolders([b(1, "work", 1), b(2, "Favourites bar", 1), b(3, "Work", 0), b(4, "Favourites bar", 0), b(5, "Reading", 0)], "Favourites bar");
+  assert.deepEqual(g.slice(0, 2).map((f) => f.name), ["Favourites bar", "Reading"]);
+  assert.deepEqual(g.slice(2).map((f) => f.name).sort(), ["Work", "work"].sort());
+  assert.deepEqual(g[0]!.items.map((x) => x.id), [4, 2]);
+  assert.deepEqual(bookmarkFolders([], "Favourites bar"), [{ name: "Favourites bar", items: [] }]);
 });

@@ -188,6 +188,14 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   memory for that run. Self-test runs use memory only. `history_list` searches words of titles and addresses (word
   starts, all words required); `history_clear` also clears the word index and compacts the file
   ([check-p3.18](../../raw/evidence/phase-p3-tabs-sessions/check-p3.18.txt)).
+- p3.19, bookmarks (`bookmarks.rs`, shell `main.ts`): commands `bookmark_list`, `bookmark_for`, `bookmark_add`,
+  `bookmark_update`, `bookmark_move`, `bookmark_remove`, `appearance_get`, `appearance_set`, allowed only for the shell
+  (`shell.json`; tab views have no bridge). The star in the address bar (filled when the page is bookmarked; only web
+  pages) adds the page to the "Favourites bar" folder and opens the editor bar (name, folder with suggestions, Done,
+  Remove; Enter and Esc); the bookmarks bar (that folder, hideable) and the editor are part of the top band, so the
+  tab view moves down and never sits under them. The sidebar gains a Bookmarks section: every folder (the bar's
+  first), open, Edit, remove. Ctrl+D and Ctrl+Shift+O move focus to the shell (like Ctrl+L); Ctrl+Shift+B is saved as
+  `[appearance] bookmarks_bar` ([check-p3.19](../../raw/evidence/phase-p3-tabs-sessions/check-p3.19.txt)).
 - p3.8, downloads (`downloads.rs`): files go to `[downloads] folder` (else the Windows Downloads folder) under the
   name WebView2 suggests (the file name only; a name already on disk or already given out in this run gets
   ` (1)`, ` (2)`, ...: nothing is ever replaced). The shell's downloads bar (top band) shows each download: percent and

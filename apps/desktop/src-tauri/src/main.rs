@@ -6,6 +6,7 @@
 #![forbid(unsafe_code)]
 #![windows_subsystem = "windows"]
 
+mod bookmarks;
 mod content;
 mod downloads;
 mod external;
@@ -191,6 +192,14 @@ fn main() {
             history::history_clear,
             settings::settings_get,
             settings::settings_set,
+            bookmarks::bookmark_list,
+            bookmarks::bookmark_for,
+            bookmarks::bookmark_add,
+            bookmarks::bookmark_update,
+            bookmarks::bookmark_move,
+            bookmarks::bookmark_remove,
+            bookmarks::appearance_get,
+            bookmarks::appearance_set,
             content::shell_focused
         ])
         .setup(|app| {

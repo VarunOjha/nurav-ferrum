@@ -55,7 +55,9 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   `move_to`, `activate_next`/`activate_previous` (wrap around), a closed-tab stack of at most 25 with `reopen_closed`,
   and `check` for the rules. Tested with fixed cases and 200 random sequences of 500 operations
   ([check-p3.1](../../raw/evidence/phase-p3-tabs-sessions/check-p3.1.txt)).
-- `shortcuts` (p3.3): the shortcut table (`for_key`, `Shortcut`, `repeats`, `name`), with unit tests.
+- `shortcuts` (p3.3): the shortcut table (`for_key`, `Shortcut`, `repeats`, `name`), with unit tests. p3.19 adds
+  `BookmarkPage` (Ctrl+D), `ToggleBookmarksBar` (Ctrl+Shift+B) and `ShowBookmarks` (Ctrl+Shift+O).
+- `config` (p3.19): `[appearance] bookmarks_bar` (default true; `Appearance`), round-trip tested.
 - `session` and `fsutil` (p3.5): `session.json` (`Session`: version 1, save time, active index, tabs with address,
   title and profile), `save` (atomic) and `load` (none when missing; newer or unreadable files refused);
   `fsutil::write_atomic` and `fsutil::backup_broken` are shared with the settings file

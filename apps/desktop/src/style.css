@@ -108,3 +108,27 @@ body { display: flex; flex-direction: column; }
 #external-uri { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
 #external-bar button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
 #external-open { background: var(--accent) !important; color: #fff !important; }
+
+/* Bookmarks (p3.19): star in the address bar, the bookmarks bar, the editor bar and the sidebar's folders. */
+#star { flex: none; width: 26px; height: 26px; border: 0; border-radius: 13px; background: transparent; color: var(--muted); font-size: 16px; line-height: 1; cursor: pointer; }
+#star[aria-pressed="true"] { color: var(--accent); }
+#star:disabled { opacity: 0.35; cursor: default; }
+#bookmarks-bar { display: flex; align-items: center; gap: 2px; height: 32px; box-sizing: border-box; padding: 0 10px; border-bottom: 1px solid var(--border); background: var(--bg); overflow: hidden; }
+#bookmarks-bar[hidden] { display: none; }
+#bookmarks-bar a { display: flex; align-items: center; gap: 6px; height: 24px; max-width: 180px; padding: 0 8px; border-radius: 6px; color: var(--text); text-decoration: none; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#bookmarks-bar a:hover, #bookmarks-bar a:focus-visible { background: var(--surface); }
+#bookmarks-bar .bm-empty { font-size: 12px; color: var(--muted); }
+#bm-editor { display: flex; align-items: center; gap: 8px; height: 44px; box-sizing: border-box; padding: 0 16px 0 13px; border-bottom: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface); color: var(--text); font-size: 13px; }
+#bm-editor[hidden] { display: none; }
+#bm-editor-title { font-weight: 600; }
+#bm-editor input { width: 220px; height: 28px; box-sizing: border-box; padding: 0 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; }
+#bm-editor button { padding: 5px 12px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
+#bm-error { color: var(--accent); font-size: 12px; }
+#side-bookmarks details { margin: 0 0 4px; }
+#side-bookmarks summary { padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+#side-bookmarks summary:hover { background: var(--surface); }
+#side-bookmarks ul { margin: 0 0 6px 12px; }
+#side-bookmarks li { display: flex; align-items: center; }
+#side-bookmarks li > button.bm-open { flex: 1; min-width: 0; }
+#side-bookmarks li > button.bm-small { flex: none; width: auto; padding: 4px 6px; color: var(--muted); font-size: 12px; }
+#side-bookmarks .bm-none { padding: 4px 8px; font-size: 12px; color: var(--muted); }

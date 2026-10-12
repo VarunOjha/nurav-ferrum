@@ -64,7 +64,14 @@ pub fn run(app: &AppHandle, s: Shortcut) {
             let _ = v.reload();
         }),
         // Shell features (sidebar p3.15, settings p3.14): the shell acts on them.
-        Shortcut::ToggleSidebar | Shortcut::Settings => shell_command(app, &name(s)),
+        Shortcut::ToggleSidebar | Shortcut::Settings | Shortcut::ToggleBookmarksBar => {
+            shell_command(app, &name(s))
+        }
+        // These open something to type in (the bookmark editor, the sidebar's bookmarks): the shell takes focus.
+        Shortcut::BookmarkPage | Shortcut::ShowBookmarks => {
+            focus_shell(app);
+            shell_command(app, &name(s))
+        }
     }
 }
 
@@ -83,6 +90,12 @@ fn select(app: &AppHandle, index: Option<usize>) {
 
 /// Moves keyboard focus into the shell's address bar.
 pub fn focus_address(app: &AppHandle) {
+    focus_shell(app);
+    shell_command(app, "focus-address");
+}
+
+/// Moves keyboard focus from the page into the shell web view.
+fn focus_shell(app: &AppHandle) {
     app.state::<FocusState>()
         .content_last
         .store(false, std::sync::atomic::Ordering::SeqCst);
@@ -91,7 +104,6 @@ pub fn focus_address(app: &AppHandle) {
             let _ = ferrum_webview_manager::webview2::controller_focus(&pw.controller());
         });
     }
-    shell_command(app, "focus-address");
 }
 
 /// Tells the shell to do something only it can (focus its address bar, show the sidebar or settings).

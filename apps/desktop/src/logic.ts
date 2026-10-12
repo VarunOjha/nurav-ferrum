@@ -155,6 +155,7 @@ export function shortcutFor(k: ShellKey): string | null {
     if (key === "l") return "focus-address";
     if (key === "r") return "reload";
     if (key === ",") return "settings";
+    if (key === "d") return "bookmark-page";
     if (/^[1-8]$/.test(key)) return `select-tab-${key}`;
     if (key === "9") return "last-tab";
     return null;
@@ -163,6 +164,8 @@ export function shortcutFor(k: ShellKey): string | null {
     if (key === "Tab") return "previous-tab";
     if (key === "t") return "reopen-tab";
     if (key === "s") return "toggle-sidebar";
+    if (key === "b") return "toggle-bookmarks-bar";
+    if (key === "o") return "show-bookmarks";
     return null;
   }
   if (!k.ctrl && !k.shift && k.alt) {
@@ -176,4 +179,25 @@ export function shortcutFor(k: ShellKey): string | null {
     if (key === "F6") return "focus-address";
   }
   return null;
+}
+
+/** A bookmark as the app reports it (p3.19). */
+export type Bookmark = { id: number; url: string; title: string; folder: string; position: number; created_at: number };
+
+/** Only web pages can be bookmarked (the app refuses anything else, adr-0032). */
+export function canBookmark(url: string): boolean {
+  return /^https?:\/\//i.test(url);
+}
+
+/** Bookmarks grouped by folder, the bookmarks bar's folder first, each in its saved order. */
+export function bookmarkFolders(list: Bookmark[], bar: string): { name: string; items: Bookmark[] }[] {
+  const by = new Map<string, Bookmark[]>();
+  by.set(bar, []);
+  for (const b of list) {
+    if (!by.has(b.folder)) by.set(b.folder, []);
+    by.get(b.folder)!.push(b);
+  }
+  return [...by.entries()]
+    .map(([name, items]) => ({ name, items: [...items].sort((a, b) => a.position - b.position || a.id - b.id) }))
+    .sort((a, b) => (a.name === bar ? -1 : b.name === bar ? 1 : a.name.localeCompare(b.name, undefined, { sensitivity: "base" })));
 }

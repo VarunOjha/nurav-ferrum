@@ -277,3 +277,27 @@ fn corrupted_file_is_backed_up() {
         "the original is left as it was"
     );
 }
+
+#[test]
+fn appearance_defaults_and_round_trip() {
+    // p3.19: no [appearance] section means the bookmarks bar shows; the setting survives a save and load.
+    let c = ferrum_core::config::parse("version = 2\n", Path::new("t.toml")).unwrap();
+    assert!(c.appearance.bookmarks_bar);
+    let c = ferrum_core::config::parse(
+        "version = 2\n[appearance]\nbookmarks_bar = false\n",
+        Path::new("t.toml"),
+    )
+    .unwrap();
+    assert!(!c.appearance.bookmarks_bar);
+    let p = tmp("appearance.toml", "");
+    ferrum_core::config::save(&p, &c).unwrap();
+    let again = ferrum_core::config::parse(&std::fs::read_to_string(&p).unwrap(), &p).unwrap();
+    assert_eq!(again.appearance, c.appearance);
+    assert!(
+        ferrum_core::config::parse(
+            "version = 2\n[appearance]\ncolour = \"red\"\n",
+            Path::new("t.toml")
+        )
+        .is_err()
+    );
+}

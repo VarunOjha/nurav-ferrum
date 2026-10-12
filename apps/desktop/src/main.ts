@@ -4,7 +4,7 @@
 // P3 tasks p3.2 (tabs) and p3.3 (strip and shortcuts).
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { addressText, blockedText, downloadText, finished, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
+import { addressText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, tabLabel, webErrorText, type Bookmark, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -129,6 +129,8 @@ function render(): void {
   lock.textContent = l.text;
   lock.title = l.title;
   statusEl.textContent = u?.status ?? "";
+  // The star follows the active tab's page (an event: render can run before the bookmark code below has started).
+  document.getElementById("star")?.dispatchEvent(new Event("ferrum-render"));
   if (u?.panel) {
     errorText.textContent = webErrorText(u.panel.webError);
     errorAddress.textContent = u.panel.uri;
@@ -453,6 +455,9 @@ function shellCommand(action: string): void {
   if (action === "focus-address") focusAddress();
   if (action === "settings") void openSettings();
   if (action === "toggle-sidebar") void toggleSidebar();
+  if (action === "bookmark-page") void bookmarkPage();
+  if (action === "toggle-bookmarks-bar") void toggleBookmarksBar();
+  if (action === "show-bookmarks") void showBookmarks();
 }
 
 // --- Sidebar (p3.15): open tabs and history, left of the content area. ---
@@ -498,6 +503,7 @@ async function toggleSidebar(): Promise<void> {
   sidebarBtn.setAttribute("aria-expanded", String(!sidebar.hidden));
   reportLayout();
   renderSideTabs();
+  renderSideBookmarks();
   await renderSideHistory();
 }
 sidebarBtn.addEventListener("click", () => void toggleSidebar());
@@ -505,6 +511,181 @@ sideSearch.addEventListener("input", () => void renderSideHistory());
 $<HTMLButtonElement>("side-clear").addEventListener("click", async () => {
   await invoke("history_clear");
   await renderSideHistory();
+});
+
+// --- Bookmarks (p3.19, adr-0032): kept by the app in ferrum.db; the star, the bookmarks bar (the bar's folder), the
+// editor bar (both in the top band, so never under a page) and the sidebar's folders. ---
+type AppearanceView = { bookmarks_bar: boolean; bar_folder: string };
+const star = $<HTMLButtonElement>("star");
+const bmBar = $<HTMLElement>("bookmarks-bar");
+const bmEditor = $<HTMLDivElement>("bm-editor");
+const bmName = $<HTMLInputElement>("bm-name");
+const bmFolder = $<HTMLInputElement>("bm-folder");
+const bmFolders = $<HTMLDataListElement>("bm-folders");
+const bmError = $<HTMLSpanElement>("bm-error");
+const sideBookmarks = $<HTMLDivElement>("side-bookmarks");
+let bookmarks: Bookmark[] = [];
+let appearance: AppearanceView = { bookmarks_bar: true, bar_folder: "Favourites bar" };
+/** The bookmark the editor shows. */
+let editing: number | null = null;
+const activeUrl = (): string => activeUi()?.uri ?? "";
+const activeTitle = (): string => list.tabs.find((t) => t.id === list.active)?.title ?? "";
+function renderStar(): void {
+  const url = activeUrl();
+  const b = bookmarks.find((x) => x.url === url);
+  star.disabled = !canBookmark(url);
+  star.textContent = b ? "\u2605" : "\u2606";
+  star.setAttribute("aria-pressed", String(Boolean(b)));
+  star.title = b ? "Edit this bookmark (Ctrl+D)" : "Bookmark this page (Ctrl+D)";
+}
+star.addEventListener("ferrum-render", renderStar);
+function openUrl(url: string, e?: MouseEvent): void {
+  if (e && (e.button === 1 || e.ctrlKey)) void invoke("tab_new", { url });
+  else void invoke("tab_navigate", { input: url });
+}
+function renderBar(): void {
+  const items = bookmarkFolders(bookmarks, appearance.bar_folder)[0]!.items;
+  const empty = document.createElement("span");
+  empty.className = "bm-empty";
+  empty.textContent = "Star a page (Ctrl+D) to keep it here.";
+  bmBar.replaceChildren(...(items.length ? items.map((b) => {
+    const a = document.createElement("a");
+    a.href = "#";
+    a.dataset.id = String(b.id);
+    a.title = `${b.title}\n${b.url}`;
+    a.textContent = b.title;
+    a.addEventListener("click", (e) => { e.preventDefault(); openUrl(b.url, e); });
+    a.addEventListener("auxclick", (e) => { if (e.button === 1) { e.preventDefault(); openUrl(b.url, e); } });
+    return a;
+  }) : [empty]));
+  const show = appearance.bookmarks_bar;
+  if (bmBar.hidden === show) {
+    bmBar.hidden = !show;
+    reportLayout();
+  }
+}
+function smallButton(cls: string, text: string, label: string, onClick: () => void): HTMLButtonElement {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = `bm-small ${cls}`;
+  b.textContent = text;
+  b.title = label;
+  b.setAttribute("aria-label", label);
+  b.addEventListener("click", onClick);
+  return b;
+}
+function renderSideBookmarks(): void {
+  if (sidebar.hidden) return;
+  sideBookmarks.replaceChildren(...bookmarkFolders(bookmarks, appearance.bar_folder).map((f) => {
+    const d = document.createElement("details");
+    d.open = true;
+    d.dataset.folder = f.name;
+    const s = document.createElement("summary");
+    s.textContent = `${f.name} (${f.items.length})`;
+    const ul = document.createElement("ul");
+    if (!f.items.length) {
+      const li = document.createElement("li");
+      li.className = "bm-none";
+      li.textContent = "Empty";
+      ul.append(li);
+    }
+    for (const b of f.items) {
+      const li = sideButton(b.title, b.url, () => openUrl(b.url));
+      li.dataset.id = String(b.id);
+      li.querySelector("button")!.classList.add("bm-open");
+      li.append(
+        smallButton("bm-edit", "Edit", `Edit ${b.title}`, () => openEditor(b)),
+        smallButton("bm-delete", "\u00d7", `Remove ${b.title}`, async () => {
+          await invoke("bookmark_remove", { id: b.id });
+          await loadBookmarks();
+        }),
+      );
+      ul.append(li);
+    }
+    d.append(s, ul);
+    return d;
+  }));
+}
+async function loadBookmarks(): Promise<void> {
+  bookmarks = await invoke<Bookmark[]>("bookmark_list");
+  renderBar();
+  renderSideBookmarks();
+  renderStar();
+}
+function openEditor(b: Bookmark): void {
+  editing = b.id;
+  bmName.value = b.title;
+  bmFolder.value = b.folder;
+  bmFolders.replaceChildren(...bookmarkFolders(bookmarks, appearance.bar_folder).map((f) => {
+    const o = document.createElement("option");
+    o.value = f.name;
+    return o;
+  }));
+  bmError.textContent = "";
+  bmEditor.hidden = false;
+  reportLayout();
+  bmName.focus();
+  bmName.select();
+}
+function closeEditor(): void {
+  if (bmEditor.hidden) return;
+  bmEditor.hidden = true;
+  editing = null;
+  reportLayout();
+}
+/** The star and Ctrl+D: bookmark the page into the bar's folder, or edit its bookmark. */
+async function bookmarkPage(): Promise<void> {
+  const url = activeUrl();
+  if (!canBookmark(url)) {
+    const u = activeUi();
+    if (u) {
+      u.status = "Only web pages can be bookmarked";
+      render();
+    }
+    return;
+  }
+  let b = bookmarks.find((x) => x.url === url);
+  if (!b) {
+    b = await invoke<Bookmark>("bookmark_add", { url, title: activeTitle() || url, folder: null });
+    await loadBookmarks();
+  }
+  openEditor(b);
+}
+async function toggleBookmarksBar(): Promise<void> {
+  appearance = await invoke<AppearanceView>("appearance_set", { bookmarksBar: !appearance.bookmarks_bar });
+  renderBar();
+}
+async function showBookmarks(): Promise<void> {
+  if (sidebar.hidden) await toggleSidebar();
+  $<HTMLElement>("side-bm-title").scrollIntoView({ block: "start" });
+  (sideBookmarks.querySelector("button.bm-open") as HTMLButtonElement | null)?.focus();
+}
+star.addEventListener("click", () => void bookmarkPage());
+const bmDone = $<HTMLButtonElement>("bm-done");
+bmDone.addEventListener("click", async () => {
+  if (editing === null) return;
+  try {
+    await invoke("bookmark_update", { id: editing, title: bmName.value, folder: bmFolder.value || null });
+    closeEditor();
+    await loadBookmarks();
+  } catch (err) {
+    bmError.textContent = String(err);
+  }
+});
+$<HTMLButtonElement>("bm-remove").addEventListener("click", async () => {
+  if (editing === null) return;
+  await invoke("bookmark_remove", { id: editing });
+  closeEditor();
+  await loadBookmarks();
+});
+bmEditor.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    e.preventDefault();
+    closeEditor();
+  } else if (e.key === "Enter") {
+    e.preventDefault();
+    bmDone.click();
+  }
 });
 
 // --- Settings (p3.14): shown in the content area; the app checks and saves (settings.rs). ---
@@ -701,8 +882,10 @@ newTab.addEventListener("click", async () => {
   address.focus();
 });
 
-// Start: the tab list the app already has, then report the layout.
+// Start: the tab list the app already has, the bookmarks, then report the layout.
 applyList(await invoke<TabList>("tab_list"));
+appearance = await invoke<AppearanceView>("appearance_get");
+await loadBookmarks();
 reportLayout();
 
 // The shell is the only web view allowed to use the app bridge (capability shell.json, p2.3).

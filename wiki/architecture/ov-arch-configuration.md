@@ -141,6 +141,11 @@ The settings screen (P3, p3.14) edits the user file through the host only (`sett
 one atomic write; nothing is written on any problem). It edits start-up sites, `restore_on_startup`, `[[sites]]` and
 `[downloads] folder`; per-site profiles and the folder apply at once, start-up sites at the next start.
 
+`[appearance]` (P3 feature set, p3.19): `bookmarks_bar` (default `true`), changed by Ctrl+Shift+B through the host
+command `appearance_set` (the other settings stay; one atomic write of the user file). p3.22 adds the theme, accent
+colour and density here (adr-0033). As with every section, a file given with `--config` replaces the user file as a
+whole for that run.
+
 `[session] restore_on_startup` is on by default from version 2: the last session's tabs open again, else the start-up
 pages (a version-1 file keeps it off, the P2 behaviour). The session itself is runtime state (section 5).
 

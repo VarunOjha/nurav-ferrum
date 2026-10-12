@@ -1,0 +1,26 @@
+Ferrum check p3.19: Bookmarks
+Why: bookmarks must be quick to add, easy to find, and kept safely.
+Run at 2026-10-12 15:51 on commit 1cb9237 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Core tests: bookmark shortcuts and the appearance setting
+         shortcut table and [appearance] tests pass
+  PASS   Shell unit tests (bookmark rules included)
+         npm test: pass
+Running 10 tests using 1 worker
+  ✓   1 bookmarks.spec.ts:22:1 › the star bookmarks the page into the bar; the editor renames and moves it (346ms)
+  ✓   2 bookmarks.spec.ts:43:1 › the bar opens pages; Ctrl+D in the shell bookmarks the page (244ms)
+  ✓   3 bookmarks.spec.ts:57:1 › the sidebar lists every folder; opening and removing from it (305ms)
+  ✓   4 bookmarks.spec.ts:71:1 › only web pages can be bookmarked; websites have no bridge (42ms)
+  ✓   5 bookmarks.spec.ts:80:1 › Ctrl+Shift+B hides the bar; bookmarks and the setting survive a restart (1.6s)
+  ✓   6 settings.spec.ts:18:1 › change settings, see them take effect, restart, still there (4.3s)
+  ✓   7 settings.spec.ts:65:1 › invalid input is refused with plain messages; the file is unchanged (1.9s)
+  ✓   8 sidebar.spec.ts:25:1 › open and close: the tab view shrinks and grows, never overlapping (320ms)
+  ✓   9 sidebar.spec.ts:41:1 › choosing a tab or a history entry in the sidebar (419ms)
+  ✓  10 sidebar.spec.ts:60:1 › Ctrl+Shift+S toggles it from the shell and from inside a page (2.5s)
+  10 passed (33.5s)
+  PASS   Smoke tests: bookmarks; sidebar and settings still work (45 s)
+         bookmarks + sidebar + settings: 10 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.19 (3 PASS; 46 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.19 check passed".

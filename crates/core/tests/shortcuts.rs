@@ -55,6 +55,9 @@ fn every_browser_shortcut_maps() {
         (ctrl(b'R' as u32), Reload),
         (ctrl_shift(b'S' as u32), ToggleSidebar),
         (ctrl(vk::COMMA), Settings),
+        (ctrl(b'D' as u32), BookmarkPage),
+        (ctrl_shift(b'B' as u32), ToggleBookmarksBar),
+        (ctrl_shift(b'O' as u32), ShowBookmarks),
     ];
     for (k, want) in cases {
         assert_eq!(for_key(k), Some(want), "{k:?}");
@@ -99,4 +102,7 @@ fn only_tab_switching_repeats() {
 fn names_are_stable() {
     assert_eq!(name(Shortcut::SelectTab(0)), "select-tab-1");
     assert_eq!(name(Shortcut::FocusAddress), "focus-address");
+    assert_eq!(name(Shortcut::BookmarkPage), "bookmark-page");
+    assert_eq!(name(Shortcut::ToggleBookmarksBar), "toggle-bookmarks-bar");
+    assert_eq!(name(Shortcut::ShowBookmarks), "show-bookmarks");
 }

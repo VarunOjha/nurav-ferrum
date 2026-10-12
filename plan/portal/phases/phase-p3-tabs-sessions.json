@@ -228,7 +228,7 @@
       "status": "In progress",
       "chain": "You asked for bookmarks → star and list → your favourite sites are one click away.",
       "check": "Tests: star, rename, delete, open, survive a restart; websites cannot touch your bookmarks.",
-      "script": null
+      "script": "scripts/verify/p3.19-bookmarks.ps1"
     },
     {
       "id": "p3.20",
