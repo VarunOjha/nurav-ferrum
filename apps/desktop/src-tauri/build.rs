@@ -32,6 +32,8 @@ fn main() {
             "test_crash",
             "history_list",
             "history_clear",
+            "history_remove",
+            "library_suggest",
             "bookmark_list",
             "bookmark_for",
             "bookmark_add",

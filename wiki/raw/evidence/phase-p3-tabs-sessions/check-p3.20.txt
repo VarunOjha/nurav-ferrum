@@ -1,0 +1,28 @@
+Ferrum check p3.20: Search of the past from the address bar
+Why: typing a few letters of a title must find the page.
+Run at 2026-10-12 15:57 on commit e197c69 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Store tests for suggestions (3 s)
+         store tests: 13 passed
+  PASS   Shell unit tests (suggestion rules)
+         npm test: pass
+Running 12 tests using 1 worker
+  ✓   1 address-search.spec.ts:30:1 › typing shows open tabs, bookmarks and history in groups, never under the page (832ms)
+  ✓   2 address-search.spec.ts:68:1 › arrow keys and Enter: an open tab is switched to; a history page opens (754ms)
+  ✓   3 address-search.spec.ts:84:1 › Shift+Delete forgets a history page; clicking a row opens it (654ms)
+  ✓   4 bookmarks.spec.ts:22:1 › the star bookmarks the page into the bar; the editor renames and moves it (394ms)
+  ✓   5 bookmarks.spec.ts:43:1 › the bar opens pages; Ctrl+D in the shell bookmarks the page (374ms)
+  ✓   6 bookmarks.spec.ts:57:1 › the sidebar lists every folder; opening and removing from it (265ms)
+  ✓   7 bookmarks.spec.ts:71:1 › only web pages can be bookmarked; websites have no bridge (35ms)
+  ✓   8 bookmarks.spec.ts:80:1 › Ctrl+Shift+B hides the bar; bookmarks and the setting survive a restart (1.4s)
+  ✓   9 history.spec.ts:30:1 › an old history.json is imported once and kept as history.json.imported (16ms)
+  ✓  10 history.spec.ts:40:1 › visits are recorded newest first with their titles, searchable, and saved to the data folder (755ms)
+  ✓  11 history.spec.ts:54:1 › back and forward follow the active tab (248ms)
+  ✓  12 history.spec.ts:68:1 › clearing empties the list and the file at once (35ms)
+  12 passed (28.5s)
+  PASS   Smoke tests: address-bar search; history and bookmarks still work (40 s)
+         address-search + history + bookmarks: 12 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.20 (3 PASS; 44 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.20 check passed".

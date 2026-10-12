@@ -201,3 +201,89 @@ export function bookmarkFolders(list: Bookmark[], bar: string): { name: string; 
     .map(([name, items]) => ({ name, items: [...items].sort((a, b) => a.position - b.position || a.id - b.id) }))
     .sort((a, b) => (a.name === bar ? -1 : b.name === bar ? 1 : a.name.localeCompare(b.name, undefined, { sensitivity: "base" })));
 }
+
+// --- Address-bar suggestions (p3.20): open tabs, bookmarks and history, grouped. The app finds bookmarks and history
+// (SQLite word index); the shell matches open tabs with the same rule: every typed word starts a word of the title
+// or the address, in any case. ---
+
+/** The words of `text` (letters and digits), lower case, as the app's word index splits them. */
+export function wordsOf(text: string): string[] {
+  return (text.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []);
+}
+
+/** True when every word of `query` starts some word of `text`. */
+export function matchesWords(text: string, query: string): boolean {
+  const q = wordsOf(query);
+  if (!q.length) return false;
+  const t = wordsOf(text);
+  return q.every((w) => t.some((x) => x.startsWith(w)));
+}
+
+/** `text` in pieces, the start of each word that a typed word begins marked `hit` (shown in the accent colour). */
+export function highlight(text: string, query: string): { text: string; hit: boolean }[] {
+  const q = wordsOf(query);
+  const out: { text: string; hit: boolean }[] = [];
+  let at = 0;
+  for (const m of text.matchAll(/[\p{L}\p{N}]+/gu)) {
+    const word = m[0].toLowerCase();
+    const len = Math.max(0, ...q.filter((w) => word.startsWith(w)).map((w) => w.length));
+    if (len > 0) {
+      const start = m.index!;
+      if (start > at) out.push({ text: text.slice(at, start), hit: false });
+      out.push({ text: text.slice(start, start + len), hit: true });
+      at = start + len;
+    }
+  }
+  if (at < text.length) out.push({ text: text.slice(at), hit: false });
+  return out.filter((p) => p.text.length > 0);
+}
+
+/** One suggestion row. */
+export type Suggestion = { kind: "tab" | "bookmark" | "history"; url: string; title: string; tab?: number; folder?: string; visitedAt?: number };
+/** A group of rows under a heading. */
+export type SuggestionGroup = { label: string; items: Suggestion[] };
+
+/**
+ * The address bar's groups for `query`: open tabs (not the active one, at most 3), bookmarks (as the app found them,
+ * at most 3) and history (at most 5); a page shows once, in the first group that has it. Empty groups are left out.
+ */
+export function suggestionGroups(
+  query: string,
+  tabs: { id: number; url: string; title: string }[],
+  active: number | null,
+  bookmarks: Bookmark[],
+  history: { url: string; title: string; visited_at: number }[],
+): SuggestionGroup[] {
+  if (!wordsOf(query).length) return [];
+  const seen = new Set<string>();
+  const take = <T extends { url: string }>(xs: T[], n: number): T[] => {
+    const out: T[] = [];
+    for (const x of xs) {
+      if (out.length >= n) break;
+      if (seen.has(x.url)) continue;
+      seen.add(x.url);
+      out.push(x);
+    }
+    return out;
+  };
+  const groups: SuggestionGroup[] = [
+    { label: "Open tabs", items: take(tabs.filter((t) => t.id !== active && /^https?:/i.test(t.url) && matchesWords(`${t.title} ${t.url}`, query)), 3)
+      .map((t) => ({ kind: "tab" as const, url: t.url, title: t.title || t.url, tab: t.id })) },
+    { label: "Bookmarks", items: take(bookmarks, 3).map((b) => ({ kind: "bookmark" as const, url: b.url, title: b.title, folder: b.folder })) },
+    { label: "History", items: take(history, 5).map((h) => ({ kind: "history" as const, url: h.url, title: h.title || h.url, visitedAt: h.visited_at })) },
+  ];
+  return groups.filter((g) => g.items.length > 0);
+}
+
+/** "just now", "5 min ago", "2 h ago", "yesterday", "3 days ago" or the date, for a history row. */
+export function agoText(then: number, now: number): string {
+  const min = Math.floor((now - then) / 60_000);
+  if (min < 1) return "just now";
+  if (min < 60) return `${min} min ago`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `${h} h ago`;
+  const d = Math.floor(h / 24);
+  if (d === 1) return "yesterday";
+  if (d < 7) return `${d} days ago`;
+  return new Date(then).toISOString().slice(0, 10);
+}

@@ -21,13 +21,16 @@
         <button id="reload" class="nav" title="Reload" aria-label="Reload" disabled>&#x21bb;</button>
         <form id="address-form" autocomplete="off">
           <span id="lock" aria-hidden="true">&#x1f512;</span>
-          <input id="address" type="text" spellcheck="false" placeholder="Enter an address" aria-label="Address" />
+          <input id="address" type="text" spellcheck="false" placeholder="Search your tabs, bookmarks and history, or type an address" aria-label="Address" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggest" />
           <button id="star" type="button" title="Bookmark this page (Ctrl+D)" aria-label="Bookmark this page" aria-pressed="false" disabled>&#x2606;</button>
         </form>
         <span id="status" aria-live="polite"></span>
         <button id="settings-btn" class="nav" type="button" title="Settings (Ctrl+,)" aria-label="Settings">&#x2699;</button>
         <div id="progress" aria-hidden="true"></div>
       </header>
+      <!-- Address-bar suggestions (p3.20): part of the top band, so the page view moves down while the list is open and
+           never covers it (a web view is always drawn above the shell, issue 15682). -->
+      <div id="suggest" role="listbox" aria-label="Suggestions" hidden></div>
       <!-- Bookmarks bar (p3.19): the "Favourites bar" folder; Ctrl+Shift+B shows or hides it. Part of the top band. -->
       <nav id="bookmarks-bar" aria-label="Bookmarks bar" hidden></nav>
       <!-- Bookmark editor (p3.19): opened by the star or Ctrl+D; in the top band, so it never sits under a page. -->

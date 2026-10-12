@@ -302,6 +302,25 @@ impl Store {
         Ok(rows)
     }
 
+    /// Up to `limit` different pages from the history matching `query` (as [`Store::history`]), each address once
+    /// with its newest visit, newest first. For the address bar's suggestions (p3.20).
+    pub fn suggest_history(&self, query: &str, limit: usize) -> Result<Vec<Entry>, StoreError> {
+        let mut seen = std::collections::HashSet::new();
+        Ok(self
+            .history(query, limit.saturating_mul(10).max(50))?
+            .into_iter()
+            .filter(|e| seen.insert(e.url.clone()))
+            .take(limit)
+            .collect())
+    }
+
+    /// Forgets every visit to `url` (Shift+Delete on a suggestion). Returns how many entries went.
+    pub fn remove_history_url(&mut self, url: &str) -> Result<usize, StoreError> {
+        Ok(self
+            .conn
+            .execute("DELETE FROM history WHERE url = ?1", params![url])?)
+    }
+
     /// Number of history entries.
     pub fn history_len(&self) -> Result<usize, StoreError> {
         Ok(self
@@ -773,6 +792,37 @@ mod tests {
         assert!(s.remove_bookmark(a.id).unwrap());
         assert!(!s.remove_bookmark(a.id).unwrap());
         assert!(s.search_bookmarks("ferr", 5).unwrap().is_empty());
+    }
+
+    #[test]
+    fn suggestions_list_each_page_once_and_one_page_can_be_forgotten() {
+        let mut s = Store::in_memory();
+        for (i, u) in [
+            "https://a.example/rust",
+            "https://b.example/rust",
+            "https://a.example/rust",
+            "https://c.example/go",
+        ]
+        .iter()
+        .enumerate()
+        {
+            s.visit(u, i as u64 + 1).unwrap();
+        }
+        let urls = |s: &Store| {
+            s.suggest_history("rust", 5)
+                .unwrap()
+                .into_iter()
+                .map(|e| e.url)
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(
+            urls(&s),
+            ["https://a.example/rust", "https://b.example/rust"]
+        );
+        assert_eq!(s.suggest_history("rust", 1).unwrap().len(), 1);
+        assert_eq!(s.remove_history_url("https://a.example/rust").unwrap(), 2);
+        assert_eq!(urls(&s), ["https://b.example/rust"]);
+        assert_eq!(s.history_len().unwrap(), 2);
     }
 
     #[test]

@@ -27,6 +27,8 @@
     "allow-test-crash",
     "allow-history-list",
     "allow-history-clear",
+    "allow-history-remove",
+    "allow-library-suggest",
     "allow-bookmark-list",
     "allow-bookmark-for",
     "allow-bookmark-add",

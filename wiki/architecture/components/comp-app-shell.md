@@ -196,6 +196,13 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   tab view moves down and never sits under them. The sidebar gains a Bookmarks section: every folder (the bar's
   first), open, Edit, remove. Ctrl+D and Ctrl+Shift+O move focus to the shell (like Ctrl+L); Ctrl+Shift+B is saved as
   `[appearance] bookmarks_bar` ([check-p3.19](../../raw/evidence/phase-p3-tabs-sessions/check-p3.19.txt)).
+- p3.20, address-bar search of the past: commands `library_suggest` (up to 3 bookmarks and 8 history pages for the
+  typed words) and `history_remove` (Shift+Delete). The shell matches open tabs itself with the same rule (every typed
+  word starts a word of the title or address) and shows three groups: Open tabs (not the active one; "Switch to tab"),
+  Bookmarks, History (each page once, "how long ago"), matched word starts in the accent colour. Arrow keys, Enter,
+  Esc, click; the address bar is a combobox (`aria-activedescendant`). The list is part of the top band, so the tab
+  view moves down while it is open and never covers it (the smoke test compares the page's height with the band)
+  ([check-p3.20](../../raw/evidence/phase-p3-tabs-sessions/check-p3.20.txt)).
 - p3.8, downloads (`downloads.rs`): files go to `[downloads] folder` (else the Windows Downloads folder) under the
   name WebView2 suggests (the file name only; a name already on disk or already given out in this run gets
   ` (1)`, ` (2)`, ...: nothing is ever replaced). The shell's downloads bar (top band) shows each download: percent and

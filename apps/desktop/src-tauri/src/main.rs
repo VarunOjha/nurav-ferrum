@@ -190,6 +190,8 @@ fn main() {
             session::test_crash,
             history::history_list,
             history::history_clear,
+            history::history_remove,
+            history::library_suggest,
             settings::settings_get,
             settings::settings_set,
             bookmarks::bookmark_list,

@@ -4,7 +4,7 @@
 // P3 tasks p3.2 (tabs) and p3.3 (strip and shortcuts).
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { addressText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, tabLabel, webErrorText, type Bookmark, type ToolbarState } from "./logic.ts";
+import { addressText, agoText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -688,6 +688,131 @@ bmEditor.addEventListener("keydown", (e) => {
   }
 });
 
+// --- Address-bar suggestions (p3.20): as the user types, open tabs, bookmarks and history in groups. The list is part
+// of the top band (the page view moves down while it is open, so it is never hidden under the page). ---
+type HistoryHit = { url: string; title: string; visited_at: number };
+const suggestEl = $<HTMLDivElement>("suggest");
+let suggestions: Suggestion[] = [];
+let selected = -1;
+let suggestSeq = 0;
+let suggestTimer: number | undefined;
+function closeSuggest(): void {
+  suggestions = [];
+  selected = -1;
+  address.setAttribute("aria-expanded", "false");
+  address.removeAttribute("aria-activedescendant");
+  if (!suggestEl.hidden) {
+    suggestEl.hidden = true;
+    suggestEl.replaceChildren();
+    reportLayout();
+  }
+}
+function markSelected(): void {
+  suggestEl.querySelectorAll<HTMLElement>(".sg-row").forEach((r, i) => r.setAttribute("aria-selected", String(i === selected)));
+  if (selected >= 0) address.setAttribute("aria-activedescendant", `sg-${selected}`);
+  else address.removeAttribute("aria-activedescendant");
+}
+function titleWithMarks(text: string, query: string): HTMLSpanElement {
+  const span = document.createElement("span");
+  span.className = "sg-title";
+  for (const p of highlight(text, query)) span.append(p.hit ? Object.assign(document.createElement("mark"), { textContent: p.text }) : p.text);
+  return span;
+}
+function renderSuggest(groups: SuggestionGroup[], query: string): void {
+  suggestions = groups.flatMap((g) => g.items);
+  selected = -1;
+  if (!suggestions.length) {
+    closeSuggest();
+    return;
+  }
+  // Line the list up under the address bar.
+  const f = form.getBoundingClientRect();
+  suggestEl.style.marginLeft = `${Math.round(f.left)}px`;
+  suggestEl.style.width = `${Math.round(f.width)}px`;
+  let n = 0;
+  const rows: HTMLElement[] = [];
+  for (const g of groups) {
+    rows.push(Object.assign(document.createElement("div"), { className: "sg-head", textContent: g.label }));
+    for (const s of g.items) {
+      const i = n++;
+      const row = document.createElement("div");
+      row.className = "sg-row";
+      row.id = `sg-${i}`;
+      row.setAttribute("role", "option");
+      row.setAttribute("aria-selected", "false");
+      row.dataset.kind = s.kind;
+      row.dataset.url = s.url;
+      const icon = s.tab !== undefined ? iconImg(s.tab) : null;
+      if (icon) row.append(icon);
+      const url = Object.assign(document.createElement("span"), { className: "sg-url", textContent: `\u00b7 ${addressText(s.url)}` });
+      const tag = document.createElement("span");
+      tag.className = "sg-tag";
+      if (s.kind === "tab") {
+        tag.classList.add("sg-switch");
+        tag.textContent = "Switch to tab \u2192";
+      } else if (s.kind === "bookmark") tag.textContent = `\u2605 ${s.folder ?? ""}`;
+      else tag.textContent = agoText(s.visitedAt ?? 0, Date.now());
+      row.append(titleWithMarks(s.title, query), url, tag);
+      // mousedown would move focus out of the address bar (closing the list) before the click lands.
+      row.addEventListener("mousedown", (e) => e.preventDefault());
+      row.addEventListener("click", () => void choose(i));
+      rows.push(row);
+    }
+  }
+  const hints = document.createElement("div");
+  hints.className = "sg-hints";
+  for (const h of ["\u2191 \u2193 choose", "Enter open", "Shift+Del remove from history", "Esc close"]) hints.append(Object.assign(document.createElement("span"), { textContent: h }));
+  suggestEl.replaceChildren(...rows, hints);
+  address.setAttribute("aria-expanded", "true");
+  if (suggestEl.hidden) {
+    suggestEl.hidden = false;
+    reportLayout();
+  }
+}
+async function updateSuggest(): Promise<void> {
+  const query = address.value;
+  const seq = ++suggestSeq;
+  if (!wordsOf(query).length || document.activeElement !== address) {
+    closeSuggest();
+    return;
+  }
+  const r = await invoke<{ bookmarks: Bookmark[]; history: HistoryHit[] }>("library_suggest", { query });
+  if (seq !== suggestSeq || document.activeElement !== address) return; // a newer keystroke, or the user left
+  renderSuggest(suggestionGroups(query, list.tabs, list.active, r.bookmarks, r.history), query);
+}
+async function choose(i: number): Promise<void> {
+  const s = suggestions[i];
+  if (!s) return;
+  closeSuggest();
+  address.blur();
+  if (s.kind === "tab" && s.tab !== undefined) await invoke("tab_activate", { id: s.tab });
+  else await invoke("tab_navigate", { input: s.url });
+}
+address.addEventListener("input", () => {
+  window.clearTimeout(suggestTimer);
+  suggestTimer = window.setTimeout(() => void updateSuggest(), 60);
+});
+address.addEventListener("blur", () => window.setTimeout(() => { if (document.activeElement !== address) closeSuggest(); }, 0));
+address.addEventListener("keydown", async (e) => {
+  if (suggestEl.hidden) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    const n = suggestions.length;
+    selected = e.key === "ArrowDown" ? (selected + 1) % n : (selected <= 0 ? n - 1 : selected - 1);
+    markSelected();
+  } else if (e.key === "Enter" && selected >= 0) {
+    e.preventDefault();
+    await choose(selected);
+  } else if (e.key === "Escape") {
+    e.preventDefault();
+    closeSuggest();
+  } else if (e.key === "Delete" && e.shiftKey && selected >= 0 && suggestions[selected]?.kind === "history") {
+    e.preventDefault();
+    await invoke("history_remove", { url: suggestions[selected]!.url });
+    await updateSuggest();
+  }
+});
+
 // --- Settings (p3.14): shown in the content area; the app checks and saves (settings.rs). ---
 type SiteRow = { site: string; profile: string };
 type SettingsView = {
@@ -820,6 +945,7 @@ function hideExternal(): void {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  closeSuggest();
   const input = address.value;
   address.blur(); // let the address bar follow the page from now on
   const r = await invoke<NavResult>("tab_navigate", { input });

@@ -239,7 +239,7 @@
       "status": "In progress",
       "chain": "You remember part of a page title → type it → Ferrum finds the page.",
       "check": "Tests: typing finds a visited page; arrows, Enter and Esc work; the list is never hidden under the page.",
-      "script": null
+      "script": "scripts/verify/p3.20-address-search.ps1"
     },
     {
       "id": "p3.21",

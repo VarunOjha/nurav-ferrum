@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, agoText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -130,4 +130,47 @@ test("bookmarks: only web pages; grouped by folder, the bar first, in saved orde
   assert.deepEqual(g.slice(2).map((f) => f.name).sort(), ["Work", "work"].sort());
   assert.deepEqual(g[0]!.items.map((x) => x.id), [4, 2]);
   assert.deepEqual(bookmarkFolders([], "Favourites bar"), [{ name: "Favourites bar", items: [] }]);
+});
+
+test("suggestions: words start words, any case; highlighted word starts", () => {
+  assert.deepEqual(wordsOf("Ferrum · GitHub/you-ferrum"), ["ferrum", "github", "you", "ferrum"]);
+  assert.equal(matchesWords("Ferrum pull request #12 https://github.com/you/ferrum/pull/12", "ferr pull"), true);
+  assert.equal(matchesWords("Ferrum", "rrum"), false, "inside a word does not count");
+  assert.equal(matchesWords("Ferrum", "  "), false);
+  assert.deepEqual(highlight("Ferrum issues", "ferr"), [{ text: "Ferr", hit: true }, { text: "um issues", hit: false }]);
+  assert.deepEqual(highlight("a b", "zz"), [{ text: "a b", hit: false }]);
+  assert.deepEqual(highlight("Rust: the Rust Book", "ru bo"), [
+    { text: "Ru", hit: true }, { text: "st: the ", hit: false }, { text: "Ru", hit: true }, { text: "st ", hit: false },
+    { text: "Bo", hit: true }, { text: "ok", hit: false },
+  ]);
+});
+
+test("suggestions: grouped tabs, bookmarks, history; a page once; the active tab left out; limits", () => {
+  const tabs = [
+    { id: 1, url: "https://github.com/you/ferrum", title: "Ferrum repo" },
+    { id: 2, url: "https://ferrum.example/active", title: "Ferrum active" },
+    { id: 3, url: "about:blank", title: "Ferrum blank" },
+  ];
+  const bm = (id: number, url: string, title: string) => ({ id, url, title, folder: "Work", position: 0, created_at: 0 });
+  const h = (url: string, title: string, t: number) => ({ url, title, visited_at: t });
+  const g = suggestionGroups("ferr", tabs, 2,
+    [bm(1, "https://github.com/you/ferrum", "dup of tab"), bm(2, "https://github.com/you/ferrum/issues", "Ferrum issues")],
+    [h("https://github.com/you/ferrum/issues", "dup of bookmark", 3), ...[1, 2, 3, 4, 5, 6].map((i) => h(`https://f.example/${i}`, `Ferrum ${i}`, i))]);
+  assert.deepEqual(g.map((x) => x.label), ["Open tabs", "Bookmarks", "History"]);
+  assert.deepEqual(g[0]!.items.map((x) => x.tab), [1]);
+  assert.deepEqual(g[1]!.items.map((x) => x.title), ["Ferrum issues"]);
+  assert.equal(g[2]!.items.length, 5);
+  assert.ok(g[2]!.items.every((x) => x.url.startsWith("https://f.example/")));
+  assert.deepEqual(suggestionGroups("  ", tabs, null, [], []), []);
+  assert.deepEqual(suggestionGroups("zzz", tabs, null, [], []), []);
+});
+
+test("history rows say how long ago", () => {
+  const now = Date.UTC(2026, 9, 12, 12);
+  assert.equal(agoText(now - 10_000, now), "just now");
+  assert.equal(agoText(now - 5 * 60_000, now), "5 min ago");
+  assert.equal(agoText(now - 2 * 3_600_000, now), "2 h ago");
+  assert.equal(agoText(now - 30 * 3_600_000, now), "yesterday");
+  assert.equal(agoText(now - 3 * 86_400_000, now), "3 days ago");
+  assert.equal(agoText(Date.UTC(2026, 0, 2), now), "2026-01-02");
 });

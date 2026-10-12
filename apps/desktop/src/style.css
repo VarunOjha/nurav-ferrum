@@ -132,3 +132,17 @@ body { display: flex; flex-direction: column; }
 #side-bookmarks li > button.bm-open { flex: 1; min-width: 0; }
 #side-bookmarks li > button.bm-small { flex: none; width: auto; padding: 4px 6px; color: var(--muted); font-size: 12px; }
 #side-bookmarks .bm-none { padding: 4px 8px; font-size: 12px; color: var(--muted); }
+
+/* Address-bar suggestions (p3.20): in the top band, under the address bar. */
+#suggest { box-sizing: border-box; margin: -4px 0 6px; padding: 6px; border: 1px solid var(--border); border-top: 0; border-radius: 0 0 12px 12px; background: var(--surface); color: var(--text); font-size: 13px; }
+#suggest[hidden] { display: none; }
+#suggest .sg-head { padding: 8px 10px 4px; font: 600 10.5px "IBM Plex Mono", Consolas, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+#suggest .sg-row { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 8px; cursor: pointer; }
+#suggest .sg-row[aria-selected="true"] { background: var(--bg); box-shadow: inset 2px 0 0 var(--accent); }
+#suggest .sg-row:hover { background: var(--bg); }
+#suggest .sg-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 45%; }
+#suggest .sg-title mark { background: transparent; color: var(--accent); font-weight: 700; }
+#suggest .sg-url { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--muted); font-size: 12px; }
+#suggest .sg-tag { flex: none; font: 11px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
+#suggest .sg-tag.sg-switch { padding: 2px 8px; border-radius: 10px; background: var(--bg); color: var(--text); font-family: inherit; }
+#suggest .sg-hints { display: flex; gap: 14px; padding: 8px 10px 2px; margin-top: 4px; border-top: 1px solid var(--border); font: 11px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }

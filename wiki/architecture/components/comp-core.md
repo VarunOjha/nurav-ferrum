@@ -81,7 +81,9 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   "Favourites bar"), `bookmark`, `bookmark_for`, `bookmarks`, `search_bookmarks`, `update_bookmark`, `move_bookmark`,
   `remove_bookmark`; `check_url` keeps only `http`/`https` (no `javascript:`, `file:`, `data:`), titles cut to 500
   characters without control characters. The `history` module stays as the `history.json` reader for the one-time
-  import. 12 unit tests ([check-p3.18](../../raw/evidence/phase-p3-tabs-sessions/check-p3.18.txt)).
+  import. 12 unit tests ([check-p3.18](../../raw/evidence/phase-p3-tabs-sessions/check-p3.18.txt)). p3.20 adds
+  `suggest_history` (each page once, newest visit first) and `remove_history_url` (every visit to one address)
+  ([check-p3.20](../../raw/evidence/phase-p3-tabs-sessions/check-p3.20.txt)).
 - `config` (p3.8): `[downloads] folder` (none = the Windows Downloads folder).
 - `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default).
 - `config` (p3.4): the file carries `version` (`VERSION` = 2). A file without it is version 1 (P2) and is migrated

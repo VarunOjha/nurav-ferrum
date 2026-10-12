@@ -60,3 +60,40 @@ pub fn history_clear(lib: tauri::State<'_, Library>) -> Result<(), String> {
     tracing::info!(target: "ferrum::history", "history cleared");
     Ok(())
 }
+
+/// Forgets every visit to one address (Shift+Delete on an address-bar suggestion, p3.20).
+#[tauri::command]
+pub fn history_remove(lib: tauri::State<'_, Library>, url: String) -> Result<usize, String> {
+    lib.lock()
+        .remove_history_url(&url)
+        .map_err(|e| e.to_string())
+}
+
+/// What the address bar suggests from the library for `query` (p3.20): matching bookmarks and pages from the history
+/// (each page once, newest first). Open tabs are matched by the shell, which has the tab list.
+#[derive(Debug, serde::Serialize)]
+pub struct Suggestions {
+    /// Up to 3 bookmarks, best match first.
+    pub bookmarks: Vec<ferrum_core::store::Bookmark>,
+    /// Up to 8 pages from the history, newest first.
+    pub history: Vec<Entry>,
+}
+
+/// Suggestions for the address bar (words of titles and addresses; nothing for an empty query).
+#[tauri::command]
+pub fn library_suggest(
+    lib: tauri::State<'_, Library>,
+    query: String,
+) -> Result<Suggestions, String> {
+    if query.trim().is_empty() {
+        return Ok(Suggestions {
+            bookmarks: Vec::new(),
+            history: Vec::new(),
+        });
+    }
+    let s = lib.lock();
+    Ok(Suggestions {
+        bookmarks: s.search_bookmarks(&query, 3).map_err(|e| e.to_string())?,
+        history: s.suggest_history(&query, 8).map_err(|e| e.to_string())?,
+    })
+}
