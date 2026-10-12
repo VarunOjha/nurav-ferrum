@@ -6,7 +6,7 @@
   "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
   "status": "In progress",
   "progress": {
-    "done": 21,
+    "done": 22,
     "total": 23
   },
   "step_order": [
@@ -269,7 +269,7 @@
       "what": "Add the feature set's tests to the Phase 3 test run and add new items to your checklist.",
       "why": "The new features must keep working, and you check them by hand before signing off.",
       "how": "Extend the Phase 3 test suite and end check; new checklist items for bookmarks, search, backup and look.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "Features built → tests and checklist → you review everything together at the Phase 3 sign-off.",
       "check": "The Phase 3 end check runs the new tests and passes; the checklist has the new items.",
       "script": "scripts/verify/p3.23-feature-set-tests.ps1"

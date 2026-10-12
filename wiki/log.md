@@ -2083,3 +2083,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-feature-set-design-pick.md]
 - result: themes.ts: Graphite tokens for light and dark, accents, densities; style.css has no colour of its own (unit-tested); [appearance] theme/accent/density changed at once from Settings; IBM Plex bundled (@fontsource 5.3.0, OFL-1.1); new-tab page over empty tabs; reduced-motion respected; logo 8 split tile in icon.ico/icon.png. scripts/verify/p3.22-look.ps1 PASS (27 smoke tests; icon orange and graphite); dark and light screenshots saved under design/. Stales approval of comp-app-shell and comp-core.
 - commit: 2a5ca43
+
+## [2026-10-12] code | p3.23 feature set in the P3 suite and gate; checklist items 14 to 20
+
+- session: s02
+- time: 16:35
+- pages: [phase-p3-tabs-sessions]
+- sources: [raw/owner/2026-10-12-s02-part-pages-reapproval-and-go.md]
+- result: npm run p3 and the p3.11 check run bookmarks, address-search, backup and look; check scripts for p3.17 (design recorded and unchanged) and p3.23; every P3 task lists a script for the gate; owner checklist items 14 to 20. Both new checks PASS.
+- commit: 0761cb2

@@ -4983,7 +4983,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: tests and your checklist",
       "summary": "Features built → tests and checklist → you review everything together at the Phase 3 sign-off.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -5076,6 +5076,14 @@
       "kind": "commit",
       "title": "Commit: Built: the Graphite look and the split-tile logo",
       "summary": "Ferrum now has the Graphite look you picked, dark or light following Windows, with your accent colour and roomy or compact sizes in Settings. An empty tab shows a new-tab page with your favourites and",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "0761cb2",
+      "kind": "commit",
+      "title": "Commit: Feature set added to the Phase 3 tests and your checklist",
+      "summary": "The new features are part of the Phase 3 test run now, and your checklist has seven new items (14 to 20) for them: look and logo, appearance settings, new tab, bookmarks, address-bar search, backup, y",
       "status": null,
       "related": []
     }

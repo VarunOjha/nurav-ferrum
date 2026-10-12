@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 21 of 23 tasks done. Next: tests, checklist and the end check.",
+  "summary": "Phase 3 is in progress: 22 of 23 tasks done. Next: phase 3 docs and the end check.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:36ca554032a0713da6303e8dbecc20ef4edee05982edf02c2a3299d6146bc4b6"
+    "content_hash": "sha256:301e05d367570e567c0fa56545889822175bfcae146edd439d872f4fdd828a28"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 21 of 23 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 22 of 23 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "21 of 23 tasks done"
+        "state": "22 of 23 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Tests, checklist and the end check"
+        "state": "Phase 3 docs and the end check"
       }
     ],
-    "why": "Nothing to run. Claude adds the feature set to the Phase 3 test run and your checklist, then runs the Phase 3 end check.",
+    "why": "Nothing to run. Claude updates the Phase 3 docs, runs the end check on one commit, then stops for your review.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:fa29c92e121b76f5794f6a0198ff0406739a0ee4019914648080b0561352d88f"
+    "content_hash": "sha256:740ee32b4c7b59ed11b9d0d47a4487c9ea97056558c924fba1e87bfaaa2e3aec"
   },
   "entries": [
     {
@@ -3397,6 +3397,26 @@
       "tags": [
         "look & feel",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-23",
+      "date": "2026-10-12",
+      "time": "16:35",
+      "title": "Feature set added to the Phase 3 tests and your checklist",
+      "done": "The new features are part of the Phase 3 test run now, and your checklist has seven new items (14 to 20) for them: look and logo, appearance settings, new tab, bookmarks, address-bar search, backup, your old history.",
+      "next": "Claude finishes the Phase 3 docs, runs the Phase 3 end check, then stops and reports.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "0761cb2",
+      "covers": [
+        "## [2026-10-12] code | p3.23 feature set in the P3 suite and gate; checklist items 14 to 20"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "testing",
+        "phases"
       ]
     }
   ]
