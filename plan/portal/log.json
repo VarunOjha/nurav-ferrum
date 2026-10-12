@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:6b3a411fb1bd133d9a69f1c80989cdb3f3156c5ba7348a6dbf087b30bb78bba4"
+    "content_hash": "sha256:fbb93558b8bea531bb0ab0378580fa0f139e365908a726d1f6ace9e457a58d3b"
   },
   "entries": [
     {
@@ -2860,6 +2860,26 @@
       "tags": [
         "tabs",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-6",
+      "date": "2026-10-12",
+      "time": "02:19",
+      "title": "Each site gets its own profile",
+      "done": "Each site (its main domain, as you chose) now has its own store for cookies and sign-ins. When a link in a tab leads to another site, Ferrum asks first, then moves the tab, as you chose. A test proves cookies stay apart (and that they would leak with one shared store). Two sites can be given one shared profile in the settings.",
+      "next": "Browsing history (task p3.7).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "0293deb",
+      "covers": [
+        "## [2026-10-12] code | p3.6 a WebView2 profile per site, per-site settings, ask before a tab changes site"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "isolation",
+        "tabs"
       ]
     }
   ]

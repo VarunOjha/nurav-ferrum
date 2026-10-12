@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 5,
+    "done": 6,
     "total": 15
   },
   "step_order": [
@@ -81,7 +81,7 @@
       "what": "Per-site settings, including which separate profile (data store) each site uses.",
       "why": "If all sites shared one store, any site could see the cookies of another, and being signed in on one account could leak into another.",
       "how": "Use the P1 route. A site is its main domain (your answer). A tab going to another site asks first, then moves to that site's profile; its back button cannot return, and the bar says so (your answer).",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Sites should not see each other's data → assign profiles using the route chosen in P1 → cookies stay apart.",
       "check": "Two sites in different profiles cannot see each other's cookies; one site in two tabs shares one profile; subdomains share; a cross-site move asks first; survives restart.",
       "script": "scripts/verify/p3.6-profile-per-site.ps1"
@@ -235,6 +235,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:eed93fb073b531e027f11eb1e55a1b75b00e92946462c21089f92c616bfd32ae"
+    "content_hash": "sha256:a71d759e14de1f037be85239a89aceeed8af13739f477ee4c823cf78a88979ab"
   }
 }

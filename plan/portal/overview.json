@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 5 of 15 tasks done. Next: a separate profile per site (p3.6).",
+  "summary": "Phase 3 is in progress: 6 of 15 tasks done. Next: browsing history (p3.7).",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:6ec2ca677581a5d88990b56c943f1b0f18b497b7f823b7199a5ed144a0519ec6"
+    "content_hash": "sha256:5d44f7e6218aa74fe55ed582b654c4756b1de0f6a32c07fdaf796cca57b85e1b"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 5 of 15 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 6 of 15 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,11 +38,11 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "5 of 15 tasks done"
+        "state": "6 of 15 tasks done"
       },
       {
         "item": "Next task",
-        "state": "A separate profile per site (p3.6)"
+        "state": "Browsing history (p3.7)"
       }
     ],
     "why": "Nothing to run. Claude builds phase 3 task by task and stops at its end check.",

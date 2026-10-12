@@ -760,7 +760,7 @@
       "kind": "task",
       "title": "P3 task: Separate profile per site",
       "summary": "Sites should not see each other's data → assign profiles using the route chosen in P1 → cookies stay apart.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4803,6 +4803,14 @@
       "kind": "commit",
       "title": "Commit: Your tabs come back after a restart or a crash",
       "summary": "Ferrum now saves your open tabs about once a second and when it closes, and opens them again on the next start, even after a crash. A tab whose site cannot be reached shows the error panel. One limit:",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "0293deb",
+      "kind": "commit",
+      "title": "Commit: Each site gets its own profile",
+      "summary": "Each site (its main domain, as you chose) now has its own store for cookies and sign-ins. When a link in a tab leads to another site, Ferrum asks first, then moves the tab, as you chose. A test proves",
       "status": null,
       "related": []
     }
