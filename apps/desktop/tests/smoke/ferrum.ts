@@ -42,16 +42,17 @@ export async function launch(name: string, opts: { data?: string; extraSettings?
   await waitCdp(30_000);
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
   const pages = async () => browser.contexts().flatMap((c) => c.pages());
+  // Wait until there are two views and one of them has loaded the shell (while it starts, the shell's address is
+  // briefly about:blank like the content view's, so the content view is only chosen once the shell is known).
   let shell: Page | undefined;
   let content: Page | undefined;
-  for (let i = 0; i < 80 && !(shell && content); i++) {
-    for (const p of await pages()) {
-      if (p.url().startsWith("http://tauri.localhost")) shell = p;
-      else content = p;
-    }
+  for (let i = 0; i < 120 && !(shell && content); i++) {
+    const all = await pages();
+    shell = all.find((p) => p.url().startsWith("http://tauri.localhost"));
+    content = shell && all.length >= 2 ? all.find((p) => p !== shell) : undefined;
     if (!(shell && content)) await new Promise((r) => setTimeout(r, 250));
   }
-  if (!shell || !content) throw new Error("shell or content view not found over CDP");
+  if (!shell || !content || shell === content) throw new Error("shell or content view not found over CDP");
   const quit = async () => {
     await shell!.evaluate(() => (window as any).__TAURI_INTERNALS__.invoke("app_quit")).catch(() => {});
     await browser.close().catch(() => {}); // over CDP this only disconnects

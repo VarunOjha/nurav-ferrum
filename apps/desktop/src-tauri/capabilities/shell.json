@@ -8,6 +8,7 @@
     "allow-app-ping",
     "allow-app-quit",
     "allow-shell-layout",
+    "allow-shell-cover",
     "allow-tab-navigate",
     "allow-tab-back",
     "allow-tab-forward",

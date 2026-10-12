@@ -1,0 +1,17 @@
+Ferrum check p2.8: Loading and error states
+Why: you always know what is happening.
+Run at 2026-10-11 19:07 on commit 93535d3 (with uncommitted changes)
+------------------------------------------------------------------------
+Running 5 tests using 1 worker
+  ✓  1 loading-errors.spec.ts:19:1 › slow page shows the loading state, then loaded (3.0s)
+  ✓  2 loading-errors.spec.ts:28:3 › HTTP 404 is shown as a toolbar status, the site's page stays (102ms)
+  ✓  3 loading-errors.spec.ts:28:3 › HTTP 500 is shown as a toolbar status, the site's page stays (101ms)
+  ✓  4 loading-errors.spec.ts:37:1 › unreachable host shows the shell's error panel, and the app recovers (574ms)
+  ✓  5 loading-errors.spec.ts:53:1 › the content view never showed the app's own origin (2ms)
+  5 passed (7.8s)
+  PASS   Smoke test: slow, 404, 500, unreachable host; never the app origin in the website view (26 s)
+         loading-errors: 5 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.8 (1 PASS; 26 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.8 check passed".

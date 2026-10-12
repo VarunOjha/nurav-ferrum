@@ -20,8 +20,58 @@ const back = document.getElementById("back") as HTMLButtonElement;
 const forward = document.getElementById("forward") as HTMLButtonElement;
 const reload = document.getElementById("reload") as HTMLButtonElement;
 const lock = document.getElementById("lock") as HTMLSpanElement;
+const toolbar = document.getElementById("toolbar") as HTMLElement;
+const panel = document.getElementById("error-panel") as HTMLElement;
+const errorText = document.getElementById("error-text") as HTMLParagraphElement;
+const errorAddress = document.getElementById("error-address") as HTMLParagraphElement;
+const errorCode = document.getElementById("error-code") as HTMLParagraphElement;
+const retry = document.getElementById("error-retry") as HTMLButtonElement;
 
 let loading = false;
+let lastUri = "";
+let covered = false;
+
+type State = "idle" | "loading" | "loaded" | "http-error" | "failed";
+function setState(st: State): void {
+  toolbar.dataset.state = st;
+}
+
+// WebView2 web error status codes (COREWEBVIEW2_WEB_ERROR_STATUS) in plain words. 14 = cancelled (not an error).
+const WEB_ERRORS: Record<number, string> = {
+  1: "The site's certificate does not match its name. Ferrum does not offer a way around certificate errors.",
+  2: "The site's certificate has expired. Ferrum does not offer a way around certificate errors.",
+  3: "The client certificate has errors.",
+  4: "The site's certificate was revoked. Ferrum does not offer a way around certificate errors.",
+  5: "The site's certificate is not valid. Ferrum does not offer a way around certificate errors.",
+  6: "The server could not be reached.",
+  7: "The server took too long to answer.",
+  8: "The server sent an answer Ferrum could not read.",
+  9: "The connection was interrupted.",
+  10: "The connection was reset.",
+  11: "The connection was lost. Check the network and try again.",
+  12: "Ferrum could not connect to the server.",
+  13: "The site's name could not be found. Check the address or the network.",
+  15: "The site redirected too many times (a redirect loop).",
+  16: "Something unexpected went wrong.",
+  17: "The site asks for a sign-in Ferrum cannot show yet.",
+  18: "The proxy asks for a sign-in.",
+};
+
+/** Shows or hides the shell's own error panel; the app hides the content view while the panel covers it. */
+async function showPanel(uri: string, webError: number): Promise<void> {
+  errorText.textContent = WEB_ERRORS[webError] ?? "The page could not be loaded.";
+  errorAddress.textContent = uri;
+  errorCode.textContent = `WebView2 error status ${webError}`;
+  panel.hidden = false;
+  covered = true;
+  await invoke("shell_cover", { cover: true });
+}
+async function hidePanel(): Promise<void> {
+  if (!covered) return;
+  panel.hidden = true;
+  covered = false;
+  await invoke("shell_cover", { cover: false });
+}
 // The events the shell received, kept in this web view's title for the built-in self-test (not shown to users:
 // the window title is set by the app, not by this page).
 const received: [string, string][] = [];
@@ -34,14 +84,21 @@ function setLoading(on: boolean): void {
   reload.disabled = false;
 }
 
+let currentUri = "";
 function showAddress(uri: string): void {
+  currentUri = uri;
   if (document.activeElement !== address) address.value = uri === "about:blank" ? "" : uri;
-  const secure = uri.startsWith("https:");
-  lock.textContent = secure ? "\u{1f512}" : uri.startsWith("http:") ? "⚠" : "";
-  lock.title = secure ? "Secure connection" : uri.startsWith("http:") ? "Not secure" : "";
 }
 
-await listen<TabEvent>("tab", (e) => {
+/** The lock describes a page that actually loaded: set on success, cleared otherwise. */
+function showLock(loaded: boolean): void {
+  const secure = loaded && currentUri.startsWith("https:");
+  const insecure = loaded && currentUri.startsWith("http:");
+  lock.textContent = secure ? "\u{1f512}" : insecure ? "⚠" : "";
+  lock.title = secure ? "Secure connection" : insecure ? "Not secure" : "";
+}
+
+await listen<TabEvent>("tab", async (e) => {
   const ev = e.payload;
   const uri = "uri" in ev ? ev.uri : "";
   received.push([ev.kind, uri]);
@@ -49,7 +106,11 @@ await listen<TabEvent>("tab", (e) => {
   switch (ev.kind) {
     case "navigation-starting":
       if (ev.allowed) {
+        lastUri = ev.uri;
+        showLock(false);
+        void hidePanel();
         setLoading(true);
+        setState("loading");
         statusEl.textContent = "Loading…";
       } else {
         statusEl.textContent = "Blocked: " + ev.uri.split(":")[0] + " address";
@@ -60,7 +121,22 @@ await listen<TabEvent>("tab", (e) => {
       break;
     case "navigation-completed":
       setLoading(false);
-      statusEl.textContent = ev.success ? "" : "The page could not be loaded";
+      if (ev.http_status >= 400) {
+        // The site answered with an error page of its own: show it, and say so in the toolbar.
+        setState("http-error");
+        statusEl.textContent = `This page answered ${ev.http_status}`;
+        showLock(true);
+      } else if (!ev.success && ev.web_error_status !== 14) {
+        // No page at all (network, name, certificate, redirect loop): the shell draws the error itself.
+        setState("failed");
+        statusEl.textContent = "Not loaded";
+        showLock(false); // no page was loaded, so there is no secure connection to show
+        await showPanel(lastUri, ev.web_error_status);
+      } else {
+        setState(ev.success ? "loaded" : "idle");
+        statusEl.textContent = "";
+        showLock(ev.success);
+      }
       break;
     case "history-changed":
       back.disabled = !ev.can_go_back;
@@ -89,6 +165,11 @@ form.addEventListener("submit", async (e) => {
 address.addEventListener("focus", () => {
   address.select();
   void invoke("shell_focused");
+});
+
+retry.addEventListener("click", async () => {
+  await hidePanel();
+  await invoke("tab_reload");
 });
 
 back.addEventListener("click", () => void invoke("tab_back"));

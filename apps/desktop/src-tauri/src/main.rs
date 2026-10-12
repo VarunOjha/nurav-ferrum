@@ -42,6 +42,22 @@ fn shell_layout(window: Window, band: tauri::State<'_, ShellBand>, extra: f64) {
     });
 }
 
+/// True while the shell's error panel covers the content area (p2.8): the content view is hidden and the shell
+/// gets the whole window, so error pages are drawn by the shell and never loaded into the content view.
+#[derive(Default)]
+pub struct Covered(pub std::sync::atomic::AtomicBool);
+
+/// The shell shows (true) or removes (false) its full error panel.
+#[tauri::command]
+fn shell_cover(window: Window, covered: tauri::State<'_, Covered>, cover: bool) {
+    covered.0.store(cover, Ordering::SeqCst);
+    let w = window.clone();
+    let _ = window.run_on_main_thread(move || {
+        content::set_content_visible(!cover);
+        let _ = relayout(&w);
+    });
+}
+
 /// Closes Ferrum (the shell's quit action; the smoke tests use it to end the app cleanly instead of killing it).
 #[tauri::command]
 fn app_quit(app: tauri::AppHandle) {
@@ -69,9 +85,19 @@ fn relayout(window: &Window) -> tauri::Result<()> {
         .inner_size()?
         .to_logical::<f64>(window.scale_factor()?);
     if let Some(shell) = window.app_handle().get_webview("shell") {
+        let covered = window
+            .app_handle()
+            .state::<Covered>()
+            .0
+            .load(Ordering::SeqCst);
+        let height = if covered {
+            size.height
+        } else {
+            band_height(window.app_handle())
+        };
         shell.set_bounds(Rect {
             position: LogicalPosition::new(0.0, 0.0).into(),
-            size: LogicalSize::new(size.width, band_height(window.app_handle())).into(),
+            size: LogicalSize::new(size.width, height).into(),
         })?;
     }
     content::relayout(window);
@@ -110,6 +136,7 @@ fn main() {
     tauri::Builder::default()
         .manage(BridgeStats::default())
         .manage(ShellBand::default())
+        .manage(Covered::default())
         .manage(FocusState::default())
         .manage(EventLog::default())
         .manage(ShellTitle::default())
@@ -118,6 +145,7 @@ fn main() {
             app_ping,
             app_quit,
             shell_layout,
+            shell_cover,
             content::tab_navigate,
             content::tab_back,
             content::tab_forward,

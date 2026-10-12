@@ -158,6 +158,15 @@ pub fn relayout<R: Runtime>(window: &Window<R>) {
     }
 }
 
+/// Shows or hides the content view (UI thread).
+pub fn set_content_visible(visible: bool) {
+    CONTENT.with(|c| {
+        if let Some(v) = c.borrow().as_ref() {
+            let _ = v.set_visible(visible);
+        }
+    });
+}
+
 /// Called on the UI thread when the window becomes active: put keyboard focus back into the page if it was there
 /// (spike S1 known issue: after Alt+Tab, typing did not reach the page until a click).
 pub fn restore_focus<R: Runtime>(app: &AppHandle<R>) {

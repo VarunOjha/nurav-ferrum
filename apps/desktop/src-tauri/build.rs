@@ -10,6 +10,7 @@ fn main() {
             "app_ping",
             "app_quit",
             "shell_layout",
+            "shell_cover",
             "tab_navigate",
             "tab_back",
             "tab_forward",
