@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 6,
+    "done": 7,
     "total": 15
   },
   "step_order": [
@@ -92,7 +92,7 @@
       "what": "Back and forward for each tab, plus a list of the pages you visited.",
       "why": "History shows which sites you visit. Kept anywhere other than this computer, or impossible to clear, it would put your privacy at risk.",
       "how": "Back and forward live with each tab in the shell; the list of visited pages is kept in one file in the app's local data, outside the project folder.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "You need back/forward per tab and a list of visited pages → kept locally, clearable, never in the repo → useful without leaking.",
       "check": "History tests pass; clearing empties the list and the file.",
       "script": "scripts/verify/p3.7-history.ps1"

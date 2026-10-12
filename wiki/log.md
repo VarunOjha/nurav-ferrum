@@ -1877,3 +1877,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt, raw/research/p3-profiles-psl.md, raw/owner/2026-10-12-s02-p3-autoapproval-keys.md]
 - result: Site key = registrable domain via psl 2.1.241 (Q-111); profile names within WebView2's documented rules; [isolation] mode per-site (default in settings version 2; version-1 files keep shared) and [[sites]] named profiles; a page leading to another profile is stopped: empty tab moves at once, else the shell bar asks and only Continue moves the tab (Q-209); typed addresses move; redirects stay (gap for P4). Fixture test sites on *.localhost; p2.1 probe repeated (raw/evidence/phase-p2-minimal-container/p2.1-fixture-curl-3.txt), p2.1 PASS. Profiles smoke 5 passed (cookie kept apart; shared-profile control sees it); whole suite 48 passed; p2.3/p2.6 PASS; cargo deny ok; p3.6 PASS. Shared resources listed on ov-arch-isolation-model and comp-webview-manager. Claims closed: psl crate (research note), profile-name limits, CDP targets across profiles. Stales comp-app-shell, comp-core, comp-webview-manager, phase-p3-tabs-sessions, adr-0010: re-recorded by the owner's directive; adr-0010 through the annex raw/owner/2026-10-12-s02-p3-autoapproval-keys.md (repeats the owner's words and lists the P3 dependency keys, because the recorder needs a source that names the key).
 - commit: 0293deb
+
+## [2026-10-12] code | p3.7 local browsing history and per-tab back/forward
+
+- session: s02
+- time: 02:26
+- pages: [phase-p3-tabs-sessions, comp-core, comp-app-shell, ov-arch-configuration]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.7.txt]
+- result: history.json in the data folder: newest first, reloads merged, at most 1000, titles (taken from the tab when the load finishes, as titles arrive first), search, clear empties list and file at once; saved with the session saver and on exit; memory only for self-tests. Back/forward follow the active tab. Core history tests 5 passed; history smoke 3 passed; whole suite 51 passed; p3.7 check PASS (no history/session files in git). Stales comp-app-shell, comp-core (re-recorded through the annex of the owner's directive).
+- commit: 3d6fa8a

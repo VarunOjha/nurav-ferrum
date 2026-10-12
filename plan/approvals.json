@@ -506,13 +506,13 @@
     "comp-core": {
       "status": "approved",
       "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T02:18:50-05:00",
+      "timestamp": "2026-10-12T02:26:10-05:00",
       "path": "wiki/architecture/components/comp-core.md",
-      "content_hash": "sha256:85321eeceed25d75b11e8e6713c0eb02ef999b5ab779a60fc6a81635e61ee842",
-      "scope_hash": "sha256:9750d157ff2d8e203ec189a4c5e6834e595c913adb447b0255e83028dcb887fb",
+      "content_hash": "sha256:f938f4262b7402271192e8c96c6ea1ffebc6411ed218d895e12c102f96ee987e",
+      "scope_hash": "sha256:c4f27fca356a2ee155724c4c4bb986dc38dc0647e71dd1adcd5f7076f5a74967",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md",
       "history": [
         {
           "status": "approved",
@@ -587,6 +587,17 @@
           "path": "wiki/architecture/components/comp-core.md",
           "content_hash": "sha256:b8b663148719ddbb9749f067434636b96f1510cfc41181a437ffa225f828ffe4",
           "scope_hash": "sha256:c42cbace3968711b5d4a68e929696375569ae09974f3a81599d0962f4fd8400b",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T02:18:50-05:00",
+          "path": "wiki/architecture/components/comp-core.md",
+          "content_hash": "sha256:85321eeceed25d75b11e8e6713c0eb02ef999b5ab779a60fc6a81635e61ee842",
+          "scope_hash": "sha256:9750d157ff2d8e203ec189a4c5e6834e595c913adb447b0255e83028dcb887fb",
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
@@ -716,13 +727,13 @@
     "comp-app-shell": {
       "status": "approved",
       "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T02:18:50-05:00",
+      "timestamp": "2026-10-12T02:26:10-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:5e34b824eafb09002f4d0d6845a61ee3812fab024791272d3bf20ce5f0e52788",
-      "scope_hash": "sha256:497d35abdc1ea4257864e8adc79c2131dda52d5e20fc94d38abe14c2170efcc6",
+      "content_hash": "sha256:cdfc6c3123dd25e0f79f1028fcb7fcd8de68ea3b4a4406b9d3a3c9fc5223b554",
+      "scope_hash": "sha256:5297595d91c69f75d9a06d0e5d2e58981b6df020ee7c3a288fcb44ef37f0390a",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md",
       "history": [
         {
           "status": "approved",
@@ -775,6 +786,17 @@
           "path": "wiki/architecture/components/comp-app-shell.md",
           "content_hash": "sha256:60870d5b864013034ef6179d2b0ef3142365395a7d3deb0dda1edee5fc2d349b",
           "scope_hash": "sha256:78a713350a19c1faa2303541d939b0d8fc3fd874c28176c36f6d8bf536e53c71",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T02:18:50-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:5e34b824eafb09002f4d0d6845a61ee3812fab024791272d3bf20ce5f0e52788",
+          "scope_hash": "sha256:497d35abdc1ea4257864e8adc79c2131dda52d5e20fc94d38abe14c2170efcc6",
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"

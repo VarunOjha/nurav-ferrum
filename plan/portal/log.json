@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:fbb93558b8bea531bb0ab0378580fa0f139e365908a726d1f6ace9e457a58d3b"
+    "content_hash": "sha256:b82e2e2e04cc98c81f0c205a9382c8c69d4c3a1062d688adcbaf6eaa22ae4e7e"
   },
   "entries": [
     {
@@ -2879,6 +2879,26 @@
       "category": "Built",
       "tags": [
         "isolation",
+        "tabs"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-7",
+      "date": "2026-10-12",
+      "time": "02:26",
+      "title": "Browsing history you can search and clear",
+      "done": "Ferrum now keeps a list of the pages you visited, newest first, with their titles, in its own data folder only. You can search it, and clearing it empties the list and the file at once. The back and forward buttons follow whichever tab is active.",
+      "next": "Basic downloads (task p3.8).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "3d6fa8a",
+      "covers": [
+        "## [2026-10-12] code | p3.7 local browsing history and per-tab back/forward"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "privacy",
         "tabs"
       ]
     }

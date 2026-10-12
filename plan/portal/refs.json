@@ -770,7 +770,7 @@
       "kind": "task",
       "title": "P3 task: History",
       "summary": "You need back/forward per tab and a list of visited pages → kept locally, clearable, never in the repo → useful without leaking.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4811,6 +4811,14 @@
       "kind": "commit",
       "title": "Commit: Each site gets its own profile",
       "summary": "Each site (its main domain, as you chose) now has its own store for cookies and sign-ins. When a link in a tab leads to another site, Ferrum asks first, then moves the tab, as you chose. A test proves",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "3d6fa8a",
+      "kind": "commit",
+      "title": "Commit: Browsing history you can search and clear",
+      "summary": "Ferrum now keeps a list of the pages you visited, newest first, with their titles, in its own data folder only. You can search it, and clearing it empties the list and the file at once. The back and f",
       "status": null,
       "related": []
     }
