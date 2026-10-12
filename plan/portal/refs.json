@@ -490,7 +490,7 @@
       "kind": "task",
       "title": "P2 task: Keep cookies across restarts",
       "summary": "Logins should survive a restart → keep site data in a fixed local folder → you stay signed in.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4675,6 +4675,14 @@
       "kind": "commit",
       "title": "Commit: New windows and links to other apps",
       "summary": "Links that try to open a new window now load in the same Ferrum view (or, if you choose that setting, in your normal browser). Links to other apps, such as mail links, now show a bar asking Open or Ca",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "573153c",
+      "kind": "commit",
+      "title": "Commit: Cookies kept across restarts",
+      "summary": "Sites that remember you with a cookie still remember you after you close and reopen Ferrum. The test proves it with the local test site, and also shows that short-lived session cookies end with the se",
       "status": null,
       "related": []
     }

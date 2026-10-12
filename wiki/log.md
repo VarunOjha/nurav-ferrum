@@ -1684,3 +1684,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.10.txt]
 - result: NewWindowRequested always handled (no stray windows); LaunchingExternalUriScheme always cancelled as a safety net. Links to other apps go to a shell confirmation bar; external_open_confirm opens only the one link asked about, re-checked by ferrum-core. Same-view mode loads pop-ups in the page view, script pop-ups included (WebView2 user-initiated flag was unreliable for script pop-ups in these runs); system-browser mode opens on click and asks otherwise. Launcher rundll32 url.dll,FileProtocolHandler, real launch not yet checked (owner manual mailto check at exit); mocked by FERRUM_LAUNCHER_LOG in debug builds. Smoke spec 7 passed; whole suite 20 passed three runs in a row; p2.10 check PASS. Follow-up for the P4 policy engine: a blocklist of risky Windows link handlers before the confirmation bar (adr-0015).
 - commit: f21caba
+
+## [2026-10-11] code | p2.11 cookies survive closing and reopening Ferrum
+
+- session: s02
+- time: 19:57
+- pages: [phase-p2-minimal-container]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.11.txt]
+- result: Smoke spec keep-cookies: one-day cookie and session cookie set; Ferrum closed normally (exit 0); cookie store found in the profile WV2Profile_ferrum-default inside the data folder; after a restart on the same folder the one-day cookie is sent, the session cookie is not. No app change needed; default data folder seen on disk under local app data (dev.ferrum.desktop). Robot quit() now waits for the debugging port to close. p2.11 check PASS; whole suite 21 passed.
+- commit: 573153c

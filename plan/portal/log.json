@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:050bb0e0861a1a2f3210f36ff649daa43d88f52e5848b7ff8714066bf56b650e"
+    "content_hash": "sha256:2f2bdf9e1527e05f4375bca99cd875ec6c8c856b07aa08188027f2d9e07328c2"
   },
   "entries": [
     {
@@ -2439,6 +2439,26 @@
       "commit": "f21caba",
       "covers": [
         "## [2026-10-11] code | p2.10 new windows follow the setting; links to other apps ask first"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "web views",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-11",
+      "date": "2026-10-11",
+      "time": "19:57",
+      "title": "Cookies kept across restarts",
+      "done": "Sites that remember you with a cookie still remember you after you close and reopen Ferrum. The test proves it with the local test site, and also shows that short-lived session cookies end with the session, as in a normal browser.",
+      "next": "Claude makes the developer tools available only in test builds (task p2.12).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "573153c",
+      "covers": [
+        "## [2026-10-11] code | p2.11 cookies survive closing and reopening Ferrum"
       ],
       "phase": "phase-p2-minimal-container",
       "category": "Built",

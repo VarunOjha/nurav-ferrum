@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 10,
+    "done": 11,
     "total": 18
   },
   "step_order": [
@@ -136,7 +136,7 @@
       "what": "Cookies and site data kept in a fixed folder in your local app data.",
       "why": "Without a lasting data folder you would have to sign in to every site again after each restart.",
       "how": "Point the web view's data folder at one fixed place under your local app data, so cookies and site data are written there and read back at start.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Logins should survive a restart → keep site data in a fixed local folder → you stay signed in.",
       "check": "A test sets a cookie, restarts the app, and the cookie comes back.",
       "script": "scripts/verify/p2.11-keep-cookies.ps1"

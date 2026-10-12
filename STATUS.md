@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.11 (cookies persist): smoke spec opens /cookie/set-persistent, closes Ferrum with app_quit, starts it again with the same data folder and checks /cookie/read shows the cookie; run scripts/verify/p2.11-keep-cookies.ps1."
+next_action: "Task p2.12 (DevTools only in debug builds): set AreDevToolsEnabled=false on the content view and the shell in release builds; scripted check that the release build reports DevTools disabled on both views and the debug build enabled; run scripts/verify/p2.12-devtools-debug-only.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -82,6 +82,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.8 done (`2c6b247`): loading and error states, shell-drawn error panel, smoke tests green.
 - p2.9 done (`e1b725e`): redirects smoke-tested; final-address bug fixed.
 - p2.10 done (`f21caba`): new windows per setting; links to other apps ask first; smoke suite 20 passed.
+- p2.11 done (`573153c`): cookies persist across a restart; smoke suite 21 passed.
 
 ## Done this session (s01)
 
@@ -293,7 +294,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.10 verified and committed 2026-10-11 as `f21caba`)
+(empty: p2.11 verified and committed 2026-10-11 as `573153c`)
 
 ## Blockers
 
@@ -329,11 +330,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 10 of 18 tasks done |
-| Next task | p2.11 cookies kept across restarts |
+| Phase 2 | In progress: 11 of 18 tasks done |
+| Next task | p2.12 developer tools only in test builds |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Sites remember you with cookies → Ferrum keeps them in its own data folder → you stay signed in after closing and reopening Ferrum.
+**2. Why, and what it does.** Nothing for you to run now. Developer tools let anyone poke inside a page → the version you use must not offer them, while test builds keep them → a normal user cannot open them by accident.
 
 **3. The script:** none for you.
 
@@ -348,4 +349,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 10 of 18 tasks done, last p2.10). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 11 of 18 tasks done, last p2.11). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
