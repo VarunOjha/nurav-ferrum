@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:1714b492bcb777eab69a501d066f6006f156d33b19bd12c3304c0f6dd83ff324"
+    "content_hash": "sha256:9273b0b9015da82646f6444f36188e1e06af5059f3b2d57a06e65495eefc20af"
   },
   "entries": [
     {
@@ -2610,6 +2610,31 @@
       "tags": [
         "paper",
         "wiki"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-18",
+      "date": "2026-10-11",
+      "time": "20:44",
+      "title": "End-of-phase review prepared",
+      "done": "Claude added checks for the toolbar code, made the end-of-phase gate real and settled the open notes the plan said this phase would answer: most are now proven with this phase's evidence, a few are moved to a later phase with a reason. Ten pages changed in the process, so your earlier approval of them is marked outdated and needs a fresh look.",
+      "next": "You look at the ten changed pages and try the release build with the checklist; then Claude runs the full gate.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Ten pages changed while closing P2 notes",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "c8a4349",
+      "covers": [
+        "## [2026-10-11] code | p2.18 (part 1) shell checks, real P2 gate, P2-targeted claims closed"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Checked",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]

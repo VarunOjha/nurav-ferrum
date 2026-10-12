@@ -213,7 +213,7 @@
       "what": "One run of every P2 check, with the output saved, then your review of the release build.",
       "why": "Tests can miss what a person notices in a minute. The first milestone counts only when you have used it yourself.",
       "how": "Run all automated checks; you visit five sites and test a mail link, a restart and going offline; then you approve the exit in Claude Code.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "All tasks done → run every check and save the output → you try the release build and approve the first milestone.",
       "check": "All evidence saved; wiki clean; you approved the P2 exit.",
       "script": "scripts/verify/p2.18-run-gate-review.ps1"

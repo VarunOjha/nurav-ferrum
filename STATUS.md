@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.18 (exit review): add shell lint and test scripts; run scripts/gates/p2-gate.ps1 (every task check, cargo fmt, clippy, test, deny, shell checks, release build, IPC denial, smoke, wiki lint) on one commit with evidence; close the P2-targeted UNVERIFIED tags; prepare the owner review: manual checklist, re-approval of the three part pages and phase-p2-minimal-container#exit; then pause."
+next_action: "Owner review of P2: re-approve the ten changed pages (adr-0006, adr-0011, adr-0018, adr-0019, adr-0029, comp-app-shell, comp-core, comp-tab-content, comp-webview-manager, phase-p2-minimal-container) and run the manual checklist docs/testing/manual-checklist-p2.md on target/release/ferrum-desktop.exe; then Claude runs pwsh -NoProfile -File scripts/gates/p2-gate.ps1 -SaveEvidence and records the results."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -89,6 +89,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.15 done (`6ed6c9a`): whole smoke suite in one command (25 passed); manual checklist written.
 - p2.16 done (`a586e34`): docs updated; three part pages implemented (approvals now outdated, re-approval at exit).
 - p2.17 done (`3b057f0`): literature batch 2 (eight labelled sources); seed snippet corrected.
+- p2.18 in progress (`a742955`, `c8a4349`): shell checks, real gate, claims closed; waiting for the owner review.
 
 ## Done this session (s01)
 
@@ -300,7 +301,10 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.17 verified and committed 2026-10-11 as `3b057f0`)
+- task: p2.18 exit gate and owner M1 review
+- intent: done so far: shell checks (a742955), real gate and claim closures (c8a4349). Remaining: owner re-approves the ten changed pages and runs the manual checklist; Claude records both, closes the Alt+Tab claims from the owner's answer, runs scripts/gates/p2-gate.ps1 -SaveEvidence on a clean commit, records the gate and asks for phase-p2-minimal-container#exit; then PAUSE
+- paths: wiki/raw/owner/*, plan/approvals.json (via tools/approvals_record.py), wiki/raw/evidence/phase-p2-minimal-container/{manual-checklist.md,gate files}, Alt+Tab claim pages, MANIFEST
+- rollback: nothing destructive; raw files are new files only
 
 ## Blockers
 
@@ -337,10 +341,10 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 2 | In progress: 17 of 18 tasks done |
-| Next task | p2.18 end-of-phase review |
+| Next task | Your review of P2 |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. All P2 tasks are done → Claude runs every automatic check on one commit, saves the evidence and closes the open notes → you can review the first working app and decide whether to sign it off.
+**2. Why, and what it does.** Nothing for you to run now. P2 is built and checked → your fresh look at the changed pages and your hands-on checklist are the last steps → then Claude runs the full gate and asks you to sign the phase off.
 
 **3. The script:** none for you.
 
@@ -355,4 +359,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 17 of 18 tasks done, last p2.17). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 17 of 18 tasks done, last p2.18). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

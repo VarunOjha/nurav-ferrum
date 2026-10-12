@@ -560,7 +560,7 @@
       "kind": "task",
       "title": "P2 task: Run the gate; your review",
       "summary": "All tasks done → run every check and save the output → you try the release build and approve the first milestone.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4731,6 +4731,14 @@
       "kind": "commit",
       "title": "Commit: Second batch of research reading",
       "summary": "Claude read eight real sources for the paper, such as how WebView2 groups its processes, how Chrome keeps sites apart, and a 2024 study comparing desktop and web versions of chat apps. Each source is ",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "c8a4349",
+      "kind": "commit",
+      "title": "Commit: End-of-phase review prepared",
+      "summary": "Claude added checks for the toolbar code, made the end-of-phase gate real and settled the open notes the plan said this phase would answer: most are now proven with this phase's evidence, a few are mo",
       "status": null,
       "related": []
     }

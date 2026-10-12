@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 17 of 18 tasks done. Next: p2.18 end-of-phase review.",
+  "summary": "Phase 2 is in progress: 17 of 18 tasks done. Next: your review of P2.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:8d1d64c972983f59c59fd6a48b591b09e653dfb546b508fc7d6ef2c6b2dd0b66"
+    "content_hash": "sha256:20e58a2d176a23921cf0dca937353938a03ee6fb72ff749930a69bd1f6677c3f"
   },
   "updated": "2026-10-11",
   "where_we_are": [
@@ -42,10 +42,10 @@
       },
       {
         "item": "Next task",
-        "state": "p2.18 end-of-phase review"
+        "state": "Your review of P2"
       }
     ],
-    "why": "Nothing to run. All P2 tasks are done → Claude runs every automatic check on one commit, saves the evidence and closes the open notes → you can review the first working app and decide whether to sign it off.",
+    "why": "Nothing to run. P2 is built and checked → your fresh look at the changed pages and your hands-on checklist are the last steps → then Claude runs the full gate and asks you to sign the phase off.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

@@ -1755,3 +1755,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/research/literature-batch-2.md, raw/evidence/phase-p2-minimal-container/check-p2.17.txt]
 - result: New raw note raw/research/literature-batch-2.md with eight labelled sources (WebView2 process model, Chromium site isolation, Reis et al. 2019 and 2009, Edge sleeping tabs 2022 as a vendor claim, Chrome tab discarding 2015 as historical, Horn et al. 2023, Thangadurai et al. 2024 read in full). The seed list snippet about the Edge post was wrong and is corrected in the note. ov-research-literature-log updated. p2.17 check PASS.
 - commit: 3b057f0
+
+## [2026-10-11] code | p2.18 (part 1) shell checks, real P2 gate, P2-targeted claims closed
+
+- session: s02
+- time: 20:44
+- pages: [phase-p2-minimal-container]
+- sources: [raw/research/p2-source-readings.md]
+- result: a742955: shell pure decisions in src/logic.ts with node:test unit tests (7 passed), npm lint (strict tsc rules) and test scripts; smoke suite 25 passed. c8a4349: scripts/gates/p2-gate.ps1 and p2.18 check made real; P2-targeted unverified claims closed with P2 evidence or raw/research/p2-source-readings.md, re-targeted with reasons (CI and reproducibility, Node LTS pin, thiserror and PSL crate, DownloadStarting and PermissionRequested to P3; wry handler coexistence to P4) or removed (Google blocking, no longer needed); the Alt+Tab fix stays open for the owner's manual check. Stales approval of adr-0006, adr-0011, adr-0018, adr-0019, adr-0029, comp-app-shell, comp-core, comp-tab-content, comp-webview-manager and phase-p2-minimal-container; wiki lint shows ADR-CHAIN for adr-0018, adr-0019, adr-0029 until re-approved.
+- commit: c8a4349
