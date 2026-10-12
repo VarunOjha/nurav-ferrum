@@ -151,6 +151,7 @@ fn main() {
         .manage(TabsState::default())
         .manage(external::PendingExternal::default())
         .manage(external::PopupTimes::default())
+        .manage(external::PendingCrossSite::default())
         .manage(FocusState::default())
         .manage(EventLog::default())
         .manage(ShellTitle::default())
@@ -161,6 +162,8 @@ fn main() {
             shell_cover,
             external::external_open_confirm,
             external::external_cancel,
+            external::cross_site_confirm,
+            external::cross_site_cancel,
             content::tab_navigate,
             content::tab_back,
             content::tab_forward,

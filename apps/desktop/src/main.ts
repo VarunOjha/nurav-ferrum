@@ -20,7 +20,8 @@ type TabEvent = { tab: number } & (
 type LinkEvent =
   | { kind: "external-request"; uri: string; scheme: string }
   | { kind: "sign-in-offer"; uri: string }
-  | { kind: "blocked"; tab: number; uri: string; why: string };
+  | { kind: "blocked"; tab: number; uri: string; why: string }
+  | { kind: "cross-site"; tab: number; uri: string; to: string; from: string };
 
 type TabSummary = { id: number; url: string; title: string; loading: boolean; profile: string; can_go_back: boolean; can_go_forward: boolean };
 type TabList = { active: number | null; tabs: TabSummary[] };
@@ -252,6 +253,9 @@ await listen<LinkEvent>("link", async (e) => {
       if (u) u.status = "";
       await showExternal(ev.uri, true);
       break;
+    case "cross-site":
+      await showCrossSite(ev.uri, ev.to);
+      break;
     case "blocked":
       // The note belongs to the tab that asked (which may no longer be the active one).
       uiOf(ev.tab).status = ev.why === "pop-up" ? "Pop-up blocked" : blockedText(ev.uri);
@@ -338,6 +342,17 @@ async function showExternal(uri: string, signIn = false): Promise<void> {
   reportLayout();
   extOpen.focus();
 }
+/** Asks before a tab moves to another site's profile (p3.6, owner answer Q-209). */
+async function showCrossSite(uri: string, to: string): Promise<void> {
+  extBar.dataset.kind = "cross-site";
+  extText.textContent = `Open ${to} in its own profile? This tab's back history will be lost.`;
+  extOpen.textContent = "Continue";
+  extUri.textContent = uri;
+  extUri.title = uri;
+  extBar.hidden = false;
+  reportLayout();
+  extOpen.focus();
+}
 function hideExternal(): void {
   if (extBar.hidden) return;
   extBar.hidden = true;
@@ -370,7 +385,12 @@ address.addEventListener("focus", () => {
 
 extOpen.addEventListener("click", async () => {
   const uri = extUri.textContent ?? "";
+  const kind = extBar.dataset.kind;
   hideExternal();
+  if (kind === "cross-site") {
+    await invoke("cross_site_confirm", { uri }).catch(() => {});
+    return;
+  }
   const u = activeUi();
   try {
     await invoke("external_open_confirm", { uri });
@@ -381,8 +401,9 @@ extOpen.addEventListener("click", async () => {
   render();
 });
 extCancel.addEventListener("click", async () => {
+  const kind = extBar.dataset.kind;
   hideExternal();
-  await invoke("external_cancel");
+  await invoke(kind === "cross-site" ? "cross_site_cancel" : "external_cancel");
   const u = activeUi();
   if (u) u.status = "";
   render();

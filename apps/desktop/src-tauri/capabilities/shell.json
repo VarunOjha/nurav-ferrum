@@ -27,6 +27,8 @@
     "allow-test-crash",
     "allow-shell-focused",
     "allow-external-open-confirm",
-    "allow-external-cancel"
+    "allow-external-cancel",
+    "allow-cross-site-confirm",
+    "allow-cross-site-cancel"
   ]
 }

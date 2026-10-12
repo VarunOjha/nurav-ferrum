@@ -26,9 +26,6 @@ use windows::Win32::Foundation::RECT;
 
 use crate::external;
 
-/// WebView2 profile of every tab while all sites share one profile (P2; per-site profiles arrive in p3.6, adr-0029).
-pub const CONTENT_PROFILE: &str = "ferrum-default";
-
 /// The address of an empty tab.
 pub const BLANK: &str = "about:blank";
 
@@ -184,9 +181,10 @@ pub fn content_rect<R: Runtime>(window: &Window<R>) -> tauri::Result<RECT> {
     })
 }
 
-/// The WebView2 profile a tab showing `url` uses. P3.2: one shared profile for every site.
-pub fn profile_for(_app: &AppHandle, _url: &str) -> String {
-    CONTENT_PROFILE.to_string()
+/// The WebView2 profile a tab showing `url` uses (p3.6): its site's own profile, a profile named in `[[sites]]`, or
+/// the shared one (no site yet, or isolation off).
+pub fn profile_for(app: &AppHandle, url: &str) -> String {
+    ferrum_core::profiles::profile_for_url(&app.state::<AppConfig>().0.config, url)
 }
 
 /// The tab list as the shell shows it.
@@ -416,8 +414,11 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
 }
 
 /// The navigation gate of tab `id`'s view: web pages load; a link to another app is cancelled and offered to the
-/// user (p2.10); Google sign-in is offered in the normal browser (p2.13); everything else is cancelled.
-fn gate(app: &AppHandle, _id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
+/// user (p2.10); Google sign-in is offered in the normal browser (p2.13); everything else is cancelled. With per-site
+/// profiles (p3.6), a page that leads to another site's profile is stopped: an empty tab moves at once; otherwise the
+/// shell asks first (owner answer Q-209) and the tab moves only if the user agrees. A redirect stays in the tab's
+/// profile (the server, not the page, chose it; moving mid-redirect would break sign-in flows).
+fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
     let h = app.clone();
     let security = app.state::<AppConfig>().0.config.security.clone();
     Rc::new(move |r: &NavRequest| {
@@ -432,7 +433,27 @@ fn gate(app: &AppHandle, _id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
             external::offer_sign_in(&h, &r.uri);
             return NavDecision::Cancel;
         }
-        d
+        let target = profile_for(&h, &r.uri);
+        let (current, from) = {
+            let t = h.state::<TabsState>();
+            let t = t.0.lock().unwrap();
+            match t.get(TabId(id)) {
+                Some(i) => (i.profile.clone(), i.url.clone()),
+                None => return d,
+            }
+        };
+        if target == current || r.redirected {
+            return d;
+        }
+        let uri = r.uri.clone();
+        if current == ferrum_core::profiles::SHARED_PROFILE {
+            // An empty tab (no site yet): nothing to lose, so it moves to the site's profile at once.
+            let h2 = h.clone();
+            let _ = h.run_on_main_thread(move || navigate_tab(&h2, id, uri));
+        } else {
+            external::ask_cross_site(&h, id, &uri, &from);
+        }
+        NavDecision::Cancel
     })
 }
 

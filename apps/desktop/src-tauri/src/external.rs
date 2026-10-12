@@ -18,6 +18,48 @@ use crate::content::{AppConfig, navigate_tab, open_tab};
 #[derive(Default)]
 pub struct PopupTimes(pub Mutex<std::collections::HashMap<u64, std::time::Instant>>);
 
+/// The other-site link the shell is asking about, with its tab (p3.6, at most one).
+#[derive(Default)]
+pub struct PendingCrossSite(pub Mutex<Option<(u64, String)>>);
+
+/// A page in tab `tab` (on `from`) leads to `uri`, which belongs to another site's profile: the shell asks whether to
+/// move the tab there (owner answer Q-209). Nothing moves without the user's click.
+pub fn ask_cross_site(app: &AppHandle, tab: u64, uri: &str, from: &str) {
+    tracing::info!(target: "ferrum::profiles", tab, from = %site(from), to = %site(uri), "asking before moving a tab to another site's profile");
+    *app.state::<PendingCrossSite>().0.lock().unwrap() = Some((tab, uri.to_string()));
+    let to_site = ferrum_core::profiles::site_key(uri).unwrap_or_default();
+    let from_site = ferrum_core::profiles::site_key(from).unwrap_or_default();
+    let h = app.clone();
+    let uri = uri.to_string();
+    let _ = app.run_on_main_thread(move || {
+        let _ = h.emit_to(
+            "shell",
+            "link",
+            json!({"kind": "cross-site", "tab": tab, "uri": uri, "to": to_site, "from": from_site}),
+        );
+    });
+}
+
+/// The user clicked Continue on the other-site bar: the tab moves to that site's profile and loads the address.
+#[tauri::command]
+pub fn cross_site_confirm(app: AppHandle, uri: String) -> Result<(), String> {
+    let asked = app.state::<PendingCrossSite>().0.lock().unwrap().take();
+    match asked {
+        Some((tab, u)) if u == uri => {
+            tracing::info!(target: "ferrum::profiles", tab, to = %site(&uri), "tab moved to another site's profile");
+            navigate_tab(&app, tab, uri);
+            Ok(())
+        }
+        _ => Err("not the link Ferrum asked about".into()),
+    }
+}
+
+/// The user clicked Cancel on the other-site bar: the tab stays where it is.
+#[tauri::command]
+pub fn cross_site_cancel(app: AppHandle) {
+    app.state::<PendingCrossSite>().0.lock().unwrap().take();
+}
+
 /// The link the shell is currently asking about (at most one).
 #[derive(Default)]
 pub struct PendingExternal(pub Mutex<Option<String>>);

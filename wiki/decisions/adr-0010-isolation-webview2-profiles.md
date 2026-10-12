@@ -3,7 +3,7 @@ id: adr-0010
 type: decision
 title: "Default site isolation via WebView2 profiles in a shared browser process"
 status: accepted
-updated: 2026-10-11
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -98,7 +98,7 @@ Claude's recommended default for Q-107:
 Binding constraints, whichever route is chosen:
 
 - **The shell never shares a profile with tabs.** Tabs never use the default profile. This keeps tab data clearing from wiping shell state.
-- **Granularity.** The profile key (per registrable domain, per origin, or user-defined containers) is open question Q-111 ([ov-open-questions](../overview/ov-open-questions.md)). Recommended default: the registrable domain, with users able to merge sites into a named container (for SSO across related domains); garbage collection of unused profiles is a P3 sub-task.
+- **Granularity.** The profile key is the registrable domain: owner answer Q-111 of 2026-10-12 ([raw/owner/2026-10-12-s02-p3-questions.md](../raw/owner/2026-10-12-s02-p3-questions.md)), built in P3 (p3.6, [ov-arch-isolation-model](../architecture/ov-arch-isolation-model.md) §2). Sites can share a named profile through the settings (`[[sites]] profile`, for SSO across related domains). Cleaning up profiles of sites no longer used is not built yet (later work).
 - **Claims follow evidence.** Ferrum claims **storage partitioning** (cookies, cache, preferences per profile) only after P4 tests show it. It **never claims process isolation** beyond what Chromium site isolation provides inside the shared process group. Whether that site isolation behaves as in Chrome is UNVERIFIED[phase-p4-security].
 - **What stays shared** is documented as a P4 deliverable. At minimum: the browser process, the GPU process, possibly renderers, the network service and environment options. The full list is UNVERIFIED[phase-p4-security].
 

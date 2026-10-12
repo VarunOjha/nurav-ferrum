@@ -85,3 +85,40 @@ async fn link_pages_contain_their_links() {
     let schemes = String::from_utf8_lossy(&schemes);
     assert!(schemes.contains("mailto:") && schemes.contains("ferrum-test:"));
 }
+
+#[tokio::test]
+async fn downloads_are_deterministic_and_named() {
+    let res = get("/download/file?bytes=1000").await;
+    assert_eq!(
+        res.headers()[header::CONTENT_DISPOSITION],
+        "attachment; filename=\"fixture-1000.bin\""
+    );
+    let body = axum::body::to_bytes(res.into_body(), usize::MAX)
+        .await
+        .unwrap();
+    assert_eq!(
+        body.as_ref(),
+        fixture_server::download_bytes(1000).as_slice()
+    );
+    assert_eq!(fixture_server::download_bytes(3), vec![7, 38, 69]);
+    let fail = get("/download/fail").await;
+    assert_eq!(fail.headers()[header::CONTENT_LENGTH], "1048576");
+}
+
+#[tokio::test]
+async fn frames_and_links_only_point_to_https_or_this_site() {
+    for bad in [
+        "/frame?src=javascript:alert(1)",
+        "/frame?src=//evil.example/",
+        "/links/to?href=http://plain.example/",
+        "/frame",
+    ] {
+        assert_eq!(get(bad).await.status(), StatusCode::BAD_REQUEST, "{bad}");
+    }
+    let ok = get("/frame?src=https://site-b.localhost:8443/cookie/read%22onload=x").await;
+    let body = axum::body::to_bytes(ok.into_body(), usize::MAX)
+        .await
+        .unwrap();
+    let text = String::from_utf8_lossy(&body);
+    assert!(text.contains("&quot;onload=x"), "{text}");
+}

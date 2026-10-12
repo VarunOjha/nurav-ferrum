@@ -61,6 +61,12 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   `fsutil::write_atomic` and `fsutil::backup_broken` are shared with the settings file
   ([check-p3.5](../../raw/evidence/phase-p3-tabs-sessions/check-p3.5.txt)). `[session] restore_on_startup` is on by
   default from settings version 2 (a version-1 file keeps it off, as P2 never restored).
+- `profiles` (p3.6): `site_key` (registrable domain via the `psl` crate 2.1.241; a suffix-only host and IP addresses
+  are their own site), `profile_for_site` (`site-<site>` or `site-h-<hash>` within WebView2's name rules),
+  `profile_for_url` (per-site, a `[[sites]]` named profile `user-<label>`, or the shared `ferrum-default`).
+  `config` gains `[isolation] mode` (`per-site` default in version 2; a version-1 file keeps `shared`) and `[[sites]]`
+  (`site`, optional `profile`), validated (the site must be its own registrable domain, listed once; labels 1 to 40
+  of `a-z 0-9 - _`).
 - `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default).
 - `config` (p3.4): the file carries `version` (`VERSION` = 2). A file without it is version 1 (P2) and is migrated
   when read (`migrate_v1`: a version-1 file that did not choose `new_window` keeps `same-view`, its P2 behaviour).

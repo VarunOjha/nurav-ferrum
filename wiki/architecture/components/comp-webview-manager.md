@@ -146,5 +146,14 @@ of it:
 - Observed in P3: WebView2's `IsUserInitiated` was `true` for a pop-up a script opened 800 ms after load, without a
   click, so Ferrum's new-tab rule does not rely on it (comp-app-shell).
 
-Not yet built: sessions and downloads (rest of P3); the security engine's fail-closed gate, frame navigations and
+- p3.6, profiles: each tab view is created with the profile name the app chooses (one per site by default, adr-0029);
+  a tab that moves to another site gets a new view in that profile (the old one is closed once the new one exists).
+  **What the profiles share** (exit criterion of P3; detail and sources on
+  [ov-arch-isolation-model](../ov-arch-isolation-model.md) §3): one WebView2 environment and browser process with
+  identical options and one user data folder (`EBWebView`; VERIFIED, adr-0029 and spike S2), the remote debugging port
+  when it is on (observed in p3.6). Separate per profile: cookies (observed in p3.6), preferences and HTTP cache
+  (VERIFIED, multi-profile doc). Not yet checked (P4): renderer, network-service, audio and crash processes, web
+  storage and service workers, HSTS, DNS and socket pools.
+
+Not yet built: downloads (rest of P3); the security engine's fail-closed gate, frame navigations and
 permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

@@ -94,6 +94,38 @@ pub struct Security {
     pub new_window: NewWindow,
 }
 
+/// How sites are kept apart (adr-0010, adr-0029; p3.6).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "kebab-case")]
+pub enum IsolationMode {
+    /// One WebView2 profile per site (its registrable domain, owner answer Q-111): cookies and storage stay apart
+    /// (default from settings version 2).
+    #[default]
+    PerSite,
+    /// One profile for every site (the P2 behaviour; also a benchmark configuration).
+    Shared,
+}
+
+/// `[isolation]`: keeping sites apart.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(deny_unknown_fields, default)]
+pub struct Isolation {
+    /// Per-site profiles or one shared profile.
+    pub mode: IsolationMode,
+}
+
+/// `[[sites]]`: settings for one site (p3.6).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SiteSettings {
+    /// The site: a registrable domain such as `example.com` (lower case, no scheme).
+    pub site: String,
+    /// Use this named profile instead of the site's own one (sites with the same name share it, for example two
+    /// domains of one sign-in system): 1 to 40 lower-case letters, digits, `-` or `_`.
+    #[serde(default)]
+    pub profile: Option<String>,
+}
+
 /// `[storage]`: where Ferrum keeps its data.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(deny_unknown_fields, default)]
@@ -122,6 +154,10 @@ pub struct Config {
     pub security: Security,
     /// Data folder.
     pub storage: Storage,
+    /// Keeping sites apart.
+    pub isolation: Isolation,
+    /// Per-site settings.
+    pub sites: Vec<SiteSettings>,
 }
 
 impl Default for Config {
@@ -131,6 +167,8 @@ impl Default for Config {
             session: Session::default(),
             security: Security::default(),
             storage: Storage::default(),
+            isolation: Isolation::default(),
+            sites: Vec::new(),
         }
     }
 }
@@ -180,6 +218,13 @@ pub enum ConfigError {
         /// The reason.
         source: std::io::Error,
     },
+    /// A `[[sites]]` entry is not usable.
+    InvalidSite {
+        /// The entry's site.
+        site: String,
+        /// Why it was refused.
+        reason: String,
+    },
     /// A start page is not a usable address.
     InvalidStartUrl {
         /// The address as written.
@@ -206,6 +251,9 @@ impl std::fmt::Display for ConfigError {
             ),
             ConfigError::Write { path, source } => {
                 write!(f, "cannot write {}: {source}", path.display())
+            }
+            ConfigError::InvalidSite { site, reason } => {
+                write!(f, "site settings for {site:?} refused: {reason}")
             }
             ConfigError::InvalidStartUrl { url, reason } => {
                 write!(f, "start page {url:?} refused: {reason}")
@@ -252,10 +300,18 @@ pub fn parse(text: &str, origin: &Path) -> Result<Config, ConfigError> {
         .map_err(|e| bad(e.message().to_string()))
 }
 
-/// Version 1 (P2) to version 2 (P3). Two defaults changed; a version-1 file that does not choose keeps what it had
+/// Version 1 (P2) to version 2 (P3). Three defaults changed; a version-1 file that does not choose keeps what it had
 /// in P2, because the new defaults would change its behaviour: new windows stay in the same view (the new default is
-/// a new tab), and the previous session is not restored (P2 never restored one).
+/// a new tab), the previous session is not restored (P2 never restored one), and all sites share one profile (the
+/// new default is a profile per site, which would hide the cookies the user already has).
 pub fn migrate_v1(table: &mut toml::Table) {
+    let isolation = table
+        .entry("isolation")
+        .or_insert_with(|| toml::Value::Table(toml::Table::new()));
+    if let toml::Value::Table(iso) = isolation {
+        iso.entry("mode")
+            .or_insert_with(|| toml::Value::String("shared".into()));
+    }
     let session = table
         .entry("session")
         .or_insert_with(|| toml::Value::Table(toml::Table::new()));
@@ -362,6 +418,30 @@ pub fn validate(mut config: Config) -> Result<Loaded, ConfigError> {
         }
     }
     config.session.startup_urls = out;
+    let mut seen = std::collections::HashSet::new();
+    for s in &config.sites {
+        let bad = |reason: &str| ConfigError::InvalidSite {
+            site: s.site.clone(),
+            reason: reason.into(),
+        };
+        // The entry must name a site as Ferrum computes it (its registrable domain), or it would never match.
+        let as_site = crate::profiles::site_key(&format!("https://{}/", s.site));
+        if s.site.is_empty() || as_site.as_deref() != Some(s.site.as_str()) {
+            return Err(bad(
+                "not a site; use its main domain in lower case, for example example.com",
+            ));
+        }
+        if !seen.insert(s.site.clone()) {
+            return Err(bad("listed twice"));
+        }
+        if let Some(p) = &s.profile
+            && !crate::profiles::valid_user_label(p)
+        {
+            return Err(bad(
+                "profile must be 1 to 40 lower-case letters, digits, - or _",
+            ));
+        }
+    }
     Ok(Loaded { config, warnings })
 }
 

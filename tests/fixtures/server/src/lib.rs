@@ -133,7 +133,149 @@ pub const ROUTES: &[Route] = &[
         status: 500,
         purpose: "server error page",
     },
+    Route {
+        path: "/cookie/set-none",
+        status: 200,
+        purpose: "sets cookie third=1 (SameSite=None, one day): readable from frames on other sites (p3.6)",
+    },
+    Route {
+        path: "/frame?src=/cookie/read",
+        status: 200,
+        purpose: "shows the https address in src (or a path on this site) in a frame (p3.6)",
+    },
+    Route {
+        path: "/links/to?href=/landing",
+        status: 200,
+        purpose: "one link to the https address in href (or a path on this site) (p3.6)",
+    },
+    Route {
+        path: "/download/file?bytes=65536",
+        status: 200,
+        purpose: "a download of N deterministic bytes (at most 50 MB), named fixture-N.bin (p3.8)",
+    },
+    Route {
+        path: "/download/fail",
+        status: 200,
+        purpose: "a download that breaks off: announces 1 MB, sends 4 KB, then the connection ends (p3.8)",
+    },
+    Route {
+        path: "/busy",
+        status: 200,
+        purpose: "a page whose script runs a never-ending loop 200 ms after load (p3.9)",
+    },
 ];
+
+/// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
+pub fn download_bytes(n: usize) -> Vec<u8> {
+    (0..n).map(|i| ((31 * i + 7) % 251) as u8).collect()
+}
+
+/// An address a fixture may point to: an `https:` address or a path on this site, with characters that could end
+/// the HTML attribute escaped.
+fn safe_target(s: &str) -> Option<String> {
+    let ok = s.starts_with("https://") || (s.starts_with('/') && !s.starts_with("//"));
+    ok.then(|| {
+        s.replace('&', "&amp;")
+            .replace('"', "&quot;")
+            .replace('<', "&lt;")
+            .replace('>', "&gt;")
+    })
+}
+
+#[derive(serde::Deserialize)]
+struct Target {
+    src: Option<String>,
+    href: Option<String>,
+}
+
+async fn frame(Query(q): Query<Target>) -> Response {
+    match q.src.as_deref().and_then(safe_target) {
+        Some(src) => page(
+            "Frame",
+            &format!(
+                "<iframe id=\"frame\" src=\"{src}\" style=\"width:90%;height:300px\"></iframe>"
+            ),
+        )
+        .into_response(),
+        None => (
+            StatusCode::BAD_REQUEST,
+            page("Bad frame", "<p>src must be https or a path.</p>"),
+        )
+            .into_response(),
+    }
+}
+
+async fn links_to(Query(q): Query<Target>) -> Response {
+    match q.href.as_deref().and_then(safe_target) {
+        Some(href) => page(
+            "Link",
+            &format!("<p><a id=\"to\" href=\"{href}\">{href}</a></p>"),
+        )
+        .into_response(),
+        None => (
+            StatusCode::BAD_REQUEST,
+            page("Bad link", "<p>href must be https or a path.</p>"),
+        )
+            .into_response(),
+    }
+}
+
+async fn cookie_set_none() -> Response {
+    let mut r = page(
+        "Cross-site cookie set",
+        "<p>The cookie third=1 was set (SameSite=None).</p>",
+    )
+    .into_response();
+    r.headers_mut().insert(
+        header::SET_COOKIE,
+        HeaderValue::from_static("third=1; Path=/; Max-Age=86400; Secure; SameSite=None"),
+    );
+    r
+}
+
+#[derive(serde::Deserialize)]
+struct Bytes {
+    bytes: Option<usize>,
+}
+
+async fn download_file(Query(q): Query<Bytes>) -> Response {
+    let n = q.bytes.unwrap_or(65536).min(50 * 1024 * 1024);
+    let disposition = format!("attachment; filename=\"fixture-{n}.bin\"");
+    let mut r = download_bytes(n).into_response();
+    let h = r.headers_mut();
+    h.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("application/octet-stream"),
+    );
+    if let Ok(v) = HeaderValue::from_str(&disposition) {
+        h.insert(header::CONTENT_DISPOSITION, v);
+    }
+    r
+}
+
+async fn download_fail() -> Response {
+    // The announced length is longer than the body, so the server ends the connection after 4 KB: a broken download.
+    let mut r = download_bytes(4096).into_response();
+    let h = r.headers_mut();
+    h.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("application/octet-stream"),
+    );
+    h.insert(
+        header::CONTENT_DISPOSITION,
+        HeaderValue::from_static("attachment; filename=\"fixture-fail.bin\""),
+    );
+    h.insert(header::CONTENT_LENGTH, HeaderValue::from_static("1048576"));
+    r
+}
+
+async fn busy() -> Html<String> {
+    page(
+        "Busy page",
+        "<p id=\"busy\">This page keeps its script busy forever.</p>\
+         <script>setTimeout(function () { for (;;) {} }, 200);</script>",
+    )
+}
 
 fn page(title: &str, body: &str) -> Html<String> {
     Html(format!(
@@ -363,6 +505,12 @@ pub fn router() -> Router {
         .route("/cookie/set-persistent", get(cookie_set_persistent))
         .route("/__shutdown", get(shutdown))
         .route("/status/{code}", get(status))
+        .route("/cookie/set-none", get(cookie_set_none))
+        .route("/frame", get(frame))
+        .route("/links/to", get(links_to))
+        .route("/download/file", get(download_file))
+        .route("/download/fail", get(download_fail))
+        .route("/busy", get(busy))
 }
 
 /// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`).

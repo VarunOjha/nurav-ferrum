@@ -1,0 +1,19 @@
+Ferrum check p3.6: A separate profile per site
+Why: cookies stay apart, and you decide when a tab changes site.
+Run at 2026-10-12 02:17 on commit cbf44a2 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Site and profile unit tests
+         7 required cases pass
+Running 5 tests using 1 worker
+  ✓  1 profiles.spec.ts:41:3 › cookies across sites: per-site (3.5s)
+  ✓  2 profiles.spec.ts:41:3 › cookies across sites: shared (control) (2.0s)
+  ✓  3 profiles.spec.ts:57:1 › one site in two tabs shares one profile; subdomains share; other sites do not (3.2s)
+  ✓  4 profiles.spec.ts:72:1 › a link to another site asks first; Cancel stays, Continue moves the tab (2.8s)
+  ✓  5 profiles.spec.ts:100:1 › per-site settings choose the profile and survive a restart (3.9s)
+  5 passed (26.1s)
+  PASS   Smoke test: cookies apart (with a shared-profile control), sharing rules, the cross-site bar, settings after a restart (37 s)
+         profiles: 5 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.6 (2 PASS; 38 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.6 check passed".

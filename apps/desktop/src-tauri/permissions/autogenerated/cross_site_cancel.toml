@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-cross-site-cancel"
+description = "Enables the cross_site_cancel command without any pre-configured scope."
+commands.allow = ["cross_site_cancel"]
+
+[[permission]]
+identifier = "deny-cross-site-cancel"
+description = "Denies the cross_site_cancel command without any pre-configured scope."
+commands.deny = ["cross_site_cancel"]

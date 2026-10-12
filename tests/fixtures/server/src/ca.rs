@@ -140,7 +140,17 @@ pub struct Leaf {
     pub key_pem: String,
 }
 
-/// Signs a new leaf certificate for `localhost`, `127.0.0.1` and `::1` with the CA in `dir`.
+/// Extra names on the leaf certificate (P3 task p3.6): separate test sites on this PC. Chromium sends every
+/// `*.localhost` name to the loopback address, and the CA's name limit (`localhost`) covers them, so they need no
+/// change to the system. `one.` and `two.site-a.localhost` share the registrable domain `site-a.localhost`.
+pub const TEST_SITES: &[&str] = &[
+    "site-a.localhost",
+    "one.site-a.localhost",
+    "two.site-a.localhost",
+    "site-b.localhost",
+];
+
+/// Signs a new leaf certificate for `localhost`, the [`TEST_SITES`], `127.0.0.1` and `::1` with the CA in `dir`.
 pub fn issue_leaf(dir: &Path) -> Result<Leaf, CaError> {
     if !cert_path(dir).exists() || !key_path(dir).exists() {
         return Err(CaError::Missing(dir.to_path_buf()));
@@ -149,11 +159,10 @@ pub fn issue_leaf(dir: &Path) -> Result<Leaf, CaError> {
     let ca_key = KeyPair::from_pem(&std::fs::read_to_string(key_path(dir))?)?;
     // The issuer name and key match the stored CA (same deterministic distinguished name, same key).
     let issuer = Issuer::new(ca_params(), ca_key);
-    let mut params = CertificateParams::new(vec![
-        "localhost".to_string(),
-        "127.0.0.1".to_string(),
-        "::1".to_string(),
-    ])?;
+    let mut names = vec!["localhost".to_string()];
+    names.extend(TEST_SITES.iter().map(|s| s.to_string()));
+    names.extend(["127.0.0.1".to_string(), "::1".to_string()]);
+    let mut params = CertificateParams::new(names)?;
     let mut dn = DistinguishedName::new();
     dn.push(DnType::CommonName, "localhost (Ferrum fixtures)");
     params.distinguished_name = dn;

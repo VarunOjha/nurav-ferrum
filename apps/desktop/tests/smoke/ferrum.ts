@@ -19,9 +19,12 @@ export type Ferrum = {
 };
 
 /** Writes a settings file for the run and returns its path. */
-export function settings(data: string, extra = ""): string {
+export function settings(data: string, extra = "", perSite = false): string {
   const p = path.join(data, "config.toml");
-  fs.writeFileSync(p, `version = 2\n[storage]\ndata_dir = ${JSON.stringify(data)}\n${extra}`);
+  // Tests written before per-site profiles (P2, and P3 tests not about profiles) run with one shared profile, as P2
+  // did; the p3.6 tests ask for per-site profiles, Ferrum's default.
+  const isolation = perSite ? "" : '[isolation]\nmode = "shared"\n';
+  fs.writeFileSync(p, `version = 2\n[storage]\ndata_dir = ${JSON.stringify(data)}\n${isolation}${extra}`);
   return p;
 }
 
@@ -41,6 +44,8 @@ export type LaunchOptions = {
   data?: string;
   extraSettings?: string;
   env?: Record<string, string>;
+  /** Use per-site profiles (Ferrum's default); otherwise the run shares one profile. */
+  perSite?: boolean;
   /** Extra command-line arguments (default: `--user-config <data>/user-config.toml`, never the real settings file). */
   args?: string[];
   /** Extra environment that depends on the run's data folder (for example a mock launcher's log file). */
@@ -49,7 +54,7 @@ export type LaunchOptions = {
 
 export async function launch(name: string, opts: LaunchOptions = {}): Promise<Ferrum> {
   const data = opts.data ?? dataDir(name);
-  const config = settings(data, opts.extraSettings ?? "");
+  const config = settings(data, opts.extraSettings ?? "", opts.perSite ?? false);
   // The user settings file is the run's own (never the real one in %APPDATA%), unless the test names another.
   const args = opts.args ?? ["--user-config", path.join(data, "user-config.toml")];
   const proc = spawn(ferrumExe, ["--config", config, ...args], {

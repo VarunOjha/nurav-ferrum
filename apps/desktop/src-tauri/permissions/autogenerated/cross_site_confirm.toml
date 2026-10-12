@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-cross-site-confirm"
+description = "Enables the cross_site_confirm command without any pre-configured scope."
+commands.allow = ["cross_site_confirm"]
+
+[[permission]]
+identifier = "deny-cross-site-confirm"
+description = "Denies the cross_site_confirm command without any pre-configured scope."
+commands.deny = ["cross_site_confirm"]

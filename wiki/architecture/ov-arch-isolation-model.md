@@ -3,8 +3,10 @@ id: ov-arch-isolation-model
 type: overview
 title: "Architecture: isolation model (WebView2 profiles in a shared browser process)"
 status: review
-updated: 2026-10-08
+updated: 2026-10-12
 sources:
+  - raw/research/p3-profiles-psl.md
+  - raw/owner/2026-10-12-s02-p3-questions.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
@@ -23,14 +25,8 @@ unverified:
     verify_in: phase-p4-security
   - claim: "HSTS state, DNS cache, socket pools and client-certificate selections are shared or partitioned across profiles"
     verify_in: phase-p4-security
-  - claim: "A maintained Rust public-suffix-list crate is available for registrable-domain computation"
-    verify_in: phase-p4-security
   - claim: "Audio service and crashpad processes are shared across profiles on one UDF"
     verify_in: phase-p4-security
-  - claim: "The remote debugging port exposes every profile's tab WebViews and the shell WebView as CDP targets"
-    verify_in: phase-p5-telemetry
-  - claim: "WebView2 profile names have length or character-set limits that a 'site-' + 32-hex name satisfies"
-    verify_in: phase-p3-tabs-sessions
 ---
 
 # Isolation model
@@ -50,10 +46,27 @@ The mode is a **runtime** switch, so exp-isolation-overhead can compare the mode
 
 ## 2. Site → profile assignment (`per-site-profile`)
 
-- **Site key** = registrable domain (eTLD+1) of the top-level URL. That needs a Public Suffix List implementation, and crate selection is UNVERIFIED[phase-p4-security].
-- **Profile name** = `site-` + a stable hash of the site key (any WebView2 profile-name length or character-set limits are UNVERIFIED[phase-p3-tabs-sessions]; a 32-hex form follows Tauri PR #16054, Tauri note §6). A mapping file `profiles.json` (site key ↔ profile name) lives in the app data dir.
+- **Site key** = registrable domain (eTLD+1) of the top-level URL (owner answer Q-111, "main domain",
+  [raw/owner/2026-10-12-s02-p3-questions.md](../raw/owner/2026-10-12-s02-p3-questions.md)). Built in P3 (p3.6) with the
+  `psl` crate 2.1.241, which compiles the Public Suffix List in; maintained and released every few days (VERIFIED,
+  [p3-profiles-psl](../raw/research/p3-profiles-psl.md) R1). A host that is itself a suffix (`localhost`) and an IP
+  address are their own site. `ferrum_core::profiles::site_key`.
+- **Profile name** = `site-<site key>` (for example `site-example.com`), or `site-h-<24 hex digits of its SHA-256>`
+  when that breaks WebView2's rules (VERIFIED limits: at most 64 characters, letters, digits and `# @ $ ( ) + - _ ~ .`
+  and space, not ending in a period or space, case-insensitive; [p3-profiles-psl](../raw/research/p3-profiles-psl.md)
+  R2). Named profiles from the settings (`[[sites]] profile = "work"`) become `user-<label>`; sites given the same label
+  share it (for example two domains of one sign-in system). The name follows from the site and the settings, so no
+  `profiles.json` mapping file is needed. Tabs with no site yet (an empty tab) use the profile `ferrum-default`, which
+  is also the one profile of `[isolation] mode = "shared"`.
 - **Creation-time binding.** A tab's profile is fixed when its WebView is created (VERIFIED: no API found to change a live controller's profile).
-- **Cross-site top-level navigation inside a tab.** PROPOSAL, owner to confirm: when a top-level navigation leaves the tab's site, `webview-manager` **re-hosts** the tab. It closes the WebView and creates a new one in the target site's profile at the target URL. Back/forward history before the switch is lost, and the shell keeps a Ferrum-side URL history so the user can still go back. Alternatives: (a) keep the original profile, so data lands in the wrong profile and isolation is broken; (b) block cross-site navigation, which hurts usability. Redirect chains during OAuth/SSO make this hard, so it needs a P3/P4 prototype.
+- **Cross-site top-level navigation inside a tab.** Owner answer Q-209 (2026-10-12): ask first, then **re-host**.
+  Built in P3 (p3.6): when a page in a tab leads to an address whose profile differs from the tab's, the navigation is
+  stopped and the shell's bar asks "Open <site> in its own profile? This tab's back history will be lost."; Continue
+  closes the tab's view and creates one in the target profile at that address (same tab); Cancel keeps the tab where it
+  was. Without asking: an empty tab (no site yet) moves at once; an address typed in the address bar moves (the user
+  chose it); a new tab opens in its own site's profile. **Gap, recorded for P4:** a redirect stays in the tab's current
+  profile (the server chose it, and moving mid-redirect would break sign-in flows), so a page reached by a cross-site
+  redirect runs in the first site's profile until the user navigates again.
 - **The shell WebView** is created by Tauri, so it lives in the **default** profile. Tabs never use the default profile in `per-site-profile` mode, and the shell keeps no web storage (trust-boundaries rule R9).
 
 ## 3. What remains shared (planning matrix)
@@ -67,11 +80,11 @@ Applies to `per-site-profile` mode: one UDF, many profiles.
 | Network service / utility processes | Probably shared | UNVERIFIED[phase-p4-security] |
 | Audio service, crashpad | Probably shared | UNVERIFIED[phase-p4-security] |
 | Renderer processes | Shared **across WebViews on a UDF** (VERIFIED). Not shared **across profiles** | UNVERIFIED[phase-p4-security] |
-| Cookies, preferences, HTTP cache | **Separate** per profile | VERIFIED (multi-profile doc) |
+| Cookies, preferences, HTTP cache | **Separate** per profile | VERIFIED (multi-profile doc). Cookies observed in P3 (p3.6): a site's cookie set in its own tab was not sent by the same site framed in another site's tab; with one shared profile it was ([check-p3.6](../raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt)) |
 | localStorage, IndexedDB, service workers, permission grants | Expected separate | UNVERIFIED[phase-p4-security] |
 | HSTS, DNS cache, socket pools, client cert choices | Unknown | UNVERIFIED[phase-p4-security] |
 | Environment options (browser args, extensions, proxy, language) | **Must be identical** for all WebViews on the UDF | VERIFIED (otherwise creation fails with `ERROR_INVALID_STATE`) |
-| Remote debugging port (benchmark runs) | **Expected shared**: the flag is environment-level, so one port serves the whole UDF | Flag is environment-level: VERIFIED (Tauri note §7). Whether all profiles and the shell are exposed as CDP targets: UNVERIFIED[phase-p5-telemetry] (Tauri note §7 marks CDP target mapping UNCERTAIN) |
+| Remote debugging port (benchmark runs) | **Shared**: one port serves the whole UDF | Flag is environment-level: VERIFIED (Tauri note §7). Observed in P3 (p3.6 smoke tests): one debugging port listed the shell and tab views of several profiles (`ferrum-default`, `site-site-a.localhost`, `site-site-b.localhost`, `user-work`) as pages ([check-p3.6](../raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt)) |
 | Runtime binaries (Evergreen) | **May share** mapped image pages with Edge, on eligible systems when versions match | Hard-linking on eligible systems when versions match: VERIFIED ([measurement note §6.2](../raw/research/measurement-methodology.md)); page sharing is DERIVED from it ("may share") |
 | Ferrum host process (Rust) | Shared | by design |
 
