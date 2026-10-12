@@ -197,7 +197,7 @@ fn launch(url: &str) -> Result<(), String> {
         return writeln!(f, "{url}").map_err(|e| e.to_string());
     }
     // url.dll's FileProtocolHandler opens an address with its registered handler; the address is one argument,
-    // no command shell is involved. UNVERIFIED[phase-p2-minimal-container]: confirmed by the owner's manual mailto
+    // no command shell is involved. UNVERIFIED[phase-p3-tabs-sessions] (not reported in the owner's first P2 round): confirmed by the owner's manual mailto
     // check at the exit review.
     std::process::Command::new("rundll32.exe")
         .arg("url.dll,FileProtocolHandler")

@@ -24,9 +24,7 @@ related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-ar
 approvable: false
 audience: owner
 tags: [questions, owner]
-unverified:
-  - claim: "A custom title bar resizes reliably under Tauri on Windows 11 (issue #12207), Q-125"
-    verify_in: phase-p3-tabs-sessions
+unverified: []
 ---
 
 # Open questions for the owner
@@ -535,7 +533,7 @@ browser look the owner chose (option A) puts the tabs in the window's top bar, n
 maximise and close buttons. That needs a **custom title bar**. The shell's design notes
 ([comp-app-shell](../architecture/components/comp-app-shell.md), "Design notes") advise against a custom title bar
 at first, because of a known resize problem with one in Tauri (issue #12207; whether it is workable is
-UNVERIFIED[phase-p3-tabs-sessions], re-targeted in P1 because spike S1 used the normal title bar).
+not tested: the owner chose the normal title bar first on 2026-10-12, so it is only needed if the tabs later move into the title bar).
 
 Options:
 

@@ -3,8 +3,9 @@ id: ov-arch-crate-graph
 type: overview
 title: "Architecture: Cargo workspace and crate dependency graph"
 status: review
-updated: 2026-10-11
+updated: 2026-10-12
 sources:
+  - raw/research/p3-crate-versions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
@@ -16,8 +17,6 @@ tags: [cargo, workspace, crates]
 unverified:
   - claim: "Building ferrum-baseline with cargo -p does not inherit the tauri unstable feature enabled by ferrum-desktop"
     verify_in: phase-p6-benchmark-harness
-  - claim: "Versions of crates not covered by research notes (url, thiserror, serde_json, toml, tokio features, psl) are current and compatible"
-    verify_in: phase-p3-tabs-sessions
 ---
 
 # Cargo workspace and crate dependency graph
@@ -101,9 +100,10 @@ Design rules:
 
 Crates added in P2, pinned exactly and clean under `cargo deny` ([source readings](../raw/research/p2-source-readings.md) S3): `toml` 1.1.8, `url`
 2.5.8, `sha2` 0.11.0, `tracing` 0.1.44, `tracing-subscriber` 0.3.23, `serde_json` 1.0.154 (declared `"1"`), and for
-the test server `axum` 0.8.9, `axum-server` 0.8.0, `rcgen` 0.14.10, `tokio` 1.53.2. Not added in P2: `thiserror`
-(Ferrum's errors are hand-written enums) and a public-suffix-list crate (per-site profiles, P3); their versions are
-UNVERIFIED[phase-p3-tabs-sessions]. `sysinfo` is **not** used for headline memory metrics: its `memory()` returns the double-counting working set ([measurement note](../raw/research/measurement-methodology.md)).
+the test server `axum` 0.8.9, `axum-server` 0.8.0, `rcgen` 0.14.10, `tokio` 1.53.2. Not added: `thiserror`
+(Ferrum's errors are hand-written enums). Added in P3: `psl` 2.1.241 (per-site profiles, [p3-profiles-psl](../raw/research/p3-profiles-psl.md))
+and, for the test server, `futures-core` 0.3.34 and `bytes` 1.12.1 (already in the lock file). On 2026-10-12 every
+pinned crate was on its newest stable release and `cargo deny` was clean ([p3-crate-versions](../raw/research/p3-crate-versions.md)). `sysinfo` is **not** used for headline memory metrics: its `memory()` returns the double-counting working set ([measurement note](../raw/research/measurement-methodology.md)).
 
 ## 4. Profiles and reproducibility
 

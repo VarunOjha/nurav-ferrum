@@ -1,8 +1,9 @@
 # Ferrum
 
-**Status: first working app (phase P2, milestone M1), awaiting the owner's exit review.** Ferrum opens one
-website at a time with an address bar, back, forward, reload, loading and error states. There is no release,
-no tabs yet and no benchmark result.
+**Status: tabs and sessions (phase P3, milestone M2), awaiting the owner's exit review.** Ferrum has tabs (one
+WebView2 view each), keyboard shortcuts that also work inside a page, a separate profile per site, restore after a
+restart or a crash, local history, basic downloads, a settings screen and a sidebar. There is no release and no
+benchmark result.
 
 Ferrum aims to be an open-source, resource-efficient and security-conscious web-application container
 for Windows 11, built with Rust, Tauri 2 and Microsoft WebView2. Whether it actually uses fewer resources
@@ -83,8 +84,10 @@ For a debug build, build the shell first (the app embeds it when compiled): `npm
 `cargo run -p ferrum-desktop` from the repository folder. Debug builds allow the developer tools; release builds do
 not.
 
-Settings live in `config.toml` in the app's config folder (`--config <path>` overrides it); logs are JSON lines in
-`ferrum.jsonl` in the app's log folder. Details: [comp-core](wiki/architecture/components/comp-core.md) and
+Settings live in `config.toml` in the app's config folder (`%APPDATA%\dev.ferrum.desktop`; the settings screen,
+Ctrl+Comma, edits it; `--user-config <path>` uses another file and `--config <path>` overrides it for experiments);
+the session (`session.json`), history (`history.json`) and logs (`logs\ferrum.jsonl`) are in the data folder
+(`%LOCALAPPDATA%\dev.ferrum.desktop`, or `[storage] data_dir`). Details: [comp-core](wiki/architecture/components/comp-core.md) and
 [comp-app-shell](wiki/architecture/components/comp-app-shell.md).
 
 Tests:
@@ -93,11 +96,37 @@ Tests:
 cargo test --workspace                       # unit and integration tests
 cargo run -p fixture-server -- ca init       # once: a local test certificate authority (localhost only);
                                              # it prints the certutil command that installs it for your user
-cd apps/desktop/tests/smoke; npm ci; npm run smoke   # the smoke suite (builds the app and test server first)
+cd apps/desktop/tests/smoke; npm ci; npm run smoke   # all app tests (build the shell, the app and the test server first)
+npm run p3                                   # only the P3 integration suite; npm run p2: only the P2 tests
 pwsh -NoProfile -File scripts/verify/p2.15-quick-whole-app.ps1   # or any task check in scripts/verify/
 ```
 
-The manual checks for the end of P2 are in [docs/testing/manual-checklist-p2.md](docs/testing/manual-checklist-p2.md).
+The manual checks for the end of P3 are in [docs/testing/manual-checklist-p3.md](docs/testing/manual-checklist-p3.md)
+(P2's: [manual-checklist-p2.md](docs/testing/manual-checklist-p2.md)). Some app tests press real keys and bring Ferrum
+to the front for a few seconds; do not type while they run.
+
+## Using Ferrum (P3)
+
+| Do this | Keys or place |
+|---|---|
+| New tab, close tab, reopen the last closed tab | Ctrl+T, Ctrl+W (or Ctrl+F4), Ctrl+Shift+T; the + and × in the tab strip; middle-click a tab to close it |
+| Next or previous tab; tab 1 to 8; last tab | Ctrl+Tab or Ctrl+Page Down; Ctrl+Shift+Tab or Ctrl+Page Up; Ctrl+1 to Ctrl+8; Ctrl+9 |
+| Address bar | Ctrl+L, Alt+D or F6 |
+| Back, forward, reload | Alt+Left, Alt+Right, F5 or Ctrl+R |
+| Sidebar (open tabs and history) | Ctrl+Shift+S, or the ☰ button |
+| Settings (start-up sites, per-site profiles, download folder) | Ctrl+Comma, or the ⚙ button |
+| Reorder tabs | drag a tab in the strip |
+
+Each site (its main domain, for example `example.com`) keeps its own cookies and storage. When a link in a tab leads to
+another site, Ferrum asks first, then moves the tab to that site's profile (its back history is lost). Tabs come back
+after a restart or a crash. Downloads go to your Downloads folder (or the folder in the settings) and never replace a
+file.
+
+Known limitations of P3: back/forward history of a tab is not restored after a restart (WebView2 cannot set it); a
+page reached by a redirect to another site stays in the first site's profile; pop-ups open in a new tab without a link
+back to the opening page, so some non-Google sign-in pop-ups may not work (P4); pages are drawn above Ferrum's own
+window, so Ferrum's panels never overlap a page (they sit beside it or hide it); no blocklist or permission prompts
+yet (P4).
 
 ## License
 

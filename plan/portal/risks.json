@@ -29,7 +29,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r01-webview2-profile-at-creation.md",
-        "content_hash": "sha256:c80a839773a57007591d9882b230cad16bb63edf6d20633a20cffb0f43b56da6"
+        "content_hash": "sha256:ffb73ca15517337b95fb75048729656e7c05bc45ef47ea9a596e8f2b7e5dd409"
       }
     },
     {
@@ -265,7 +265,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r10-google-oauth-embedded.md",
-        "content_hash": "sha256:835d7589a50de4a5657e77842b0f27fa17de71ba9250dcba48ffbf36c4fd95fe"
+        "content_hash": "sha256:0d57c9f349fc8b6b1ce26130e257b824806c4891182b0f2dc865a46cddbd1311"
       }
     },
     {
@@ -541,7 +541,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r20-dependency-toolchain-churn.md",
-        "content_hash": "sha256:8073b1a81f744e3ca1290296fce14674d647ea185689ef0b936e8cf4fd97be0c"
+        "content_hash": "sha256:68545e897eb62f8b397b139d9cd6ce579049ca42618bd50c3e5179cdfe5d360b"
       }
     },
     {

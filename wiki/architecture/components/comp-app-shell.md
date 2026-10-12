@@ -3,8 +3,8 @@ id: comp-app-shell
 type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: implemented
-last_verified_commit: 9df1157
-updated: 2026-10-11
+last_verified_commit: ebc79ca
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md

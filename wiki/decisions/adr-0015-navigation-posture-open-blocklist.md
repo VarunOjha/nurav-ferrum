@@ -3,7 +3,7 @@ id: adr-0015
 type: decision
 title: "Default navigation posture is open browsing + blocklist"
 status: accepted
-updated: 2026-10-11
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -23,7 +23,7 @@ unverified:
   - claim: "Raw-COM FrameNavigationStarting and LaunchingExternalUriScheme can be registered on Tauri-created tab webviews and cancel navigations reliably"
     verify_in: phase-p4-security
   - claim: "Google refuses OAuth sign-in in a Ferrum (WebView2) tab in practice"
-    verify_in: phase-p3-tabs-sessions
+    verify_in: phase-p4-security
 ---
 
 # ADR-0015: The default navigation posture is open browsing + blocklist
@@ -42,7 +42,7 @@ Research facts ([raw/research/tauri-webview2-capabilities.md](../raw/research/ta
 - **Popups.** With no `on_new_window` handler, wry suppresses popups silently. With a handler, Ferrum can deny, allow, or route the popup into a new tab.
 - **Downloads.** The wry default download handler allows when the app sets none.
 - **Permissions.** `on_permission_request` sees only *new* requests; persisted choices bypass it. Keeping the app authoritative needs `SavesInProfile(FALSE)` via raw COM.
-- **Google OAuth.** Google's policy forbids OAuth requests from embedded user-agents the developer controls, and Ferrum tabs qualify. Ferrum must detect the flow and offer to open it in the system browser, never work around it. Whether Google actually refuses sign-in in a Ferrum tab is UNVERIFIED[phase-p3-tabs-sessions], to be observed and not circumvented.
+- **Google OAuth.** Google's policy forbids OAuth requests from embedded user-agents the developer controls, and Ferrum tabs qualify. Ferrum must detect the flow and offer to open it in the system browser, never work around it. Whether Google actually refuses sign-in in a Ferrum tab is UNVERIFIED[phase-p4-security] (re-targeted in P3: Ferrum never loads the sign-in page in a tab, by design since P2, so observing it is a deliberate P4 security test), to be observed and not circumvented.
 
 ## Options considered
 

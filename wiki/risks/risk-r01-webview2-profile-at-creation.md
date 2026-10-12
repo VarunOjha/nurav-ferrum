@@ -3,7 +3,7 @@ id: risk-r01
 type: risk
 title: "WebView2 profile can only be chosen at controller creation and Tauri 2.12.1 does not expose it"
 status: mitigating
-updated: 2026-10-11
+updated: 2026-10-12
 sources:
   - raw/evidence/phase-p1-foundation/spike-s2-profiles.md
   - raw/research/tauri-webview2-capabilities.md
@@ -19,9 +19,7 @@ spike: p1.6
 owner_phase: phase-p1-foundation
 trigger: "Tauri PR 16054 is still unmerged when P3 is about to start; the patched build fails to compile; controller creation returns ERROR_INVALID_STATE; the isolation fixture shows cookies leaking between profiles."
 fallback: "Per-site data_directory (works today but starts one browser process per site, which contradicts the shared-browser-process part of adr-0010 and needs a superseding ADR), or a single shared profile with per-site InPrivate controllers for sites that need separation."
-unverified:
-  - claim: "No WebView2 API changes the profile of an already-created controller (absence found only by not finding one)"
-    verify_in: phase-p3-tabs-sessions
+unverified: []
 ---
 
 # risk-r01: WebView2 profile can only be chosen at controller creation and Tauri 2.12.1 does not expose it
@@ -84,7 +82,7 @@ Status `mitigating` until the owner decides.
 
 ## Unverified claims
 
-- No WebView2 API changes the profile of an already-created controller (absence found only by not finding one). UNVERIFIED[phase-p3-tabs-sessions] (re-targeted in P1: spike S2 did not search for such an API; P3 implements profiles)
+- Whether any WebView2 API changes the profile of an already-created controller was not searched further: P3 does not need it. A tab that moves to another site's profile gets a new view in that profile and the old view is closed (p3.6, [check-p3.6](../raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt)).
 
 ## Affects
 

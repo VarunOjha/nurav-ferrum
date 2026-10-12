@@ -3,7 +3,7 @@ id: ov-arch-trust-boundaries
 type: overview
 title: "Architecture: trust boundaries and preliminary threat model"
 status: review
-updated: 2026-10-08
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -26,7 +26,7 @@ unverified:
   - claim: "WebView2 applies Mark-of-the-Web to downloaded files"
     verify_in: phase-p4-security
   - claim: "Routing window.open popups into new tabs keeps non-Google OAuth popup flows working"
-    verify_in: phase-p3-tabs-sessions
+    verify_in: phase-p4-security
   - claim: "WebView2 blocks a page with a certificate error by default when the app does not handle ServerCertificateErrorDetected"
     verify_in: phase-p4-security
   - claim: "The benchmark remote debugging port exposes the shell WebView as a CDP target"
@@ -122,7 +122,10 @@ The order of evaluation and the default posture follow adr-0015 (open browsing +
 2. **Scheme.** `https` is allowed. `http` is upgraded or warned (configurable). `ferrum`-internal and `tauri` origins are denied for tabs (R4). `javascript:`, `file:` and `data:` top-level navigations are denied (PROPOSAL). Other schemes (`mailto:`, `ms-*` and similar) need **user confirmation** in the shell, and are then handed to the OS (TB3) through `LaunchingExternalUriScheme` (raw COM only, VERIFIED binding exists, Tauri note §6).
 3. **Blocklist.** Domain-suffix match against the configured blocklist. Applies to top-level navigations, including **every redirect hop**, because NavigationStarting fires for redirects (VERIFIED). It applies to iframes through raw-COM `FrameNavigationStarting`, since Tauri has no iframe hook (VERIFIED).
 4. **Per-site settings.** Permissions, downloads and the profile assignment.
-5. **New windows.** `on_new_window` returns Deny, or routes the popup to a new tab after re-evaluating it. Whether this keeps OAuth popups that rely on `window.opener` working is UNVERIFIED[phase-p3-tabs-sessions].
+5. **New windows.** `on_new_window` returns Deny, or routes the popup to a new tab after re-evaluating it. Built in P3 (p3.2): the pop-up's address opens in a new tab with its own view, so the new page has **no
+`window.opener` link** to the page that opened it; sign-in pop-ups that report back through `window.opener` therefore
+cannot work as built. Keeping the link (WebView2 can hand the request a view of the app's choosing) and testing real
+OAuth pop-ups are P4 work: UNVERIFIED[phase-p4-security].
 6. **Google OAuth.** Google forbids OAuth from embedded user agents (VERIFIED, Tauri note §8). Ferrum detects `accounts.google.com` OAuth flows and offers "open in system browser". **It never spoofs the user agent or uses any other workaround** (master prompt §5).
 7. **Permissions.** Default **deny** for camera, microphone, geolocation, notifications, clipboard-read, sensors, MIDI, file-system access and window management, with per-site overrides (PROPOSAL; kinds VERIFIED in Tauri note §4). Ferrum, not the profile, stays authoritative: `SavesInProfile(FALSE)` needs raw COM (VERIFIED).
 8. **Downloads.** Every download fires `on_download`. The engine decides allow/deny and the destination, and the shell shows it. The filename is sanitised. Whether WebView2 applies Mark-of-the-Web to the file is UNVERIFIED[phase-p4-security].

@@ -51,6 +51,30 @@ Known limitations of M1: one site profile for everything (per-site profiles arri
 permission prompts yet (P4); the WebView2 remote-debugging switch below; the system-browser and mail hand-off has
 been tested only with a stand-in launcher until the owner's manual check.
 
+## What P3 (M2, tabs and sessions) adds
+
+Checked by the P3 task scripts (evidence: [wiki/raw/evidence/phase-p3-tabs-sessions/](wiki/raw/evidence/phase-p3-tabs-sessions/)):
+
+- **A profile per site.** Each site (its registrable domain, from the Public Suffix List) gets its own WebView2
+  profile: cookies and storage stay apart. A test shows a site's cookie is not sent when that site is framed inside
+  another site's tab, while one shared profile would send it (p3.6). What profiles still share (one browser process,
+  one data folder, the debugging port when on) is listed in
+  [ov-arch-isolation-model](wiki/architecture/ov-arch-isolation-model.md); process isolation itself is tested in P4.
+- **Changing site asks first.** A link that leads a tab to another site's profile is stopped; the shell asks, and only
+  the address it asked about moves (p3.6). A redirect to another site stays in the first site's profile (P4 gap).
+- **Pages still cannot reach the app.** Keyboard shortcuts inside a page are taken from WebView2's key hook before the
+  page sees them; nothing is injected into pages (p3.3). The settings commands are shell-only; the p2.3 test page now
+  also tries `settings_set` and is refused (p3.14). The settings screen never writes the file itself: the app checks
+  every value first and writes in one step.
+- **Browsing data stays local.** `session.json`, `history.json`, profiles and downloads live in the data folder only;
+  the history can be cleared at once (list and file); a check fails if such files are ever tracked in git (p3.7).
+  Logs still record only scheme and host.
+- **Downloads** go to the download folder under the file name only (a site cannot choose the folder) and never replace
+  a file (p3.8). Risky file types and "ask where to save" are P4.
+- **Pop-ups**: at most one new tab per tab per second; WebView2's "user initiated" flag is not trusted (it was true
+  for a script-only pop-up). A real pop-up policy is P4.
+- **Debug-only test commands** (`test_stats`, `test_focus`, `test_crash`) refuse in release builds.
+
 ## Debug port (benchmarks and debugging only)
 
 The benchmark harness drives web views through the Chrome DevTools Protocol, enabled with

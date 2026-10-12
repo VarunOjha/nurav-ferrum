@@ -345,7 +345,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0011-git-ci-license.md",
-        "content_hash": "sha256:eb46a92b1d870f38a1fbc3d9da89f78e9b0d2b3e15f2a861723bcf2ed350ea6c"
+        "content_hash": "sha256:8297149127e9c41621291a30450294aa28e7f40417506721d0be7e522a429463"
       }
     },
     {
@@ -471,7 +471,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0015-navigation-posture-open-blocklist.md",
-        "content_hash": "sha256:66e203313ead363a7e9bb52fff93a04df56ff0003e8fcb8dc0c86116c3128166"
+        "content_hash": "sha256:83e5dc591a230a087d327ce05059538a4dd8fae0bf3869a96e4e7c964989cb4b"
       }
     },
     {
@@ -851,7 +851,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md",
-        "content_hash": "sha256:56974fd086546b0c426a817bc96d7fc78cd9cd49f89690016cc7ccb72b050090"
+        "content_hash": "sha256:94ab5cdb5946ee1617e2062a2c7df5e4bfac276ba90fd39df34d2ec3a5427876"
       }
     },
     {

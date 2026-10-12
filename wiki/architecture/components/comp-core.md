@@ -3,8 +3,8 @@ id: comp-core
 type: component
 title: "Core crate (shared types, config schema, traits)"
 status: implemented
-last_verified_commit: 9df1157
-updated: 2026-10-11
+last_verified_commit: ebc79ca
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/research/tauri-webview2-capabilities.md
