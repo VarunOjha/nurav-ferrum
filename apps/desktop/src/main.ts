@@ -4,7 +4,7 @@
 // P3 tasks p3.2 (tabs) and p3.3 (strip and shortcuts).
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { addressText, blockedText, downloadText, finished, linesOf, lockFor, shortcutFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
+import { addressText, blockedText, downloadText, finished, historyLines, linesOf, lockFor, shortcutFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -79,12 +79,16 @@ const uiOf = (id: number): TabUi => {
 const activeUi = (): TabUi | undefined => (list.active === null ? undefined : uiOf(list.active));
 
 // --- Layout: tell the app how much room the top band takes (tab views fill the rest). ---
-let reported = -1;
+let reported = "";
 function reportLayout(): void {
   const h = Math.ceil(top.getBoundingClientRect().height);
-  if (h === reported) return;
-  reported = h;
-  void invoke("shell_layout", { top: h, left: 0 });
+  // The sidebar's width (p3.15): tab views start to its right, so they never overlap it.
+  const side = document.getElementById("sidebar");
+  const w = side && !side.hidden ? Math.ceil(side.getBoundingClientRect().width) : 0;
+  const key = `${h}x${w}`;
+  if (key === reported) return;
+  reported = key;
+  void invoke("shell_layout", { top: h, left: w });
 }
 new ResizeObserver(reportLayout).observe(top);
 
@@ -181,6 +185,12 @@ function applyList(next: TabList): void {
   if (switched && document.activeElement === address) address.blur();
   renderStrip();
   render();
+  // The sidebar's tab list follows too (looked up directly: lists can arrive while this script is still starting).
+  const side = document.getElementById("sidebar");
+  if (side && !side.hidden) {
+    renderSideTabs();
+    void renderSideHistory();
+  }
 }
 
 // --- Events. ---
@@ -383,8 +393,56 @@ async function runShortcut(name: string): Promise<void> {
 function shellCommand(action: string): void {
   if (action === "focus-address") focusAddress();
   if (action === "settings") void openSettings();
-  // "toggle-sidebar" (p3.15) is added with its task.
+  if (action === "toggle-sidebar") void toggleSidebar();
 }
+
+// --- Sidebar (p3.15): open tabs and history, left of the content area. ---
+type HistoryEntry = { url: string; title: string; visited_at: number };
+const sidebar = $<HTMLElement>("sidebar");
+const sidebarBtn = $<HTMLButtonElement>("sidebar-btn");
+const sideTabs = $<HTMLUListElement>("side-tabs");
+const sideHistory = $<HTMLUListElement>("side-history");
+const sideSearch = $<HTMLInputElement>("side-search");
+function sideButton(label: string, url: string, onClick: () => void, current = false): HTMLLIElement {
+  const li = document.createElement("li");
+  const b = document.createElement("button");
+  b.type = "button";
+  b.title = url;
+  if (current) b.setAttribute("aria-current", "true");
+  const name = document.createElement("span");
+  name.textContent = label;
+  const addr = document.createElement("span");
+  addr.className = "side-url";
+  addr.textContent = url;
+  b.append(name, addr);
+  b.addEventListener("click", onClick);
+  li.append(b);
+  return li;
+}
+function renderSideTabs(): void {
+  if (sidebar.hidden) return;
+  sideTabs.replaceChildren(...list.tabs.map((t) =>
+    sideButton(tabLabel(t.title, t.url), t.url, () => void invoke("tab_activate", { id: t.id }), t.id === list.active)));
+}
+async function renderSideHistory(): Promise<void> {
+  if (sidebar.hidden) return;
+  const entries = await invoke<HistoryEntry[]>("history_list", { query: sideSearch.value || null, limit: 200 });
+  sideHistory.replaceChildren(...historyLines(entries).map((h) =>
+    sideButton(h.label, h.url, () => void invoke("tab_navigate", { input: h.url }))));
+}
+async function toggleSidebar(): Promise<void> {
+  sidebar.hidden = !sidebar.hidden;
+  sidebarBtn.setAttribute("aria-expanded", String(!sidebar.hidden));
+  reportLayout();
+  renderSideTabs();
+  await renderSideHistory();
+}
+sidebarBtn.addEventListener("click", () => void toggleSidebar());
+sideSearch.addEventListener("input", () => void renderSideHistory());
+$<HTMLButtonElement>("side-clear").addEventListener("click", async () => {
+  await invoke("history_clear");
+  await renderSideHistory();
+});
 
 // --- Settings (p3.14): shown in the content area; the app checks and saves (settings.rs). ---
 type SiteRow = { site: string; profile: string };

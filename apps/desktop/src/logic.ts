@@ -109,6 +109,22 @@ export function linesOf(text: string): string[] {
   return text.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0);
 }
 
+/** A history entry as the sidebar lists it. */
+export type HistoryEntry = { url: string; title: string; visited_at: number };
+
+/** Sidebar history lines: title (or address) and address, the same address listed once (its newest visit). */
+export function historyLines(entries: HistoryEntry[], max = 50): { label: string; url: string }[] {
+  const seen = new Set<string>();
+  const out: { label: string; url: string }[] = [];
+  for (const e of entries) {
+    if (seen.has(e.url)) continue;
+    seen.add(e.url);
+    out.push({ label: tabLabel(e.title, e.url), url: e.url });
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
 /** A key press in the shell (the parts of a KeyboardEvent the shortcut table needs). */
 export type ShellKey = { key: string; ctrl: boolean; shift: boolean; alt: boolean };
 

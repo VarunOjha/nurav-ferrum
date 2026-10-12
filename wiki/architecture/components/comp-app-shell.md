@@ -203,6 +203,11 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   and apply the settings (`AppConfig` is behind a lock: profiles and the folder at once, start-up sites at the next
   start). The p2.3 probe page now also tries `settings_set`: refused for a website ("allowed on: webviews shell"),
   and tab views have no bridge ([check-p3.14](../../raw/evidence/phase-p3-tabs-sessions/check-p3.14.txt)).
+- p3.15, sidebar: a panel left of the content area (toolbar button ☰, Ctrl+Shift+S from the toolbar or from a page)
+  listing open tabs (choose one to switch) and history (search box; choose an entry to open it in the active tab;
+  Clear history). The shell reports its width with `shell_layout { left }`, so tab views start to its right and never
+  overlap it (pages are drawn above the shell's window). Sidebar history shows each address once, newest first
+  ([check-p3.15](../../raw/evidence/phase-p3-tabs-sessions/check-p3.15.txt)).
 - New windows: `new_window = "new-tab"` is the new default (`same-view` and `system-browser` stay). One tab may open
   at most one new tab per second; further requests are blocked with "Pop-up blocked" on that tab. WebView2's
   user-initiated flag is not used (it was `true` for a script-only pop-up). A real pop-up policy is P4 work.

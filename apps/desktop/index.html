@@ -15,6 +15,7 @@
         <button id="new-tab" class="strip-btn" type="button" title="New tab (Ctrl+T)" aria-label="New tab">+</button>
       </nav>
       <header id="toolbar" role="toolbar" aria-label="Navigation" data-state="idle">
+        <button id="sidebar-btn" class="nav" type="button" title="Tabs and history (Ctrl+Shift+S)" aria-label="Tabs and history" aria-expanded="false" aria-controls="sidebar">&#x2630;</button>
         <button id="back" class="nav" title="Back" aria-label="Back" disabled>&#x2190;</button>
         <button id="forward" class="nav" title="Forward" aria-label="Forward" disabled>&#x2192;</button>
         <button id="reload" class="nav" title="Reload" aria-label="Reload" disabled>&#x21bb;</button>
@@ -37,6 +38,16 @@
         <button id="downloads-clear" type="button" title="Remove finished downloads from this list">Clear</button>
       </div>
     </div>
+    <div id="middle">
+    <!-- The sidebar (p3.15): left of the content area; its width is reported to the app, so tab views never overlap it. -->
+    <aside id="sidebar" aria-label="Tabs and history" hidden>
+      <h2>Open tabs</h2>
+      <ul id="side-tabs"></ul>
+      <h2>History</h2>
+      <input id="side-search" type="search" placeholder="Search history" aria-label="Search history" spellcheck="false" />
+      <ul id="side-history"></ul>
+      <button id="side-clear" type="button">Clear history</button>
+    </aside>
     <!-- The content area: covered by the active tab's view, except while one of these shell panels shows. -->
     <main id="content-area">
       <section id="error-panel" role="alert" hidden>
@@ -83,6 +94,7 @@
         <p>Type an address above, or open a new tab with + (Ctrl+T).</p>
       </section>
     </main>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

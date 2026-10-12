@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, blockedText, downloadText, finished, linesOf, lockFor, shortcutFor, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, blockedText, downloadText, finished, historyLines, linesOf, lockFor, shortcutFor, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -93,4 +93,14 @@ test("the start-up box takes one address per line", () => {
     "https://a.example/", "https://b.example/x", "about:blank",
   ]);
   assert.deepEqual(linesOf("   \n"), []);
+});
+
+test("sidebar history lists each address once, newest first, with its title", () => {
+  const e = (url: string, title: string, at: number) => ({ url, title, visited_at: at });
+  const lines = historyLines([e("https://a.example/", "A", 3), e("https://b.example/x", "", 2), e("https://a.example/", "A old", 1)]);
+  assert.deepEqual(lines, [
+    { label: "A", url: "https://a.example/" },
+    { label: "b.example/x", url: "https://b.example/x" },
+  ]);
+  assert.equal(historyLines(Array.from({ length: 80 }, (_, i) => e(`https://e.example/${i}`, "", i)), 50).length, 50);
 });

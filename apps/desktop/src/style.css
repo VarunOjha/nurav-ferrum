@@ -17,7 +17,19 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
    with shell_layout), so nothing of the shell is ever drawn under a page. */
 body { display: flex; flex-direction: column; }
 #top { flex: none; }
-#content-area { flex: 1; position: relative; overflow: auto; background: var(--surface); }
+#middle { flex: 1; display: flex; min-height: 0; }
+#content-area { flex: 1; position: relative; overflow: auto; background: var(--surface); min-width: 0; }
+/* Sidebar (p3.15). */
+#sidebar { flex: none; width: 260px; box-sizing: border-box; padding: 12px; border-right: 1px solid var(--border); overflow: auto; background: var(--bg); }
+#sidebar[hidden] { display: none; }
+#sidebar h2 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 8px 0 6px; }
+#sidebar ul { list-style: none; margin: 0 0 12px; padding: 0; }
+#sidebar li button { display: block; width: 100%; text-align: left; padding: 6px 8px; border: 0; border-radius: 8px; background: transparent; color: var(--text); font: inherit; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#sidebar li button:hover { background: var(--surface); }
+#sidebar li button[aria-current="true"] { box-shadow: inset 3px 0 0 var(--accent); background: var(--surface); }
+#sidebar li .side-url { display: block; font: 11px "IBM Plex Mono", Consolas, monospace; color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
+#side-search { width: 100%; box-sizing: border-box; margin-bottom: 6px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; }
+#side-clear { padding: 4px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
 /* Tab strip (P3): one row under the normal Windows title bar (owner answer Q-125). */
 #tabstrip { display: flex; align-items: flex-end; gap: 4px; height: 36px; padding: 0 8px; box-sizing: border-box; }
 #tabs { display: flex; gap: 2px; min-width: 0; overflow: hidden; }
