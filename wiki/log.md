@@ -1719,3 +1719,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.13.txt, raw/research/google-oauth-endpoint.md]
 - result: ferrum-core oauth classifier: accounts.google.com, path under /o/oauth2/ (endpoint from raw/research/google-oauth-endpoint.md), host compared after URL parsing; test-only pattern only in debug builds. Gate cancels sign-in navigations; shell bar "Google sign-in must open in your normal browser" with Open in browser (owner answer Q-109); opens only after the click; no user-agent change. Unit tests 3 passed; smoke spec 4 passed incl. the real Google address (cancelled in NavigationStarting; no network traffic measured); whole suite 25 passed twice; p2.13 check PASS.
 - commit: e8bc194
+
+## [2026-10-11] code | p2.14 JSON-lines logs, typed WebView2 errors, crashes recorded
+
+- session: s02
+- time: 20:25
+- pages: [phase-p2-minimal-container, comp-core, comp-webview-manager, comp-app-shell]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.14.txt]
+- result: tracing =0.1.44 and tracing-subscriber =0.3.23 (json): ferrum.jsonl in the app log folder or <data_dir>/logs; events for start, settings, content view, navigation outcomes, offers, launches, quit; addresses as scheme and host only (ferrum_core::address::site); panic hook writes a panic event. webview-manager typed Error. p2.14 check PASS: smoke suite 25 passed, 7 log files, 96 JSON lines, 0 panics, no address with path or query; deliberate test crash logged once, exit 0. cargo deny ok with the new crates. To close at the exit review: the tracing-subscriber version tag on ov-arch-crate-graph (now pinned =0.3.23, cargo deny clean).
+- commit: 9df1157

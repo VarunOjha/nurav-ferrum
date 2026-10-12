@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 13,
+    "done": 14,
     "total": 18
   },
   "step_order": [
@@ -169,7 +169,7 @@
       "what": "Machine-readable log lines in the app's log folder, clear error types and no crashes on bad navigation.",
       "why": "Without readable logs a bug report says only that something went wrong. A crash on a bad link would also lose your open pages.",
       "how": "Use Rust's tracing library to write one machine-readable record per line; a test run checks that every line can be read and no crash entry appears.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Problems need evidence → Machine-readable log lines and clear errors, no crashing on bad navigation → failures can be diagnosed.",
       "check": "Every log line can be read by a program; no crash entries.",
       "script": "scripts/verify/p2.14-structured-logs-crashes.ps1"

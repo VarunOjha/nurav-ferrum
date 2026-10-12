@@ -520,7 +520,7 @@
       "kind": "task",
       "title": "P2 task: Structured logs, no crashes",
       "summary": "Problems need evidence → Machine-readable log lines and clear errors, no crashing on bad navigation → failures can be diagnosed.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4699,6 +4699,14 @@
       "kind": "commit",
       "title": "Commit: Google sign-in opens in your browser",
       "summary": "When a site sends you to Google sign-in, Ferrum does not load it inside itself (Google forbids that) and does not try to trick Google. It shows a bar saying sign-in must open in your normal browser, w",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "9df1157",
+      "kind": "commit",
+      "title": "Commit: Logs and crash records",
+      "summary": "Ferrum now keeps a tidy log, one line per event, so problems can be traced. It records only which site was involved, never the full page address, so the log is not a browsing history. If part of Ferru",
       "status": null,
       "related": []
     }

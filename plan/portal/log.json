@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:a00136c9e9fec24c591a529297f14835de5732583a66c8a3f46926e2d71ba3a3"
+    "content_hash": "sha256:5c0536ddf2bd0d5ed471f62a305d422af5a1bea9518e550c1e9ce697eb61e533"
   },
   "entries": [
     {
@@ -2525,6 +2525,26 @@
       "tags": [
         "web views",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-14",
+      "date": "2026-10-11",
+      "time": "20:25",
+      "title": "Logs and crash records",
+      "done": "Ferrum now keeps a tidy log, one line per event, so problems can be traced. It records only which site was involved, never the full page address, so the log is not a browsing history. If part of Ferrum crashes, the crash is written to the log too; a deliberate test crash proved it.",
+      "next": "Claude runs the full test suite as one command and writes your manual checklist (task p2.15).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "9df1157",
+      "covers": [
+        "## [2026-10-11] code | p2.14 JSON-lines logs, typed WebView2 errors, crashes recorded"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "testing",
+        "privacy"
       ]
     }
   ]
