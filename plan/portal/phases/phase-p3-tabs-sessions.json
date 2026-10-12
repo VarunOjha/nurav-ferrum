@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 9,
+    "done": 10,
     "total": 15
   },
   "step_order": [
@@ -125,7 +125,7 @@
       "what": "A guard that stops the known Windows freeze bug from coming back.",
       "why": "This freeze was already seen in Tauri on Windows. Without a guard, a small change later could bring it back without anyone noticing.",
       "how": "Make sure tab views can only be created from non-blocking code, and add this rule to the code review checklist.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Creating views from blocking code freezes on Windows → make that path impossible and test it in a loop → the bug cannot come back.",
       "check": "A review checklist item plus a loop test that never hangs.",
       "script": "scripts/verify/p3.10-guard-against-freeze.ps1"

@@ -1904,3 +1904,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.9.txt]
 - result: Smoke spec responsive: a tab on site-a runs /busy (endless script); switching to a site-b tab and typing an address each finish within the test's 5 s requirement (threshold, not a measurement); the busy tab closes. 3 of 3 repeats passed; p3.9 check PASS. The P3-page claim that a busy tab does not block the shell is answered from this evidence; process placement left to P4. Stales comp-app-shell and phase-p3-tabs-sessions (re-recorded through the annex).
 - commit: a35aac5
+
+## [2026-10-12] code | p3.10 deadlock regression guard
+
+- session: s02
+- time: 02:54
+- pages: [phase-p3-tabs-sessions, comp-app-shell]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.10.txt]
+- result: p3.10 check: code scan (commands that can create a tab view are async; no blocking wait on the tab path except the async test_stats; self-test threads exempt) found cross_site_confirm not async, fixed; review checklist docs/developer/code-review-checklist.md; smoke no-freeze: ~40 tab commands at once settle within 30 s, every tab gets its view, pop-ups still open tabs. p3.10 PASS; profiles smoke 5 passed after the change. Stales comp-app-shell (re-recorded through the annex).
+- commit: 83a754d

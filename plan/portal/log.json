@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:984442f01c814723f0faf23158fda10b5d88399edad02ca0054e83ccb08d1e78"
+    "content_hash": "sha256:02225aa503595b7215e38fb118e6a425b67612b471caca740d8bcb5a19d5a898"
   },
   "entries": [
     {
@@ -2940,6 +2940,26 @@
       "tags": [
         "tabs",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-10",
+      "date": "2026-10-12",
+      "time": "02:54",
+      "title": "Ferrum cannot freeze on a new tab",
+      "done": "A check now scans the code for the one pattern that can freeze a Windows app when it creates web views (waiting for the view while creating it), and a stress test fires about 40 tab commands at once. The scan found one command that broke the rule; it is fixed. A short code-review checklist records the rule.",
+      "next": "The settings screen (task p3.14).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "83a754d",
+      "covers": [
+        "## [2026-10-12] code | p3.10 deadlock regression guard"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "tabs",
+        "check scripts"
       ]
     }
   ]

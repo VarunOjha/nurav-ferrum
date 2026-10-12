@@ -660,7 +660,7 @@
       "kind": "task",
       "title": "P3 task: Guard against the freeze bug",
       "summary": "Creating views from blocking code freezes on Windows → make that path impossible and test it in a loop → the bug cannot come back.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4835,6 +4835,14 @@
       "kind": "commit",
       "title": "Commit: A stuck page does not freeze Ferrum",
       "summary": "A test page whose script never stops runs in one tab; switching to another tab and typing an address still work at once, and the stuck tab can be closed.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "83a754d",
+      "kind": "commit",
+      "title": "Commit: Ferrum cannot freeze on a new tab",
+      "summary": "A check now scans the code for the one pattern that can freeze a Windows app when it creates web views (waiting for the view while creating it), and a stress test fires about 40 tab commands at once. ",
       "status": null,
       "related": []
     }
