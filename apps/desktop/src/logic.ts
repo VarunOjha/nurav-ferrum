@@ -83,6 +83,27 @@ export function tabLabel(title: string, url: string): string {
   return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
+/** Bytes in plain units (B, KB, MB, GB; 1 KB = 1024 B). */
+export function sizeText(bytes: number): string {
+  if (bytes < 0) return "unknown size";
+  const units = ["B", "KB", "MB", "GB"];
+  let v = bytes;
+  let i = 0;
+  while (v >= 1024 && i < units.length - 1) {
+    v /= 1024;
+    i++;
+  }
+  return i === 0 ? `${v} B` : `${v.toFixed(1)} ${units[i]}`;
+}
+
+/** The state text of a download line. */
+export function downloadText(state: "running" | "completed" | "failed", received: number, total: number): string {
+  if (state === "completed") return `Done, ${sizeText(received)}`;
+  if (state === "failed") return `Failed after ${sizeText(received)}`;
+  if (total > 0) return `${Math.floor((received / total) * 100)}% of ${sizeText(total)}`;
+  return `${sizeText(received)} so far`;
+}
+
 /** A key press in the shell (the parts of a KeyboardEvent the shortcut table needs). */
 export type ShellKey = { key: string; ctrl: boolean; shift: boolean; alt: boolean };
 

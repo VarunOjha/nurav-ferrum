@@ -4,7 +4,7 @@
 // P3 tasks p3.2 (tabs) and p3.3 (strip and shortcuts).
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { addressText, blockedText, finished, lockFor, shortcutFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
+import { addressText, blockedText, downloadText, finished, lockFor, shortcutFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -162,7 +162,8 @@ function renderStrip(): void {
 }
 
 function applyList(next: TabList): void {
-  const switched = next.active !== list.active;
+  // A switch between two tabs (not the first tab list at start, which must not wipe an address being typed).
+  const switched = list.active !== null && next.active !== list.active;
   list = next;
   for (const t of list.tabs) {
     const u = uiOf(t.id);
@@ -265,6 +266,61 @@ await listen<LinkEvent>("link", async (e) => {
 });
 
 await listen<TabList>("tabs", (e) => applyList(e.payload));
+
+// --- Downloads (p3.8): one line each in the top band; the app saves the files (downloads.rs). ---
+type DownloadMsg =
+  | { kind: "started"; download: number; tab: number; file: string; path: string; total: number; received: number; replaces: number | null }
+  | { kind: "progress"; download: number; received: number; total: number }
+  | { kind: "completed" | "failed"; download: number; file: string; path: string; received: number; reason: number };
+type DownloadLine = { file: string; path: string; received: number; total: number; state: "running" | "completed" | "failed" };
+const downloadsEl = $<HTMLDivElement>("downloads");
+const downloadList = $<HTMLUListElement>("download-list");
+const downloadLines = new Map<number, DownloadLine>();
+function renderDownloads(): void {
+  downloadList.replaceChildren(
+    ...[...downloadLines.entries()].map(([id, d]) => {
+      const li = document.createElement("li");
+      li.dataset.download = String(id);
+      li.dataset.state = d.state;
+      li.title = d.path;
+      const name = document.createElement("span");
+      name.className = "dl-file";
+      name.textContent = d.file;
+      const state = document.createElement("span");
+      state.className = "dl-state";
+      state.textContent = downloadText(d.state, d.received, d.total);
+      li.append(name, state);
+      return li;
+    }),
+  );
+  const show = downloadLines.size > 0;
+  if (downloadsEl.hidden === show) {
+    downloadsEl.hidden = !show;
+    reportLayout();
+  }
+}
+await listen<DownloadMsg>("download", (e) => {
+  const m = e.payload;
+  const d = downloadLines.get(m.download);
+  if (m.kind === "started") {
+    // A retry of a download that broke off replaces the older line (the app tells which).
+    if (m.replaces !== null) downloadLines.delete(m.replaces);
+    downloadLines.set(m.download, { file: m.file, path: m.path, received: 0, total: m.total, state: "running" });
+  } else if (d && m.kind === "progress") {
+    d.received = m.received;
+    d.total = m.total;
+  } else if (m.kind === "completed" || m.kind === "failed") {
+    const line = d ?? { file: m.file, path: m.path, received: 0, total: -1, state: "running" as const };
+    line.received = m.received;
+    line.state = m.kind;
+    downloadLines.set(m.download, line);
+  }
+  renderDownloads();
+});
+$<HTMLButtonElement>("downloads-clear").addEventListener("click", () => {
+  for (const [id, d] of downloadLines) if (d.state !== "running") downloadLines.delete(id);
+  renderDownloads();
+});
 
 // --- Keyboard shortcuts (p3.3). Keys pressed inside a page are handled by the app (WebView2 accelerator keys); keys
 // pressed in the shell are handled here, with the same table (logic.ts). ---

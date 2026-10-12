@@ -7,6 +7,7 @@
 #![windows_subsystem = "windows"]
 
 mod content;
+mod downloads;
 mod external;
 mod history;
 mod logging;
@@ -152,6 +153,9 @@ fn main() {
         .manage(TabsState::default())
         .manage(external::PendingExternal::default())
         .manage(external::PopupTimes::default())
+        .manage(downloads::ProgressTimes::default())
+        .manage(downloads::Reserved::default())
+        .manage(downloads::Running::default())
         .manage(external::PendingCrossSite::default())
         .manage(FocusState::default())
         .manage(EventLog::default())

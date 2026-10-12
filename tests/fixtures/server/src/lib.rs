@@ -253,9 +253,51 @@ async fn download_file(Query(q): Query<Bytes>) -> Response {
     r
 }
 
+/// The body of `/download/fail`: 4 KB, a pause, then an error, so the connection ends in the middle of the download.
+struct BrokenBody {
+    step: u8,
+    sleep: Option<std::pin::Pin<Box<tokio::time::Sleep>>>,
+}
+
+impl futures_core::Stream for BrokenBody {
+    type Item = Result<bytes::Bytes, std::io::Error>;
+
+    fn poll_next(
+        mut self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Option<Self::Item>> {
+        use std::task::Poll;
+        match self.step {
+            0 => {
+                self.step = 1;
+                Poll::Ready(Some(Ok(bytes::Bytes::from(download_bytes(4096)))))
+            }
+            1 => {
+                let sleep = self.sleep.get_or_insert_with(|| {
+                    Box::pin(tokio::time::sleep(Duration::from_millis(300)))
+                });
+                match sleep.as_mut().poll(cx) {
+                    Poll::Pending => Poll::Pending,
+                    Poll::Ready(()) => {
+                        self.step = 2;
+                        Poll::Ready(Some(Err(std::io::Error::other(
+                            "fixture: download broken off on purpose",
+                        ))))
+                    }
+                }
+            }
+            _ => Poll::Ready(None),
+        }
+    }
+}
+
 async fn download_fail() -> Response {
-    // The announced length is longer than the body, so the server ends the connection after 4 KB: a broken download.
-    let mut r = download_bytes(4096).into_response();
+    // Headers announce 1 MB; the body sends 4 KB, then fails: the server ends the connection mid-download.
+    let mut r = axum::body::Body::from_stream(BrokenBody {
+        step: 0,
+        sleep: None,
+    })
+    .into_response();
     let h = r.headers_mut();
     h.insert(
         header::CONTENT_TYPE,

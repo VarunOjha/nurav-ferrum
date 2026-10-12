@@ -70,6 +70,7 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
 - `history` (p3.7): `History` (newest first; a visit to the newest entry's address updates it; at most 1000), `visit`,
   `set_title`, `search` (address or title, any case), `clear`; `save` (atomic) and `load` of `history.json`
   ([check-p3.7](../../raw/evidence/phase-p3-tabs-sessions/check-p3.7.txt)).
+- `config` (p3.8): `[downloads] folder` (none = the Windows Downloads folder).
 - `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default).
 - `config` (p3.4): the file carries `version` (`VERSION` = 2). A file without it is version 1 (P2) and is migrated
   when read (`migrate_v1`: a version-1 file that did not choose `new_window` keeps `same-view`, its P2 behaviour).

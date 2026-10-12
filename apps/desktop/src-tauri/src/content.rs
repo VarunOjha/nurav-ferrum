@@ -125,6 +125,12 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
             uri,
             user_initiated,
         } => json!({"kind": "external-scheme", "uri": uri, "user_initiated": user_initiated}),
+        // Downloads go to the shell as their own `download` messages (downloads.rs).
+        TabEvent::DownloadStarted { download, .. }
+        | TabEvent::DownloadProgress { download, .. }
+        | TabEvent::DownloadFinished { download, .. } => {
+            json!({"kind": "download", "download": download})
+        }
     };
     v["tab"] = json!(tab);
     v
@@ -285,6 +291,7 @@ fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
                 sink: sink(&h, id),
                 gate: gate(&h, id),
                 keys: crate::shortcuts::filter(&h),
+                downloads: crate::downloads::chooser(&h),
             },
             Box::new({
                 let h = h.clone();
@@ -407,6 +414,13 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
                 crate::history::titled(&h, &url, title);
             }
             _ => {}
+        }
+        if let Some(msg) = crate::downloads::shell_message(&h, id, &e) {
+            crate::downloads::emit(&h, msg);
+            return;
+        }
+        if matches!(e, TabEvent::DownloadProgress { .. }) {
+            return; // throttled progress
         }
         log_event(id, &e);
         let v = event_json(id, &e);

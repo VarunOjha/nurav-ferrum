@@ -64,8 +64,8 @@ connects:
     kind: rust-api
     crosses_trust_boundary: false
 unverified:
-  - claim: "Raw-COM DownloadStarting and PermissionRequested cover for tabs what Tauri's hooks would have done"
-    verify_in: phase-p3-tabs-sessions
+  - claim: "Raw-COM PermissionRequested covers for tabs what Tauri's permission hooks would have done"
+    verify_in: phase-p4-security
 ---
 
 # comp-webview-manager
@@ -84,7 +84,7 @@ This crate owns every tab WebView. **It is the only place in Ferrum where WebVie
 
 Raw-COM events instead of Tauri's hooks: `NavigationStarting`, `NewWindowRequested` and `NavigationCompleted` were
 verified in P2 for the content view (checks [p2.6](../../raw/evidence/phase-p2-minimal-container/check-p2.6.txt), [p2.8](../../raw/evidence/phase-p2-minimal-container/check-p2.8.txt),
-[p2.10](../../raw/evidence/phase-p2-minimal-container/check-p2.10.txt)); `DownloadStarting` and `PermissionRequested` are UNVERIFIED[phase-p3-tabs-sessions].
+[p2.10](../../raw/evidence/phase-p2-minimal-container/check-p2.10.txt)); `DownloadStarting` was verified in P3 (p3.8: the file, its size and contents, completion and failure; [check-p3.8](../../raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt)); `PermissionRequested` belongs to the permission work of P4 and is UNVERIFIED[phase-p4-security].
 
 ## Unsafe invariants
 
@@ -155,5 +155,12 @@ of it:
   (VERIFIED, multi-profile doc). Not yet checked (P4): renderer, network-service, audio and crash processes, web
   storage and service workers, HSTS, DNS and socket pools.
 
-Not yet built: downloads (rest of P3); the security engine's fail-closed gate, frame navigations and
+- p3.8, downloads: `DownloadStarting` (ICoreWebView2_4; token removed in `close`) asks the app for the file
+  (`Handlers::downloads`), sets `ResultFilePath` and `Handled` (no WebView2 download pop-up), and follows the
+  `DownloadOperation` (`BytesReceivedChanged`, `StateChanged`) as tab events `DownloadStarted`, `DownloadProgress` and
+  `DownloadFinished`; the operation and its tokens are kept in `DOWNLOADS` until it ends, so a download outlives its
+  tab. Observed: a download whose connection broke off was started again by WebView2 several times (six attempts; only
+  the last reported its end); the app shows the retries as one line ([check-p3.8](../../raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt)).
+
+Not yet built: the security engine's fail-closed gate, frame navigations and
 permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

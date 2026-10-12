@@ -1,0 +1,18 @@
+Ferrum check p3.8: Basic downloads
+Why: you know where each file is and whether it arrived whole.
+Run at 2026-10-12 02:45 on commit 177f702 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Test server download pages
+         downloads_are_deterministic_and_named: ok
+Running 4 tests using 1 worker
+  ✓  1 downloads.spec.ts:28:1 › a download lands in the folder with the right size and contents; the shell shows it done (444ms)
+  ✓  2 downloads.spec.ts:41:1 › the same file again gets a new name; nothing is replaced (261ms)
+  ✓  3 downloads.spec.ts:50:1 › a download that breaks off shows as failed (2.0s)
+  ✓  4 downloads.spec.ts:63:1 › Clear removes finished downloads from the list (43ms)
+  4 passed (18.5s)
+  PASS   Smoke test: size and SHA-256, no replaced files, broken download failed, list cleared (37 s)
+         downloads: 4 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.8 (2 PASS; 38 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.8 check passed".

@@ -1,38 +1,50 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-  Check for task p3.8 (P3 Tabs and sessions): Basic downloads.  DRAFT: not ready until P3.
+  Check for task p3.8 (P3 Tabs and sessions): Basic downloads.
 
 .DESCRIPTION
-  Status         : DRAFT. Its real checks are written when P3 starts; until then it only lists them and
-                   ends NOT READY.
-  What it checks : (planned) A test file arrives with the right size and fingerprint; a failing one shows
-                   an error.
-  Why            : Files must land somewhere sensible → default folder or a prompt, with progress and
-                   errors → downloads are visible.
-  What it changes: nothing.
-  How long       : under a second while it is a draft.
+  What it checks : (1) the test server's download pages (unit tests: deterministic bytes and file names; the broken
+                   download announces 1 MB); (2) the smoke test "downloads": a 300 KB file lands in the download folder
+                   with the right size and SHA-256, the shell shows it done, the page stays; the same file again gets a
+                   new name and nothing is replaced; a download that breaks off shows as failed (one line, although
+                   WebView2 retries it); Clear empties the list.
+  Why            : people download files every day → save them in the Downloads folder (or the folder in the settings)
+                   under a name that never replaces an existing file, and show progress and the end → you know where
+                   each file is and whether it arrived whole.
+  What it changes: nothing in git.
+  How long       : about 40 seconds after the first build.
   How to run     : pwsh -NoProfile -File scripts/verify/p3.8-basic-downloads.ps1
-  Result         : NOT READY until P3 starts (this is a draft); then PASS or FAIL.
-  Tell Claude    : nothing. "Not ready until P3" is the expected result for now.
+                   Needs the local development certificate (task p2.1) and ports 8443 and 9339 free.
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits).
+  Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p3.8 check failed".
 
   For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
-                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
-                   page:
-    Integration test downloads a fixture file and checks size and hash; failure fixture shows the error
-    state.
+                   scripts/lib/Ferrum.Check.psm1, scripts/lib/Ferrum.SelfTest.ps1). Phase-page verify field:
+    Integration test downloads a fixture file and checks size and hash; failure fixture shows the error state.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
+. (Join-Path $PSScriptRoot '../lib/Ferrum.SelfTest.ps1')
 
 Start-Check -Id 'p3.8' -Title 'Basic downloads' -Phase 'phase-p3-tabs-sessions' `
-    -Why 'downloads are visible.'
+    -Why 'you know where each file is and whether it arrived whole.'
 
-# TODO(P3): replace each planned step below with an Invoke-Step that really checks it.
-Add-TodoStep 'A test file arrives with the right size and fingerprint' 'Planned check; written when P3 starts.'
-Add-TodoStep 'A failing one shows an error' 'Planned check; written when P3 starts.'
+Invoke-Step 'Test server download pages' {
+    $r = Assert-Cargo @('test', '--locked', '-p', 'fixture-server', '--test', 'routes')
+    if ($r.Output -notmatch 'downloads_are_deterministic_and_named \.\.\. ok') { Stop-Fail 'The download page test did not pass.' }
+    'downloads_are_deterministic_and_named: ok'
+}
 
-Complete-Check -SaveEvidence:$SaveEvidence -NotReadyUntil 'P3'
+Invoke-Step 'Smoke test: size and SHA-256, no replaced files, broken download failed, list cleared' {
+    $r = Invoke-FerrumSmoke -Spec 'downloads'
+    Add-LogText (Get-Tail $r.Output 9)
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '4 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    'downloads: 4 passed'
+}
+
+Complete-Check -SaveEvidence:$SaveEvidence

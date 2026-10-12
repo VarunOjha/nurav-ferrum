@@ -126,6 +126,14 @@ pub struct SiteSettings {
     pub profile: Option<String>,
 }
 
+/// `[downloads]`: where downloads go (p3.8).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(deny_unknown_fields, default)]
+pub struct Downloads {
+    /// The folder downloads are saved in. `None` = the Windows Downloads folder.
+    pub folder: Option<PathBuf>,
+}
+
 /// `[storage]`: where Ferrum keeps its data.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(deny_unknown_fields, default)]
@@ -158,6 +166,8 @@ pub struct Config {
     pub isolation: Isolation,
     /// Per-site settings.
     pub sites: Vec<SiteSettings>,
+    /// Downloads.
+    pub downloads: Downloads,
 }
 
 impl Default for Config {
@@ -169,6 +179,7 @@ impl Default for Config {
             storage: Storage::default(),
             isolation: Isolation::default(),
             sites: Vec::new(),
+            downloads: Downloads::default(),
         }
     }
 }

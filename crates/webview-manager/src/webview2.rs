@@ -14,17 +14,18 @@
 
 #![allow(unsafe_code)]
 
-use std::cell::RefCell;
+use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
 use std::rc::Rc;
 
 use webview2_com::Microsoft::Web::WebView2::Win32::*;
 use webview2_com::{
-    AcceleratorKeyPressedEventHandler, CreateCoreWebView2ControllerCompletedHandler,
-    DocumentTitleChangedEventHandler, FocusChangedEventHandler, HistoryChangedEventHandler,
+    AcceleratorKeyPressedEventHandler, BytesReceivedChangedEventHandler,
+    CreateCoreWebView2ControllerCompletedHandler, DocumentTitleChangedEventHandler,
+    DownloadStartingEventHandler, FocusChangedEventHandler, HistoryChangedEventHandler,
     LaunchingExternalUriSchemeEventHandler, NavigationCompletedEventHandler,
     NavigationStartingEventHandler, NewWindowRequestedEventHandler, SourceChangedEventHandler,
-    take_pwstr,
+    StateChangedEventHandler, take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows_core::{BOOL, HSTRING, Interface, PWSTR};
@@ -39,8 +40,14 @@ pub type NavGate = Rc<dyn Fn(&NavRequest) -> NavDecision>;
 /// Decides whether a key pressed in the view is Ferrum's (true: handled, the page never sees it) (UI thread).
 pub type KeyFilter = Rc<dyn Fn(KeyDown) -> bool>;
 
+/// Chooses where a download is saved: given its address and WebView2's suggested path, the full path to save to, or
+/// `None` to refuse the download (UI thread).
+pub type DownloadFilter = Rc<dyn Fn(&str, &str) -> Option<String>>;
+
 /// What a tab view reports to, and asks of, the app.
 pub struct Handlers {
+    /// Chooses each download's file (p3.8).
+    pub downloads: DownloadFilter,
     /// Receives the view's events.
     pub sink: EventSink,
     /// Decides each top-level navigation.
@@ -67,6 +74,7 @@ enum Ev {
     NewWindow,
     LaunchExternal,
     Accelerator,
+    Download,
 }
 
 /// One tab web view: a WebView2 controller Ferrum created (adr-0029). `!Send` by construction (COM-1).
@@ -128,7 +136,12 @@ impl ContentView {
     }
 
     fn register(&mut self, handlers: Handlers) -> Result<(), Error> {
-        let Handlers { sink, gate, keys } = handlers;
+        let Handlers {
+            sink,
+            gate,
+            keys,
+            downloads,
+        } = handlers;
         let core = self.core.clone();
 
         let s = sink.clone();
@@ -348,6 +361,23 @@ impl ContentView {
         hr(unsafe { self.controller.add_AcceleratorKeyPressed(&h, &mut t) })?;
         self.tokens.push((Ev::Accelerator, t));
 
+        // Downloads (p3.8): the app chooses the file; WebView2's own download pop-up is not shown (Handled); progress
+        // and the end are reported as tab events. The operation is kept (with its handler tokens) in `DOWNLOADS`
+        // until it finishes, so it outlives a tab that closes meanwhile.
+        if let Ok(core4) = core.cast::<ICoreWebView2_4>() {
+            let s = sink.clone();
+            let h = DownloadStartingEventHandler::create(Box::new(move |_sender, args| {
+                if let Some(args) = args {
+                    start_download(&args, &s, &downloads);
+                }
+                Ok(())
+            }));
+            let mut t = 0i64;
+            // SAFETY: COM-1, COM-4: token kept for close().
+            hr(unsafe { core4.add_DownloadStarting(&h, &mut t) })?;
+            self.tokens.push((Ev::Download, t));
+        }
+
         let s = sink;
         let h = FocusChangedEventHandler::create(Box::new(move |_sender, _args| {
             s(TabEvent::GotFocus);
@@ -447,6 +477,10 @@ impl ContentView {
                     Ev::Title => self.core.remove_DocumentTitleChanged(*t),
                     Ev::GotFocus => self.controller.remove_GotFocus(*t),
                     Ev::Accelerator => self.controller.remove_AcceleratorKeyPressed(*t),
+                    Ev::Download => match self.core.cast::<ICoreWebView2_4>() {
+                        Ok(c4) => c4.remove_DownloadStarting(*t),
+                        Err(e) => Err(e),
+                    },
                     Ev::NewWindow => self.core.remove_NewWindowRequested(*t),
                     Ev::LaunchExternal => match self.core.cast::<ICoreWebView2_18>() {
                         Ok(c18) => c18.remove_LaunchingExternalUriScheme(*t),
@@ -458,6 +492,103 @@ impl ContentView {
         // SAFETY: COM-1, COM-4.
         let _ = unsafe { self.controller.Close() };
     }
+}
+
+/// UI thread, inside `DownloadStarting`: asks the app for the file, then follows the download.
+fn start_download(
+    args: &ICoreWebView2DownloadStartingEventArgs,
+    sink: &EventSink,
+    choose: &DownloadFilter,
+) {
+    // SAFETY: COM-1, UI-thread callback; `args` is live for the callback.
+    let Ok(op) = (unsafe { args.DownloadOperation() }) else {
+        return;
+    };
+    let (mut uri, mut suggested, mut total) = (PWSTR::null(), PWSTR::null(), 0i64);
+    // SAFETY: COM-1, COM-5: out-pointers are locals; strings copied and freed by take_pwstr.
+    let (uri, suggested) = unsafe {
+        let _ = op.Uri(&mut uri);
+        let _ = op.TotalBytesToReceive(&mut total);
+        let _ = args.ResultFilePath(&mut suggested);
+        (take_pwstr(uri), take_pwstr(suggested))
+    };
+    let Some(path) = choose(&uri, &suggested) else {
+        // SAFETY: COM-1; cancelling inside the callback is the documented use.
+        let _ = unsafe { args.SetCancel(true) };
+        return;
+    };
+    // SAFETY: COM-1; the HSTRING outlives the calls. Handled = true: WebView2 shows no download pop-up of its own.
+    unsafe {
+        let _ = args.SetResultFilePath(&HSTRING::from(path.as_str()));
+        let _ = args.SetHandled(true);
+    }
+    let id = NEXT_DOWNLOAD.with(|n| {
+        let v = n.get() + 1;
+        n.set(v);
+        v
+    });
+    sink(TabEvent::DownloadStarted {
+        download: id,
+        uri,
+        path: path.clone(),
+        total,
+    });
+    let s = sink.clone();
+    let o = op.clone();
+    let bytes = BytesReceivedChangedEventHandler::create(Box::new(move |_sender, _args| {
+        let (mut received, mut total) = (0i64, 0i64);
+        // SAFETY: COM-1; out-pointers are locals.
+        unsafe {
+            let _ = o.BytesReceived(&mut received);
+            let _ = o.TotalBytesToReceive(&mut total);
+        }
+        s(TabEvent::DownloadProgress {
+            download: id,
+            received,
+            total,
+        });
+        Ok(())
+    }));
+    let s = sink.clone();
+    let o = op.clone();
+    let state = StateChangedEventHandler::create(Box::new(move |_sender, _args| {
+        let mut st = COREWEBVIEW2_DOWNLOAD_STATE::default();
+        let mut reason = COREWEBVIEW2_DOWNLOAD_INTERRUPT_REASON::default();
+        let mut received = 0i64;
+        // SAFETY: COM-1; out-pointers are locals.
+        unsafe {
+            let _ = o.State(&mut st);
+            let _ = o.InterruptReason(&mut reason);
+            let _ = o.BytesReceived(&mut received);
+        }
+        if st == COREWEBVIEW2_DOWNLOAD_STATE_IN_PROGRESS {
+            return Ok(());
+        }
+        s(TabEvent::DownloadFinished {
+            download: id,
+            completed: st == COREWEBVIEW2_DOWNLOAD_STATE_COMPLETED,
+            interrupt_reason: reason.0,
+            path: path.clone(),
+            received,
+        });
+        // Done: release the operation and its handlers (COM-4), outside this callback's own borrow.
+        let done = DOWNLOADS.with(|d| d.borrow_mut().remove(&id));
+        if let Some((op, bt, stt)) = done {
+            // SAFETY: COM-1, COM-4: the tokens came from the add_* calls on this operation.
+            unsafe {
+                let _ = op.remove_BytesReceivedChanged(bt);
+                let _ = op.remove_StateChanged(stt);
+            }
+        }
+        Ok(())
+    }));
+    let (mut bt, mut stt) = (0i64, 0i64);
+    // SAFETY: COM-1, COM-4: tokens kept in DOWNLOADS and removed when the download ends.
+    unsafe {
+        let _ = op.add_BytesReceivedChanged(&bytes, &mut bt);
+        let _ = op.add_StateChanged(&state, &mut stt);
+    }
+    DOWNLOADS.with(|d| d.borrow_mut().insert(id, (op, bt, stt)));
 }
 
 /// Whether virtual key `vk` is held down right now, for the thread's keyboard state (Ctrl 0x11, Shift 0x10).
@@ -547,4 +678,8 @@ thread_local! {
     pub static VIEWS: RefCell<HashMap<u64, ContentView>> = RefCell::new(HashMap::new());
     /// Tauri's WebView2 environment, saved when the first tab view is created (every tab view comes from it, COM-7).
     pub static ENVIRONMENT: RefCell<Option<ICoreWebView2Environment>> = const { RefCell::new(None) };
+    /// Downloads in progress: the operation and its two handler tokens, by Ferrum's download id (p3.8).
+    static DOWNLOADS: RefCell<HashMap<u64, (ICoreWebView2DownloadOperation, i64, i64)>> = RefCell::new(HashMap::new());
+    /// The last download id handed out.
+    static NEXT_DOWNLOAD: Cell<u64> = const { Cell::new(0) };
 }

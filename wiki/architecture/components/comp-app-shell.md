@@ -181,6 +181,12 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   memory only. Per-tab back and forward: the toolbar's buttons follow the active tab's own `history-changed` state. The
   history is browsing data: it stays in the data folder and is never committed (the p3.7 check looks)
   ([check-p3.7](../../raw/evidence/phase-p3-tabs-sessions/check-p3.7.txt)).
+- p3.8, downloads (`downloads.rs`): files go to `[downloads] folder` (else the Windows Downloads folder) under the
+  name WebView2 suggests (the file name only; a name already on disk or already given out in this run gets
+  ` (1)`, ` (2)`, ...: nothing is ever replaced). The shell's downloads bar (top band) shows each download: percent and
+  size while running, "Done" or "Failed"; Clear removes finished ones. Event `download` (`started`, `progress` at most
+  every 200 ms, `completed`, `failed`; a retry of the same address replaces its older line). Risky file types and
+  "ask where to save" are P4 (adr-0015) ([check-p3.8](../../raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt)).
 - New windows: `new_window = "new-tab"` is the new default (`same-view` and `system-browser` stay). One tab may open
   at most one new tab per second; further requests are blocked with "Pop-up blocked" on that tab. WebView2's
   user-initiated flag is not used (it was `true` for a script-only pop-up). A real pop-up policy is P4 work.

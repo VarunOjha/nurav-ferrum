@@ -63,6 +63,39 @@ pub enum TabEvent {
         /// Caused by a user gesture.
         user_initiated: bool,
     },
+    /// A download started (p3.8), saved to `path`.
+    DownloadStarted {
+        /// Ferrum's id for the download.
+        download: u64,
+        /// Where it comes from.
+        uri: String,
+        /// Where it is saved.
+        path: String,
+        /// Its size, when the server said (-1 when unknown).
+        total: i64,
+    },
+    /// More of a download arrived.
+    DownloadProgress {
+        /// Ferrum's id for the download.
+        download: u64,
+        /// Bytes received so far.
+        received: i64,
+        /// Its size (-1 when unknown).
+        total: i64,
+    },
+    /// A download finished: completed, or broke off (`interrupt_reason` is WebView2's reason code).
+    DownloadFinished {
+        /// Ferrum's id for the download.
+        download: u64,
+        /// It completed.
+        completed: bool,
+        /// WebView2's interrupt reason (0 when completed).
+        interrupt_reason: i32,
+        /// Where it was saved.
+        path: String,
+        /// Bytes received.
+        received: i64,
+    },
 }
 
 /// A top-level navigation that is about to start, as the navigation gate sees it.

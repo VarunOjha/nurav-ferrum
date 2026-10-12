@@ -66,6 +66,15 @@ body { display: flex; flex-direction: column; }
 #external-bar { display: flex; align-items: center; gap: 12px; height: 44px; box-sizing: border-box; padding: 0 16px 0 13px; border-bottom: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface); color: var(--text); }
 #external-text { font-weight: 600; white-space: nowrap; }
 #external-bar[hidden] { display: none; }
+/* Downloads (p3.8): part of the top band, one line per download. */
+#downloads { display: flex; align-items: flex-start; gap: 12px; padding: 6px 16px; box-sizing: border-box; border-bottom: 1px solid var(--border); background: var(--surface); color: var(--text); }
+#downloads[hidden] { display: none; }
+#download-list { flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; }
+#download-list li { display: flex; gap: 10px; align-items: baseline; padding: 2px 0; }
+#download-list .dl-file { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 40%; }
+#download-list .dl-state { color: var(--muted); }
+#download-list li[data-state="failed"] .dl-state { color: var(--accent); }
+#downloads button { padding: 4px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
 #external-uri { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
 #external-bar button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
 #external-open { background: var(--accent) !important; color: #fff !important; }

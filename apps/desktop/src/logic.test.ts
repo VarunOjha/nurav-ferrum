@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, blockedText, finished, lockFor, shortcutFor, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, blockedText, downloadText, finished, lockFor, shortcutFor, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -74,4 +74,16 @@ test("shell shortcuts follow the same table as the app", () => {
   for (const key of [k("t"), k("c", "c"), k("v", "c"), k("z", "c"), k("a", "c"), k("ArrowLeft"), k("Tab"), k("0", "c")]) {
     assert.equal(shortcutFor(key), null, JSON.stringify(key));
   }
+});
+
+test("download lines: sizes in plain units, percent while running, done or failed", () => {
+  assert.equal(sizeText(500), "500 B");
+  assert.equal(sizeText(1536), "1.5 KB");
+  assert.equal(sizeText(300000), "293.0 KB");
+  assert.equal(sizeText(5 * 1024 * 1024), "5.0 MB");
+  assert.equal(sizeText(-1), "unknown size");
+  assert.equal(downloadText("running", 50, 200), "25% of 200 B");
+  assert.equal(downloadText("running", 2048, -1), "2.0 KB so far");
+  assert.equal(downloadText("completed", 300000, 300000), "Done, 293.0 KB");
+  assert.equal(downloadText("failed", 4096, 1048576), "Failed after 4.0 KB");
 });
