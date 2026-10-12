@@ -1895,3 +1895,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt]
 - result: WebView2 DownloadStarting via raw COM: the app chooses the file (download folder from settings or Windows Downloads; file name only; never replaces a file), WebView2's pop-up hidden; progress, completion and failure shown in the shell's downloads bar. Fixture broken download now streams 4 KB then fails. Observed: WebView2 restarted a broken download six times, only the last reporting its end; retries are shown as one line. Fixed: the first tab list at start cleared an address being typed (likely the earlier keep-cookies flake). Downloads smoke 4 passed (12 of 12 in 3 repeats); whole suite 55 passed; p3.8 PASS. Claim on DownloadStarting closed; PermissionRequested moved to P4. Stales comp-app-shell, comp-core, comp-webview-manager (re-recorded through the annex).
 - commit: f742b15
+
+## [2026-10-12] code | p3.9 shell responsiveness under a busy tab
+
+- session: s02
+- time: 02:49
+- pages: [phase-p3-tabs-sessions, comp-app-shell]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.9.txt]
+- result: Smoke spec responsive: a tab on site-a runs /busy (endless script); switching to a site-b tab and typing an address each finish within the test's 5 s requirement (threshold, not a measurement); the busy tab closes. 3 of 3 repeats passed; p3.9 check PASS. The P3-page claim that a busy tab does not block the shell is answered from this evidence; process placement left to P4. Stales comp-app-shell and phase-p3-tabs-sessions (re-recorded through the annex).
+- commit: a35aac5

@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: null
-next_action: "Phase 3 in progress: next task p3.9 (busy-loop tab; switching tabs and typing in the address bar stay responsive). Stop after the P3 exit gate (owner directive 2026-10-12)."
+next_action: "Phase 3 in progress: next task p3.10 (deadlock guard: tab creation never from a synchronous command or event handler; review checklist plus a test creating tabs from the command path in a loop). Stop after the P3 exit gate (owner directive 2026-10-12)."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -102,6 +102,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 - p3.6 done (`0293deb`): per-site profiles (psl), per-site settings, ask before a tab changes site; smoke 48 passed; check PASS.
 - p3.7 done (`3d6fa8a`): local, searchable, clearable history; back/forward per tab; smoke 51 passed; check PASS.
 - p3.8 done (`f742b15`): downloads with progress, completion and failure; start-up address race fixed; smoke 55 passed; check PASS.
+- p3.9 done (`a35aac5`): shell responsive with a busy tab; check PASS.
 
 ## Done this session (s01)
 
@@ -313,7 +314,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p3.8 verified and committed 2026-10-12 as `f742b15`)
+(empty: p3.9 verified and committed 2026-10-12 as `a35aac5`)
 
 ## Blockers
 
@@ -349,8 +350,8 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | In progress: 8 of 15 tasks done |
-| Next task | Responsive while a tab is busy (p3.9) |
+| Phase 3 | In progress: 9 of 15 tasks done |
+| Next task | Guard against freezes (p3.10) |
 | Your rule this session | Claude asks before any delete or kill command |
 
 **2. Why, and what it does.** Nothing for you to run now. Claude builds phase 3 task by task and stops at its end check.
@@ -368,4 +369,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 in progress: 8 of 15 tasks done, last p3.8). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-12, session s02 (P3 in progress: 9 of 15 tasks done, last p3.9). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

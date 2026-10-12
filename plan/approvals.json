@@ -738,10 +738,10 @@
     "comp-app-shell": {
       "status": "approved",
       "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T02:47:07-05:00",
+      "timestamp": "2026-10-12T02:49:16-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:854e3c13f85e68361b30d15154f01874068364d4b02ee74e373c811d3891a8e0",
-      "scope_hash": "sha256:80c2078749a24a181243dcff61d8499fe56a2f84b4217388311060706e6fd89a",
+      "content_hash": "sha256:3cea9f5b25b461aa1a25d93067bdc2c43ebe36d19091fbc0af4c8499c686c5e4",
+      "scope_hash": "sha256:2ec4b466ae6f47c9469cc125d2fc6d48950ecb3c5ac4cbe70585a57755dccc5a",
       "approved_by": "owner",
       "recorded_by": "claude",
       "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md",
@@ -819,6 +819,17 @@
           "path": "wiki/architecture/components/comp-app-shell.md",
           "content_hash": "sha256:cdfc6c3123dd25e0f79f1028fcb7fcd8de68ea3b4a4406b9d3a3c9fc5223b554",
           "scope_hash": "sha256:5297595d91c69f75d9a06d0e5d2e58981b6df020ee7c3a288fcb44ef37f0390a",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T02:47:07-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:854e3c13f85e68361b30d15154f01874068364d4b02ee74e373c811d3891a8e0",
+          "scope_hash": "sha256:80c2078749a24a181243dcff61d8499fe56a2f84b4217388311060706e6fd89a",
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md"
@@ -956,13 +967,13 @@
     "phase-p3-tabs-sessions": {
       "status": "approved",
       "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T02:18:51-05:00",
+      "timestamp": "2026-10-12T02:49:16-05:00",
       "path": "wiki/phases/phase-p3-tabs-sessions.md",
-      "content_hash": "sha256:a71d759e14de1f037be85239a89aceeed8af13739f477ee4c823cf78a88979ab",
-      "scope_hash": "sha256:0c6a225c17a5207f020a9b44fcc1da47430fdff57fe30e6b53651ce8aff4e386",
+      "content_hash": "sha256:0eb8a347371a3e82efd5dd49d0b91bab94192294c8833bbe204d2219c55a4dff",
+      "scope_hash": "sha256:e5471c27b119a7261048a16d28577d0cb7f66314fab3daec5fa8e9ded4358e35",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md",
       "history": [
         {
           "status": "approved",
@@ -982,6 +993,17 @@
           "path": "wiki/phases/phase-p3-tabs-sessions.md",
           "content_hash": "sha256:eed93fb073b531e027f11eb1e55a1b75b00e92946462c21089f92c616bfd32ae",
           "scope_hash": "sha256:65fa2dc4e1c5d10767af5496615e72f547d82c32791ee72955a65b48a1384afd",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T02:18:51-05:00",
+          "path": "wiki/phases/phase-p3-tabs-sessions.md",
+          "content_hash": "sha256:a71d759e14de1f037be85239a89aceeed8af13739f477ee4c823cf78a88979ab",
+          "scope_hash": "sha256:0c6a225c17a5207f020a9b44fcc1da47430fdff57fe30e6b53651ce8aff4e386",
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"

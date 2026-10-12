@@ -790,7 +790,7 @@
       "kind": "task",
       "title": "P3 task: Shell stays responsive",
       "summary": "A busy tab must not freeze the browser → switch tabs and type while another tab burns CPU → the shell stays usable.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4827,6 +4827,14 @@
       "kind": "commit",
       "title": "Commit: Downloads work, with progress and failures shown",
       "summary": "Downloads now go to your Downloads folder (or one set in the settings) and never replace an existing file. A bar under the toolbar shows progress, Done or Failed. A test checks that the downloaded fil",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "a35aac5",
+      "kind": "commit",
+      "title": "Commit: A stuck page does not freeze Ferrum",
+      "summary": "A test page whose script never stops runs in one tab; switching to another tab and typing an address still work at once, and the stuck tab can be closed.",
       "status": null,
       "related": []
     }

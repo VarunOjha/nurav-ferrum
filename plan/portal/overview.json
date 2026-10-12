@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 8 of 15 tasks done. Next: responsive while a tab is busy (p3.9).",
+  "summary": "Phase 3 is in progress: 9 of 15 tasks done. Next: guard against freezes (p3.10).",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:90a29a69a4041ff85040af1eaf963031719783603656872b1505a1eb3c46077f"
+    "content_hash": "sha256:a293174dc71375695dccd1f7e15c23332075979c171903126b7c71912fc44497"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 8 of 15 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 9 of 15 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,11 +38,11 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "8 of 15 tasks done"
+        "state": "9 of 15 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Responsive while a tab is busy (p3.9)"
+        "state": "Guard against freezes (p3.10)"
       }
     ],
     "why": "Nothing to run. Claude builds phase 3 task by task and stops at its end check.",

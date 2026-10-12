@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:0a85b15fe8cbe22e1e1325dadbae73dcb83979f9208912b50cc8616b3c9d79c7"
+    "content_hash": "sha256:984442f01c814723f0faf23158fda10b5d88399edad02ca0054e83ccb08d1e78"
   },
   "entries": [
     {
@@ -2919,6 +2919,26 @@
       "category": "Built",
       "tags": [
         "web views",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-9",
+      "date": "2026-10-12",
+      "time": "02:49",
+      "title": "A stuck page does not freeze Ferrum",
+      "done": "A test page whose script never stops runs in one tab; switching to another tab and typing an address still work at once, and the stuck tab can be closed.",
+      "next": "A guard against freezes when tabs are created (task p3.10).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "a35aac5",
+      "covers": [
+        "## [2026-10-12] code | p3.9 shell responsiveness under a busy tab"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "tabs",
         "testing"
       ]
     }

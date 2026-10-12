@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 8,
+    "done": 9,
     "total": 15
   },
   "step_order": [
@@ -114,7 +114,7 @@
       "what": "A check that the browser stays usable while one tab is very busy.",
       "why": "If one heavy website could freeze the whole window, every other tab would be stuck too, and the main promise of a separate tab view would fail.",
       "how": "Rely on each website view running apart from the shell, then load a test page that keeps one tab busy. Whether that separation holds is not checked yet; this task checks it.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "A busy tab must not freeze the browser → switch tabs and type while another tab burns CPU → the shell stays usable.",
       "check": "Switching and typing finish within the test's time limit (a requirement, not a measurement).",
       "script": "scripts/verify/p3.9-shell-stays-responsive.ps1"
@@ -235,6 +235,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:a71d759e14de1f037be85239a89aceeed8af13739f477ee4c823cf78a88979ab"
+    "content_hash": "sha256:0eb8a347371a3e82efd5dd49d0b91bab94192294c8833bbe204d2219c55a4dff"
   }
 }
