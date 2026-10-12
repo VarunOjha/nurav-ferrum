@@ -1,0 +1,14 @@
+Ferrum check p3.9: The toolbar stays responsive while a tab is busy
+Why: you can always switch away from, or close, a stuck tab.
+Run at 2026-10-12 02:48 on commit 027af5b (with uncommitted changes)
+------------------------------------------------------------------------
+Running 1 test using 1 worker
+p3.9 result: switch 56 ms, type-and-load 58 ms (threshold 5000 ms each)
+  ✓  1 responsive.spec.ts:15:1 › a busy tab does not block switching tabs or typing in the address bar (1.7s)
+  1 passed (15.9s)
+  PASS   Smoke test: switch and type within 5 s while a tab spins; the busy tab closes (26 s)
+         responsive: 1 passed; p3.9 result: switch 56 ms, type-and-load 58 ms (threshold 5000 ms each) (test log, not a measurement)
+------------------------------------------------------------------------
+RESULT: PASS - p3.9 (1 PASS; 26 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.9 check passed".

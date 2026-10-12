@@ -119,8 +119,6 @@ components: [comp-app-shell, comp-webview-manager, comp-core]
 unverified:
   - claim: "Moving keyboard focus into the content web view when the window becomes active fixes the Alt+Tab focus issue (13466)"
     verify_in: phase-p3-tabs-sessions
-  - claim: "The shell WebView and remote tabs run in different renderer processes, so a busy tab does not block the shell"
-    verify_in: phase-p3-tabs-sessions
 ---
 
 # P3 Tabs and sessions (Milestone M2)
@@ -135,6 +133,7 @@ P3 turns the single content WebView into a tab manager. It covers master prompt 
 - Owner answers of 2026-10-12 ([raw/owner/2026-10-12-s02-p3-questions.md](../raw/owner/2026-10-12-s02-p3-questions.md)): the normal Windows title bar first, tab strip just under it (Q-125); a site is its registrable domain (Q-111); a top-level navigation to another site asks first, then moves the tab to that site's profile (Q-209).
 - Shortcuts with focus in a page (p3.3): WebView2's `AcceleratorKeyPressed` on each tab view reports the key before the page sees it; Ferrum's keys are marked handled and never reach the page; nothing is injected into the page, and the p2.3 IPC test still passes ([check-p3.3](../raw/evidence/phase-p3-tabs-sessions/check-p3.3.txt)). CDP key events do not reach this hook, so the smoke test presses real keys.
 - Per-site profiles (p3.6): site key from the `psl` crate (VERIFIED maintained, [p3-profiles-psl](../raw/research/p3-profiles-psl.md)); profile names within WebView2's documented rules; what stays shared is listed on [ov-arch-isolation-model](../architecture/ov-arch-isolation-model.md) §3 and [comp-webview-manager](../architecture/components/comp-webview-manager.md) ([check-p3.6](../raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt)).
+- Busy tab (p3.9): with a tab whose script never stops, switching tabs and typing an address in the shell each finished within the test's 5-second requirement, and the busy tab could be closed ([check-p3.9](../raw/evidence/phase-p3-tabs-sessions/check-p3.9.txt); timings there are test log, not measurements). This answers the planning claim that a busy tab does not block the shell; which renderer process hosts which view was not inspected (process isolation is examined in P4).
 - Alt+Tab focus: P2 built the fix; the owner checks it here (UNVERIFIED[phase-p3-tabs-sessions], carried from P2).
 - Per-site profiles. All profiles in one user data folder share the browser process and must use identical environment options (section 6), and `clear_all_browsing_data` is profile-wide. P3 documents exactly what is shared; P4 tests it as a security property.
 

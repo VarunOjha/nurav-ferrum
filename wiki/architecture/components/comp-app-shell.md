@@ -187,6 +187,9 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   size while running, "Done" or "Failed"; Clear removes finished ones. Event `download` (`started`, `progress` at most
   every 200 ms, `completed`, `failed`; a retry of the same address replaces its older line). Risky file types and
   "ask where to save" are P4 (adr-0015) ([check-p3.8](../../raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt)).
+- p3.9, a busy tab: a tab whose script never stops does not block the shell: switching tabs and typing an address
+  each finished within the test's 5-second requirement, and the busy tab closed normally
+  ([check-p3.9](../../raw/evidence/phase-p3-tabs-sessions/check-p3.9.txt)).
 - New windows: `new_window = "new-tab"` is the new default (`same-view` and `system-browser` stay). One tab may open
   at most one new tab per second; further requests are blocked with "Pop-up blocked" on that tab. WebView2's
   user-initiated flag is not used (it was `true` for a script-only pop-up). A real pop-up policy is P4 work.
