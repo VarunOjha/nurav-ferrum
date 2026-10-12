@@ -7,6 +7,7 @@
 pub mod config;
 
 pub mod address;
+pub mod backup;
 pub mod fsutil;
 pub mod history;
 pub mod oauth;

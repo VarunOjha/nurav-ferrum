@@ -203,6 +203,13 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   Esc, click; the address bar is a combobox (`aria-activedescendant`). The list is part of the top band, so the tab
   view moves down while it is open and never covers it (the smoke test compares the page's height with the band)
   ([check-p3.20](../../raw/evidence/phase-p3-tabs-sessions/check-p3.20.txt)).
+- p3.21, backup and restore (`backup.rs`, adr-0032): commands `backup_suggest_path` (the download folder,
+  `ferrum-backup-<date>.ferrum-backup`), `backup_export` (a new file only, never over an existing one),
+  `backup_preview` (what is inside; nothing changes) and `backup_import` (merge, or replace after a dated copy
+  `ferrum.db.before-import-<seconds>`); the key derivation runs off the main thread; the passphrase is wiped and
+  never logged (the smoke test reads every log). The Backup and restore screen (from the sidebar) covers the active
+  tab like Settings: make a backup (passphrase twice), look inside, Merge into mine, Replace mine (asked twice)
+  ([check-p3.21](../../raw/evidence/phase-p3-tabs-sessions/check-p3.21.20261012-1618.txt)).
 - p3.8, downloads (`downloads.rs`): files go to `[downloads] folder` (else the Windows Downloads folder) under the
   name WebView2 suggests (the file name only; a name already on disk or already given out in this run gets
   ` (1)`, ` (2)`, ...: nothing is ever replaced). The shell's downloads bar (top band) shows each download: percent and

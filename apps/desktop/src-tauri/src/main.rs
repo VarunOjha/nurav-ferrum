@@ -6,6 +6,7 @@
 #![forbid(unsafe_code)]
 #![windows_subsystem = "windows"]
 
+mod backup;
 mod bookmarks;
 mod content;
 mod downloads;
@@ -202,6 +203,10 @@ fn main() {
             bookmarks::bookmark_remove,
             bookmarks::appearance_get,
             bookmarks::appearance_set,
+            backup::backup_suggest_path,
+            backup::backup_export,
+            backup::backup_preview,
+            backup::backup_import,
             content::shell_focused
         ])
         .setup(|app| {

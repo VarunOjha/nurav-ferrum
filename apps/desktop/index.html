@@ -67,6 +67,7 @@
       <input id="side-search" type="search" placeholder="Search history" aria-label="Search history" spellcheck="false" />
       <ul id="side-history"></ul>
       <button id="side-clear" type="button">Clear history</button>
+      <button id="side-backup" type="button">Backup and restore&#x2026;</button>
     </aside>
     <!-- The content area: covered by the active tab's view, except while one of these shell panels shows. -->
     <main id="content-area">
@@ -108,6 +109,46 @@
           </div>
           <p class="hint" id="set-file"></p>
         </form>
+      </section>
+      <!-- Backup and restore (p3.21, adr-0032): covers the active tab like the settings screen. -->
+      <section id="backup-panel" aria-labelledby="backup-title" hidden>
+        <h1 id="backup-title">Backup and restore</h1>
+        <p class="hint">A backup holds your bookmarks and history, locked with a passphrase you choose. Cookies, saved
+          logins and site data are never in it. Without the passphrase nobody can open the file, not even Ferrum.</p>
+        <form id="bk-export-form" autocomplete="off">
+          <fieldset>
+            <legend>Make a backup</legend>
+            <label for="bk-out">Save as</label>
+            <input id="bk-out" type="text" spellcheck="false" />
+            <label for="bk-pass1">Passphrase (at least 12 characters)</label>
+            <input id="bk-pass1" type="password" autocomplete="new-password" />
+            <label for="bk-pass2">The passphrase again</label>
+            <input id="bk-pass2" type="password" autocomplete="new-password" />
+            <div class="settings-actions">
+              <button id="bk-export" type="submit">Make backup</button>
+              <span id="bk-export-status" role="status"></span>
+            </div>
+          </fieldset>
+        </form>
+        <form id="bk-import-form" autocomplete="off">
+          <fieldset>
+            <legend>Restore from a backup</legend>
+            <label for="bk-in">Backup file</label>
+            <input id="bk-in" type="text" spellcheck="false" placeholder="C:\Users\you\Downloads\ferrum-backup-2026-10-12.ferrum-backup" />
+            <label for="bk-pass3">Passphrase</label>
+            <input id="bk-pass3" type="password" autocomplete="off" />
+            <div class="settings-actions">
+              <button id="bk-look" type="submit">Look inside</button>
+              <span id="bk-preview" role="status"></span>
+            </div>
+            <div id="bk-choose" class="settings-actions" hidden>
+              <button id="bk-merge" type="button">Merge into mine</button>
+              <button id="bk-replace" type="button">Replace mine</button>
+              <span id="bk-import-status" role="status"></span>
+            </div>
+          </fieldset>
+        </form>
+        <div class="settings-actions"><button id="backup-close" type="button">Close</button></div>
       </section>
       <section id="empty-panel" hidden>
         <h1>No tabs open</h1>

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-backup-suggest-path"
+description = "Enables the backup_suggest_path command without any pre-configured scope."
+commands.allow = ["backup_suggest_path"]
+
+[[permission]]
+identifier = "deny-backup-suggest-path"
+description = "Denies the backup_suggest_path command without any pre-configured scope."
+commands.deny = ["backup_suggest_path"]

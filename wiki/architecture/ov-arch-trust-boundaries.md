@@ -47,6 +47,7 @@ unverified:
 | A2 Per-site session state (cookies, storage, cache, permissions) | Cross-site leakage, session theft |
 | A3 Shell UI integrity (address bar shows the true URL; security prompts are genuine) | Spoofed UI enables phishing |
 | A4 Network log files and session files (browsing history, URLs) | Sensitive browsing information (master prompt §12: never commit it) |
+| A4b The library `ferrum.db` (history and bookmarks) and backup files `*.ferrum-backup` (P3 feature set, adr-0032) | Browsing information. `ferrum.db` lives in the data folder, protected by the Windows account like A4, reachable only through shell-only commands (no bridge in tab views). A backup file leaves the PC by design: it is locked with the owner's passphrase (Argon2id key, XChaCha20-Poly1305 over contents and header), holds no cookies, logins or site data, and an import accepts only `http`/`https` addresses. P4 adds these to its tests |
 | A5 Benchmark integrity (raw data, run metadata) | Research validity |
 | A6 Owner approvals (`plan/approvals.json`) | Integrity of the phase-gating process |
 

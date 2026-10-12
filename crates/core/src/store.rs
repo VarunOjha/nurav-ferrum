@@ -10,6 +10,7 @@ use std::path::Path;
 use rusqlite::{Connection, OptionalExtension, params};
 use serde::{Deserialize, Serialize};
 
+use crate::backup::{BookmarkRecord, Contents};
 use crate::history::{Entry, History};
 
 /// The database layout this Ferrum writes (SQLite `user_version`).
@@ -43,6 +44,17 @@ pub struct Bookmark {
     pub position: i64,
     /// When it was added (milliseconds since 1970).
     pub created_at: u64,
+}
+
+/// What an import added (p3.21).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Default)]
+pub struct ImportReport {
+    /// Bookmarks added.
+    pub bookmarks: usize,
+    /// History entries added.
+    pub history: usize,
+    /// Entries left out: already there (merge), or not a web address.
+    pub skipped: usize,
 }
 
 /// Why the store could not be used.
@@ -365,6 +377,104 @@ impl Store {
         }
         tx.commit()?;
         Ok(n)
+    }
+
+    // ---- backup (p3.21) ----
+
+    /// Everything a backup holds: every bookmark and the whole history (newest first).
+    pub fn export(&self, at: u64) -> Result<Contents, StoreError> {
+        let bookmarks = self
+            .bookmarks()?
+            .into_iter()
+            .map(|b| BookmarkRecord {
+                url: b.url,
+                title: b.title,
+                folder: b.folder,
+                position: b.position,
+                created_at: b.created_at,
+            })
+            .collect();
+        Ok(Contents::new(
+            at,
+            bookmarks,
+            self.history("", HISTORY_LIMIT)?,
+        ))
+    }
+
+    /// Adds a backup's contents. `replace` first empties bookmarks and history; otherwise entries already here (same
+    /// address and folder for a bookmark, same address and time for a visit) are skipped. Addresses that are not
+    /// `http`/`https` are left out and titles are cleaned, as for every other entry. One transaction: all or nothing.
+    pub fn import(&mut self, c: &Contents, replace: bool) -> Result<ImportReport, StoreError> {
+        let mut r = ImportReport::default();
+        let tx = self.conn.transaction()?;
+        if replace {
+            tx.execute("DELETE FROM bookmarks", [])?;
+            tx.execute("DELETE FROM history", [])?;
+        }
+        {
+            let mut exists =
+                tx.prepare("SELECT 1 FROM bookmarks WHERE url = ?1 AND folder = ?2")?;
+            let mut next = tx.prepare(
+                "SELECT coalesce(max(position), -1) + 1 FROM bookmarks WHERE folder = ?1",
+            )?;
+            let mut add = tx.prepare(
+                "INSERT INTO bookmarks (url, title, folder, position, created_at) VALUES (?1, ?2, ?3, ?4, ?5)",
+            )?;
+            let mut ordered: Vec<&BookmarkRecord> = c.bookmarks.iter().collect();
+            ordered.sort_by_key(|b| (b.folder.clone(), b.position));
+            for b in ordered {
+                let folder = folder_name(Some(&b.folder));
+                if check_url(&b.url).is_err() || exists.exists(params![b.url, folder])? {
+                    r.skipped += 1;
+                    continue;
+                }
+                let mut title = clean(&b.title, MAX_TITLE);
+                if title.is_empty() {
+                    title = b.url.chars().take(MAX_TITLE).collect();
+                }
+                let position: i64 = next.query_row(params![folder], |x| x.get(0))?;
+                add.execute(params![b.url, title, folder, position, b.created_at as i64])?;
+                r.bookmarks += 1;
+            }
+            let mut seen =
+                tx.prepare("SELECT 1 FROM history WHERE url = ?1 AND visited_at = ?2")?;
+            let mut visit =
+                tx.prepare("INSERT INTO history (url, title, visited_at) VALUES (?1, ?2, ?3)")?;
+            // Oldest first, so ids grow with time like normal visits.
+            for e in c.history.iter().rev() {
+                if check_url(&e.url).is_err() || seen.exists(params![e.url, e.visited_at as i64])? {
+                    r.skipped += 1;
+                    continue;
+                }
+                visit.execute(params![
+                    e.url,
+                    clean(&e.title, MAX_TITLE),
+                    e.visited_at as i64
+                ])?;
+                r.history += 1;
+            }
+        }
+        tx.execute(
+            "DELETE FROM history WHERE id IN (SELECT id FROM history ORDER BY visited_at DESC, id DESC \
+             LIMIT -1 OFFSET ?1)",
+            params![HISTORY_LIMIT as i64],
+        )?;
+        tx.commit()?;
+        Ok(r)
+    }
+
+    /// Writes a consistent copy of the whole database to `path` (a new file), e.g. before an import replaces
+    /// everything.
+    pub fn copy_to(&self, path: &Path) -> Result<(), StoreError> {
+        if path.exists() {
+            return Err(StoreError::Invalid(format!(
+                "{} already exists",
+                path.display()
+            )));
+        }
+        self.conn
+            .execute("VACUUM INTO ?1", params![path.to_string_lossy()])?;
+        Ok(())
     }
 
     // ---- bookmarks ----
@@ -823,6 +933,76 @@ mod tests {
         assert_eq!(s.remove_history_url("https://a.example/rust").unwrap(), 2);
         assert_eq!(urls(&s), ["https://b.example/rust"]);
         assert_eq!(s.history_len().unwrap(), 2);
+    }
+
+    #[test]
+    fn backup_export_and_import_merge_or_replace() {
+        let mut a = Store::in_memory();
+        a.visit("https://one.example/", 10).unwrap();
+        a.set_title("https://one.example/", "One").unwrap();
+        a.visit("https://two.example/", 20).unwrap();
+        a.add_bookmark("https://bm.example/", "Bm", Some("Work"), 1)
+            .unwrap();
+        let mut c = a.export(99).unwrap();
+        assert_eq!(
+            (c.bookmarks.len(), c.history.len(), c.created_at),
+            (1, 2, 99)
+        );
+        // A crafted backup: a script address and a control character are not taken over.
+        c.bookmarks.push(BookmarkRecord {
+            url: "javascript:alert(1)".into(),
+            title: "evil".into(),
+            folder: "Work".into(),
+            position: 5,
+            created_at: 1,
+        });
+        c.history.push(Entry {
+            url: "file:///C:/x".into(),
+            title: "x".into(),
+            visited_at: 1,
+        });
+        c.history[0].title = "Two\u{7}".into();
+
+        let mut b = Store::in_memory();
+        b.add_bookmark("https://mine.example/", "Mine", None, 1)
+            .unwrap();
+        let r = b.import(&c, false).unwrap();
+        assert_eq!((r.bookmarks, r.history, r.skipped), (1, 2, 2));
+        assert_eq!(b.bookmarks().unwrap().len(), 2);
+        assert!(
+            b.bookmarks()
+                .unwrap()
+                .iter()
+                .all(|x| x.url.starts_with("https://"))
+        );
+        assert_eq!(b.history("", 10).unwrap()[0].title, "Two");
+        // Merging again adds nothing.
+        let again = b.import(&c, false).unwrap();
+        assert_eq!((again.bookmarks, again.history), (0, 0));
+        // Replace: only the backup's entries stay.
+        let r = b.import(&c, true).unwrap();
+        assert_eq!((r.bookmarks, r.history), (1, 2));
+        assert_eq!(
+            b.bookmarks()
+                .unwrap()
+                .iter()
+                .map(|x| x.url.as_str())
+                .collect::<Vec<_>>(),
+            ["https://bm.example/"]
+        );
+        assert_eq!(b.history("one", 5).unwrap().len(), 1);
+    }
+
+    #[test]
+    fn copy_to_writes_a_usable_copy_and_never_overwrites() {
+        let p = temp("copy");
+        let mut s = Store::open(&p).unwrap();
+        s.add_bookmark("https://kept.example/", "Kept", None, 1)
+            .unwrap();
+        let copy = p.with_file_name("copy.db");
+        s.copy_to(&copy).unwrap();
+        assert_eq!(Store::open(&copy).unwrap().bookmarks().unwrap().len(), 1);
+        assert!(s.copy_to(&copy).is_err());
     }
 
     #[test]

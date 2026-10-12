@@ -84,6 +84,14 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   import. 12 unit tests ([check-p3.18](../../raw/evidence/phase-p3-tabs-sessions/check-p3.18.txt)). p3.20 adds
   `suggest_history` (each page once, newest visit first) and `remove_history_url` (every visit to one address)
   ([check-p3.20](../../raw/evidence/phase-p3-tabs-sessions/check-p3.20.txt)).
+- `backup` (p3.21, adr-0032): the backup file. Header `FERRUMBK`, format 1, Argon2id cost (Ferrum writes 64 MiB, 3
+  passes, 1 lane; a file asking for more than 512 MiB, 10 passes or 8 lanes is refused), 16-byte salt, 24-byte nonce;
+  then XChaCha20-Poly1305 over the JSON contents (bookmarks, history) with the header as associated data. Crates
+  `argon2` 0.6.0 and `chacha20poly1305` 0.11.0 (RustCrypto, MIT OR Apache-2.0; `getrandom` 0.4.3, `zeroize` 1.9.1),
+  chosen over the `age` format for fewer dependencies (adr-0032 allowed either). Passphrase at least 12 characters;
+  key and plaintext wiped after use; files over 100 MB refused. `seal`, `open`. Store gains `export`, `import` (merge
+  skips what is there; replace empties first; one transaction; non-web addresses dropped) and `copy_to`
+  (`VACUUM INTO`, never over an existing file). 8 unit tests ([check-p3.21](../../raw/evidence/phase-p3-tabs-sessions/check-p3.21.20261012-1618.txt)).
 - `config` (p3.8): `[downloads] folder` (none = the Windows Downloads folder).
 - `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default).
 - `config` (p3.4): the file carries `version` (`VERSION` = 2). A file without it is version 1 (P2) and is migrated

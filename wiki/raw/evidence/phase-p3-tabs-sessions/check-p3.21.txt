@@ -1,0 +1,60 @@
+Ferrum check p3.21: The encrypted backup and its import
+Why: a backup must be unreadable without the passphrase, refuse anything changed, and never lose your data.
+Run at 2026-10-12 16:10 on commit 3ac7054 (with uncommitted changes)
+------------------------------------------------------------------------
+running 8 tests
+test backup::tests::short_passphrase_is_refused ... ok
+test backup::tests::round_trip ... ok
+test backup::tests::two_backups_of_the_same_contents_differ ... ok
+test backup::tests::not_a_backup_newer_and_unreasonable_files_are_refused ... ok
+test store::tests::backup_export_and_import_merge_or_replace ... ok
+test backup::tests::wrong_passphrase_changed_byte_and_cut_file_are_refused ... ok
+test store::tests::copy_to_writes_a_usable_copy_and_never_overwrites ... ok
+test backup::tests::ferrum_cost_is_the_documented_one ... ok
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 5.87s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running unittests src\lib.rs (target\debug\deps\ferrum_core-a4234a78cc03effc.exe)
+  PASS   Backup format and import unit tests (6 s)
+         8 named tests pass
+  PASS   Licences and alerts with the encryption building blocks (2 s)
+         cargo deny check: ok (argon2 0.6.0, chacha20poly1305 0.11.0)
+      100 |     const dir = path.join(d, "logs");
+      101 |     if (fs.existsSync(dir)) for (const n of fs.readdirSync(dir)) logs.push(fs.readFileSync(path.join(dir, n), "latin1"));
+      102 |   }
+        at <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\tests\smoke\backup.spec.ts:99:18
+    Error Context: test-results\backup-the-passphrase-is-in-no-log\error-context.md
+    Error Context: test-results\backup-the-passphrase-is-in-no-log\error-context.md
+  2 failed
+    backup.spec.ts:54:1 › a fresh Ferrum: wrong passphrase and a changed byte are refused; merge, then replace 
+    backup.spec.ts:96:1 › the passphrase is in no log ──────────────────────────────────────────────
+  1 passed (46.3s)
+  FAIL   Smoke test: backup and restore between two Ferrums (57 s)
+         The smoke test failed:
+               61 |   await f.shell.locator("#bk-look").click();
+             > 62 |   await expect(f.shell.locator("#bk-preview")).toHaveText(/wrong passphrase, or the file was changed/, { timeout: 20_000 });
+                  |                                                ^
+               63 |   await expect(f.shell.locator("#bk-choose")).toBeHidden();
+               64 |   const changed = path.join(dataB, "changed.ferrum-backup");
+               65 |   const bytes = fs.readFileSync(file);
+                 at <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\tests\smoke\backup.spec.ts:62:48
+             Error Context: test-results\backup-a-fresh-Ferrum-wron-b843d--refused-merge-then-replace\error-context.md
+             Error Context: test-results\backup-a-fresh-Ferrum-wron-b843d--refused-merge-then-replace\error-context.md
+           2) backup.spec.ts:96:1 › the passphrase is in no log ─────────────────────────────────────────────
+             Error: ENOENT: no such file or directory, open '<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\tests\smoke\.data\backup-a-20508\app.log'
+                97 |   const logs: string[] = [];
+                98 |   for (const d of [dataA, dataB]) {
+             >  99 |     logs.push(fs.readFileSync(path.join(d, "app.log"), "latin1"));
+                   |                  ^
+               100 |     const dir = path.join(d, "logs");
+               101 |     if (fs.existsSync(dir)) for (const n of fs.readdirSync(dir)) logs.push(fs.readFileSync(path.join(dir, n), "latin1"));
+               102 |   }
+                 at <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\tests\smoke\backup.spec.ts:99:18
+             Error Context: test-results\backup-the-passphrase-is-in-no-log\error-context.md
+             Error Context: test-results\backup-the-passphrase-is-in-no-log\error-context.md
+           2 failed
+             backup.spec.ts:54:1 › a fresh Ferrum: wrong passphrase and a changed byte are refused; merge, then replace 
+             backup.spec.ts:96:1 › the passphrase is in no log ──────────────────────────────────────────────
+           1 passed (46.3s)
+------------------------------------------------------------------------
+RESULT: FAIL - p3.21 (2 PASS, 1 FAIL; 66 s)
+What to tell Claude: "p3.21 check failed at: Smoke test: backup and restore between two Ferrums", and paste the FAIL lines above.

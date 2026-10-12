@@ -146,3 +146,14 @@ body { display: flex; flex-direction: column; }
 #suggest .sg-tag { flex: none; font: 11px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
 #suggest .sg-tag.sg-switch { padding: 2px 8px; border-radius: 10px; background: var(--bg); color: var(--text); font-family: inherit; }
 #suggest .sg-hints { display: flex; gap: 14px; padding: 8px 10px 2px; margin-top: 4px; border-top: 1px solid var(--border); font: 11px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
+
+/* Backup and restore (p3.21): laid out like the settings screen. */
+#backup-panel { max-width: 720px; margin: 0 auto; padding: 24px 32px; }
+#backup-panel[hidden] { display: none; }
+#backup-panel fieldset { display: flex; flex-direction: column; gap: 6px; margin: 0 0 18px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; }
+#backup-panel input { height: 30px; box-sizing: border-box; padding: 0 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: 13px "IBM Plex Mono", Consolas, monospace; }
+#backup-panel button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
+#backup-panel [role="status"] { font-size: 13px; }
+#backup-panel .bad { color: var(--accent); }
+#side-backup { margin-top: 8px; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
+#backup-panel [hidden] { display: none; }

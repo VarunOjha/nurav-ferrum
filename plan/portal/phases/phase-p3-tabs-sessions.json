@@ -250,7 +250,7 @@
       "status": "In progress",
       "chain": "You set up a second PC → export, carry the file, import → same bookmarks and history there.",
       "check": "Tests: export and import match; wrong passphrase, damaged file and hidden script addresses are refused; the passphrase is never logged.",
-      "script": null
+      "script": "scripts/verify/p3.21-backup.ps1"
     },
     {
       "id": "p3.22",

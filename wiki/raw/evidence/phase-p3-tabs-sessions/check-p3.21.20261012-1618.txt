@@ -1,0 +1,31 @@
+Ferrum check p3.21: The encrypted backup and its import
+Why: a backup must be unreadable without the passphrase, refuse anything changed, and never lose your data.
+Run at 2026-10-12 16:17 on commit 3ac7054 (with uncommitted changes)
+------------------------------------------------------------------------
+running 8 tests
+test backup::tests::short_passphrase_is_refused ... ok
+test backup::tests::not_a_backup_newer_and_unreasonable_files_are_refused ... ok
+test backup::tests::round_trip ... ok
+test backup::tests::two_backups_of_the_same_contents_differ ... ok
+test store::tests::backup_export_and_import_merge_or_replace ... ok
+test backup::tests::wrong_passphrase_changed_byte_and_cut_file_are_refused ... ok
+test store::tests::copy_to_writes_a_usable_copy_and_never_overwrites ... ok
+test backup::tests::ferrum_cost_is_the_documented_one ... ok
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 5.93s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s
+     Running unittests src\lib.rs (target\debug\deps\ferrum_core-a4234a78cc03effc.exe)
+  PASS   Backup format and import unit tests (6 s)
+         8 named tests pass
+  PASS   Licences and alerts with the encryption building blocks (2 s)
+         cargo deny check: ok (argon2 0.6.0, chacha20poly1305 0.11.0)
+Running 3 tests using 1 worker
+  ✓  1 backup.spec.ts:19:1 › make a backup from the Backup and restore screen (7.9s)
+  ✓  2 backup.spec.ts:56:1 › a fresh Ferrum: wrong passphrase and a changed byte are refused; merge, then replace (30.5s)
+  ✓  3 backup.spec.ts:100:1 › the passphrase is in no log (6ms)
+  3 passed (56.3s)
+  PASS   Smoke test: backup and restore between two Ferrums (67 s)
+         backup: 3 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.21 (3 PASS; 75 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.21 check passed".

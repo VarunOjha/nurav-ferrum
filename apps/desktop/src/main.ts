@@ -196,6 +196,8 @@ function applyList(next: TabList): void {
   // arrive while this script is still starting, before the settings code below has run.
   const sp = document.getElementById("settings-panel");
   if (sp && !sp.hidden && next.active !== settingsCovering) void closeSettings();
+  const bp = document.getElementById("backup-panel");
+  if (bp && !bp.hidden && next.active !== settingsCovering) void closeBackup();
   // A switch between two tabs (not the first tab list at start, which must not wipe an address being typed).
   const switched = list.active !== null && next.active !== list.active;
   list = next;
@@ -813,6 +815,104 @@ address.addEventListener("keydown", async (e) => {
   }
 });
 
+// --- Backup and restore (p3.21, adr-0032): covers the active tab like the settings screen. The app locks and opens
+// the file; the passphrase goes straight to it and is cleared from the form after use. ---
+type BackupSummary = { bookmarks: number; history: number; created_at: number; path: string };
+type ImportResult = { bookmarks: number; history: number; skipped: number; saved_copy: string };
+const backupPanel = $<HTMLElement>("backup-panel");
+const bkOut = $<HTMLInputElement>("bk-out");
+const bkPass1 = $<HTMLInputElement>("bk-pass1");
+const bkPass2 = $<HTMLInputElement>("bk-pass2");
+const bkIn = $<HTMLInputElement>("bk-in");
+const bkPass3 = $<HTMLInputElement>("bk-pass3");
+const bkExportStatus = $<HTMLSpanElement>("bk-export-status");
+const bkPreview = $<HTMLSpanElement>("bk-preview");
+const bkChoose = $<HTMLDivElement>("bk-choose");
+const bkReplace = $<HTMLButtonElement>("bk-replace");
+const bkImportStatus = $<HTMLSpanElement>("bk-import-status");
+function say(el: HTMLElement, text: string, bad = false): void {
+  el.textContent = text;
+  el.classList.toggle("bad", bad);
+}
+const counts = (b: number, h: number) => `${b} bookmark${b === 1 ? "" : "s"}, ${h} history entr${h === 1 ? "y" : "ies"}`;
+async function openBackup(): Promise<void> {
+  await closeSettings();
+  bkOut.value = await invoke<string>("backup_suggest_path");
+  for (const el of [bkExportStatus, bkPreview, bkImportStatus]) say(el, "");
+  bkChoose.hidden = true;
+  backupPanel.hidden = false;
+  if (list.active !== null && settingsCovering === null) {
+    settingsCovering = list.active;
+    await invoke("shell_cover", { cover: true, tab: settingsCovering });
+  }
+  bkPass1.focus();
+}
+async function closeBackup(): Promise<void> {
+  if (backupPanel.hidden) return;
+  backupPanel.hidden = true;
+  for (const el of [bkPass1, bkPass2, bkPass3]) el.value = "";
+  if (settingsCovering !== null) {
+    const id = settingsCovering;
+    settingsCovering = null;
+    if (!uiOf(id).panel) await invoke("shell_cover", { cover: false, tab: id });
+  }
+}
+$<HTMLFormElement>("bk-export-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (bkPass1.value !== bkPass2.value) {
+    say(bkExportStatus, "The two passphrases are not the same.", true);
+    return;
+  }
+  say(bkExportStatus, "Making the backup\u2026");
+  try {
+    const s = await invoke<BackupSummary>("backup_export", { path: bkOut.value, passphrase: bkPass1.value });
+    bkPass1.value = bkPass2.value = "";
+    say(bkExportStatus, `Saved: ${counts(s.bookmarks, s.history)} in ${s.path}. Keep the passphrase safe; a lost passphrase cannot be recovered.`);
+  } catch (err) {
+    say(bkExportStatus, String(err), true);
+  }
+});
+$<HTMLFormElement>("bk-import-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  bkChoose.hidden = true;
+  bkReplace.dataset.confirm = "";
+  bkReplace.textContent = "Replace mine";
+  say(bkImportStatus, "");
+  say(bkPreview, "Opening\u2026");
+  try {
+    const s = await invoke<BackupSummary>("backup_preview", { path: bkIn.value, passphrase: bkPass3.value });
+    say(bkPreview, `Inside: ${counts(s.bookmarks, s.history)}, made ${new Date(s.created_at).toLocaleString()}.`);
+    bkChoose.hidden = false;
+  } catch (err) {
+    say(bkPreview, String(err), true);
+  }
+});
+async function runImport(replace: boolean): Promise<void> {
+  say(bkImportStatus, "Importing\u2026");
+  try {
+    const r = await invoke<ImportResult>("backup_import", { path: bkIn.value, passphrase: bkPass3.value, replace });
+    bkPass3.value = "";
+    bkChoose.hidden = true;
+    const copy = r.saved_copy ? ` Your previous library was saved as ${r.saved_copy}.` : "";
+    say(bkImportStatus, `Added ${counts(r.bookmarks, r.history)}${r.skipped ? `; ${r.skipped} skipped (already here, or not a web page)` : ""}.${copy}`);
+    await loadBookmarks();
+  } catch (err) {
+    say(bkImportStatus, String(err), true);
+  }
+}
+$<HTMLButtonElement>("bk-merge").addEventListener("click", () => void runImport(false));
+bkReplace.addEventListener("click", () => {
+  // Replace removes your current bookmarks and history (a copy is kept): ask once more.
+  if (bkReplace.dataset.confirm !== "yes") {
+    bkReplace.dataset.confirm = "yes";
+    bkReplace.textContent = "Click again to replace all your bookmarks and history";
+    return;
+  }
+  void runImport(true);
+});
+$<HTMLButtonElement>("backup-close").addEventListener("click", () => void closeBackup());
+$<HTMLButtonElement>("side-backup").addEventListener("click", () => void openBackup());
+
 // --- Settings (p3.14): shown in the content area; the app checks and saves (settings.rs). ---
 type SiteRow = { site: string; profile: string };
 type SettingsView = {
@@ -861,6 +961,7 @@ function fillSettings(v: SettingsView): void {
   $<HTMLParagraphElement>("set-file").textContent = v.file ? `Saved to ${v.file}` : "";
 }
 async function openSettings(): Promise<void> {
+  await closeBackup();
   fillSettings(await invoke<SettingsView>("settings_get"));
   settingsErrors.replaceChildren();
   settingsStatus.textContent = "";
