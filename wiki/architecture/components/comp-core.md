@@ -70,6 +70,16 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
 - `history` (p3.7): `History` (newest first; a visit to the newest entry's address updates it; at most 1000), `visit`,
   `set_title`, `search` (address or title, any case), `clear`; `save` (atomic) and `load` of `history.json`
   ([check-p3.7](../../raw/evidence/phase-p3-tabs-sessions/check-p3.7.txt)).
+- `store` (p3.18, adr-0032): history and bookmarks in one SQLite file (`rusqlite` 0.40.2 with its bundled SQLite,
+  MIT; FTS5 confirmed compiled in by a unit test). Tables `history` and `bookmarks`, each with an FTS5 word index
+  (external content, kept by triggers); `user_version` 1, a newer file is refused (`StoreError::Newer`), a damaged one
+  is an error. History: `visit` (newest-entry dedup, at most 50 000, oldest dropped), `set_title`, `history` (words of
+  title and address as quoted prefixes, all required; newest first), `clear_history` (rows and index, then `VACUUM`;
+  `secure_delete` is on), `import_history` (an old `history.json`). Bookmarks: `add_bookmark` (folder default
+  "Favourites bar"), `bookmark`, `bookmark_for`, `bookmarks`, `search_bookmarks`, `update_bookmark`, `move_bookmark`,
+  `remove_bookmark`; `check_url` keeps only `http`/`https` (no `javascript:`, `file:`, `data:`), titles cut to 500
+  characters without control characters. The `history` module stays as the `history.json` reader for the one-time
+  import. 12 unit tests ([check-p3.18](../../raw/evidence/phase-p3-tabs-sessions/check-p3.18.txt)).
 - `config` (p3.8): `[downloads] folder` (none = the Windows Downloads folder).
 - `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default).
 - `config` (p3.4): the file carries `version` (`VERSION` = 2). A file without it is version 1 (P2) and is migrated

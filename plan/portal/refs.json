@@ -3196,7 +3196,7 @@
       "id": "comp-core",
       "kind": "component",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats. Trusted. It calls nothing itself; everything else depends on it.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats, and the local database for history and bookmarks ([decision](ref:adr-0032)). Trusted. It calls nothing itself; everything else depends on it.",
       "status": "Built (first working app)",
       "related": [
         "layer-base"

@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:a81d1935e7e1b4aea0267ef5d9400ec18137e96d8a69873cd2783a8276381867"
+        "content_hash": "sha256:b31ba0194295097a644cd7447c402e50b37096aad7da16220abcb2448e438aad"
       }
     },
     {
@@ -426,7 +426,7 @@
     {
       "id": "comp-core",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats. Trusted. It calls nothing itself; everything else depends on it.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats, and the local database for history and bookmarks ([decision](ref:adr-0032)). Trusted. It calls nothing itself; everything else depends on it.",
       "group": "application",
       "layer": "layer-base",
       "status": "Built (first working app)",
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:cf5c3906e56837bf087c3c4cd4f15bc4aea07221cc8289f2ee37582526a2f141"
+        "content_hash": "sha256:726880cde1823519d8280f91f9345134ae50a807069f0650f800bcbf36e23f18"
       }
     },
     {

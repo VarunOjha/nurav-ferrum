@@ -10,6 +10,7 @@ mod content;
 mod downloads;
 mod external;
 mod history;
+mod library;
 mod logging;
 mod selftest;
 mod session;
@@ -227,7 +228,9 @@ fn main() {
             let data_dir = loaded.config.storage.data_dir.clone();
             app.manage(AppConfig(std::sync::RwLock::new(loaded)));
             app.manage(session::store(app, data_dir.clone()));
-            app.manage(history::store(app, data_dir));
+            let lib = library::open(app, data_dir);
+            tracing::info!(target: "ferrum::library", on_disk = lib.on_disk, has_folder = lib.path.is_some(), "library opened");
+            app.manage(lib);
             session::start_saver(app.handle().clone());
             // Test hook: FERRUM_EXIT_AFTER=<seconds> makes the app close itself (automated checks never kill it).
             if let Some(secs) = std::env::var("FERRUM_EXIT_AFTER")
@@ -306,7 +309,6 @@ fn main() {
             // Save the tab list one last time when Ferrum closes normally (p3.5).
             if let tauri::RunEvent::Exit = event {
                 session::save_now(app);
-                history::save_if_dirty(app);
             }
         });
 }

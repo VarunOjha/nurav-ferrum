@@ -181,6 +181,13 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   memory only. Per-tab back and forward: the toolbar's buttons follow the active tab's own `history-changed` state. The
   history is browsing data: it stays in the data folder and is never committed (the p3.7 check looks)
   ([check-p3.7](../../raw/evidence/phase-p3-tabs-sessions/check-p3.7.txt)).
+- p3.18, library (`library.rs`, adr-0032): history (and, from p3.19, bookmarks) live in `ferrum.db` in the data
+  folder through `ferrum_core::store`, written at once per change (no save on exit any more). On the first start with
+  `ferrum.db` an old `history.json` is imported and renamed `history.json.imported` (nothing deleted). A file from a
+  newer Ferrum is left alone, a damaged one is copied aside (`.broken-<seconds>`); either way the library runs in
+  memory for that run. Self-test runs use memory only. `history_list` searches words of titles and addresses (word
+  starts, all words required); `history_clear` also clears the word index and compacts the file
+  ([check-p3.18](../../raw/evidence/phase-p3-tabs-sessions/check-p3.18.txt)).
 - p3.8, downloads (`downloads.rs`): files go to `[downloads] folder` (else the Windows Downloads folder) under the
   name WebView2 suggests (the file name only; a name already on disk or already given out in this run gets
   ` (1)`, ` (2)`, ...: nothing is ever replaced). The shell's downloads bar (top band) shows each download: percent and

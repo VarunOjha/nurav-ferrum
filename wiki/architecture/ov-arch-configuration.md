@@ -3,7 +3,7 @@ id: ov-arch-configuration
 type: overview
 title: "Architecture: configuration model and lifecycle policy flags"
 status: review
-updated: 2026-10-11
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -146,4 +146,4 @@ pages (a version-1 file keeps it off, the P2 behaviour). The session itself is r
 
 ## 5. Persisted runtime state (not config)
 
-`history.json` (built in P3, p3.7: the local history, newest first, at most 1000 entries, clearable at once), `session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), `profiles.json` (site → profile map), `audit.jsonl`, `netlog/*.jsonl`, `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.
+`ferrum.db` (built in P3, p3.18, adr-0032: one SQLite file with the history, newest first, at most 50 000 entries, clearable at once with nothing left inside the file, and the bookmarks; it replaced p3.7's `history.json`, which is imported once and kept as `history.json.imported`), `session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), `profiles.json` (site → profile map), `audit.jsonl`, `netlog/*.jsonl`, `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.

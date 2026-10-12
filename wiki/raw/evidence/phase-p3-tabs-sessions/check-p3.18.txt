@@ -1,0 +1,36 @@
+Ferrum check p3.18: History and bookmarks in a local database
+Why: bookmarks, address-bar search and the backup all rely on it.
+Run at 2026-10-12 15:36 on commit 2e571da (with uncommitted changes)
+------------------------------------------------------------------------
+running 12 tests
+test store::tests::word_query_quotes_every_word ... ok
+test store::tests::a_damaged_file_is_an_error_not_a_crash ... ok
+test store::tests::word_index_is_compiled_in ... ok
+test store::tests::other_schemes_are_not_history ... ok
+test store::tests::bookmarks_only_web_addresses ... ok
+test store::tests::imports_old_history_json_in_order ... ok
+test store::tests::visits_newest_first_with_titles_and_no_duplicate_on_reload ... ok
+test store::tests::bookmarks_add_rename_move_delete_and_search ... ok
+test store::tests::search_finds_words_of_titles_and_addresses_any_case ... ok
+test store::tests::survives_reopening_and_refuses_a_newer_file ... ok
+test store::tests::clear_history_leaves_nothing_in_tables_index_or_file ... ok
+test store::tests::oldest_entries_go_past_the_limit ... ok
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.51s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.63s
+     Running unittests src\lib.rs (target\debug\deps\ferrum_core-f97112127636d67c.exe)
+  PASS   Store unit tests (7 s)
+         10 named tests pass (12 passed)
+  PASS   Licences and alerts with the new building block (6 s)
+         cargo deny check: ok (rusqlite 0.40.2, MIT, in the core crate)
+Running 4 tests using 1 worker
+  ✓  1 history.spec.ts:30:1 › an old history.json is imported once and kept as history.json.imported (51ms)
+  ✓  2 history.spec.ts:40:1 › visits are recorded newest first with their titles, searchable, and saved to the data folder (1.1s)
+  ✓  3 history.spec.ts:54:1 › back and forward follow the active tab (357ms)
+  ✓  4 history.spec.ts:68:1 › clearing empties the list and the file at once (55ms)
+  4 passed (32.5s)
+  PASS   Smoke test: history in ferrum.db, import of history.json (55 s)
+         history: 4 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.18 (3 PASS; 69 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.18 check passed".

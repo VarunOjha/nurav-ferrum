@@ -217,7 +217,7 @@
       "status": "In progress",
       "chain": "You want bookmarks and search of the past → one safe local database → every new feature uses it.",
       "check": "Tests: old history imported, search finds titles and addresses, clearing leaves nothing behind; licence check passes.",
-      "script": null
+      "script": "scripts/verify/p3.18-store.ps1"
     },
     {
       "id": "p3.19",

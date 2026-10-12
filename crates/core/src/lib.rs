@@ -13,4 +13,5 @@ pub mod oauth;
 pub mod profiles;
 pub mod session;
 pub mod shortcuts;
+pub mod store;
 pub mod tabs;
