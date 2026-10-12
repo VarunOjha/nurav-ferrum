@@ -1,0 +1,17 @@
+Ferrum check p3.4: Saved settings and start-up sites
+Why: an update or a crash never loses or garbles your settings.
+Run at 2026-10-12 01:48 on commit 305f032 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Settings file unit tests, one per required case
+         5 required cases pass (test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s)
+Running 3 tests using 1 worker
+  ✓  1 startup.spec.ts:18:1 › start-up sites open as tabs, in order, the first active (2.5s)
+  ✓  2 startup.spec.ts:28:1 › an unreadable user settings file is backed up; Ferrum starts with the defaults (1.3s)
+  ✓  3 startup.spec.ts:42:1 › a settings file from a newer Ferrum is left untouched (1.5s)
+  3 passed (13.9s)
+  PASS   Smoke test: start-up sites in order; broken and newer settings files handled (39 s)
+         startup: 3 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.4 (2 PASS; 40 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.4 check passed".

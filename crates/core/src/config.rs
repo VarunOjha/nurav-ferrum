@@ -1,4 +1,4 @@
-//! Ferrum's configuration model (P2 task p2.4; design: `wiki/architecture/ov-arch-configuration.md`).
+//! Ferrum's configuration model (P2 task p2.4, P3 task p3.4; design: `wiki/architecture/ov-arch-configuration.md`).
 //!
 //! P2 implements the subset the minimal container needs: start page, the navigation posture of adr-0015, what new
 //! windows do, and the data folder. Settings are TOML (owner decision Q-214). Unknown keys are rejected
@@ -6,7 +6,12 @@
 //!
 //! Layers, low to high: built-in defaults, the user's `config.toml`, an experiment override file. A missing file
 //! means "use the layer below".
+//!
+//! Versions (p3.4): the file carries `version` ([`VERSION`] today). A file without it is version 1 (the P2 format)
+//! and is migrated when read; a file from a newer Ferrum is refused with a clear error (and never overwritten).
+//! [`save`] writes atomically (a temporary file, then a rename), so a crash never leaves half a file.
 
+use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
@@ -88,16 +93,37 @@ pub struct Storage {
     pub data_dir: Option<PathBuf>,
 }
 
+/// The settings file format this Ferrum writes.
+pub const VERSION: u32 = 2;
+
+fn version_one() -> u32 {
+    1
+}
+
 /// The effective configuration.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields, default)]
 pub struct Config {
+    /// Settings file format (a file without it is version 1, the P2 format).
+    #[serde(default = "version_one")]
+    pub version: u32,
     /// Start-up pages.
     pub session: Session,
     /// Navigation posture.
     pub security: Security,
     /// Data folder.
     pub storage: Storage,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Config {
+            version: VERSION,
+            session: Session::default(),
+            security: Security::default(),
+            storage: Storage::default(),
+        }
+    }
 }
 
 /// Something in the configuration that is accepted but worth telling the user.
@@ -131,6 +157,20 @@ pub enum ConfigError {
         /// The parser's message.
         message: String,
     },
+    /// The file was written by a newer Ferrum (its `version` is higher than [`VERSION`]).
+    NewerVersion {
+        /// The file.
+        path: PathBuf,
+        /// Its version.
+        found: u32,
+    },
+    /// The file could not be written.
+    Write {
+        /// The file.
+        path: PathBuf,
+        /// The reason.
+        source: std::io::Error,
+    },
     /// A start page is not a usable address.
     InvalidStartUrl {
         /// The address as written.
@@ -148,6 +188,15 @@ impl std::fmt::Display for ConfigError {
             }
             ConfigError::Parse { path, message } => {
                 write!(f, "invalid settings in {}: {message}", path.display())
+            }
+            ConfigError::NewerVersion { path, found } => write!(
+                f,
+                "{} is settings version {found}, from a newer Ferrum (this one reads up to version {VERSION}); \
+                 it was left unchanged and the defaults are used",
+                path.display()
+            ),
+            ConfigError::Write { path, source } => {
+                write!(f, "cannot write {}: {source}", path.display())
             }
             ConfigError::InvalidStartUrl { url, reason } => {
                 write!(f, "start page {url:?} refused: {reason}")
@@ -167,12 +216,92 @@ pub struct Loaded {
     pub warnings: Vec<Warning>,
 }
 
-/// Parses one TOML layer. Each layer is a complete configuration; missing keys take their defaults.
+/// Parses one TOML layer. Each layer is a complete configuration; missing keys take their defaults. A version-1 file
+/// is migrated ([`migrate_v1`]); a file newer than [`VERSION`] is refused.
 pub fn parse(text: &str, origin: &Path) -> Result<Config, ConfigError> {
-    toml::from_str(text).map_err(|e| ConfigError::Parse {
+    let bad = |message: String| ConfigError::Parse {
         path: origin.to_path_buf(),
-        message: e.message().to_string(),
+        message,
+    };
+    let mut table: toml::Table = toml::from_str(text).map_err(|e| bad(e.message().to_string()))?;
+    let version = match table.get("version") {
+        None => 1,
+        Some(toml::Value::Integer(v)) if *v >= 1 && *v <= i64::from(u32::MAX) => *v as u32,
+        Some(_) => return Err(bad("version must be a whole number from 1".into())),
+    };
+    if version > VERSION {
+        return Err(ConfigError::NewerVersion {
+            path: origin.to_path_buf(),
+            found: version,
+        });
+    }
+    if version == 1 {
+        migrate_v1(&mut table);
+    }
+    table
+        .try_into::<Config>()
+        .map_err(|e| bad(e.message().to_string()))
+}
+
+/// Version 1 (P2) to version 2 (P3): new windows used to open in the same view by default; a version-1 file that
+/// does not choose keeps that behaviour, because the new default (a new tab) would change what the user had.
+pub fn migrate_v1(table: &mut toml::Table) {
+    let security = table
+        .entry("security")
+        .or_insert_with(|| toml::Value::Table(toml::Table::new()));
+    if let toml::Value::Table(sec) = security {
+        sec.entry("new_window")
+            .or_insert_with(|| toml::Value::String("same-view".into()));
+    }
+    table.insert("version".into(), toml::Value::Integer(i64::from(VERSION)));
+}
+
+/// Writes `config` to `path` atomically: the canonical TOML goes to a temporary file next to it, which then replaces
+/// `path` in one rename. Readers see the old file or the new one, never half of one.
+pub fn save(path: &Path, config: &Config) -> Result<(), ConfigError> {
+    let err = |source| ConfigError::Write {
+        path: path.to_path_buf(),
+        source,
+    };
+    if let Some(dir) = path.parent().filter(|d| !d.as_os_str().is_empty()) {
+        std::fs::create_dir_all(dir).map_err(err)?;
+    }
+    let mut out = config.clone();
+    out.version = VERSION;
+    let text = format!(
+        "# Ferrum settings (written by Ferrum; edit with care, unknown keys are refused).\n{}",
+        canonical(&out)
+    );
+    let name = path
+        .file_name()
+        .map(|n| n.to_string_lossy().into_owned())
+        .unwrap_or_else(|| "config.toml".into());
+    let tmp = path.with_file_name(format!("{name}.tmp-{}", std::process::id()));
+    {
+        let mut f = std::fs::File::create(&tmp).map_err(err)?;
+        f.write_all(text.as_bytes()).map_err(err)?;
+        f.sync_all().map_err(err)?;
+    }
+    std::fs::rename(&tmp, path).map_err(|e| {
+        let _ = std::fs::remove_file(&tmp);
+        err(e)
     })
+}
+
+/// Copies an unreadable settings file aside as `<name>.broken-<seconds since 1970>` and returns the copy's path, so
+/// nothing the user wrote is lost when Ferrum falls back to the defaults.
+pub fn backup_broken(path: &Path) -> std::io::Result<PathBuf> {
+    let secs = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0);
+    let name = path
+        .file_name()
+        .map(|n| n.to_string_lossy().into_owned())
+        .unwrap_or_else(|| "config.toml".into());
+    let backup = path.with_file_name(format!("{name}.broken-{secs}"));
+    std::fs::copy(path, &backup)?;
+    Ok(backup)
 }
 
 fn read_layer(path: &Path) -> Result<Option<Config>, ConfigError> {

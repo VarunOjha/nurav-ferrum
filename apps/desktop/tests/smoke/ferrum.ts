@@ -21,7 +21,7 @@ export type Ferrum = {
 /** Writes a settings file for the run and returns its path. */
 export function settings(data: string, extra = ""): string {
   const p = path.join(data, "config.toml");
-  fs.writeFileSync(p, `[storage]\ndata_dir = ${JSON.stringify(data)}\n${extra}`);
+  fs.writeFileSync(p, `version = 2\n[storage]\ndata_dir = ${JSON.stringify(data)}\n${extra}`);
   return p;
 }
 
@@ -41,6 +41,8 @@ export type LaunchOptions = {
   data?: string;
   extraSettings?: string;
   env?: Record<string, string>;
+  /** Extra command-line arguments (default: `--user-config <data>/user-config.toml`, never the real settings file). */
+  args?: string[];
   /** Extra environment that depends on the run's data folder (for example a mock launcher's log file). */
   envFromData?: (data: string) => Record<string, string>;
 };
@@ -48,7 +50,9 @@ export type LaunchOptions = {
 export async function launch(name: string, opts: LaunchOptions = {}): Promise<Ferrum> {
   const data = opts.data ?? dataDir(name);
   const config = settings(data, opts.extraSettings ?? "");
-  const proc = spawn(ferrumExe, ["--config", config], {
+  // The user settings file is the run's own (never the real one in %APPDATA%), unless the test names another.
+  const args = opts.args ?? ["--user-config", path.join(data, "user-config.toml")];
+  const proc = spawn(ferrumExe, ["--config", config, ...args], {
     env: {
       ...process.env,
       WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${cdpPort}`,

@@ -160,3 +160,121 @@ fn hash_is_stable_and_sensitive() {
         b
     );
 }
+
+// --- p3.4: versioned file, atomic save, migration, newer versions, broken files ---
+
+#[test]
+fn save_then_load_round_trips() {
+    let p = tmp("roundtrip.toml", "");
+    let mut c = Config::default();
+    c.session.startup_urls = vec![
+        "https://example.org/".into(),
+        "https://example.com/a".into(),
+    ];
+    c.security.new_window = NewWindow::SystemBrowser;
+    config::save(&p, &c).unwrap();
+    let text = std::fs::read_to_string(&p).unwrap();
+    assert!(
+        text.contains(&format!("version = {}", config::VERSION)),
+        "{text}"
+    );
+    let l = config::load(Some(&p), None).unwrap();
+    assert_eq!(l.config, c);
+    // No temporary file is left next to it.
+    let leftovers: Vec<_> = std::fs::read_dir(p.parent().unwrap())
+        .unwrap()
+        .filter_map(|e| e.ok())
+        .filter(|e| {
+            e.file_name()
+                .to_string_lossy()
+                .starts_with("roundtrip.toml.tmp")
+        })
+        .collect();
+    assert!(leftovers.is_empty());
+}
+
+#[test]
+fn save_replaces_an_existing_file() {
+    let p = tmp(
+        "replace.toml",
+        "[session]\nstartup_urls = [\"https://old.example/\"]\n",
+    );
+    let mut c = Config::default();
+    c.session.startup_urls = vec!["https://new.example/".into()];
+    config::save(&p, &c).unwrap();
+    let l = config::load(Some(&p), None).unwrap();
+    assert_eq!(l.config.session.startup_urls, vec!["https://new.example/"]);
+}
+
+#[test]
+fn newer_version_is_refused_with_a_clear_error() {
+    let p = tmp("newer.toml", "version = 99\n");
+    match config::load(Some(&p), None) {
+        Err(e @ ConfigError::NewerVersion { found: 99, .. }) => {
+            let msg = e.to_string();
+            assert!(
+                msg.contains("version 99") && msg.contains("newer Ferrum"),
+                "{msg}"
+            );
+        }
+        other => panic!("expected NewerVersion, got {other:?}"),
+    }
+    // Refusing it does not touch the file.
+    assert_eq!(std::fs::read_to_string(&p).unwrap(), "version = 99\n");
+}
+
+#[test]
+fn version_one_file_is_migrated_and_keeps_its_behaviour() {
+    // A P2 file (no version): new windows stayed in the same view, so the migration keeps that.
+    let p = tmp(
+        "v1.toml",
+        "[session]\nstartup_urls = [\"https://example.org/\"]\n",
+    );
+    let l = config::load(Some(&p), None).unwrap();
+    assert_eq!(l.config.version, config::VERSION);
+    assert_eq!(l.config.security.new_window, NewWindow::SameView);
+    // A version-1 file that chose explicitly keeps its choice.
+    let p = tmp("v1b.toml", "[security]\nnew_window = \"system-browser\"\n");
+    assert_eq!(
+        config::load(Some(&p), None)
+            .unwrap()
+            .config
+            .security
+            .new_window,
+        NewWindow::SystemBrowser
+    );
+    // A version-2 file without the key gets the new default.
+    let p = tmp("v2.toml", "version = 2\n");
+    assert_eq!(
+        config::load(Some(&p), None)
+            .unwrap()
+            .config
+            .security
+            .new_window,
+        NewWindow::NewTab
+    );
+}
+
+#[test]
+fn corrupted_file_is_backed_up() {
+    let text = "[session\nstartup_urls = [";
+    let p = tmp("broken.toml", text);
+    assert!(matches!(
+        config::load(Some(&p), None),
+        Err(ConfigError::Parse { .. })
+    ));
+    let backup = config::backup_broken(&p).unwrap();
+    assert!(
+        backup
+            .file_name()
+            .unwrap()
+            .to_string_lossy()
+            .starts_with("broken.toml.broken-")
+    );
+    assert_eq!(std::fs::read_to_string(&backup).unwrap(), text);
+    assert_eq!(
+        std::fs::read_to_string(&p).unwrap(),
+        text,
+        "the original is left as it was"
+    );
+}

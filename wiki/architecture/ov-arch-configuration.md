@@ -126,6 +126,17 @@ The canonical list of `cfg-*` ids lives in [ov-research-configurations](../resea
 
 **The one exception to "one binary": `bench-nosecurity`.** exp-security-overhead needs an ablation where every policy decision returns "allow". A runtime switch that disables security in the shipped binary would be a security hazard, so the ablation is a **Cargo feature on `ferrum-security`**, `bench-nosecurity`. CI asserts that release artefacts are never built with it. The experiment must state the confound: two different binaries are being compared.
 
+## 4a. Versions and safe writing (built in P3, p3.4)
+
+The file starts with `version = 2`. A file without `version` is the P2 format (version 1) and is upgraded when read;
+the only change from version 1 is that a file which did not choose `new_window` keeps `same-view`, the P2 default,
+because the new default (a new tab) would change what the user had. A file from a newer Ferrum is refused with a clear
+message and left untouched (the app uses the defaults). Ferrum writes the file atomically: a temporary file next to it,
+then one rename. A user file that cannot be read as TOML is copied aside (`config.toml.broken-<seconds>`) before the
+defaults are used, so nothing the user wrote is lost. `--user-config <path>` replaces the user file's location (the
+tests use their own file); the override layer (`--config`) still applies when the user file fails. Every start-up site
+opens as a tab, in order, the first active ([check-p3.4](../raw/evidence/phase-p3-tabs-sessions/check-p3.4.txt)).
+
 ## 5. Persisted runtime state (not config)
 
 `session.json` (tabs + snapshots, one format for restore and discard), `profiles.json` (site → profile map), `audit.jsonl`, `netlog/*.jsonl`, `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.

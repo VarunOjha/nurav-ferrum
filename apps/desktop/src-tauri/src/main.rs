@@ -93,26 +93,51 @@ fn relayout(window: &Window) -> tauri::Result<()> {
     Ok(())
 }
 
-/// Settings: the user's `config.toml` in the app config folder, then `--config <path>` (experiment override).
-/// Returns the settings and, if they could not be used, why (logged once logging has started).
-fn load_config(app: &tauri::App) -> (config::Loaded, Option<String>) {
-    let user = app
-        .path()
-        .app_config_dir()
-        .ok()
-        .map(|d| d.join("config.toml"));
+/// Where the user's settings file is: `--user-config <path>` if given (tests use their own file), else
+/// `config.toml` in the app config folder (`%APPDATA%\dev.ferrum.desktop`).
+pub struct UserConfigPath(pub Option<PathBuf>);
+
+fn arg_after(flag: &str) -> Option<PathBuf> {
     let args: Vec<String> = std::env::args().collect();
-    let over = args
-        .iter()
-        .position(|a| a == "--config")
+    args.iter()
+        .position(|a| a == flag)
         .and_then(|i| args.get(i + 1))
-        .map(PathBuf::from);
-    match config::load(user.as_deref(), over.as_deref()) {
+        .map(PathBuf::from)
+}
+
+/// Settings: the user's file, then `--config <path>` (experiment override). Returns the settings and, if a file
+/// could not be used, why (logged once logging has started). Never starts with half-read settings: a user file
+/// that cannot be used is skipped (the defaults, or the override file, apply). A user file that cannot be read as
+/// TOML is first copied aside (`<name>.broken-<time>`), so nothing is lost; a file from a newer Ferrum is left
+/// exactly as it is (p3.4).
+fn load_config(user: Option<&std::path::Path>) -> (config::Loaded, Option<String>) {
+    let over = arg_after("--config");
+    let defaults = || config::validate(config::Config::default()).expect("defaults are valid");
+    match config::load(user, over.as_deref()) {
         Ok(l) => (l, None),
         Err(e) => {
-            // Never start with half-read settings: fall back to the safe defaults and say so.
-            let defaults = config::validate(config::Config::default()).expect("defaults are valid");
-            (defaults, Some(e.to_string()))
+            let mut why = e.to_string();
+            let failed_path = match &e {
+                config::ConfigError::Parse { path, .. }
+                | config::ConfigError::NewerVersion { path, .. }
+                | config::ConfigError::Read { path, .. } => Some(path.as_path()),
+                _ => None,
+            };
+            let user_failed = failed_path.is_some() && failed_path == user;
+            if let (config::ConfigError::Parse { .. }, true, Some(u)) = (&e, user_failed, user) {
+                match config::backup_broken(u) {
+                    Ok(b) => why.push_str(&format!("; a copy was kept as {}", b.display())),
+                    Err(be) => why.push_str(&format!("; no backup copy could be made ({be})")),
+                }
+            }
+            if user_failed && over.is_some() {
+                // The override file still applies (experiments and tests keep their data folder).
+                match config::load(None, over.as_deref()) {
+                    Ok(l) => return (l, Some(why)),
+                    Err(e2) => why.push_str(&format!("; the override file failed too: {e2}")),
+                }
+            }
+            (defaults(), Some(why))
         }
     }
 }
@@ -153,7 +178,14 @@ fn main() {
             content::shell_focused
         ])
         .setup(|app| {
-            let (loaded, config_error) = load_config(app);
+            let user_config = arg_after("--user-config").or_else(|| {
+                app.path()
+                    .app_config_dir()
+                    .ok()
+                    .map(|d| d.join("config.toml"))
+            });
+            let (loaded, config_error) = load_config(user_config.as_deref());
+            app.manage(UserConfigPath(user_config));
             // Logs: <data_dir>/logs when a data folder is configured, else the app's log folder (p2.14).
             let log_dir = match &loaded.config.storage.data_dir {
                 Some(d) => Some(d.join("logs")),
@@ -227,16 +259,20 @@ fn main() {
                 if let Err(e) = ferrum_webview_manager::webview2::send_to_back(&pw.controller()) {
                     tracing::warn!(target: "ferrum::app", error = %e, "shell not moved behind the tab views");
                 }
-                let start = handle
+                // Every start-up site opens as a tab, in order; the first is active (p3.4). None: one empty tab.
+                let mut start = handle
                     .state::<AppConfig>()
                     .0
                     .config
                     .session
                     .startup_urls
-                    .first()
-                    .cloned()
-                    .unwrap_or_else(|| content::BLANK.to_string());
-                content::open_tab(&handle, start, Place::End, true);
+                    .clone();
+                if start.is_empty() {
+                    start.push(content::BLANK.to_string());
+                }
+                for (i, url) in start.into_iter().enumerate() {
+                    content::open_tab(&handle, url, Place::End, i == 0);
+                }
             })?;
             match std::env::var("FERRUM_SELFTEST").as_deref() {
                 Ok("ipc") => selftest::start_ipc(app.handle().clone(), size.width, size.height),
