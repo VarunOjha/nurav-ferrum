@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b82e2e2e04cc98c81f0c205a9382c8c69d4c3a1062d688adcbaf6eaa22ae4e7e"
+    "content_hash": "sha256:0a85b15fe8cbe22e1e1325dadbae73dcb83979f9208912b50cc8616b3c9d79c7"
   },
   "entries": [
     {
@@ -2900,6 +2900,26 @@
       "tags": [
         "privacy",
         "tabs"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-8",
+      "date": "2026-10-12",
+      "time": "02:47",
+      "title": "Downloads work, with progress and failures shown",
+      "done": "Downloads now go to your Downloads folder (or one set in the settings) and never replace an existing file. A bar under the toolbar shows progress, Done or Failed. A test checks that the downloaded file is byte-for-byte right. Claude also fixed a start-up glitch that could lose an address typed in the first moment.",
+      "next": "The toolbar stays responsive while a tab is busy (task p3.9).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "f742b15",
+      "covers": [
+        "## [2026-10-12] code | p3.8 basic downloads"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "web views",
+        "testing"
       ]
     }
   ]

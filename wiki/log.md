@@ -1886,3 +1886,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.7.txt]
 - result: history.json in the data folder: newest first, reloads merged, at most 1000, titles (taken from the tab when the load finishes, as titles arrive first), search, clear empties list and file at once; saved with the session saver and on exit; memory only for self-tests. Back/forward follow the active tab. Core history tests 5 passed; history smoke 3 passed; whole suite 51 passed; p3.7 check PASS (no history/session files in git). Stales comp-app-shell, comp-core (re-recorded through the annex of the owner's directive).
 - commit: 3d6fa8a
+
+## [2026-10-12] code | p3.8 basic downloads
+
+- session: s02
+- time: 02:47
+- pages: [phase-p3-tabs-sessions, comp-webview-manager, comp-app-shell, comp-core]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt]
+- result: WebView2 DownloadStarting via raw COM: the app chooses the file (download folder from settings or Windows Downloads; file name only; never replaces a file), WebView2's pop-up hidden; progress, completion and failure shown in the shell's downloads bar. Fixture broken download now streams 4 KB then fails. Observed: WebView2 restarted a broken download six times, only the last reporting its end; retries are shown as one line. Fixed: the first tab list at start cleared an address being typed (likely the earlier keep-cookies flake). Downloads smoke 4 passed (12 of 12 in 3 repeats); whole suite 55 passed; p3.8 PASS. Claim on DownloadStarting closed; PermissionRequested moved to P4. Stales comp-app-shell, comp-core, comp-webview-manager (re-recorded through the annex).
+- commit: f742b15

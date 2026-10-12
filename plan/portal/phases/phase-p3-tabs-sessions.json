@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 7,
+    "done": 8,
     "total": 15
   },
   "step_order": [
@@ -103,7 +103,7 @@
       "what": "Basic downloads: save to the Downloads folder or ask where, and show progress, completion and errors.",
       "why": "Without visible progress a download can fail silently. Files saved to an unexpected place are hard to find and easy to forget.",
       "how": "Use the app framework's download hook. Stricter download safety rules come later, in P4.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Files must land somewhere sensible → default folder or a prompt, with progress and errors → downloads are visible.",
       "check": "A test file arrives with the right size and fingerprint; a failing one shows an error.",
       "script": "scripts/verify/p3.8-basic-downloads.ps1"
