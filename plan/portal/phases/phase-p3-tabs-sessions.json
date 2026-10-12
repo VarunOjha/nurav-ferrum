@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 4,
+    "done": 5,
     "total": 15
   },
   "step_order": [
@@ -70,7 +70,7 @@
       "what": "Your tabs (address, order, active tab, profile, place in history) come back after a restart or a crash.",
       "why": "Without restore, a crash or a Windows update would lose every open tab, and with it whatever you were in the middle of.",
       "how": "Save the tab list regularly and on exit, writing a temporary file and then renaming it, so a crash never leaves a half-written file. Restore it on start.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Crashes happen → save the tab list regularly and on exit, safely → after a forced kill you get your tabs back.",
       "check": "Normal exit, forced kill and unreachable-site restores all behave.",
       "script": "scripts/verify/p3.5-restore-tabs.ps1"

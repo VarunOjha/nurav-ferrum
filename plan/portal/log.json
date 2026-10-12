@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:c3740240b251965b73534027abeb16504c73d40da5f03f7006605e7fe1fcea9c"
+    "content_hash": "sha256:6b3a411fb1bd133d9a69f1c80989cdb3f3156c5ba7348a6dbf087b30bb78bba4"
   },
   "entries": [
     {
@@ -2838,7 +2838,27 @@
       "phase": "phase-p3-tabs-sessions",
       "category": "Built",
       "tags": [
-        "sessions",
+        "tabs",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-5",
+      "date": "2026-10-12",
+      "time": "02:03",
+      "title": "Your tabs come back after a restart or a crash",
+      "done": "Ferrum now saves your open tabs about once a second and when it closes, and opens them again on the next start, even after a crash. A tab whose site cannot be reached shows the error panel. One limit: each tab reopens its last page, but its back button history is not kept (WebView2 cannot restore it).",
+      "next": "A separate profile per site (task p3.6).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "9113016",
+      "covers": [
+        "## [2026-10-12] code | p3.5 session restore after a restart or a crash"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "tabs",
         "testing"
       ]
     }

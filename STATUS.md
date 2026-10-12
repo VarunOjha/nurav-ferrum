@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: null
-next_action: "Phase 3 in progress: next task p3.5 (session restore: tab list saved periodically and on exit with atomic write; restored on start; crash test without kill commands). Stop after the P3 exit gate (owner directive 2026-10-12)."
+next_action: "Phase 3 in progress: next task p3.6 (per-site profiles: site key = registrable domain (Q-111), cross-site navigation asks then moves the tab to the other profile (Q-209), per-site settings). Stop after the P3 exit gate (owner directive 2026-10-12)."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -98,6 +98,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 - p3.2 done (`7c4b532`): one view per tab, tab commands, first tab strip; shell stacking fixed; smoke 27 passed; check PASS.
 - p3.3 done (`86f1717`): shortcuts in shell and pages via WebView2 accelerator keys; smoke 36 passed; check PASS.
 - p3.4 done (`719adb4`): versioned settings file, atomic save, migration, start-up tabs; smoke 39 passed; check PASS.
+- p3.5 done (`9113016`): tabs saved and restored after exit or crash; smoke 43 passed; check PASS.
 
 ## Done this session (s01)
 
@@ -309,7 +310,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p3.4 verified and committed 2026-10-12 as `719adb4`)
+(empty: p3.5 verified and committed 2026-10-12 as `9113016`)
 
 ## Blockers
 
@@ -345,8 +346,8 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | In progress: 4 of 15 tasks done |
-| Next task | Restore tabs after a restart or crash (p3.5) |
+| Phase 3 | In progress: 5 of 15 tasks done |
+| Next task | A separate profile per site (p3.6) |
 | Your rule this session | Claude asks before any delete or kill command |
 
 **2. Why, and what it does.** Nothing for you to run now. Claude builds phase 3 task by task and stops at its end check.
@@ -364,4 +365,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 in progress: 4 of 15 tasks done, last p3.4). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-12, session s02 (P3 in progress: 5 of 15 tasks done, last p3.5). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

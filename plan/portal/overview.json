@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 4 of 15 tasks done. Next: restore tabs after a restart or crash (p3.5).",
+  "summary": "Phase 3 is in progress: 5 of 15 tasks done. Next: a separate profile per site (p3.6).",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:efef3aef23d7aead281850a616cc6838ae932da31099841f0bea2c7975718d23"
+    "content_hash": "sha256:6ec2ca677581a5d88990b56c943f1b0f18b497b7f823b7199a5ed144a0519ec6"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 4 of 15 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 5 of 15 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,11 +38,11 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "4 of 15 tasks done"
+        "state": "5 of 15 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Restore tabs after a restart or crash (p3.5)"
+        "state": "A separate profile per site (p3.6)"
       }
     ],
     "why": "Nothing to run. Claude builds phase 3 task by task and stops at its end check.",

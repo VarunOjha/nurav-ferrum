@@ -1859,3 +1859,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.4.txt]
 - result: Settings file version 2; version-1 (P2) files migrated (a file that did not choose new_window keeps same-view); newer versions refused with a clear message and never written; atomic save (temp file then rename); an unreadable user file is copied aside and skipped (override layer still applies); --user-config for tests; start-up sites open as tabs in order. Core config tests 14 passed; startup smoke 3 passed; whole suite 39 passed; p3.4 check PASS. comp-core and ov-arch-configuration updated (stales comp-core; re-recorded by the owner's directive of 2026-10-12).
 - commit: 719adb4
+
+## [2026-10-12] code | p3.5 session restore after a restart or a crash
+
+- session: s02
+- time: 02:03
+- pages: [phase-p3-tabs-sessions, comp-app-shell, comp-core, ov-arch-configuration]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.5.txt]
+- result: session.json (version 1) saved atomically about once a second while tabs change and on exit; restored on start when restore_on_startup (default on from settings version 2; version-1 files keep it off); unreadable session copied aside; newer one never overwritten; off for self-test runs. Crash test uses the app's own abort (debug-only test_crash), no kill command. Known limit: back/forward history not restored. Core session tests 5 passed; restore smoke 4 passed; whole suite 43 passed twice (keep-cookies failed once in an earlier full run, not reproduced in 6 single and 2 full runs: watched); p2.6 PASS; p3.5 check PASS. Stales comp-app-shell and comp-core (re-recorded by the owner's directive of 2026-10-12).
+- commit: 9113016

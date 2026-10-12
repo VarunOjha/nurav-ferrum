@@ -750,7 +750,7 @@
       "kind": "task",
       "title": "P3 task: Restore tabs after restart or crash",
       "summary": "Crashes happen → save the tab list regularly and on exit, safely → after a forced kill you get your tabs back.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4795,6 +4795,14 @@
       "kind": "commit",
       "title": "Commit: Settings are saved safely; start-up sites open as tabs",
       "summary": "The settings file now has a version number, so later versions can upgrade it, and it is written in one step, so a crash cannot leave half a file. A file Ferrum cannot read is copied aside instead of l",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "9113016",
+      "kind": "commit",
+      "title": "Commit: Your tabs come back after a restart or a crash",
+      "summary": "Ferrum now saves your open tabs about once a second and when it closes, and opens them again on the next start, even after a crash. A tab whose site cannot be reached shows the error panel. One limit:",
       "status": null,
       "related": []
     }
