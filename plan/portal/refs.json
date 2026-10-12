@@ -42,7 +42,7 @@
       "kind": "phase",
       "title": "P3 Tabs and sessions",
       "summary": "Goal: Many tabs, restored after a restart, with separate data per site. Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
-      "status": "Waiting for your review",
+      "status": "In progress",
       "related": [],
       "aliases": [
         "P3"
@@ -4994,7 +4994,7 @@
       "kind": "decision",
       "title": "Decision 32: Bookmarks and history in a local file, moved by encrypted backup",
       "summary": "Bookmarks and history live in one SQLite database file on your PC. To move them to another Ferrum, you export one backup file locked with a passphrase you choose, and import it there: you see what's inside first, then merge or replace. Cookies and logins are never included.",
-      "status": "Proposed",
+      "status": "Accepted",
       "related": [
         "phase-p3-tabs-sessions",
         "comp-core",

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:d8b5f681949414abcc90dadb60faa735140a7c3d9de314466952714337253af2"
+    "content_hash": "sha256:b9e677b976856789f54969223dcc2589bf7fb4583623ace9e91db11e99c9a7f8"
   },
   "entries": [
     {
@@ -3227,6 +3227,47 @@
       "tags": [
         "look & feel",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-feature-set-approved",
+      "date": "2026-10-12",
+      "time": "15:17",
+      "title": "You approved the feature set plan",
+      "done": "Your approval is recorded for the Phase 3 plan with the feature set, the storage and backup decision, the look decision and the project overview. Phase 3 is back in progress for the feature set.",
+      "next": "Two part pages changed by the review fixes need your re-approval before building starts.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Phase 3 plan with the feature set",
+          "status": "Approved"
+        },
+        {
+          "what": "Storage and backup decision",
+          "status": "Approved"
+        },
+        {
+          "what": "Look decision",
+          "status": "Approved"
+        },
+        {
+          "what": "Project overview",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser controls and website views part pages",
+          "status": "Outdated"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-12] approval | feature set plan approved: phase-p3-tabs-sessions, adr-0032, adr-0033, ov-project"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]

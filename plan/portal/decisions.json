@@ -945,7 +945,7 @@
       "summary": "Bookmarks and history live in one SQLite database file on your PC. To move them to another Ferrum, you export one backup file locked with a passphrase you choose, and import it there: you see what's inside first, then merge or replace. Cookies and logins are never included.",
       "why": "You chose SQLite over Postgres: nothing to install or run, works offline, fast search, and no extra process to skew the benchmarks. The backup is your 'manual, but secure' dump.",
       "catch": "No automatic sync between PCs. A lost passphrase means the backup cannot be opened. Two new building blocks (the database and the encryption) must pass the licence check first.",
-      "status": "Proposed",
+      "status": "Accepted",
       "decided_by": "claude",
       "date": "2026-10-12",
       "replaced_by": null,
@@ -963,7 +963,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0032-local-sqlite-store-encrypted-backup.md",
-        "content_hash": "sha256:bf634a1259871cb668c42f8f8fa12548beb7606575b76f86ce3c4ef752c621d4"
+        "content_hash": "sha256:b91f661f0a0ed94e139f3cc5c7c13c747552376d44bdf6d487f619a93b5ef785"
       }
     },
     {

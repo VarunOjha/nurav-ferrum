@@ -999,14 +999,14 @@
     },
     "phase-p3-tabs-sessions": {
       "status": "approved",
-      "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T02:49:16-05:00",
+      "comment": "Approved",
+      "timestamp": "2026-10-12T15:17:19-05:00",
       "path": "wiki/phases/phase-p3-tabs-sessions.md",
-      "content_hash": "sha256:0eb8a347371a3e82efd5dd49d0b91bab94192294c8833bbe204d2219c55a4dff",
-      "scope_hash": "sha256:e5471c27b119a7261048a16d28577d0cb7f66314fab3daec5fa8e9ded4358e35",
+      "content_hash": "sha256:4a45c0379041971287c057a2920870494503c74ba33ca822db21ca3945459b8d",
+      "scope_hash": "sha256:9447db5bc3168bf190662d5f161de34c6e0852f22bb45e39ae5199074fc285fa",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md",
+      "owner_words": "wiki/raw/owner/2026-10-12-s02-feature-set-plan-approval.md",
       "history": [
         {
           "status": "approved",
@@ -1040,6 +1040,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T02:49:16-05:00",
+          "path": "wiki/phases/phase-p3-tabs-sessions.md",
+          "content_hash": "sha256:0eb8a347371a3e82efd5dd49d0b91bab94192294c8833bbe204d2219c55a4dff",
+          "scope_hash": "sha256:e5471c27b119a7261048a16d28577d0cb7f66314fab3daec5fa8e9ded4358e35",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md"
         }
       ]
     },
@@ -1053,6 +1064,42 @@
       "approved_by": "owner",
       "recorded_by": "claude",
       "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md",
+      "history": []
+    },
+    "adr-0032": {
+      "status": "approved",
+      "comment": "Approved",
+      "timestamp": "2026-10-12T15:17:20-05:00",
+      "path": "wiki/decisions/adr-0032-local-sqlite-store-encrypted-backup.md",
+      "content_hash": "sha256:bf634a1259871cb668c42f8f8fa12548beb7606575b76f86ce3c4ef752c621d4",
+      "scope_hash": "sha256:0ac4d726a804bd85961ad1944f6221293f9863b4147f30bef276a271a80a2690",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-12-s02-feature-set-plan-approval.md",
+      "history": []
+    },
+    "adr-0033": {
+      "status": "approved",
+      "comment": "Approved",
+      "timestamp": "2026-10-12T15:17:20-05:00",
+      "path": "wiki/decisions/adr-0033-graphite-look-split-tile-logo-themes.md",
+      "content_hash": "sha256:4fdf4b5b07833b52e14b7cc18e1ddeb65b3910ecaf6a18db27eece0b53868b54",
+      "scope_hash": "sha256:a03d30e5662c4f39e7b5dee06cdb9dde76e5a37d85613999afb444b59844e021",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-12-s02-feature-set-plan-approval.md",
+      "history": []
+    },
+    "ov-project": {
+      "status": "approved",
+      "comment": "Approved",
+      "timestamp": "2026-10-12T15:17:20-05:00",
+      "path": "wiki/overview/ov-project-overview.md",
+      "content_hash": "sha256:96b6f49e3b9adec4f710ecd4154bb0996d3c2e7dde8dfb2f4ebc4374bdff2f93",
+      "scope_hash": "sha256:ddf817c70029d9dfc6e6cbb39393b4d4b5550d99acb99bdc8b0df6fd99ac1bae",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-12-s02-feature-set-plan-approval.md",
       "history": []
     }
   }

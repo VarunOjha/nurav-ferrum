@@ -2,7 +2,7 @@
 id: adr-0032
 type: decision
 title: "Bookmarks and history in a local SQLite file; a manual, encrypted backup file moves them to another Ferrum"
-status: proposed
+status: accepted
 updated: 2026-10-12
 sources:
   - raw/owner/2026-10-12-s02-feature-set-request.md

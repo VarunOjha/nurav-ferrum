@@ -23,8 +23,8 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: null
-next_action: "Owner: say \"approve the feature set plan\" (approves phase-p3-tabs-sessions, adr-0032, adr-0033 and ov-project) or what to change. Claude records it with tools/approvals_record.py and then builds p3.18 (local SQLite store) to p3.23. Still open: P3 review (docs/testing/manual-checklist-p3.md items 1 to 13), re-approval of adr-0011, adr-0015, comp-app-shell, comp-webview-manager, and the P3 sign-off after the feature set. No P4 work."
-blocked_on: []
+next_action: "Owner: re-approve comp-app-shell and comp-webview-manager (changed by the p3.16 review fixes: download tabs, site icons, app icon) and, if ready, adr-0011 and adr-0015 (changed by p3.13). Claude records them with tools/approvals_record.py, then builds p3.18 (local SQLite store, adr-0032) with scripts/verify/p3.18-*.ps1. No P4 work."
+blocked_on: [comp-app-shell, comp-webview-manager]
 last_handoff: handoff-2026-10-12-s02
 ---
 
@@ -361,16 +361,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Design | Done: look A Graphite, logo 8 split tile, themes ready for later |
-| Feature set plan | Waits for your approval |
-| Phase 3 review | Still open; the sign-off comes after the feature set |
+| Feature set plan | Approved |
+| Two part pages (browser controls, website views) | Changed by the review fixes; need your re-approval before building |
+| Phase 3 | In progress again, for the feature set |
 | Phase 4 | Not started |
 
-**2. Why, and what it does.** Building starts only with your approval → then the local database, bookmarks, address-bar search, backup and the new look, each with its own check.
+**2. Why, and what it does.** The feature set changes the browser controls page → its approval must be current before building → then Claude starts the local database.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** "approve the feature set plan", or what to change.
+**4. What to tell Claude:** "re-approve the part pages" (or what to change).
 
 ## Pending owner approvals
 
@@ -381,4 +381,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (p3.17 done: Graphite look and split-tile logo picked; waiting for the plan approval). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-12, session s02 (feature set plan approved; waiting for re-approval of comp-app-shell and comp-webview-manager). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).

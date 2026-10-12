@@ -2020,3 +2020,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: On request Claude added Comet-inspired layouts D, E, F and logos 4 to 9 to the canvas. Owner chose look A with Graphite colours and logo 8 (split tile, "for now"), and asked that themes can be configured in the future. Design frozen under raw/evidence/phase-p3-tabs-sessions/design/. adr-0033 accepted for the quoted choice (elaboration binds on approval): themes as named design tokens, Graphite first, accent and density as settings, safe theme files later. p3.22 updated. Stales approval of phase-p3-tabs-sessions (already stale).
 - next: owner approves the feature set plan (phase-p3-tabs-sessions, adr-0032, adr-0033, ov-project); then p3.18 (local store).
 - commit: 509309d
+
+## [2026-10-12] approval | feature set plan approved: phase-p3-tabs-sessions, adr-0032, adr-0033, ov-project
+
+- session: s02
+- time: 15:17
+- pages: [phase-p3-tabs-sessions, adr-0032, adr-0033, ov-project]
+- sources: [raw/owner/2026-10-12-s02-feature-set-plan-approval.md]
+- result: Owner: "Approved", answering Claude's request to approve the feature set plan (four pages named). Recorded with tools/approvals_record.py: phase-p3-tabs-sessions, adr-0032, adr-0033, ov-project approved. adr-0032 set to accepted; phase-p3-tabs-sessions back to in-progress (feature set p3.18 to p3.23). Still STALE: comp-app-shell and comp-webview-manager (changed by p3.16) and adr-0011, adr-0015 (changed by p3.13). comp-app-shell is touched by p3.18 to p3.22, so implementation waits for its re-approval (SCHEMA §10.4 rule 1).
+- next: owner re-approves comp-app-shell and comp-webview-manager (and adr-0011, adr-0015); then p3.18.

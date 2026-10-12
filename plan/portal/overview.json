@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is built; your review is open. For the new feature set you picked the Graphite look and the split-tile logo; the plan waits for your approval before building starts.",
+  "summary": "You approved the feature set plan. Before building starts, two part pages changed by the review fixes need your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:a228d94c36bdb57b1f5bc6775662dc83f144f26e2796123c7125dbe7e2c67397"
+    "content_hash": "sha256:bb8a42355a2524a1572efab0a0561621540d19a600dbb0ea304bdfbeda21364a"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: feature set designed; waiting for your plan approval",
+      "state": "P3 Tabs and sessions: in progress again for the feature set",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -37,17 +37,17 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "Design",
-        "state": "picked: Graphite, split-tile logo"
+        "item": "Feature set plan",
+        "state": "approved"
       },
       {
-        "item": "Feature set plan",
-        "state": "waits for your approval"
+        "item": "Part pages",
+        "state": "browser controls and website views need re-approval"
       }
     ],
-    "why": "Nothing is built until you approve the plan.",
+    "why": "Building changes the browser controls page, so its approval must be current first.",
     "script": null,
-    "tell_claude": "\"approve the feature set plan\", or what to change."
+    "tell_claude": "\"re-approve the part pages\", or what to change."
   },
   "questions_for_you": {
     "open": 23,
