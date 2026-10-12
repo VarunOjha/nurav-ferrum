@@ -2065,3 +2065,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-feature-set-design-answers.md]
 - result: library_suggest and history_remove commands; store suggest_history and remove_history_url; shell groups Open tabs / Bookmarks / History with highlighted word starts, arrows, Enter, Esc, Shift+Delete, click; the list is in the top band so the page view moves down. scripts/verify/p3.20-address-search.ps1 PASS (13 store tests, 18 shell unit tests, smoke address-search + history + bookmarks 12 passed). Stales approval of comp-app-shell and comp-core.
 - commit: d03784b
+
+## [2026-10-12] code | p3.21 encrypted backup file and import
+
+- session: s02
+- time: 16:19
+- pages: [phase-p3-tabs-sessions, comp-core, comp-app-shell, ov-arch-trust-boundaries]
+- sources: [raw/owner/2026-10-12-s02-feature-set-request.md]
+- result: ferrum_core::backup: Argon2id + XChaCha20-Poly1305 (RustCrypto argon2 0.6.0, chacha20poly1305 0.11.0), header authenticated, crafted costs refused; store export/import (merge, replace) and copy_to; app commands and the Backup and restore screen; replace keeps a dated copy of ferrum.db; passphrase never logged. scripts/verify/p3.21-backup.ps1 PASS. One evidence run failed because the test typed before the screen finished opening (kept as check-p3.21.txt); fixed in the test, three further runs pass. Stales approval of comp-app-shell, comp-core and ov-arch-trust-boundaries.
+- commit: 00715eb

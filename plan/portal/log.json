@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:450ef62322e4902806eee203893084eba688520993c711225e69362f9a84b636"
+    "content_hash": "sha256:e260bc2b0fd237ba4cf44d62808175b61b49dd48d873cedd43d32f49cf4fb38b"
   },
   "entries": [
     {
@@ -3357,6 +3357,26 @@
       "tags": [
         "address bar",
         "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-21",
+      "date": "2026-10-12",
+      "time": "16:19",
+      "title": "Built: the encrypted backup and restore",
+      "done": "Backup and restore (in the sidebar) saves your bookmarks and history to one file locked with your passphrase. On another Ferrum you look inside first, then merge or replace; replace keeps a copy of what was there. A wrong passphrase or a changed file is refused. Cookies and logins are never in it, and the passphrase is never written down.",
+      "next": "Claude builds the new Graphite look and the split-tile logo next.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "00715eb",
+      "covers": [
+        "## [2026-10-12] code | p3.21 encrypted backup file and import"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "privacy",
+        "address bar"
       ]
     }
   ]

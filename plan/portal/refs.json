@@ -4961,7 +4961,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: encrypted backup and restore",
       "summary": "You set up a second PC → export, carry the file, import → same bookmarks and history there.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -4972,7 +4972,7 @@
       "kind": "task",
       "title": "P3 task: Feature set: new look and logo",
       "summary": "You chose a design → Claude applies it everywhere → Ferrum looks the way you picked.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p3-tabs-sessions",
         "adr-0032"
@@ -5060,6 +5060,14 @@
       "kind": "commit",
       "title": "Commit: Built: search of the past from the address bar",
       "summary": "As you type in the address bar, Ferrum suggests matching open tabs, bookmarks and pages from your history, in groups, with the matching letters highlighted. Arrow keys and Enter open one; Shift+Delete",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "00715eb",
+      "kind": "commit",
+      "title": "Commit: Built: the encrypted backup and restore",
+      "summary": "Backup and restore (in the sidebar) saves your bookmarks and history to one file locked with your passphrase. On another Ferrum you look inside first, then merge or replace; replace keeps a copy of wh",
       "status": null,
       "related": []
     }

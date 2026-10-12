@@ -22,8 +22,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
-current_task: p3.21
-next_action: "Claude: build the feature set p3.21 to p3.23 one task at a time (In-flight shows the current one), then rerun scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit and STOP to report to the owner (owner: \"complete P3 and then stop and let me know\"). Owner then: checklist docs/testing/manual-checklist-p3.md, re-approval of adr-0011, adr-0015 and the pages the feature set changes, P3 sign-off. No P4 work."
+current_task: p3.22
+next_action: "Claude: build the feature set p3.22 and p3.23 (In-flight shows the current one), then rerun scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit and STOP to report to the owner (owner: \"complete P3 and then stop and let me know\"). Owner then: checklist docs/testing/manual-checklist-p3.md, re-approval of adr-0011, adr-0015 and the pages the feature set changes, P3 sign-off. No P4 work."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -114,6 +114,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 - p3.18 done (0108da1): local SQLite store; history.json imported once; check PASS.
 - p3.19 done (38e294f): bookmarks (star, bar, editor, sidebar folders, shortcuts); check PASS.
 - p3.20 done (d03784b): address-bar search of the past; check PASS.
+- p3.21 done (00715eb): encrypted backup and import; check PASS.
 
 ## Done this session (s01)
 
@@ -325,9 +326,9 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.21 encrypted backup and restore (adr-0032)
-- intent: ferrum_core::backup: Argon2id (argon2 0.6) + XChaCha20-Poly1305 (chacha20poly1305 0.11), header as associated data, passphrase at least 12 characters, never stored or logged; payload JSON with bookmarks and history; import checks size (100 MB), version, http(s) only, title length; merge or replace (replace keeps a dated copy of ferrum.db). App commands backup_export (save dialog-free: a path chosen in the shell form) and backup_preview / backup_import; a Backup and restore panel in the shell; unit tests and a smoke test; scripts/verify/p3.21-backup.ps1; comp-core, comp-app-shell, ov-arch-trust-boundaries updated.
-- paths: crates/core/**, apps/desktop/src-tauri/**, apps/desktop/src/**, apps/desktop/index.html, apps/desktop/tests/smoke/**, Cargo.lock, scripts/verify/p3.21-backup.ps1, wiki/architecture/**, plan/portal/*
+- task: p3.22 new look and logo (adr-0033)
+- intent: Graphite theme as named design tokens (light and dark, follows Windows), theme data separate from layout so more themes can be added later; accent colour and compact/roomy density as [appearance] settings applied live; IBM Plex fonts bundled with the app (no remote fonts, CSP unchanged); new-tab page (search box, favourites tiles, most visited) for empty tabs; gentle motion off under reduce-animations; logo 8 (split tile) from icons/app-icon.svg to every icon size. A test fails on any colour outside the theme. scripts/verify/p3.22-look.ps1; comp-app-shell updated.
+- paths: apps/desktop/src/**, apps/desktop/index.html, apps/desktop/public/** (fonts), apps/desktop/src-tauri/**, crates/core/src/config.rs, crates/core/tests/config.rs, apps/desktop/tests/smoke/**, scripts/verify/p3.22-look.ps1, scripts/verify/p3.16-review-fixes.ps1, wiki/architecture/**, plan/portal/*
 - rollback: git checkout of these paths
 
 ## Blockers
@@ -364,11 +365,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | In progress: 19 of 23 tasks done |
-| Next task | Encrypted backup and restore |
+| Phase 3 | In progress: 20 of 23 tasks done |
+| Next task | New look and logo |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude builds the passphrase-locked backup file and its import next.
+**2. Why, and what it does.** Nothing for you to run now. Claude applies the Graphite look, the themes structure and the split-tile logo next.
 
 **3. The script:** none for you.
 
@@ -383,4 +384,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 in progress: 19 of 23 tasks done, last p3.20). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-12, session s02 (P3 in progress: 20 of 23 tasks done, last p3.21). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

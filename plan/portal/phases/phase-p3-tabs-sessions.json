@@ -6,7 +6,7 @@
   "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
   "status": "In progress",
   "progress": {
-    "done": 19,
+    "done": 20,
     "total": 23
   },
   "step_order": [
@@ -247,7 +247,7 @@
       "what": "Export your bookmarks and history to one file locked with your passphrase. Import it on another Ferrum: see what's inside, then merge or replace.",
       "why": "You want a manual, secure dump to load into another Ferrum.",
       "how": "Standard, published encryption; a wrong passphrase or a changed file is refused with nothing changed. Replace keeps a copy of your old data first. Cookies and logins are never in the file.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "You set up a second PC → export, carry the file, import → same bookmarks and history there.",
       "check": "Tests: export and import match; wrong passphrase, damaged file and hidden script addresses are refused; the passphrase is never logged.",
       "script": "scripts/verify/p3.21-backup.ps1"
@@ -258,7 +258,7 @@
       "what": "Apply your pick: the Graphite look, light or dark following Windows, accent colour and compact or roomy settings, the new tab page, gentle motion, and the split-tile logo.",
       "why": "You want the browser to be fun to use and comfortable, with a better logo.",
       "how": "Colours live only in a theme (a set of named colours), so more themes can be added later as data. Fonts are part of the app. The logo is one drawing from which every icon size is made.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "You chose a design → Claude applies it everywhere → Ferrum looks the way you picked.",
       "check": "Tests pass; a test fails if a colour is written outside the theme; light and dark screenshots for you to compare with the design; the program shows the split-tile logo.",
       "script": null

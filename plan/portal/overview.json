@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 19 of 23 tasks done. Next: encrypted backup and restore.",
+  "summary": "Phase 3 is in progress: 20 of 23 tasks done. Next: new look and logo.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:919fd95c7b14f8555aba75c598c13d51505ab1b891fa823d9d2357a6ca82b56f"
+    "content_hash": "sha256:79c3f02182ceb99ba49e0b8b907f704ba0fe9e53749c1c08e817dec9edd4b47f"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 19 of 23 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 20 of 23 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "19 of 23 tasks done"
+        "state": "20 of 23 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Encrypted backup and restore"
+        "state": "New look and logo"
       }
     ],
-    "why": "Nothing to run. Claude builds the passphrase-locked backup file and its import next.",
+    "why": "Nothing to run. Claude applies the Graphite look, the themes structure and the split-tile logo next.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
