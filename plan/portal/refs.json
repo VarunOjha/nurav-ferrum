@@ -510,7 +510,7 @@
       "kind": "task",
       "title": "P2 task: Google sign-in: offer the normal browser",
       "summary": "Google may refuse sign-in inside embedded views → detect its sign-in page and offer the system browser, never disguise the app → we respect Google's rules.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4691,6 +4691,14 @@
       "kind": "commit",
       "title": "Commit: Developer tools only in test builds",
       "summary": "The real (release) Ferrum no longer lets anyone open the developer tools with F12 or the right-click menu, in the website area or the toolbar; test builds still can. A script proved both by pressing t",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "e8bc194",
+      "kind": "commit",
+      "title": "Commit: Google sign-in opens in your browser",
+      "summary": "When a site sends you to Google sign-in, Ferrum does not load it inside itself (Google forbids that) and does not try to trick Google. It shows a bar saying sign-in must open in your normal browser, w",
       "status": null,
       "related": []
     }

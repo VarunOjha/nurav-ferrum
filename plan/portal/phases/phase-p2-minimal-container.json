@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 12,
+    "done": 13,
     "total": 18
   },
   "step_order": [
@@ -158,7 +158,7 @@
       "what": "Detection of Google's sign-in page, with an offer to open it in your normal browser.",
       "why": "Google may block sign-in inside apps like Ferrum. Disguising the app to get around that would break Google's rules and could get accounts locked.",
       "how": "Compare each address with known Google sign-in address patterns; on a match, show a banner that opens the page in your normal browser.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Google may refuse sign-in inside embedded views → detect its sign-in page and offer the system browser, never disguise the app → we respect Google's rules.",
       "check": "Test on recorded addresses; a test link shows the banner. No live Google login.",
       "script": "scripts/verify/p2.13-google-sign-in.ps1"

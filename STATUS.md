@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.13 (Google OAuth policy): URL classifier in ferrum-core with unit tests on recorded URL patterns plus a test-only pattern; shell banner with an Open in browser button; smoke test with a fixture link to the test-only pattern; run scripts/verify/p2.13-google-sign-in.ps1."
+next_action: "Task p2.14 (tracing): JSON-lines logs to a file in the data folder, a panic hook that logs and exits cleanly; check that a normal run writes valid JSON lines and a forced test panic (debug only) is logged; run scripts/verify/p2.14-structured-logs-crashes.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -84,6 +84,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.10 done (`f21caba`): new windows per setting; links to other apps ask first; smoke suite 20 passed.
 - p2.11 done (`573153c`): cookies persist across a restart; smoke suite 21 passed.
 - p2.12 done (`083561b`): DevTools only in debug builds, checked by key presses in release and debug.
+- p2.13 done (`e8bc194`): Google sign-in bar, classifier with unit tests, smoke suite 25 passed.
 
 ## Done this session (s01)
 
@@ -295,7 +296,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.12 verified and committed 2026-10-11 as `083561b`)
+(empty: p2.13 verified and committed 2026-10-11 as `e8bc194`)
 
 ## Blockers
 
@@ -331,11 +332,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 12 of 18 tasks done |
-| Next task | p2.13 Google sign-in banner |
+| Phase 2 | In progress: 13 of 18 tasks done |
+| Next task | p2.14 logs and crash handling |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Google blocks sign-in inside embedded browsers → Ferrum recognises the Google sign-in address and offers to open it in your normal browser, without tricks → sign-in stays honest and possible.
+**2. Why, and what it does.** Nothing for you to run now. When something goes wrong you need a record → Ferrum writes one tidy log line per event and records crashes instead of vanishing → problems can be found and fixed.
 
 **3. The script:** none for you.
 
@@ -350,4 +351,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 12 of 18 tasks done, last p2.12). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 13 of 18 tasks done, last p2.13). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

@@ -1702,3 +1702,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.12.txt]
 - result: Content view: AreDevToolsEnabled = debug build (WebView2 default is on); shell follows Tauri rule (no devtools feature; wry default on only in debug, read in the sources). Observed: the setting blocks F12 and the context menu but a direct OpenDevToolsWindow call still opens DevTools in release, so Ferrum has no such call. Self-test devtools + check script pressing F12 and Ctrl+Shift+I only while Ferrum is active: release off/off and no window; debug on/on and F12 opens DevTools in the website view. p2.12 check PASS; smoke suite 21 passed; p2.3 re-checked PASS. Process slip: the write-ahead In-flight entry was not filled before this task (committed cleanly; noted here). For SECURITY.md (p2.16): the WebView2 remote-debugging switch in the WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS environment variable still works in release builds (the smoke robot uses it); only someone who can already run programs as the user can set it.
 - commit: 083561b
+
+## [2026-10-11] ingest | Google OAuth authorization endpoint recorded from Google's own pages (for p2.13)
+
+- session: s02
+- time: 20:15
+- pages: []
+- sources: [raw/research/google-oauth-endpoint.md]
+- result: New raw research note (index and MANIFEST lines added). VERIFIED in Google's OpenID discovery document and its "OAuth 2.0 for Web Server Applications" guide (accessed 2026-10-11): the authorization endpoint is https://accounts.google.com/o/oauth2/v2/auth, and Google lists showing it in a disallowed embedded user-agent as an error. UNCERTAIN (recorded as such): other entry paths, and whether Google refuses sign-in in a Ferrum view in practice. Used by the ferrum-core sign-in classifier (task p2.13).
+
+## [2026-10-11] code | p2.13 Google sign-in offered in the normal browser, never worked around
+
+- session: s02
+- time: 20:15
+- pages: [phase-p2-minimal-container, comp-core, comp-webview-manager, comp-app-shell]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.13.txt, raw/research/google-oauth-endpoint.md]
+- result: ferrum-core oauth classifier: accounts.google.com, path under /o/oauth2/ (endpoint from raw/research/google-oauth-endpoint.md), host compared after URL parsing; test-only pattern only in debug builds. Gate cancels sign-in navigations; shell bar "Google sign-in must open in your normal browser" with Open in browser (owner answer Q-109); opens only after the click; no user-agent change. Unit tests 3 passed; smoke spec 4 passed incl. the real Google address (cancelled in NavigationStarting; no network traffic measured); whole suite 25 passed twice; p2.13 check PASS.
+- commit: e8bc194

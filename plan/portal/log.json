@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:ecc60224b5bee885e42e5912f7c1de614a04ee0e4eb0764722934fe3f4a191f0"
+    "content_hash": "sha256:a00136c9e9fec24c591a529297f14835de5732583a66c8a3f46926e2d71ba3a3"
   },
   "entries": [
     {
@@ -2479,6 +2479,46 @@
       "commit": "083561b",
       "covers": [
         "## [2026-10-11] code | p2.12 developer tools only in debug builds"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "web views",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-ingest-google-oauth",
+      "date": "2026-10-11",
+      "time": "20:15",
+      "title": "Google's sign-in address checked at the source",
+      "done": "Before building the Google sign-in rule, Claude looked up the exact sign-in address on Google's own pages and saved the evidence as a research note, so the rule rests on a recorded fact, not memory.",
+      "next": "Claude builds the Google sign-in rule on it (task p2.13).",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-11] ingest | Google OAuth authorization endpoint recorded from Google's own pages (for p2.13)"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Planned",
+      "tags": [
+        "wiki",
+        "web views"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-13",
+      "date": "2026-10-11",
+      "time": "20:15",
+      "title": "Google sign-in opens in your browser",
+      "done": "When a site sends you to Google sign-in, Ferrum does not load it inside itself (Google forbids that) and does not try to trick Google. It shows a bar saying sign-in must open in your normal browser, with an Open in browser button; nothing opens until you click it.",
+      "next": "Claude adds structured logs and crash handling (task p2.14).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "e8bc194",
+      "covers": [
+        "## [2026-10-11] code | p2.13 Google sign-in offered in the normal browser, never worked around"
       ],
       "phase": "phase-p2-minimal-container",
       "category": "Built",

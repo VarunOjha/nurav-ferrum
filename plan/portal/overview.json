@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 12 of 18 tasks done. Next: p2.13 Google sign-in banner.",
+  "summary": "Phase 2 is in progress: 13 of 18 tasks done. Next: p2.14 logs and crash handling.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:ff54dcb2514e17d0968a1e89d563171b92d5d6d780eb4cfdcbe2a22d6eb42d95"
+    "content_hash": "sha256:c55ae0a8d4932fe8565e20d3593a4b0aff0f5944171c1ec20abdb4701082fed0"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 12 of 18 tasks done",
+      "state": "P2 First working app: in progress, 13 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "12 of 18 tasks done"
+        "state": "13 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.13 Google sign-in banner"
+        "state": "p2.14 logs and crash handling"
       }
     ],
-    "why": "Nothing to run. Google blocks sign-in inside embedded browsers → Ferrum recognises the Google sign-in address and offers to open it in your normal browser, without tricks → sign-in stays honest and possible.",
+    "why": "Nothing to run. When something goes wrong you need a record → Ferrum writes one tidy log line per event and records crashes instead of vanishing → problems can be found and fixed.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
