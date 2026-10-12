@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f65f6809215cd4c53e1729e07e9264f13396dc6e8bb62f25db2c8d0ed785b6df"
+    "content_hash": "sha256:1c93c1cb64aa1304fb75d13e7d4700e80ab4f2b482ae6f3100cd527aeb7edb42"
   },
   "entries": [
     {
@@ -2565,6 +2565,31 @@
       "tags": [
         "testing",
         "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-16",
+      "date": "2026-10-11",
+      "time": "20:32",
+      "title": "Documentation brought up to date",
+      "done": "The README now explains how to build, run and test Ferrum; the security notes list what this first version protects against and what it does not yet do; the pages for the three parts built in this phase now say \"built\". Because those three pages changed, your earlier approval of them is marked outdated; Claude will ask you to look at them again at the end-of-phase review.",
+      "next": "Claude does the second batch of literature reading (task p2.17).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Application shell, WebView manager and core library pages (changed to built)",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "a586e34",
+      "covers": [
+        "## [2026-10-11] code | p2.16 README, SECURITY.md and part pages describe the first working app"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "wiki",
+        "approvals"
       ]
     }
   ]

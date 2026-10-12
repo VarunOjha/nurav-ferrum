@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.16 (docs): README build and run instructions; SECURITY.md M1 section and known limitations; component pages comp-app-shell, comp-webview-manager, comp-core set to status implemented with last_verified_commit; run scripts/verify/p2.16-update-docs.ps1 (wiki lint clean)."
+next_action: "Task p2.17 (literature batch 2): new raw research note(s) with access dates on WebView2 and Chromium process model, page lifecycle and embedded-webview resource studies; update ov-research-literature-log; no unverified citation; run scripts/verify/p2.17-literature-batch-2.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -87,6 +87,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.13 done (`e8bc194`): Google sign-in bar, classifier with unit tests, smoke suite 25 passed.
 - p2.14 done (`9df1157`): JSON-lines logs, typed errors, crash records; smoke suite 25 passed.
 - p2.15 done (`6ed6c9a`): whole smoke suite in one command (25 passed); manual checklist written.
+- p2.16 done (`a586e34`): docs updated; three part pages implemented (approvals now outdated, re-approval at exit).
 
 ## Done this session (s01)
 
@@ -298,7 +299,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.15 verified and committed 2026-10-11 as `6ed6c9a`)
+(empty: p2.16 verified and committed 2026-10-11 as `a586e34`)
 
 ## Blockers
 
@@ -334,11 +335,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 15 of 18 tasks done |
-| Next task | p2.16 documentation |
+| Phase 2 | In progress: 16 of 18 tasks done |
+| Next task | p2.17 literature batch 2 |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Code changed a lot in this phase → the README, the security notes and the component pages must say what is now built and what is still limited → the next reader is not misled.
+**2. Why, and what it does.** Nothing for you to run now. The paper needs sources → Claude reads primary sources on WebView2 and Chromium processes, page lifecycle and embedded-browser resource use → every later claim can cite something real.
 
 **3. The script:** none for you.
 
@@ -353,4 +354,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 15 of 18 tasks done, last p2.15). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 16 of 18 tasks done, last p2.16). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

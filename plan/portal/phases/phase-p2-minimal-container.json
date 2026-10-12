@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 15,
+    "done": 16,
     "total": 18
   },
   "step_order": [
@@ -191,7 +191,7 @@
       "what": "Updated README, security notes, known limits and part pages.",
       "why": "Outdated instructions waste a reader's time, and a part page that still says 'planned' misleads every later session.",
       "how": "Go through each document and part page touched by P2, rewrite what changed, and note the commit that was checked.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Code changed → README, security notes, known limits and part pages updated with the verified commit → docs match reality.",
       "check": "Wiki check clean; shell, web-view manager and core pages marked built.",
       "script": "scripts/verify/p2.16-update-docs.ps1"

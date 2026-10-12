@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 15 of 18 tasks done. Next: p2.16 documentation.",
+  "summary": "Phase 2 is in progress: 16 of 18 tasks done. Next: p2.17 literature batch 2.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b7b61f5e639e5ded0df3e5392bdc19a9735e02c88c34249ef5773ca46d532c2e"
+    "content_hash": "sha256:f49a29fd60561387f247af4dbb3dbfc2ab093355fd15405c932a5bfa0c56746b"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 15 of 18 tasks done",
+      "state": "P2 First working app: in progress, 16 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "15 of 18 tasks done"
+        "state": "16 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.16 documentation"
+        "state": "p2.17 literature batch 2"
       }
     ],
-    "why": "Nothing to run. Code changed a lot in this phase → the README, the security notes and the component pages must say what is now built and what is still limited → the next reader is not misled.",
+    "why": "Nothing to run. The paper needs sources → Claude reads primary sources on WebView2 and Chromium processes, page lifecycle and embedded-browser resource use → every later claim can cite something real.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

@@ -1737,3 +1737,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.15.txt]
 - result: npm run smoke runs all six smoke specs (p2.7 to p2.11 and p2.13; p2.12 is checked on the release build by its own script). docs/testing/manual-checklist-p2.md lists the owner's five end-of-phase checks (five HTTPS sites, mailto with a real mail app, sign-in kept after restart, network loss and recovery, Alt+Tab focus). p2.15 check PASS: suite exit 0, 25 passed.
 - commit: 6ed6c9a
+
+## [2026-10-11] code | p2.16 README, SECURITY.md and part pages describe the first working app
+
+- session: s02
+- time: 20:32
+- pages: [phase-p2-minimal-container, comp-app-shell, comp-webview-manager, comp-core]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.16.txt]
+- result: comp-app-shell, comp-webview-manager, comp-core: status implemented (last_verified_commit 9df1157) with an Implementation status (P2) section each; portal records and index updated. Stales approval of comp-app-shell, comp-webview-manager and comp-core (re-approval at the P2 exit review). README build, run and test instructions; SECURITY.md M1 section with known limitations; debug-port note corrected (environment switch also works on release builds). p2.16 check PASS (wiki lint 0 errors after the index status column was fixed).
+- commit: a586e34
