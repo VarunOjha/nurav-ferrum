@@ -3,11 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Ferrum P2 smoke suite: Playwright over CDP (adr-0031) against the app and the local HTTPS test server.",
+  "description": "Ferrum smoke and integration suites: Playwright over CDP (adr-0031) against the app and the local HTTPS test server. npm run p2 (P2 regression), npm run p3 (P3 integration), npm test (all).",
   "license": "MIT OR Apache-2.0",
   "scripts": {
     "test": "playwright test",
-    "smoke": "playwright test"
+    "smoke": "playwright test",
+    "p3": "playwright test tabs.spec shortcuts.spec startup.spec restore.spec profiles.spec history.spec downloads.spec responsive.spec no-freeze.spec settings.spec sidebar.spec",
+    "p2": "playwright test back-forward-refresh.spec loading-errors.spec redirects.spec new-windows-links.spec keep-cookies.spec google-sign-in.spec"
   },
   "devDependencies": {
     "@playwright/test": "1.64.0"

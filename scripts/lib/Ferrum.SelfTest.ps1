@@ -42,15 +42,15 @@ function Invoke-FerrumSmoke {
     <#
       Runs smoke-test files of apps/desktop/tests/smoke (Playwright over CDP, adr-0031) after building the shell, the
       app and the test server. The suite starts and stops the test server and the app itself (nothing is killed).
-      Returns { ExitCode, Output }. -Spec is a file-name filter ('' = the whole suite).
+      Returns { ExitCode, Output }. -Spec is one or more file-name filters (none or '' = the whole suite).
     #>
-    param([string]$Spec = '')
+    param([string[]]$Spec = @())
     $b = Invoke-Npm -Arguments @('run', 'build') -Folder 'apps/desktop'
     if ($b.ExitCode -ne 0) { Stop-Fail "Shell build failed: $(Get-Tail $b.Output 5)" }
     [void](Assert-Cargo @('build', '--locked', '-p', 'ferrum-desktop', '-p', 'fixture-server'))
     $busy = Get-NetTCPConnection -LocalPort 8443, 9339 -State Listen -ErrorAction SilentlyContinue
     if ($busy) { Stop-Wait 'Port 8443 or 9339 is in use (an earlier test run may still be stopping); run the check again in a minute.' }
-    $pwArgs = @('playwright', 'test') + $(if ($Spec) { @($Spec) } else { @() })
+    $pwArgs = @('playwright', 'test') + @($Spec | Where-Object { $_ })
     $folder = Get-RepoPath 'apps/desktop/tests/smoke'
     if (-not (Test-Path -LiteralPath (Join-Path $folder 'node_modules'))) {
         $i = Invoke-Npm -Arguments @('install', '--no-fund', '--no-audit') -Folder 'apps/desktop/tests/smoke'

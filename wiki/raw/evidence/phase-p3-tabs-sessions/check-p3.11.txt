@@ -1,0 +1,17 @@
+Ferrum check p3.11: The P3 test suite in one command
+Why: the P3 gate and any later change can re-run everything at once.
+Run at 2026-10-12 03:09 on commit a33fcc3 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Rust unit tests of the P3 parts (12 s)
+         ferrum-core P3 tests: 45 passed
+         saved wiki/raw/evidence/phase-p3-tabs-sessions/p3.11-suite.txt
+  ✓  34 startup.spec.ts:28:1 › an unreadable user settings file is backed up; Ferrum starts with the defaults (1.5s)
+  ✓  35 startup.spec.ts:42:1 › a settings file from a newer Ferrum is left untouched (1.6s)
+  ✓  36 tabs.spec.ts:19:1 › 20 tabs: one view each, only the active one shown, all released on close (4.0s)
+  36 passed (1.8m)
+  PASS   App tests of p3.2 to p3.9, p3.14 and p3.15 (npm run p3) (117 s)
+         npm run p3: 36 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.11 (2 PASS; 129 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.11 check passed".
