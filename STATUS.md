@@ -90,6 +90,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.16 done (`a586e34`): docs updated; three part pages implemented (approvals now outdated, re-approval at exit).
 - p2.17 done (`3b057f0`): literature batch 2 (eight labelled sources); seed snippet corrected.
 - p2.18 in progress (`a742955`, `c8a4349`): shell checks, real gate, claims closed; waiting for the owner review.
+- p2.18 owner checklist round 1 (`c899c22`): link bar readable in dark mode, loading signal visible; ten P2 pages and the P3 plan approved by the owner's directive; Q-111, Q-125, Q-209 answered.
 
 ## Done this session (s01)
 
@@ -302,9 +303,9 @@ P0 and P1 are done and signed off (2026-10-11).
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
 - task: p2.18 exit gate and owner M1 review
-- intent: done so far: shell checks (a742955), real gate and claim closures (c8a4349). Remaining: owner re-approves the ten changed pages and runs the manual checklist; Claude records both, closes the Alt+Tab claims from the owner's answer, runs scripts/gates/p2-gate.ps1 -SaveEvidence on a clean commit, records the gate and asks for phase-p2-minimal-container#exit; then PAUSE
-- paths: wiki/raw/owner/*, plan/approvals.json (via tools/approvals_record.py), wiki/raw/evidence/phase-p2-minimal-container/{manual-checklist.md,gate files}, Alt+Tab claim pages, MANIFEST
-- rollback: nothing destructive; raw files are new files only
+- intent: owner checklist round 1 and directive recorded (raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md). Now: fix the two checklist findings in the shell (link-to-other-app bar unreadable in dark mode; loading signal too faint), rebuild, re-run shell tests and smoke suite; then record the checklist, re-approvals by the owner's directive, run scripts/gates/p2-gate.ps1 -SaveEvidence, record phase-p2-minimal-container#exit, P3 go-ahead
+- paths: apps/desktop/src/style.css, apps/desktop/index.html (if needed), wiki/components/comp-app-shell.md, wiki/raw/owner/*, wiki/raw/evidence/phase-p2-minimal-container/*, wiki/raw/MANIFEST, plan/approvals.json (via tools/approvals_record.py), plan/portal/*
+- rollback: git checkout of the shell files; raw files are new files only
 
 ## Blockers
 
@@ -324,7 +325,7 @@ Exact install and verification commands: [wiki/operations/ops-environment-setup.
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **26 open** (newest: Q-222, the MPL-2.0 licence), 26 answered (Q-109, Q-202, Q-214 on 2026-10-11; Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
+[ov-open-questions](wiki/overview/ov-open-questions.md): **23 open**, 29 answered (Q-111, Q-125, Q-209 on 2026-10-12; Q-109, Q-202, Q-214 on 2026-10-11; Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
 Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003).
 Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 

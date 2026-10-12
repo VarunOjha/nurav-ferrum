@@ -5,7 +5,7 @@
   "summary": "Phase 2 is in progress: 17 of 18 tasks done. Next: your review of P2.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:20e58a2d176a23921cf0dca937353938a03ee6fb72ff749930a69bd1f6677c3f"
+    "content_hash": "sha256:f591b6301a49fc5eb7bf59457198748a26f8b3142b204289718abc8ca8df5f56"
   },
   "updated": "2026-10-11",
   "where_we_are": [
@@ -50,7 +50,7 @@
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
   "questions_for_you": {
-    "open": 26,
+    "open": 23,
     "items": [
       {
         "id": "Q-221",

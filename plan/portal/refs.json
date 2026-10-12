@@ -3587,7 +3587,7 @@
       "kind": "question",
       "title": "What counts as one site?",
       "summary": "Should a 'site' mean the registrable domain, the exact origin, or containers you define? Sets how finely websites are kept apart. P3 builds per-site settings on it.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -3809,7 +3809,7 @@
       "kind": "question",
       "title": "Tab moving to another site",
       "summary": "When a tab moves to another site, should Ferrum move it to that site's profile (losing back/forward history), keep the old profile, or block it? A trade-off between isolation and convenience; it matters only if per-site profiles are used. Recommended: move it and tell the user.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4280,7 +4280,7 @@
       "kind": "question",
       "title": "Tabs in the top bar: normal title bar first?",
       "summary": "The look you chose puts the tabs in the window's top bar. Should the first version keep the normal Windows title bar above the tabs until that is checked? Tabs in the top bar need a custom title bar, which has a known resize problem in Tauri; not checked yet (checked in P1). Claude suggests the normal title bar first. Needed before tabs are built (P3).",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "adr-0028",
         "comp-app-shell",
@@ -4747,6 +4747,14 @@
       "kind": "commit",
       "title": "Commit: Gate trial run found one stale test record",
       "summary": "The p2.1 check now reads a fresh HTTPS probe that covers the two test pages added later in P2.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "c899c22",
+      "kind": "commit",
+      "title": "Commit: Your checklist findings fixed",
+      "summary": "The mail-link bar is readable in dark mode, and a moving accent line plus \"Loading…\" now show while a page loads.",
       "status": null,
       "related": []
     }

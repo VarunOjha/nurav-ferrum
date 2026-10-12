@@ -23,7 +23,7 @@ phase: phase-p0-planning
 tags: [unsafe, com, webview2, architecture]
 unverified:
   - claim: "COM event handlers registered via with_webview on Tauri-created webviews coexist with wry's own handlers without interference"
-    verify_in: phase-p2-minimal-container
+    verify_in: phase-p4-security
 ---
 
 # ADR-0019: Raw WebView2 COM access is confined to one audited module behind a safe Rust API

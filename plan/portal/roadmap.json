@@ -71,7 +71,7 @@
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
-        "content_hash": "sha256:30d250e7055c6b19f0af47f0a6c6f0ba40d928b1f804dae7897f757fc4d08b3e"
+        "content_hash": "sha256:664242cc1bef48ff8588e016f9d768f4c3f75875a157f45abbe31c2dcc6d69ad"
       }
     },
     {
@@ -84,7 +84,7 @@
       "tasks_total": 15,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-        "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+        "content_hash": "sha256:3e5063869ef3f15617e5f42f05da04429398046234613753891d83421bdb4edd"
       }
     },
     {

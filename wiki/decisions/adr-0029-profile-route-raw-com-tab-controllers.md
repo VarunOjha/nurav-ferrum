@@ -24,9 +24,7 @@ options:
   - "(c') Tauri child web views with one shared profile in P2, choose (a) or (c) at P3 entry"
 phase: phase-p1-foundation
 tags: [webview2, profiles, isolation, architecture]
-unverified:
-  - claim: "Tauri's IPC bridge is not present in WebView2 controllers that Ferrum creates itself"
-    verify_in: phase-p2-minimal-container
+unverified: []
 ---
 
 # ADR-0029: Tab web views are WebView2 controllers Ferrum creates itself, one profile per site

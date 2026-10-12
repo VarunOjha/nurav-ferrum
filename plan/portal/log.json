@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e79bd8a60fd144ff5c253103cd93707d30945d04508fed5e946c68a6c6b98f95"
+    "content_hash": "sha256:3c1c4c4736e99c0734c04f1638afb3363aab41f04304224a1a4f633aa88941fc"
   },
   "entries": [
     {
@@ -2655,6 +2655,65 @@
       "tags": [
         "testing",
         "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p2-18-checklist",
+      "date": "2026-10-12",
+      "time": "00:32",
+      "title": "Your checklist findings fixed",
+      "done": "You tried the release build. Two things you found are fixed: the bar for mail links was unreadable in dark mode, and nothing showed that a page was loading. While testing, Claude also found that pressing Enter wiped the \"Loading…\" text at once. New automatic tests check both fixes.",
+      "next": "The full P2 gate, then the P2 sign-off you pre-approved.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "c899c22",
+      "covers": [
+        "## [2026-10-12] code | p2.18 (part 3) owner checklist round 1: link bar and loading signal fixed",
+        "## [2026-10-12] ingest | Owner checklist round 1 recorded; Alt+Tab claims moved to P3"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Fixed",
+      "tags": [
+        "testing",
+        "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-approvals",
+      "date": "2026-10-12",
+      "time": "00:32",
+      "title": "You pre-approved phase 3 and answered its three questions",
+      "done": "You told Claude to treat the approvals as given and build phase 3, then stop. Claude recorded the ten changed P2 pages and the phase 3 plan as approved by those words. You answered three questions: tabs sit under the normal Windows title bar; a site means its main domain; a tab moving to another site asks first, then switches profile.",
+      "next": "Claude runs the full P2 gate, records the P2 sign-off, and starts phase 3.",
+      "decisions": [
+        {
+          "what": "Tabs under the normal Windows title bar first",
+          "by": "you"
+        },
+        {
+          "what": "A site is its main domain",
+          "by": "you"
+        },
+        {
+          "what": "Moving a tab to another site asks first, then switches profile",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Ten pages changed in phase 2, and the phase 3 plan",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-12] approval | Ten P2 pages re-approved and phase-p3-tabs-sessions approved by the owner's directive; Q-111, Q-125, Q-209 answered"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]

@@ -68,8 +68,8 @@ connects:
     kind: os-api
     crosses_trust_boundary: true
 unverified:
-  - claim: "Tauri unstable multi-webview focus, resize and z-order issues are workable on Windows"
-    verify_in: phase-p2-minimal-container
+  - claim: "Moving keyboard focus into the content web view when the window becomes active fixes the Alt+Tab focus issue (13466)"
+    verify_in: phase-p3-tabs-sessions
 ---
 
 # comp-app-shell: application shell
@@ -102,7 +102,7 @@ asks the owner which way to go.
 
 ## Design notes
 
-- **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) was seen in P1 ([S1 report](../../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md); owner: fix later) and its fix is UNVERIFIED[phase-p2-minimal-container]; resize and z-order behaved as designed in S1. Resize with a custom title bar (#12207) is UNVERIFIED[phase-p3-tabs-sessions]. Avoid a custom title bar initially.
+- **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) was seen in P1 ([S1 report](../../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md); owner: fix later). P2 built the fix (`restore_focus`); the owner has not checked it yet (first checklist round, 2026-10-12), so it is UNVERIFIED[phase-p3-tabs-sessions] and goes on the P3 keyboard checks. Resize and z-order behaved as designed in S1 and P2. Resize with a custom title bar (#12207) is UNVERIFIED[phase-p3-tabs-sessions]. Avoid a custom title bar initially.
 - **Capabilities.** Exactly one capability file, `shell.json`, targets `"webviews": ["shell"]`. **No capability declares `remote`.** A CI check enforces this ([trust boundaries R1–R3](../ov-arch-trust-boundaries.md)).
 - **Commands are async.** Tab creation runs from async commands: creating web views from a synchronous handler deadlocks on Windows (VERIFIED, Tauri note §2; reproduced in spike S1). Under adr-0029 the shell asks `webview-manager`, which creates the tab controller on the UI thread through `with_webview` and reports completion asynchronously.
 - **No web storage in the shell** (trust rule R9). Settings go through `settings_get`/`settings_set` to Rust-side `config.toml`.
@@ -145,6 +145,6 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
 - **Logs**: `ferrum.jsonl`, JSON lines, sites as scheme and host only ([check-p2.14](../../raw/evidence/phase-p2-minimal-container/check-p2.14.txt)).
 
 Known limitations of this first version: one view and no tabs (P3); the normal Windows title bar; the Alt+Tab focus
-fix (`restore_focus`) awaits the owner's manual check; opening a link in another app has been tested only with a
+fix (`restore_focus`) awaits the owner's manual check (moved to P3); opening a link in another app has been tested only with a
 stand-in launcher (the owner's manual mailto check). The smoke robot uses WebView2's remote-debugging switch
 (adr-0031); it is an environment variable that also works on release builds.

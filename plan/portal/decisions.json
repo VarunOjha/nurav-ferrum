@@ -596,7 +596,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0019-raw-webview2-com-boundary.md",
-        "content_hash": "sha256:5b6541c9ff0c9426b2632b95cdeb2f44a9ad0fefe4857cce0a26c2d2289d7f99"
+        "content_hash": "sha256:63e8a5916a02ceb3416eb49df67379041694ed4fc4389377ae0fc6fb82f20c40"
       }
     },
     {
@@ -880,7 +880,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0029-profile-route-raw-com-tab-controllers.md",
-        "content_hash": "sha256:8d74d0d7e057b911847e59cab2a215e66a4694d7c7cbe3633baeeeb2b5b14559"
+        "content_hash": "sha256:21779595901fed3ec2f80da257afbf3ed754a9d75c7783a9b16c20b1e16bbc47"
       }
     },
     {

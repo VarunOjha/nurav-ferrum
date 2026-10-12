@@ -45,7 +45,7 @@
     {
       "id": "p3.3",
       "title": "Tab strip and shortcuts",
-      "what": "A tab strip plus keyboard shortcuts for new tab, close tab, next and previous tab, address bar, back, forward and reload.",
+      "what": "A tab strip just under the normal Windows title bar (your answer), plus keyboard shortcuts for new tab, close tab, next and previous tab, address bar, back, forward and reload.",
       "why": "A browser you can only use with the mouse is slow and hard to use for many people. Letting websites see the shortcuts would open a way into the app.",
       "how": "Handle the shortcuts in the trusted shell. The exact way to catch keys while a website has focus is not checked yet; this phase checks it.",
       "status": "Not started",
@@ -80,10 +80,10 @@
       "title": "Separate profile per site",
       "what": "Per-site settings, including which separate profile (data store) each site uses.",
       "why": "If all sites shared one store, any site could see the cookies of another, and being signed in on one account could leak into another.",
-      "how": "Assign profiles through the route chosen in P1. Decide and write down what counts as one site: the exact web address origin or the wider domain.",
+      "how": "Use the P1 route. A site is its main domain (your answer). A tab going to another site asks first, then moves to that site's profile; its back button cannot return, and the bar says so (your answer).",
       "status": "Not started",
       "chain": "Sites should not see each other's data → assign profiles using the route chosen in P1 → cookies stay apart.",
-      "check": "Two sites in different profiles cannot see each other's cookies; one site in two tabs shares one profile; survives restart.",
+      "check": "Two sites in different profiles cannot see each other's cookies; one site in two tabs shares one profile; subdomains share; a cross-site move asks first; survives restart.",
       "script": "scripts/verify/p3.6-profile-per-site.ps1"
     },
     {
@@ -223,7 +223,7 @@
       },
       {
         "check": "Your working session",
-        "proves": "You used eight or more tabs, every shortcut, a kill-and-restore and a real download."
+        "proves": "You used eight or more tabs, every shortcut, a kill-and-restore and a real download; plus the three P2 checks still open (Alt+Tab, mail link Open, sign-in after restart)."
       }
     ],
     "script": "scripts/gates/p3-gate.ps1"
@@ -235,6 +235,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:9f5b569d67c73a54fbb9934a5d8d926db86093205b5fa79de37dc34d5d4726f9"
+    "content_hash": "sha256:3e5063869ef3f15617e5f42f05da04429398046234613753891d83421bdb4edd"
   }
 }

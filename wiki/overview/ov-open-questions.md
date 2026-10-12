@@ -3,7 +3,7 @@ id: ov-open-questions
 type: overview
 title: "Open questions for the owner (canonical register)"
 status: draft
-updated: 2026-10-11
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -18,6 +18,7 @@ sources:
   - raw/owner/2026-10-10-s01-q008-and-pause.md
   - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
   - raw/owner/2026-10-11-s01-wave2-answers.md
+  - raw/owner/2026-10-12-s02-p3-questions.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt
 related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability, adr-0028]
 approvable: false
@@ -78,7 +79,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | `schema` approval (part of every phase entry) | none (Q-207 answered 2026-10-11) |
 | P1 entry | none (Q-106, Q-110, Q-211 answered 2026-10-11) |
 | P2 entry | none (Q-109, Q-202, Q-214 answered 2026-10-11) |
-| P3 entry | Q-111, Q-209 |
+| P3 entry | none (Q-111, Q-125, Q-209 answered 2026-10-12) |
 | P4 entry | Q-112, Q-113, Q-212 |
 | P5 entry | Q-114, Q-115, Q-203 |
 | P6 entry (incl. exp-energy, exp-reliability) | Q-117, Q-118, Q-119, Q-120, Q-121, Q-123, Q-201, Q-204, Q-205, Q-213 |
@@ -86,7 +87,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P8 entry | Q-124, Q-206 |
 | Exit reviews only, or not blocking | Q-105, Q-215, Q-217 |
 | The first push to GitHub (not a phase gate) | Q-221 |
-| Answered | Q-109, Q-202, Q-214, Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
+| Answered | Q-111, Q-125, Q-209, Q-109, Q-202, Q-214, Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -342,8 +343,8 @@ phase-p2-minimal-container, so blocking the ADR holds both entry gates.
 
 - asked: 2026-10-08
 - blocking: [phase-p3-tabs-sessions]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-12-s02-p3-questions.md](../raw/owner/2026-10-12-s02-p3-questions.md), owner answer (2026-10-12): "Main domain (Recommended)": the profile key is the registrable domain (eTLD+1); named containers are not part of the answer.
 
 Raised in adr-0010.
 
@@ -526,8 +527,8 @@ Raised in adr-0017. It is not needed until results exist, and it gates P8 entry.
 
 - asked: 2026-10-10
 - blocking: [phase-p3-tabs-sessions]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-12-s02-p3-questions.md](../raw/owner/2026-10-12-s02-p3-questions.md), owner answer (2026-10-12): "Normal title bar first (Recommended)": option (a), the normal Windows title bar first, tab strip just under it.
 
 Raised in [adr-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md) (review of 2026-10-10). The
 browser look the owner chose (option A) puts the tabs in the window's top bar, next to the Windows 11 minimise,
@@ -668,8 +669,8 @@ the exclusion as a deviation in
 
 - asked: 2026-10-08
 - blocking: [phase-p3-tabs-sessions]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-12-s02-p3-questions.md](../raw/owner/2026-10-12-s02-p3-questions.md), owner answer (2026-10-12): "Can we have pop up to confirm, and then do 1": Ferrum asks first (a confirmation bar in the shell band), then re-hosts the tab in site B's profile, showing that the tab's back history to site A is lost; Cancel keeps the tab on site A.
 
 Raised by the architecture area ([ov-arch-isolation-model](../architecture/ov-arch-isolation-model.md)).
 When a tab bound to site A's profile navigates top-level to site B, Ferrum can (a) re-host the tab in

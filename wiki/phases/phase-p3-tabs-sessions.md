@@ -3,12 +3,14 @@ id: phase-p3-tabs-sessions
 type: phase
 title: "P3 Tabs and sessions (Milestone M2): multi-tab, session restore, per-site settings"
 status: planned
-updated: 2026-10-08
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
+  - raw/owner/2026-10-12-s02-p3-questions.md
+  - raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md
 related: [phase-p2-minimal-container, phase-p4-security, ov-open-questions, comp-app-shell, comp-webview-manager, comp-core, risk-r01, risk-r02, adr-0007, adr-0010]
 approvable: true
 phase: phase-p3-tabs-sessions
@@ -40,7 +42,7 @@ tasks:
     title: "webview-manager: one child WebView per tab, created only from async contexts (Windows deadlock note), hidden/shown on switch, laid out on resize, fully closed and handlers released on tab close"
     verify: "Integration test opens 20 tabs, switches through all, closes all; WebView count returns to zero and no WebView2 process belonging to a closed profile remains (checked with the process-info API used in spike S3)."
   - id: p3.3
-    title: "Shell tab strip UI and keyboard shortcuts (new tab, close tab, next/previous tab, focus address bar, back/forward, reload) that work when focus is inside tab content without giving remote pages IPC access"
+    title: "Shell tab strip UI under the normal Windows title bar (Q-125) and keyboard shortcuts (new tab, close tab, next/previous tab, focus address bar, back/forward, reload) that work when focus is inside tab content without giving remote pages IPC access"
     verify: "Smoke tests send each shortcut with focus in the shell and with focus in a tab; the action happens; the p2.3 IPC denial test still passes."
   - id: p3.4
     title: "Persistent settings and configurable startup websites: versioned settings file in the app config folder, atomic write, schema migration from version 1"
@@ -49,8 +51,8 @@ tasks:
     title: "Session restoration: tab list (URL, order, active, profile, history position) persisted periodically and on exit with atomic write; restored on start"
     verify: "Integration tests: normal exit then restart restores tabs; forced process kill then restart restores the last persisted state; restore of a tab whose site is now unreachable shows the error state, not a crash."
   - id: p3.6
-    title: "Per-site settings including profile assignment via the p1.9 route; site key definition (origin or registrable domain) decided and documented"
-    verify: "Integration test: two fixture sites mapped to different profiles do not see each other's cookies; same site in two tabs shares one profile; settings survive restart."
+    title: "Per-site settings including profile assignment via the p1.9 route (adr-0029); site key = registrable domain (Q-111); a top-level navigation to another site asks first, then moves the tab to that site's profile, losing its back history, which the bar says (Q-209)"
+    verify: "Integration test: two fixture sites mapped to different profiles do not see each other's cookies; same site in two tabs shares one profile; subdomains of one registrable domain share a profile; a cross-site navigation shows the confirmation bar, Cancel keeps the tab, Confirm re-hosts it in the other profile; settings survive restart."
   - id: p3.7
     title: "Navigation history: per-tab back/forward state in the shell; local global history list, clearable, never stored in the repo"
     verify: "Unit tests on the history store; smoke test: clearing history empties the list and the file."
@@ -94,6 +96,7 @@ test_gate:
     - "Owner checks every keyboard shortcut with focus in a tab."
     - "Owner kills the app from Task Manager and confirms tabs are restored."
     - "Owner downloads a file from a real site and confirms it lands where expected."
+    - "Carried over from the P2 checklist (owner's first round, 2026-10-12): after Alt+Tab back, typing reaches the page without a click; Open on a mail link starts the mail app; a sign-in survives closing and reopening Ferrum."
   evidence:
     - raw/evidence/phase-p3-tabs-sessions/cargo-clippy.txt
     - raw/evidence/phase-p3-tabs-sessions/cargo-test.txt
@@ -114,6 +117,8 @@ decisions: [adr-0006, adr-0007, adr-0010, adr-0014]
 experiments: []
 components: [comp-app-shell, comp-webview-manager, comp-core]
 unverified:
+  - claim: "Moving keyboard focus into the content web view when the window becomes active fixes the Alt+Tab focus issue (13466)"
+    verify_in: phase-p3-tabs-sessions
   - claim: "Keyboard shortcuts can be captured while a child WebView has focus without exposing IPC to remote pages (for example via window accelerators or raw COM AcceleratorKeyPressed)"
     verify_in: phase-p3-tabs-sessions
   - claim: "The shell WebView and remote tabs run in different renderer processes, so a busy tab does not block the shell"
@@ -131,6 +136,8 @@ P3 turns the single content WebView into a tab manager. It covers master prompt 
 - Tab model as pure Rust in the core crate, so its rules are tested without a GUI.
 - Child WebViews per tab with hide/show switching. Hiding matters later: TrySuspend requires `IsVisible == false` ([raw/research/tauri-webview2-capabilities.md](../raw/research/tauri-webview2-capabilities.md) section 6), which P7 relies on.
 - Known constraints from research that shape the UI: tab content is always drawn above the shell, so shell menus must never overlap tab bounds (issue 15682); WebView creation from synchronous commands deadlocks on Windows (section 2).
+- Owner answers of 2026-10-12 ([raw/owner/2026-10-12-s02-p3-questions.md](../raw/owner/2026-10-12-s02-p3-questions.md)): the normal Windows title bar first, tab strip just under it (Q-125); a site is its registrable domain (Q-111); a top-level navigation to another site asks first, then moves the tab to that site's profile (Q-209).
+- Alt+Tab focus: P2 built the fix; the owner checks it here (UNVERIFIED[phase-p3-tabs-sessions], carried from P2).
 - Per-site profiles. All profiles in one user data folder share the browser process and must use identical environment options (section 6), and `clear_all_browsing_data` is profile-wide. P3 documents exactly what is shared; P4 tests it as a security property.
 
 ## Out of scope

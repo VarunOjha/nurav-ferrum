@@ -1773,3 +1773,28 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/p2.1-fixture-curl-2.txt, raw/evidence/phase-p2-minimal-container/check-p2.1.20261011-2048.txt]
 - result: A background dry run of scripts/gates/p2-gate.ps1 was stopped by Claude Code because the system ran low on memory (not a failure of the gate; not restarted, per the tool's instruction; no app or server left running). Before it stopped: approvals WAIT and wiki check FAIL (both expected: ten pages await re-approval) and p2.1 FAIL. Cause: the saved HTTPS probe predates the test pages /links/popup and /links/google. Probe repeated into a new raw file (21 of 21 pages as documented); the p2.1 check reads the newest probe; p2.1 PASS.
 - commit: a707e8c
+
+## [2026-10-12] code | p2.18 (part 3) owner checklist round 1: link bar and loading signal fixed
+
+- session: s02
+- time: 00:32
+- pages: [comp-app-shell, phase-p2-minimal-container]
+- sources: [raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md]
+- result: Owner tried the release build (commit 4f9fbd5). Two findings fixed: the link-to-other-app bar used two undefined colour tokens (light text on a light background in dark mode), now theme colours with an accent edge; the loading signal was a 2 px line and pressing Enter cleared "Loading…" as soon as tab_navigate replied, now a moving 3 px accent line with the accent "Loading…" kept. Smoke tests added for both (contrast at least 4.5:1 in light and dark mode; loading text, colour, line and animation). npm lint, typecheck, test (7) exit 0; loading-errors and new-windows-links 12 passed. comp-app-shell updated (stales its approval).
+- commit: c899c22
+
+## [2026-10-12] ingest | Owner checklist round 1 recorded; Alt+Tab claims moved to P3
+
+- session: s02
+- time: 00:32
+- pages: [phase-p2-minimal-container, comp-app-shell, risk-r02, adr-0019, adr-0029]
+- sources: [raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md, raw/evidence/phase-p2-minimal-container/manual-checklist.md]
+- result: Owner's words transcribed; checklist results saved as raw/evidence/phase-p2-minimal-container/manual-checklist.md (1 yes; 2 bar unreadable, fixed, Open not reported; 3 kept across sites, restart not reported; 4 works, waiting not visible, fixed; 5 not reported). The Alt+Tab fix claim moves to phase-p3-tabs-sessions on phase-p2-minimal-container, comp-app-shell and risk-r02 (the owner has not checked it). Two frontmatter leftovers fixed: adr-0029's IPC-bridge claim removed (verified in P2 by check-p2.3, already stated in its body), adr-0019's handler-coexistence claim set to phase-p4-security (as its body says). Stales approval of comp-app-shell, adr-0019, adr-0029, phase-p2-minimal-container.
+
+## [2026-10-12] approval | Ten P2 pages re-approved and phase-p3-tabs-sessions approved by the owner's directive; Q-111, Q-125, Q-209 answered
+
+- session: s02
+- time: 00:32
+- pages: [adr-0006, adr-0011, adr-0018, adr-0019, adr-0029, comp-app-shell, comp-core, comp-tab-content, comp-webview-manager, phase-p2-minimal-container, phase-p3-tabs-sessions, ov-open-questions]
+- sources: [raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md, raw/owner/2026-10-12-s02-p3-questions.md]
+- result: Owner: "Fix both yes, but then consider auto approved for next phase and do that. Stop after the next phase is done." Eleven keys recorded with tools/approvals_record.py citing that transcript: the ten pages changed during P2 and phase-p3-tabs-sessions (after it took the answers below, the carried-over P2 checks and the Alt+Tab claim). Questions are not approvals, so Claude asked the three that block P3: Q-125 "Normal title bar first (Recommended)"; Q-111 "Main domain (Recommended)"; Q-209 "Can we have pop up to confirm, and then do 1" (confirmation bar, then move the tab to the other site's profile). approvals_check --gate phase-p2-minimal-container: PASS. P3 entry now waits only for phase-p2-minimal-container done with #exit.
