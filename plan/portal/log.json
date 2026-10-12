@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:87726c15f5c33cda9b54daabb2aa6d62fdf76dfd65a63741495d3480299325e0"
+    "content_hash": "sha256:12fd819a64522b565de7474804c904391de39cc201f900993ff18fb1b4558f13"
   },
   "entries": [
     {
@@ -2399,6 +2399,26 @@
       "commit": "2c6b247",
       "covers": [
         "## [2026-10-11] code | p2.8 loading and error states drawn by the shell"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "address bar",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-9",
+      "date": "2026-10-11",
+      "time": "19:12",
+      "title": "Redirects show the right address",
+      "done": "When a site forwards you elsewhere, the address bar now always shows where you really ended up, for every kind of forward; an endless forwarding loop ends in Ferrum's error panel. The test found and fixed one real bug along the way.",
+      "next": "Claude handles new windows and links to other apps (task p2.10).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "e1b725e",
+      "covers": [
+        "## [2026-10-11] code | p2.9 redirects end on the right address; loops show an error"
       ],
       "phase": "phase-p2-minimal-container",
       "category": "Built",

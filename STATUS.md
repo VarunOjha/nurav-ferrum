@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p2-minimal-container
 current_task: null
-next_action: "Task p2.9 (redirects): smoke spec for each redirect fixture (301, 302, 303, 307, 308, chain) asserts the final URL in the address bar; the loop fixture ends in the error state; run scripts/verify/p2.9-follow-redirects-correctly.ps1."
+next_action: "Task p2.10: NewWindowRequested (same view or system browser per settings) and LaunchingExternalUriScheme/typed external schemes with a shell confirmation bar; launcher mocked in tests (FERRUM_LAUNCHER_LOG); smoke spec new-windows-links; run scripts/verify/p2.10-new-windows-links.ps1."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -80,6 +80,7 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.6 done (`2c9d89f`): content web view (adr-0029) with events to the shell; nav and ipc self-tests PASS; the Ferrum-created view has no bridge.
 - p2.7 done (`094b0b7`): back/forward/refresh smoke test; smoke robot; app_quit, shell_layout, data_dir applied.
 - p2.8 done (`2c6b247`): loading and error states, shell-drawn error panel, smoke tests green.
+- p2.9 done (`e1b725e`): redirects smoke-tested; final-address bug fixed.
 
 ## Done this session (s01)
 
@@ -291,7 +292,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.8 verified and committed 2026-10-11 as `2c6b247`)
+(empty: p2.9 verified and committed 2026-10-11 as `e1b725e`)
 
 ## Blockers
 
@@ -327,11 +328,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 8 of 18 tasks done |
-| Next task | p2.9 redirects |
+| Phase 2 | In progress: 9 of 18 tasks done |
+| Next task | p2.10 new windows and other-app links |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Sites often forward you to another address → Ferrum must show where you really ended up, and stop endless loops → the address bar never lies.
+**2. Why, and what it does.** Nothing for you to run now. Links can open new windows or other apps such as mail → Ferrum follows your setting for new windows and asks before anything leaves the browser → nothing launches without your consent.
 
 **3. The script:** none for you.
 
@@ -346,4 +347,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 8 of 18 tasks done, last p2.8). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-11, session s02 (P2 in progress: 9 of 18 tasks done, last p2.9). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

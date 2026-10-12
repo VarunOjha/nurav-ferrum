@@ -640,7 +640,7 @@
       "kind": "task",
       "title": "P2 task: Follow redirects correctly",
       "summary": "Sites redirect → show the final address and stop loops with an error → the address bar never lies.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4659,6 +4659,14 @@
       "kind": "commit",
       "title": "Commit: Loading and error states added",
       "summary": "While a page loads you now see a thin progress bar and a Stop button. A site's error page (like 404) stays visible with a note in the toolbar, and when a site cannot be reached at all, Ferrum draws it",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "e1b725e",
+      "kind": "commit",
+      "title": "Commit: Redirects show the right address",
+      "summary": "When a site forwards you elsewhere, the address bar now always shows where you really ended up, for every kind of forward; an endless forwarding loop ends in Ferrum's error panel. The test found and f",
       "status": null,
       "related": []
     }

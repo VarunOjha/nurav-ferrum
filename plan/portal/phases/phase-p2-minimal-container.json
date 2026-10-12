@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 8,
+    "done": 9,
     "total": 18
   },
   "step_order": [
@@ -114,7 +114,7 @@
       "what": "Correct handling of redirects: the final address shown, loops stopped with an error.",
       "why": "Sites send you on through several addresses. Showing an old one would mislead you about which site you are on, and a loop would hang the view.",
       "how": "Watch every address change during a page load, show the last one in the address bar, and stop with an error when the same addresses repeat.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Sites redirect → show the final address and stop loops with an error → the address bar never lies.",
       "check": "Each redirect test shows the final address; the loop test ends in an error.",
       "script": "scripts/verify/p2.9-follow-redirects-correctly.ps1"

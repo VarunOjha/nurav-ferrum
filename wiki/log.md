@@ -1666,3 +1666,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.8.txt, raw/evidence/phase-p2-minimal-container/p2.8-error-panel.png]
 - result: Toolbar states (loading with progress bar and Stop, loaded, http-error with status, failed), the shell's own error panel for failures without an HTTP status (shell_cover hides the content view; the shell takes the window; Try again), lock only for pages that loaded over https. Smoke spec loading-errors: slow, 404, 500, unreachable host and recovery, content view never on the app origin; 5 passed. A start-up race in the robot (both views briefly about:blank) was found and fixed; suite green three runs in a row. p2.8 check PASS; error panel picture saved.
 - commit: 2c6b247
+
+## [2026-10-11] code | p2.9 redirects end on the right address; loops show an error
+
+- session: s02
+- time: 19:12
+- pages: [phase-p2-minimal-container, comp-webview-manager, comp-app-shell]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.9.txt]
+- result: Smoke spec redirects (301, 302, 303, 307, 308, chain, loop) passes. It found a real bug: a redirect back to the current address raises no SourceChanged, so the address bar kept the typed text; NavigationCompleted now carries the final address from the raw-COM module and the toolbar always shows it. Whole smoke suite 13 passed; p2.9 check PASS; p2.6 re-checked PASS.
+- commit: e1b725e
