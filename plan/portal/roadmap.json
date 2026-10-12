@@ -80,11 +80,11 @@
       "name": "Tabs and sessions",
       "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
       "status": "In progress",
-      "tasks_done": 2,
+      "tasks_done": 3,
       "tasks_total": 15,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-        "content_hash": "sha256:2db60fb91d1d81c202ae32125de1d8bef86a88318df53cdd4564bb4cd15b9be2"
+        "content_hash": "sha256:eed93fb073b531e027f11eb1e55a1b75b00e92946462c21089f92c616bfd32ae"
       }
     },
     {

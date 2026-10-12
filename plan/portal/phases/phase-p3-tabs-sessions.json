@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 2,
+    "done": 3,
     "total": 15
   },
   "step_order": [
@@ -48,7 +48,7 @@
       "what": "A tab strip just under the normal Windows title bar (your answer), plus keyboard shortcuts for new tab, close tab, next and previous tab, address bar, back, forward and reload.",
       "why": "A browser you can only use with the mouse is slow and hard to use for many people. Letting websites see the shortcuts would open a way into the app.",
       "how": "Handle the shortcuts in the trusted shell. The exact way to catch keys while a website has focus is not checked yet; this phase checks it.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Shortcuts must work even while typing in a website → handle them in the shell without giving websites access → fast and still safe.",
       "check": "Each shortcut works from the shell and from a tab; the bridge lockdown test still passes.",
       "script": "scripts/verify/p3.3-tab-strip-shortcuts.ps1"
@@ -235,6 +235,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:2db60fb91d1d81c202ae32125de1d8bef86a88318df53cdd4564bb4cd15b9be2"
+    "content_hash": "sha256:eed93fb073b531e027f11eb1e55a1b75b00e92946462c21089f92c616bfd32ae"
   }
 }

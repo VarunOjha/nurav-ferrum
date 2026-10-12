@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:65041124e0c69b798326e73a06c2944c8b0d26b0b79e6c648bc1cc0367c50ab7"
+    "content_hash": "sha256:cce1a5c8ff2b92d47d828ee6b21145a537a668c373840e8dfea89bfd6beb71a9"
   },
   "entries": [
     {
@@ -2800,6 +2800,26 @@
       "tags": [
         "tabs",
         "web views"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-3",
+      "date": "2026-10-12",
+      "time": "01:43",
+      "title": "Keyboard shortcuts work everywhere",
+      "done": "Browser shortcuts now work whether you are in the toolbar or typing in a page: Ctrl+T, Ctrl+W, Ctrl+Tab, Ctrl+Shift+T, Ctrl+1 to 9, Ctrl+L, Alt+Left and Right, F5. Pages never see these keys and still cannot reach the app. Tabs can be dragged to reorder.",
+      "next": "Saved settings and start-up sites (task p3.4).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "86f1717",
+      "covers": [
+        "## [2026-10-12] code | p3.3 tab strip and keyboard shortcuts"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "tabs",
+        "look & feel"
       ]
     }
   ]

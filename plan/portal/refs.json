@@ -730,7 +730,7 @@
       "kind": "task",
       "title": "P3 task: Tab strip and shortcuts",
       "summary": "Shortcuts must work even while typing in a website → handle them in the shell without giving websites access → fast and still safe.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4779,6 +4779,14 @@
       "kind": "commit",
       "title": "Commit: Each tab has its own website view",
       "summary": "Ferrum now has real tabs: each one has its own website view, only the active one is shown, and closing a tab releases everything it used (checked with 20 tabs). Links that open a new window open a new",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "86f1717",
+      "kind": "commit",
+      "title": "Commit: Keyboard shortcuts work everywhere",
+      "summary": "Browser shortcuts now work whether you are in the toolbar or typing in a page: Ctrl+T, Ctrl+W, Ctrl+Tab, Ctrl+Shift+T, Ctrl+1 to 9, Ctrl+L, Alt+Left and Right, F5. Pages never see these keys and still",
       "status": null,
       "related": []
     }
