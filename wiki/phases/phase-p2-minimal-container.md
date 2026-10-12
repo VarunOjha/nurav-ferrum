@@ -2,8 +2,8 @@
 id: phase-p2-minimal-container
 type: phase
 title: "P2 Minimal container (Milestone M1): one shell, one content WebView, safe navigation"
-status: in-progress
-updated: 2026-10-11
+status: done
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md

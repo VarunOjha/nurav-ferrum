@@ -21,9 +21,9 @@ sources:
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s02
-current_phase: phase-p2-minimal-container
+current_phase: phase-p3-tabs-sessions
 current_task: null
-next_action: "Owner review of P2: re-approve the ten changed pages (adr-0006, adr-0011, adr-0018, adr-0019, adr-0029, comp-app-shell, comp-core, comp-tab-content, comp-webview-manager, phase-p2-minimal-container) and run the manual checklist docs/testing/manual-checklist-p2.md on target/release/ferrum-desktop.exe; then Claude runs pwsh -NoProfile -File scripts/gates/p2-gate.ps1 -SaveEvidence and records the results."
+next_action: "Phase 3 in progress: next task p3.1 (tab model as pure Rust in crates/core). Stop after the P3 exit gate (owner directive 2026-10-12)."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -36,13 +36,14 @@ last_handoff: handoff-2026-10-11-s02
 
 ## Current phase
 
-**phase-p2-minimal-container — IN PROGRESS (session s02, entry passed 2026-10-11).** Go-ahead
-([raw/owner/2026-10-11-s02-p2-go-ahead.md](wiki/raw/owner/2026-10-11-s02-p2-go-ahead.md)); Approval Wave 3 and Q-109, Q-202,
-Q-214 answered ([raw/owner/2026-10-11-s02-wave3-and-p2-questions.md](wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md)).
-Design: adr-0029 (Ferrum-created tab controllers), adr-0030 (history calls), adr-0031 (CDP smoke tests). Standing rule: no
-kill commands and no deleting of things Claude did not create without asking.
+**phase-p3-tabs-sessions — IN PROGRESS (session s02, entry passed 2026-10-12).** Owner's directive of 2026-10-12
+([raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md](wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md)):
+"consider auto approved for next phase and do that. Stop after the next phase is done." Q-111, Q-125, Q-209 answered
+([raw/owner/2026-10-12-s02-p3-questions.md](wiki/raw/owner/2026-10-12-s02-p3-questions.md)). **Stop after P3's exit gate:**
+the P3 sign-off and anything towards P4 or benchmarking wait for the owner. Standing rule: no kill commands and no
+deleting of things Claude did not create without asking.
 
-P0 and P1 are done and signed off (2026-10-11).
+P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 
 ## Done this session (s02)
 
@@ -91,6 +92,8 @@ P0 and P1 are done and signed off (2026-10-11).
 - p2.17 done (`3b057f0`): literature batch 2 (eight labelled sources); seed snippet corrected.
 - p2.18 in progress (`a742955`, `c8a4349`): shell checks, real gate, claims closed; waiting for the owner review.
 - p2.18 owner checklist round 1 (`c899c22`): link bar readable in dark mode, loading signal visible; ten P2 pages and the P3 plan approved by the owner's directive; Q-111, Q-125, Q-209 answered.
+- P2 gate PASS on 5c2af31 (evidence `72cbef4`, 27 PASS); phase-p2-minimal-container#exit recorded by the owner's directive; P2 done.
+- P3 entry passed (2026-10-12); phase-p3-tabs-sessions in progress.
 
 ## Done this session (s01)
 
@@ -302,10 +305,7 @@ P0 and P1 are done and signed off (2026-10-11).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p2.18 exit gate and owner M1 review
-- intent: owner checklist round 1 and directive recorded (raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md). Now: fix the two checklist findings in the shell (link-to-other-app bar unreadable in dark mode; loading signal too faint), rebuild, re-run shell tests and smoke suite; then record the checklist, re-approvals by the owner's directive, run scripts/gates/p2-gate.ps1 -SaveEvidence, record phase-p2-minimal-container#exit, P3 go-ahead
-- paths: apps/desktop/src/style.css, apps/desktop/index.html (if needed), wiki/components/comp-app-shell.md, wiki/raw/owner/*, wiki/raw/evidence/phase-p2-minimal-container/*, wiki/raw/MANIFEST, plan/approvals.json (via tools/approvals_record.py), plan/portal/*
-- rollback: git checkout of the shell files; raw files are new files only
+(empty: p2.18 verified and committed 2026-10-12; P2 done)
 
 ## Blockers
 
@@ -341,11 +341,11 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 2 | In progress: 17 of 18 tasks done |
-| Next task | Your review of P2 |
+| Phase 3 | In progress: 0 of 15 tasks done |
+| Next task | Tab rules as plain code (p3.1) |
 | Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. P2 is built and checked → your fresh look at the changed pages and your hands-on checklist are the last steps → then Claude runs the full gate and asks you to sign the phase off.
+**2. Why, and what it does.** Nothing for you to run now. Claude builds phase 3 task by task and stops at its end check.
 
 **3. The script:** none for you.
 
@@ -360,4 +360,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-11, session s02 (P2 in progress: 17 of 18 tasks done, last p2.18). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-12, session s02 (P3 in progress: 0 of 15 tasks done). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

@@ -66,12 +66,12 @@
       "short": "P2",
       "name": "First working app",
       "one_line_goal": "One window browses websites safely: address bar, back, forward, refresh",
-      "status": "In progress",
-      "tasks_done": 17,
+      "status": "Done",
+      "tasks_done": 18,
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
-        "content_hash": "sha256:664242cc1bef48ff8588e016f9d768f4c3f75875a157f45abbe31c2dcc6d69ad"
+        "content_hash": "sha256:e92e440db75ced39e55c5e21f731b8b3f58bf49c325be238a842ed51076e3a58"
       }
     },
     {
@@ -79,12 +79,12 @@
       "short": "P3",
       "name": "Tabs and sessions",
       "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
-      "status": "Not started",
+      "status": "In progress",
       "tasks_done": 0,
       "tasks_total": 15,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-        "content_hash": "sha256:3e5063869ef3f15617e5f42f05da04429398046234613753891d83421bdb4edd"
+        "content_hash": "sha256:2db60fb91d1d81c202ae32125de1d8bef86a88318df53cdd4564bb4cd15b9be2"
       }
     },
     {

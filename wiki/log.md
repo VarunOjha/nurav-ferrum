@@ -1798,3 +1798,28 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [adr-0006, adr-0011, adr-0018, adr-0019, adr-0029, comp-app-shell, comp-core, comp-tab-content, comp-webview-manager, phase-p2-minimal-container, phase-p3-tabs-sessions, ov-open-questions]
 - sources: [raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md, raw/owner/2026-10-12-s02-p3-questions.md]
 - result: Owner: "Fix both yes, but then consider auto approved for next phase and do that. Stop after the next phase is done." Eleven keys recorded with tools/approvals_record.py citing that transcript: the ten pages changed during P2 and phase-p3-tabs-sessions (after it took the answers below, the carried-over P2 checks and the Alt+Tab claim). Questions are not approvals, so Claude asked the three that block P3: Q-125 "Normal title bar first (Recommended)"; Q-111 "Main domain (Recommended)"; Q-209 "Can we have pop up to confirm, and then do 1" (confirmation bar, then move the tab to the other site's profile). approvals_check --gate phase-p2-minimal-container: PASS. P3 entry now waits only for phase-p2-minimal-container done with #exit.
+
+## [2026-10-12] gate | phase-p2-minimal-container exit gate passed
+
+- session: s02
+- time: 00:58
+- pages: [phase-p2-minimal-container]
+- sources: [raw/evidence/phase-p2-minimal-container/p2-gate.txt, raw/evidence/phase-p2-minimal-container/manual-checklist.md]
+- result: SCHEMA §9.7 exit steps 1 to 5. (1) scripts/gates/p2-gate.ps1 -SaveEvidence on 5c2af31: RESULT PASS (27 PASS, 2 YOURS; 669 s); evidence committed in 72cbef4 (cargo-fmt, cargo-clippy, cargo-test, cargo-deny, shell-tests, release-build, ipc-denial, smoke 25 passed, wiki-lint 0 errors, p2-gate). A first run on the same commit failed at p2.2 and p2.12 only because the release exe was open from the owner's checklist (locked file); its uncommitted output was discarded and the gate re-run after the owner closed the window. (2) Every test_gate.evidence file exists. (3) Manual checklist round 1 recorded (manual-checklist.md): two findings fixed in c899c22; mail Open, restart and Alt+Tab not reported and carried to the P3 manual checks. (4) Lint clean; the only P2-targeted claim left (Alt+Tab fix) moved to P3. (5) Exit approval below.
+
+## [2026-10-12] approval | phase-p2-minimal-container#exit approved: P2 signed off by the owner's directive
+
+- session: s02
+- time: 00:58
+- pages: [phase-p2-minimal-container]
+- sources: [raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md]
+- result: phase-p2-minimal-container#exit recorded with tools/approvals_record.py citing the owner's directive ("consider auto approved for next phase and do that"), after the gate passed. SCHEMA §9.7 step 6: phase-p2-minimal-container set to done (18 of 18 tasks). Step 7: the same directive is the owner's explicit go for phase-p3-tabs-sessions ("do that"); P3's sign-off stays with the owner ("Stop after the next phase is done").
+
+## [2026-10-12] gate | phase-p3-tabs-sessions entry passed
+
+- session: s02
+- time: 00:59
+- pages: [phase-p3-tabs-sessions, status-live]
+- sources: [raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md, raw/owner/2026-10-12-s02-p3-questions.md]
+- result: approvals_check --gate phase-p3-tabs-sessions: ENTRY GATE PASS (P2 done with #exit approved; go-ahead in the owner's directive; dependency set APPROVED; Q-111, Q-125, Q-209 answered; the adr-0010 contradiction is registered under the answered Q-107). phase-p3-tabs-sessions set to in-progress (volatile key). Stop point: P3's exit gate (owner's words "Stop after the next phase is done").
+- next: p3.1 tab model in the core crate

@@ -2,7 +2,7 @@
 id: phase-p3-tabs-sessions
 type: phase
 title: "P3 Tabs and sessions (Milestone M2): multi-tab, session restore, per-site settings"
-status: planned
+status: in-progress
 updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md

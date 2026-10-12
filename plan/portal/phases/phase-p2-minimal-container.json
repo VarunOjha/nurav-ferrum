@@ -4,9 +4,9 @@
   "title": "First working app",
   "one_line_goal": "One window browses websites safely: address bar, back, forward, refresh",
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
-  "status": "In progress",
+  "status": "Done",
   "progress": {
-    "done": 17,
+    "done": 18,
     "total": 18
   },
   "step_order": [
@@ -213,7 +213,7 @@
       "what": "One run of every P2 check, with the output saved, then your review of the release build.",
       "why": "Tests can miss what a person notices in a minute. The first milestone counts only when you have used it yourself.",
       "how": "Run all automated checks; you visit five sites and test a mail link, a restart and going offline; then you approve the exit in Claude Code.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "All tasks done → run every check and save the output → you try the release build and approve the first milestone.",
       "check": "All evidence saved; wiki clean; you approved the P2 exit.",
       "script": "scripts/verify/p2.18-run-gate-review.ps1"
@@ -269,6 +269,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
-    "content_hash": "sha256:664242cc1bef48ff8588e016f9d768f4c3f75875a157f45abbe31c2dcc6d69ad"
+    "content_hash": "sha256:e92e440db75ced39e55c5e21f731b8b3f58bf49c325be238a842ed51076e3a58"
   }
 }

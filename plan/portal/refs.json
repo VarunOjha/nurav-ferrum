@@ -31,7 +31,7 @@
       "kind": "phase",
       "title": "P2 First working app",
       "summary": "Goal: One window browses websites safely: address bar, back, forward, refresh. Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
-      "status": "In progress",
+      "status": "Done",
       "related": [],
       "aliases": [
         "P2"
@@ -42,7 +42,7 @@
       "kind": "phase",
       "title": "P3 Tabs and sessions",
       "summary": "Goal: Many tabs, restored after a restart, with separate data per site. Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [],
       "aliases": [
         "P3"
@@ -560,7 +560,7 @@
       "kind": "task",
       "title": "P2 task: Run the gate; your review",
       "summary": "All tasks done → run every check and save the output → you try the release build and approve the first milestone.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4755,6 +4755,14 @@
       "kind": "commit",
       "title": "Commit: Your checklist findings fixed",
       "summary": "The mail-link bar is readable in dark mode, and a moving accent line plus \"Loading…\" now show while a page loads.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "72cbef4",
+      "kind": "commit",
+      "title": "Commit: Phase 2 end-check evidence",
+      "summary": "The P2 end-of-phase check passed on one commit: 27 automatic checks; each test output saved as evidence.",
       "status": null,
       "related": []
     }

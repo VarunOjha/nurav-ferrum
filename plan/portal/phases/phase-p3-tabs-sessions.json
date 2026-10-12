@@ -4,7 +4,7 @@
   "title": "Tabs and sessions",
   "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
-  "status": "Not started",
+  "status": "In progress",
   "progress": {
     "done": 0,
     "total": 15
@@ -235,6 +235,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:3e5063869ef3f15617e5f42f05da04429398046234613753891d83421bdb4edd"
+    "content_hash": "sha256:2db60fb91d1d81c202ae32125de1d8bef86a88318df53cdd4564bb4cd15b9be2"
   }
 }

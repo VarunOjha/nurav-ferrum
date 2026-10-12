@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:3c1c4c4736e99c0734c04f1638afb3363aab41f04304224a1a4f633aa88941fc"
+    "content_hash": "sha256:e94d9e69eff204943b1c1e25790f7c5d6ffb1b159d4932252afa764dd7d0dcc6"
   },
   "entries": [
     {
@@ -2714,6 +2714,52 @@
       "tags": [
         "approvals",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p2-exit",
+      "date": "2026-10-12",
+      "time": "00:58",
+      "title": "Phase 2 passed its end check and is signed off",
+      "done": "The full end-of-phase check passed on one commit: 27 automatic checks, including the release build and all 25 quick app tests. A first run failed only because the Ferrum window from your checklist still had the program file open. With your go-ahead in advance, Claude recorded your P2 sign-off.",
+      "next": "Phase 3 (tabs and sessions) starts.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Phase 2 sign-off",
+          "status": "Approved"
+        }
+      ],
+      "commit": "72cbef4",
+      "covers": [
+        "## [2026-10-12] gate | phase-p2-minimal-container exit gate passed",
+        "## [2026-10-12] approval | phase-p2-minimal-container#exit approved: P2 signed off by the owner's directive"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-entry",
+      "date": "2026-10-12",
+      "time": "00:59",
+      "title": "Phase 3 started",
+      "done": "Phase 3's entry check passed: phase 2 is signed off, the phase 3 plan is approved and its three questions are answered. Claude builds phase 3 and stops at its end check, as you asked.",
+      "next": "Claude starts with the tab rules as plain code (task p3.1).",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-12] gate | phase-p3-tabs-sessions entry passed"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "tabs"
       ]
     }
   ]
