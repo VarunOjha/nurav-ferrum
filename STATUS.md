@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: p3.13
-next_action: "Claude: P3 docs for the feature set (README features, claims in adr-0032 and adr-0033 closed), then scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit, then STOP and report to the owner (owner: \"complete P3 and then stop and let me know\"). Owner then: checklist docs/testing/manual-checklist-p3.md items 1 to 20, re-approval of the pages changed during P3, P3 sign-off. No P4 work."
+next_action: "Owner: close every Ferrum window and other heavy programs, and say \"Closed\". Then Claude runs scripts/gates/p3-gate.ps1 -SaveEvidence (about 30 minutes; real keys are pressed, so do not type meanwhile), examines any failure that repeats, and reports. After that the owner checks docs/testing/manual-checklist-p3.md items 1 to 20, re-approves the pages changed in P3 (comp-app-shell, comp-core, ov-arch-trust-boundaries, ov-arch-configuration, adr-0011, adr-0015, adr-0032, adr-0033) and says whether P3 is signed off. No P4 work."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -329,9 +329,9 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
 - task: p3.13 docs and exit gate (after the feature set)
-- intent: README features for the feature set; close the P3-targeted claims in adr-0032 (rusqlite FTS5 and cargo deny; encryption crates) and adr-0033 (rounded page corners: not used by look A); then scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit; set P3 to gate-review; STOP and report.
-- paths: README.md, wiki/decisions/adr-0032-*.md, wiki/decisions/adr-0033-*.md, wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, wiki/phases/phase-p3-tabs-sessions.md, plan/portal/*
-- rollback: git checkout of these paths; evidence files are new files only
+- intent: Feature set built (p3.17 to p3.23) and P3 docs updated (da1cd89). The gate's trial run was stopped by low memory (see log). Next: owner closes Ferrum and heavy programs, says "Closed"; Claude reruns scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit, examines any repeating failure, sets P3 to gate-review only when it passes, then STOPS and reports.
+- paths: wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, wiki/phases/phase-p3-tabs-sessions.md, plan/portal/*
+- rollback: evidence files are new files only
 
 ## Blockers
 
@@ -367,15 +367,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | In progress: 22 of 23 tasks done |
-| Next task | Phase 3 docs and the end check |
-| Your rule this session | Claude asks before any delete or kill command |
+| New feature set | Built: 6 steps, each with its own passing check |
+| Phase 3 end check | A trial run was stopped because the PC ran low on memory; nothing saved |
+| Your Ferrum window | Open; it blocks the release build |
+| Phase 4 | Not started |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude updates the Phase 3 docs, runs the end check on one commit, then stops for your review.
+**2. Why, and what it does.** The end check builds the release program and runs every test on one commit → it needs the program file free and enough memory → then you get saved evidence for your sign-off.
 
-**3. The script:** none for you.
+**3. The script:** none. Close every Ferrum window and other heavy programs (many browser tabs, big apps).
 
-**4. What to tell Claude:** nothing; Claude asks when a step needs you.
+**4. What to tell Claude:** "Closed".
 
 ## Pending owner approvals
 
@@ -386,4 +387,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 in progress: 22 of 23 tasks done, last p3.23). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-12, session s02 (feature set built; the P3 gate trial run was stopped by low memory; waiting for the owner to close Ferrum). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).

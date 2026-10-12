@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 22 of 23 tasks done. Next: phase 3 docs and the end check.",
+  "summary": "Phase 3's new feature set is built and each part passed its own check. The Phase 3 end check still has to run cleanly: a trial run was stopped because the PC ran low on memory.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:301e05d367570e567c0fa56545889822175bfcae146edd439d872f4fdd828a28"
+    "content_hash": "sha256:8484c2001e3658c6ce580f59bd01aac77c38df590e307a5a72e706d67078a539"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 22 of 23 tasks done",
+      "state": "P3 Tabs and sessions: feature set built; end check to run",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -34,20 +34,20 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
-        "item": "Phase 3",
-        "state": "22 of 23 tasks done"
+        "item": "Feature set",
+        "state": "built and checked"
       },
       {
-        "item": "Next task",
-        "state": "Phase 3 docs and the end check"
+        "item": "End check",
+        "state": "needs Ferrum closed and free memory"
       }
     ],
-    "why": "Nothing to run. Claude updates the Phase 3 docs, runs the end check on one commit, then stops for your review.",
+    "why": "The end check builds the release program and runs every test; it needs the program file free and enough memory.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude asks when a step needs you."
+    "tell_claude": "\"Closed\" once every Ferrum window and other heavy programs are closed."
   },
   "questions_for_you": {
     "open": 23,

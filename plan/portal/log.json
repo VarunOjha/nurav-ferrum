@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:740ee32b4c7b59ed11b9d0d47a4487c9ea97056558c924fba1e87bfaaa2e3aec"
+    "content_hash": "sha256:c3593bb3d89945ccdf532c4ed3ca1832c7e085e5da6fbba33f19b1f47a01df40"
   },
   "entries": [
     {
@@ -3411,6 +3411,26 @@
       "commit": "0761cb2",
       "covers": [
         "## [2026-10-12] code | p3.23 feature set in the P3 suite and gate; checklist items 14 to 20"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "testing",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-gate-dry",
+      "date": "2026-10-12",
+      "time": "16:57",
+      "title": "End check stopped: the PC ran low on memory",
+      "done": "A trial run of the Phase 3 end check was stopped by Claude Code because the computer was critically low on memory; nothing was saved. Before it stopped, 17 task checks passed and 4 failed in their app tests, probably because of the memory shortage (not proven). The release build also needs your Ferrum window closed.",
+      "next": "You close Ferrum (and other heavy programs) and say \"Closed\"; Claude runs the end check again.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-12] gate | phase-p3-tabs-sessions exit dry run stopped by low memory (not saved)"
       ],
       "phase": "phase-p3-tabs-sessions",
       "category": "Checked",

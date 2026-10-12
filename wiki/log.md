@@ -2092,3 +2092,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-part-pages-reapproval-and-go.md]
 - result: npm run p3 and the p3.11 check run bookmarks, address-search, backup and look; check scripts for p3.17 (design recorded and unchanged) and p3.23; every P3 task lists a script for the gate; owner checklist items 14 to 20. Both new checks PASS.
 - commit: 0761cb2
+
+## [2026-10-12] gate | phase-p3-tabs-sessions exit dry run stopped by low memory (not saved)
+
+- session: s02
+- time: 16:57
+- pages: [phase-p3-tabs-sessions]
+- result: scripts/gates/p3-gate.ps1 run without -SaveEvidence on da1cd89 to find problems before the real run. Claude Code stopped it (and the plan portal it had started) because the PC was critically low on memory; nothing was saved. Before it stopped: Part 1 WAIT (pages changed in P3 need the owner's re-approval: comp-app-shell, comp-core, ov-arch-trust-boundaries, ov-arch-configuration, adr-0011, adr-0015, adr-0032, adr-0033); task checks PASS for p3.1, p3.3 to p3.6, p3.9 to p3.12, p3.14 to p3.16, p3.18 to p3.21; WAIT for p3.17 (its adr-0033 approval is stale after the claim closure); FAIL for p3.2, p3.7, p3.8 and p3.22 (smoke tests; the one failure detail kept shows the settings screen not opening within 15 s in settings.spec, which passed in the p3.22 run shortly before). Cause not established; the memory shortage is the likely one and is not proven. The test-gate rows (Part 3) did not run. The release build cannot run while the owner's Ferrum window (opened for the review) is open.
+- next: the owner closes Ferrum (and other heavy programs) and says "Closed"; Claude reruns scripts/gates/p3-gate.ps1 -SaveEvidence and examines any failure that repeats.
