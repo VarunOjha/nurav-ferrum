@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 (tabs and sessions) is in progress: 0 of 15 tasks done. Phase 2 is signed off.",
+  "summary": "Phase 3 is in progress: 1 of 15 tasks done. Next: one view per tab (p3.2).",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:84a443012a7670cbeffa0c00eae487b898ce5a5891325b106db728fd7e89deca"
+    "content_hash": "sha256:d39d1fcb80981b633900ec71759f02eddffe82fb766667006eb94fcf02b3d163"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 0 of 15 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 1 of 15 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "0 of 15 tasks done"
+        "state": "1 of 15 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Tab rules as plain code (p3.1)"
+        "state": "One view per tab (p3.2)"
       }
     ],
-    "why": "Nothing to run. Claude builds phase 3 and stops at its end check, as you asked.",
+    "why": "Nothing to run. Claude builds phase 3 task by task and stops at its end check.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

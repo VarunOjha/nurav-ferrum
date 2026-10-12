@@ -1823,3 +1823,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md, raw/owner/2026-10-12-s02-p3-questions.md]
 - result: approvals_check --gate phase-p3-tabs-sessions: ENTRY GATE PASS (P2 done with #exit approved; go-ahead in the owner's directive; dependency set APPROVED; Q-111, Q-125, Q-209 answered; the adr-0010 contradiction is registered under the answered Q-107). phase-p3-tabs-sessions set to in-progress (volatile key). Stop point: P3's exit gate (owner's words "Stop after the next phase is done").
 - next: p3.1 tab model in the core crate
+
+## [2026-10-12] code | p3.1 tab model as pure Rust
+
+- session: s02
+- time: 01:02
+- pages: [phase-p3-tabs-sessions, comp-core]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.1.txt]
+- result: crates/core/src/tabs.rs: Tabs<T> (ids never reused; one active tab when any exist; close activates the right neighbour, else the left; open at end or after active; move; next/previous with wrap; closed-tab stack of 25 with reopen; check()). crates/core/tests/tabs.rs: 9 fixed cases and 200 seeded random sequences of 500 operations, every rule checked after every step. cargo test 10 passed; clippy and fmt clean; p3.1 check PASS. comp-core updated (stales its approval; re-recorded by the owner's directive of 2026-10-12).
+- commit: ac0361b

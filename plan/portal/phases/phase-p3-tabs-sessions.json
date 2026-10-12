@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 0,
+    "done": 1,
     "total": 15
   },
   "step_order": [
@@ -26,7 +26,7 @@
       "what": "The rules for tabs (open, close, switch, reorder, reopen a closed tab), written as plain code with no window attached.",
       "why": "Tab bugs like two active tabs or a reused id are hard to find once windows are involved. Mistakes here would spread into restore, history and the sidebar.",
       "how": "Write the rules in the app's core code. Run normal tests plus tests that try random sequences of actions and check every rule still holds.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Tab logic has many edge cases → write it without the window and test random sequences of actions → exactly one active tab, ids never reused.",
       "check": "Unit and random-sequence tests keep every rule.",
       "script": "scripts/verify/p3.1-tab-rules.ps1"

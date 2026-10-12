@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e94d9e69eff204943b1c1e25790f7c5d6ffb1b159d4932252afa764dd7d0dcc6"
+    "content_hash": "sha256:80dd8cb6b773181432ceb6607b470f312596727eb52b674af1344d9d09e746ec"
   },
   "entries": [
     {
@@ -2760,6 +2760,26 @@
       "tags": [
         "phases",
         "tabs"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-1",
+      "date": "2026-10-12",
+      "time": "01:02",
+      "title": "Tab rules written and tested",
+      "done": "The rules for tabs now exist as plain code, without any window: exactly one active tab, ids never reused, closing the active tab picks its neighbour, and up to 25 closed tabs can be reopened. 200 random sequences of 500 actions each keep every rule.",
+      "next": "One website view per tab (task p3.2).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "ac0361b",
+      "covers": [
+        "## [2026-10-12] code | p3.1 tab model as pure Rust"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "tabs",
+        "testing"
       ]
     }
   ]

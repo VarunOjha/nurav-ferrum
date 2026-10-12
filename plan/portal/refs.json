@@ -650,7 +650,7 @@
       "kind": "task",
       "title": "P3 task: Tab rules as plain code",
       "summary": "Tab logic has many edge cases → write it without the window and test random sequences of actions → exactly one active tab, ids never reused.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4763,6 +4763,14 @@
       "kind": "commit",
       "title": "Commit: Phase 2 end-check evidence",
       "summary": "The P2 end-of-phase check passed on one commit: 27 automatic checks; each test output saved as evidence.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "ac0361b",
+      "kind": "commit",
+      "title": "Commit: Tab rules written and tested",
+      "summary": "The rules for tabs now exist as plain code, without any window: exactly one active tab, ids never reused, closing the active tab picks its neighbour, and up to 25 closed tabs can be reopened. 200 rand",
       "status": null,
       "related": []
     }

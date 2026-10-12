@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: null
-next_action: "Phase 3 in progress: next task p3.1 (tab model as pure Rust in crates/core). Stop after the P3 exit gate (owner directive 2026-10-12)."
+next_action: "Phase 3 in progress: next task p3.2 (one WebView per tab, create/hide/show/close, 20-tab integration test). Stop after the P3 exit gate (owner directive 2026-10-12)."
 blocked_on: []
 last_handoff: handoff-2026-10-11-s02
 ---
@@ -94,6 +94,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 - p2.18 owner checklist round 1 (`c899c22`): link bar readable in dark mode, loading signal visible; ten P2 pages and the P3 plan approved by the owner's directive; Q-111, Q-125, Q-209 answered.
 - P2 gate PASS on 5c2af31 (evidence `72cbef4`, 27 PASS); phase-p2-minimal-container#exit recorded by the owner's directive; P2 done.
 - P3 entry passed (2026-10-12); phase-p3-tabs-sessions in progress.
+- p3.1 done (`ac0361b`): tab model in crates/core with random-sequence tests; check PASS.
 
 ## Done this session (s01)
 
@@ -305,7 +306,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p2.18 verified and committed 2026-10-12; P2 done)
+(empty: p3.1 verified and committed 2026-10-12 as `ac0361b`)
 
 ## Blockers
 
@@ -341,8 +342,8 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | In progress: 0 of 15 tasks done |
-| Next task | Tab rules as plain code (p3.1) |
+| Phase 3 | In progress: 1 of 15 tasks done |
+| Next task | One view per tab (p3.2) |
 | Your rule this session | Claude asks before any delete or kill command |
 
 **2. Why, and what it does.** Nothing for you to run now. Claude builds phase 3 task by task and stops at its end check.
@@ -360,4 +361,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 in progress: 0 of 15 tasks done). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
+2026-10-12, session s02 (P3 in progress: 1 of 15 tasks done, last p3.1). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).
