@@ -700,7 +700,7 @@
       "kind": "task",
       "title": "P3 task: Settings screen",
       "summary": "You need to change startup sites, profiles and the download folder → a settings screen in the trusted shell, checked by the app → websites still cannot touch settings.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -4843,6 +4843,14 @@
       "kind": "commit",
       "title": "Commit: Ferrum cannot freeze on a new tab",
       "summary": "A check now scans the code for the one pattern that can freeze a Windows app when it creates web views (waiting for the view while creating it), and a stress test fires about 40 tab commands at once. ",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "0b1bd6a",
+      "kind": "commit",
+      "title": "Commit: A settings screen",
+      "summary": "Ferrum has a settings screen (the gear button or Ctrl+,): start-up sites, whether to reopen last session's tabs, which sites share a named profile, and the download folder. The app checks every value ",
       "status": null,
       "related": []
     }

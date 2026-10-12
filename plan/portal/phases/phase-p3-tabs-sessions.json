@@ -6,7 +6,7 @@
   "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
   "status": "In progress",
   "progress": {
-    "done": 10,
+    "done": 11,
     "total": 15
   },
   "step_order": [
@@ -136,7 +136,7 @@
       "what": "A settings screen in the trusted shell for startup sites, per-site settings with profiles, and the download folder.",
       "why": "Editing settings files by hand is error-prone. If websites could reach these commands, a page could change your startup sites or download folder.",
       "how": "The screen reads and changes settings only through app commands that check the input and save safely. Bad input, like a missing folder, is refused.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "You need to change startup sites, profiles and the download folder → a settings screen in the trusted shell, checked by the app → websites still cannot touch settings.",
       "check": "Changes persist and apply after restart; bad input is refused; websites cannot call these commands.",
       "script": "scripts/verify/p3.14-settings-screen.ps1"

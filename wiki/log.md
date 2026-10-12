@@ -1913,3 +1913,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.10.txt]
 - result: p3.10 check: code scan (commands that can create a tab view are async; no blocking wait on the tab path except the async test_stats; self-test threads exempt) found cross_site_confirm not async, fixed; review checklist docs/developer/code-review-checklist.md; smoke no-freeze: ~40 tab commands at once settle within 30 s, every tab gets its view, pop-ups still open tabs. p3.10 PASS; profiles smoke 5 passed after the change. Stales comp-app-shell (re-recorded through the annex).
 - commit: 83a754d
+
+## [2026-10-12] code | p3.14 settings screen in the trusted shell
+
+- session: s02
+- time: 03:03
+- pages: [phase-p3-tabs-sessions, comp-app-shell, ov-arch-configuration]
+- sources: [raw/evidence/phase-p3-tabs-sessions/check-p3.14.txt]
+- result: Settings screen in the shell (toolbar button, Ctrl+Comma; the tab's view hidden meanwhile): start-up sites, reopen last tabs, per-site named profiles, download folder. Host commands settings_get/settings_set check every value and list problems in plain words; on success one atomic write of the user settings file, applied at once (profiles, folder) or at next start (start-up sites). The IPC probe now tries settings_set: refused for a website by Tauri's ACL; tab views have no bridge. Settings smoke 2 passed; whole suite 59 passed; p3.14 PASS. Stales comp-app-shell (re-recorded through the annex).
+- commit: 0b1bd6a

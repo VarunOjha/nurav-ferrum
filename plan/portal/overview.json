@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 10 of 15 tasks done. Next: settings screen (p3.14).",
+  "summary": "Phase 3 is in progress: 11 of 15 tasks done. Next: sidebar with tabs and history (p3.15).",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:044e90ee62c8e97cbadd4f59d2ee780b8cebd340d65d09e12122c7d0fffa348f"
+    "content_hash": "sha256:ad9768df9e65dd70ba1db6f032b1ea3267687fd4fd030878691be7d703a51468"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 10 of 15 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 11 of 15 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,11 +38,11 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "10 of 15 tasks done"
+        "state": "11 of 15 tasks done"
       },
       {
         "item": "Next task",
-        "state": "Settings screen (p3.14)"
+        "state": "Sidebar with tabs and history (p3.15)"
       }
     ],
     "why": "Nothing to run. Claude builds phase 3 task by task and stops at its end check.",

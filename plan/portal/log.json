@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:02225aa503595b7215e38fb118e6a425b67612b471caca740d8bcb5a19d5a898"
+    "content_hash": "sha256:867368d6d944f7d7dd36e8ff2bf32b60192f82e4ec3bd30d4996a294ba56ac21"
   },
   "entries": [
     {
@@ -2960,6 +2960,26 @@
       "tags": [
         "tabs",
         "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-14",
+      "date": "2026-10-12",
+      "time": "03:03",
+      "title": "A settings screen",
+      "done": "Ferrum has a settings screen (the gear button or Ctrl+,): start-up sites, whether to reopen last session's tabs, which sites share a named profile, and the download folder. The app checks every value before saving and explains what is wrong; websites cannot reach these settings.",
+      "next": "The sidebar with open tabs and history (task p3.15).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "0b1bd6a",
+      "covers": [
+        "## [2026-10-12] code | p3.14 settings screen in the trusted shell"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "look & feel",
+        "privacy"
       ]
     }
   ]
