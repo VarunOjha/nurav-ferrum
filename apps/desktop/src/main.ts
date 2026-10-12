@@ -9,11 +9,34 @@ type TabEvent =
   | { kind: "navigation-completed"; id: number; uri: string; success: boolean; http_status: number; web_error_status: number }
   | { kind: "history-changed"; can_go_back: boolean; can_go_forward: boolean }
   | { kind: "title-changed"; title: string }
-  | { kind: "got-focus" };
+  | { kind: "got-focus" }
+  | { kind: "new-window"; uri: string; user_initiated: boolean }
+  | { kind: "external-scheme"; uri: string; user_initiated: boolean }
+  | { kind: "external-request"; uri: string; scheme: string }
+  | { kind: "blocked"; uri: string; why: string };
 
 type NavResult = { outcome: "navigate" | "confirm" | "refused"; url: string | null; note: string | null; reason: string | null };
 
 const statusEl = document.getElementById("status") as HTMLSpanElement;
+const extBar = document.getElementById("external-bar") as HTMLDivElement;
+const extUri = document.getElementById("external-uri") as HTMLElement;
+const extOpen = document.getElementById("external-open") as HTMLButtonElement;
+const extCancel = document.getElementById("external-cancel") as HTMLButtonElement;
+const EXT_BAR_H = 44;
+
+/** The confirmation bar for links to other apps (p2.10): the shell band grows so the bar never covers the page. */
+async function showExternal(uri: string): Promise<void> {
+  extUri.textContent = uri;
+  extUri.title = uri;
+  extBar.hidden = false;
+  await invoke("shell_layout", { extra: EXT_BAR_H });
+  extOpen.focus();
+}
+async function hideExternal(): Promise<void> {
+  if (extBar.hidden) return;
+  extBar.hidden = true;
+  await invoke("shell_layout", { extra: 0 });
+}
 const address = document.getElementById("address") as HTMLInputElement;
 const form = document.getElementById("address-form") as HTMLFormElement;
 const back = document.getElementById("back") as HTMLButtonElement;
@@ -112,7 +135,8 @@ await listen<TabEvent>("tab", async (e) => {
         setLoading(true);
         setState("loading");
         statusEl.textContent = "Loading…";
-      } else {
+      } else if (extBar.hidden || extUri.textContent !== ev.uri) {
+        // (A link to another app is not "blocked": the confirmation bar is asking about it.)
         statusEl.textContent = "Blocked: " + ev.uri.split(":")[0] + " address";
       }
       break;
@@ -148,6 +172,16 @@ await listen<TabEvent>("tab", async (e) => {
       break;
     case "got-focus":
       break;
+    case "external-request":
+      statusEl.textContent = "";
+      await showExternal(ev.uri);
+      break;
+    case "blocked":
+      statusEl.textContent = "Blocked: " + ev.uri.split(":")[0] + " address";
+      break;
+    case "new-window":
+    case "external-scheme":
+      break;
   }
 });
 
@@ -159,7 +193,7 @@ form.addEventListener("submit", async (e) => {
   if (r.outcome === "navigate") {
     statusEl.textContent = r.note === "upgraded-from-http" ? "Using the secure https address" : "";
   } else if (r.outcome === "confirm") {
-    statusEl.textContent = "This link opens another app (confirmation arrives in a later step)";
+    // The app sends an external-request event; the confirmation bar shows from there.
   } else {
     statusEl.textContent = "Not loaded: " + (r.reason ?? "unknown");
   }
@@ -168,6 +202,22 @@ form.addEventListener("submit", async (e) => {
 address.addEventListener("focus", () => {
   address.select();
   void invoke("shell_focused");
+});
+
+extOpen.addEventListener("click", async () => {
+  const uri = extUri.textContent ?? "";
+  await hideExternal();
+  try {
+    await invoke("external_open_confirm", { uri });
+    statusEl.textContent = "Opened in another app";
+  } catch (err) {
+    statusEl.textContent = "Not opened: " + String(err);
+  }
+});
+extCancel.addEventListener("click", async () => {
+  await hideExternal();
+  await invoke("external_cancel");
+  statusEl.textContent = "";
 });
 
 retry.addEventListener("click", async () => {

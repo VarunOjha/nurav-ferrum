@@ -20,8 +20,9 @@ use std::rc::Rc;
 use webview2_com::Microsoft::Web::WebView2::Win32::*;
 use webview2_com::{
     CreateCoreWebView2ControllerCompletedHandler, DocumentTitleChangedEventHandler,
-    FocusChangedEventHandler, HistoryChangedEventHandler, NavigationCompletedEventHandler,
-    NavigationStartingEventHandler, SourceChangedEventHandler, take_pwstr,
+    FocusChangedEventHandler, HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
+    NavigationCompletedEventHandler, NavigationStartingEventHandler,
+    NewWindowRequestedEventHandler, SourceChangedEventHandler, take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows_core::{BOOL, HSTRING, Interface, PWSTR};
@@ -45,6 +46,8 @@ enum Ev {
     History,
     Title,
     GotFocus,
+    NewWindow,
+    LaunchExternal,
 }
 
 /// One tab web view: a WebView2 controller Ferrum created (adr-0029). `!Send` by construction (COM-1).
@@ -227,6 +230,58 @@ impl ContentView {
         hr(unsafe { core.add_DocumentTitleChanged(&h, &mut t) })?;
         self.tokens.push((Ev::Title, t));
 
+        let s = sink.clone();
+        let h = NewWindowRequestedEventHandler::create(Box::new(move |_sender, args| {
+            if let Some(args) = args {
+                let (mut uri, mut user) = (PWSTR::null(), BOOL(0));
+                // SAFETY: COM-1, COM-5: out-pointers are locals; `uri` copied and freed by take_pwstr. Handled =
+                // true with no NewWindow set means WebView2 opens no window: Ferrum decides (p2.10).
+                let uri = unsafe {
+                    let _ = args.Uri(&mut uri);
+                    let _ = args.IsUserInitiated(&mut user);
+                    let _ = args.SetHandled(true);
+                    take_pwstr(uri)
+                };
+                s(TabEvent::NewWindowRequested {
+                    uri,
+                    user_initiated: user.as_bool(),
+                });
+            }
+            Ok(())
+        }));
+        let mut t = 0i64;
+        // SAFETY: COM-1, COM-4.
+        hr(unsafe { core.add_NewWindowRequested(&h, &mut t) })?;
+        self.tokens.push((Ev::NewWindow, t));
+
+        // Safety net for links to other apps that do not pass the navigation gate (for example from a frame):
+        // WebView2 never launches them itself; Ferrum reports them and asks the user (p2.10).
+        if let Ok(core18) = core.cast::<ICoreWebView2_18>() {
+            let s = sink.clone();
+            let h =
+                LaunchingExternalUriSchemeEventHandler::create(Box::new(move |_sender, args| {
+                    if let Some(args) = args {
+                        let (mut uri, mut user) = (PWSTR::null(), BOOL(0));
+                        // SAFETY: COM-1, COM-5: out-pointers are locals; `uri` copied and freed by take_pwstr.
+                        let uri = unsafe {
+                            let _ = args.Uri(&mut uri);
+                            let _ = args.IsUserInitiated(&mut user);
+                            let _ = args.SetCancel(true);
+                            take_pwstr(uri)
+                        };
+                        s(TabEvent::ExternalSchemeRequested {
+                            uri,
+                            user_initiated: user.as_bool(),
+                        });
+                    }
+                    Ok(())
+                }));
+            let mut t = 0i64;
+            // SAFETY: COM-1, COM-4.
+            hr(unsafe { core18.add_LaunchingExternalUriScheme(&h, &mut t) })?;
+            self.tokens.push((Ev::LaunchExternal, t));
+        }
+
         let s = sink;
         let h = FocusChangedEventHandler::create(Box::new(move |_sender, _args| {
             s(TabEvent::GotFocus);
@@ -312,6 +367,11 @@ impl ContentView {
                     Ev::History => self.core.remove_HistoryChanged(*t),
                     Ev::Title => self.core.remove_DocumentTitleChanged(*t),
                     Ev::GotFocus => self.controller.remove_GotFocus(*t),
+                    Ev::NewWindow => self.core.remove_NewWindowRequested(*t),
+                    Ev::LaunchExternal => match self.core.cast::<ICoreWebView2_18>() {
+                        Ok(c18) => c18.remove_LaunchingExternalUriScheme(*t),
+                        Err(e) => Err(e),
+                    },
                 };
             }
         }

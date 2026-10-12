@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-external-cancel"
+description = "Enables the external_cancel command without any pre-configured scope."
+commands.allow = ["external_cancel"]
+
+[[permission]]
+identifier = "deny-external-cancel"
+description = "Denies the external_cancel command without any pre-configured scope."
+commands.deny = ["external_cancel"]

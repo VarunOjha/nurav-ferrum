@@ -18,6 +18,12 @@
       <span id="status" aria-live="polite"></span>
       <div id="progress" aria-hidden="true"></div>
     </header>
+    <div id="external-bar" role="alertdialog" aria-labelledby="external-text" hidden>
+      <span id="external-text">Open this link outside Ferrum?</span>
+      <code id="external-uri"></code>
+      <button id="external-open" type="button">Open</button>
+      <button id="external-cancel" type="button">Cancel</button>
+    </div>
     <section id="error-panel" role="alert" hidden>
       <h1 id="error-title">This page could not be loaded</h1>
       <p id="error-text"></p>

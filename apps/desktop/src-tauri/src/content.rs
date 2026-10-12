@@ -8,7 +8,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 use ferrum_core::address::{Note, Outcome, Refusal, normalize};
 use ferrum_core::config::Loaded;
-use ferrum_webview_manager::tab::{TabEvent, p2_gate};
+use ferrum_webview_manager::tab::{NavDecision, TabEvent, p2_gate};
 use ferrum_webview_manager::webview2::{CONTENT, ContentView};
 use serde::Serialize;
 use serde_json::{Value, json};
@@ -16,6 +16,7 @@ use tauri::{AppHandle, Emitter, Manager, Runtime, Window};
 use windows::Win32::Foundation::RECT;
 
 use crate::band_height;
+use crate::external;
 
 /// WebView2 profile of the content view (one profile in P2; one per site in P3, adr-0029).
 pub const CONTENT_PROFILE: &str = "ferrum-default";
@@ -70,6 +71,14 @@ fn event_json(e: &TabEvent) -> Value {
             "kind": "history-changed", "can_go_back": can_go_back, "can_go_forward": can_go_forward }),
         TabEvent::TitleChanged { title } => json!({"kind": "title-changed", "title": title}),
         TabEvent::GotFocus => json!({"kind": "got-focus"}),
+        TabEvent::NewWindowRequested {
+            uri,
+            user_initiated,
+        } => json!({"kind": "new-window", "uri": uri, "user_initiated": user_initiated}),
+        TabEvent::ExternalSchemeRequested {
+            uri,
+            user_initiated,
+        } => json!({"kind": "external-scheme", "uri": uri, "user_initiated": user_initiated}),
     }
 }
 
@@ -113,6 +122,28 @@ pub fn create(app: &AppHandle, window: &Window) -> tauri::Result<()> {
             let v = event_json(&e);
             h2.state::<EventLog>().0.lock().unwrap().push(v.clone());
             let _ = h2.emit_to("shell", "tab", v);
+            match &e {
+                TabEvent::NewWindowRequested {
+                    uri,
+                    user_initiated,
+                } => external::on_new_window(&h2, uri, *user_initiated),
+                TabEvent::ExternalSchemeRequested { uri, .. } => {
+                    let security = h2.state::<AppConfig>().0.config.security.clone();
+                    external::on_page_navigation(&h2, &security, uri);
+                }
+                _ => {}
+            }
+        });
+        // Navigation gate: web pages load; a link to another app is cancelled and offered to the user (p2.10);
+        // everything else is cancelled.
+        let h4 = handle.clone();
+        let security = handle.state::<AppConfig>().0.config.security.clone();
+        let gate = Rc::new(move |uri: &str| {
+            let d = p2_gate(uri);
+            if d == NavDecision::Cancel {
+                external::on_page_navigation(&h4, &security, uri);
+            }
+            d
         });
         let h3 = handle.clone();
         let res = ContentView::create(
@@ -121,7 +152,7 @@ pub fn create(app: &AppHandle, window: &Window) -> tauri::Result<()> {
             rect,
             CONTENT_PROFILE,
             sink,
-            Rc::new(p2_gate),
+            gate,
             Box::new(move |view| match view {
                 Ok(view) => {
                     let _ = view.navigate(&start);
@@ -217,13 +248,16 @@ pub fn tab_navigate(app: AppHandle, cfg: tauri::State<'_, AppConfig>, input: Str
                 reason: None,
             }
         }
-        // Links to other apps: confirmation UI arrives in p2.10; nothing is launched here.
-        Outcome::Confirm { url } => NavResult {
-            outcome: "confirm",
-            url: Some(url.to_string()),
-            note: None,
-            reason: None,
-        },
+        // Links to other apps: the shell asks first (p2.10); nothing is launched here.
+        Outcome::Confirm { url } => {
+            external::request(&app, url.to_string());
+            NavResult {
+                outcome: "confirm",
+                url: Some(url.to_string()),
+                note: None,
+                reason: None,
+            }
+        }
         Outcome::Refuse(r) => NavResult {
             outcome: "refused",
             url: None,

@@ -49,6 +49,20 @@ pub enum TabEvent {
     },
     /// The tab web view received keyboard focus.
     GotFocus,
+    /// A page asked for a new window (`target=_blank`, `window.open`). WebView2 opened none; the app decides.
+    NewWindowRequested {
+        /// The address the page wanted to open.
+        uri: String,
+        /// Caused by a user gesture (click) rather than by script alone.
+        user_initiated: bool,
+    },
+    /// WebView2 was about to hand a link to another app; it was cancelled, and the app asks the user.
+    ExternalSchemeRequested {
+        /// The link (for example `mailto:`).
+        uri: String,
+        /// Caused by a user gesture.
+        user_initiated: bool,
+    },
 }
 
 /// The navigation gate's answer for a starting navigation.
@@ -61,7 +75,7 @@ pub enum NavDecision {
 }
 
 /// The P2 navigation gate for page-started navigations: web pages (`https:`, `http:`) and `about:blank` may load;
-/// every other scheme is cancelled here (links to other apps are handled separately, p2.10). The full policy
+/// every other scheme is cancelled here (the app asks before links to other apps are opened, p2.10). The full policy
 /// engine (blocklist, adr-0015) arrives in P4.
 pub fn p2_gate(uri: &str) -> NavDecision {
     let scheme = uri.split(':').next().unwrap_or("").to_ascii_lowercase();

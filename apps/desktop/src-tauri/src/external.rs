@@ -1,0 +1,133 @@
+//! Links to other apps and new windows (P2 task p2.10). Nothing is handed to Windows without the user's click in
+//! the shell: the app remembers the one link it asked about, and `external_open_confirm` opens only that link,
+//! after checking it again with `ferrum_core::address`.
+
+use std::sync::Mutex;
+
+use ferrum_core::address::{Outcome, normalize};
+use ferrum_core::config::{NewWindow, Security};
+use serde_json::json;
+use tauri::{AppHandle, Emitter, Manager};
+
+use crate::content::{AppConfig, with_content};
+
+/// The link the shell is currently asking about (at most one).
+#[derive(Default)]
+pub struct PendingExternal(pub Mutex<Option<String>>);
+
+/// Asks the shell to confirm opening `url` in another app. The message is posted, so the shell sees it after the
+/// navigation event that triggered it.
+pub fn request(app: &AppHandle, url: String) {
+    *app.state::<PendingExternal>().0.lock().unwrap() = Some(url.clone());
+    let scheme = url.split(':').next().unwrap_or("").to_string();
+    let h = app.clone();
+    let _ = app.run_on_main_thread(move || {
+        let _ = h.emit_to(
+            "shell",
+            "tab",
+            json!({"kind": "external-request", "uri": url, "scheme": scheme}),
+        );
+    });
+}
+
+/// Tells the shell something was blocked (shown as a toolbar status).
+fn blocked(app: &AppHandle, uri: &str, why: &str) {
+    let h = app.clone();
+    let (uri, why) = (uri.to_string(), why.to_string());
+    let _ = app.run_on_main_thread(move || {
+        let _ = h.emit_to(
+            "shell",
+            "tab",
+            json!({"kind": "blocked", "uri": uri, "why": why}),
+        );
+    });
+}
+
+/// A page-started navigation to a non-web address (called from the navigation gate, which cancels it): links to
+/// other apps are offered to the user; everything else stays blocked.
+pub fn on_page_navigation(app: &AppHandle, security: &Security, uri: &str) {
+    if let Outcome::Confirm { url } = normalize(uri, security) {
+        request(app, url.to_string());
+    }
+}
+
+/// A page asked for a new window (WebView2 opened none).
+///
+/// Same view: the address loads in the page's own view, gesture or not. A page can already change its own address
+/// by script, so this gives it nothing new (and does not depend on WebView2's user-initiated flag, which the p2.10
+/// smoke runs found unreliable for script pop-ups). System browser: a click opens the browser; anything else is
+/// offered on the confirmation bar first, so nothing leaves Ferrum silently.
+pub fn on_new_window(app: &AppHandle, uri: &str, user_initiated: bool) {
+    let security = app.state::<AppConfig>().0.config.security.clone();
+    match normalize(uri, &security) {
+        Outcome::Navigate { url, .. } => match security.new_window {
+            NewWindow::SameView => {
+                let target = url.to_string();
+                with_content(app, move |v| {
+                    let _ = v.navigate(&target);
+                });
+            }
+            NewWindow::SystemBrowser if user_initiated => {
+                if let Err(e) = launch(url.as_str()) {
+                    eprintln!("[ferrum] system browser not opened: {e}");
+                }
+            }
+            NewWindow::SystemBrowser => request(app, url.to_string()),
+        },
+        Outcome::Confirm { url } => request(app, url.to_string()),
+        Outcome::Refuse(_) => blocked(app, uri, "new-window"),
+    }
+}
+
+/// Hands `url` to Windows (default browser or app for its scheme). In debug builds, `FERRUM_LAUNCHER_LOG` replaces
+/// the launch with a line in that file (smoke tests; nothing opens).
+fn launch(url: &str) -> Result<(), String> {
+    #[cfg(debug_assertions)]
+    if let Ok(log) = std::env::var("FERRUM_LAUNCHER_LOG") {
+        use std::io::Write;
+        let mut f = std::fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(log)
+            .map_err(|e| e.to_string())?;
+        return writeln!(f, "{url}").map_err(|e| e.to_string());
+    }
+    // url.dll's FileProtocolHandler opens an address with its registered handler; the address is one argument,
+    // no command shell is involved. UNVERIFIED[phase-p2-minimal-container]: confirmed by the owner's manual mailto
+    // check at the exit review.
+    std::process::Command::new("rundll32.exe")
+        .arg("url.dll,FileProtocolHandler")
+        .arg(url)
+        .spawn()
+        .map(|_| ())
+        .map_err(|e| e.to_string())
+}
+
+/// The user clicked Open on the shell's confirmation bar.
+#[tauri::command]
+pub fn external_open_confirm(
+    pending: tauri::State<'_, PendingExternal>,
+    cfg: tauri::State<'_, AppConfig>,
+    uri: String,
+) -> Result<(), String> {
+    let asked = pending.0.lock().unwrap().take();
+    if asked.as_deref() != Some(uri.as_str()) {
+        return Err("not the link Ferrum asked about".into());
+    }
+    match normalize(&uri, &cfg.0.config.security) {
+        Outcome::Confirm { url } => launch(url.as_str()),
+        // A web page offered for the system browser (new_window = system-browser, see on_new_window).
+        Outcome::Navigate { url, .. }
+            if cfg.0.config.security.new_window == NewWindow::SystemBrowser =>
+        {
+            launch(url.as_str())
+        }
+        _ => Err("this link may not be opened outside Ferrum".into()),
+    }
+}
+
+/// The user clicked Cancel (or the bar went away).
+#[tauri::command]
+pub fn external_cancel(pending: tauri::State<'_, PendingExternal>) {
+    pending.0.lock().unwrap().take();
+}

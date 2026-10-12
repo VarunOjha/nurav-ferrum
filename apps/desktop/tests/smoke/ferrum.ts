@@ -27,7 +27,15 @@ async function waitCdp(ms: number): Promise<void> {
   throw new Error("Ferrum's CDP endpoint did not appear");
 }
 
-export async function launch(name: string, opts: { data?: string; extraSettings?: string; env?: Record<string, string> } = {}): Promise<Ferrum> {
+export type LaunchOptions = {
+  data?: string;
+  extraSettings?: string;
+  env?: Record<string, string>;
+  /** Extra environment that depends on the run's data folder (for example a mock launcher's log file). */
+  envFromData?: (data: string) => Record<string, string>;
+};
+
+export async function launch(name: string, opts: LaunchOptions = {}): Promise<Ferrum> {
   const data = opts.data ?? dataDir(name);
   const config = settings(data, opts.extraSettings ?? "");
   const proc = spawn(ferrumExe, ["--config", config], {
@@ -36,8 +44,10 @@ export async function launch(name: string, opts: { data?: string; extraSettings?
       WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${cdpPort}`,
       FERRUM_EXIT_AFTER: "600",
       ...(opts.env ?? {}),
+      ...(opts.envFromData?.(data) ?? {}),
     },
-    stdio: "ignore",
+    // The app's own messages go to app.log in the run's data folder (for diagnosing a failed run).
+    stdio: ["ignore", fs.openSync(path.join(data, "app.log"), "a"), fs.openSync(path.join(data, "app.log"), "a")],
   });
   await waitCdp(30_000);
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);

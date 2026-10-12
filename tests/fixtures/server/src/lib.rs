@@ -79,6 +79,11 @@ pub const ROUTES: &[Route] = &[
         purpose: "target=_blank link and a window.open button",
     },
     Route {
+        path: "/links/popup",
+        status: 200,
+        purpose: "opens a window from script alone, without a click (pop-up)",
+    },
+    Route {
         path: "/links/schemes",
         status: 200,
         purpose: "mailto: and custom-scheme (ferrum-test:) links",
@@ -181,6 +186,13 @@ async fn links_blank() -> Html<String> {
         "New windows",
         "<p><a id=\"blank\" href=\"/landing\" target=\"_blank\">Open the landing page in a new window</a></p>\
          <p><button id=\"open\" onclick=\"window.open('/landing')\">window.open('/landing')</button></p>",
+    )
+}
+
+async fn links_popup() -> Html<String> {
+    page(
+        "Pop-up",
+        "<p id=\"popup\">This page tries to open /landing in a new window without a click.</p>         <script>addEventListener('load', function () { setTimeout(function () { window.open('/landing'); }, 800); });</script>",
     )
 }
 
@@ -319,6 +331,7 @@ pub fn router() -> Router {
         .route("/landing", get(landing))
         .route("/redirect/{code}", get(redirect))
         .route("/links/blank", get(links_blank))
+        .route("/links/popup", get(links_popup))
         .route("/links/schemes", get(links_schemes))
         .route("/cookie/set", get(cookie_set))
         .route("/cookie/read", get(cookie_read))

@@ -17,6 +17,8 @@ fn main() {
             "tab_reload",
             "tab_stop",
             "shell_focused",
+            "external_open_confirm",
+            "external_cancel",
         ]),
     ))
     .expect("Tauri build step failed");

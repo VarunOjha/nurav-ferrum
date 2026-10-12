@@ -31,3 +31,8 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
 #error-address { font: 12px "IBM Plex Mono", Consolas, monospace; word-break: break-all; }
 #error-code { font: 11px "IBM Plex Mono", Consolas, monospace; opacity: 0.7; }
 #error-retry { margin-top: 16px; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; font: inherit; cursor: pointer; }
+#external-bar { display: flex; align-items: center; gap: 12px; height: 44px; box-sizing: border-box; padding: 0 16px; border-bottom: 1px solid var(--line, #d9d6cf); background: var(--panel, #f6f4ef); }
+#external-bar[hidden] { display: none; }
+#external-uri { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px "IBM Plex Mono", Consolas, monospace; }
+#external-bar button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: inherit; }
+#external-open { background: var(--accent) !important; color: #fff !important; }

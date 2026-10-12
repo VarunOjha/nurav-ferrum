@@ -5,6 +5,7 @@
 #![windows_subsystem = "windows"]
 
 mod content;
+mod external;
 mod selftest;
 
 use std::path::PathBuf;
@@ -137,6 +138,7 @@ fn main() {
         .manage(BridgeStats::default())
         .manage(ShellBand::default())
         .manage(Covered::default())
+        .manage(external::PendingExternal::default())
         .manage(FocusState::default())
         .manage(EventLog::default())
         .manage(ShellTitle::default())
@@ -146,6 +148,8 @@ fn main() {
             app_quit,
             shell_layout,
             shell_cover,
+            external::external_open_confirm,
+            external::external_cancel,
             content::tab_navigate,
             content::tab_back,
             content::tab_forward,
