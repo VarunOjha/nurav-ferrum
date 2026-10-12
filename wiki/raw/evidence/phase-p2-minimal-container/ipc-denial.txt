@@ -1,0 +1,17 @@
+Command output saved by scripts/gates/p2-gate.ps1 on 2026-10-12 00:56 at commit 5c2af31 (with uncommitted changes)
+Exit code: 0
+
+Ferrum check p2.3: Lock the bridge to the app
+Why: a website cannot control Ferrum.
+Run at 2026-10-12 00:55 on commit 5c2af31 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Only the shell has a capability, and none allows remote pages
+         shell.json: webviews ["shell"], no remote section
+  PASS   The app declares its commands at build time
+         build.rs: AppManifest commands declared
+  PASS   Self-test: website calls refused in a Tauri view; no bridge at all in the Ferrum-created view; the shell works (59 s)
+         Tauri view: 3 calls refused; content view: no bridge; shell pings: 1
+------------------------------------------------------------------------
+RESULT: PASS - p2.3 (3 PASS; 59 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.3 check passed".

@@ -1,0 +1,395 @@
+Ferrum check P2-gate: First working app: end-of-phase gate
+Why: only a passing gate and your approval let the next phase start.
+Run at 2026-10-12 00:46 on commit 5c2af31
+------------------------------------------------------------------------
+
+Part 1 - Your approvals for P2 are current
+approvals.json entries: 42
+  APPROVED                 adr-0001
+  APPROVED                 adr-0002
+  APPROVED                 adr-0003
+  APPROVED                 adr-0004
+  APPROVED                 adr-0006
+  APPROVED                 adr-0007
+  APPROVED                 adr-0010
+  APPROVED                 adr-0011
+  APPROVED                 adr-0012
+  APPROVED                 adr-0014
+  APPROVED                 adr-0015
+  APPROVED                 adr-0018
+  APPROVED                 adr-0019
+  APPROVED                 adr-0021
+  APPROVED                 adr-0023
+  APPROVED                 adr-0024
+  APPROVED                 adr-0025
+  APPROVED                 adr-0026
+  APPROVED                 adr-0027
+  APPROVED                 adr-0029
+  APPROVED_VOLATILE_DRIFT  adr-0030
+  APPROVED_VOLATILE_DRIFT  adr-0031
+  APPROVED                 comp-app-shell
+  APPROVED                 comp-core
+  APPROVED                 comp-interactive-plan
+  APPROVED                 comp-security-engine
+  APPROVED                 comp-tab-content
+  APPROVED                 comp-webview-manager
+  APPROVED                 comp-webview2-runtime
+  APPROVED                 comp-windows-os
+  APPROVED                 ip-data-contract
+  APPROVED                 ip-routes-and-views
+  APPROVED                 ip-spec
+  APPROVED                 ip-testing
+  APPROVED                 ip-wiki-lint
+  APPROVED                 phase-p0-planning
+  APPROVED                 phase-p0-planning#exit
+  APPROVED_VOLATILE_DRIFT  phase-p1-foundation
+  APPROVED_VOLATILE_DRIFT  phase-p1-foundation#exit
+  APPROVED                 phase-p2-minimal-container
+  APPROVED                 phase-p3-tabs-sessions
+  APPROVED                 schema
+  depends_on phase-p1-foundation: status=done exit=APPROVED_VOLATILE_DRIFT
+  APPROVED                 adr-0006
+  APPROVED                 adr-0007
+  APPROVED                 adr-0010
+  APPROVED                 adr-0011
+  APPROVED                 adr-0014
+  APPROVED                 adr-0015
+  APPROVED                 adr-0018
+  APPROVED                 adr-0019
+  APPROVED                 adr-0029
+  APPROVED_VOLATILE_DRIFT  adr-0030
+  APPROVED_VOLATILE_DRIFT  adr-0031
+  APPROVED                 comp-app-shell
+  APPROVED                 comp-core
+  APPROVED                 comp-security-engine
+  APPROVED                 comp-tab-content
+  APPROVED                 comp-webview-manager
+  APPROVED                 comp-webview2-runtime
+  APPROVED                 phase-p2-minimal-container
+  APPROVED                 schema
+  registered CONTRADICTION wiki/decisions/adr-0010-isolation-webview2-profiles.md:44 -> Q-107
+ENTRY GATE: PASS
+  PASS   Approvals for P2 recorded and current; no question blocks it
+         all P2 approvals current
+
+Part 2 - Every P2 task, checked
+  PASS   Wiki check (run once, reused by the task checks) (12 s)
+         213 pages: 0 errors
+    --- output of scripts/verify/p2.1-local-test-pages.ps1 (exit 0) ---
+Ferrum check p2.1: Build local test pages
+Why: navigation tests give the same answer every run.
+Run at 2026-10-12 00:46 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Server tests pass (routes, HTTPS, name limit of the local certificate authority) (4 s)
+         cargo test -p fixture-server: 7 tests passed
+  PASS   Each test page returned its documented status over real HTTPS (3 s)
+         every documented route matched in the saved probe
+------------------------------------------------------------------------
+RESULT: PASS - p2.1 (2 PASS; 7 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.1 check passed".
+    --- end of scripts/verify/p2.1-local-test-pages.ps1 ---
+  PASS   Task p2.1: Build local test pages (8 s)
+         scripts/verify/p2.1-local-test-pages.ps1: RESULT: PASS - p2.1 (2 PASS; 7 s)
+    --- output of scripts/verify/p2.2-create-desktop-app.ps1 (exit 0) ---
+Ferrum check p2.2: Create the desktop app
+Why: every later task builds on the real app.
+Run at 2026-10-12 00:47 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Tauri tool, Vite and TypeScript are pinned exactly; the app forbids unsafe code
+         pins exact; #![forbid(unsafe_code)]
+  PASS   Release build with the pinned Tauri tool (49 s)
+         npm run tauri -- build --no-bundle: exit 0
+  PASS   The window opens, shows the shell, and closes by itself (11 s)
+         window 1295x837; toolbar shows 119 colours; exited by itself (code 0)
+------------------------------------------------------------------------
+RESULT: PASS - p2.2 (3 PASS; 60 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.2 check passed".
+    --- end of scripts/verify/p2.2-create-desktop-app.ps1 ---
+  PASS   Task p2.2: Create the desktop app (62 s)
+         scripts/verify/p2.2-create-desktop-app.ps1: RESULT: PASS - p2.2 (3 PASS; 60 s)
+    --- output of scripts/verify/p2.3-lock-bridge-app.ps1 (exit 0) ---
+Ferrum check p2.3: Lock the bridge to the app
+Why: a website cannot control Ferrum.
+Run at 2026-10-12 00:48 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Only the shell has a capability, and none allows remote pages
+         shell.json: webviews ["shell"], no remote section
+  PASS   The app declares its commands at build time
+         build.rs: AppManifest commands declared
+  PASS   Self-test: website calls refused in a Tauri view; no bridge at all in the Ferrum-created view; the shell works (59 s)
+         Tauri view: 3 calls refused; content view: no bridge; shell pings: 1
+------------------------------------------------------------------------
+RESULT: PASS - p2.3 (3 PASS; 59 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.3 check passed".
+    --- end of scripts/verify/p2.3-lock-bridge-app.ps1 ---
+  PASS   Task p2.3: Lock the bridge to the app (60 s)
+         scripts/verify/p2.3-lock-bridge-app.ps1: RESULT: PASS - p2.3 (3 PASS; 59 s)
+    --- output of scripts/verify/p2.4-settings-model.ps1 (exit 0) ---
+Ferrum check p2.4: Settings model
+Why: bad settings never crash or weaken the app.
+Run at 2026-10-12 00:49 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   The core crate forbids unsafe code
+         #![forbid(unsafe_code)]
+  PASS   Settings tests pass, one per required case
+         7 required cases pass (test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s)
+------------------------------------------------------------------------
+RESULT: PASS - p2.4 (2 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.4 check passed".
+    --- end of scripts/verify/p2.4-settings-model.ps1 ---
+  PASS   Task p2.4: Settings model (1 s)
+         scripts/verify/p2.4-settings-model.ps1: RESULT: PASS - p2.4 (2 PASS; 1 s)
+    --- output of scripts/verify/p2.5-address-input.ps1 (exit 0) ---
+Ferrum check p2.5: Clean up address-bar input
+Why: malformed input never navigates.
+Run at 2026-10-12 00:49 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   The case table covers every input class
+         14 classes, 36 cases
+  PASS   The function is pure (no file, network or clock use)
+         no I/O in address.rs
+  PASS   Tests pass: every case, and malformed input never navigates
+         every_input_class ok; malformed_never_navigates ok
+------------------------------------------------------------------------
+RESULT: PASS - p2.5 (3 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.5 check passed".
+    --- end of scripts/verify/p2.5-address-input.ps1 ---
+  PASS   Task p2.5: Clean up address-bar input (1 s)
+         scripts/verify/p2.5-address-input.ps1: RESULT: PASS - p2.5 (3 PASS; 1 s)
+    --- output of scripts/verify/p2.6-show-website.ps1 (exit 0) ---
+Ferrum check p2.6: Show a website and track it
+Why: the address bar and spinner are always right.
+Run at 2026-10-12 00:49 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Raw WebView2 code is confined to one audited module
+         unsafe only in crates/webview-manager/src/webview2.rs; clippy (incl. undocumented_unsafe_blocks) clean
+  PASS   Self-test: two pages, events in order, the shell receives them (58 s)
+         2 pages in order; the shell received 10 events in order
+------------------------------------------------------------------------
+RESULT: PASS - p2.6 (2 PASS; 59 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.6 check passed".
+    --- end of scripts/verify/p2.6-show-website.ps1 ---
+  PASS   Task p2.6: Show a website and track it (59 s)
+         scripts/verify/p2.6-show-website.ps1: RESULT: PASS - p2.6 (2 PASS; 59 s)
+    --- output of scripts/verify/p2.7-back-forward-refresh.ps1 (exit 0) ---
+Ferrum check p2.7: Back, forward, refresh
+Why: browsing works like a normal browser.
+Run at 2026-10-12 00:50 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Smoke test: A, B, back, forward, refresh; buttons follow the history (17 s)
+         back-forward-refresh: 1 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.7 (1 PASS; 17 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.7 check passed".
+    --- end of scripts/verify/p2.7-back-forward-refresh.ps1 ---
+  PASS   Task p2.7: Back, forward, refresh (18 s)
+         scripts/verify/p2.7-back-forward-refresh.ps1: RESULT: PASS - p2.7 (1 PASS; 17 s)
+    --- output of scripts/verify/p2.8-loading-error-screens.ps1 (exit 0) ---
+Ferrum check p2.8: Loading and error states
+Why: you always know what is happening.
+Run at 2026-10-12 00:50 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Smoke test: slow, 404, 500, unreachable host; never the app origin in the website view (20 s)
+         loading-errors: 5 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.8 (1 PASS; 21 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.8 check passed".
+    --- end of scripts/verify/p2.8-loading-error-screens.ps1 ---
+  PASS   Task p2.8: Loading and error screens (21 s)
+         scripts/verify/p2.8-loading-error-screens.ps1: RESULT: PASS - p2.8 (1 PASS; 21 s)
+    --- output of scripts/verify/p2.9-follow-redirects-correctly.ps1 (exit 0) ---
+Ferrum check p2.9: Follow redirects correctly
+Why: the address bar never lies.
+Run at 2026-10-12 00:50 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Smoke test: six redirect kinds end on the final address; the loop ends in the error state (18 s)
+         redirects: 7 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.9 (1 PASS; 18 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.9 check passed".
+    --- end of scripts/verify/p2.9-follow-redirects-correctly.ps1 ---
+  PASS   Task p2.9: Follow redirects correctly (19 s)
+         scripts/verify/p2.9-follow-redirects-correctly.ps1: RESULT: PASS - p2.9 (1 PASS; 18 s)
+    --- output of scripts/verify/p2.10-new-windows-links.ps1 (exit 0) ---
+Ferrum check p2.10: New windows and links to other apps
+Why: nothing launches without your consent.
+Run at 2026-10-12 00:51 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Smoke test: new windows follow the setting; links to other apps ask first and launch only on Open (22 s)
+         new-windows-links: 7 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.10 (1 PASS; 23 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.10 check passed".
+    --- end of scripts/verify/p2.10-new-windows-links.ps1 ---
+  PASS   Task p2.10: New windows and outside links (23 s)
+         scripts/verify/p2.10-new-windows-links.ps1: RESULT: PASS - p2.10 (1 PASS; 23 s)
+    --- output of scripts/verify/p2.11-keep-cookies.ps1 (exit 0) ---
+Ferrum check p2.11: Keep cookies across a restart
+Why: you stay signed in after closing and reopening Ferrum.
+Run at 2026-10-12 00:51 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Smoke test: a one-day cookie survives a restart on the same data folder; a session cookie does not (18 s)
+         keep-cookies: 1 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.11 (1 PASS; 18 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.11 check passed".
+    --- end of scripts/verify/p2.11-keep-cookies.ps1 ---
+  PASS   Task p2.11: Keep cookies across restarts (19 s)
+         scripts/verify/p2.11-keep-cookies.ps1: RESULT: PASS - p2.11 (1 PASS; 18 s)
+    --- output of scripts/verify/p2.12-devtools-debug-only.ps1 (exit 0) ---
+Ferrum check p2.12: Developer tools only in test builds
+Why: nobody opens them by accident in the real app.
+Run at 2026-10-12 00:51 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Build the shell, the debug app and the release app (55 s)
+         debug and release builds ready
+  PASS   Release build: DevTools off in both views; F12 and Ctrl+Shift+I open nothing (10 s)
+         content=off, shell=off; content view: new DevTools windows = 0; shell view: new DevTools windows = 0
+  PASS   Debug build: DevTools on in both views; F12 opens them in the website view (15 s)
+         content=on, shell=on; content view: new DevTools windows = 1; shell view: new DevTools windows = 0
+------------------------------------------------------------------------
+RESULT: PASS - p2.12 (3 PASS; 82 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.12 check passed".
+    --- end of scripts/verify/p2.12-devtools-debug-only.ps1 ---
+  PASS   Task p2.12: Developer tools only in test builds (82 s)
+         scripts/verify/p2.12-devtools-debug-only.ps1: RESULT: PASS - p2.12 (3 PASS; 82 s)
+    --- output of scripts/verify/p2.13-google-sign-in.ps1 (exit 0) ---
+Ferrum check p2.13: Google sign-in opens in your normal browser
+Why: sign-in stays honest and possible.
+Run at 2026-10-12 00:53 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Unit tests of the sign-in address checker (recorded Google addresses, look-alikes, test pattern)
+         ferrum-core oauth tests: 3 passed
+  PASS   Smoke test: sign-in links show the bar and never load inside Ferrum; only the click opens them (19 s)
+         google-sign-in: 4 passed
+  PASS   No user-agent change anywhere in Ferrum's code
+         no SetUserAgent / user_agent( / --user-agent in crates or apps/desktop
+------------------------------------------------------------------------
+RESULT: PASS - p2.13 (3 PASS; 20 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.13 check passed".
+    --- end of scripts/verify/p2.13-google-sign-in.ps1 ---
+  PASS   Task p2.13: Google sign-in: offer the normal browser (21 s)
+         scripts/verify/p2.13-google-sign-in.ps1: RESULT: PASS - p2.13 (3 PASS; 20 s)
+    --- output of scripts/verify/p2.14-structured-logs-crashes.ps1 (exit 0) ---
+Ferrum check p2.14: Structured logs and crash records
+Why: problems can be found and fixed.
+Run at 2026-10-12 00:53 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Unit tests: typed WebView2 errors; logged addresses keep only scheme and host
+         site_keeps_only_scheme_and_host ok; errors_print_as_one_line ok
+  PASS   Whole smoke suite; every log file of the run is JSON lines, no panic, addresses as scheme and host only (44 s)
+         7 log files, 96 JSON lines, 0 panics, 0 problems
+  PASS   A deliberate test crash is written to the log as one panic line (debug build) (1 s)
+         exit code 0; 4 JSON lines; 1 panic line with the test message
+------------------------------------------------------------------------
+RESULT: PASS - p2.14 (3 PASS; 46 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.14 check passed".
+    --- end of scripts/verify/p2.14-structured-logs-crashes.ps1 ---
+  PASS   Task p2.14: Structured logs, no crashes (47 s)
+         scripts/verify/p2.14-structured-logs-crashes.ps1: RESULT: PASS - p2.14 (3 PASS; 46 s)
+    --- output of scripts/verify/p2.15-quick-whole-app.ps1 (exit 0) ---
+Ferrum check p2.15: Whole smoke suite and manual checklist
+Why: the first milestone is shown working end to end.
+Run at 2026-10-12 00:54 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   One suite command; a test file for each smoke-tested task
+         npm run smoke; 6 spec files (p2.12 has its own release-build check)
+  PASS   The whole smoke suite passes (38 s)
+         exit 0; 25 passed
+  PASS   Manual checklist for the end-of-phase review is written
+         docs/testing/manual-checklist-p2.md: 5 checks (sites, mailto, sign-in kept, network loss, Alt+Tab)
+------------------------------------------------------------------------
+RESULT: PASS - p2.15 (3 PASS; 38 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.15 check passed".
+    --- end of scripts/verify/p2.15-quick-whole-app.ps1 ---
+  PASS   Task p2.15: Quick whole-app tests (39 s)
+         scripts/verify/p2.15-quick-whole-app.ps1: RESULT: PASS - p2.15 (3 PASS; 38 s)
+    --- output of scripts/verify/p2.16-update-docs.ps1 (exit 0) ---
+Ferrum check p2.16: Update docs and part pages
+Why: docs match reality.
+Run at 2026-10-12 00:54 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   Wiki check clean (no errors)
+         npm run lint:wiki: 0 errors
+  PASS   Shell, WebView manager and core pages marked implemented, with a real last verified commit
+         comp-app-shell implemented @ 9df1157; comp-webview-manager implemented @ 9df1157; comp-core implemented @ 9df1157
+  PASS   README build, run and test instructions; SECURITY.md first-version section
+         README: build, run, tests, manual checklist; SECURITY.md: M1 section and known limitations
+------------------------------------------------------------------------
+RESULT: PASS - p2.16 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.16 check passed".
+    --- end of scripts/verify/p2.16-update-docs.ps1 ---
+  PASS   Task p2.16: Update docs and part pages (1 s)
+         scripts/verify/p2.16-update-docs.ps1: RESULT: PASS - p2.16 (3 PASS; 0 s)
+    --- output of scripts/verify/p2.17-literature-batch-2.ps1 (exit 0) ---
+Ferrum check p2.17: Literature batch 2
+Why: evidence for later experiments.
+Run at 2026-10-12 00:54 on commit 5c2af31
+------------------------------------------------------------------------
+  PASS   New dated note with its web sources, fingerprinted in the raw manifest
+         access date stated; 9 web sources; manifest line present
+  PASS   Every source entry says whether it was read (VERIFIED or UNCERTAIN)
+         8 entries, each labelled
+  PASS   Reading log has a row for batch 2; wiki check clean
+         batch 2 row present; npm run lint:wiki: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p2.17 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.17 check passed".
+    --- end of scripts/verify/p2.17-literature-batch-2.ps1 ---
+  PASS   Task p2.17: Literature batch 2
+         scripts/verify/p2.17-literature-batch-2.ps1: RESULT: PASS - p2.17 (3 PASS; 0 s)
+
+Part 3 - Test gate on one commit
+         saved wiki/raw/evidence/phase-p2-minimal-container/cargo-fmt.txt
+         saved wiki/raw/evidence/phase-p2-minimal-container/cargo-clippy.txt
+  PASS   Formatting and code warnings (4 s)
+         cargo fmt --check and cargo clippy -D warnings: exit 0
+         saved wiki/raw/evidence/phase-p2-minimal-container/cargo-test.txt
+  PASS   Rust tests (5 s)
+         cargo test --workspace: exit 0
+         saved wiki/raw/evidence/phase-p2-minimal-container/cargo-deny.txt
+  PASS   Licences and alerts (2 s)
+         cargo deny check: exit 0
+         saved wiki/raw/evidence/phase-p2-minimal-container/shell-tests.txt
+  PASS   Shell checks (lint, types, unit tests) (2 s)
+         npm run lint, typecheck, test: exit 0
+         saved wiki/raw/evidence/phase-p2-minimal-container/release-build.txt
+  PASS   Release build (51 s)
+         npm run tauri -- build --no-bundle: exit 0 (target/release/ferrum-desktop.exe)
+         saved wiki/raw/evidence/phase-p2-minimal-container/ipc-denial.txt
+  PASS   Bridge lockdown test (no website can call the app) (60 s)
+         p2.3 IPC denial test: PASS
+         saved wiki/raw/evidence/phase-p2-minimal-container/smoke.txt
+  PASS   Whole smoke suite (39 s)
+         25 passed
+         saved wiki/raw/evidence/phase-p2-minimal-container/wiki-lint.txt
+  PASS   Wiki check (12 s)
+         lint: 0 errors, 39 warnings, 2 info (pages: 213)
+
+Part 4 - Your part (task p2.18)
+  YOURS  Your checklist
+         You tried the release build: five HTTPS sites, a mail link, a restart, going offline and Alt+Tab (docs/testing/manual-checklist-p2.md), and told Claude the results.
+  YOURS  Your review
+         You looked at the changed pages and the evidence, and said whether P2 is signed off.
+------------------------------------------------------------------------
+RESULT: PASS - P2-gate (27 PASS, 2 YOURS; 669 s)
+All automatic P2 checks passed on one commit.
+Still yours to do by hand: Your checklist; Your review.
+What to tell Claude: "P2 gate passed".

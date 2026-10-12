@@ -1,0 +1,33 @@
+Command output saved by scripts/gates/p2-gate.ps1 on 2026-10-12 00:55 at commit 5c2af31 (with uncommitted changes)
+Exit code: 0
+
+### npm run lint (exit 0)
+
+> ferrum-desktop-shell@0.0.0 lint
+> tsc --noEmit -p tsconfig.lint.json
+
+### npm run typecheck (exit 0)
+
+> ferrum-desktop-shell@0.0.0 typecheck
+> tsc --noEmit
+
+### npm run test (exit 0)
+
+> ferrum-desktop-shell@0.0.0 test
+> node --test "src/**/*.test.ts"
+
+✔ a loaded page: state loaded, no panel, lock allowed (1.485ms)
+✔ a site's own error page (404, 500) stays visible with a toolbar note (0.2781ms)
+✔ a failure without a page gets the shell's panel (0.1992ms)
+✔ a cancelled navigation is not an error (0.1308ms)
+✔ the lock describes only pages that loaded (0.195ms)
+✔ error texts: known codes in plain words, unknown codes get a general sentence (0.2241ms)
+✔ address text and blocked note (0.1523ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 137.7097

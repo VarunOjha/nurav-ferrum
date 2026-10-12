@@ -1,0 +1,26 @@
+Command output saved by scripts/gates/p2-gate.ps1 on 2026-10-12 00:55 at commit 5c2af31 (with uncommitted changes)
+Exit code: 0
+
+
+> ferrum-desktop-shell@0.0.0 tauri
+> tauri build --no-bundle
+
+
+> ferrum-desktop-shell@0.0.0 build
+> tsc --noEmit && vite build
+
+[36mvite v8.3.4 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 9 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                 1.72 kB │ gzip: 0.71 kB
+dist/assets/index-Byle5wXs.css  3.17 kB │ gzip: 1.12 kB
+dist/assets/index-dhXEQ-k5.js   6.89 kB │ gzip: 2.77 kB
+
+[32m✓ built in 78ms[39m
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `npm run build`
+   Compiling ferrum-desktop v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\src-tauri)
+    Finished `release` profile [optimized] target(s) in 45.79s
+       Built application at: <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\target\release\ferrum-desktop.exe

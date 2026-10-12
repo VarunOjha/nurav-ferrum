@@ -1,0 +1,33 @@
+Command output saved by scripts/gates/p2-gate.ps1 on 2026-10-12 00:57 at commit 5c2af31 (with uncommitted changes)
+Exit code: 0
+
+
+Running 25 tests using 1 worker
+
+  ✓   1 back-forward-refresh.spec.ts:13:1 › back, forward and refresh behave like a browser (540ms)
+  ✓   2 google-sign-in.spec.ts:22:1 › the sign-in link shows the banner and does not load in Ferrum (835ms)
+  ✓   3 google-sign-in.spec.ts:35:1 › Dismiss opens nothing; Open in browser opens exactly the sign-in address (242ms)
+  ✓   4 google-sign-in.spec.ts:46:1 › a typed sign-in address is offered the same way (109ms)
+  ✓   5 google-sign-in.spec.ts:55:1 › the real Google sign-in address is caught too (183ms)
+  ✓   6 keep-cookies.spec.ts:9:1 › a persistent cookie survives closing and reopening Ferrum (3.4s)
+  ✓   7 loading-errors.spec.ts:19:1 › slow page shows the loading state, then loaded (3.1s)
+  ✓   8 loading-errors.spec.ts:42:3 › HTTP 404 is shown as a toolbar status, the site's page stays (97ms)
+  ✓   9 loading-errors.spec.ts:42:3 › HTTP 500 is shown as a toolbar status, the site's page stays (98ms)
+  ✓  10 loading-errors.spec.ts:51:1 › unreachable host shows the shell's error panel, and the app recovers (433ms)
+  ✓  11 loading-errors.spec.ts:67:1 › the content view never showed the app's own origin (2ms)
+  ✓  12 new-windows-links.spec.ts:49:3 › default settings (same view, confirm other apps) › target=_blank opens in the same view, no extra window (320ms)
+  ✓  13 new-windows-links.spec.ts:57:3 › default settings (same view, confirm other apps) › window.open from a click opens in the same view (222ms)
+  ✓  14 new-windows-links.spec.ts:64:3 › default settings (same view, confirm other apps) › a pop-up opened by script alone also stays in the same view (no new window) (1.1s)
+  ✓  15 new-windows-links.spec.ts:71:3 › default settings (same view, confirm other apps) › mailto link asks first; Cancel launches nothing (822ms)
+  ✓  16 new-windows-links.spec.ts:94:3 › default settings (same view, confirm other apps) › custom-scheme link: Open launches exactly that link, once (397ms)
+  ✓  17 new-windows-links.spec.ts:109:3 › default settings (same view, confirm other apps) › a typed link to another app asks too (78ms)
+  ✓  18 new-windows-links.spec.ts:127:3 › new_window = system-browser › target=_blank goes to the system browser; the page stays (340ms)
+  ✓  19 redirects.spec.ts:12:3 › redirect 301 shows the final address (183ms)
+  ✓  20 redirects.spec.ts:12:3 › redirect 302 shows the final address (105ms)
+  ✓  21 redirects.spec.ts:12:3 › redirect 303 shows the final address (88ms)
+  ✓  22 redirects.spec.ts:12:3 › redirect 307 shows the final address (92ms)
+  ✓  23 redirects.spec.ts:12:3 › redirect 308 shows the final address (174ms)
+  ✓  24 redirects.spec.ts:12:3 › redirect chain shows the final address (80ms)
+  ✓  25 redirects.spec.ts:21:1 › a redirect loop ends in the error state (382ms)
+
+  25 passed (28.7s)
