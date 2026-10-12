@@ -1,0 +1,13 @@
+Ferrum check p2.11: Keep cookies across a restart
+Why: you stay signed in after closing and reopening Ferrum.
+Run at 2026-10-11 19:56 on commit e2b2095 (with uncommitted changes)
+------------------------------------------------------------------------
+Running 1 test using 1 worker
+  ✓  1 keep-cookies.spec.ts:9:1 › a persistent cookie survives closing and reopening Ferrum (3.7s)
+  1 passed (7.3s)
+  PASS   Smoke test: a one-day cookie survives a restart on the same data folder; a session cookie does not (16 s)
+         keep-cookies: 1 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.11 (1 PASS; 16 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.11 check passed".

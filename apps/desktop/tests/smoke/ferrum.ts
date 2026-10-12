@@ -71,6 +71,13 @@ export async function launch(name: string, opts: LaunchOptions = {}): Promise<Fe
       const t = setTimeout(resolve, 15_000);
       proc.once("exit", () => { clearTimeout(t); resolve(); });
     });
+    // WebView2's browser processes end shortly after the app; wait until the debugging port is free, so the next
+    // launch cannot connect to the old instance (and the data folder is no longer in use).
+    for (let i = 0; i < 60; i++) {
+      const up = await fetch(`http://127.0.0.1:${cdpPort}/json/version`).then(() => true, () => false);
+      if (!up) break;
+      await new Promise((r) => setTimeout(r, 250));
+    }
   };
   return { proc, browser, shell, content, data, quit };
 }
