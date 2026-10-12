@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is in progress: 20 of 23 tasks done. Next: new look and logo.",
+  "summary": "Phase 3 is in progress: 21 of 23 tasks done. Next: tests, checklist and the end check.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:79c3f02182ceb99ba49e0b8b907f704ba0fe9e53749c1c08e817dec9edd4b47f"
+    "content_hash": "sha256:36ca554032a0713da6303e8dbecc20ef4edee05982edf02c2a3299d6146bc4b6"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: in progress, 20 of 23 tasks done",
+      "state": "P3 Tabs and sessions: in progress, 21 of 23 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 3",
-        "state": "20 of 23 tasks done"
+        "state": "21 of 23 tasks done"
       },
       {
         "item": "Next task",
-        "state": "New look and logo"
+        "state": "Tests, checklist and the end check"
       }
     ],
-    "why": "Nothing to run. Claude applies the Graphite look, the themes structure and the split-tile logo next.",
+    "why": "Nothing to run. Claude adds the feature set to the Phase 3 test run and your checklist, then runs the Phase 3 end check.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

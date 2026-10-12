@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e260bc2b0fd237ba4cf44d62808175b61b49dd48d873cedd43d32f49cf4fb38b"
+    "content_hash": "sha256:fa29c92e121b76f5794f6a0198ff0406739a0ee4019914648080b0561352d88f"
   },
   "entries": [
     {
@@ -3377,6 +3377,26 @@
       "tags": [
         "privacy",
         "address bar"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-22",
+      "date": "2026-10-12",
+      "time": "16:33",
+      "title": "Built: the Graphite look and the split-tile logo",
+      "done": "Ferrum now has the Graphite look you picked, dark or light following Windows, with your accent colour and roomy or compact sizes in Settings. An empty tab shows a new-tab page with your favourites and most visited pages. The program and taskbar use the split-tile logo. Themes are built as swappable colour sets, ready for more later.",
+      "next": "Claude adds the feature set to the Phase 3 tests and your checklist, then runs the end check.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "2a5ca43",
+      "covers": [
+        "## [2026-10-12] code | p3.22 Graphite look, themes as data, new-tab page, split-tile logo"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Built",
+      "tags": [
+        "look & feel",
+        "testing"
       ]
     }
   ]

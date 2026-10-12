@@ -6,7 +6,7 @@
   "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
   "status": "In progress",
   "progress": {
-    "done": 20,
+    "done": 21,
     "total": 23
   },
   "step_order": [
@@ -258,7 +258,7 @@
       "what": "Apply your pick: the Graphite look, light or dark following Windows, accent colour and compact or roomy settings, the new tab page, gentle motion, and the split-tile logo.",
       "why": "You want the browser to be fun to use and comfortable, with a better logo.",
       "how": "Colours live only in a theme (a set of named colours), so more themes can be added later as data. Fonts are part of the app. The logo is one drawing from which every icon size is made.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "You chose a design → Claude applies it everywhere → Ferrum looks the way you picked.",
       "check": "Tests pass; a test fails if a colour is written outside the theme; light and dark screenshots for you to compare with the design; the program shows the split-tile logo.",
       "script": "scripts/verify/p3.22-look.ps1"
@@ -269,7 +269,7 @@
       "what": "Add the feature set's tests to the Phase 3 test run and add new items to your checklist.",
       "why": "The new features must keep working, and you check them by hand before signing off.",
       "how": "Extend the Phase 3 test suite and end check; new checklist items for bookmarks, search, backup and look.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "Features built → tests and checklist → you review everything together at the Phase 3 sign-off.",
       "check": "The Phase 3 end check runs the new tests and passes; the checklist has the new items.",
       "script": null

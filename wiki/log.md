@@ -2074,3 +2074,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-feature-set-request.md]
 - result: ferrum_core::backup: Argon2id + XChaCha20-Poly1305 (RustCrypto argon2 0.6.0, chacha20poly1305 0.11.0), header authenticated, crafted costs refused; store export/import (merge, replace) and copy_to; app commands and the Backup and restore screen; replace keeps a dated copy of ferrum.db; passphrase never logged. scripts/verify/p3.21-backup.ps1 PASS. One evidence run failed because the test typed before the screen finished opening (kept as check-p3.21.txt); fixed in the test, three further runs pass. Stales approval of comp-app-shell, comp-core and ov-arch-trust-boundaries.
 - commit: 00715eb
+
+## [2026-10-12] code | p3.22 Graphite look, themes as data, new-tab page, split-tile logo
+
+- session: s02
+- time: 16:33
+- pages: [phase-p3-tabs-sessions, comp-app-shell, ov-arch-configuration]
+- sources: [raw/owner/2026-10-12-s02-feature-set-design-pick.md]
+- result: themes.ts: Graphite tokens for light and dark, accents, densities; style.css has no colour of its own (unit-tested); [appearance] theme/accent/density changed at once from Settings; IBM Plex bundled (@fontsource 5.3.0, OFL-1.1); new-tab page over empty tabs; reduced-motion respected; logo 8 split tile in icon.ico/icon.png. scripts/verify/p3.22-look.ps1 PASS (27 smoke tests; icon orange and graphite); dark and light screenshots saved under design/. Stales approval of comp-app-shell and comp-core.
+- commit: 2a5ca43
