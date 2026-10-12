@@ -1,0 +1,26 @@
+Ferrum check p2.14: Structured logs and crash records
+Why: problems can be found and fixed.
+Run at 2026-10-11 20:23 on commit a3dadf3 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: typed WebView2 errors; logged addresses keep only scheme and host
+         site_keeps_only_scheme_and_host ok; errors_print_as_one_line ok
+  ✓  21 redirects.spec.ts:12:3 › redirect 303 shows the final address (71ms)
+  ✓  22 redirects.spec.ts:12:3 › redirect 307 shows the final address (77ms)
+  ✓  23 redirects.spec.ts:12:3 › redirect 308 shows the final address (79ms)
+  ✓  24 redirects.spec.ts:12:3 › redirect chain shows the final address (88ms)
+  ✓  25 redirects.spec.ts:21:1 › a redirect loop ends in the error state (348ms)
+  25 passed (27.7s)
+Sample (first lines of one log):
+{"timestamp":"2026-10-12T01:23:19.519022Z","level":"INFO","fields":{"message":"start","version":"0.0.0","build":"debug","config_hash":"sha256:c511e93702d543a2c148c56539ef7116ce6f30a1de1258e906dd5141beba1448"},"target":"ferrum::app"}
+{"timestamp":"2026-10-12T01:23:20.459216Z","level":"INFO","fields":{"message":"content view created","profile":"ferrum-default"},"target":"ferrum::content"}
+{"timestamp":"2026-10-12T01:23:20.551916Z","level":"INFO","fields":{"message":"page loaded","site":"about:","http_status":0},"target":"ferrum::nav"}
+{"timestamp":"2026-10-12T01:23:20.950152Z","level":"INFO","fields":{"message":"page loaded","site":"https://localhost:8443","http_status":200},"target":"ferrum::nav"}
+  PASS   Whole smoke suite; every log file of the run is JSON lines, no panic, addresses as scheme and host only (42 s)
+         7 log files, 96 JSON lines, 0 panics, 0 problems
+{"timestamp":"2026-10-12T01:23:47.508477Z","level":"ERROR","fields":{"message":"panic","panic":true,"location":"apps\\desktop\\src-tauri\\src\\selftest.rs:318","panic_message":"ferrum test panic (p2.14 self-test)"},"target":"ferrum::panic"}
+  PASS   A deliberate test crash is written to the log as one panic line (debug build) (1 s)
+         exit code 0; 4 JSON lines; 1 panic line with the test message
+------------------------------------------------------------------------
+RESULT: PASS - p2.14 (3 PASS; 44 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.14 check passed".

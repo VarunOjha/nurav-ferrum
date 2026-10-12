@@ -6,7 +6,7 @@ use std::rc::Rc;
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, Ordering};
 
-use ferrum_core::address::{Note, Outcome, Refusal, normalize};
+use ferrum_core::address::{Note, Outcome, Refusal, normalize, site};
 use ferrum_core::config::{GoogleOauth, Loaded};
 use ferrum_webview_manager::tab::{NavDecision, TabEvent, p2_gate};
 use ferrum_webview_manager::webview2::{CONTENT, ContentView};
@@ -82,6 +82,42 @@ fn event_json(e: &TabEvent) -> Value {
     }
 }
 
+/// Writes the log line for a tab event (navigation outcomes and decisions; addresses as scheme and host only).
+fn log_event(e: &TabEvent) {
+    match e {
+        TabEvent::NavigationStarting {
+            uri,
+            allowed: false,
+            ..
+        } => {
+            tracing::info!(target: "ferrum::nav", site = %site(uri), "navigation cancelled by the gate")
+        }
+        TabEvent::NavigationCompleted {
+            uri,
+            success,
+            http_status,
+            web_error_status,
+            ..
+        } => {
+            if *success && *http_status < 400 {
+                tracing::info!(target: "ferrum::nav", site = %site(uri), http_status, "page loaded");
+            } else {
+                tracing::warn!(target: "ferrum::nav", site = %site(uri), success, http_status, web_error_status, "page not loaded normally");
+            }
+        }
+        TabEvent::NewWindowRequested {
+            uri,
+            user_initiated,
+        } => {
+            tracing::info!(target: "ferrum::nav", site = %site(uri), user_initiated, "new window requested")
+        }
+        TabEvent::ExternalSchemeRequested { uri, .. } => {
+            tracing::info!(target: "ferrum::nav", site = %site(uri), "link to another app stopped by WebView2")
+        }
+        _ => {}
+    }
+}
+
 /// The content area in physical pixels relative to the window's client area.
 pub fn content_rect<R: Runtime>(window: &Window<R>) -> tauri::Result<RECT> {
     let size = window.inner_size()?;
@@ -119,6 +155,7 @@ pub fn create(app: &AppHandle, window: &Window) -> tauri::Result<()> {
                     .content_last
                     .store(true, Ordering::SeqCst);
             }
+            log_event(&e);
             let v = event_json(&e);
             h2.state::<EventLog>().0.lock().unwrap().push(v.clone());
             let _ = h2.emit_to("shell", "tab", v);
@@ -165,15 +202,18 @@ pub fn create(app: &AppHandle, window: &Window) -> tauri::Result<()> {
             gate,
             Box::new(move |view| match view {
                 Ok(view) => {
-                    let _ = view.navigate(&start);
+                    tracing::info!(target: "ferrum::content", profile = CONTENT_PROFILE, "content view created");
+                    if let Err(e) = view.navigate(&start) {
+                        tracing::warn!(target: "ferrum::content", error = %e, "start page not opened");
+                    }
                     CONTENT.with(|c| *c.borrow_mut() = Some(view));
                     h3.state::<ContentReady>().0.store(true, Ordering::SeqCst);
                 }
-                Err(e) => eprintln!("[ferrum] content view not created: {e}"),
+                Err(e) => tracing::error!(target: "ferrum::content", error = %e, "content view not created"),
             }),
         );
         if let Err(e) = res {
-            eprintln!("[ferrum] content view creation failed to start: {e}");
+            tracing::error!(target: "ferrum::content", error = %e, "content view creation failed to start");
         }
     })
 }

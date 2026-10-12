@@ -188,3 +188,19 @@ pub fn normalize(input: &str, security: &Security) -> Outcome {
     }
     Outcome::Navigate { url, note: None }
 }
+
+/// The part of an address that Ferrum's log keeps: `scheme://host[:port]` for web addresses, only `scheme:` for
+/// others (for example `mailto:`), `"(not an address)"` when it does not parse. No path, query or fragment: the log
+/// must not become a browsing history (task p2.14).
+pub fn site(uri: &str) -> String {
+    match Url::parse(uri) {
+        Ok(u) => match u.host_str() {
+            Some(h) => match u.port() {
+                Some(p) => format!("{}://{}:{}", u.scheme(), h, p),
+                None => format!("{}://{}", u.scheme(), h),
+            },
+            None => format!("{}:", u.scheme()),
+        },
+        Err(_) => "(not an address)".to_string(),
+    }
+}

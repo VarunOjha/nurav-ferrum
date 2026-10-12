@@ -6,6 +6,7 @@
 
 mod content;
 mod external;
+mod logging;
 mod selftest;
 
 use std::path::PathBuf;
@@ -62,6 +63,7 @@ fn shell_cover(window: Window, covered: tauri::State<'_, Covered>, cover: bool) 
 /// Closes Ferrum (the shell's quit action; the smoke tests use it to end the app cleanly instead of killing it).
 #[tauri::command]
 fn app_quit(app: tauri::AppHandle) {
+    tracing::info!(target: "ferrum::app", "quit");
     app.exit(0);
 }
 
@@ -106,7 +108,8 @@ fn relayout(window: &Window) -> tauri::Result<()> {
 }
 
 /// Settings: the user's `config.toml` in the app config folder, then `--config <path>` (experiment override).
-fn load_config(app: &tauri::App) -> config::Loaded {
+/// Returns the settings and, if they could not be used, why (logged once logging has started).
+fn load_config(app: &tauri::App) -> (config::Loaded, Option<String>) {
     let user = app
         .path()
         .app_config_dir()
@@ -119,16 +122,11 @@ fn load_config(app: &tauri::App) -> config::Loaded {
         .and_then(|i| args.get(i + 1))
         .map(PathBuf::from);
     match config::load(user.as_deref(), over.as_deref()) {
-        Ok(l) => {
-            for w in &l.warnings {
-                eprintln!("[ferrum] settings: {w:?}");
-            }
-            l
-        }
+        Ok(l) => (l, None),
         Err(e) => {
             // Never start with half-read settings: fall back to the safe defaults and say so.
-            eprintln!("[ferrum] settings not used ({e}); using the defaults");
-            config::validate(config::Config::default()).expect("defaults are valid")
+            let defaults = config::validate(config::Config::default()).expect("defaults are valid");
+            (defaults, Some(e.to_string()))
         }
     }
 }
@@ -158,7 +156,31 @@ fn main() {
             content::shell_focused
         ])
         .setup(|app| {
-            app.manage(AppConfig(load_config(app)));
+            let (loaded, config_error) = load_config(app);
+            // Logs: <data_dir>/logs when a data folder is configured, else the app's log folder (p2.14).
+            let log_dir = match &loaded.config.storage.data_dir {
+                Some(d) => Some(d.join("logs")),
+                None => app.path().app_log_dir().ok(),
+            };
+            let log_file = log_dir.as_deref().map(logging::init);
+            tracing::info!(
+                target: "ferrum::app",
+                version = env!("CARGO_PKG_VERSION"),
+                build = if cfg!(debug_assertions) { "debug" } else { "release" },
+                config_hash = %config::hash(&loaded.config),
+                "start"
+            );
+            if let Some(Err(e)) = &log_file {
+                // Nowhere to log to: say it on stderr (only visible when started from a terminal).
+                eprintln!("[ferrum] logging not started: {e}");
+            }
+            for w in &loaded.warnings {
+                tracing::warn!(target: "ferrum::config", warning = ?w, "settings warning");
+            }
+            if let Some(e) = config_error {
+                tracing::warn!(target: "ferrum::config", error = %e, "settings not used; using the defaults");
+            }
+            app.manage(AppConfig(loaded));
             // Test hook: FERRUM_EXIT_AFTER=<seconds> makes the app close itself (automated checks never kill it).
             if let Some(secs) = std::env::var("FERRUM_EXIT_AFTER")
                 .ok()
@@ -198,6 +220,8 @@ fn main() {
                 Ok("ipc") => selftest::start_ipc(app.handle().clone(), size.width, size.height),
                 Ok("nav") => selftest::start_nav(app.handle().clone()),
                 Ok("devtools") => selftest::start_devtools(app.handle().clone()),
+                #[cfg(debug_assertions)]
+                Ok("panic") => selftest::start_panic(app.handle().clone()),
                 _ => {}
             }
             Ok(())

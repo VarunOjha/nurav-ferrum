@@ -246,7 +246,10 @@ pub fn start_devtools(app: AppHandle) {
     std::thread::spawn(move || {
         let out = std::env::var("FERRUM_SELFTEST_OUT").unwrap_or_default();
         let ready = wait_for(20, || app.state::<ContentReady>().0.load(Ordering::SeqCst));
-        let (tx, rx) = std::sync::mpsc::channel::<(&'static str, Result<bool, String>)>();
+        let (tx, rx) = std::sync::mpsc::channel::<(
+            &'static str,
+            Result<bool, ferrum_webview_manager::Error>,
+        )>();
         let tx_content = tx.clone();
         with_content(&app, move |v| {
             let _ = tx_content.send(("content", v.devtools_enabled()));
@@ -264,7 +267,7 @@ pub fn start_devtools(app: AppHandle) {
                     view.to_string(),
                     match r {
                         Ok(b) => json!(b),
-                        Err(e) => json!({ "error": e }),
+                        Err(e) => json!({ "error": e.to_string() }),
                     },
                 );
             }
@@ -303,6 +306,20 @@ pub fn start_devtools(app: AppHandle) {
                 "devtools_enabled": got,
                 "keyboard_attempts": handed_over,
             }),
+        );
+    });
+}
+
+/// Panic self-test (p2.14, debug builds only): a background thread panics on purpose; the panic hook must write it to
+/// the log as one JSON line. The app then exits normally.
+#[cfg(debug_assertions)]
+pub fn start_panic(app: AppHandle) {
+    std::thread::spawn(move || {
+        let crashed = std::thread::spawn(|| panic!("ferrum test panic (p2.14 self-test)")).join();
+        std::thread::sleep(Duration::from_millis(300));
+        finish(
+            &app,
+            json!({ "selftest": "panic", "thread_panicked": crashed.is_err() }),
         );
     });
 }

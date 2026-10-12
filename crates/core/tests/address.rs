@@ -272,3 +272,19 @@ fn malformed_never_navigates() {
         );
     }
 }
+
+#[test]
+fn site_keeps_only_scheme_and_host() {
+    use ferrum_core::address::site;
+    assert_eq!(
+        site("https://example.org/private/path?q=secret#frag"),
+        "https://example.org"
+    );
+    assert_eq!(
+        site("https://user:pw@example.org:8443/x"),
+        "https://example.org:8443"
+    );
+    assert_eq!(site("mailto:someone@example.org"), "mailto:");
+    assert_eq!(site("about:blank"), "about:");
+    assert_eq!(site("not an address"), "(not an address)");
+}

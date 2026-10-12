@@ -8,7 +8,10 @@
 #![deny(unsafe_code)]
 #![deny(clippy::undocumented_unsafe_blocks)]
 
+pub mod error;
 pub mod tab;
+
+pub use error::Error;
 
 #[cfg(windows)]
 pub mod webview2;

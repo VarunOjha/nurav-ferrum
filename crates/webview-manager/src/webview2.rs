@@ -27,6 +27,7 @@ use webview2_com::{
 use windows::Win32::Foundation::{HWND, RECT};
 use windows_core::{BOOL, HSTRING, Interface, PWSTR};
 
+use crate::Error;
 use crate::tab::{NavDecision, TabEvent};
 
 /// Receives tab events (UI thread).
@@ -34,8 +35,11 @@ pub type EventSink = Rc<dyn Fn(TabEvent)>;
 /// Decides whether a page-started navigation may start (UI thread).
 pub type NavGate = Rc<dyn Fn(&str) -> NavDecision>;
 
-fn hr<T>(r: windows_core::Result<T>) -> Result<T, String> {
-    r.map_err(|e| format!("0x{:08X} {}", e.code().0 as u32, e.message()))
+fn hr<T>(r: windows_core::Result<T>) -> Result<T, Error> {
+    r.map_err(|e| Error::Com {
+        code: e.code().0 as u32,
+        message: e.message(),
+    })
 }
 
 #[derive(Clone, Copy)]
@@ -70,8 +74,8 @@ impl ContentView {
         devtools: bool,
         sink: EventSink,
         gate: NavGate,
-        done: Box<dyn FnOnce(Result<ContentView, String>)>,
-    ) -> Result<(), String> {
+        done: Box<dyn FnOnce(Result<ContentView, Error>)>,
+    ) -> Result<(), Error> {
         let env10: ICoreWebView2Environment10 = hr(env.cast())?;
         // SAFETY: COM-1 (called on the UI thread by the caller's contract); `env10` is a live environment.
         let opts = hr(unsafe { env10.CreateCoreWebView2ControllerOptions() })?;
@@ -79,9 +83,9 @@ impl ContentView {
         hr(unsafe { opts.SetProfileName(&HSTRING::from(profile)) })?;
         let handler = CreateCoreWebView2ControllerCompletedHandler::create(Box::new(
             move |res, controller| {
-                let built = (|| -> Result<ContentView, String> {
+                let built = (|| -> Result<ContentView, Error> {
                     hr(res)?;
-                    let controller = controller.ok_or("WebView2 returned no controller")?;
+                    let controller = controller.ok_or(Error::NoController)?;
                     // SAFETY: COM-1 (WebView2 delivers this completion on the UI thread); `controller` is live.
                     let core = hr(unsafe { controller.CoreWebView2() })?;
                     // SAFETY: COM-1; `core` is live. Set before the first navigation.
@@ -110,7 +114,7 @@ impl ContentView {
         })
     }
 
-    fn register(&mut self, sink: EventSink, gate: NavGate) -> Result<(), String> {
+    fn register(&mut self, sink: EventSink, gate: NavGate) -> Result<(), Error> {
         let core = self.core.clone();
 
         let s = sink.clone();
@@ -303,49 +307,49 @@ impl ContentView {
     }
 
     /// Navigates to an absolute address (already normalised by `ferrum_core::address`).
-    pub fn navigate(&self, url: &str) -> Result<(), String> {
+    pub fn navigate(&self, url: &str) -> Result<(), Error> {
         // SAFETY: COM-1; the HSTRING outlives the call.
         hr(unsafe { self.core.Navigate(&HSTRING::from(url)) })
     }
 
     /// Back one entry (adr-0030).
-    pub fn go_back(&self) -> Result<(), String> {
+    pub fn go_back(&self) -> Result<(), Error> {
         // SAFETY: COM-1.
         hr(unsafe { self.core.GoBack() })
     }
 
     /// Forward one entry (adr-0030).
-    pub fn go_forward(&self) -> Result<(), String> {
+    pub fn go_forward(&self) -> Result<(), Error> {
         // SAFETY: COM-1.
         hr(unsafe { self.core.GoForward() })
     }
 
     /// Reloads the page.
-    pub fn reload(&self) -> Result<(), String> {
+    pub fn reload(&self) -> Result<(), Error> {
         // SAFETY: COM-1.
         hr(unsafe { self.core.Reload() })
     }
 
     /// Stops loading.
-    pub fn stop(&self) -> Result<(), String> {
+    pub fn stop(&self) -> Result<(), Error> {
         // SAFETY: COM-1.
         hr(unsafe { self.core.Stop() })
     }
 
     /// Places the view (physical pixels, relative to the parent window's client area).
-    pub fn set_bounds(&self, bounds: RECT) -> Result<(), String> {
+    pub fn set_bounds(&self, bounds: RECT) -> Result<(), Error> {
         // SAFETY: COM-1.
         hr(unsafe { self.controller.SetBounds(bounds) })
     }
 
     /// Shows or hides the view.
-    pub fn set_visible(&self, visible: bool) -> Result<(), String> {
+    pub fn set_visible(&self, visible: bool) -> Result<(), Error> {
         // SAFETY: COM-1.
         hr(unsafe { self.controller.SetIsVisible(visible) })
     }
 
     /// Gives the page keyboard focus (used when the window becomes active again; S1 Alt+Tab issue).
-    pub fn focus(&self) -> Result<(), String> {
+    pub fn focus(&self) -> Result<(), Error> {
         // SAFETY: COM-1.
         hr(unsafe {
             self.controller
@@ -354,7 +358,7 @@ impl ContentView {
     }
 
     /// Whether the developer tools are allowed in this view (p2.12).
-    pub fn devtools_enabled(&self) -> Result<bool, String> {
+    pub fn devtools_enabled(&self) -> Result<bool, Error> {
         controller_devtools_enabled(&self.controller)
     }
 
@@ -396,7 +400,7 @@ impl ContentView {
 /// Whether the developer tools are allowed in the web view of `controller` (also used for Tauri's shell view).
 /// Note (p2.12, observed): this setting blocks the user's ways in (F12, the context menu); a direct
 /// `OpenDevToolsWindow` call still opens them, so Ferrum has no code that makes that call.
-pub fn controller_devtools_enabled(controller: &ICoreWebView2Controller) -> Result<bool, String> {
+pub fn controller_devtools_enabled(controller: &ICoreWebView2Controller) -> Result<bool, Error> {
     let mut on = BOOL(0);
     // SAFETY: COM-1; `controller` is live; the out-pointer is a local.
     hr(unsafe {
@@ -409,7 +413,7 @@ pub fn controller_devtools_enabled(controller: &ICoreWebView2Controller) -> Resu
 }
 
 /// Gives keyboard focus to the web view of `controller` (used by the developer-tools self-test for the shell).
-pub fn controller_focus(controller: &ICoreWebView2Controller) -> Result<(), String> {
+pub fn controller_focus(controller: &ICoreWebView2Controller) -> Result<(), Error> {
     // SAFETY: COM-1; `controller` is live.
     hr(unsafe { controller.MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC) })
 }

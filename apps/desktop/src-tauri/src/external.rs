@@ -4,7 +4,7 @@
 
 use std::sync::Mutex;
 
-use ferrum_core::address::{Outcome, normalize};
+use ferrum_core::address::{Outcome, normalize, site};
 use ferrum_core::config::{NewWindow, Security};
 use ferrum_core::oauth::{TestPattern, classify};
 use serde_json::json;
@@ -19,6 +19,7 @@ pub struct PendingExternal(pub Mutex<Option<String>>);
 /// Asks the shell to confirm opening `url` in another app. The message is posted, so the shell sees it after the
 /// navigation event that triggered it.
 pub fn request(app: &AppHandle, url: String) {
+    tracing::info!(target: "ferrum::external", site = %site(&url), "asking before opening outside Ferrum");
     *app.state::<PendingExternal>().0.lock().unwrap() = Some(url.clone());
     let scheme = url.split(':').next().unwrap_or("").to_string();
     let h = app.clone();
@@ -53,6 +54,7 @@ pub fn is_sign_in(uri: &str) -> bool {
 /// "Open in browser"; nothing opens without that click. Ferrum never changes its user agent or works around
 /// Google's rule against embedded browsers (adr-0015).
 pub fn offer_sign_in(app: &AppHandle, uri: &str) {
+    tracing::info!(target: "ferrum::external", site = %site(uri), "Google sign-in offered in the normal browser");
     *app.state::<PendingExternal>().0.lock().unwrap() = Some(uri.to_string());
     let h = app.clone();
     let uri = uri.to_string();
@@ -100,7 +102,7 @@ pub fn on_new_window(app: &AppHandle, uri: &str, user_initiated: bool) {
             }
             NewWindow::SystemBrowser if user_initiated => {
                 if let Err(e) = launch(url.as_str()) {
-                    eprintln!("[ferrum] system browser not opened: {e}");
+                    tracing::warn!(target: "ferrum::external", error = %e, "system browser not opened");
                 }
             }
             NewWindow::SystemBrowser => request(app, url.to_string()),
@@ -113,6 +115,7 @@ pub fn on_new_window(app: &AppHandle, uri: &str, user_initiated: bool) {
 /// Hands `url` to Windows (default browser or app for its scheme). In debug builds, `FERRUM_LAUNCHER_LOG` replaces
 /// the launch with a line in that file (smoke tests; nothing opens).
 fn launch(url: &str) -> Result<(), String> {
+    tracing::info!(target: "ferrum::external", site = %site(url), "opening outside Ferrum");
     #[cfg(debug_assertions)]
     if let Ok(log) = std::env::var("FERRUM_LAUNCHER_LOG") {
         use std::io::Write;
@@ -143,6 +146,7 @@ pub fn external_open_confirm(
 ) -> Result<(), String> {
     let asked = pending.0.lock().unwrap().take();
     if asked.as_deref() != Some(uri.as_str()) {
+        tracing::warn!(target: "ferrum::external", site = %site(&uri), "confirmation refused: not the link Ferrum asked about");
         return Err("not the link Ferrum asked about".into());
     }
     if is_sign_in(&uri) {
@@ -164,5 +168,6 @@ pub fn external_open_confirm(
 /// The user clicked Cancel (or the bar went away).
 #[tauri::command]
 pub fn external_cancel(pending: tauri::State<'_, PendingExternal>) {
+    tracing::info!(target: "ferrum::external", "user cancelled");
     pending.0.lock().unwrap().take();
 }
