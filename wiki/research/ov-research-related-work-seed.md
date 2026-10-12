@@ -3,8 +3,9 @@ id: ov-research-related-work-seed
 type: overview
 title: "Related-work seed (verified entries only)"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-12
 sources:
+  - raw/research/literature-batch-3.md
   - raw/research/related-work-seed.md
 related:
   - ov-research-plan
@@ -73,15 +74,15 @@ tags:
 |---|---|---|---|
 | F1 | AOSP, "Low Memory Killer Daemon (lmkd)" | Page read | Memory-pressure kill ranked by importance. Analogue for strategy 3 |
 | F2 | Android Developers, "App Standby Buckets" | Page read | Adaptive policy based on predicted usage. Weakens any novelty claim for an "adaptive" policy |
-| F3 | Apple, "Managing your app's life cycle" (UIKit) | Page read | Analogue for suspend with a snapshot |
+| F3 | Apple, "Managing your app's life cycle" (UIKit) | Page read; batch 3 read Apple's "Responding to memory warnings", which says the system terminates suspended apps to reclaim memory before warning running ones ([literature-batch-3](../raw/research/literature-batch-3.md) L7) | Analogue for suspend with a snapshot, and for discard-then-shed under memory pressure |
 | F4 | Lebeck et al., "End the Senseless Killing", USENIX ATC 2020, pp. 873–887 | USENIX page plus abstract | Argues that killing apps is not the only option. Supports evaluating suspend as well as discard |
 
 ## G. Cost-aware replacement (conceptual analogues)
 
 | Id | Source | Verified | Relevance |
 |---|---|---|---|
-| G1 | Cao and Irani, "Cost-Aware WWW Proxy Caching Algorithms", USITS '97 | USENIX page plus abstract (GreedyDual-Size combines locality, cost and size) | **Closest template** for strategy 4. Ferrum must cite it and position itself against it. Read the paper's Section 3 before formalising anything |
-| G2 | Young, Algorithmica 11(6) 1994, doi 10.1007/BF01189992 | Crossref metadata | The competitive-analysis root of cost-aware eviction (its role as the origin of GreedyDual is unverified) |
+| G1 | Cao and Irani, "Cost-Aware WWW Proxy Caching Algorithms", USITS '97 | USENIX page plus abstract; the algorithm section was read in batch 3 ([literature-batch-3](../raw/research/literature-batch-3.md) L8): H = cost/size on access, offset by an inflation value L; k-competitive | **Closest template** for strategy 4. Ferrum must cite it and position itself against it |
+| G2 | Young, Algorithmica 11(6) 1994, doi 10.1007/BF01189992 | Crossref metadata; batch 3 read Cao and Irani's text and reference list naming it as the origin of GreedyDual (L8) | The competitive-analysis root of cost-aware eviction and the origin of GreedyDual |
 | G3 | O'Neil, O'Neil, Weikum, "LRU-K", SIGMOD 1993, doi 10.1145/170036.170081 | Crossref metadata plus abstract | Analogue for predicting tab revisits from activation history |
 | G4 | Megiddo and Modha, IEEE Computer 37(4) 2004, doi 10.1109/MC.2004.1297303 | Crossref metadata | A self-tuning recency/frequency balance. Analogue for an adaptive policy |
 

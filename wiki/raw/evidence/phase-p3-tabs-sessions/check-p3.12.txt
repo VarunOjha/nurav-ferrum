@@ -1,0 +1,16 @@
+Ferrum check p3.12: Literature batch 3
+Why: later claims about tab sleeping and lifecycles can cite something real.
+Run at 2026-10-12 03:16 on commit d796d23 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   New dated note with its web sources, fingerprinted in the raw manifest
+         access date stated; 9 web sources; manifest line present
+  PASS   Every source entry says whether it was read (VERIFIED or UNCERTAIN)
+         8 entries, each labelled
+  PASS   Seed-list open points: closed with a source, or still flagged
+         F3, G1, G2 closed with batch 3 sources (note and seed summary page)
+  PASS   Reading log has a row for batch 3; wiki check clean (14 s)
+         batch 3 row present; npm run lint:wiki: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p3.12 (4 PASS; 14 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.12 check passed".
