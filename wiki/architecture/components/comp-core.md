@@ -88,7 +88,7 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   passes, 1 lane; a file asking for more than 512 MiB, 10 passes or 8 lanes is refused), 16-byte salt, 24-byte nonce;
   then XChaCha20-Poly1305 over the JSON contents (bookmarks, history) with the header as associated data. Crates
   `argon2` 0.6.0 and `chacha20poly1305` 0.11.0 (RustCrypto, MIT OR Apache-2.0; `getrandom` 0.4.3, `zeroize` 1.9.1),
-  chosen over the `age` format for fewer dependencies (adr-0032 allowed either). Passphrase at least 12 characters;
+  chosen over the `age` format to build on the two primitives directly (adr-0032 allowed either). Passphrase at least 12 characters;
   key and plaintext wiped after use; files over 100 MB refused. `seal`, `open`. Store gains `export`, `import` (merge
   skips what is there; replace empties first; one transaction; non-web addresses dropped) and `copy_to`
   (`VACUUM INTO`, never over an existing file). 8 unit tests ([check-p3.21](../../raw/evidence/phase-p3-tabs-sessions/check-p3.21.20261012-1618.txt)).

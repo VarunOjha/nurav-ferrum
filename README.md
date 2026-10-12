@@ -2,8 +2,9 @@
 
 **Status: tabs and sessions (phase P3, milestone M2), awaiting the owner's exit review.** Ferrum has tabs (one
 WebView2 view each), keyboard shortcuts that also work inside a page, a separate profile per site, restore after a
-restart or a crash, local history, basic downloads, a settings screen and a sidebar. There is no release and no
-benchmark result.
+restart or a crash, local history, basic downloads, a settings screen and a sidebar. A small feature set added during
+the P3 review brings bookmarks, search of the past from the address bar, a passphrase-locked backup file, and the
+Graphite look with the split-tile logo. There is no release and no benchmark result.
 
 Ferrum aims to be an open-source, resource-efficient and security-conscious web-application container
 for Windows 11, built with Rust, Tauri 2 and Microsoft WebView2. Whether it actually uses fewer resources
@@ -116,17 +117,27 @@ to the front for a few seconds; do not type while they run.
 | Sidebar (open tabs and history) | Ctrl+Shift+S, or the ☰ button |
 | Settings (start-up sites, per-site profiles, download folder) | Ctrl+Comma, or the ⚙ button |
 | Reorder tabs | drag a tab in the strip |
+| Bookmark the page (or edit its bookmark) | Ctrl+D, or the ☆ in the address bar |
+| Show or hide the bookmarks bar; all bookmarks | Ctrl+Shift+B; Ctrl+Shift+O (the sidebar's Bookmarks) |
+| Find a page you visited | type a few letters of its title or address; arrows and Enter pick, Shift+Delete forgets one, Esc closes |
+| Back up or move bookmarks and history | sidebar, Backup and restore (a file locked with your passphrase) |
+| Accent colour, roomy or compact | Settings, Appearance (light or dark follows Windows) |
 
 Each site (its main domain, for example `example.com`) keeps its own cookies and storage. When a link in a tab leads to
 another site, Ferrum asks first, then moves the tab to that site's profile (its back history is lost). Tabs come back
 after a restart or a crash. Downloads go to your Downloads folder (or the folder in the settings) and never replace a
 file.
 
+History and bookmarks live in one database file, `ferrum.db`, in Ferrum's data folder; Clear history leaves nothing
+of the cleared pages inside it. A backup file holds bookmarks and history only (never cookies, logins or site data),
+locked with your passphrase: without it nobody can open the file, not even Ferrum, so keep the passphrase safe.
+
 Known limitations of P3: back/forward history of a tab is not restored after a restart (WebView2 cannot set it); a
 page reached by a redirect to another site stays in the first site's profile; pop-ups open in a new tab without a link
 back to the opening page, so some non-Google sign-in pop-ups may not work (P4); pages are drawn above Ferrum's own
-window, so Ferrum's panels never overlap a page (they sit beside it or hide it); no blocklist or permission prompts
-yet (P4).
+window, so Ferrum's panels never overlap a page (they sit beside it or hide it; the address-bar suggestions move the
+page down while they are open); no blocklist or permission prompts yet (P4); Graphite is the only theme so far (more
+can be added as data); moving data between PCs is a manual backup, there is no sync.
 
 ## License
 

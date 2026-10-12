@@ -25,9 +25,6 @@ options:
   - "F. Search-first new tab, Comet-style"
 phase: phase-p3-tabs-sessions
 tags: [ui, shell, design, look-and-feel, themes, logo]
-unverified:
-  - claim: "WebView2 child views cannot be given rounded corners, so the page area stays a plain rectangle"
-    verify_in: phase-p3-tabs-sessions
 ---
 
 # ADR-0033: Feature set look: Graphite, split-tile logo, themes as swappable data
@@ -95,8 +92,9 @@ default settings: Graphite, dark, typing).**
   `#A2A9B1`) and light (ground `#F2F3F4`, surfaces `#E4E6E8` / `#FFFFFF`, borders `#C9CED3`, text `#1A1D20`, muted
   `#59616A`), with a faint brushed texture on the tab strip. Accent orange `#F97316` in dark, `#C2410C` in light (for
   contrast). IBM Plex Sans and Mono, bundled with the app (adr-0028).
-- The canvas draws the page area with rounded corners in some layouts; whether a WebView2 child view can be rounded is
-  UNVERIFIED[phase-p3-tabs-sessions]. If not, the page area stays a plain rectangle.
+- The canvas draws the page area with rounded corners in layouts D to F only; look A, the one chosen, has a plain
+  rectangular page area, so whether a WebView2 child view can be rounded did not need checking (built in p3.22 as a
+  rectangle, [check-p3.22](../raw/evidence/phase-p3-tabs-sessions/check-p3.22.txt)).
 
 **Logo 8, split tile (frozen in [logos-4-to-9.dc.html](../raw/evidence/phase-p3-tabs-sessions/design/logos-4-to-9.dc.html)).**
 A rounded square cut on the diagonal, orange top-left and graphite bottom-right, with "Fe": the F dark on orange, the e

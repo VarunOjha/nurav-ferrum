@@ -62,6 +62,15 @@ Checked by the P3 task scripts (evidence: [wiki/raw/evidence/phase-p3-tabs-sessi
   [ov-arch-isolation-model](wiki/architecture/ov-arch-isolation-model.md); process isolation itself is tested in P4.
 - **Changing site asks first.** A link that leads a tab to another site's profile is stopped; the shell asks, and only
   the address it asked about moves (p3.6). A redirect to another site stays in the first site's profile (P4 gap).
+- **Bookmarks and history (feature set, adr-0032).** Kept in `ferrum.db` in the data folder, reachable only through
+  shell-only commands (tab views have no bridge); only `http`/`https` addresses are stored, so a `javascript:` or
+  `file:` "bookmark" cannot be saved or imported; Clear history removes entries and their word index and compacts the
+  file (p3.18 to p3.20).
+- **The backup file (adr-0032).** Argon2id key from your passphrase (at least 12 characters, never stored or logged)
+  and XChaCha20-Poly1305 over the contents and the header (RustCrypto crates, no cryptography of Ferrum's own); a wrong
+  passphrase, any changed byte or a cut file is refused as a whole, a file asking for unreasonable key-derivation work
+  is refused, and an import replaces nothing before making a copy of the library. Cookies, logins and site data are
+  never in it (p3.21).
 - **Pages still cannot reach the app.** Keyboard shortcuts inside a page are taken from WebView2's key hook before the
   page sees them; nothing is injected into pages (p3.3). The settings commands are shell-only; the p2.3 test page now
   also tries `settings_set` and is refused (p3.14). The settings screen never writes the file itself: the app checks

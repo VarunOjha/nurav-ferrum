@@ -7,10 +7,11 @@ updated: 2026-10-12
 sources:
   - raw/owner/2026-10-12-s02-feature-set-request.md
   - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
+  - raw/owner/2026-10-12-s02-feature-set-plan-approval.md
 related: [phase-p3-tabs-sessions, comp-core, comp-app-shell, ov-arch-configuration, ov-arch-trust-boundaries, ov-project, adr-0015, adr-0028]
 approvable: true
 date: 2026-10-12
-decided_by: claude-proposed
+decided_by: owner
 supersedes: []
 options:
   - "A. SQLite: one database file in Ferrum's data folder, plus a manual encrypted export and import file"
@@ -19,11 +20,6 @@ options:
   - "D. Keep JSON files (today's history.json) and add bookmarks.json"
 phase: phase-p3-tabs-sessions
 tags: [storage, bookmarks, history, backup, security]
-unverified:
-  - claim: "rusqlite with its bundled SQLite build includes the FTS5 text index, needs no SQLite installed on the PC and passes cargo deny"
-    verify_in: phase-p3-tabs-sessions
-  - claim: "A maintained Rust crate implements passphrase-based authenticated encryption for the backup file (planned: the age format, or Argon2id with XChaCha20-Poly1305) under a licence cargo deny allows"
-    verify_in: phase-p3-tabs-sessions
 ---
 
 # ADR-0032: Bookmarks and history in a local SQLite file; a manual, encrypted backup moves them
@@ -61,8 +57,10 @@ and, on the backup:
 
 > But I will like the option to take backup of the data from postgress and upload to another ferrum. This will be manual, but secure.
 
-The owner also said "I will review the plan and approve implementation", so this ADR stays `proposed` until the
-owner approves it in chat (SCHEMA §10.4 rule 3(a)).
+The owner also said "I will review the plan and approve implementation"; the owner approved it on 2026-10-12
+([raw/owner/2026-10-12-s02-feature-set-plan-approval.md](../raw/owner/2026-10-12-s02-feature-set-plan-approval.md)).
+The quoted choice (SQLite, a manual and secure dump) is the owner's (`decided_by: owner`, SCHEMA §10.4 rule 3(b)); the
+elaboration below binds while the owner's approval of this page is current.
 
 ### Claude elaboration (binding only once the owner APPROVES this ADR)
 
@@ -72,7 +70,9 @@ owner approves it in chat (SCHEMA §10.4 rule 3(a)).
   It is browsing data: never committed, like `history.json` today.
 - SQLite is compiled into Ferrum (the `rusqlite` crate with its bundled SQLite), so nothing is installed on the PC.
   Titles and addresses get a text index (SQLite FTS5) for fast search from the address bar.
-  Both UNVERIFIED[phase-p3-tabs-sessions], checked when the store is built (p3.18), together with `cargo deny`.
+  Verified in p3.18: `rusqlite` 0.40.2 (MIT) with its bundled SQLite reports `ENABLE_FTS5` among its compile options
+  (a unit test checks it) and passes `cargo deny`
+  ([check-p3.18](../raw/evidence/phase-p3-tabs-sessions/check-p3.18.txt)).
 - Every change is one transaction, so a crash never leaves a half-written file.
 - History limit rises from 1000 to 50 000 entries (oldest dropped). **Clear history** empties the tables and the
   text index, then compacts the file (`VACUUM`), so cleared entries do not linger inside it.
@@ -89,8 +89,11 @@ owner approves it in chat (SCHEMA §10.4 rule 3(a)).
   encrypted with a passphrase the owner types (at least 12 characters, typed twice). The passphrase is never stored
   or logged. The encryption is authenticated: a wrong passphrase, a damaged file or any change to the file is
   refused as a whole, never half-imported. Planned format: the published `age` format in passphrase mode, or
-  Argon2id key stretching with XChaCha20-Poly1305; chosen in p3.21 after a maintenance and licence check
-  (UNVERIFIED[phase-p3-tabs-sessions]). Ferrum invents no encryption of its own.
+  Argon2id key stretching with XChaCha20-Poly1305, chosen after a maintenance and licence check. Chosen in p3.21:
+  Argon2id (`argon2` 0.6.0) with XChaCha20-Poly1305 (`chacha20poly1305` 0.11.0), RustCrypto crates
+  under MIT OR Apache-2.0 that pass `cargo deny`, chosen over `age` 0.12.1 (same licences) to build on the two primitives directly
+  ([check-p3.21](../raw/evidence/phase-p3-tabs-sessions/check-p3.21.20261012-1618.txt)). Ferrum invents no encryption
+  of its own.
 - **Import** asks for the passphrase, then shows what is inside ("212 bookmarks, 3 400 history entries") before
   anything changes. The owner chooses **merge** (duplicates skipped) or **replace**. Replace first copies the current
   `ferrum.db` to a dated backup beside it.

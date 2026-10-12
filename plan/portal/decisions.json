@@ -944,9 +944,9 @@
       "title": "Bookmarks and history in a local file, moved by encrypted backup",
       "summary": "Bookmarks and history live in one SQLite database file on your PC. To move them to another Ferrum, you export one backup file locked with a passphrase you choose, and import it there: you see what's inside first, then merge or replace. Cookies and logins are never included.",
       "why": "You chose SQLite over Postgres: nothing to install or run, works offline, fast search, and no extra process to skew the benchmarks. The backup is your 'manual, but secure' dump.",
-      "catch": "No automatic sync between PCs. A lost passphrase means the backup cannot be opened. Two new building blocks (the database and the encryption) must pass the licence check first.",
+      "catch": "No automatic sync between PCs. A lost passphrase means the backup cannot be opened. Built with standard, published building blocks (SQLite; Argon2id and XChaCha20-Poly1305 from RustCrypto), all passing the licence check.",
       "status": "Accepted",
-      "decided_by": "claude",
+      "decided_by": "you",
       "date": "2026-10-12",
       "replaced_by": null,
       "category": "The app",
@@ -963,7 +963,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0032-local-sqlite-store-encrypted-backup.md",
-        "content_hash": "sha256:b91f661f0a0ed94e139f3cc5c7c13c747552376d44bdf6d487f619a93b5ef785"
+        "content_hash": "sha256:103dbb992837d548b29f5a8b3313ce2c2b7db42e3f6e3601083d53f7485f0dc8"
       }
     },
     {
@@ -991,7 +991,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0033-graphite-look-split-tile-logo-themes.md",
-        "content_hash": "sha256:4fdf4b5b07833b52e14b7cc18e1ddeb65b3910ecaf6a18db27eece0b53868b54"
+        "content_hash": "sha256:96011be6b23c2da20125efe96a651c65b362beb0f5b8dac427b788a0a3aaba07"
       }
     }
   ]
