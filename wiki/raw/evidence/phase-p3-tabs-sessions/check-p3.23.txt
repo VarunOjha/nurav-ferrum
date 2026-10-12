@@ -1,0 +1,14 @@
+Ferrum check p3.23: The feature set in the P3 tests and your checklist
+Why: the new features must keep working, and you check them by hand before signing off.
+Run at 2026-10-12 16:34 on commit e5e9e8e (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The P3 test suite includes the feature set
+         npm run p3: 15 test files, the feature set's included
+  PASS   Every feature set task has a check script the gate runs
+         p3.17 to p3.23: scripts listed and present
+  PASS   Your checklist has the feature set's items
+         items 14 to 20 present; the gate names them
+------------------------------------------------------------------------
+RESULT: PASS - p3.23 (3 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.23 check passed".

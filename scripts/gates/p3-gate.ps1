@@ -132,7 +132,7 @@ try {
 
     # --- Part 4: your part -------------------------------------------------------------------------------
     Write-Section 'Part 4 - Your part (task p3.13)'
-    Add-YourStep 'Your checklist' 'You used the release build with eight or more tabs, every shortcut, an end from Task Manager and a real download, plus the open P2 items (docs/testing/manual-checklist-p3.md), and told Claude the results.'
+    Add-YourStep 'Your checklist' 'You used the release build with eight or more tabs, every shortcut, an end from Task Manager and a real download, plus the open P2 items and the new feature set (bookmarks, address-bar search, backup, look; docs/testing/manual-checklist-p3.md items 14 to 20), and told Claude the results.'
     Add-YourStep 'Your review' 'You looked at the changed pages and the evidence, and said whether P3 is signed off.'
 }
 finally { Clear-SharedWikiLint }

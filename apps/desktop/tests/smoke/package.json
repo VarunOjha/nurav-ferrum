@@ -8,7 +8,7 @@
   "scripts": {
     "test": "playwright test",
     "smoke": "playwright test",
-    "p3": "playwright test tabs.spec shortcuts.spec startup.spec restore.spec profiles.spec history.spec downloads.spec responsive.spec no-freeze.spec settings.spec sidebar.spec",
+    "p3": "playwright test tabs.spec shortcuts.spec startup.spec restore.spec profiles.spec history.spec downloads.spec responsive.spec no-freeze.spec settings.spec sidebar.spec bookmarks.spec address-search.spec backup.spec look.spec",
     "p2": "playwright test back-forward-refresh.spec loading-errors.spec redirects.spec new-windows-links.spec keep-cookies.spec google-sign-in.spec"
   },
   "devDependencies": {

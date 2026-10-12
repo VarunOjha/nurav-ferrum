@@ -1,0 +1,14 @@
+Ferrum check p3.17: The design you chose, recorded
+Why: everything after it follows this design.
+Run at 2026-10-12 16:34 on commit e5e9e8e (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Your words and the frozen design: present and unchanged
+         6 files present, fingerprints match
+  PASS   The pick names look A Graphite and logo 8
+         quoted pick; logo 8 in the frozen board
+  PASS   The look decision (adr-0033) is accepted and your approval is current
+         adr-0033 accepted; approval APPROVED
+------------------------------------------------------------------------
+RESULT: PASS - p3.17 (3 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.17 check passed".

@@ -37,7 +37,9 @@ Start-Check -Id 'p3.11' -Title 'The P3 test suite in one command' -Phase 'phase-
 
 # The P3 app tests, in the order of the tasks (the same list as "npm run p3").
 $specs = @('tabs.spec', 'shortcuts.spec', 'startup.spec', 'restore.spec', 'profiles.spec', 'history.spec', 'downloads.spec',
-    'responsive.spec', 'no-freeze.spec', 'settings.spec', 'sidebar.spec')
+    'responsive.spec', 'no-freeze.spec', 'settings.spec', 'sidebar.spec',
+    # The new small feature set (p3.19 to p3.22, added 2026-10-12).
+    'bookmarks.spec', 'address-search.spec', 'backup.spec', 'look.spec')
 
 Invoke-Step 'Rust unit tests of the P3 parts' {
     $r = Assert-Cargo @('test', '--locked', '-p', 'ferrum-core', '--test', 'tabs', '--test', 'shortcuts', '--test', 'config',

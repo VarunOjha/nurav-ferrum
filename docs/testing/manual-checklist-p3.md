@@ -43,6 +43,18 @@ Start the release build from the repo folder:
 | 12 | Open a few well-known sites in tabs. | Each tab shows the **site's icon** next to its title (also in the sidebar). | |
 | 13 | Look at the **taskbar** and at **Task Manager** (Processes tab, "Apps"). | The orange "F" icon is easy to see; Task Manager lists **Ferrum** with that icon, and its WebView2 helpers (shown as "WebView2 Manager" and similar) inside its group. | |
 
+## The new small feature set (tasks p3.17 to p3.23)
+
+| # | What to do | What should happen | Result |
+|---|---|---|---|
+| 14 | Look at Ferrum in **dark** and in **light** (Windows Settings, Personalisation, Colours, "Choose your mode"). | The Graphite look you picked, following Windows; the **split-tile logo** on the taskbar and in Task Manager. | |
+| 15 | Open **Settings**, Appearance: try another **accent colour** and **Compact**, then go back. | The look changes at once, and stays after a restart. | |
+| 16 | Open a **new tab** (Ctrl+T). | The new-tab page: the logo, a search box, your favourites and most visited pages. | |
+| 17 | On a page, click the **star** (or Ctrl+D); rename it, put it in a folder; Ctrl+Shift+B hides and shows the bookmarks bar. | The bookmark appears in the bar or in its folder in the sidebar (Ctrl+Shift+O); clicking it opens the page. | |
+| 18 | In the address bar, type a **few letters of a page you visited** earlier. | Suggestions in groups (open tabs, bookmarks, history); arrows and Enter open one; Esc closes the list; the page is never hidden under the list. | |
+| 19 | Sidebar, **Backup and restore**: make a backup with a passphrase. Then (on this PC is fine) **Look inside** with a wrong passphrase, then the right one, and **Merge**. | The wrong passphrase is refused; the right one shows what is inside; after Merge nothing is lost or doubled. | |
+| 20 | Your existing **history** from before this update. | Still there (carried over once into the new database). | |
+
 Notes for the reviewer:
 
 - Each site keeps its own cookies now (per-site profiles), so sites you signed in to during P2 (one shared profile) ask

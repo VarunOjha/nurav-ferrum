@@ -206,7 +206,7 @@
       "status": "Done",
       "chain": "You ask for a nicer, comfortable browser → Claude asks, then draws options → you choose, and everything after builds that choice.",
       "check": "Your answers and choice are recorded; the chosen design is saved; no app code changes.",
-      "script": null
+      "script": "scripts/verify/p3.17-design.ps1"
     },
     {
       "id": "p3.18",
@@ -272,7 +272,7 @@
       "status": "In progress",
       "chain": "Features built → tests and checklist → you review everything together at the Phase 3 sign-off.",
       "check": "The Phase 3 end check runs the new tests and passes; the checklist has the new items.",
-      "script": null
+      "script": "scripts/verify/p3.23-feature-set-tests.ps1"
     }
   ],
   "test_gate": {
