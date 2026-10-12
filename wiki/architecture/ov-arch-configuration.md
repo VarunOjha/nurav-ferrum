@@ -137,6 +137,9 @@ defaults are used, so nothing the user wrote is lost. `--user-config <path>` rep
 tests use their own file); the override layer (`--config`) still applies when the user file fails. Every start-up site
 opens as a tab, in order, the first active ([check-p3.4](../raw/evidence/phase-p3-tabs-sessions/check-p3.4.txt)).
 
+`[session] restore_on_startup` is on by default from version 2: the last session's tabs open again, else the start-up
+pages (a version-1 file keeps it off, the P2 behaviour). The session itself is runtime state (section 5).
+
 ## 5. Persisted runtime state (not config)
 
-`session.json` (tabs + snapshots, one format for restore and discard), `profiles.json` (site → profile map), `audit.jsonl`, `netlog/*.jsonl`, `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.
+`session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), `profiles.json` (site → profile map), `audit.jsonl`, `netlog/*.jsonl`, `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.

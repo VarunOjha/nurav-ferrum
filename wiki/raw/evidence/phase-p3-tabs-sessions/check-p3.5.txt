@@ -1,0 +1,18 @@
+Ferrum check p3.5: Restore tabs after a restart or a crash
+Why: after a restart or a crash your tabs are back.
+Run at 2026-10-12 01:57 on commit 1f3bc5a (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Session file unit tests (2 s)
+         5 required cases pass
+Running 4 tests using 1 worker
+  ✓  1 restore.spec.ts:34:1 › tabs come back after a normal exit, with the same active tab (4.6s)
+  ✓  2 restore.spec.ts:45:1 › tabs come back after a crash (the last save) (5.0s)
+  ✓  3 restore.spec.ts:62:1 › a restored tab whose site is unreachable shows the error panel (1.6s)
+  ✓  4 restore.spec.ts:74:1 › restore_on_startup = false opens the start-up pages instead (1.5s)
+  4 passed (21.2s)
+  PASS   Smoke test: normal exit, crash, unreachable site, restore switched off (31 s)
+         restore: 4 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.5 (2 PASS; 33 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.5 check passed".

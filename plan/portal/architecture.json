@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:49b3b1299eb3f800358f0c9440ebd064c092cb5e5a8ffe90bd11d1c3bf2b3333"
+        "content_hash": "sha256:60870d5b864013034ef6179d2b0ef3142365395a7d3deb0dda1edee5fc2d349b"
       }
     },
     {
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:b62fb6c7d0673d9d1f18253fa00c66cb7f0dff89a5d87b43314a57c9999dfecb"
+        "content_hash": "sha256:b8b663148719ddbb9749f067434636b96f1510cfc41181a437ffa225f828ffe4"
       }
     },
     {

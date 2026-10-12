@@ -56,6 +56,11 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   and `check` for the rules. Tested with fixed cases and 200 random sequences of 500 operations
   ([check-p3.1](../../raw/evidence/phase-p3-tabs-sessions/check-p3.1.txt)).
 - `shortcuts` (p3.3): the shortcut table (`for_key`, `Shortcut`, `repeats`, `name`), with unit tests.
+- `session` and `fsutil` (p3.5): `session.json` (`Session`: version 1, save time, active index, tabs with address,
+  title and profile), `save` (atomic) and `load` (none when missing; newer or unreadable files refused);
+  `fsutil::write_atomic` and `fsutil::backup_broken` are shared with the settings file
+  ([check-p3.5](../../raw/evidence/phase-p3-tabs-sessions/check-p3.5.txt)). `[session] restore_on_startup` is on by
+  default from settings version 2 (a version-1 file keeps it off, as P2 never restored).
 - `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default).
 - `config` (p3.4): the file carries `version` (`VERSION` = 2). A file without it is version 1 (P2) and is migrated
   when read (`migrate_v1`: a version-1 file that did not choose `new_window` keeps `same-view`, its P2 behaviour).

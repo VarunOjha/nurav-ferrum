@@ -7,6 +7,8 @@
 pub mod config;
 
 pub mod address;
+pub mod fsutil;
 pub mod oauth;
+pub mod session;
 pub mod shortcuts;
 pub mod tabs;

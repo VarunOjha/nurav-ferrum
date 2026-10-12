@@ -11,7 +11,6 @@
 //! and is migrated when read; a file from a newer Ferrum is refused with a clear error (and never overwritten).
 //! [`save`] writes atomically (a temporary file, then a rename), so a crash never leaves half a file.
 
-use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
@@ -62,13 +61,23 @@ pub enum GoogleOauth {
 }
 
 /// `[session]`: what Ferrum shows at start.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields, default)]
 pub struct Session {
-    /// Pages opened at start (P2 shows the first). Empty means a blank page.
+    /// Pages opened at start, as tabs in this order (p3.4). Empty means one empty tab.
     pub startup_urls: Vec<String>,
-    /// Restore the previous session instead (P3; ignored in P2).
+    /// Reopen the tabs of the last run (p3.5) when there are any; otherwise the start-up pages. On by default since
+    /// settings version 2 (it did nothing in P2).
     pub restore_on_startup: bool,
+}
+
+impl Default for Session {
+    fn default() -> Self {
+        Session {
+            startup_urls: Vec::new(),
+            restore_on_startup: true,
+        }
+    }
 }
 
 /// `[security]`: the navigation posture (adr-0015).
@@ -243,9 +252,17 @@ pub fn parse(text: &str, origin: &Path) -> Result<Config, ConfigError> {
         .map_err(|e| bad(e.message().to_string()))
 }
 
-/// Version 1 (P2) to version 2 (P3): new windows used to open in the same view by default; a version-1 file that
-/// does not choose keeps that behaviour, because the new default (a new tab) would change what the user had.
+/// Version 1 (P2) to version 2 (P3). Two defaults changed; a version-1 file that does not choose keeps what it had
+/// in P2, because the new defaults would change its behaviour: new windows stay in the same view (the new default is
+/// a new tab), and the previous session is not restored (P2 never restored one).
 pub fn migrate_v1(table: &mut toml::Table) {
+    let session = table
+        .entry("session")
+        .or_insert_with(|| toml::Value::Table(toml::Table::new()));
+    if let toml::Value::Table(ses) = session {
+        ses.entry("restore_on_startup")
+            .or_insert(toml::Value::Boolean(false));
+    }
     let security = table
         .entry("security")
         .or_insert_with(|| toml::Value::Table(toml::Table::new()));
@@ -256,52 +273,25 @@ pub fn migrate_v1(table: &mut toml::Table) {
     table.insert("version".into(), toml::Value::Integer(i64::from(VERSION)));
 }
 
-/// Writes `config` to `path` atomically: the canonical TOML goes to a temporary file next to it, which then replaces
-/// `path` in one rename. Readers see the old file or the new one, never half of one.
+/// Writes `config` to `path` atomically ([`crate::fsutil::write_atomic`]): readers see the old file or the new one,
+/// never half of one.
 pub fn save(path: &Path, config: &Config) -> Result<(), ConfigError> {
-    let err = |source| ConfigError::Write {
-        path: path.to_path_buf(),
-        source,
-    };
-    if let Some(dir) = path.parent().filter(|d| !d.as_os_str().is_empty()) {
-        std::fs::create_dir_all(dir).map_err(err)?;
-    }
     let mut out = config.clone();
     out.version = VERSION;
     let text = format!(
         "# Ferrum settings (written by Ferrum; edit with care, unknown keys are refused).\n{}",
         canonical(&out)
     );
-    let name = path
-        .file_name()
-        .map(|n| n.to_string_lossy().into_owned())
-        .unwrap_or_else(|| "config.toml".into());
-    let tmp = path.with_file_name(format!("{name}.tmp-{}", std::process::id()));
-    {
-        let mut f = std::fs::File::create(&tmp).map_err(err)?;
-        f.write_all(text.as_bytes()).map_err(err)?;
-        f.sync_all().map_err(err)?;
-    }
-    std::fs::rename(&tmp, path).map_err(|e| {
-        let _ = std::fs::remove_file(&tmp);
-        err(e)
+    crate::fsutil::write_atomic(path, text.as_bytes()).map_err(|source| ConfigError::Write {
+        path: path.to_path_buf(),
+        source,
     })
 }
 
 /// Copies an unreadable settings file aside as `<name>.broken-<seconds since 1970>` and returns the copy's path, so
 /// nothing the user wrote is lost when Ferrum falls back to the defaults.
 pub fn backup_broken(path: &Path) -> std::io::Result<PathBuf> {
-    let secs = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map(|d| d.as_secs())
-        .unwrap_or(0);
-    let name = path
-        .file_name()
-        .map(|n| n.to_string_lossy().into_owned())
-        .unwrap_or_else(|| "config.toml".into());
-    let backup = path.with_file_name(format!("{name}.broken-{secs}"));
-    std::fs::copy(path, &backup)?;
-    Ok(backup)
+    crate::fsutil::backup_broken(path)
 }
 
 fn read_layer(path: &Path) -> Result<Option<Config>, ConfigError> {

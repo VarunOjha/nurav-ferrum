@@ -202,9 +202,10 @@ pub fn snapshot(app: &AppHandle) -> Value {
     })
 }
 
-/// Sends the tab list to the shell.
+/// Sends the tab list to the shell and marks the session for saving (p3.5).
 pub fn emit_tabs(app: &AppHandle) {
     let _ = app.emit_to("shell", "tabs", snapshot(app));
+    crate::session::mark_dirty(app);
 }
 
 fn update(app: &AppHandle, id: u64, f: impl FnOnce(&mut TabInfo)) -> bool {

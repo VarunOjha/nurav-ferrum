@@ -26,6 +26,7 @@ fn main() {
             "tab_list",
             "test_stats",
             "test_focus",
+            "test_crash",
             "shell_focused",
             "external_open_confirm",
             "external_cancel",

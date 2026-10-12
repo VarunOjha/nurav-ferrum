@@ -24,6 +24,7 @@
     "allow-tab-list",
     "allow-test-stats",
     "allow-test-focus",
+    "allow-test-crash",
     "allow-shell-focused",
     "allow-external-open-confirm",
     "allow-external-cancel"

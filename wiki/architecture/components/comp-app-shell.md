@@ -163,6 +163,13 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   WebView2's accelerator-key hook; the page never sees them). Event `shell-command` asks the shell to focus its
   address bar. Tabs can be dragged to reorder them and closed with a middle click. Debug-only `test_focus` puts
   focus in a page or the shell for the real-key smoke tests ([check-p3.3](../../raw/evidence/phase-p3-tabs-sessions/check-p3.3.txt)).
+- p3.5, session restore (`session.rs`): the tab list is saved to `session.json` in the data folder about once a
+  second while it changes and on a normal exit (`RunEvent::Exit`), atomically; on start the last session opens again
+  (same order, same active tab) when `restore_on_startup` is on, else the start-up pages. An unreadable session file is
+  copied aside; one from a newer Ferrum is neither restored nor overwritten. Self-test runs (`FERRUM_SELFTEST`) never
+  read or write it (they use the real data folder). Debug-only `test_crash` ends the process at once for the crash
+  test (no kill command). Known limit: back/forward history is not restored (WebView2 cannot give a new view a
+  history); each tab reopens its last address ([check-p3.5](../../raw/evidence/phase-p3-tabs-sessions/check-p3.5.txt)).
 - New windows: `new_window = "new-tab"` is the new default (`same-view` and `system-browser` stay). One tab may open
   at most one new tab per second; further requests are blocked with "Pop-up blocked" on that tab. WebView2's
   user-initiated flag is not used (it was `true` for a script-only pop-up). A real pop-up policy is P4 work.

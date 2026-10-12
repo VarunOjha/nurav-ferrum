@@ -10,6 +10,7 @@ mod content;
 mod external;
 mod logging;
 mod selftest;
+mod session;
 mod shortcuts;
 
 use std::path::PathBuf;
@@ -175,6 +176,7 @@ fn main() {
             content::tab_list,
             content::test_stats,
             content::test_focus,
+            session::test_crash,
             content::shell_focused
         ])
         .setup(|app| {
@@ -209,7 +211,10 @@ fn main() {
             if let Some(e) = config_error {
                 tracing::warn!(target: "ferrum::config", error = %e, "settings not used; using the defaults");
             }
+            let data_dir = loaded.config.storage.data_dir.clone();
             app.manage(AppConfig(loaded));
+            app.manage(session::store(app, data_dir));
+            session::start_saver(app.handle().clone());
             // Test hook: FERRUM_EXIT_AFTER=<seconds> makes the app close itself (automated checks never kill it).
             if let Some(secs) = std::env::var("FERRUM_EXIT_AFTER")
                 .ok()
@@ -259,19 +264,9 @@ fn main() {
                 if let Err(e) = ferrum_webview_manager::webview2::send_to_back(&pw.controller()) {
                     tracing::warn!(target: "ferrum::app", error = %e, "shell not moved behind the tab views");
                 }
-                // Every start-up site opens as a tab, in order; the first is active (p3.4). None: one empty tab.
-                let mut start = handle
-                    .state::<AppConfig>()
-                    .0
-                    .config
-                    .session
-                    .startup_urls
-                    .clone();
-                if start.is_empty() {
-                    start.push(content::BLANK.to_string());
-                }
-                for (i, url) in start.into_iter().enumerate() {
-                    content::open_tab(&handle, url, Place::End, i == 0);
+                // The last session (p3.5), or every start-up site as a tab, in order (p3.4).
+                for (url, active) in session::start_tabs(&handle) {
+                    content::open_tab(&handle, url, Place::End, active);
                 }
             })?;
             match std::env::var("FERRUM_SELFTEST").as_deref() {
@@ -291,6 +286,12 @@ fn main() {
             WindowEvent::Focused(true) => content::restore_focus(window.app_handle()),
             _ => {}
         })
-        .run(tauri::generate_context!())
-        .expect("Ferrum failed to start");
+        .build(tauri::generate_context!())
+        .expect("Ferrum failed to start")
+        .run(|app, event| {
+            // Save the tab list one last time when Ferrum closes normally (p3.5).
+            if let tauri::RunEvent::Exit = event {
+                session::save_now(app);
+            }
+        });
 }

@@ -78,19 +78,7 @@ export async function launch(name: string, opts: LaunchOptions = {}): Promise<Fe
   const tabPages = () => all().filter((p) => p !== shell);
   const quit = async () => {
     await shell!.evaluate(() => (window as any).__TAURI_INTERNALS__.invoke("app_quit")).catch(() => {});
-    await browser.close().catch(() => {}); // over CDP this only disconnects
-    await new Promise<void>((resolve) => {
-      if (proc.exitCode !== null) return resolve();
-      const t = setTimeout(resolve, 15_000);
-      proc.once("exit", () => { clearTimeout(t); resolve(); });
-    });
-    // WebView2's browser processes end shortly after the app; wait until the debugging port is free, so the next
-    // launch cannot connect to the old instance (and the data folder is no longer in use).
-    for (let i = 0; i < 60; i++) {
-      const up = await fetch(`http://127.0.0.1:${cdpPort}/json/version`).then(() => true, () => false);
-      if (!up) break;
-      await new Promise((r) => setTimeout(r, 250));
-    }
+    await gone(proc, browser);
   };
   return {
     proc, browser, shell: shell!, data, quit, pages: tabPages,
@@ -101,6 +89,25 @@ export async function launch(name: string, opts: LaunchOptions = {}): Promise<Fe
     },
   };
 }
+
+/** Waits until Ferrum's process has ended and WebView2's debugging port is free (so the next launch cannot connect to
+ * the old instance, and the data folder is no longer in use). Ferrum is never killed. */
+async function gone(proc: ChildProcess, browser: Browser): Promise<void> {
+  await browser.close().catch(() => {}); // over CDP this only disconnects
+  await new Promise<void>((resolve) => {
+    if (proc.exitCode !== null || proc.signalCode !== null) return resolve();
+    const t = setTimeout(resolve, 15_000);
+    proc.once("exit", () => { clearTimeout(t); resolve(); });
+  });
+  for (let i = 0; i < 60; i++) {
+    const up = await fetch(`http://127.0.0.1:${cdpPort}/json/version`).then(() => true, () => false);
+    if (!up) break;
+    await new Promise((r) => setTimeout(r, 250));
+  }
+}
+
+/** Waits for a Ferrum that ended by itself (for example after test_crash). */
+export const waitGone = (f: Ferrum) => gone(f.proc, f.browser);
 
 /** Types into the shell's address bar and presses Enter. */
 export async function go(f: Ferrum, input: string): Promise<void> {

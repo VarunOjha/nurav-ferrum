@@ -233,6 +233,10 @@ fn version_one_file_is_migrated_and_keeps_its_behaviour() {
     let l = config::load(Some(&p), None).unwrap();
     assert_eq!(l.config.version, config::VERSION);
     assert_eq!(l.config.security.new_window, NewWindow::SameView);
+    assert!(
+        !l.config.session.restore_on_startup,
+        "P2 never restored a session"
+    );
     // A version-1 file that chose explicitly keeps its choice.
     let p = tmp("v1b.toml", "[security]\nnew_window = \"system-browser\"\n");
     assert_eq!(
@@ -245,14 +249,9 @@ fn version_one_file_is_migrated_and_keeps_its_behaviour() {
     );
     // A version-2 file without the key gets the new default.
     let p = tmp("v2.toml", "version = 2\n");
-    assert_eq!(
-        config::load(Some(&p), None)
-            .unwrap()
-            .config
-            .security
-            .new_window,
-        NewWindow::NewTab
-    );
+    let l = config::load(Some(&p), None).unwrap();
+    assert_eq!(l.config.security.new_window, NewWindow::NewTab);
+    assert!(l.config.session.restore_on_startup);
 }
 
 #[test]
