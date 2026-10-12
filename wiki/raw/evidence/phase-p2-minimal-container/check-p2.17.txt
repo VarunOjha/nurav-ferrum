@@ -1,0 +1,14 @@
+Ferrum check p2.17: Literature batch 2
+Why: evidence for later experiments.
+Run at 2026-10-11 20:35 on commit f2d069d (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   New dated note with its web sources, fingerprinted in the raw manifest
+         access date stated; 9 web sources; manifest line present
+  PASS   Every source entry says whether it was read (VERIFIED or UNCERTAIN)
+         8 entries, each labelled
+  PASS   Reading log has a row for batch 2; wiki check clean (11 s)
+         batch 2 row present; npm run lint:wiki: 0 errors
+------------------------------------------------------------------------
+RESULT: PASS - p2.17 (3 PASS; 12 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.17 check passed".
