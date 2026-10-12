@@ -34,7 +34,9 @@ Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
 Start-Check -Id 'p2.1' -Title 'Build local test pages' -Phase 'phase-p2-minimal-container' `
     -Why 'navigation tests give the same answer every run.'
 
-$probe = 'wiki/raw/evidence/phase-p2-minimal-container/p2.1-fixture-curl.txt'
+# The newest saved probe (raw files are never overwritten; a later probe is a new file, e.g. after test pages were added).
+$probe = 'wiki/raw/evidence/phase-p2-minimal-container/' + (Get-ChildItem -LiteralPath (Get-RepoPath 'wiki/raw/evidence/phase-p2-minimal-container') -Filter 'p2.1-fixture-curl*.txt' |
+        Sort-Object { if ($_.BaseName -match '-(\d+)$') { [int]$Matches[1] } else { 1 } } | Select-Object -Last 1).Name
 
 Invoke-Step 'Server tests pass (routes, HTTPS, name limit of the local certificate authority)' {
     $r = Assert-Cargo @('test', '--locked', '-p', 'fixture-server')

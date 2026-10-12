@@ -1,0 +1,12 @@
+Ferrum check p2.1: Build local test pages
+Why: navigation tests give the same answer every run.
+Run at 2026-10-11 20:48 on commit bcb3054 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Server tests pass (routes, HTTPS, name limit of the local certificate authority) (2 s)
+         cargo test -p fixture-server: 7 tests passed
+  PASS   Each test page returned its documented status over real HTTPS (2 s)
+         every documented route matched in the saved probe
+------------------------------------------------------------------------
+RESULT: PASS - p2.1 (2 PASS; 5 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.1 check passed".
