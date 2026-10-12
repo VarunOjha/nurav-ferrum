@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 9,
+    "done": 10,
     "total": 18
   },
   "step_order": [
@@ -125,7 +125,7 @@
       "what": "Handling of links that open new windows or other apps, such as mail.",
       "why": "A link could otherwise open your mail app or another program without asking, which is surprising at best and unsafe at worst.",
       "how": "New windows follow the setting (same view or system browser), caught through the engine's new-window event; mail and other app links ask in the shell first. Tests use a fake launcher.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Links open new windows or other apps such as mail → follow the setting, and ask before handing off to another app → nothing launches without your consent.",
       "check": "The new-window test follows the setting; the mail-link test asks and launches nothing without consent.",
       "script": "scripts/verify/p2.10-new-windows-links.ps1"

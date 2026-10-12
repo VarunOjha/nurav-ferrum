@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:12fd819a64522b565de7474804c904391de39cc201f900993ff18fb1b4558f13"
+    "content_hash": "sha256:050bb0e0861a1a2f3210f36ff649daa43d88f52e5848b7ff8714066bf56b650e"
   },
   "entries": [
     {
@@ -2424,6 +2424,26 @@
       "category": "Built",
       "tags": [
         "address bar",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-11-p2-10",
+      "date": "2026-10-11",
+      "time": "19:54",
+      "title": "New windows and links to other apps",
+      "done": "Links that try to open a new window now load in the same Ferrum view (or, if you choose that setting, in your normal browser). Links to other apps, such as mail links, now show a bar asking Open or Cancel; nothing opens without your click. The tests use a stand-in, so no real app was opened yet; you will check one real mail link at the end of the phase.",
+      "next": "Claude makes sign-ins survive a restart (task p2.11).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "f21caba",
+      "covers": [
+        "## [2026-10-11] code | p2.10 new windows follow the setting; links to other apps ask first"
+      ],
+      "phase": "phase-p2-minimal-container",
+      "category": "Built",
+      "tags": [
+        "web views",
         "testing"
       ]
     }

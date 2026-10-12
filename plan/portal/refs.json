@@ -480,7 +480,7 @@
       "kind": "task",
       "title": "P2 task: New windows and outside links",
       "summary": "Links open new windows or other apps such as mail → follow the setting, and ask before handing off to another app → nothing launches without your consent.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4667,6 +4667,14 @@
       "kind": "commit",
       "title": "Commit: Redirects show the right address",
       "summary": "When a site forwards you elsewhere, the address bar now always shows where you really ended up, for every kind of forward; an endless forwarding loop ends in Ferrum's error panel. The test found and f",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "f21caba",
+      "kind": "commit",
+      "title": "Commit: New windows and links to other apps",
+      "summary": "Links that try to open a new window now load in the same Ferrum view (or, if you choose that setting, in your normal browser). Links to other apps, such as mail links, now show a bar asking Open or Ca",
       "status": null,
       "related": []
     }
