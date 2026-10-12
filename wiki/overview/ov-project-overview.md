@@ -3,13 +3,14 @@ id: ov-project
 type: overview
 title: "Ferrum project overview: goals, scope, non-goals, success criteria"
 status: draft
-updated: 2026-10-11
+updated: 2026-10-12
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/related-work-seed.md
   - raw/research/measurement-methodology.md
-related: [adr-0001, adr-0002, adr-0003, adr-0004, adr-0007, adr-0009, adr-0010, adr-0014, adr-0015, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, ov-open-questions, glossary, ops-session-protocol, ov-research-plan]
+  - raw/owner/2026-10-12-s02-feature-set-request.md
+related: [adr-0001, adr-0002, adr-0003, adr-0004, adr-0007, adr-0009, adr-0010, adr-0014, adr-0015, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, ov-open-questions, glossary, ops-session-protocol, ov-research-plan, adr-0032]
 approvable: true
 audience: both
 tags: [overview, goals, scope]
@@ -132,7 +133,13 @@ Proposed by Claude, **not in the master prompt**, confirmed by the owner on 2026
 - Split view: deferred until after P8. Master prompt §4 lists "Split-view support in a later phase" and
   §16 assigns it to no milestone ([phase-p3-tabs-sessions](../phases/phase-p3-tabs-sessions.md), Out of scope).
 
-Possible later addition, noted by the owner (2026-10-11): **bookmarks**, only after the planned phases are done. Not in scope now.
+Possible later addition, noted by the owner (2026-10-11): **bookmarks**, only after the planned phases are done.
+**Changed 2026-10-12:** the owner asked for bookmarks now, as a small feature set in P3 (bookmarks, search of the
+past from the address bar, a manual encrypted backup file, a refreshed look and logo;
+[raw/owner/2026-10-12-s02-feature-set-request.md](../raw/owner/2026-10-12-s02-feature-set-request.md),
+[phase-p3-tabs-sessions](../phases/phase-p3-tabs-sessions.md), [adr-0032](../decisions/adr-0032-local-sqlite-store-encrypted-backup.md)).
+Built only after the owner approves that plan. "Account sign-in, sync or cloud services" stays a non-goal: the backup
+is a file the owner moves by hand.
 
 ## 6. Success criteria
 

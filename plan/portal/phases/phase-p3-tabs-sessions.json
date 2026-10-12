@@ -3,11 +3,11 @@
   "short": "P3",
   "title": "Tabs and sessions",
   "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
-  "summary": "Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
+  "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
   "status": "Waiting for your review",
   "progress": {
     "done": 15,
-    "total": 16
+    "total": 23
   },
   "step_order": [
     "Tab rules",
@@ -16,6 +16,7 @@
     "Per-site profiles",
     "History and downloads",
     "Settings screen, sidebar",
+    "New features: bookmarks, search, look",
     "Gate",
     "Your review"
   ],
@@ -195,6 +196,83 @@
       "chain": "Your review found problems → fix each one with a test → they stay fixed when you try the new build.",
       "check": "A download in a new window completes with no error and its tab closes; a site's icon shows in its tab; the program carries the new icon.",
       "script": "scripts/verify/p3.16-review-fixes.ps1"
+    },
+    {
+      "id": "p3.17",
+      "title": "Feature set: design with you",
+      "what": "Claude asks you the design questions one at a time, then shows options on a design canvas, light and dark. You pick.",
+      "why": "Bookmarks and the address-bar suggestions need a place and a look, and you want the browser fun and comfortable to use.",
+      "how": "Questions one by one: overall feel, light and dark, suggestions, where bookmarks live, new-tab page, logo. Then two or three options drawn on a Claude design canvas.",
+      "status": "Not started",
+      "chain": "You ask for a nicer, comfortable browser → Claude asks, then draws options → you choose, and everything after builds that choice.",
+      "check": "Your answers and choice are recorded; the chosen design is saved; no app code changes.",
+      "script": null
+    },
+    {
+      "id": "p3.18",
+      "title": "Feature set: local database",
+      "what": "History and bookmarks move into one SQLite database file on your PC, with a fast word index on titles and addresses.",
+      "why": "Bookmarks, address-bar search and the backup all read and write the same data; a database keeps it fast and crash-safe.",
+      "how": "SQLite built into Ferrum (nothing to install). Your current history is copied over once, and the old file is kept. Up to 50,000 entries. Clear history wipes everything, including leftovers inside the file.",
+      "status": "Not started",
+      "chain": "You want bookmarks and search of the past → one safe local database → every new feature uses it.",
+      "check": "Tests: old history imported, search finds titles and addresses, clearing leaves nothing behind; licence check passes.",
+      "script": null
+    },
+    {
+      "id": "p3.19",
+      "title": "Feature set: bookmarks",
+      "what": "A star in the address bar bookmarks the page; your bookmarks show where you chose in the design; rename, move and delete.",
+      "why": "You asked for bookmarks.",
+      "how": "Star to add or edit; list in the sidebar and/or a bar, as designed; only web addresses are accepted.",
+      "status": "Not started",
+      "chain": "You asked for bookmarks → star and list → your favourite sites are one click away.",
+      "check": "Tests: star, rename, delete, open, survive a restart; websites cannot touch your bookmarks.",
+      "script": null
+    },
+    {
+      "id": "p3.20",
+      "title": "Feature set: search the past from the address bar",
+      "what": "As you type, the address bar suggests matching bookmarks, pages from your history and open tabs. Arrow keys and Enter open one.",
+      "why": "You asked for search of the past on the address bar.",
+      "how": "Best matches first, keyboard first. Pages are drawn above Ferrum's own controls, so the list is never hidden under the page: the page moves aside while the list is open, or the list gets its own small window.",
+      "status": "Not started",
+      "chain": "You remember part of a page title → type it → Ferrum finds the page.",
+      "check": "Tests: typing finds a visited page; arrows, Enter and Esc work; the list is never hidden under the page.",
+      "script": null
+    },
+    {
+      "id": "p3.21",
+      "title": "Feature set: encrypted backup and restore",
+      "what": "Export your bookmarks and history to one file locked with your passphrase. Import it on another Ferrum: see what's inside, then merge or replace.",
+      "why": "You want a manual, secure dump to load into another Ferrum.",
+      "how": "Standard, published encryption; a wrong passphrase or a changed file is refused with nothing changed. Replace keeps a copy of your old data first. Cookies and logins are never in the file.",
+      "status": "Not started",
+      "chain": "You set up a second PC → export, carry the file, import → same bookmarks and history there.",
+      "check": "Tests: export and import match; wrong passphrase, damaged file and hidden script addresses are refused; the passphrase is never logged.",
+      "script": null
+    },
+    {
+      "id": "p3.22",
+      "title": "Feature set: new look and logo",
+      "what": "Apply the look and logo you chose: colours, light and dark, fonts built into the app, tabs and toolbar styling.",
+      "why": "You want the browser to be fun to use and comfortable, with a better logo.",
+      "how": "Styling is done last, over the finished parts, so it is done once. The fonts are part of the app, so the shell still loads nothing from the internet.",
+      "status": "Not started",
+      "chain": "You chose a design → Claude applies it everywhere → Ferrum looks the way you picked.",
+      "check": "Tests still pass; light and dark screenshots saved for you to compare with the design; the program shows the new logo.",
+      "script": null
+    },
+    {
+      "id": "p3.23",
+      "title": "Feature set: tests and your checklist",
+      "what": "Add the feature set's tests to the Phase 3 test run and add new items to your checklist.",
+      "why": "The new features must keep working, and you check them by hand before signing off.",
+      "how": "Extend the Phase 3 test suite and end check; new checklist items for bookmarks, search, backup and look.",
+      "status": "Not started",
+      "chain": "Features built → tests and checklist → you review everything together at the Phase 3 sign-off.",
+      "check": "The Phase 3 end check runs the new tests and passes; the checklist has the new items.",
+      "script": null
     }
   ],
   "test_gate": {
@@ -233,6 +311,10 @@
         "proves": "The wiki has zero errors."
       },
       {
+        "check": "New feature set",
+        "proves": "Bookmarks, address-bar search, backup and restore, and the new look work and stay working."
+      },
+      {
         "check": "Your working session",
         "proves": "You used eight or more tabs, every shortcut, a kill-and-restore and a real download; plus the three P2 checks still open (Alt+Tab, mail link Open, sign-in after restart)."
       }
@@ -242,10 +324,11 @@
   "related": [
     "adr-0007",
     "adr-0010",
-    "risk-r01"
+    "risk-r01",
+    "adr-0032"
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:faa823446e99af3f5de54378f6e8654da8752ac5780d9d658efb30d15229e9e8"
+    "content_hash": "sha256:432b17f2f113af9556f840831b3049f4e1253e3d68635d102b332af1092f91f1"
   }
 }

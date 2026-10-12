@@ -41,7 +41,7 @@
       "id": "phase-p3-tabs-sessions",
       "kind": "phase",
       "title": "P3 Tabs and sessions",
-      "summary": "Goal: Many tabs, restored after a restart, with separate data per site. Turn the single view into tabs: switching, shortcuts, restore after a crash, a profile per site, history, basic downloads, a settings screen and a sidebar.",
+      "summary": "Goal: Many tabs, restored after a restart, with separate data per site. Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
       "status": "Waiting for your review",
       "related": [],
       "aliases": [
@@ -4911,6 +4911,96 @@
       "summary": "A download in a new window shows no error and its tab closes; tabs show site icons; a new orange app icon.",
       "status": null,
       "related": []
+    },
+    {
+      "id": "p3.17",
+      "kind": "task",
+      "title": "P3 task: Feature set: design with you",
+      "summary": "You ask for a nicer, comfortable browser → Claude asks, then draws options → you choose, and everything after builds that choice.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0032"
+      ]
+    },
+    {
+      "id": "p3.18",
+      "kind": "task",
+      "title": "P3 task: Feature set: local database",
+      "summary": "You want bookmarks and search of the past → one safe local database → every new feature uses it.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0032"
+      ]
+    },
+    {
+      "id": "p3.19",
+      "kind": "task",
+      "title": "P3 task: Feature set: bookmarks",
+      "summary": "You asked for bookmarks → star and list → your favourite sites are one click away.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0032"
+      ]
+    },
+    {
+      "id": "p3.20",
+      "kind": "task",
+      "title": "P3 task: Feature set: search the past from the address bar",
+      "summary": "You remember part of a page title → type it → Ferrum finds the page.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0032"
+      ]
+    },
+    {
+      "id": "p3.21",
+      "kind": "task",
+      "title": "P3 task: Feature set: encrypted backup and restore",
+      "summary": "You set up a second PC → export, carry the file, import → same bookmarks and history there.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0032"
+      ]
+    },
+    {
+      "id": "p3.22",
+      "kind": "task",
+      "title": "P3 task: Feature set: new look and logo",
+      "summary": "You chose a design → Claude applies it everywhere → Ferrum looks the way you picked.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0032"
+      ]
+    },
+    {
+      "id": "p3.23",
+      "kind": "task",
+      "title": "P3 task: Feature set: tests and your checklist",
+      "summary": "Features built → tests and checklist → you review everything together at the Phase 3 sign-off.",
+      "status": "Not started",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "adr-0032"
+      ]
+    },
+    {
+      "id": "adr-0032",
+      "kind": "decision",
+      "title": "Decision 32: Bookmarks and history in a local file, moved by encrypted backup",
+      "summary": "Bookmarks and history live in one SQLite database file on your PC. To move them to another Ferrum, you export one backup file locked with a passphrase you choose, and import it there: you see what's inside first, then merge or replace. Cookies and logins are never included.",
+      "status": "Proposed",
+      "related": [
+        "phase-p3-tabs-sessions",
+        "comp-core",
+        "comp-app-shell",
+        "adr-0028"
+      ]
     }
   ]
 }
