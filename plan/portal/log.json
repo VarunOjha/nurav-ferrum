@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7e30fc60044532b96d8c9a724c0c1ebb04e87ca15bc60d28f8767019202f67a5"
+    "content_hash": "sha256:5d0b8c237f490c94504635485bb6c03c97c46bcc81620a1dfbcca4e033c8d238"
   },
   "entries": [
     {
@@ -3125,6 +3125,40 @@
       "category": "Fixed",
       "tags": [
         "tabs",
+        "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-17-plan",
+      "date": "2026-10-12",
+      "time": "14:37",
+      "title": "Planned: a small new feature set (bookmarks, search, backup, look)",
+      "done": "Your request is written into Phase 3 as a small new feature set: bookmarks, search of the past from the address bar, an encrypted backup file to move them to another Ferrum, and a fresh look and logo. The storage choice (SQLite, not Postgres) is a proposed decision for you to approve.",
+      "next": "Claude asks you the design questions one at a time, then shows options on a design canvas. Nothing is built until you approve the plan.",
+      "decisions": [
+        {
+          "what": "Bookmarks and history in SQLite on your PC, not Postgres",
+          "by": "you"
+        },
+        {
+          "what": "A manual, passphrase-locked backup file moves them to another Ferrum",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Phase 3 plan with the new feature set, and the storage and backup decision",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "d28179a",
+      "covers": [
+        "## [2026-10-12] plan | p3.17 new small feature set planned: bookmarks, address-bar search, encrypted backup, look"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Planned",
+      "tags": [
+        "address bar",
         "look & feel"
       ]
     }

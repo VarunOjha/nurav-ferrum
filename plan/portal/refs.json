@@ -5001,6 +5001,14 @@
         "comp-app-shell",
         "adr-0028"
       ]
+    },
+    {
+      "id": "d28179a",
+      "kind": "commit",
+      "title": "Commit: New small feature set planned",
+      "summary": "Bookmarks, search of the past, an encrypted backup and a fresh look added to Phase 3 as a small feature set; storage decision proposed.",
+      "status": null,
+      "related": []
     }
   ]
 }

@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is built and your first review's findings are fixed. Close Ferrum so Claude can rebuild it for you.",
+  "summary": "Phase 3 is built; your review is open. You asked for a small new feature set (bookmarks, search of the past, an encrypted backup, a fresh look). It is planned and waits for your design answers and approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b91ba9d0679b9bc484ad434bec6328e4b77c4c693daace1ef2843d7944c4d4c7"
+    "content_hash": "sha256:677c94d5032312cccfc41f3f1ede24b5b82b36af05930cb97e2b2ce0877d451d"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: review fixes done; waiting for you to close Ferrum",
+      "state": "P3 Tabs and sessions: new feature set planned; design questions with you",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -37,17 +37,17 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "Review findings",
-        "state": "fixed and tested"
+        "item": "New feature set",
+        "state": "planned, waits for your approval"
       },
       {
-        "item": "Release build",
-        "state": "waits for Ferrum to be closed"
+        "item": "Design",
+        "state": "questions one at a time, then options on a canvas"
       }
     ],
-    "why": "Windows cannot replace a program that is running. Once Ferrum is closed, Claude rebuilds it with the fixes and opens it for you.",
+    "why": "You choose how the new features look before anything is built.",
     "script": null,
-    "tell_claude": "\"Closed\" once every Ferrum window is closed."
+    "tell_claude": "Your answer to each design question, then \"approve the feature set plan\" or what to change."
   },
   "questions_for_you": {
     "open": 23,

@@ -1990,3 +1990,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-p3-review-round-1.md]
 - result: A navigation that turns into a download is no longer shown as an error; a tab that only started a download closes when it ends. Site icons from WebView2 FaviconChanged + GetFavicon (PNG, no own request, at most 256 KB) shown in the tab strip and sidebar. New app icon (icons/app-icon.svg, rust-orange tile with a white F); build.rs reruns on icon changes. Task Manager: ferrum-desktop.exe (description "Ferrum") is the parent of its WebView2 processes; checklist item 13 asks the owner to look again. scripts/verify/p3.16-review-fixes.ps1 PASS (downloads + tabs smoke 7 passed; program icon orange); shell tests 14 pass; cargo fmt, clippy, test pass. Stales approval of phase-p3-tabs-sessions, comp-app-shell and comp-webview-manager. The release build is not yet rebuilt: the owner's Ferrum window is open and locks the program file.
 - commit: 80dc946
+
+## [2026-10-12] plan | p3.17 new small feature set planned: bookmarks, address-bar search, encrypted backup, look
+
+- session: s02
+- time: 14:37
+- pages: [phase-p3-tabs-sessions, adr-0032, ov-project]
+- sources: [raw/owner/2026-10-12-s02-feature-set-request.md]
+- result: Owner asked for bookmarks, search of the past from the address bar, a manual secure dump to load into another Ferrum, and a refreshed look and logo; chose SQLite over Postgres. adr-0032 proposed (local SQLite file; passphrase-encrypted export and import; no cookies or logins). P3 page gains the feature set, tasks p3.17 (design with the owner) to p3.23. No application code. Stales approval of phase-p3-tabs-sessions (already stale) and ov-project.
+- next: design questions to the owner one at a time (p3.17), then options on a Claude design canvas; implementation waits for the owner's approval of the plan and adr-0032.
+- commit: d28179a

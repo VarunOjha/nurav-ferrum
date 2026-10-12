@@ -3,7 +3,7 @@ id: status-live
 type: status
 title: "Ferrum live status and next action"
 status: active
-updated: 2026-10-11
+updated: 2026-10-12
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -22,8 +22,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
-current_task: p3.13
-next_action: "Owner: close every Ferrum window and say \"Closed\". Then Claude rebuilds the release build (npm run tauri -- build --no-bundle in apps/desktop), opens it with scripts/open-ferrum.ps1, and the owner checks docs/testing/manual-checklist-p3.md items 1 to 13, re-approves adr-0011, adr-0015, phase-p3-tabs-sessions, comp-app-shell, comp-webview-manager and says whether P3 is signed off. Claude reruns scripts/gates/p3-gate.ps1 -SaveEvidence before recording the sign-off. No P4 work."
+current_task: p3.17
+next_action: "Owner: answer the design questions for the new feature set one at a time in chat (p3.17); Claude transcribes each answer to wiki/raw/owner/, then draws options on a Claude design canvas. The owner reviews the plan (wiki/phases/phase-p3-tabs-sessions.md, feature set section; adr-0032) and approves implementation in chat. Still open: P3 review (docs/testing/manual-checklist-p3.md items 1 to 13), re-approval of adr-0011, adr-0015, phase-p3-tabs-sessions, comp-app-shell, comp-webview-manager, ov-project, and the P3 sign-off after the feature set. No P4 work."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -322,10 +322,10 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.13 docs and exit gate (owner review)
-- intent: p3.16 fixes committed (80dc946). Waiting for the owner: close Ferrum so Claude rebuilds the release build; then the owner's checklist (items 1 to 13), re-approval of adr-0011, adr-0015, phase-p3-tabs-sessions, comp-app-shell, comp-webview-manager, and phase-p3-tabs-sessions#exit. Before the sign-off Claude reruns scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit (code changed after the gate run on d363adf).
-- paths: wiki/raw/owner/*, wiki/raw/evidence/phase-p3-tabs-sessions/*, plan/approvals.json, Alt+Tab and mail claim pages, MANIFEST
-- rollback: nothing destructive; raw files are new files only
+- task: p3.17 feature set design with the owner (plan committed d28179a)
+- intent: Ask the owner the design questions one at a time (feel, light and dark, address-bar suggestions, bookmarks placement, new-tab page, logo); transcribe each answer to wiki/raw/owner/; then draw options on a Claude design canvas. No application code until the owner approves the plan (phase-p3-tabs-sessions, adr-0032). P3 review (checklist 1 to 13, re-approvals, sign-off) also still open.
+- paths: wiki/raw/owner/*, wiki/raw/MANIFEST.sha256, wiki/raw/evidence/phase-p3-tabs-sessions/design/*, a new look ADR
+- rollback: new files only
 
 ## Blockers
 
@@ -361,16 +361,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Your review findings | Fixed and tested (download tab, site icons, app icon) |
-| Release build | Not rebuilt yet: your open Ferrum window locks the program file |
-| Phase 4 | Not started: waits for your sign-off and an explicit go |
+| New feature set | Planned in Phase 3 (bookmarks, search of the past, encrypted backup, look and logo); waits for your approval |
+| Design | Claude asks you questions one at a time, then shows options on a design canvas |
+| Phase 3 review | Still open; the sign-off comes after the feature set |
+| Phase 4 | Not started |
 
-**2. Why, and what it does.** Windows cannot replace a program that is running → you close Ferrum → Claude rebuilds it
-with the fixes and opens it for you.
+**2. Why, and what it does.** You asked for the feature set and want to choose the design → Claude asks, then draws options → you pick and approve the plan before anything is built.
 
-**3. The script:** none. Close every Ferrum window with its X.
+**3. The script:** none.
 
-**4. What to tell Claude:** "Closed".
+**4. What to tell Claude:** your answer to each design question; then "approve the feature set plan" (or what to change).
 
 ## Pending owner approvals
 
@@ -381,4 +381,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (P3 review fixes done; waiting for the owner to close Ferrum). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-12, session s02 (feature set planned, d28179a; design questions to the owner). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
