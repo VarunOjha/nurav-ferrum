@@ -6,7 +6,7 @@
   "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
   "status": "In progress",
   "progress": {
-    "done": 16,
+    "done": 17,
     "total": 23
   },
   "step_order": [
@@ -214,7 +214,7 @@
       "what": "History and bookmarks move into one SQLite database file on your PC, with a fast word index on titles and addresses.",
       "why": "Bookmarks, address-bar search and the backup all read and write the same data; a database keeps it fast and crash-safe.",
       "how": "SQLite built into Ferrum (nothing to install). Your current history is copied over once, and the old file is kept. Up to 50,000 entries. Clear history wipes everything, including leftovers inside the file.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "You want bookmarks and search of the past → one safe local database → every new feature uses it.",
       "check": "Tests: old history imported, search finds titles and addresses, clearing leaves nothing behind; licence check passes.",
       "script": "scripts/verify/p3.18-store.ps1"
@@ -225,7 +225,7 @@
       "what": "A star in the address bar bookmarks the page; your bookmarks show where you chose in the design; rename, move and delete.",
       "why": "You asked for bookmarks.",
       "how": "Star to add or edit; list in the sidebar and/or a bar, as designed; only web addresses are accepted.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "You asked for bookmarks → star and list → your favourite sites are one click away.",
       "check": "Tests: star, rename, delete, open, survive a restart; websites cannot touch your bookmarks.",
       "script": null

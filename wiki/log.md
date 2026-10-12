@@ -2038,3 +2038,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-12-s02-part-pages-reapproval-and-go.md]
 - result: Owner: "Okay, approved. Let's complete P3 and then stop and let me know". Recorded the narrower of the two offered options: comp-app-shell and comp-webview-manager approved (tools/approvals_record.py). adr-0011 and adr-0015 stay STALE, asked again at the P3 sign-off. blocked_on cleared. Claude builds p3.18 to p3.23, reruns the P3 gate, then stops and reports.
 - next: p3.18 local SQLite store.
+
+## [2026-10-12] code | p3.18 local SQLite store for history and bookmarks
+
+- session: s02
+- time: 15:41
+- pages: [phase-p3-tabs-sessions, comp-core, comp-app-shell, ov-arch-configuration]
+- sources: [raw/owner/2026-10-12-s02-feature-set-plan-approval.md]
+- result: ferrum_core::store (rusqlite 0.40.2 bundled, FTS5 confirmed): ferrum.db with history and bookmarks, word indexes, limit 50 000, clear leaves nothing in the file, only http(s); app library.rs imports history.json once (renamed history.json.imported). scripts/verify/p3.18-store.ps1 PASS (12 store tests, cargo deny ok, history smoke 4 passed); cargo test --workspace, clippy, fmt clean. Stales approval of comp-app-shell and comp-core.
+- commit: 0108da1

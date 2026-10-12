@@ -22,8 +22,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
-current_task: p3.18
-next_action: "Claude: build the feature set p3.18 to p3.23 one task at a time (In-flight shows the current one), then rerun scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit and STOP to report to the owner (owner: \"complete P3 and then stop and let me know\"). Owner then: checklist docs/testing/manual-checklist-p3.md, re-approval of adr-0011 and adr-0015, P3 sign-off. No P4 work."
+current_task: p3.19
+next_action: "Claude: build the feature set p3.19 to p3.23 one task at a time (In-flight shows the current one), then rerun scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit and STOP to report to the owner (owner: \"complete P3 and then stop and let me know\"). Owner then: checklist docs/testing/manual-checklist-p3.md, re-approval of adr-0011, adr-0015 and the pages the feature set changes, P3 sign-off. No P4 work."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -111,6 +111,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 - p3.13 part 1 (`6ab7667`): P3 docs, manual checklist, real P3 gate; P3 claims closed or re-targeted.
 - P3 gate PASS on d363adf (evidence `e1cee54`, 24 PASS); phase-p3-tabs-sessions gate-review; handoff written; STOPPED for the owner's review.
 - p3.16 done (80dc946): owner review fixes (download tab, site icons, app icon); check PASS.
+- p3.18 done (0108da1): local SQLite store; history.json imported once; check PASS.
 
 ## Done this session (s01)
 
@@ -322,10 +323,10 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.18 local SQLite store (adr-0032)
-- intent: Add rusqlite (bundled) to the core crate; a Store for history and bookmarks in ferrum.db with an FTS5 index on titles and addresses; one-time import of history.json (renamed history.json.imported); limit 50 000; Clear history empties tables and index and runs VACUUM; only http(s) bookmarks. Wire the app's history commands to it. Unit tests; scripts/verify/p3.18-store.ps1; comp-core and comp-app-shell pages updated.
-- paths: crates/core/**, apps/desktop/src-tauri/**, Cargo.toml, Cargo.lock, deny.toml, scripts/verify/p3.18-store.ps1, wiki/architecture/components/comp-core.md, wiki/architecture/components/comp-app-shell.md, wiki/architecture/ov-arch-configuration.md, plan/portal/*
-- rollback: git checkout of these paths; new files deleted only with the owner's consent
+- task: p3.19 bookmarks
+- intent: Bookmark commands (list, add, update, move, remove, for-url) on the library store, allowed only for the shell; star in the address bar (Ctrl+D), bookmarks bar under the toolbar (favourites folder, hideable, Ctrl+Shift+B), Bookmarks section in the sidebar with folders (Ctrl+Shift+O opens it); shell unit tests and a smoke test; scripts/verify/p3.19-bookmarks.ps1; comp-app-shell updated.
+- paths: apps/desktop/src-tauri/**, apps/desktop/src/**, apps/desktop/index.html, apps/desktop/tests/smoke/**, crates/core/src/shortcuts.rs, scripts/verify/p3.19-bookmarks.ps1, wiki/architecture/components/comp-app-shell.md, plan/portal/*
+- rollback: git checkout of these paths
 
 ## Blockers
 
@@ -361,16 +362,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Feature set | Approved; Claude is building it now |
-| Current task | Local database for history and bookmarks |
-| After the feature set | Phase 3 end check, then Claude stops and reports |
-| Phase 4 | Not started |
+| Phase 3 | In progress: 17 of 23 tasks done |
+| Next task | Bookmarks: star, bar and sidebar list |
+| Your rule this session | Claude asks before any delete or kill command |
 
-**2. Why, and what it does.** Nothing for you to run now. Claude builds and checks each part; you review at the end.
+**2. Why, and what it does.** Nothing for you to run now. Claude builds the bookmark star, the bookmarks bar and the sidebar list next.
 
 **3. The script:** none for you.
 
-**4. What to tell Claude:** nothing; Claude reports when Phase 3 is ready for your review.
+**4. What to tell Claude:** nothing; Claude asks when a step needs you.
 
 ## Pending owner approvals
 
@@ -381,4 +381,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (building the feature set; p3.18 in progress). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-12, session s02 (P3 in progress: 17 of 23 tasks done, last p3.18). Last handoff: [handoff-2026-10-11-s02](wiki/operations/handoffs/handoff-2026-10-11-s02.md).

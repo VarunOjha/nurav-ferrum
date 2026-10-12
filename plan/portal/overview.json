@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3's feature set is approved and being built. Claude stops after the Phase 3 end check and reports.",
+  "summary": "Phase 3 is in progress: 17 of 23 tasks done. Next: bookmarks: star, bar and sidebar list.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:9f4521473f0ef1f5237329500a83c4a5ac3fa463858d80ec45c1f8c829c25423"
+    "content_hash": "sha256:26104eecb30b240a2647c3d749378bccee6dc344795fe9dd9f863826dd164b52"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: building the feature set",
+      "state": "P3 Tabs and sessions: in progress, 17 of 23 tasks done",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -37,17 +37,17 @@
     "who": "claude",
     "where_we_are": [
       {
-        "item": "Feature set",
-        "state": "being built"
+        "item": "Phase 3",
+        "state": "17 of 23 tasks done"
       },
       {
-        "item": "Next for you",
-        "state": "the review after the end check"
+        "item": "Next task",
+        "state": "Bookmarks: star, bar and sidebar list"
       }
     ],
-    "why": "Nothing to run. Claude builds and checks each part, then reports.",
+    "why": "Nothing to run. Claude builds the bookmark star, the bookmarks bar and the sidebar list next.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude reports when Phase 3 is ready for your review."
+    "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },
   "questions_for_you": {
     "open": 23,
