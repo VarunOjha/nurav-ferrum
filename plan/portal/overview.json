@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 2 is in progress: 7 of 18 tasks done. Next: p2.8 loading and error states.",
+  "summary": "Phase 2 is in progress: 8 of 18 tasks done. Next: p2.9 redirects.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b3d965bb58e2fdf30c17d78abd615acbb1a59f1a48a2b3df4aaffe8b8643e8e9"
+    "content_hash": "sha256:6f00381127e761a55a7dea4cb116407c5534bb07e5e03c93752c6c2f13918793"
   },
   "updated": "2026-10-11",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P2 First working app: in progress, 7 of 18 tasks done",
+      "state": "P2 First working app: in progress, 8 of 18 tasks done",
       "ref": "phase-p2-minimal-container"
     },
     {
@@ -38,14 +38,14 @@
     "where_we_are": [
       {
         "item": "Phase 2",
-        "state": "7 of 18 tasks done"
+        "state": "8 of 18 tasks done"
       },
       {
         "item": "Next task",
-        "state": "p2.8 loading and error states"
+        "state": "p2.9 redirects"
       }
     ],
-    "why": "Nothing to run. Pages can be slow, missing or unreachable → Claude shows a clear loading indicator and an error panel drawn by the shell itself → you always know what is happening.",
+    "why": "Nothing to run. Sites often forward you to another address → Ferrum must show where you really ended up, and stop endless loops → the address bar never lies.",
     "script": null,
     "tell_claude": "Nothing for now. Claude asks when a step needs you."
   },

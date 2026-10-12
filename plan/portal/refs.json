@@ -630,7 +630,7 @@
       "kind": "task",
       "title": "P2 task: Loading and error screens",
       "summary": "Pages are slow or fail → spinner and error panel drawn by the shell, never by loading the app's own pages into the website view → clear feedback without weakening security.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p2-minimal-container"
       ]
@@ -4651,6 +4651,14 @@
       "kind": "commit",
       "title": "Commit: Back, forward and refresh tested",
       "summary": "Claude built a test robot that drives the real Ferrum window like a person would. Its first test opens two pages, goes back, forward and refreshes; the local test server counts every request, and the ",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "2c6b247",
+      "kind": "commit",
+      "title": "Commit: Loading and error states added",
+      "summary": "While a page loads you now see a thin progress bar and a Stop button. A site's error page (like 404) stays visible with a note in the toolbar, and when a site cannot be reached at all, Ferrum draws it",
       "status": null,
       "related": []
     }

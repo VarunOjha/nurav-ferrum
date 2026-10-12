@@ -6,7 +6,7 @@
   "summary": "Build the first real Ferrum: a trusted shell around one website view, with safe navigation and a locked bridge so websites cannot call the app.",
   "status": "In progress",
   "progress": {
-    "done": 7,
+    "done": 8,
     "total": 18
   },
   "step_order": [
@@ -103,7 +103,7 @@
       "what": "A spinner while loading and an error panel for failed pages.",
       "why": "Without feedback a slow page looks like a frozen app. Drawing errors in the website view itself could let pages fake app screens.",
       "how": "The shell draws both itself and never loads the app's own pages into the website view. Whether Tauri reports enough to show HTTP errors is not checked yet.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Pages are slow or fail → spinner and error panel drawn by the shell, never by loading the app's own pages into the website view → clear feedback without weakening security.",
       "check": "Slow, 404, 500 and unreachable tests each show the right state.",
       "script": "scripts/verify/p2.8-loading-error-screens.ps1"

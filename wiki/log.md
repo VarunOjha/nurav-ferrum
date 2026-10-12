@@ -1657,3 +1657,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p2-minimal-container/check-p2.7.txt]
 - result: Smoke robot (Playwright 1.64.0 over CDP, adr-0031) with an isolated data folder, test server started and stopped by itself, app closed with the shell-only app_quit command; nothing killed. The data_dir setting is now applied to the shell environment (and so to the content view). New shell-only commands app_quit and shell_layout (information band below the toolbar). Spec back-forward-refresh passes: A, B, back, forward, reload counted by the test server; buttons follow HistoryChanged. p2.7 check PASS.
 - commit: 094b0b7
+
+## [2026-10-11] code | p2.8 loading and error states drawn by the shell
+
+- session: s02
+- time: 19:08
+- pages: [phase-p2-minimal-container, comp-webview-manager, comp-app-shell]
+- sources: [raw/evidence/phase-p2-minimal-container/check-p2.8.txt, raw/evidence/phase-p2-minimal-container/p2.8-error-panel.png]
+- result: Toolbar states (loading with progress bar and Stop, loaded, http-error with status, failed), the shell's own error panel for failures without an HTTP status (shell_cover hides the content view; the shell takes the window; Try again), lock only for pages that loaded over https. Smoke spec loading-errors: slow, 404, 500, unreachable host and recovery, content view never on the app origin; 5 passed. A start-up race in the robot (both views briefly about:blank) was found and fixed; suite green three runs in a row. p2.8 check PASS; error panel picture saved.
+- commit: 2c6b247
