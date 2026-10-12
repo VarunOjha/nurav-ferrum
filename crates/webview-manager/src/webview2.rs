@@ -154,6 +154,7 @@ impl ContentView {
         self.tokens.push((Ev::Source, t));
 
         let s = sink.clone();
+        let c = core.clone();
         let h = NavigationCompletedEventHandler::create(Box::new(move |_sender, args| {
             if let Some(args) = args {
                 let (mut ok, mut id, mut web) =
@@ -168,8 +169,15 @@ impl ContentView {
                         let _ = a2.HttpStatusCode(&mut status);
                     }
                 }
+                let mut src = PWSTR::null();
+                // SAFETY: COM-1, COM-5: the view's current address, copied and freed by take_pwstr.
+                let uri = unsafe {
+                    let _ = c.Source(&mut src);
+                    take_pwstr(src)
+                };
                 s(TabEvent::NavigationCompleted {
                     id,
+                    uri,
                     success: ok.as_bool(),
                     http_status: status,
                     web_error_status: web.0,

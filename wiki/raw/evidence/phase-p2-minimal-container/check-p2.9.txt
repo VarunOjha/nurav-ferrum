@@ -1,0 +1,19 @@
+Ferrum check p2.9: Follow redirects correctly
+Why: the address bar never lies.
+Run at 2026-10-11 19:11 on commit 05afdf7 (with uncommitted changes)
+------------------------------------------------------------------------
+Running 7 tests using 1 worker
+  ✓  1 redirects.spec.ts:12:3 › redirect 301 shows the final address (157ms)
+  ✓  2 redirects.spec.ts:12:3 › redirect 302 shows the final address (83ms)
+  ✓  3 redirects.spec.ts:12:3 › redirect 303 shows the final address (78ms)
+  ✓  4 redirects.spec.ts:12:3 › redirect 307 shows the final address (100ms)
+  ✓  5 redirects.spec.ts:12:3 › redirect 308 shows the final address (70ms)
+  ✓  6 redirects.spec.ts:12:3 › redirect chain shows the final address (80ms)
+  ✓  7 redirects.spec.ts:21:1 › a redirect loop ends in the error state (368ms)
+  7 passed (5.1s)
+  PASS   Smoke test: six redirect kinds end on the final address; the loop ends in the error state (18 s)
+         redirects: 7 passed
+------------------------------------------------------------------------
+RESULT: PASS - p2.9 (1 PASS; 19 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.9 check passed".

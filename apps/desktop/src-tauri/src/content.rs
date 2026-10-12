@@ -56,11 +56,12 @@ fn event_json(e: &TabEvent) -> Value {
         TabEvent::SourceChanged { uri } => json!({"kind": "source-changed", "uri": uri}),
         TabEvent::NavigationCompleted {
             id,
+            uri,
             success,
             http_status,
             web_error_status,
         } => json!({
-            "kind": "navigation-completed", "id": id, "success": success, "http_status": http_status,
+            "kind": "navigation-completed", "id": id, "uri": uri, "success": success, "http_status": http_status,
             "web_error_status": web_error_status }),
         TabEvent::HistoryChanged {
             can_go_back,

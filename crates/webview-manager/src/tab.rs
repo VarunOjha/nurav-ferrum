@@ -25,6 +25,9 @@ pub enum TabEvent {
     NavigationCompleted {
         /// WebView2's navigation id.
         id: u64,
+        /// The view's address when the navigation finished (after any redirects). Sent here as well because a
+        /// redirect back to the current address raises no `SourceChanged`.
+        uri: String,
         /// Whether the page loaded.
         success: bool,
         /// HTTP status of the main document if WebView2 reported one (0 = none).

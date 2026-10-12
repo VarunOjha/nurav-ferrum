@@ -6,7 +6,7 @@ import { listen } from "@tauri-apps/api/event";
 type TabEvent =
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
   | { kind: "source-changed"; uri: string }
-  | { kind: "navigation-completed"; id: number; success: boolean; http_status: number; web_error_status: number }
+  | { kind: "navigation-completed"; id: number; uri: string; success: boolean; http_status: number; web_error_status: number }
   | { kind: "history-changed"; can_go_back: boolean; can_go_forward: boolean }
   | { kind: "title-changed"; title: string }
   | { kind: "got-focus" };
@@ -121,6 +121,8 @@ await listen<TabEvent>("tab", async (e) => {
       break;
     case "navigation-completed":
       setLoading(false);
+      // The final address (after redirects): a redirect back to the current address raises no source-changed.
+      if (ev.uri) showAddress(ev.uri);
       if (ev.http_status >= 400) {
         // The site answered with an error page of its own: show it, and say so in the toolbar.
         setState("http-error");
@@ -151,10 +153,11 @@ await listen<TabEvent>("tab", async (e) => {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const r = await invoke<NavResult>("tab_navigate", { input: address.value });
+  const input = address.value;
+  address.blur(); // let the address bar follow the page from now on
+  const r = await invoke<NavResult>("tab_navigate", { input });
   if (r.outcome === "navigate") {
     statusEl.textContent = r.note === "upgraded-from-http" ? "Using the secure https address" : "";
-    address.blur();
   } else if (r.outcome === "confirm") {
     statusEl.textContent = "This link opens another app (confirmation arrives in a later step)";
   } else {
