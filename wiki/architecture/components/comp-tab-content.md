@@ -31,16 +31,14 @@ connects:
     label: "page-initiated navigations, popups, downloads, permission and scheme requests"
     kind: webview2-com
     crosses_trust_boundary: true
-unverified:
-  - claim: "A tab web view created by Ferrum (adr-0029) has no Tauri IPC bridge"
-    verify_in: phase-p2-minimal-container
+unverified: []
 ---
 
 # comp-tab-content (untrusted)
 
 This is not Ferrum code. It is a **modelling node** that makes trust boundary TB1 explicit in the architecture graph. The architecture area added it to the registry. One child WebView per tab hosts remote content (adr-0007). Its connections show where untrusted input enters Ferrum:
 
-- through the IPC channel, which Tauri injects into every WebView it creates (VERIFIED, [Tauri note §3](../../raw/research/tauri-webview2-capabilities.md)). Under adr-0029 tab views are controllers Ferrum creates itself, so no bridge is expected there (UNVERIFIED[phase-p2-minimal-container], checked by the p2.3 negative test); any bridge that does appear is denied by ACL;
+- through the IPC channel, which Tauri injects into every WebView it creates (VERIFIED, [Tauri note §3](../../raw/research/tauri-webview2-capabilities.md)). Under adr-0029 tab views are controllers Ferrum creates itself, and they have no bridge (verified in P2 by the p2.3 negative test, [check-p2.3](../../raw/evidence/phase-p2-minimal-container/check-p2.3.txt)); any bridge that does appear is denied by ACL;
 - through WebView2 events (navigation, popups, downloads, permissions), which go to the security engine.
 
 `shipped: false` because Ferrum does not ship this content. The `webview2-com` kind on the second edge is approximate: the page acts through the runtime, which raises COM events.

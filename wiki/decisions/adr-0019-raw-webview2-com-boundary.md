@@ -99,7 +99,7 @@ Facts that constrain any design:
 ### Negative
 
 - More design work in P2 before the first COM feature lands.
-- Whether raw-COM handlers on Tauri-created webviews coexist with wry's own handlers (`NavigationStarting`, `NewWindowRequested`, …) is UNVERIFIED[phase-p2-minimal-container].
+- Whether raw-COM handlers on Tauri-created webviews coexist with wry's own handlers (`NavigationStarting`, `NewWindowRequested`, …) is UNVERIFIED[phase-p4-security]. P2 did not need it: tab views are Ferrum-created (adr-0029), and on the Tauri-created shell P2 only reads a setting and moves focus ([check-p2.12](../raw/evidence/phase-p2-minimal-container/check-p2.12.txt)).
 
 ### Follow-ups
 

@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use: tabs on top, address bar, back, forward, reload, settings and a Ferrum panel on the right ([the look you chose](ref:adr-0028)). Our code: a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
+      "summary": "The window you use. Built in P2 as a first version: one website area with address bar, back, forward, reload, loading and error states, and the bars that ask before links leave Ferrum. Tabs and the Ferrum panel ([the look you chose](ref:adr-0028)) come later. Risk: the multi-view feature is experimental in Tauri; it held up in P1 and P2.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:98f0f63ee20c88abe4bd46a157462a49a8b4caf43517c0b56fe69a50b5bfd3fc"
+        "content_hash": "sha256:62129af3e5710e779c4c06410d892b0499af7cb472fd4156abd845063c150a39"
       }
     },
     {
@@ -254,13 +254,13 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-tab-content.md",
-        "content_hash": "sha256:f2beede071cfd51f436a92d751ad3c819f673d331ef788e33c50b9d7aa448005"
+        "content_hash": "sha256:4b7e917e4497f86f5fbe310042bfcf583c54db0f62c6718e9dd8481d7cfc84a4"
       }
     },
     {
       "id": "comp-webview-manager",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation, sessions and downloads. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Risk: some needed features exist only at that level; not checked yet (checked in P1 and P4).",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Built in P2 for one view: navigation, history, new windows, links to other apps and developer tools work; downloads and permissions are checked in P3.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (first working app)",
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:601d9cd2623371b2fef31ebf526648131be9cf345fcb5f60115d0964048b3cca"
+        "content_hash": "sha256:b7a0c98607d308382d5d24a51faf9abbdd2ba486dfb1def4489222d1810e0795"
       }
     },
     {

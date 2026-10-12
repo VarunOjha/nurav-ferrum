@@ -15,10 +15,6 @@ audience: both
 phase: phase-p0-planning
 tags: [configuration, feature-flags]
 unverified:
-  - claim: "Tauri's default app data / WebView2 user data folder location on Windows"
-    verify_in: phase-p2-minimal-container
-  - claim: "The toml crate is the right choice for config parsing (version and maintenance)"
-    verify_in: phase-p2-minimal-container
   - claim: "Source of the OS memory-pressure signal used by the memory-pressure policy"
     verify_in: phase-p7-lifecycle
 ---
@@ -47,14 +43,17 @@ Benchmark-only behaviour, such as the remote debugging port, comes from **enviro
 ## 2. Layers and precedence (low → high)
 
 1. **Built-in defaults.** These live in `ferrum-core::config`, with conservative values.
-2. **User config file.** `config.toml` in the app config dir. The exact Windows location is UNVERIFIED[phase-p2-minimal-container]. The shell's settings UI edits this layer, through the host. The shell never writes the file directly.
+2. **User config file.** `config.toml` in the app config dir, which on Windows is `%APPDATA%\dev.ferrum.desktop\` (roaming); logs and
+WebView2 data go to `%LOCALAPPDATA%\dev.ferrum.desktop\` (read in the Tauri and dirs sources and seen on disk in P2,
+[source readings](../raw/research/p2-source-readings.md) S1). The shell's settings UI edits this layer, through the host. The shell never writes the file directly.
 3. **Experiment override.** `--config <path>` on the command line, used by the harness. It is used for a whole run and is never written back.
 
 The **effective config** is serialised in canonical form and hashed (`config_sha256`). It is written into every telemetry export and every harness trial record. Config changes at runtime (from settings) emit a `ConfigChanged` event with the new hash.
 
 ## 3. Schema sketch (TOML; key names are PROPOSALs, values are placeholders, not tuned)
 
-TOML is proposed because experiment configs are human-edited. Which parsing crate and version to use is UNVERIFIED[phase-p2-minimal-container] (re-targeted in P1: the format itself is still open, Q-214, and the crate is chosen when p2.4 adds it). JSON via `serde_json` is the fallback.
+TOML is proposed because experiment configs are human-edited. The owner chose TOML (Q-214); P2 uses the `toml` crate 1.1.8, pinned exactly and clean under `cargo deny`
+([source readings](../raw/research/p2-source-readings.md) S3, [check-p2.4](../raw/evidence/phase-p2-minimal-container/check-p2.4.txt)). JSON via `serde_json` is the fallback.
 
 ```toml
 [session]

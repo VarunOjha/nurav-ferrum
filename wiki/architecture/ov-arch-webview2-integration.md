@@ -13,11 +13,7 @@ approvable: true
 audience: both
 phase: phase-p0-planning
 tags: [webview2, com, unsafe, tauri, wry]
-unverified:
-  - claim: "Back/forward via raw COM GoBack/GoForward is preferable to eval(history.back())"
-    verify_in: phase-p2-minimal-container
-  - claim: "NavigationCompleted args expose an HTTP status code usable for error states"
-    verify_in: phase-p2-minimal-container
+unverified: []
 ---
 
 # WebView2 integration layer
@@ -43,12 +39,12 @@ Rust toolchain ≥ 1.90 (Tauri note §1). Tauri 3.0.0-alpha.4 exists, but Ferrum
 | Child WebViews in one window (adr-0007) | Tauri (`unstable`) | `Window::add_child`, from **async** contexts only | `webview-manager::host` |
 | Bounds, show/hide, focus, auto-resize | Tauri | `set_bounds`, `show`, `hide`, `set_focus`, `set_auto_resize` | `webview-manager::host` |
 | Navigate, reload, URL | Tauri | `navigate`, `reload`, `url` | `webview-manager::tab` |
-| Back / forward | **Raw COM** `GoBack`/`GoForward` (Tauri has none; `eval("history.back()")` is the fallback) | `ICoreWebView2` | `webview-manager::webview2::nav`. Choice UNVERIFIED[phase-p2-minimal-container] |
+| Back / forward | **Raw COM** `GoBack`/`GoForward` (Tauri has none; `eval("history.back()")` is the fallback) | `ICoreWebView2` | `webview-manager::webview2`. Chosen (adr-0030) and verified in P2 ([check-p2.7](../raw/evidence/phase-p2-minimal-container/check-p2.7.txt)) |
 | Main-frame navigation intercept (redirects included) | Tauri `on_navigation` **plus** raw COM `NavigationStarting` for fail-closed parsing | | `webview-manager::webview2::nav` + security engine |
 | Iframe navigation intercept | **Raw COM** | `add_FrameNavigationStarting` | `webview-manager::webview2::nav` |
 | New-window / popup | Tauri | `on_new_window` | `webview-manager::tab` |
 | Downloads | Tauri | `on_download` | `webview-manager::tab` |
-| Page load start/finish | Tauri `on_page_load`. HTTP status via raw COM `NavigationCompleted` args2 is UNVERIFIED[phase-p2-minimal-container] | | `webview-manager::tab` |
+| Page load start/finish | Raw COM `NavigationStarting` / `NavigationCompleted` (tab views are Ferrum-created, adr-0029); the HTTP status from `NavigationCompleted` args2 drives the error states (verified in P2, [check-p2.8](../raw/evidence/phase-p2-minimal-container/check-p2.8.txt)) | `ICoreWebView2NavigationCompletedEventArgs2` | `webview-manager::webview2` |
 | Permission requests | Tauri `on_permission_request`; `SavesInProfile(FALSE)` via **raw COM** | `PermissionRequested` | `webview-manager::webview2::perm` |
 | External URI schemes | **Raw COM** | `LaunchingExternalUriScheme` | `webview-manager::webview2::nav` |
 | Per-site profile name | **Not in Tauri 2.12.1.** wry has `with_profile_name`; Tauri PR #16054 is open (risk-r01) | see §3 | `webview-manager::host` (backend choice) |

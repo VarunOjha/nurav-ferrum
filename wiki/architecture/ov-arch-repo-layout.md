@@ -15,8 +15,6 @@ audience: both
 phase: phase-p0-planning
 tags: [repo, layout, gitignore]
 unverified:
-  - claim: "A Tauri 2 app can live at apps/desktop with its Rust crate in apps/desktop/src-tauri as a member of a root Cargo workspace"
-    verify_in: phase-p2-minimal-container
   - claim: "Git LFS (or an alternative) is needed for large raw benchmark outputs"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -85,7 +83,8 @@ Notes:
 - **`docs/` vs `wiki/`.** `wiki/` is the canonical planning, decision and research memory. `docs/` holds end-user and developer documentation generated from it or written for GitHub readers. Where they conflict, the wiki wins (SCHEMA §3.4).
 - **`benchmarks/configurations/` vs `experiments/`.** `configurations/` holds *product* configurations (cfg-chrome … cfg-ferrum-adaptive and policy parameter sets). `experiments/<family>/` holds experiment definitions that combine workloads, configurations and trials. The canonical design of each experiment lives in `wiki/research/experiments/`.
 - **Generated data is separate from source** (master prompt §12). The harness writes to `benchmarks/results/<run-id>/`, which is gitignored. A run counts for research only once its full raw output is **copied unedited** into `wiki/raw/bench/<run-id>/`. Whether that needs Git LFS depends on size: UNVERIFIED[phase-p6-benchmark-harness].
-- **Shell UI location.** Putting the Tauri crate in `apps/desktop/src-tauri/` follows the Tauri convention. Whether it works cleanly as a member of a root Cargo workspace is UNVERIFIED[phase-p2-minimal-container] (re-targeted in P1: the spikes were built outside the workspace on purpose; p2.2 creates `apps/desktop`).
+- **Shell UI location.** Putting the Tauri crate in `apps/desktop/src-tauri/` follows the Tauri convention. It works as a member of the root Cargo workspace: the pinned Tauri CLI builds it there (verified in P2,
+[check-p2.2](../raw/evidence/phase-p2-minimal-container/check-p2.2.txt)).
 
 ## `.gitignore` plan (phase-p1-foundation deliverable)
 

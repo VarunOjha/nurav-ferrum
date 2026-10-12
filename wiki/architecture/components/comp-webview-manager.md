@@ -64,8 +64,8 @@ connects:
     kind: rust-api
     crosses_trust_boundary: false
 unverified:
-  - claim: "Raw-COM events (NavigationStarting, NewWindowRequested, DownloadStarting, NavigationCompleted, PermissionRequested) cover for tabs what Tauri's hooks would have done"
-    verify_in: phase-p2-minimal-container
+  - claim: "Raw-COM DownloadStarting and PermissionRequested cover for tabs what Tauri's hooks would have done"
+    verify_in: phase-p3-tabs-sessions
 ---
 
 # comp-webview-manager
@@ -81,6 +81,10 @@ This crate owns every tab WebView. **It is the only place in Ferrum where WebVie
 | `session` | `session.json` snapshot store, shared by restore and discard | no |
 | `actuator` | `LifecycleActuator` implementation with the two-phase discard ([state machine §2](../ov-arch-lifecycle-state-machine.md)) | no |
 | `webview2::{nav, perm, lifecycle, events, procinfo, netlog, probe, profile}` | Thin safe wrappers over `webview2-com` 0.39 | **yes** |
+
+Raw-COM events instead of Tauri's hooks: `NavigationStarting`, `NewWindowRequested` and `NavigationCompleted` were
+verified in P2 for the content view (checks [p2.6](../../raw/evidence/phase-p2-minimal-container/check-p2.6.txt), [p2.8](../../raw/evidence/phase-p2-minimal-container/check-p2.8.txt),
+[p2.10](../../raw/evidence/phase-p2-minimal-container/check-p2.10.txt)); `DownloadStarting` and `PermissionRequested` are UNVERIFIED[phase-p3-tabs-sessions].
 
 ## Unsafe invariants
 

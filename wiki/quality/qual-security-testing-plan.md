@@ -3,7 +3,7 @@ id: qual-security-testing-plan
 type: quality
 title: "Security testing plan: master prompt section 11 mapped to harmless fixtures"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -21,8 +21,6 @@ tooling:
   - "@playwright/test over CDP (E2E, test builds only)"
   - "raw-COM WebView2 handlers via with_webview (navigation, frame navigation, external schemes, process failure)"
 unverified:
-  - claim: "Playwright over CDP can drive Ferrum tab webviews in a test build for the E2E security tests"
-    verify_in: phase-p2-minimal-container
   - claim: "WebView2 raises LaunchingExternalUriScheme for an unregistered custom scheme navigated from a tab"
     verify_in: phase-p4-security
   - claim: "WebView2 marks downloaded files with Mark-of-the-Web"
@@ -196,4 +194,4 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 
 ## 6. Unverified items on this page
 
-All are listed in the frontmatter `unverified:` block and tagged inline in SEC-02, SEC-05, SEC-06, SEC-07, SEC-10 and SEC-13. One more applies to the whole E2E level: driving Ferrum tab webviews with Playwright over CDP in a test build. UNVERIFIED[phase-p2-minimal-container]
+All are listed in the frontmatter `unverified:` block and tagged inline in SEC-02, SEC-05, SEC-06, SEC-07, SEC-10 and SEC-13. One more applied to the whole E2E level, driving Ferrum tab webviews with Playwright over CDP in a test build: verified in P2 for the shell and the content view ([check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)).

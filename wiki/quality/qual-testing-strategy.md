@@ -26,14 +26,10 @@ tooling:
   - "scipy 1.18.0 (reference statistics)"
   - "npm run lint:wiki (wiki lint, see ip-wiki-lint)"
 unverified:
-  - claim: "Playwright connectOverCDP can drive both the Ferrum shell webview and tab webviews for E2E tests in a test build"
-    verify_in: phase-p2-minimal-container
   - claim: "A GitHub-hosted windows-latest runner can launch a Tauri WebView2 window for E2E smoke tests"
-    verify_in: phase-p2-minimal-container
+    verify_in: phase-p3-tabs-sessions
   - claim: "pytest is the test runner chosen for the Python analysis code and runs on the installed Python 3.12.10"
     verify_in: phase-p6-benchmark-harness
-  - claim: "Vitest runs the vanilla TypeScript shell UI tests with a jsdom environment under Vite"
-    verify_in: phase-p2-minimal-container
 ---
 
 # Testing strategy
@@ -96,8 +92,8 @@ Rules for `unsafe` code (risk-r18): every `unsafe` block has a `// SAFETY:` comm
 | Layer | What | Tool |
 |---|---|---|
 | Static | `eslint`, `tsc --noEmit` | eslint, TypeScript |
-| Unit | Address-bar input normalisation, tab-strip state, keyboard-shortcut mapping, IPC request builders, all as pure modules | Vitest with jsdom (UNVERIFIED[phase-p2-minimal-container]) |
-| E2E | The built app driven through the shell webview | Playwright over CDP (UNVERIFIED[phase-p2-minimal-container]) |
+| Unit | Address-bar input normalisation, tab-strip state, keyboard-shortcut mapping, IPC request builders, all as pure modules | Node's own test runner on the pure shell modules (P2: `apps/desktop/src/logic.test.ts`, run by `npm test`, 7 tests passing at commit a742955); Vitest with jsdom only if DOM tests become necessary |
+| E2E | The built app driven through the shell webview | Playwright over CDP (verified in P2, [check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)) |
 
 The shell never contains policy logic; policy decisions live in Rust and are unit-tested there.
 
@@ -205,5 +201,5 @@ Manual checks are done by the owner at milestone reviews (adr-0014) and recorded
 - proptest availability on the pinned toolchain: compatible by its metadata (proptest 1.12.0 needs Rust 1.88; [claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §2).
 - Playwright over CDP driving both the shell and the tabs in a test build (stated in 2.2). See the inline tag there.
 - Vitest with jsdom for the vanilla TypeScript shell (stated in 2.2). See the inline tag there.
-- A hosted windows-latest runner launching a Tauri WebView2 window. UNVERIFIED[phase-p2-minimal-container] (re-targeted in P1: the first push was deferred).
+- A hosted windows-latest runner launching a Tauri WebView2 window. UNVERIFIED[phase-p3-tabs-sessions] (re-targeted in P1 and again in P2: the first push is deferred, Q-221).
 - pytest as the Python runner on Python 3.12.10. UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P1: the Python environment tool is open, Q-121, and analysis code starts in P6).

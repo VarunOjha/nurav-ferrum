@@ -184,7 +184,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0006-shell-ui-vanilla-ts-vite.md",
-        "content_hash": "sha256:4ef92ab8f3895a5b6cdf9ea2375a878c77976bd207a3cb5a50b47c801b912cbc"
+        "content_hash": "sha256:026aa6a929c33e81c6e8809150c430548acd6b28667fc9eb68851934188cddab"
       }
     },
     {
@@ -345,7 +345,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0011-git-ci-license.md",
-        "content_hash": "sha256:b0a1bf4e16cb5c1759cab654d7a1994503b127ff6756d943955011573d3e3d40"
+        "content_hash": "sha256:eb46a92b1d870f38a1fbc3d9da89f78e9b0d2b3e15f2a861723bcf2ed350ea6c"
       }
     },
     {
@@ -561,7 +561,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0018-repo-root-cargo-workspace.md",
-        "content_hash": "sha256:edf1b89394a79adb40b23a8d687fc53c915a0f5bbb538484e912007a9035eaa8"
+        "content_hash": "sha256:995b171e359eeafb7b369fcbd00494faebd513d623bb62f8af46ba8de10904d2"
       }
     },
     {
@@ -596,7 +596,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0019-raw-webview2-com-boundary.md",
-        "content_hash": "sha256:8b762fe27fc5f741a4095e9ab054fe5eb5cef5b2cf4852636bbcba395648da69"
+        "content_hash": "sha256:5b6541c9ff0c9426b2632b95cdeb2f44a9ad0fefe4857cce0a26c2d2289d7f99"
       }
     },
     {
@@ -851,7 +851,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md",
-        "content_hash": "sha256:90f446db59f30a2eea018b2a38bb43a501e07c95a96c314242e02914b2c6d311"
+        "content_hash": "sha256:56974fd086546b0c426a817bc96d7fc78cd9cd49f89690016cc7ccb72b050090"
       }
     },
     {
@@ -880,7 +880,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0029-profile-route-raw-com-tab-controllers.md",
-        "content_hash": "sha256:b9c915212c3c734bf43fa6ec5a36a1d83b370261cdf41f0483a913f2b62b801f"
+        "content_hash": "sha256:8d74d0d7e057b911847e59cab2a215e66a4694d7c7cbe3633baeeeb2b5b14559"
       }
     },
     {

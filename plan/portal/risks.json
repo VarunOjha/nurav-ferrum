@@ -265,7 +265,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r10-google-oauth-embedded.md",
-        "content_hash": "sha256:2378403adb1a6c9c3462011e236c8622cc44c786c860f9a0170546061f863deb"
+        "content_hash": "sha256:835d7589a50de4a5657e77842b0f27fa17de71ba9250dcba48ffbf36c4fd95fe"
       }
     },
     {
@@ -541,7 +541,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r20-dependency-toolchain-churn.md",
-        "content_hash": "sha256:aa90bf66d9471f7aa28170874fa9195a195e0170744ccd3debf0c7c7189a6858"
+        "content_hash": "sha256:8073b1a81f744e3ca1290296fce14674d647ea185689ef0b936e8cf4fd97be0c"
       }
     },
     {

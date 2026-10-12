@@ -22,9 +22,7 @@ options:
   - "Separate repositories for app, harness and paper"
 phase: phase-p0-planning
 tags: [repository, layout, cargo, workspace]
-unverified:
-  - claim: "Tauri CLI 2.12.1 builds an app located at apps/desktop/ (src-tauri inside it) as a member of a root Cargo workspace"
-    verify_in: phase-p2-minimal-container
+unverified: []
 ---
 
 # ADR-0018: The repository root is the project root; the Cargo workspace mirrors the master prompt §12 layout
@@ -101,7 +99,8 @@ Placement details:
 
 - The root has no `ferrum/` prefix, unlike the §12 drawing. The deviation is purely cosmetic.
 - Several Node projects each have their own lockfile (`apps/desktop`, `benchmarks/runners`, `interactive_plan`). That this does not confuse Turbopack root inference once `turbopack.root` is set was confirmed in P1: the plan app built while two spike lockfiles existed in the repo ([claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §3) ([raw/research/nextjs-stack.md](../raw/research/nextjs-stack.md) §3.5).
-- That the Tauri CLI builds `apps/desktop/src-tauri` as a workspace member is UNVERIFIED[phase-p2-minimal-container] (re-targeted in P1: the spikes were kept outside the workspace on purpose; p2.2 creates `apps/desktop`).
+- The Tauri CLI (2.12.2, pinned) builds `apps/desktop/src-tauri` as a workspace member (verified in P2,
+  [check-p2.2](../raw/evidence/phase-p2-minimal-container/check-p2.2.txt)).
 
 ### Follow-ups
 

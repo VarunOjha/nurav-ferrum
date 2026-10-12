@@ -35,7 +35,7 @@ deliverables:
 tasks:
   - id: p2.1
     title: "Local fixture server (tests/fixtures/) serving deterministic pages: redirect chains (301, 302, 303, 307, 308, loop), target=_blank links, mailto and custom-scheme links, cookie setter, slow page, 404/500 pages"
-    verify: "The fixture server is a Rust crate at tests/fixtures/server (axum or hyper; exact version pinned at P2 start, UNVERIFIED[phase-p2-minimal-container]); 'cargo test --locked -p fixture-server' passes; each fixture URL returns the documented status code (curl -sI output saved). P6 workloads may reuse this server."
+    verify: "The fixture server is a Rust crate at tests/fixtures/server (axum 0.8.9, pinned exactly; [source readings](../raw/research/p2-source-readings.md) S3); 'cargo test --locked -p fixture-server' passes; each fixture URL returns the documented status code (curl -sI output saved). P6 workloads may reuse this server."
   - id: p2.2
     title: "Create apps/desktop with the Tauri version and hosting route fixed in p1.9; shell UI in vanilla TS + Vite (adr-0006); workspace member"
     verify: "Release build via the pinned Tauri CLI exits 0 (output saved); app window opens and shows the shell (owner or Claude observes; screenshot saved)."
@@ -125,14 +125,6 @@ decisions: [adr-0006, adr-0007, adr-0010, adr-0011, adr-0014, adr-0015, adr-0018
 experiments: []
 components: [comp-app-shell, comp-webview-manager, comp-core, comp-webview2-runtime]
 unverified:
-  - claim: "NavigationCompleted and WebResourceResponseReceived provide enough information for an HTTP error state (status-code path)"
-    verify_in: phase-p2-minimal-container
-  - claim: "Google refuses OAuth sign-in in a WebView2-based tab in practice (observe only, never circumvent)"
-    verify_in: phase-p2-minimal-container
-  - claim: "A local fixture can be served over HTTPS without weakening certificate validation (needs a locally trusted certificate)"
-    verify_in: phase-p2-minimal-container
-  - claim: "A WebView2 controller that Ferrum creates itself has no Tauri IPC bridge"
-    verify_in: phase-p2-minimal-container
   - claim: "Moving keyboard focus into the content web view when the window becomes active fixes the Alt+Tab focus issue (13466)"
     verify_in: phase-p2-minimal-container
 ---
@@ -148,7 +140,7 @@ Even with a single tab, P2 uses the hosting model chosen for tabs: one window, t
 - Shell UI: address bar, back/forward/refresh, load indicator, error panel. Vanilla TS + Vite (adr-0006).
 - Content WebView: navigation, redirects, external links, cookies, DevTools gating.
 - Known issue from spike S1 (owner: fix later): after Alt+Tab back to the window, typing does not reach the web view until a click ([S1 report](../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md), Tauri issue 13466). P2 moves keyboard focus into the content web view when the window becomes active; that this fixes it is UNVERIFIED[phase-p2-minimal-container].
-- Security floor from day one. Every web view Tauri creates gets the IPC channel, and authorisation in Rust is the only protection ([raw/research/tauri-webview2-capabilities.md](../raw/research/tauri-webview2-capabilities.md) section 3). P2 therefore applies recipe items 1 to 3 (no `remote` capability, webview-label targeting, app ACL manifest) and proves them with the p2.3 negative test. The content web view is created by Ferrum (adr-0029) and should have no IPC bridge at all; the same negative test checks that (UNVERIFIED[phase-p2-minimal-container]). The full policy engine is [P4](phase-p4-security.md).
+- Security floor from day one. Every web view Tauri creates gets the IPC channel, and authorisation in Rust is the only protection ([raw/research/tauri-webview2-capabilities.md](../raw/research/tauri-webview2-capabilities.md) section 3). P2 therefore applies recipe items 1 to 3 (no `remote` capability, webview-label targeting, app ACL manifest) and proves them with the p2.3 negative test. The content web view is created by Ferrum (adr-0029) and has no IPC bridge at all; the same negative test showed it (verified in P2, [check-p2.3](../raw/evidence/phase-p2-minimal-container/check-p2.3.txt)). The full policy engine is [P4](phase-p4-security.md).
 - Secure defaults from master prompt section 5: never bypass certificate validation, never weaken Chromium sandboxing, never bypass OAuth provider restrictions.
 
 ## Out of scope
@@ -176,7 +168,9 @@ This is [Q-202](../overview/ov-open-questions.md#q-202-local-fixture-scheme-loop
 2. Fixtures over `http://127.0.0.1` under a test-only configuration. Under adr-0015 HTTP is upgraded or warned, so tests would exercise the warning path, not the HTTPS path.
 3. Public HTTPS sites only for HTTPS-specific smoke checks, fixtures over HTTP for everything else.
 
-Claude's recommendation is option 1 for fixtures plus a few public HTTPS sites in the owner's manual checklist. Whether option 1 works without side effects is UNVERIFIED[phase-p2-minimal-container].
+Claude's recommendation is option 1 for fixtures plus a few public HTTPS sites in the owner's manual checklist. Option 1 works without weakening certificate checks (verified in P2, [check-p2.1](../raw/evidence/phase-p2-minimal-container/check-p2.1.txt)). Its one
+side effect is the local test certificate authority in the developer's Windows user Root store, which is
+name-constrained to `localhost`, `127.0.0.0/8` and `::1` (installed with the owner's confirmation).
 
 ## Step order
 

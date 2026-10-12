@@ -68,8 +68,6 @@ connects:
     kind: os-api
     crosses_trust_boundary: true
 unverified:
-  - claim: "A strict content security policy for the shell is workable, so fonts and assets can be bundled locally"
-    verify_in: phase-p2-minimal-container
   - claim: "Tauri unstable multi-webview focus, resize and z-order issues are workable on Windows"
     verify_in: phase-p2-minimal-container
 ---
@@ -91,8 +89,10 @@ sleeping tabs, blocked sites and this tab's network log (metadata only, adr-0008
 warm grey, one rust-orange accent, IBM Plex Sans and Mono, light and dark. No AI assistant. Frozen design:
 [option-a.dc.html](../../raw/evidence/phase-p0-planning/browser-ui/option-a.dc.html). All numbers on it are samples;
 nothing is measured. The panel's sections fill in as later phases land (P4 blocking, P5 measurement and network log,
-P7 sleeping tabs). Proposed (not yet approved): the fonts are bundled with the app, since the shell is meant to load
-no remote resources (strict policy, UNVERIFIED[phase-p2-minimal-container]).
+P7 sleeping tabs). The shell loads no remote resources: its content security policy allows only the app's own files and the IPC
+channel, and the shell works under it, bridge included (verified in P2, [check-p2.3](../../raw/evidence/phase-p2-minimal-container/check-p2.3.txt); the policy
+is in `apps/desktop/src-tauri/tauri.conf.json`). Proposed (not yet approved): bundle the IBM Plex fonts with the app;
+P2 does not bundle them (the shell uses IBM Plex if installed, else Segoe UI and Consolas).
 
 **Title bar.** Option A as drawn puts the tabs in the window's top bar, which needs a custom title bar; the design
 notes below advise against one at first (resize problem, Tauri issue #12207, UNVERIFIED[phase-p3-tabs-sessions]; not tested in P1 because spike S1 used the normal title bar). Until

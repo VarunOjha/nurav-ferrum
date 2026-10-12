@@ -25,8 +25,6 @@ unverified:
     verify_in: phase-p5-telemetry
   - claim: "A custom title bar with tabs in it resizes reliably under Tauri on Windows 11 (issue #12207)"
     verify_in: phase-p3-tabs-sessions
-  - claim: "A strict content security policy for the shell is workable, so the IBM Plex fonts can be bundled locally"
-    verify_in: phase-p2-minimal-container
 ---
 
 # ADR-0028: Browser look: tabs on top, Ferrum panel on the right
@@ -93,8 +91,8 @@ Claude's proposals for building it (also binding only once the owner approves th
   that section stays empty or hidden.
 - **Fonts bundled with the app.** The IBM Plex fonts would be bundled locally rather than loaded from the web,
   because the shell is meant to load no remote resources under a strict content security policy
-  ([adr-0006](adr-0006-shell-ui-vanilla-ts-vite.md)); whether a strict policy is workable is
-  UNVERIFIED[phase-p2-minimal-container]. The design file loads the fonts from Google Fonts only because it is a mockup.
+  ([adr-0006](adr-0006-shell-ui-vanilla-ts-vite.md)); the strict policy works, fonts loaded from the app's own files
+  included (`font-src 'self'`; verified in P2, [check-p2.3](../raw/evidence/phase-p2-minimal-container/check-p2.3.txt)). P2 does not bundle the fonts yet. The design file loads the fonts from Google Fonts only because it is a mockup.
 
 ## Consequences
 

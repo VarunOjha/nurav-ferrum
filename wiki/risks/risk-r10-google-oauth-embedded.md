@@ -3,7 +3,7 @@ id: risk-r10
 type: risk
 title: "Google OAuth refuses sign-in from embedded webviews such as Ferrum tabs"
 status: open
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/00-master-prompt.md
@@ -18,8 +18,6 @@ owner_phase: phase-p2-minimal-container
 trigger: "Users report Google sign-in failing in a tab; a chosen public real-world workload turns out to require Google sign-in."
 fallback: "Accept the limitation and document it; keep authenticated Google sites out of scope for both the app and the benchmarks."
 unverified:
-  - claim: "Google actually blocks sign-in in a WebView2-based Ferrum tab with its default user agent"
-    verify_in: phase-p2-minimal-container
   - claim: "Other OAuth providers (for example Microsoft or GitHub) impose similar embedded-webview restrictions"
     verify_in: phase-p3-tabs-sessions
 ---
@@ -62,7 +60,7 @@ Accept the limitation and document it; keep authenticated Google sites out of sc
 
 ## Unverified claims
 
-- Google actually blocks sign-in in a WebView2-based Ferrum tab with its default user agent. UNVERIFIED[phase-p2-minimal-container]
+- Whether Google would block sign-in in a Ferrum view was not observed, by design: since P2 Ferrum never loads Google's sign-in address and offers the normal browser instead ([check-p2.13](../raw/evidence/phase-p2-minimal-container/check-p2.13.txt)), so the design no longer depends on it.
 - Other OAuth providers (for example Microsoft or GitHub) impose similar embedded-webview restrictions. UNVERIFIED[phase-p3-tabs-sessions]
 
 ## Affects

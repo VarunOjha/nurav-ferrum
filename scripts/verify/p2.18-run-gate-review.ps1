@@ -1,24 +1,24 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-  Check for task p2.18 (P2 First working app): Run the gate; your review.  DRAFT: not ready until P2.
+  Check for task p2.18 (P2 First working app): Run the gate; your review.
 
 .DESCRIPTION
-  Status         : DRAFT. Its real checks are written when P2 starts; until then it only lists them and
-                   ends NOT READY.
-  What it checks : (planned) All evidence saved; wiki clean; you approved the P2 exit.
-  Why            : All tasks done → run every check and save the output → you try the release build and
-                   approve the first milestone.
+  What it checks : every evidence file the P2 phase page lists exists (the gate saves them, and Claude saves your
+                   manual checklist answers); the log has a gate entry for P2; your approval of the P2 exit is
+                   recorded. Until you have reviewed P2 this ends NOT READY, which is expected.
+  Why            : all tasks done → run every check and save the output → you try the release build and approve
+                   the first milestone on saved evidence, not on a claim.
   What it changes: nothing.
-  How long       : under a second while it is a draft.
+  How long       : a few seconds.
   How to run     : pwsh -NoProfile -File scripts/verify/p2.18-run-gate-review.ps1
-  Result         : NOT READY until P2 starts (this is a draft); then PASS or FAIL.
-  Tell Claude    : nothing. "Not ready until P2" is the expected result for now.
+  Result         : PASS (every checked step is fine), FAIL (something is wrong) or NOT READY (something
+                   still waits, usually your review).
+  Tell Claude    : nothing; Claude runs it after your review.
 
   For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
-                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
-                   page:
-    All evidence files exist; lint clean; owner approves phase-p2-minimal-container#exit.
+                   scripts/lib/Ferrum.Check.psm1). Phase-page verify field: all evidence files exist; lint clean
+                   (the gate's wiki check); owner approves phase-p2-minimal-container#exit.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
@@ -27,11 +27,25 @@ $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
 
 Start-Check -Id 'p2.18' -Title 'Run the gate; your review' -Phase 'phase-p2-minimal-container' `
-    -Why 'you try the release build and approve the first milestone.'
+    -Why 'you approve the exit on saved evidence, not on a claim.'
 
-# TODO(P2): replace each planned step below with an Invoke-Step that really checks it.
-Add-TodoStep 'All evidence saved' 'Planned check; written when P2 starts.'
-Add-TodoStep 'Wiki clean' 'Planned check; written when P2 starts.'
-Add-TodoStep 'You approved the P2 exit' 'Planned check; written when P2 starts.'
+Invoke-Step 'Every evidence file of the P2 gate exists' {
+    $t = (Read-RepoText 'wiki/phases/phase-p2-minimal-container.md') -replace "`r`n", "`n"
+    $block = [regex]::Match($t, '(?m)^  evidence:\n((?:    - .+\n)+)').Groups[1].Value
+    $files = @([regex]::Matches($block, '    - (\S+)') | ForEach-Object { 'wiki/' + $_.Groups[1].Value })
+    if ($files.Count -eq 0) { Stop-Fail 'The P2 phase page lists no gate evidence.' }
+    $missing = @($files | Where-Object { -not (Test-Path -LiteralPath (Get-RepoPath $_)) } | ForEach-Object { Split-Path -Leaf $_ })
+    if ($missing.Count) { Stop-Fail "$($missing.Count) of $($files.Count) missing: $($missing -join ', ')." }
+    "$($files.Count) evidence files"
+}
 
-Complete-Check -SaveEvidence:$SaveEvidence -NotReadyUntil 'P2'
+Invoke-Step 'The log has a gate entry for P2' {
+    if (-not (Test-LogHeading '\] gate \| phase-p2-minimal-container')) { Stop-Fail 'No "gate | phase-p2-minimal-container" entry in wiki/log.md yet.' }
+    'gate entry found'
+}
+
+Invoke-Step 'Your approval of the P2 exit is recorded' {
+    Assert-Approved -Keys 'phase-p2-minimal-container#exit' -What 'your approval of the P2 exit'
+}
+
+Complete-Check -SaveEvidence:$SaveEvidence

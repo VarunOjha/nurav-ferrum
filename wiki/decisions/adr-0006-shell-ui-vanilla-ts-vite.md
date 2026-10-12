@@ -19,9 +19,7 @@ options:
   - "Rust-to-WASM UI framework"
 phase: phase-p0-planning
 tags: [ui, shell, frontend]
-unverified:
-  - claim: "A strict Content-Security-Policy for the shell webview can be configured in Tauri 2.12.1 without breaking IPC"
-    verify_in: phase-p2-minimal-container
+unverified: []
 ---
 
 # ADR-0006: The shell UI stack is vanilla TypeScript + Vite
@@ -83,7 +81,8 @@ Design rules that follow from the research:
 ### Follow-ups
 
 - P1: scaffold the shell frontend and pin exact versions.
-- P2: configure a strict CSP for the shell. Feasibility without breaking IPC is UNVERIFIED[phase-p2-minimal-container].
+- P2: configure a strict CSP for the shell. Done: the shell runs under it with the bridge working (verified in P2,
+  [check-p2.3](../raw/evidence/phase-p2-minimal-container/check-p2.3.txt); the policy is in `apps/desktop/src-tauri/tauri.conf.json`).
 - Unit tests for shell logic (URL parsing in the address bar, tab state reducer) use a lightweight TS test runner. The runner is chosen in P1.
 
 ### Related risks and phases

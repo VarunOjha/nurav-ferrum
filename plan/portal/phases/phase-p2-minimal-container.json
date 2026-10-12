@@ -102,7 +102,7 @@
       "title": "Loading and error screens",
       "what": "A spinner while loading and an error panel for failed pages.",
       "why": "Without feedback a slow page looks like a frozen app. Drawing errors in the website view itself could let pages fake app screens.",
-      "how": "The shell draws both itself and never loads the app's own pages into the website view. Whether Tauri reports enough to show HTTP errors is not checked yet.",
+      "how": "The shell draws both itself and never loads the app's own pages into the website view. WebView2 reports the HTTP status, so a site's own error page gets a note in the toolbar (checked in P2).",
       "status": "Done",
       "chain": "Pages are slow or fail → spinner and error panel drawn by the shell, never by loading the app's own pages into the website view → clear feedback without weakening security.",
       "check": "Slow, 404, 500 and unreachable tests each show the right state.",
@@ -269,6 +269,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
-    "content_hash": "sha256:2a5306bc00ef49bcd67f4ce0131b37625fefc65e784e45d01bf79841fd4f1224"
+    "content_hash": "sha256:30d250e7055c6b19f0af47f0a6c6f0ba40d928b1f804dae7897f757fc4d08b3e"
   }
 }
