@@ -46,5 +46,13 @@ Built in P2 (evidence in [the P2 evidence folder](../../raw/evidence/phase-p2-mi
   [google-oauth-endpoint](../../raw/research/google-oauth-endpoint.md)); a test-only pattern only when the app passes
   one (debug builds).
 
-Unit tests: `crates/core/tests/{config,address,oauth}.rs`. Not yet built: shared ids, event and record types, and the
+Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
+
+## Implementation status (P3, tabs and sessions)
+
+- `tabs` (p3.1): `Tabs<T>`, the tab model without any window: `TabId` (counts up, never reused), `open` at the end or
+  after the active tab, `close` (the active tab's right-hand neighbour takes over, else the left one), `activate`,
+  `move_to`, `activate_next`/`activate_previous` (wrap around), a closed-tab stack of at most 25 with `reopen_closed`,
+  and `check` for the rules. Tested with fixed cases and 200 random sequences of 500 operations
+  ([check-p3.1](../../raw/evidence/phase-p3-tabs-sessions/check-p3.1.txt)). Not yet built: shared ids, event and record types, and the
 `LifecycleActuator` and `Clock` traits (later phases).

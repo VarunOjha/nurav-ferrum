@@ -1,0 +1,12 @@
+Ferrum check p3.1: Tab rules as plain code
+Why: exactly one active tab, ids never reused.
+Run at 2026-10-12 01:01 on commit 7267d89 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The tab model lives in the core crate, which forbids unsafe code
+         crates/core/src/tabs.rs, #![forbid(unsafe_code)]
+  PASS   Tab rule tests pass, including the random operation sequences (6 s)
+         9 required cases pass (test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.75s)
+------------------------------------------------------------------------
+RESULT: PASS - p3.1 (2 PASS; 6 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.1 check passed".
