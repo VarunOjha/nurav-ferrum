@@ -8,6 +8,7 @@
 
 mod content;
 mod external;
+mod history;
 mod logging;
 mod selftest;
 mod session;
@@ -180,6 +181,8 @@ fn main() {
             content::test_stats,
             content::test_focus,
             session::test_crash,
+            history::history_list,
+            history::history_clear,
             content::shell_focused
         ])
         .setup(|app| {
@@ -216,7 +219,8 @@ fn main() {
             }
             let data_dir = loaded.config.storage.data_dir.clone();
             app.manage(AppConfig(loaded));
-            app.manage(session::store(app, data_dir));
+            app.manage(session::store(app, data_dir.clone()));
+            app.manage(history::store(app, data_dir));
             session::start_saver(app.handle().clone());
             // Test hook: FERRUM_EXIT_AFTER=<seconds> makes the app close itself (automated checks never kill it).
             if let Some(secs) = std::env::var("FERRUM_EXIT_AFTER")
@@ -295,6 +299,7 @@ fn main() {
             // Save the tab list one last time when Ferrum closes normally (p3.5).
             if let tauri::RunEvent::Exit = event {
                 session::save_now(app);
+                history::save_if_dirty(app);
             }
         });
 }

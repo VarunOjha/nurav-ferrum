@@ -1,0 +1,19 @@
+Ferrum check p3.7: Browsing history
+Why: useful, private, never in the project files.
+Run at 2026-10-12 02:24 on commit 5a83519 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   History unit tests
+         5 required cases pass
+Running 3 tests using 1 worker
+  ✓  1 history.spec.ts:24:1 › visits are recorded newest first with their titles, searchable, and saved to the data folder (811ms)
+  ✓  2 history.spec.ts:38:1 › back and forward follow the active tab (236ms)
+  ✓  3 history.spec.ts:52:1 › clearing empties the list and the file at once (32ms)
+  3 passed (15.1s)
+  PASS   Smoke test: recorded, searched, cleared (list and file); back/forward per tab (43 s)
+         history: 3 passed
+  PASS   History files are never part of the project
+         no history.json or session.json in git
+------------------------------------------------------------------------
+RESULT: PASS - p3.7 (3 PASS; 44 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.7 check passed".

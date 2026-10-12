@@ -88,6 +88,7 @@ pub fn start_saver(app: AppHandle) {
             if dirty {
                 save_now(&app);
             }
+            crate::history::save_if_dirty(&app);
         }
     });
 }

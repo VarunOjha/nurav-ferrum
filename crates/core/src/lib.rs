@@ -8,6 +8,7 @@ pub mod config;
 
 pub mod address;
 pub mod fsutil;
+pub mod history;
 pub mod oauth;
 pub mod profiles;
 pub mod session;

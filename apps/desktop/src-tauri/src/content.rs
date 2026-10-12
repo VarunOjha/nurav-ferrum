@@ -370,13 +370,24 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
             TabEvent::SourceChanged { uri } => {
                 list_changed = update(&h, id, |i| i.url = uri.clone())
             }
-            TabEvent::NavigationCompleted { uri, .. } => {
+            TabEvent::NavigationCompleted {
+                uri,
+                success,
+                http_status,
+                ..
+            } => {
+                let mut title = String::new();
                 list_changed = update(&h, id, |i| {
                     i.loading = false;
+                    title = i.title.clone();
                     if !uri.is_empty() {
                         i.url = uri.clone();
                     }
-                })
+                });
+                // A page that loaded goes into the history (p3.7); failed loads and error pages do not.
+                if *success && *http_status < 400 {
+                    crate::history::visited(&h, uri, &title);
+                }
             }
             TabEvent::HistoryChanged {
                 can_go_back,
@@ -388,7 +399,12 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
                 })
             }
             TabEvent::TitleChanged { title } => {
-                list_changed = update(&h, id, |i| i.title = title.clone())
+                let mut url = String::new();
+                list_changed = update(&h, id, |i| {
+                    i.title = title.clone();
+                    url = i.url.clone();
+                });
+                crate::history::titled(&h, &url, title);
             }
             _ => {}
         }

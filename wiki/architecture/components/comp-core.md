@@ -67,6 +67,9 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   `config` gains `[isolation] mode` (`per-site` default in version 2; a version-1 file keeps `shared`) and `[[sites]]`
   (`site`, optional `profile`), validated (the site must be its own registrable domain, listed once; labels 1 to 40
   of `a-z 0-9 - _`).
+- `history` (p3.7): `History` (newest first; a visit to the newest entry's address updates it; at most 1000), `visit`,
+  `set_title`, `search` (address or title, any case), `clear`; `save` (atomic) and `load` of `history.json`
+  ([check-p3.7](../../raw/evidence/phase-p3-tabs-sessions/check-p3.7.txt)).
 - `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default).
 - `config` (p3.4): the file carries `version` (`VERSION` = 2). A file without it is version 1 (P2) and is migrated
   when read (`migrate_v1`: a version-1 file that did not choose `new_window` keeps `same-view`, its P2 behaviour).

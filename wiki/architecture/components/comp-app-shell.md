@@ -175,6 +175,12 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   its own profile? This tab's back history will be lost.", Continue / Cancel; `link` event kind `cross-site`,
   commands `cross_site_confirm` (only the address asked about) and `cross_site_cancel`). Typed addresses move without
   asking; redirects stay in the current profile ([check-p3.6](../../raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt)).
+- p3.7, history (`history.rs`): pages that load (web addresses, HTTP status below 400) are recorded with their title in
+  `history.json` in the data folder, saved with the session saver and on exit; commands `history_list` (newest first,
+  optional search and limit) and `history_clear` (empties the list and the file at once). Self-test runs keep it in
+  memory only. Per-tab back and forward: the toolbar's buttons follow the active tab's own `history-changed` state. The
+  history is browsing data: it stays in the data folder and is never committed (the p3.7 check looks)
+  ([check-p3.7](../../raw/evidence/phase-p3-tabs-sessions/check-p3.7.txt)).
 - New windows: `new_window = "new-tab"` is the new default (`same-view` and `system-browser` stay). One tab may open
   at most one new tab per second; further requests are blocked with "Pop-up blocked" on that tab. WebView2's
   user-initiated flag is not used (it was `true` for a script-only pop-up). A real pop-up policy is P4 work.

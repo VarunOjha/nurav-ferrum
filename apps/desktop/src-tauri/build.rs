@@ -27,6 +27,8 @@ fn main() {
             "test_stats",
             "test_focus",
             "test_crash",
+            "history_list",
+            "history_clear",
             "shell_focused",
             "external_open_confirm",
             "external_cancel",
