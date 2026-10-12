@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is built; your review is open. You asked for a small new feature set (bookmarks, search of the past, an encrypted backup, a fresh look). It is planned and waits for your design answers and approval.",
+  "summary": "Phase 3 is built; your review is open. The new feature set is planned, and design options from your answers are on a design canvas for you to pick from.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:677c94d5032312cccfc41f3f1ede24b5b82b36af05930cb97e2b2ce0877d451d"
+    "content_hash": "sha256:9e00af9677324098873f14ca5f5d828724f5982c383a4223d39ab72f481b0fa5"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: new feature set planned; design questions with you",
+      "state": "P3 Tabs and sessions: feature set design options ready for your pick",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -37,17 +37,17 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "New feature set",
-        "state": "planned, waits for your approval"
+        "item": "Design options",
+        "state": "three looks, three logos, on the canvas"
       },
       {
-        "item": "Design",
-        "state": "questions one at a time, then options on a canvas"
+        "item": "Feature set plan",
+        "state": "waits for your approval"
       }
     ],
-    "why": "You choose how the new features look before anything is built.",
+    "why": "You choose the look before anything is built.",
     "script": null,
-    "tell_claude": "Your answer to each design question, then \"approve the feature set plan\" or what to change."
+    "tell_claude": "The look (A, B or C), the logo (1, 2 or 3), any changes, and \"approve the feature set plan\"."
   },
   "questions_for_you": {
     "open": 23,

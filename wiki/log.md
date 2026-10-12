@@ -2000,3 +2000,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Owner asked for bookmarks, search of the past from the address bar, a manual secure dump to load into another Ferrum, and a refreshed look and logo; chose SQLite over Postgres. adr-0032 proposed (local SQLite file; passphrase-encrypted export and import; no cookies or logins). P3 page gains the feature set, tasks p3.17 (design with the owner) to p3.23. No application code. Stales approval of phase-p3-tabs-sessions (already stale) and ov-project.
 - next: design questions to the owner one at a time (p3.17), then options on a Claude design canvas; implementation waits for the owner's approval of the plan and adr-0032.
 - commit: d28179a
+
+## [2026-10-12] ingest | p3.17 owner design answers ingested; options on a design canvas
+
+- session: s02
+- time: 14:49
+- pages: [phase-p3-tabs-sessions]
+- sources: [raw/owner/2026-10-12-s02-feature-set-design-answers.md]
+- result: Seven design questions asked one at a time. Owner chose dark and metallic (follows Windows light/dark), grouped address-bar suggestions, bookmarks bar plus sidebar, a new tab with search and favourites, an Fe element-tile logo, and all four comfort touches. Claude drew three dark metallic looks (Graphite, Forge, Steel) in dark and light, the new tab page, three Fe logo versions and compact density on a private Claude design canvas: https://claude.ai/artifact/LaQHpDxGjzdqLuH8FQ7BFW. Sample values only. The new look changes adr-0028's colours (calm warm grey); a look ADR follows the owner's pick.
+- next: owner picks a look (A, B or C) and a logo (1, 2 or 3) and approves the feature set plan and adr-0032.
+- commit: ec63f1b

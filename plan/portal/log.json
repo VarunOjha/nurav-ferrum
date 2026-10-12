@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5d0b8c237f490c94504635485bb6c03c97c46bcc81620a1dfbcca4e033c8d238"
+    "content_hash": "sha256:954af96530ff887688e1d4785f4fcb18877ca54b470e7c5adea79ce60d561e99"
   },
   "entries": [
     {
@@ -3160,6 +3160,35 @@
       "tags": [
         "address bar",
         "look & feel"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-17-design",
+      "date": "2026-10-12",
+      "time": "14:49",
+      "title": "Design options drawn from your answers",
+      "done": "You answered seven design questions: dark and metallic, following Windows; grouped suggestions; bookmarks bar plus sidebar; a new tab with search and favourites; an iron element logo; all four comfort touches. Claude drew three looks, the new tab, three logos and compact mode on a design canvas.",
+      "next": "You pick a look and a logo, and approve the feature set plan.",
+      "decisions": [
+        {
+          "what": "Dark and metallic look, following the Windows light or dark setting",
+          "by": "you"
+        },
+        {
+          "what": "Logo direction: an iron element tile reading Fe",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": "ec63f1b",
+      "covers": [
+        "## [2026-10-12] ingest | p3.17 owner design answers ingested; options on a design canvas"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Planned",
+      "tags": [
+        "look & feel",
+        "address bar"
       ]
     }
   ]

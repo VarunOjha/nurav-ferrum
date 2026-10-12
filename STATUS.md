@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: p3.17
-next_action: "Owner: answer the design questions for the new feature set one at a time in chat (p3.17); Claude transcribes each answer to wiki/raw/owner/, then draws options on a Claude design canvas. The owner reviews the plan (wiki/phases/phase-p3-tabs-sessions.md, feature set section; adr-0032) and approves implementation in chat. Still open: P3 review (docs/testing/manual-checklist-p3.md items 1 to 13), re-approval of adr-0011, adr-0015, phase-p3-tabs-sessions, comp-app-shell, comp-webview-manager, ov-project, and the P3 sign-off after the feature set. No P4 work."
+next_action: "Owner: open the design canvas https://claude.ai/artifact/LaQHpDxGjzdqLuH8FQ7BFW and say which look (A Graphite, B Forge, C Steel) and which logo (1, 2, 3), plus any changes; and say \"approve the feature set plan\" (phase-p3-tabs-sessions feature set section and adr-0032) or what to change. Claude then records the choice as a look ADR, freezes the chosen design under raw/evidence/phase-p3-tabs-sessions/design/, and builds p3.18 onward only after the approval. Still open: P3 review (docs/testing/manual-checklist-p3.md items 1 to 13), re-approvals (adr-0011, adr-0015, phase-p3-tabs-sessions, comp-app-shell, comp-webview-manager, ov-project), P3 sign-off after the feature set. No P4 work."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -322,8 +322,8 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.17 feature set design with the owner (plan committed d28179a)
-- intent: Ask the owner the design questions one at a time (feel, light and dark, address-bar suggestions, bookmarks placement, new-tab page, logo); transcribe each answer to wiki/raw/owner/; then draw options on a Claude design canvas. No application code until the owner approves the plan (phase-p3-tabs-sessions, adr-0032). P3 review (checklist 1 to 13, re-approvals, sign-off) also still open.
+- task: p3.17 feature set design with the owner (plan d28179a, answers ec63f1b)
+- intent: Options are on the canvas https://claude.ai/artifact/LaQHpDxGjzdqLuH8FQ7BFW. Waiting for the owner's pick (look A/B/C, logo 1/2/3) and approval of the feature set plan and adr-0032. Then: transcribe, a look ADR, freeze the chosen design under raw/evidence/phase-p3-tabs-sessions/design/. No application code before the approval.
 - paths: wiki/raw/owner/*, wiki/raw/MANIFEST.sha256, wiki/raw/evidence/phase-p3-tabs-sessions/design/*, a new look ADR
 - rollback: new files only
 
@@ -361,16 +361,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| New feature set | Planned in Phase 3 (bookmarks, search of the past, encrypted backup, look and logo); waits for your approval |
-| Design | Claude asks you questions one at a time, then shows options on a design canvas |
-| Phase 3 review | Still open; the sign-off comes after the feature set |
+| Your design answers | Recorded (dark and metallic, follows Windows, grouped suggestions, bar + sidebar, search + favourites, Fe logo, all comfort touches) |
+| Design canvas | Three looks in dark and light, new tab, three logos, compact mode |
+| Feature set plan | Waits for your approval |
 | Phase 4 | Not started |
 
-**2. Why, and what it does.** You asked for the feature set and want to choose the design → Claude asks, then draws options → you pick and approve the plan before anything is built.
+**2. Why, and what it does.** You pick the look → Claude records it → building starts only after you approve the plan.
 
-**3. The script:** none.
+**3. The script:** none. Open the canvas link in your browser.
 
-**4. What to tell Claude:** your answer to each design question; then "approve the feature set plan" (or what to change).
+**4. What to tell Claude:** the look (A, B or C) and the logo (1, 2 or 3), any changes, and "approve the feature set plan".
 
 ## Pending owner approvals
 
@@ -381,4 +381,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (feature set planned, d28179a; design questions to the owner). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-12, session s02 (feature set: design options on the canvas; waiting for the owner's pick and plan approval). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).

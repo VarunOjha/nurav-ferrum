@@ -5009,6 +5009,14 @@
       "summary": "Bookmarks, search of the past, an encrypted backup and a fresh look added to Phase 3 as a small feature set; storage decision proposed.",
       "status": null,
       "related": []
+    },
+    {
+      "id": "ec63f1b",
+      "kind": "commit",
+      "title": "Commit: Your design answers recorded",
+      "summary": "Seven design answers for the new feature set; options drawn on a design canvas.",
+      "status": null,
+      "related": []
     }
   ]
 }
