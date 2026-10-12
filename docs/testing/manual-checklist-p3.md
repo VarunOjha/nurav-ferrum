@@ -35,6 +35,14 @@ Start the release build from the repo folder:
 | 9 | Open **Settings** (⚙ or Ctrl+Comma): add a start-up site, save, restart Ferrum with "Reopen the tabs from last time" unticked. | The start-up site opens; Settings still shows it. | |
 | 10 | Open the **sidebar** (☰ or Ctrl+Shift+S): pick a tab, search the history, pick an entry. | The page moves right to make room; the choices work. | |
 
+## Fixes from your first review (task p3.16)
+
+| # | What to do | What should happen | Result |
+|---|---|---|---|
+| 11 | On a site that opens a file (for example a PDF) **in a new window**, start that download. | The file lands in Downloads and the bar says "Done"; the extra tab closes by itself; no "could not be loaded" page. | |
+| 12 | Open a few well-known sites in tabs. | Each tab shows the **site's icon** next to its title (also in the sidebar). | |
+| 13 | Look at the **taskbar** and at **Task Manager** (Processes tab, "Apps"). | The orange "F" icon is easy to see; Task Manager lists **Ferrum** with that icon, and its WebView2 helpers (shown as "WebView2 Manager" and similar) inside its group. | |
+
 Notes for the reviewer:
 
 - Each site keeps its own cookies now (per-site profiles), so sites you signed in to during P2 (one shared profile) ask

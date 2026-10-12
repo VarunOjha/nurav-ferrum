@@ -71,6 +71,9 @@ tasks:
   - id: p3.15
     title: "Sidebar in the trusted shell (master prompt section 4): collapsible panel listing open tabs and history, laid out beside the tab content area so it never overlaps child WebView bounds (z-order constraint, issue 15682)"
     verify: "Smoke test toggles the sidebar and asserts the active tab's WebView bounds shrink and grow so the two never overlap; selecting a tab or history entry in the sidebar activates or navigates it; keyboard toggle works with focus in a tab; shell unit tests cover the sidebar component."
+  - id: p3.16
+    title: "Owner review round 1 fixes (raw/owner/2026-10-12-s02-p3-review-round-1.md): a tab that turns into a download shows no error panel and, if it never showed a page, closes when the download ends; site icons (favicons) in the tab strip and sidebar; a clearly visible app icon; Ferrum findable in Task Manager"
+    verify: "Shell unit tests cover the icon and page rules; smoke tests: a download opened in a new window completes, its extra tab closes and no error panel shows; a page's own icon appears in its tab, a page without one shows none; the program file carries the new icon (orange, not the old dark square)."
   - id: p3.11
     title: "Integration test suite consolidating p3.2 to p3.9, p3.14 and p3.15"
     verify: "One command runs the suite and exits 0; output saved."
@@ -172,10 +175,11 @@ flowchart LR
   p3_15 --> p3_11
   p3_10 --> p3_11
   p3_11 --> p3_13["p3.13 docs + exit"]
+  p3_13 --> p3_16["p3.16 review fixes"]
   p3_12["p3.12 literature batch 3"] --> p3_13
 ```
 
-Task ids are stable identifiers, not an ordering: p3.14 and p3.15 were added after review and slot in before p3.11 as the diagram shows.
+Task ids are stable identifiers, not an ordering: p3.14 and p3.15 were added after review and slot in before p3.11 as the diagram shows. p3.16 was added after the owner's first hands-on review of the P3 release build (2026-10-12); it fixes what that review found before the sign-off.
 
 ## Checkpoints and interruption recovery
 

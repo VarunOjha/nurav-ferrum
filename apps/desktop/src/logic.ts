@@ -65,6 +65,19 @@ export function lockFor(uri: string, pageLoaded: boolean): { text: string; title
   return { text: "", title: "" };
 }
 
+/** The tab's icon as the shell may show it: only a PNG data address made by the app (p3.16); anything else gives none. */
+export function iconSrc(icon: string): string {
+  return icon.startsWith("data:image/png;base64,") ? icon : "";
+}
+
+/**
+ * Whether a finished navigation showed a real web page (p3.16): a tab that never did and then turns into a download
+ * (a site opened the file in a new window) closes when its download ends.
+ */
+export function showedPage(uri: string, pageLoaded: boolean): boolean {
+  return pageLoaded && /^https?:/i.test(uri);
+}
+
 /** The address bar text for a view address (the blank start page shows as empty). */
 export function addressText(uri: string): string {
   return uri === "about:blank" ? "" : uri;

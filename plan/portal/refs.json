@@ -4893,6 +4893,16 @@
       "summary": "The P3 end-of-phase check passed on one commit: 24 automatic checks; each test output saved as evidence.",
       "status": null,
       "related": []
+    },
+    {
+      "id": "p3.16",
+      "kind": "task",
+      "title": "P3 task: Fixes from your first review",
+      "summary": "Your review found problems → fix each one with a test → they stay fixed when you try the new build.",
+      "status": "In progress",
+      "related": [
+        "phase-p3-tabs-sessions"
+      ]
     }
   ]
 }

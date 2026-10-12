@@ -187,6 +187,13 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   size while running, "Done" or "Failed"; Clear removes finished ones. Event `download` (`started`, `progress` at most
   every 200 ms, `completed`, `failed`; a retry of the same address replaces its older line). Risky file types and
   "ask where to save" are P4 (adr-0015) ([check-p3.8](../../raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt)).
+- p3.16, owner review fixes: (1) a navigation that turns into a download (for example a site opening a PDF in a new
+  window) no longer shows the "could not be loaded" panel; a tab that never showed a web page and only started a
+  download closes when the download ends (the download does not depend on the tab). (2) Site icons: the app turns
+  the view's `FaviconChanged` PNG into a `data:image/png;base64,...` address (tab event kind `favicon`); the shell
+  shows it in the tab strip and the sidebar's tab list and accepts nothing else (the shell's CSP allows `data:` images
+  only). (3) A new app icon (`icons/app-icon.svg`, a rust-orange tile with a white F; `icon.ico` and `icon.png`
+  made from it with the Tauri CLI), compiled into the program file; `build.rs` now rebuilds when the icons change.
 - p3.9, a busy tab: a tab whose script never stops does not block the shell: switching tabs and typing an address
   each finished within the test's 5-second requirement, and the busy tab closed normally
   ([check-p3.9](../../raw/evidence/phase-p3-tabs-sessions/check-p3.9.txt)).

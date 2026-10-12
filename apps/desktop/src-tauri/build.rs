@@ -5,6 +5,9 @@
 //! `allow-<command>` permission. Only `capabilities/shell.json` (the shell web view) does.
 
 fn main() {
+    // The app icon is compiled into the program file; tauri-build does not watch it, so a new icon would be missed
+    // by an incremental build (seen in p3.16).
+    println!("cargo:rerun-if-changed=icons");
     tauri_build::try_build(tauri_build::Attributes::new().app_manifest(
         tauri_build::AppManifest::new().commands(&[
             "app_ping",

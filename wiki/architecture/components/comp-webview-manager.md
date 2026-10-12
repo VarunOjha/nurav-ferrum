@@ -161,6 +161,10 @@ of it:
   `DownloadFinished`; the operation and its tokens are kept in `DOWNLOADS` until it ends, so a download outlives its
   tab. Observed: a download whose connection broke off was started again by WebView2 several times (six attempts; only
   the last reported its end); the app shows the retries as one line ([check-p3.8](../../raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt)).
+- p3.16, site icons: `FaviconChanged` (ICoreWebView2_15; token removed in `close`) asks for the icon with
+  `GetFavicon` as PNG; the completion reads the stream (at most 256 KB, else nothing) and sends tab event
+  `FaviconChanged { png }` (empty: the page has none). WebView2 gives the icon it already loaded; Ferrum makes no
+  request of its own.
 
 Not yet built: the security engine's fail-closed gate, frame navigations and
 permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

@@ -81,10 +81,10 @@
       "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
       "status": "Waiting for your review",
       "tasks_done": 14,
-      "tasks_total": 15,
+      "tasks_total": 16,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-        "content_hash": "sha256:facf35a63c0547358177cdbfda1f95739be92d89b242216b053845ff55096dc5"
+        "content_hash": "sha256:faa823446e99af3f5de54378f6e8654da8752ac5780d9d658efb30d15229e9e8"
       }
     },
     {

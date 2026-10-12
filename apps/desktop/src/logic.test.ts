@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, blockedText, downloadText, finished, historyLines, linesOf, lockFor, shortcutFor, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, blockedText, downloadText, finished, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, sizeText, tabLabel, webErrorText, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -93,6 +93,20 @@ test("the start-up box takes one address per line", () => {
     "https://a.example/", "https://b.example/x", "about:blank",
   ]);
   assert.deepEqual(linesOf("   \n"), []);
+});
+
+test("tab icons are the app's PNG data addresses only", () => {
+  assert.equal(iconSrc("data:image/png;base64,iVBORw0KGgo="), "data:image/png;base64,iVBORw0KGgo=");
+  assert.equal(iconSrc(""), "");
+  assert.equal(iconSrc("https://example.org/favicon.ico"), "");
+  assert.equal(iconSrc("data:image/svg+xml,<svg/>"), "");
+});
+
+test("a tab showed a page only after a web page loaded", () => {
+  assert.equal(showedPage("https://example.org/", true), true);
+  assert.equal(showedPage("http://example.org/", true), true);
+  assert.equal(showedPage("about:blank", true), false);
+  assert.equal(showedPage("https://example.org/file.pdf", false), false);
 });
 
 test("sidebar history lists each address once, newest first, with its title", () => {

@@ -63,6 +63,11 @@ pub enum TabEvent {
         /// Caused by a user gesture.
         user_initiated: bool,
     },
+    /// The page's icon changed (p3.16): the icon as PNG bytes, as WebView2 already has it (empty: the page has none).
+    FaviconChanged {
+        /// PNG image bytes.
+        png: Vec<u8>,
+    },
     /// A download started (p3.8), saved to `path`.
     DownloadStarted {
         /// Ferrum's id for the download.

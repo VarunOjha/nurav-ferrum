@@ -132,6 +132,8 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
             uri,
             user_initiated,
         } => json!({"kind": "external-scheme", "uri": uri, "user_initiated": user_initiated}),
+        // The site icon as a data address the shell's image may show (its CSP allows `data:` images only).
+        TabEvent::FaviconChanged { png } => json!({"kind": "favicon", "icon": icon_data_url(png)}),
         // Downloads go to the shell as their own `download` messages (downloads.rs).
         TabEvent::DownloadStarted { download, .. }
         | TabEvent::DownloadProgress { download, .. }
@@ -141,6 +143,18 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
     };
     v["tab"] = json!(tab);
     v
+}
+
+/// `data:image/png;base64,...` for an icon's PNG bytes; empty for no icon.
+fn icon_data_url(png: &[u8]) -> String {
+    use base64::Engine;
+    if png.is_empty() {
+        return String::new();
+    }
+    format!(
+        "data:image/png;base64,{}",
+        base64::engine::general_purpose::STANDARD.encode(png)
+    )
 }
 
 /// Writes the log line for a tab event (navigation outcomes and decisions; addresses as scheme and host only).

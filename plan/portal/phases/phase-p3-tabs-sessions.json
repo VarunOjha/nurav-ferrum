@@ -7,7 +7,7 @@
   "status": "Waiting for your review",
   "progress": {
     "done": 14,
-    "total": 15
+    "total": 16
   },
   "step_order": [
     "Tab rules",
@@ -184,6 +184,17 @@
       "chain": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
       "check": "All evidence saved; wiki clean; you approved the P3 exit.",
       "script": "scripts/verify/p3.13-docs-gate-review.ps1"
+    },
+    {
+      "id": "p3.16",
+      "title": "Fixes from your first review",
+      "what": "A download a site opens in a new window no longer shows an error page, and the extra tab closes by itself. Tabs show each site's icon. Ferrum gets a clear orange app icon.",
+      "why": "In your review a download looked failed although the file had arrived, tabs had no site icons, and the app icon was barely visible, which also made Ferrum hard to spot in Task Manager.",
+      "how": "Treat a page that turns into a download as a download, not an error. Take each site's icon from WebView2 (no extra request) and show it in the tab. Draw a new icon and build it into the program.",
+      "status": "In progress",
+      "chain": "Your review found problems → fix each one with a test → they stay fixed when you try the new build.",
+      "check": "A download in a new window completes with no error and its tab closes; a site's icon shows in its tab; the program carries the new icon.",
+      "script": "scripts/verify/p3.16-review-fixes.ps1"
     }
   ],
   "test_gate": {
@@ -235,6 +246,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:facf35a63c0547358177cdbfda1f95739be92d89b242216b053845ff55096dc5"
+    "content_hash": "sha256:faa823446e99af3f5de54378f6e8654da8752ac5780d9d658efb30d15229e9e8"
   }
 }

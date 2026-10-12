@@ -163,6 +163,21 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "a page whose script runs a never-ending loop 200 ms after load (p3.9)",
     },
+    Route {
+        path: "/links/download",
+        status: 200,
+        purpose: "a link that opens a download in a new window (target=_blank to /download/file?bytes=300000) (p3.16)",
+    },
+    Route {
+        path: "/icon",
+        status: 200,
+        purpose: "a page with its own site icon (/icon.png, a 16x16 orange square) (p3.16)",
+    },
+    Route {
+        path: "/icon.png",
+        status: 200,
+        purpose: "the site icon of /icon (PNG) (p3.16)",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -339,6 +354,29 @@ async fn index() -> Html<String> {
         })
         .collect();
     page("Ferrum fixtures", &format!("<ul>{rows}</ul>"))
+}
+
+async fn links_download() -> Html<String> {
+    page(
+        "Download link",
+        "<p><a id=\"dl\" href=\"/download/file?bytes=300000\" target=\"_blank\">Download a file (opens a new window)</a></p>",
+    )
+}
+
+async fn icon_page() -> Html<String> {
+    Html(
+        "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>Icon</title>\
+         <link rel=\"icon\" type=\"image/png\" href=\"/icon.png\"></head><body><h1 id=\"icon\">Icon</h1></body></html>"
+            .to_string(),
+    )
+}
+
+async fn icon_png() -> Response {
+    (
+        [(header::CONTENT_TYPE, HeaderValue::from_static("image/png"))],
+        &include_bytes!("../assets/icon.png")[..],
+    )
+        .into_response()
 }
 
 async fn landing() -> Html<String> {
@@ -554,6 +592,9 @@ pub fn router() -> Router {
         .route("/download/file", get(download_file))
         .route("/download/fail", get(download_fail))
         .route("/busy", get(busy))
+        .route("/links/download", get(links_download))
+        .route("/icon", get(icon_page))
+        .route("/icon.png", get(icon_png))
 }
 
 /// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`).

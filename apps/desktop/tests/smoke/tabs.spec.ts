@@ -4,6 +4,7 @@
 // Playwright's focus emulation over CDP, not checked); the active view fills the area below
 // the shell's top band; closing every tab releases every view, and WebView2's renderer processes fall back to what the
 // shell alone needs (counted with GetProcessInfos, as in spike S3; debug-only test_stats command).
+// p3.16: a tab shows its site's icon (WebView2 hands the icon over as PNG; the shell shows it in the strip).
 import { test, expect, type Page } from "@playwright/test";
 import { launch, call, tabList, type Ferrum } from "./ferrum.ts";
 import { base } from "./paths.ts";
@@ -63,4 +64,17 @@ test("20 tabs: one view each, only the active one shown, all released on close",
   await expect.poll(async () => (await stats(f)).renderers, { timeout: 30_000 }).toBeLessThanOrEqual(baseline);
   expect((await stats(f)).tabs).toBe(0);
   expect((await tabList(f)).active).toBeNull();
+});
+
+test("a tab shows its site's icon (p3.16)", async () => {
+  const id = await call<number>(f, "tab_new", { url: `${base}/icon` });
+  const img = f.shell.locator(`.tab[data-id="${id}"] img.tab-icon`);
+  await expect(img).toHaveAttribute("src", /^data:image\/png;base64,/, { timeout: 20_000 });
+  // The image decodes (the test server's icon is 16 x 16).
+  await expect.poll(() => img.evaluate((e) => (e as HTMLImageElement).naturalWidth)).toBe(16);
+  // A page without an icon of its own shows none (the test server has no /favicon.ico).
+  const plain = await call<number>(f, "tab_new", { url: `${base}/landing?noicon` });
+  await expect.poll(async () => (await tabList(f)).tabs.find((t) => t.id === plain)?.loading, { timeout: 15_000 }).toBe(false);
+  await f.shell.waitForTimeout(1000);
+  await expect(f.shell.locator(`.tab[data-id="${plain}"] img.tab-icon`)).toHaveCount(0);
 });

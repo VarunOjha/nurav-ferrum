@@ -4,7 +4,7 @@
 // P3 tasks p3.2 (tabs) and p3.3 (strip and shortcuts).
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { addressText, blockedText, downloadText, finished, historyLines, linesOf, lockFor, shortcutFor, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
+import { addressText, blockedText, downloadText, finished, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, tabLabel, webErrorText, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -12,6 +12,7 @@ type TabEvent = { tab: number } & (
   | { kind: "navigation-completed"; id: number; uri: string; success: boolean; http_status: number; web_error_status: number }
   | { kind: "history-changed"; can_go_back: boolean; can_go_forward: boolean }
   | { kind: "title-changed"; title: string }
+  | { kind: "favicon"; icon: string }
   | { kind: "got-focus" }
   | { kind: "new-window"; uri: string; user_initiated: boolean }
   | { kind: "external-scheme"; uri: string; user_initiated: boolean }
@@ -38,10 +39,19 @@ type TabUi = {
   canBack: boolean;
   canForward: boolean;
   panel: { uri: string; webError: number } | null;
+  /** The site's icon (a PNG data address from the app), or "". */
+  icon: string;
+  /** A web page loaded in this tab at some point (p3.16). */
+  hadPage: boolean;
+  /** When a download from this tab last started (ms), so its navigation's end is not shown as an error. */
+  downloadAt: number;
 };
 const newUi = (): TabUi => ({
   uri: "", lastUri: "", loading: false, state: "idle", status: "", pageLoaded: false, canBack: false, canForward: false, panel: null,
+  icon: "", hadPage: false, downloadAt: 0,
 });
+/** How long after a download started a failed navigation of its tab counts as "became the download". */
+const DOWNLOAD_GRACE_MS = 3000;
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const top = $<HTMLDivElement>("top");
@@ -76,6 +86,16 @@ const uiOf = (id: number): TabUi => {
   if (!u) ui.set(id, (u = newUi()));
   return u;
 };
+/** Small image for a tab's site icon, or null when the tab has none. */
+function iconImg(id: number): HTMLImageElement | null {
+  const src = iconSrc(uiOf(id).icon);
+  if (!src) return null;
+  const img = document.createElement("img");
+  img.className = "tab-icon";
+  img.alt = "";
+  img.src = src;
+  return img;
+}
 const activeUi = (): TabUi | undefined => (list.active === null ? undefined : uiOf(list.active));
 
 // --- Layout: tell the app how much room the top band takes (tab views fill the rest). ---
@@ -161,6 +181,8 @@ function renderStrip(): void {
       el.addEventListener("auxclick", (e) => {
         if (e.button === 1) void invoke("tab_close", { id: t.id });
       });
+      const icon = iconImg(t.id);
+      if (icon) el.append(icon);
       el.append(label, close);
       return el;
     }),
@@ -243,9 +265,19 @@ await listen<TabEvent>("tab", async (e) => {
       u.state = f.state;
       u.status = f.status;
       u.pageLoaded = f.pageLoaded;
-      if (f.panel) await showPanelFor(ev.tab, u.lastUri, ev.web_error_status);
+      if (showedPage(u.uri, f.pageLoaded)) u.hadPage = true;
+      // A navigation that turned into a download ends without a page; that is not an error (p3.16).
+      if (f.panel && Date.now() - u.downloadAt < DOWNLOAD_GRACE_MS) {
+        u.state = "idle";
+        u.status = "Downloading…";
+      } else if (f.panel) await showPanelFor(ev.tab, u.lastUri, ev.web_error_status);
       break;
     }
+    case "favicon":
+      u.icon = ev.icon;
+      renderStrip();
+      renderSideTabs();
+      return;
     case "history-changed":
       u.canBack = ev.can_go_back;
       u.canForward = ev.can_go_forward;
@@ -315,6 +347,31 @@ function renderDownloads(): void {
     reportLayout();
   }
 }
+// Tabs that exist only for a download (a site opened the file in a new window, p3.16): download -> tab. Such a tab
+// closes when its download ends; the download itself does not depend on the tab (webview2.rs keeps it).
+const downloadTabs = new Map<number, number>();
+async function startedIn(tab: number, download: number, replaces: number | null): Promise<void> {
+  const u = uiOf(tab);
+  u.downloadAt = Date.now();
+  if (replaces !== null) downloadTabs.delete(replaces);
+  if (u.panel || u.state === "failed") {
+    // The "could not be loaded" panel came just before WebView2 reported the download: take it back.
+    u.state = "idle";
+    u.status = "Downloading…";
+    await hidePanelFor(tab);
+  }
+  if (!u.hadPage) {
+    downloadTabs.set(download, tab);
+    u.status = "Downloading…";
+  }
+  if (tab === list.active) render();
+}
+function endedIn(download: number): void {
+  const tab = downloadTabs.get(download);
+  if (tab === undefined) return;
+  downloadTabs.delete(download);
+  if (list.tabs.some((t) => t.id === tab) && !uiOf(tab).hadPage) void invoke("tab_close", { id: tab });
+}
 await listen<DownloadMsg>("download", (e) => {
   const m = e.payload;
   const d = downloadLines.get(m.download);
@@ -322,6 +379,7 @@ await listen<DownloadMsg>("download", (e) => {
     // A retry of a download that broke off replaces the older line (the app tells which).
     if (m.replaces !== null) downloadLines.delete(m.replaces);
     downloadLines.set(m.download, { file: m.file, path: m.path, received: 0, total: m.total, state: "running" });
+    void startedIn(m.tab, m.download, m.replaces);
   } else if (d && m.kind === "progress") {
     d.received = m.received;
     d.total = m.total;
@@ -330,6 +388,7 @@ await listen<DownloadMsg>("download", (e) => {
     line.received = m.received;
     line.state = m.kind;
     downloadLines.set(m.download, line);
+    endedIn(m.download);
   }
   renderDownloads();
 });
@@ -421,8 +480,12 @@ function sideButton(label: string, url: string, onClick: () => void, current = f
 }
 function renderSideTabs(): void {
   if (sidebar.hidden) return;
-  sideTabs.replaceChildren(...list.tabs.map((t) =>
-    sideButton(tabLabel(t.title, t.url), t.url, () => void invoke("tab_activate", { id: t.id }), t.id === list.active)));
+  sideTabs.replaceChildren(...list.tabs.map((t) => {
+    const li = sideButton(tabLabel(t.title, t.url), t.url, () => void invoke("tab_activate", { id: t.id }), t.id === list.active);
+    const icon = iconImg(t.id);
+    if (icon) li.querySelector("button span")?.prepend(icon);
+    return li;
+  }));
 }
 async function renderSideHistory(): Promise<void> {
   if (sidebar.hidden) return;

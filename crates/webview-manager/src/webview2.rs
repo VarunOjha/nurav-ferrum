@@ -22,12 +22,14 @@ use webview2_com::Microsoft::Web::WebView2::Win32::*;
 use webview2_com::{
     AcceleratorKeyPressedEventHandler, BytesReceivedChangedEventHandler,
     CreateCoreWebView2ControllerCompletedHandler, DocumentTitleChangedEventHandler,
-    DownloadStartingEventHandler, FocusChangedEventHandler, HistoryChangedEventHandler,
-    LaunchingExternalUriSchemeEventHandler, NavigationCompletedEventHandler,
-    NavigationStartingEventHandler, NewWindowRequestedEventHandler, SourceChangedEventHandler,
-    StateChangedEventHandler, take_pwstr,
+    DownloadStartingEventHandler, FaviconChangedEventHandler, FocusChangedEventHandler,
+    GetFaviconCompletedHandler, HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
+    NavigationCompletedEventHandler, NavigationStartingEventHandler,
+    NewWindowRequestedEventHandler, SourceChangedEventHandler, StateChangedEventHandler,
+    take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
+use windows::Win32::System::Com::IStream;
 use windows_core::{BOOL, HSTRING, Interface, PWSTR};
 
 use crate::Error;
@@ -75,7 +77,11 @@ enum Ev {
     LaunchExternal,
     Accelerator,
     Download,
+    Favicon,
 }
+
+/// The largest site icon passed on (bytes of PNG); a larger one is dropped (the tab shows no icon).
+const MAX_ICON: usize = 256 * 1024;
 
 /// One tab web view: a WebView2 controller Ferrum created (adr-0029). `!Send` by construction (COM-1).
 pub struct ContentView {
@@ -378,6 +384,31 @@ impl ContentView {
             self.tokens.push((Ev::Download, t));
         }
 
+        // Site icons (p3.16): when the page's icon changes, WebView2 hands over the icon it already loaded, as PNG (no
+        // extra request). The icon arrives in a completion callback (COM-2); an empty one means the page has none.
+        if let Ok(core15) = core.cast::<ICoreWebView2_15>() {
+            let s = sink.clone();
+            let c = core15.clone();
+            let h = FaviconChangedEventHandler::create(Box::new(move |_sender, _args| {
+                let s = s.clone();
+                let done = GetFaviconCompletedHandler::create(Box::new(move |res, stream| {
+                    let png = match (res, stream) {
+                        (Ok(()), Some(stream)) => read_stream(&stream, MAX_ICON),
+                        _ => Vec::new(),
+                    };
+                    s(TabEvent::FaviconChanged { png });
+                    Ok(())
+                }));
+                // SAFETY: COM-1, COM-2: UI-thread callback; the icon arrives in `done`, nothing waits for it.
+                let _ = unsafe { c.GetFavicon(COREWEBVIEW2_FAVICON_IMAGE_FORMAT_PNG, &done) };
+                Ok(())
+            }));
+            let mut t = 0i64;
+            // SAFETY: COM-1, COM-4: token kept for close().
+            hr(unsafe { core15.add_FaviconChanged(&h, &mut t) })?;
+            self.tokens.push((Ev::Favicon, t));
+        }
+
         let s = sink;
         let h = FocusChangedEventHandler::create(Box::new(move |_sender, _args| {
             s(TabEvent::GotFocus);
@@ -481,6 +512,10 @@ impl ContentView {
                         Ok(c4) => c4.remove_DownloadStarting(*t),
                         Err(e) => Err(e),
                     },
+                    Ev::Favicon => match self.core.cast::<ICoreWebView2_15>() {
+                        Ok(c15) => c15.remove_FaviconChanged(*t),
+                        Err(e) => Err(e),
+                    },
                     Ev::NewWindow => self.core.remove_NewWindowRequested(*t),
                     Ev::LaunchExternal => match self.core.cast::<ICoreWebView2_18>() {
                         Ok(c18) => c18.remove_LaunchingExternalUriScheme(*t),
@@ -491,6 +526,27 @@ impl ContentView {
         }
         // SAFETY: COM-1, COM-4.
         let _ = unsafe { self.controller.Close() };
+    }
+}
+
+/// Reads a whole COM stream from where it stands; nothing when reading fails or it holds more than `max` bytes.
+fn read_stream(stream: &IStream, max: usize) -> Vec<u8> {
+    let mut out = Vec::new();
+    let mut buf = [0u8; 8192];
+    loop {
+        let mut n = 0u32;
+        // SAFETY: COM-1; `buf` and `n` are locals that outlive the call, and Read writes at most `buf.len()` bytes.
+        let r = unsafe { stream.Read(buf.as_mut_ptr().cast(), buf.len() as u32, Some(&mut n)) };
+        if r.is_err() {
+            return Vec::new();
+        }
+        if n == 0 {
+            return out;
+        }
+        out.extend_from_slice(&buf[..n as usize]);
+        if out.len() > max {
+            return Vec::new();
+        }
     }
 }
 

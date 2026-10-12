@@ -1,6 +1,7 @@
 // p3.8: a download goes to the download folder (here the run's own folder, [downloads] folder) with the right size
 // and contents (the test server's bytes are deterministic); the shell shows it done; a download that breaks off shows
 // as failed; an existing file is never replaced (the second copy gets " (1)"); the page stays where it was.
+// p3.16: a download a site opens in a new window shows no error panel, and the extra tab closes once it is done.
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -58,6 +59,23 @@ test("a download that breaks off shows as failed", async () => {
   // No complete file of the announced size exists.
   const p = path.join(folder, "fixture-fail.bin");
   expect(fs.existsSync(p) && fs.statSync(p).size === 1_048_576).toBe(false);
+});
+
+test("a download opened in a new window: no error panel; the extra tab closes when it is done (p3.16)", async () => {
+  const n = 300_000;
+  await go(f, `${base}/links/download`);
+  await expect(f.content.locator("#dl")).toBeVisible();
+  const page = (await tabList(f)).tabs[0]!.id;
+  await f.content.click("#dl");
+  // Two copies exist already, so this one is " (2)".
+  await expect(line(`fixture-${n} (2).bin`)).toHaveAttribute("data-state", "completed", { timeout: 20_000 });
+  expect(fs.readFileSync(path.join(folder, `fixture-${n} (2).bin`)).length).toBe(n);
+  // The site did open a new tab (the shell saw the request) ...
+  expect(await f.shell.evaluate(() => document.title)).toContain('"new-window"');
+  // ... and it closed again; the page with the link is the only tab, and no error panel shows.
+  await expect.poll(async () => (await tabList(f)).tabs.map((t) => t.id), { timeout: 10_000 }).toEqual([page]);
+  await expect(f.shell.locator("#error-panel")).toBeHidden();
+  expect((await tabList(f)).tabs[0]!.url).toBe(`${base}/links/download`);
 });
 
 test("Clear removes finished downloads from the list", async () => {
