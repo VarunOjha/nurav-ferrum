@@ -2,7 +2,7 @@
 id: comp-webview-manager
 type: component
 title: "WebView manager (tab WebViews, navigation, sessions, raw COM layer)"
-status: planned
+status: implemented
 last_verified_commit: 9df1157
 updated: 2026-10-11
 sources:
@@ -105,3 +105,25 @@ Each `unsafe` block cites its invariant ids in a `// SAFETY:` comment.
 - phase-p4-security: raw-COM fail-closed navigation (tabs have no Tauri `on_navigation`; adr-0029), frame navigation, `LaunchingExternalUriScheme`, `SavesInProfile(FALSE)`, `ProcessFailed` recovery.
 - phase-p5-telemetry: `procinfo` and `netlog`.
 - phase-p7-lifecycle: actuator (suspend, memory level, discard, restore) and guard probes.
+
+## Implementation status (P2, first working app)
+
+Built in P2 (evidence in [the P2 evidence folder](../../raw/evidence/phase-p2-minimal-container/)). The module sketch above is the full plan; P2 built this part
+of it:
+
+- `src/webview2.rs`, the only raw-COM module (`#![allow(unsafe_code)]` here only; every block has a `// SAFETY: COM-n`
+  comment). `ContentView::create` makes a WebView2 controller from Tauri's environment with its own profile
+  (`ferrum-default`) and sets `AreDevToolsEnabled` to the build type. Events registered and removed again in `close`:
+  `NavigationStarting` (with the gate), `SourceChanged`, `NavigationCompleted` (HTTP status, web error status and the
+  final address), `HistoryChanged`, `DocumentTitleChanged`, `GotFocus`, `NewWindowRequested` (always handled, so
+  WebView2 opens no window) and `LaunchingExternalUriScheme` (always cancelled). Methods: `navigate`, `go_back`,
+  `go_forward`, `reload`, `stop`, `set_bounds`, `set_visible`, `focus`, `source`, `devtools_enabled`, `close`.
+- `src/tab.rs`: `TabEvent`, `NavDecision` and the P2 gate (web pages and `about:blank` only).
+- `src/error.rs`: the typed `Error` (`Com { code, message }`, `NoController`).
+- Observed in P2: the view's `AreDevToolsEnabled = false` blocks F12 and the context menu, but a direct
+  `OpenDevToolsWindow` call still opens DevTools, so Ferrum has no such call ([check-p2.12](../../raw/evidence/phase-p2-minimal-container/check-p2.12.txt)). A
+  redirect back to the current address raises no `SourceChanged`, so `NavigationCompleted` carries the final address
+  ([check-p2.9](../../raw/evidence/phase-p2-minimal-container/check-p2.9.txt)).
+
+Not yet built: `TabHost`, many tabs, sessions and downloads (P3); the security engine's fail-closed gate, frame
+navigations and permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

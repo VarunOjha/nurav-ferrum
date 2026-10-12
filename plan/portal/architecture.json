@@ -198,7 +198,7 @@
       "summary": "The window you use: tabs on top, address bar, back, forward, reload, settings and a Ferrum panel on the right ([the look you chose](ref:adr-0028)). Our code: a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
       "group": "application",
       "layer": "layer-controls",
-      "status": "Planned",
+      "status": "Built (first working app)",
       "ours": true,
       "phase": "phase-p2-minimal-container",
       "connects": [
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:2567ea0f88100190a1b5948f1896b4f870aa49145755971ba6e140ff4fb005b0"
+        "content_hash": "sha256:98f0f63ee20c88abe4bd46a157462a49a8b4caf43517c0b56fe69a50b5bfd3fc"
       }
     },
     {
@@ -263,7 +263,7 @@
       "summary": "Creates, shows, hides and closes each website view; handles navigation, sessions and downloads. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Risk: some needed features exist only at that level; not checked yet (checked in P1 and P4).",
       "group": "application",
       "layer": "layer-engine",
-      "status": "Planned",
+      "status": "Built (first working app)",
       "ours": true,
       "phase": "phase-p2-minimal-container",
       "connects": [
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:284f5e559155073c3084443e7471eaddd0cb265e8f6abb8e0fdef62ba6ec4243"
+        "content_hash": "sha256:601d9cd2623371b2fef31ebf526648131be9cf345fcb5f60115d0964048b3cca"
       }
     },
     {
@@ -429,14 +429,14 @@
       "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats. Trusted. It calls nothing itself; everything else depends on it.",
       "group": "application",
       "layer": "layer-base",
-      "status": "Planned",
+      "status": "Built (first working app)",
       "ours": true,
       "phase": "phase-p1-foundation",
       "connects": [],
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:15575a951b0212f869aef0cafc696e55564ecc0b64968af2a1ccd610a1099dd4"
+        "content_hash": "sha256:2f948d0170763126b9d1259d1773863ee2d0d3569d5178fb66ec1509a771d19f"
       }
     },
     {

@@ -47,11 +47,11 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 
 ## Components
 
-- [comp-app-shell](architecture/components/comp-app-shell.md) | planned | Application shell (Tauri host + vanilla-TS shell UI) | Ferrum desktop app: window and layout, navigation controls, tab strip and address bar (trusted shell UI)
+- [comp-app-shell](architecture/components/comp-app-shell.md) | implemented | Application shell (Tauri host + vanilla-TS shell UI) | Ferrum desktop app: window and layout, navigation controls, tab strip and address bar (trusted shell UI)
 - [comp-baseline-app](architecture/components/comp-baseline-app.md) | planned | Minimal Tauri + WebView2 baseline app (benchmark configuration C) | Minimal Tauri app (configuration C) used as the benchmark baseline; not shipped
 - [comp-benchmark-harness](architecture/components/comp-benchmark-harness.md) | planned | Benchmark harness (Rust orchestrator + Node/TS Playwright runners) | Rust orchestrator plus Node/TS Playwright scripts that schedule, randomise and sample benchmark trials (adr-0012)
 - [comp-competitor-browsers](architecture/components/comp-competitor-browsers.md) | planned | Google Chrome and Microsoft Edge (external benchmark targets) | External modelling node for Chrome and Edge (configurations A and B)
-- [comp-core](architecture/components/comp-core.md) | planned | Core crate (shared types, config schema, traits) | Leaf crate: shared ids, configuration schema with validation and hashing, event/record types, dependency-inversion traits
+- [comp-core](architecture/components/comp-core.md) | implemented | Core crate (shared types, config schema, traits) | Leaf crate: shared ids, configuration schema with validation and hashing, event/record types, dependency-inversion traits
 - [comp-interactive-plan](architecture/components/comp-interactive-plan.md) | implemented | Plan portal (Next.js, read-only, planning tooling, not shipped) | Read-only plan portal in interactive_plan/ that renders the plain-language JSON in plan/portal/ and shows approval labels and check scripts; not shipped (adr-0023, adr-0024)
 - [comp-network-logger](architecture/components/comp-network-logger.md) | planned | Network logger (metadata-only JSONL) | Metadata-only JSONL network log per tab with rotation (adr-0008); never headers, cookies or bodies
 - [comp-research-analysis](architecture/components/comp-research-analysis.md) | planned | Research analysis (Python statistics, figures, reports) | Python statistics and plotting over raw benchmark data (adr-0013)
@@ -59,7 +59,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 - [comp-security-engine](architecture/components/comp-security-engine.md) | planned | Security policy engine | Pure, synchronous policy evaluator for navigation, schemes, permissions and block/allow lists
 - [comp-tab-content](architecture/components/comp-tab-content.md) | planned | Tab content (untrusted remote web content in child WebViews) | Untrusted remote web content rendered in tab WebViews; modelling node, not Ferrum code
 - [comp-telemetry](architecture/components/comp-telemetry.md) | planned | Telemetry engine (in-app process sampling, events, exports) | Process-tree resource sampling, navigation and startup timing marks, lifecycle transition records
-- [comp-webview-manager](architecture/components/comp-webview-manager.md) | planned | WebView manager (tab WebViews, navigation, sessions, raw COM layer) | Creates and destroys tab WebViews, routes navigation through the security engine, tracks tab state and sessions
+- [comp-webview-manager](architecture/components/comp-webview-manager.md) | implemented | WebView manager (tab WebViews, navigation, sessions, raw COM layer) | Creates and destroys tab WebViews, routes navigation through the security engine, tracks tab state and sessions
 - [comp-webview2-runtime](architecture/components/comp-webview2-runtime.md) | planned | Microsoft Edge WebView2 Runtime (external) | External Microsoft Edge WebView2 Evergreen runtime that Ferrum and the baseline depend on
 - [comp-windows-os](architecture/components/comp-windows-os.md) | planned | Windows 11 OS APIs (external) | External modelling node for Windows APIs (process, Job Object, memory), so os-api edges have an endpoint
 

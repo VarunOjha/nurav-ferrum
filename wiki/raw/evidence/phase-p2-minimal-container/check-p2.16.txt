@@ -1,0 +1,14 @@
+Ferrum check p2.16: Update docs and part pages
+Why: docs match reality.
+Run at 2026-10-11 20:32 on commit cab35db (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Wiki check clean (no errors) (11 s)
+         npm run lint:wiki: 0 errors
+  PASS   Shell, WebView manager and core pages marked implemented, with a real last verified commit
+         comp-app-shell implemented @ 9df1157; comp-webview-manager implemented @ 9df1157; comp-core implemented @ 9df1157
+  PASS   README build, run and test instructions; SECURITY.md first-version section
+         README: build, run, tests, manual checklist; SECURITY.md: M1 section and known limitations
+------------------------------------------------------------------------
+RESULT: PASS - p2.16 (3 PASS; 11 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.16 check passed".

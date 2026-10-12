@@ -1,6 +1,7 @@
 # Security
 
-Ferrum is a research prototype in its foundation phase (P1). There is no released build yet.
+Ferrum is a research prototype. Its first working app (phase P2, milestone M1) exists; there is no released build
+yet.
 The canonical security design lives in the wiki; this file is the short entry point.
 
 ## Reporting a vulnerability
@@ -23,19 +24,48 @@ A reporting address will be added here before the first public release.
 - **Navigation posture:** open web with a blocklist ([adr-0015](wiki/decisions/adr-0015-navigation-posture-open-blocklist.md)).
 - Security test plan: [qual-security-testing-plan](wiki/quality/qual-security-testing-plan.md). P4 builds and tests the security engine.
 
+## What the first version (M1, phase P2) does
+
+Checked by the P2 task scripts (evidence: [wiki/raw/evidence/phase-p2-minimal-container/](wiki/raw/evidence/phase-p2-minimal-container/)):
+
+- **No website can call Ferrum's commands.** Every command is declared and granted only to the shell web view; no
+  capability has a `remote` section. The website view is a WebView2 controller Ferrum creates itself and has no Tauri
+  bridge at all (check p2.3).
+- **Address rules.** Only `https`, `http` and `about:blank` load. `http` addresses typed in the address bar are
+  upgraded to `https` by default. `javascript:`, `data:`, `file:` and similar addresses are refused (task p2.5).
+- **Links to other apps** (`mailto:` and custom schemes) are stopped and shown on a confirmation bar; nothing is
+  handed to Windows without the user's click, and the app opens only the one link it asked about (p2.10).
+- **New windows** never open: they load in the same view, or (setting `new_window = "system-browser"`) in the
+  user's browser on a click (p2.10).
+- **Google sign-in** is never loaded inside Ferrum and never worked around (no user-agent change): a bar offers the
+  user's normal browser (p2.13; owner answer Q-109).
+- **Developer tools** are off in release builds in both views (p2.12). WebView2's own setting blocks F12 and the
+  context menu but not a direct `OpenDevToolsWindow` call, so Ferrum's code makes no such call.
+- **Certificates** are never bypassed: Ferrum has no code that overrides a certificate check. A page that fails to
+  load for a certificate reason gets Ferrum's error panel, which offers no way around it (p2.8; a certificate failure
+  itself was not part of the P2 tests). The automated tests use a local certificate authority that is name-constrained to `localhost`, `127.0.0.0/8` and
+  `::1` and installed only for the developer's Windows user (p2.1).
+- **Logs** record sites as scheme and host only, never full addresses (p2.14).
+
+Known limitations of M1: one site profile for everything (per-site profiles arrive in P3); no blocklist or
+permission prompts yet (P4); the WebView2 remote-debugging switch below; the system-browser and mail hand-off has
+been tested only with a stand-in launcher until the owner's manual check.
+
 ## Debug port (benchmarks and debugging only)
 
 The benchmark harness drives web views through the Chrome DevTools Protocol, enabled with
 `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=<port>`. That port exposes **every** web view,
 including the trusted shell, to any local process
-([spike S4 report](wiki/raw/evidence/phase-p1-foundation/spike-s4-playwright-cdp.md)). It is never enabled in
-normal builds. WebView2 ignores these environment flags for elevated processes, so benchmarks run non-elevated.
+([spike S4 report](wiki/raw/evidence/phase-p1-foundation/spike-s4-playwright-cdp.md)). Ferrum never sets it; the
+smoke tests and benchmarks set it for their own runs. The switch is an environment variable that WebView2 also reads
+for release builds, so anyone who can already start programs as the user can turn it on; it gives them no more than
+that. WebView2 ignores these environment flags for elevated processes, so benchmarks run non-elevated.
 
 ## OAuth and sign-in
 
 Embedded web views are a known problem for Google sign-in; Ferrum must not weaken WebView2 or OAuth restrictions
-to get around it. The sign-in hand-off design is an open question (Q-109 in
-[open questions](wiki/overview/ov-open-questions.md)), settled before P2.
+to get around it. The owner chose the hand-off (Q-109 in [open questions](wiki/overview/ov-open-questions.md)):
+Ferrum recognises Google's sign-in address and offers "Open in browser"; nothing opens without the user's click.
 
 ## Rules Ferrum keeps
 

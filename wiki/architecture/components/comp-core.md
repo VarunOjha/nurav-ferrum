@@ -2,9 +2,9 @@
 id: comp-core
 type: component
 title: "Core crate (shared types, config schema, traits)"
-status: planned
+status: implemented
 last_verified_commit: 9df1157
-updated: 2026-10-08
+updated: 2026-10-11
 sources:
   - raw/00-master-prompt.md
   - raw/research/tauri-webview2-capabilities.md
@@ -33,3 +33,18 @@ connects: []
 The leaf crate. `#![forbid(unsafe_code)]`. It depends on serde (and similar) only: **no Tauri, no `windows`, no Ferrum crate**. Every other Rust crate depends on it ([crate graph](../ov-arch-crate-graph.md)). It is introduced in phase-p1-foundation as part of the workspace scaffold, so later phases share one set of types from day one.
 
 It has no outgoing `connects` edges because it calls nothing. Every other Rust component points to it.
+
+## Implementation status (P2, first working app)
+
+Built in P2 (evidence in [the P2 evidence folder](../../raw/evidence/phase-p2-minimal-container/)):
+
+- `config`: the settings schema (`[session]`, `[security]`, `[storage]`), `load` (user file, then `--config`),
+  `validate`, `parse`, canonical form and `hash` (`sha256:`), warnings; unknown keys are refused.
+- `address`: `normalize` turns address-bar input into navigate, confirm (links to other apps) or refuse; `site` keeps
+  only the scheme and host of an address for the log.
+- `oauth`: `classify` recognises the start of a Google sign-in (endpoint recorded in
+  [google-oauth-endpoint](../../raw/research/google-oauth-endpoint.md)); a test-only pattern only when the app passes
+  one (debug builds).
+
+Unit tests: `crates/core/tests/{config,address,oauth}.rs`. Not yet built: shared ids, event and record types, and the
+`LifecycleActuator` and `Clock` traits (later phases).

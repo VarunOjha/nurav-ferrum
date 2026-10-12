@@ -3163,7 +3163,7 @@
       "kind": "component",
       "title": "Browser controls",
       "summary": "The window you use: tabs on top, address bar, back, forward, reload, settings and a Ferrum panel on the right ([the look you chose](ref:adr-0028)). Our code: a TypeScript screen plus a Rust host that wires the engine parts together. Risk: the multi-view feature it needs is experimental in Tauri; not checked yet (checked in P1).",
-      "status": "Planned",
+      "status": "Built (first working app)",
       "related": [
         "layer-controls"
       ]
@@ -3197,7 +3197,7 @@
       "kind": "component",
       "title": "Core library",
       "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats. Trusted. It calls nothing itself; everything else depends on it.",
-      "status": "Planned",
+      "status": "Built (first working app)",
       "related": [
         "layer-base"
       ]
@@ -3273,7 +3273,7 @@
       "kind": "component",
       "title": "Tab & view manager",
       "summary": "Creates, shows, hides and closes each website view; handles navigation, sessions and downloads. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Risk: some needed features exist only at that level; not checked yet (checked in P1 and P4).",
-      "status": "Planned",
+      "status": "Built (first working app)",
       "related": [
         "layer-engine"
       ]

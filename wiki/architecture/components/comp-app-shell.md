@@ -2,7 +2,7 @@
 id: comp-app-shell
 type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
-status: planned
+status: implemented
 last_verified_commit: 9df1157
 updated: 2026-10-11
 sources:
@@ -78,7 +78,7 @@ unverified:
 
 The Ferrum desktop application. It has two halves in one component:
 
-1. **Shell UI.** Vanilla TypeScript + Vite (adr-0006), in `apps/desktop/ui/`, rendered in the **trusted shell WebView** at the local app origin.
+1. **Shell UI.** Vanilla TypeScript + Vite (adr-0006), in `apps/desktop/` (`index.html`, `src/`), rendered in the **trusted shell WebView** at the local app origin.
 2. **Tauri host.** The `ferrum-desktop` crate in `apps/desktop/src-tauri/`. It owns the window, registers commands, holds the capability files and wires the other crates together.
 
 ## Look
@@ -114,3 +114,34 @@ asks the owner which way to go.
 - phase-p3-tabs-sessions (M2): tabs, shortcuts, session restore, per-site settings UI, downloads list.
 - phase-p4-security (M3): permission and external-scheme prompts, blocked-navigation UI.
 - Later: the Ferrum panel's sections as their data sources land (adr-0028); split view.
+
+## Implementation status (P2, first working app)
+
+Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder](../../raw/evidence/phase-p2-minimal-container/)); the frontmatter's
+`last_verified_commit` is the last commit these checks passed on.
+
+- **Window and layout.** One window `main`. The shell is a Tauri child web view `shell` in a band at the top (52 px
+  toolbar, plus 44 px while a confirmation bar shows). One content view below it, created by `ferrum-webview-manager`
+  (adr-0029). The two never overlap; while the shell's full error panel shows, the content view is hidden and the shell
+  takes the window (`shell_cover`).
+- **Shell UI** (`apps/desktop/index.html`, `src/main.ts`, `src/style.css`; Vite 8.3.4, TypeScript 7.0.2,
+  `@tauri-apps/api` 2.12.3): back, forward, reload/stop, the address bar with the lock (only for a page that loaded
+  over https), a status text, a progress bar, the confirmation bar (links that open outside Ferrum; Google sign-in),
+  and the error panel with "Try again".
+- **Tauri host** (`apps/desktop/src-tauri/src/`: `main.rs`, `content.rs`, `external.rs`, `logging.rs`, `selftest.rs`).
+  Implemented commands, all shell-only (declared in `build.rs`, granted only by `capabilities/shell.json`, which has no
+  `remote` section; [check-p2.3](../../raw/evidence/phase-p2-minimal-container/check-p2.3.txt)): `app_ping`, `app_quit`, `shell_layout`, `shell_cover`,
+  `shell_focused`, `tab_navigate`, `tab_back`, `tab_forward`, `tab_reload`, `tab_stop`, `external_open_confirm`,
+  `external_cancel`. One event to the shell, `tab`, with the kinds `navigation-starting`, `source-changed`,
+  `navigation-completed`, `history-changed`, `title-changed`, `got-focus`, `new-window`, `external-scheme`,
+  `external-request`, `sign-in-offer`, `blocked`. The interface list in the frontmatter stays the full plan.
+- **Settings**: `config.toml` in the app config folder, `--config <path>` override (comp-core).
+- **Shell security**: the CSP in `tauri.conf.json` allows only the app's own files and the IPC channel; fonts are not
+  bundled (the shell names IBM Plex and falls back to Segoe UI and Consolas, all local). Developer tools only in debug
+  builds ([check-p2.12](../../raw/evidence/phase-p2-minimal-container/check-p2.12.txt)).
+- **Logs**: `ferrum.jsonl`, JSON lines, sites as scheme and host only ([check-p2.14](../../raw/evidence/phase-p2-minimal-container/check-p2.14.txt)).
+
+Known limitations of this first version: one view and no tabs (P3); the normal Windows title bar; the Alt+Tab focus
+fix (`restore_focus`) awaits the owner's manual check; opening a link in another app has been tested only with a
+stand-in launcher (the owner's manual mailto check). The smoke robot uses WebView2's remote-debugging switch
+(adr-0031); it is an environment variable that also works on release builds.
