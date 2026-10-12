@@ -6,7 +6,8 @@
   "description": "Ferrum P2 smoke suite: Playwright over CDP (adr-0031) against the app and the local HTTPS test server.",
   "license": "MIT OR Apache-2.0",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "smoke": "playwright test"
   },
   "devDependencies": {
     "@playwright/test": "1.64.0"

@@ -10,5 +10,6 @@ summarise and link into it rather than repeat it.
 | Decisions | `wiki/decisions/` (one ADR per decision); index in [wiki/index.md](../wiki/index.md) |
 | The plan and its phases | `wiki/phases/`; live state in [STATUS.md](../STATUS.md) |
 | Security | [SECURITY.md](../SECURITY.md) |
+| Manual checks at the end of P2 | [testing/manual-checklist-p2.md](testing/manual-checklist-p2.md) |
 | Benchmarks and reproducibility | [BENCHMARKING.md](../BENCHMARKING.md), [REPRODUCIBILITY.md](../REPRODUCIBILITY.md) |
 | How AI is used | [AI_USAGE.md](../AI_USAGE.md) |
