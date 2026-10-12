@@ -1,0 +1,52 @@
+Ferrum check p2.12: Developer tools only in test builds
+Why: nobody opens them by accident in the real app.
+Run at 2026-10-11 20:05 on commit 0791271 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Build the shell, the debug app and the release app (52 s)
+         debug and release builds ready
+{
+  "build": "release",
+  "content_view_ready": true,
+  "devtools_enabled": {
+    "content": false,
+    "shell": false
+  },
+  "keyboard_attempts": [
+    {
+      "acknowledged": true,
+      "view": "content"
+    },
+    {
+      "acknowledged": true,
+      "view": "shell"
+    }
+  ],
+  "selftest": "devtools"
+}
+  PASS   Release build: DevTools off in both views; F12 and Ctrl+Shift+I open nothing (10 s)
+         content=off, shell=off; content view: new DevTools windows = 0; shell view: new DevTools windows = 0
+{
+  "build": "debug",
+  "content_view_ready": true,
+  "devtools_enabled": {
+    "content": true,
+    "shell": true
+  },
+  "keyboard_attempts": [
+    {
+      "acknowledged": true,
+      "view": "content"
+    },
+    {
+      "acknowledged": true,
+      "view": "shell"
+    }
+  ],
+  "selftest": "devtools"
+}
+  PASS   Debug build: DevTools on in both views; F12 opens them in the website view (11 s)
+         content=on, shell=on; content view: new DevTools windows = 1; shell view: new DevTools windows = 0
+------------------------------------------------------------------------
+RESULT: PASS - p2.12 (3 PASS; 74 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.12 check passed".

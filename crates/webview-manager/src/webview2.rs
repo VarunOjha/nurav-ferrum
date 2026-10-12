@@ -59,12 +59,15 @@ pub struct ContentView {
 
 impl ContentView {
     /// Starts creating a content view in `parent` (the Tauri window) from `env` (Tauri's environment), with its own
-    /// WebView2 profile `profile`. `done` receives the view once WebView2 has created it.
+    /// WebView2 profile `profile`. `devtools` allows the developer tools (WebView2's default is on; Ferrum passes
+    /// true only in debug builds, p2.12). `done` receives the view once WebView2 has created it.
+    #[allow(clippy::too_many_arguments)]
     pub fn create(
         env: &ICoreWebView2Environment,
         parent: isize,
         bounds: RECT,
         profile: &str,
+        devtools: bool,
         sink: EventSink,
         gate: NavGate,
         done: Box<dyn FnOnce(Result<ContentView, String>)>,
@@ -81,6 +84,11 @@ impl ContentView {
                     let controller = controller.ok_or("WebView2 returned no controller")?;
                     // SAFETY: COM-1 (WebView2 delivers this completion on the UI thread); `controller` is live.
                     let core = hr(unsafe { controller.CoreWebView2() })?;
+                    // SAFETY: COM-1; `core` is live. Set before the first navigation.
+                    hr(unsafe {
+                        core.Settings()
+                            .and_then(|st| st.SetAreDevToolsEnabled(devtools))
+                    })?;
                     let mut view = ContentView {
                         controller,
                         core,
@@ -345,6 +353,11 @@ impl ContentView {
         })
     }
 
+    /// Whether the developer tools are allowed in this view (p2.12).
+    pub fn devtools_enabled(&self) -> Result<bool, String> {
+        controller_devtools_enabled(&self.controller)
+    }
+
     /// The current address.
     pub fn source(&self) -> String {
         let mut uri = PWSTR::null();
@@ -378,6 +391,27 @@ impl ContentView {
         // SAFETY: COM-1, COM-4.
         let _ = unsafe { self.controller.Close() };
     }
+}
+
+/// Whether the developer tools are allowed in the web view of `controller` (also used for Tauri's shell view).
+/// Note (p2.12, observed): this setting blocks the user's ways in (F12, the context menu); a direct
+/// `OpenDevToolsWindow` call still opens them, so Ferrum has no code that makes that call.
+pub fn controller_devtools_enabled(controller: &ICoreWebView2Controller) -> Result<bool, String> {
+    let mut on = BOOL(0);
+    // SAFETY: COM-1; `controller` is live; the out-pointer is a local.
+    hr(unsafe {
+        controller
+            .CoreWebView2()
+            .and_then(|c| c.Settings())
+            .and_then(|st| st.AreDevToolsEnabled(&mut on))
+    })?;
+    Ok(on.as_bool())
+}
+
+/// Gives keyboard focus to the web view of `controller` (used by the developer-tools self-test for the shell).
+pub fn controller_focus(controller: &ICoreWebView2Controller) -> Result<(), String> {
+    // SAFETY: COM-1; `controller` is live.
+    hr(unsafe { controller.MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC) })
 }
 
 thread_local! {

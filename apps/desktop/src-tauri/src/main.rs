@@ -197,6 +197,7 @@ fn main() {
             match std::env::var("FERRUM_SELFTEST").as_deref() {
                 Ok("ipc") => selftest::start_ipc(app.handle().clone(), size.width, size.height),
                 Ok("nav") => selftest::start_nav(app.handle().clone()),
+                Ok("devtools") => selftest::start_devtools(app.handle().clone()),
                 _ => {}
             }
             Ok(())

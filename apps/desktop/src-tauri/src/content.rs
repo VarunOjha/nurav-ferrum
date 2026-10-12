@@ -151,6 +151,8 @@ pub fn create(app: &AppHandle, window: &Window) -> tauri::Result<()> {
             hwnd,
             rect,
             CONTENT_PROFILE,
+            // Developer tools only in debug builds (p2.12); the shell gets the same rule from Tauri.
+            cfg!(debug_assertions),
             sink,
             gate,
             Box::new(move |view| match view {

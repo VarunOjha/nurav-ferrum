@@ -236,3 +236,73 @@ pub fn start_nav(app: AppHandle) {
         );
     });
 }
+
+/// Developer-tools self-test (p2.12). Reports whether the developer tools are allowed in the content view and in
+/// the shell, then hands over to the check script for a keyboard attempt in each view: it puts focus in a view, writes
+/// that view's name to `<out>.phase` and waits for the script's `<out>.ack` (the script presses F12 and
+/// Ctrl+Shift+I and looks for a DevTools window). Ferrum itself never opens the developer tools.
+pub fn start_devtools(app: AppHandle) {
+    use ferrum_webview_manager::webview2::{controller_devtools_enabled, controller_focus};
+    std::thread::spawn(move || {
+        let out = std::env::var("FERRUM_SELFTEST_OUT").unwrap_or_default();
+        let ready = wait_for(20, || app.state::<ContentReady>().0.load(Ordering::SeqCst));
+        let (tx, rx) = std::sync::mpsc::channel::<(&'static str, Result<bool, String>)>();
+        let tx_content = tx.clone();
+        with_content(&app, move |v| {
+            let _ = tx_content.send(("content", v.devtools_enabled()));
+        });
+        let shell = app.get_webview("shell");
+        if let Some(shell) = &shell {
+            let _ = shell.with_webview(move |pw| {
+                let _ = tx.send(("shell", controller_devtools_enabled(&pw.controller())));
+            });
+        }
+        let mut got = serde_json::Map::new();
+        for _ in 0..2 {
+            if let Ok((view, r)) = rx.recv_timeout(Duration::from_secs(10)) {
+                got.insert(
+                    view.to_string(),
+                    match r {
+                        Ok(b) => json!(b),
+                        Err(e) => json!({ "error": e }),
+                    },
+                );
+            }
+        }
+        let mut handed_over = Vec::new();
+        for view in ["content", "shell"] {
+            // Bring Ferrum to the front first (Windows does not let the check script do it; Tauri's set_focus can),
+            // then put focus in the view.
+            if let Some(w) = app.get_window("main") {
+                let _ = w.set_focus();
+            }
+            std::thread::sleep(Duration::from_millis(500));
+            if view == "content" {
+                with_content(&app, |v| {
+                    let _ = v.focus();
+                });
+            } else if let Some(shell) = &shell {
+                let _ = shell.with_webview(|pw| {
+                    let _ = controller_focus(&pw.controller());
+                });
+            }
+            std::thread::sleep(Duration::from_millis(500));
+            let ack = format!("{out}.ack-{view}");
+            let _ = std::fs::write(format!("{out}.phase"), view);
+            let acked = wait_for(30, || std::path::Path::new(&ack).exists());
+            let _ = std::fs::remove_file(&ack);
+            handed_over.push(json!({"view": view, "acknowledged": acked}));
+        }
+        let _ = std::fs::remove_file(format!("{out}.phase"));
+        finish(
+            &app,
+            json!({
+                "selftest": "devtools",
+                "build": if cfg!(debug_assertions) { "debug" } else { "release" },
+                "content_view_ready": ready,
+                "devtools_enabled": got,
+                "keyboard_attempts": handed_over,
+            }),
+        );
+    });
+}
