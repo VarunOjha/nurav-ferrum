@@ -42,7 +42,7 @@ pub fn ask_cross_site(app: &AppHandle, tab: u64, uri: &str, from: &str) {
 
 /// The user clicked Continue on the other-site bar: the tab moves to that site's profile and loads the address.
 #[tauri::command]
-pub fn cross_site_confirm(app: AppHandle, uri: String) -> Result<(), String> {
+pub async fn cross_site_confirm(app: AppHandle, uri: String) -> Result<(), String> {
     let asked = app.state::<PendingCrossSite>().0.lock().unwrap().take();
     match asked {
         Some((tab, u)) if u == uri => {

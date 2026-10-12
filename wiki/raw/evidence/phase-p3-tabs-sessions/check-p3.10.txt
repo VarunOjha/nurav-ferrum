@@ -1,0 +1,17 @@
+Ferrum check p3.10: A guard against freezes when tabs are created
+Why: the app cannot hang on a new tab.
+Run at 2026-10-12 02:52 on commit ce4f593 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Code scan: tab-creating commands are async; nothing blocks on a reply
+         23 commands scanned; tab-creating ones are async; no blocking call outside test_stats
+  PASS   The review checklist has the item
+         docs/developer/code-review-checklist.md: present
+Running 1 test using 1 worker
+  ✓  1 no-freeze.spec.ts:12:1 › a burst of tab commands settles without hanging (5.6s)
+  1 passed (21.5s)
+  PASS   Smoke test: a burst of tab commands settles; pop-ups still open tabs (34 s)
+         no-freeze: 1 passed
+------------------------------------------------------------------------
+RESULT: PASS - p3.10 (3 PASS; 34 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p3.10 check passed".
