@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:738ffef193411ea776e40e04ad0f799ebbe283b20f8188396779e8db22c12e17"
+    "content_hash": "sha256:2102b031047939509802ef18324d678d6304414c2fa58c180fb2d9d9353c948c"
   },
   "entries": [
     {
@@ -3638,6 +3638,51 @@
       "tags": [
         "blocklist",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-alt-tab",
+      "date": "2026-10-13",
+      "time": "07:58",
+      "title": "Alt+Tab check moved to Phase 4; you re-approved five pages",
+      "done": "Closing Phase 3 left one claim still marked 'check in P3': your hand check of the Alt+Tab keyboard fix, which you deferred. Claude moved it to the Phase 4 hand checks. That touched three approved pages, and you re-approved them and the two sign-offs.",
+      "next": "Phase 4 continues.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "App-shell page, Phase 2 and Phase 3 pages and sign-offs",
+          "status": "Approved"
+        }
+      ],
+      "commit": "2f9b541",
+      "covers": [
+        "## [2026-10-13] approval | deferred Alt+Tab check moved to P4; five keys re-approved"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-p4-1",
+      "date": "2026-10-13",
+      "time": "07:58",
+      "title": "Threat model written: every place where trust changes is mapped",
+      "done": "Claude listed who might attack Ferrum, the 15 places where trust changes between its parts, and 26 threats. Each threat has a protection and a test, or says plainly 'not enforced' (8 do). SECURITY.md has the short version. A check script compares this with the architecture pages and passes.",
+      "next": "Next: the site-rules engine that decides which addresses may load.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "ff7292e",
+      "covers": [
+        "## [2026-10-13] code | p4.1 threat model written; check script made real"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "blocklist",
+        "testing"
       ]
     }
   ]

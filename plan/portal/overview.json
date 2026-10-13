@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is done and signed off. Phase 4 (security) has started; Claude builds it task by task and stops for your review at the end.",
+  "summary": "Phase 3 is done and signed off. Phase 4 (security) is in progress: the threat model is written; next is the site-rules engine. Claude stops for your review when Phase 4 is done.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:393c2f7726cb9d656868c925017efe990d778047341334852807e723773062d4"
+    "content_hash": "sha256:24ef20ae2cb3f0501be0d8955256ca251cc2bb194edc8c056f0c93c23f8b1b02"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -38,7 +38,7 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "started; first task is the threat list"
+        "state": "1 of 17 tasks done; next the site-rules engine"
       },
       {
         "item": "Your Ferrum notes",

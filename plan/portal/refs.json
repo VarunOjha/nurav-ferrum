@@ -5118,6 +5118,30 @@
       "summary": "Bug fixes and document corrections from the Phase 3 self-scan; the app tests run with the next end check.",
       "status": null,
       "related": []
+    },
+    {
+      "id": "2f9b541",
+      "kind": "commit",
+      "title": "Commit 2f9b541",
+      "summary": "The deferred Alt+Tab check moved to Phase 4; five pages re-approved.",
+      "status": "Committed",
+      "related": []
+    },
+    {
+      "id": "ff7292e",
+      "kind": "commit",
+      "title": "Commit ff7292e",
+      "summary": "Task p4.1: the threat model and its check script.",
+      "status": "Committed",
+      "related": []
+    },
+    {
+      "id": "b293d24",
+      "kind": "commit",
+      "title": "Commit b293d24",
+      "summary": "Phase 3 signed off; Phase 4 questions answered and pages approved.",
+      "status": "Committed",
+      "related": []
     }
   ]
 }

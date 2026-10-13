@@ -2213,3 +2213,23 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [phase-p4-security]
 - result: (1) P3 done, phase-p3-tabs-sessions#exit APPROVED, go-ahead given. (2) Dependency set APPROVED: phase-p4-security, adr-0008, adr-0010, adr-0014, adr-0015, comp-security-engine, comp-webview-manager, comp-app-shell, exp-security-overhead, exp-isolation-overhead, schema. (3) No open question blocks it (Q-112, Q-113, Q-212 answered). (4) The only CONTRADICTION in the set (adr-0010) names Q-107, answered. phase-p4-security set to in-progress.
 - next: p4.1 threat model.
+
+## [2026-10-13] approval | deferred Alt+Tab check moved to P4; five keys re-approved
+
+- session: s03
+- time: 07:58
+- pages: [comp-app-shell, phase-p2-minimal-container, phase-p3-tabs-sessions, risk-r02]
+- sources: [raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md]
+- result: With P3 done, lint:wiki reported UNV-PASTDUE for the Alt+Tab focus claim (the owner's deferred hand check). verify_in and inline tags moved to phase-p4-security. This staled comp-app-shell, phase-p2-minimal-container(#exit) and phase-p3-tabs-sessions(#exit); gate held for p4.2 onward until the owner answered "Re-approve all five (Recommended)". Recorded; approvals_check shows no STALE.
+- stales: [comp-app-shell, phase-p2-minimal-container, phase-p3-tabs-sessions]
+- commit: 2f9b541
+
+## [2026-10-13] code | p4.1 threat model written; check script made real
+
+- session: s03
+- time: 07:58
+- pages: [qual-security-testing-plan, ov-arch-trust-boundaries, phase-p4-security]
+- sources: [raw/evidence/phase-p4-security/check-p4.1.txt]
+- result: Threat model in qual-security-testing-plan §7: 6 adversary classes, 15 trust-boundary edges (E01 to E15, read from the component pages), 26 threats (T01 to T26) each with a control and a SEC test or "not enforced" (8 not enforced), explicit not-enforced list; new SEC-14. SECURITY.md has the summary, the same edge table and its not-enforced list. scripts/verify/p4.1-threat-model.ps1 PASS 6 of 6 (a deliberately broken row made it FAIL). quick_lint 0 errors, lint:wiki 0 errors, mask scan 0.
+- next: p4.2 policy engine.
+- commit: ff7292e

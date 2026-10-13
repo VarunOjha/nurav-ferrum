@@ -25,8 +25,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s03
 current_phase: phase-p4-security
-current_task: p4.1
-next_action: "Build P4 task by task, starting with p4.1 (threat model), per wiki/phases/phase-p4-security.md; stop after the P4 exit gate (no P5 work). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+current_task: p4.2
+next_action: "Build P4 task by task; next p4.2 (policy engine in crates/security), per wiki/phases/phase-p4-security.md; stop after the P4 exit gate (no P5 work). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-13-s02
 ---
@@ -53,6 +53,8 @@ manual checklist items 1 to 20 are still owed).
 - P3: seven stale pages re-approved; P3 signed off (`phase-p3-tabs-sessions#exit`); status done.
 - P4 go-ahead (P4 only, then pause). Q-112 (HTTP allowed with a warning bar), Q-113 (blocklist ships empty) and Q-212
   (settings in one app) answered; adr-0015 updated; five P4 pages approved; P4 entry gate passed.
+- Alt+Tab focus check (deferred at the P3 sign-off) moved to the P4 hand checks; five keys re-approved (`2f9b541`).
+- p4.1 done (`ff7292e`): threat model (15 boundary edges, 26 threats, not-enforced list) in the security testing plan and SECURITY.md; check PASS.
 
 ## Done this session (s02)
 
@@ -337,7 +339,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: session s02 ended 2026-10-13 with every change committed; the next step is in next_action and the handoff)
+(empty: p4.1 committed in ff7292e; next is p4.2)
 
 ## Blockers
 
@@ -374,7 +376,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | Started; first task is the threat list |
+| Phase 4 (security) | 1 of 17 tasks done (threat model); next the site-rules engine |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.
