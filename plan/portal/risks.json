@@ -38,7 +38,7 @@
       "summary": "Many web views in one window needs a Tauri feature marked experimental. Known bugs: hangs, blank views, lost keyboard focus.",
       "likelihood": 4,
       "impact": 4,
-      "mitigation": "Tested in P1: create views only from background code and keep the shell above the tabs. Copy and paste work; after Alt+Tab the keyboard needs a click (known issue, fix planned in P2).",
+      "mitigation": "Tested in P1: create views only from background code and keep the shell above the tabs. Copy and paste work; after Alt+Tab the keyboard needed a click. P2 built a fix; your check of it moved to the P4 hand checks.",
       "phase": "phase-p1-foundation",
       "status": "Being reduced",
       "category": "The app",
@@ -57,7 +57,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r02-tauri-multiwebview-unstable.md",
-        "content_hash": "sha256:3fcd0c08c20acddfa67b122d811b06cfde9b2cf30ca8f676cd93bc0fcbbc98ea"
+        "content_hash": "sha256:82c5edfbccaa5e842ae903d9d0a48650d3d6ef654774b8c3d6e6ddfcd25bff60"
       }
     },
     {

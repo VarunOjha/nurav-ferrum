@@ -3,7 +3,7 @@ id: risk-r02
 type: risk
 title: "Tauri multi-webview (child WebViews in one window) is behind the unstable feature"
 status: mitigating
-updated: 2026-10-11
+updated: 2026-10-13
 sources:
   - raw/evidence/phase-p1-foundation/spike-s1/sync-1.json
   - raw/evidence/phase-p1-foundation/spike-s1/auto-1.json
@@ -21,7 +21,7 @@ trigger: "Hang or deadlock while creating a tab; child webviews render white or 
 fallback: "Host tab controllers outside Tauri's webview manager with raw COM in child HWNDs (route c of risk-r01), or one top-level window per tab; either needs an ADR superseding adr-0007."
 unverified:
   - claim: "Moving keyboard focus into the visible tab when the window becomes active fixes the Alt+Tab focus issue (13466)"
-    verify_in: phase-p3-tabs-sessions
+    verify_in: phase-p4-security
 ---
 
 # risk-r02: Tauri multi-webview (child WebViews in one window) is behind the unstable feature
@@ -77,11 +77,11 @@ passed. Where the shell and a tab overlap, the **tab is drawn on top** (issue 15
 bounds. The owner's hand checks ([S1 report](../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md)): text-editing shortcuts work (issue 9257 not seen);
 **keyboard focus after Alt+Tab fails** (issue 13466 seen): typing reaches the tab only after a click on the window. The owner
 marked it a known issue to fix later; P2 built the expected fix (move focus into the visible tab when the window becomes
-active); the owner had not checked it by the P2 exit, so it is UNVERIFIED[phase-p3-tabs-sessions]. Resize with a custom title bar (issue 12207) was not tested (normal title bar).
+active); the owner had not checked it by the P2 exit, so it is UNVERIFIED[phase-p4-security] (the owner's check was deferred at the P3 sign-off on 2026-10-13 and moves to the P4 hand checks). Resize with a custom title bar (issue 12207) was not tested (normal title bar).
 
 ## Unverified claims
 
-- Moving keyboard focus into the visible tab when the window becomes active fixes the Alt+Tab focus issue (13466). UNVERIFIED[phase-p3-tabs-sessions]
+- Moving keyboard focus into the visible tab when the window becomes active fixes the Alt+Tab focus issue (13466). UNVERIFIED[phase-p4-security] (the owner's check was deferred at the P3 sign-off on 2026-10-13 and moves to the P4 hand checks)
 
 
 ## Affects

@@ -782,14 +782,14 @@
     },
     "comp-app-shell": {
       "status": "approved",
-      "comment": "Sign off now, check later",
-      "timestamp": "2026-10-13T07:35:04-05:00",
+      "comment": "Re-approve all five (Recommended)",
+      "timestamp": "2026-10-13T07:57:23-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:e44fa266ca08489902df91d350addd9836bfe139e517b3a3a92f47d102e7c34a",
-      "scope_hash": "sha256:bfd09150dc3c7d6153b1d0e20e20369c45095ce966c48ee876237567df20d35c",
+      "content_hash": "sha256:9f80349de7aeaa51c8408582df36e12a4a453ef1083684b680887f43cbbb601f",
+      "scope_hash": "sha256:3b5b69dffb383987d5340a355370c69d7f98f5c135b93fa8283c825f605c04e7",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md",
+      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -933,6 +933,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-part-pages-reapproval-and-go.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Sign off now, check later",
+          "timestamp": "2026-10-13T07:35:04-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:e44fa266ca08489902df91d350addd9836bfe139e517b3a3a92f47d102e7c34a",
+          "scope_hash": "sha256:bfd09150dc3c7d6153b1d0e20e20369c45095ce966c48ee876237567df20d35c",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md"
         }
       ]
     },
@@ -1053,14 +1064,14 @@
     },
     "phase-p2-minimal-container": {
       "status": "approved",
-      "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T00:29:04-05:00",
+      "comment": "Re-approve all five (Recommended)",
+      "timestamp": "2026-10-13T07:57:24-05:00",
       "path": "wiki/phases/phase-p2-minimal-container.md",
-      "content_hash": "sha256:664242cc1bef48ff8588e016f9d768f4c3f75875a157f45abbe31c2dcc6d69ad",
-      "scope_hash": "sha256:a940964fca39202054edc6424445ab1ea46d5fc4376e924cb406e5a868e6ada0",
+      "content_hash": "sha256:2357156633a8fa240077121b493f631ec3de436ecb56d8717e034a9cd54d3a5f",
+      "scope_hash": "sha256:b3eac8e398bf35d27e5acd8cefa5c05e17c2bb5753842871dd56b5cfcab1e737",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1072,19 +1083,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-11-s02-wave3-and-p2-questions.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T00:29:04-05:00",
+          "path": "wiki/phases/phase-p2-minimal-container.md",
+          "content_hash": "sha256:664242cc1bef48ff8588e016f9d768f4c3f75875a157f45abbe31c2dcc6d69ad",
+          "scope_hash": "sha256:a940964fca39202054edc6424445ab1ea46d5fc4376e924cb406e5a868e6ada0",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
         }
       ]
     },
     "phase-p3-tabs-sessions": {
       "status": "approved",
-      "comment": "Sign off now, check later",
-      "timestamp": "2026-10-13T07:35:04-05:00",
+      "comment": "Re-approve all five (Recommended)",
+      "timestamp": "2026-10-13T07:57:24-05:00",
       "path": "wiki/phases/phase-p3-tabs-sessions.md",
-      "content_hash": "sha256:0171d6b49d2ee770f79ef0880f5f807bc195511689eb33e0233f5b5f8bcb31cd",
-      "scope_hash": "sha256:b61830ec5f6cd4c3fee926aed39c97c0436cd23bda632da2a7f2770f9d1a85c4",
+      "content_hash": "sha256:3a1682d14820fc13c907b781242264d5d6a5724f9ff75551e1584fd3229f4961",
+      "scope_hash": "sha256:d44dda0e8a270b477e7f39c582d81e88665622bdd44b2d05699b7a011a6fa168",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md",
+      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1140,20 +1162,43 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-feature-set-plan-approval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Sign off now, check later",
+          "timestamp": "2026-10-13T07:35:04-05:00",
+          "path": "wiki/phases/phase-p3-tabs-sessions.md",
+          "content_hash": "sha256:0171d6b49d2ee770f79ef0880f5f807bc195511689eb33e0233f5b5f8bcb31cd",
+          "scope_hash": "sha256:b61830ec5f6cd4c3fee926aed39c97c0436cd23bda632da2a7f2770f9d1a85c4",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md"
         }
       ]
     },
     "phase-p2-minimal-container#exit": {
       "status": "approved",
-      "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T00:58:43-05:00",
+      "comment": "Re-approve all five (Recommended)",
+      "timestamp": "2026-10-13T07:57:24-05:00",
       "path": "wiki/phases/phase-p2-minimal-container.md",
-      "content_hash": "sha256:664242cc1bef48ff8588e016f9d768f4c3f75875a157f45abbe31c2dcc6d69ad",
-      "scope_hash": "sha256:a940964fca39202054edc6424445ab1ea46d5fc4376e924cb406e5a868e6ada0",
+      "content_hash": "sha256:2357156633a8fa240077121b493f631ec3de436ecb56d8717e034a9cd54d3a5f",
+      "scope_hash": "sha256:b3eac8e398bf35d27e5acd8cefa5c05e17c2bb5753842871dd56b5cfcab1e737",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T00:58:43-05:00",
+          "path": "wiki/phases/phase-p2-minimal-container.md",
+          "content_hash": "sha256:664242cc1bef48ff8588e016f9d768f4c3f75875a157f45abbe31c2dcc6d69ad",
+          "scope_hash": "sha256:a940964fca39202054edc6424445ab1ea46d5fc4376e924cb406e5a868e6ada0",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        }
+      ]
     },
     "adr-0032": {
       "status": "approved",
@@ -1217,15 +1262,27 @@
     },
     "phase-p3-tabs-sessions#exit": {
       "status": "approved",
-      "comment": "Sign off now, check later (end-check rerun and checklist items 1 to 20 still owed)",
-      "timestamp": "2026-10-13T07:35:08-05:00",
+      "comment": "Re-approve all five (Recommended)",
+      "timestamp": "2026-10-13T07:57:25-05:00",
       "path": "wiki/phases/phase-p3-tabs-sessions.md",
-      "content_hash": "sha256:0171d6b49d2ee770f79ef0880f5f807bc195511689eb33e0233f5b5f8bcb31cd",
-      "scope_hash": "sha256:b61830ec5f6cd4c3fee926aed39c97c0436cd23bda632da2a7f2770f9d1a85c4",
+      "content_hash": "sha256:3a1682d14820fc13c907b781242264d5d6a5724f9ff75551e1584fd3229f4961",
+      "scope_hash": "sha256:d44dda0e8a270b477e7f39c582d81e88665622bdd44b2d05699b7a011a6fa168",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "Sign off now, check later (end-check rerun and checklist items 1 to 20 still owed)",
+          "timestamp": "2026-10-13T07:35:08-05:00",
+          "path": "wiki/phases/phase-p3-tabs-sessions.md",
+          "content_hash": "sha256:0171d6b49d2ee770f79ef0880f5f807bc195511689eb33e0233f5b5f8bcb31cd",
+          "scope_hash": "sha256:b61830ec5f6cd4c3fee926aed39c97c0436cd23bda632da2a7f2770f9d1a85c4",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md"
+        }
+      ]
     },
     "phase-p4-security": {
       "status": "approved",
