@@ -1,7 +1,7 @@
 # Security
 
-Ferrum is a research prototype. Its first working app (phase P2, milestone M1) exists; there is no released build
-yet.
+Ferrum is a research prototype. Phase P3 (tabs and sessions, milestone M2) is built and waiting for the owner's
+review; there is no released build yet.
 The canonical security design lives in the wiki; this file is the short entry point.
 
 ## Reporting a vulnerability
@@ -75,8 +75,11 @@ Checked by the P3 task scripts (evidence: [wiki/raw/evidence/phase-p3-tabs-sessi
   page sees them; nothing is injected into pages (p3.3). The settings commands are shell-only; the p2.3 test page now
   also tries `settings_set` and is refused (p3.14). The settings screen never writes the file itself: the app checks
   every value first and writes in one step.
-- **Browsing data stays local.** `session.json`, `history.json`, profiles and downloads live in the data folder only;
-  the history can be cleared at once (list and file); a check fails if such files are ever tracked in git (p3.7).
+- **Browsing data stays local.** `session.json`, `ferrum.db` (history and bookmarks, since p3.18; an old
+  `history.json` is imported once and renamed `history.json.imported`), profiles and downloads live in the data folder
+  only; the history can be cleared at once, leaving nothing of it inside `ferrum.db`; git ignores `ferrum.db` and
+  backup files, and a check fails if a `session.json`, `history.json`, `ferrum.db` or backup file is ever tracked in
+  git (p3.7).
   Logs still record only scheme and host.
 - **Downloads** go to the download folder under the file name only (a site cannot choose the folder) and never replace
   a file (p3.8). Risky file types and "ask where to save" are P4.

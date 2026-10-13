@@ -3,7 +3,7 @@ id: ov-arch-trust-boundaries
 type: overview
 title: "Architecture: trust boundaries and preliminary threat model"
 status: review
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -108,7 +108,7 @@ Facts, all VERIFIED from the tauri-2.12.1 source per [Tauri note §3](../raw/res
 | R1 | No capability file in `apps/desktop/src-tauri/capabilities/` declares `remote`. Enforced by a CI grep / unit test over the capability JSON | Static check in CI from phase-p2-minimal-container |
 | R2 | The shell capability targets `"webviews": ["shell"]`, not the window label. A window-label match would also cover the child tab WebViews in that window (VERIFIED matching logic) | Invoke each app command from a fixture page in a tab → expect rejection |
 | R3 | Ship an app ACL manifest (tauri-build app manifest) so local custom commands are also ACL-checked | Same fixture: core plugin commands, app commands, event emit/listen all rejected |
-| R4 | A tab may never navigate to the app's own origin (`tauri://localhost` / `http(s)://tauri.localhost`), because a tab there would become `Origin::Local`. Blocked in navigation handling. Whether WebView2 even permits that navigation is UNVERIFIED[phase-p4-security] (same phase as adr-0007 rule 4 and risk-r19; the handler itself is built in phase-p3-tabs-sessions and may be smoke-tested there) | Fixture tries `location = "http://tauri.localhost/"`, link, redirect, `window.open` → all blocked and audit-logged |
+| R4 | A tab may never navigate to the app's own origin (`tauri://localhost` / `http(s)://tauri.localhost`), because a tab there would become `Origin::Local`. Blocked in navigation handling. Whether WebView2 even permits that navigation is UNVERIFIED[phase-p4-security] (same phase as adr-0007 rule 4 and risk-r19; the handler is not built yet: P3 added no check for the app's own origin, so it moves to phase-p4-security too) | Fixture tries `location = "http://tauri.localhost/"`, link, redirect, `window.open` → all blocked and audit-logged |
 | R5 | The internal `FETCH_CHANNEL_DATA_COMMAND` is exempt from the ACL check (VERIFIED, `// TODO: Remove ... in v3`). What it can leak to a remote caller is UNVERIFIED[phase-p4-security] | Dedicated negative test calling it from a tab |
 | R6 | The `__TAURI_INVOKE_KEY__` is injected into page context and is **not** a security boundary | Documented. No control relies on it |
 | R7 | Whether WebView2's `Source` can be spoofed by page script is UNVERIFIED[phase-p4-security]. The design assumes it is browser-reported | Fixture with iframes / `postMessage` tricks |

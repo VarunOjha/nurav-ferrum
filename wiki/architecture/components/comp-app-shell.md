@@ -70,6 +70,8 @@ connects:
 unverified:
   - claim: "Moving keyboard focus into the content web view when the window becomes active fixes the Alt+Tab focus issue (13466)"
     verify_in: phase-p3-tabs-sessions
+  - claim: "A custom (frameless) title bar has a window-resize problem in Tauri (issue #12207); P3 kept the normal Windows title bar"
+    verify_in: phase-p4-security
 ---
 
 # comp-app-shell: application shell
@@ -91,18 +93,18 @@ warm grey, one rust-orange accent, IBM Plex Sans and Mono, light and dark. No AI
 nothing is measured. The panel's sections fill in as later phases land (P4 blocking, P5 measurement and network log,
 P7 sleeping tabs). The shell loads no remote resources: its content security policy allows only the app's own files and the IPC
 channel, and the shell works under it, bridge included (verified in P2, [check-p2.3](../../raw/evidence/phase-p2-minimal-container/check-p2.3.txt); the policy
-is in `apps/desktop/src-tauri/tauri.conf.json`). Proposed (not yet approved): bundle the IBM Plex fonts with the app;
-P2 does not bundle them (the shell uses IBM Plex if installed, else Segoe UI and Consolas).
+is in `apps/desktop/src-tauri/tauri.conf.json`). P2 did not bundle the IBM Plex fonts (the shell used IBM Plex if
+installed, else Segoe UI and Consolas); P3 bundles them (p3.22: `@fontsource` IBM Plex Sans and Mono, imported in
+`apps/desktop/src/main.ts`).
 
 **Title bar.** Option A as drawn puts the tabs in the window's top bar, which needs a custom title bar; the design
-notes below advise against one at first (resize problem, Tauri issue #12207, UNVERIFIED[phase-p3-tabs-sessions]; not tested in P1 because spike S1 used the normal title bar). Until
-P1 has checked it, the early shell may show the normal Windows title bar above the tab strip. Open question
+notes below advise against one at first (resize problem, Tauri issue #12207, UNVERIFIED[phase-p4-security]; not tested in P1 because spike S1 used the normal title bar, and P3 built no custom title bar). The owner answered
 [Q-125](../../overview/ov-open-questions.md#q-125-tabs-in-the-windows-top-bar-custom-title-bar-or-the-normal-windows-title-bar-first)
-asks the owner which way to go.
+on 2026-10-12: the normal Windows title bar first, with the tab strip just under it. That is what P3 built.
 
 ## Design notes
 
-- **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) was seen in P1 ([S1 report](../../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md); owner: fix later). P2 built the fix (`restore_focus`); the owner has not checked it yet (first checklist round, 2026-10-12), so it is UNVERIFIED[phase-p3-tabs-sessions] and goes on the P3 keyboard checks. Resize and z-order behaved as designed in S1 and P2. Resize with a custom title bar (#12207) is UNVERIFIED[phase-p3-tabs-sessions]. Avoid a custom title bar initially.
+- **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) was seen in P1 ([S1 report](../../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md); owner: fix later). P2 built the fix (`restore_focus`); the owner has not checked it yet (first checklist round, 2026-10-12), so it is UNVERIFIED[phase-p3-tabs-sessions] and goes on the P3 keyboard checks. Resize and z-order behaved as designed in S1 and P2. Resize with a custom title bar (#12207) is UNVERIFIED[phase-p4-security]; P3 kept the normal title bar (Q-125).
 - **Capabilities.** Exactly one capability file, `shell.json`, targets `"webviews": ["shell"]`. **No capability declares `remote`.** A CI check enforces this ([trust boundaries R1–R3](../ov-arch-trust-boundaries.md)).
 - **Commands are async.** Tab creation runs from async commands: creating web views from a synchronous handler deadlocks on Windows (VERIFIED, Tauri note §2; reproduced in spike S1). Under adr-0029 the shell asks `webview-manager`, which creates the tab controller on the UI thread through `with_webview` and reports completion asynchronously.
 - **No web storage in the shell** (trust rule R9). Settings go through `settings_get`/`settings_set` to Rust-side `config.toml`.
@@ -139,8 +141,9 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   `navigation-completed`, `history-changed`, `title-changed`, `got-focus`, `new-window`, `external-scheme`,
   `external-request`, `sign-in-offer`, `blocked`. The interface list in the frontmatter stays the full plan.
 - **Settings**: `config.toml` in the app config folder, `--config <path>` override (comp-core).
-- **Shell security**: the CSP in `tauri.conf.json` allows only the app's own files and the IPC channel; fonts are not
-  bundled (the shell names IBM Plex and falls back to Segoe UI and Consolas, all local). Developer tools only in debug
+- **Shell security**: the CSP in `tauri.conf.json` allows only the app's own files and the IPC channel; in P2 fonts
+  were not bundled (the shell named IBM Plex and fell back to Segoe UI and Consolas, all local); P3 bundles IBM Plex
+  with the app (p3.22). Developer tools only in debug
   builds ([check-p2.12](../../raw/evidence/phase-p2-minimal-container/check-p2.12.txt)).
 - **Logs**: `ferrum.jsonl`, JSON lines, sites as scheme and host only ([check-p2.14](../../raw/evidence/phase-p2-minimal-container/check-p2.14.txt)).
 

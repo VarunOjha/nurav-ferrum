@@ -15,7 +15,7 @@ Start the release build from the repo folder:
 | # | What to do | What should happen | Result (yes / no + note) |
 |---|---|---|---|
 | 1 | Use Ferrum for a working session with **at least eight tabs** on several sites (mail, docs, news, video...). | Tabs open, switch and close normally; nothing freezes; pages look right. Note anything odd. | |
-| 2 | Try **every shortcut** while typing inside a page: Ctrl+T, Ctrl+W, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Shift+T, Ctrl+1 to Ctrl+9, Ctrl+L, Alt+Left, Alt+Right, F5, Ctrl+Shift+S, Ctrl+Comma. | Each does its job, and the page does not react to it. | |
+| 2 | Try **every shortcut** while typing inside a page: Ctrl+T, Ctrl+W, Ctrl+F4, Ctrl+Shift+T, Ctrl+Tab, Ctrl+Page Down, Ctrl+Shift+Tab, Ctrl+Page Up, Ctrl+1 to Ctrl+9, Ctrl+L, Alt+D, F6, Alt+Left, Alt+Right, F5, Ctrl+R, Ctrl+Shift+S, Ctrl+Comma, Ctrl+D, Ctrl+Shift+B, Ctrl+Shift+O (the same list as the shortcut table in the README). | Each does its job, and the page does not react to it. | |
 | 3 | With several tabs open, end Ferrum from **Task Manager** (Details, ferrum-desktop.exe, End task). Start it again. | The tabs come back (each opens its last page; its back history is not kept). | |
 | 4 | **Download a file** from a real site (for example a PDF). | It lands in your Downloads folder (or the folder in Settings) and the bar under the toolbar says "Done". | |
 
@@ -41,7 +41,7 @@ Start the release build from the repo folder:
 |---|---|---|---|
 | 11 | On a site that opens a file (for example a PDF) **in a new window**, start that download. | The file lands in Downloads and the bar says "Done"; the extra tab closes by itself; no "could not be loaded" page. | |
 | 12 | Open a few well-known sites in tabs. | Each tab shows the **site's icon** next to its title (also in the sidebar). | |
-| 13 | Look at the **taskbar** and at **Task Manager** (Processes tab, "Apps"). | The orange "F" icon is easy to see; Task Manager lists **Ferrum** with that icon, and its WebView2 helpers (shown as "WebView2 Manager" and similar) inside its group. | |
+| 13 | Look at the **taskbar** and at **Task Manager** (Processes tab, "Apps"). | The split-tile icon is easy to see; Task Manager lists Ferrum's own process as **Ferrum**. The page processes may show as a separate "WebView2 Manager" group instead of inside Ferrum's group: a known WebView2 issue (open question Q-223). | |
 
 ## The new small feature set (tasks p3.17 to p3.23)
 

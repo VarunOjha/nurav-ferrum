@@ -3,7 +3,7 @@ id: adr-0033
 type: decision
 title: "Feature set look: Graphite (dark and metallic, follows Windows), split-tile logo, themes as swappable data"
 status: accepted
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/owner/2026-10-12-s02-feature-set-request.md
   - raw/owner/2026-10-12-s02-feature-set-design-answers.md
@@ -110,8 +110,8 @@ one file.
   separate tokens, so a theme cannot break the layout.
 - **Built in now:** Graphite (the only theme in this feature set). Accent colour (orange, blue, green, violet) and
   density (roomy, compact) are user settings applied on top of any theme. Light or dark follows Windows.
-- **Ready for later:** adding Forge or Steel is adding a token record and a name in Settings; no shell code changes. A
-  theme picker in Settings comes when a second theme exists.
+- **Ready for later:** adding Forge or Steel is adding a token record and a name in Settings; no shell code changes. Settings
+  already has a Theme list; it shows only Graphite until a second theme exists.
 - **User-made themes later, safely:** if themes are ever loaded from files, Ferrum reads only the known token names and
   accepts only colour values and the few allowed texture or shadow forms; anything else is refused. A theme file can
   never carry CSS, script or web addresses, and the shell's content security policy stays as it is (adr-0006).
@@ -129,8 +129,8 @@ one file.
 
 - This changes adr-0028's colours (calm warm grey). adr-0028's layout and panel stay. adr-0028 is not edited (that
   would stale its approval); this ADR records the change and points back to it.
-- Every shell colour must go through tokens, which p3.22 checks (a test fails on any colour written outside the theme
-  file).
+- Every shell colour must go through tokens, which p3.22 checks (a test fails on any colour written in `style.css`;
+  `apps/desktop/src/themes.test.ts`).
 - Gentle motion is not visible on a still canvas; p3.22 keeps it short and turns it off when Windows' "reduce
   animations" setting is on.
 

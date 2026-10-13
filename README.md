@@ -20,7 +20,8 @@ literature review is planned before any such claim.
 ## How this project works
 
 - **Planning first.** Every phase, decision, risk and experiment is a page in [`wiki/`](wiki/). The
-  owner approves each page in the interactive plan app before any implementation that depends on it.
+  owner approves each page in chat in Claude Code before any implementation that depends on it; Claude
+  records the decision with `tools/approvals_record.py`. The plan app is read-only (adr-0023).
 - **Phase-gated.** Work proceeds in phases P0–P8 (milestones M1–M7), each with an automated and a
   manual test gate and an owner review at its exit.
 - **Built across many sessions.** The documentation is the project memory, following
@@ -51,9 +52,8 @@ literature review is planned before any such claim.
 | [`wiki/quality/`](wiki/quality/) | Test strategy and gates |
 | [`wiki/operations/`](wiki/operations/) | Session, resume, handoff, approval, git and environment procedures |
 | `wiki/interactive-plan/` | Data contract and views of the plan app |
-| `interactive_plan/` | Next.js app that visualises the wiki and records approvals (planning tool, not shipped) |
-| `plan/approvals.json` | Owner approvals, written only by the plan app |
-
+| `interactive_plan/` | Read-only Next.js app that shows the plan in plain words (planning tool, not shipped; adr-0023) |
+| `plan/approvals.json` | Owner approvals given in chat, written only by `tools/approvals_record.py` |
 | [`apps/desktop/`](apps/desktop/) | The Ferrum app: shell UI (`index.html`, `src/`) and Tauri host (`src-tauri/`) |
 | [`crates/`](crates/) | Rust libraries: `core` (settings, address rules), `webview-manager` (the only raw WebView2 code), stubs for later phases |
 | [`tests/fixtures/server/`](tests/fixtures/server/) | Local HTTPS test site used by the automated checks |
@@ -87,7 +87,7 @@ not.
 
 Settings live in `config.toml` in the app's config folder (`%APPDATA%\dev.ferrum.desktop`; the settings screen,
 Ctrl+Comma, edits it; `--user-config <path>` uses another file and `--config <path>` overrides it for experiments);
-the session (`session.json`), history (`history.json`) and logs (`logs\ferrum.jsonl`) are in the data folder
+the session (`session.json`), history and bookmarks (`ferrum.db`) and logs (`logs\ferrum.jsonl`) are in the data folder
 (`%LOCALAPPDATA%\dev.ferrum.desktop`, or `[storage] data_dir`). Details: [comp-core](wiki/architecture/components/comp-core.md) and
 [comp-app-shell](wiki/architecture/components/comp-app-shell.md).
 

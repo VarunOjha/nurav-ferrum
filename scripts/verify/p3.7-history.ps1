@@ -50,9 +50,9 @@ Invoke-Step 'Smoke test: recorded, searched, cleared (list and file); back/forwa
 }
 
 Invoke-Step 'History files are never part of the project' {
-    $tracked = @(git -C (Get-RepoPath '.') ls-files '*history.json' '*session.json')
+    $tracked = @(git -C (Get-RepoPath '.') ls-files '*history.json' '*session.json' '*ferrum.db*' '*.ferrum-backup')
     if ($tracked.Count) { Stop-Fail "Tracked browsing-data files: $($tracked -join ', ')" }
-    'no history.json or session.json in git'
+    'no history.json, session.json, ferrum.db or backup file in git'
 }
 
 Complete-Check -SaveEvidence:$SaveEvidence

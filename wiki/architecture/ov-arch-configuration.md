@@ -3,7 +3,7 @@ id: ov-arch-configuration
 type: overview
 title: "Architecture: configuration model and lifecycle policy flags"
 status: review
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -54,6 +54,9 @@ The **effective config** is serialised in canonical form and hashed (`config_sha
 
 TOML is proposed because experiment configs are human-edited. The owner chose TOML (Q-214); P2 uses the `toml` crate 1.1.8, pinned exactly and clean under `cargo deny`
 ([source readings](../raw/research/p2-source-readings.md) S3, [check-p2.4](../raw/evidence/phase-p2-minimal-container/check-p2.4.txt)). JSON via `serde_json` is the fallback.
+Keys built in P2 and P3 (`[session]`, `http_policy`, `external_schemes`, `google_oauth`, `new_window`, `[isolation] mode`)
+use the names and values in `crates/core/src/config.rs`, shown below; the code refuses any other spelling. The other
+keys are still proposals and are not built (a file using them today is refused).
 
 ```toml
 [session]
@@ -66,11 +69,12 @@ http_policy = "upgrade"         # upgrade | warn
 external_schemes = "confirm"    # confirm | deny
 permissions_default = "deny"    # deny | prompt
 downloads = "prompt"            # prompt | deny
-google_oauth = "system-browser" # never spoof UA
+google_oauth = "offer-system-browser" # the only value; never spoof UA (Q-109)
+new_window = "new-tab"          # new-tab | same-view | system-browser
 
 [isolation]                     # adr-0010; see ov-arch-isolation-model
-mode = "shared"                 # shared | per-site-profile | per-site-udf | private
-cross_site_navigation = "rehost" # rehost | keep (PROPOSAL)
+mode = "per-site"               # per-site | shared (built); per-site-udf | private: not built
+                                # no key for cross-site links: Ferrum asks, then re-hosts the tab (Q-209)
 
 [lifecycle]                     # see ov-arch-lifecycle-state-machine
 policy = "none"                 # none | fixed-idle | memory-pressure | adaptive
@@ -120,8 +124,8 @@ The canonical list of `cfg-*` ids lives in [ov-research-configurations](../resea
 | cfg-ferrum-mempressure | ferrum-desktop release | `lifecycle.policy = "memory-pressure"` |
 | cfg-ferrum-adaptive | ferrum-desktop release | `lifecycle.policy = "adaptive"` + weights |
 | cfg-ferrum-shared-profile | ferrum-desktop release | `isolation.mode = "shared"` |
-| cfg-ferrum-profile-per-site | ferrum-desktop release (needs a profile-capable TabHost backend, risk-r01) | `isolation.mode = "per-site-profile"` |
-| cfg-ferrum-udf-per-site | ferrum-desktop release | `isolation.mode = "per-site-udf"` |
+| cfg-ferrum-profile-per-site | ferrum-desktop release (needs a profile-capable TabHost backend, risk-r01) | `isolation.mode = "per-site"` |
+| cfg-ferrum-udf-per-site | ferrum-desktop release | `isolation.mode = "per-site-udf"` (not built yet) |
 | cfg-ferrum-nosecurity-bench | **separate build** with Cargo feature `bench-nosecurity` | see below |
 
 **The one exception to "one binary": `bench-nosecurity`.** exp-security-overhead needs an ablation where every policy decision returns "allow". A runtime switch that disables security in the shipped binary would be a security hazard, so the ablation is a **Cargo feature on `ferrum-security`**, `bench-nosecurity`. CI asserts that release artefacts are never built with it. The experiment must state the confound: two different binaries are being compared.
@@ -129,8 +133,10 @@ The canonical list of `cfg-*` ids lives in [ov-research-configurations](../resea
 ## 4a. Versions and safe writing (built in P3, p3.4)
 
 The file starts with `version = 2`. A file without `version` is the P2 format (version 1) and is upgraded when read;
-the only change from version 1 is that a file which did not choose `new_window` keeps `same-view`, the P2 default,
-because the new default (a new tab) would change what the user had. A file from a newer Ferrum is refused with a clear
+a version-1 file keeps the P2 behaviour for the three settings whose defaults changed, unless it chose them itself:
+`new_window` stays `same-view` (the new default is a new tab), `[isolation] mode` stays `shared` (the new default, a
+profile per site, would hide the cookies the user already has) and `restore_on_startup` stays `false` (P2 never
+restored a session); `migrate_v1` in `crates/core/src/config.rs`. A file from a newer Ferrum is refused with a clear
 message and left untouched (the app uses the defaults). Ferrum writes the file atomically: a temporary file next to it,
 then one rename. A user file that cannot be read as TOML is copied aside (`config.toml.broken-<seconds>`) before the
 defaults are used, so nothing the user wrote is lost. `--user-config <path>` replaces the user file's location (the
@@ -153,4 +159,4 @@ pages (a version-1 file keeps it off, the P2 behaviour). The session itself is r
 
 ## 5. Persisted runtime state (not config)
 
-`ferrum.db` (built in P3, p3.18, adr-0032: one SQLite file with the history, newest first, at most 50 000 entries, clearable at once with nothing left inside the file, and the bookmarks; it replaced p3.7's `history.json`, which is imported once and kept as `history.json.imported`), `session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), `profiles.json` (site → profile map), `audit.jsonl`, `netlog/*.jsonl`, `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.
+`ferrum.db` (built in P3, p3.18, adr-0032: one SQLite file with the history, newest first, at most 50 000 entries, clearable at once with nothing left inside the file, and the bookmarks; it replaced p3.7's `history.json`, which is imported once and kept as `history.json.imported`), `session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), no `profiles.json` (not built: each site's profile is worked out from its registrable domain, and named profiles live in `[[sites]]` in `config.toml`), `audit.jsonl`, `netlog/*.jsonl`, `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.

@@ -23,7 +23,7 @@ responsibilities:
   - "Traits for dependency inversion: LifecycleActuator, Clock"
   - "Common error types"
 interfaces:
-  - "config::Config, config::load(layers) -> Config, config::hash(&Config)"
+  - "config::Config, config::load(user: Option<&Path>, override_file: Option<&Path>) -> Result<Loaded, ConfigError>, config::hash(&Config) -> String"
   - "types::*, events::*, traits::{LifecycleActuator, Clock}"
 connects: []
 ---
@@ -46,7 +46,7 @@ Built in P2 (evidence in [the P2 evidence folder](../../raw/evidence/phase-p2-mi
   [google-oauth-endpoint](../../raw/research/google-oauth-endpoint.md)); a test-only pattern only when the app passes
   one (debug builds).
 
-Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
+Unit tests: `crates/core/tests/{config,address,oauth}.rs` in P2; P3 adds `{tabs,shortcuts,session,profiles,history}.rs`.
 
 ## Implementation status (P3, tabs and sessions)
 
@@ -57,7 +57,9 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   ([check-p3.1](../../raw/evidence/phase-p3-tabs-sessions/check-p3.1.txt)).
 - `shortcuts` (p3.3): the shortcut table (`for_key`, `Shortcut`, `repeats`, `name`), with unit tests. p3.19 adds
   `BookmarkPage` (Ctrl+D), `ToggleBookmarksBar` (Ctrl+Shift+B) and `ShowBookmarks` (Ctrl+Shift+O).
-- `config` (p3.19): `[appearance] bookmarks_bar` (default true; `Appearance`), round-trip tested.
+- `config` (p3.19): `[appearance] bookmarks_bar` (default true; `Appearance`), round-trip tested. p3.22 (adr-0033) adds
+  `theme` (`graphite`, the only one), `accent` (`orange` default, `blue`, `green`, `violet`) and `density` (`roomy`
+  default, `compact`); unknown names are refused.
 - `session` and `fsutil` (p3.5): `session.json` (`Session`: version 1, save time, active index, tabs with address,
   title and profile), `save` (atomic) and `load` (none when missing; newer or unreadable files refused);
   `fsutil::write_atomic` and `fsutil::backup_broken` are shared with the settings file

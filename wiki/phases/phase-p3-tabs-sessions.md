@@ -3,7 +3,7 @@ id: phase-p3-tabs-sessions
 type: phase
 title: "P3 Tabs and sessions (Milestone M2): multi-tab, session restore, per-site settings"
 status: gate-review
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -125,7 +125,7 @@ test_gate:
     - "Owner kills the app from Task Manager and confirms tabs are restored."
     - "Owner downloads a file from a real site and confirms it lands where expected."
     - "Carried over from the P2 checklist (owner's first round, 2026-10-12): after Alt+Tab back, typing reaches the page without a click; Open on a mail link starts the mail app; a sign-in survives closing and reopening Ferrum."
-    - "Feature set (p3.23): owner bookmarks pages, finds a past page by typing in the address bar, exports a backup and imports it into a fresh Ferrum data folder, and checks the new look and logo in light and dark."
+    - "Feature set (p3.23): owner bookmarks pages, finds a past page by typing in the address bar, exports a backup, opens it with a wrong and then the right passphrase and restores it with Merge (on this PC, or on another PC), and checks the new look and logo in light and dark."
   evidence:
     - raw/evidence/phase-p3-tabs-sessions/cargo-clippy.txt
     - raw/evidence/phase-p3-tabs-sessions/cargo-test.txt

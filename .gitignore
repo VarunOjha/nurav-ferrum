@@ -36,6 +36,9 @@ profiles/
 .env*
 !.env.example
 **/EBWebView/
+# Ferrum's library (history and bookmarks) and its copies, and backup files (P3 self-scan, 2026-10-13)
+ferrum.db*
+*.ferrum-backup
 *.user-data/
 logs/netlog/
 
