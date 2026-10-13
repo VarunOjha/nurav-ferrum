@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:1f62ffb8fbbe5344366d04b0391b77e08c28bbf68dde31481d627d07c6e00ded"
+    "content_hash": "sha256:63ab3d53ab33e79298323aa61e47302157e6037b61ff8b9bf9990dfb316ac3ad"
   },
   "items": [
     {
@@ -915,6 +915,22 @@
       "tags": [
         "licensing",
         "Tauri"
+      ]
+    },
+    {
+      "id": "Q-223",
+      "asked": "2026-10-13",
+      "time": "00:32",
+      "question": "Task Manager shows Ferrum's pages as \"WebView2 Manager\": accept it as a known limitation, or revisit later?",
+      "why_it_matters": "It is Microsoft's WebView2 engine, and no supported setting changes the name yet. Claude recommends a README note and watching Microsoft's report; shipping our own Chromium instead would be a major change.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
+      "blocks": [],
+      "category": "The app",
+      "tags": [
+        "WebView2",
+        "look & feel"
       ]
     }
   ]

@@ -5102,6 +5102,14 @@
       "summary": "The saved results of the Phase 3 end check: all of Claude's 30 checks passed; your review is what remains.",
       "status": null,
       "related": []
+    },
+    {
+      "id": "Q-223",
+      "kind": "question",
+      "title": "Task Manager shows \"WebView2 Manager\", not Ferrum",
+      "summary": "Task Manager shows Ferrum's pages as \"WebView2 Manager\": accept it as a known limitation, or revisit later? Blocks nothing.",
+      "status": "Open",
+      "related": []
     }
   ]
 }

@@ -3,13 +3,14 @@ id: ov-open-questions
 type: overview
 title: "Open questions for the owner (canonical register)"
 status: draft
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/measurement-methodology.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/nextjs-stack.md
+  - raw/research/webview2-task-manager-grouping.md
   - raw/research/related-work-seed.md
   - raw/owner/2026-10-08-s01-wave0.md
   - raw/owner/2026-10-08-s01-wave0b.md
@@ -868,3 +869,22 @@ P2 builds the real Tauri app, so its `cargo deny check` would fail unless MPL-2.
 files must stay open; Ferrum's code and licence are unaffected), or should Ferrum avoid those libraries? Claude
 recommends allowing MPL-2.0 for dependencies only, because Tauri itself pulls them in. Whether the licences are
 compatible in law is not something Claude can certify; this is the owner's licensing call (CLAUDE.md §9).
+
+## Q-223 Ferrum's page processes show as "WebView2 Manager" in Task Manager: accept, or revisit later?
+
+- asked: 2026-10-13 00:32
+- blocking: []
+- status: open
+- answer: none yet
+
+**Where we are:** the owner asked why Windows Task Manager shows "webview manager" instead of Ferrum
+([raw/owner/2026-10-13-s02-task-manager-name-engine-and-claims.md](../raw/owner/2026-10-13-s02-task-manager-name-engine-and-claims.md)). Ferrum's own process is named
+"Ferrum"; the separate "WebView2 Manager" group is Microsoft's WebView2 runtime. It is a known Windows 11 / WebView2
+issue with no supported setting, workaround or fix so far ([research note](../raw/research/webview2-task-manager-grouping.md)). Renaming Microsoft's signed
+runtime is excluded (CLAUDE.md §6).
+
+**Question:** (a) accept it as a known limitation, add one line to the README's known limitations and watch the two
+upstream reports (Claude recommends this); (b) also run a short spike in a later phase to try unofficial ideas, with
+no promise it works; (c) reconsider the engine (shipping Chromium ourselves) if Microsoft never fixes it. Option (c)
+would change the project's base (raw/01-scoping-decisions.md), give Ferrum the job of shipping every Chromium security
+fix, and rebuild most of P1 to P3; it would need its own ADR. Non-blocking: no phase waits on it.
