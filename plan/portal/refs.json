@@ -3530,7 +3530,7 @@
       "kind": "question",
       "title": "GitHub repository details",
       "summary": "What name, visibility and timing do you want for the GitHub repository? Automatic checks on GitHub cannot run until it exists. Needed only for the P1 review.",
-      "status": "Open",
+      "status": "Answered",
       "related": []
     },
     {
@@ -3921,7 +3921,7 @@
       "kind": "question",
       "title": "Rewrite history before first upload?",
       "summary": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path? Old commits still hold the values masked on 9 Oct. A rewrite changes every commit id, so it must happen before any upload. It holds the first upload only.",
-      "status": "Open",
+      "status": "Answered",
       "related": []
     },
     {

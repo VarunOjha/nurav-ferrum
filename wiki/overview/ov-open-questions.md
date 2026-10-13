@@ -253,8 +253,8 @@ earlier answer would also let P0 checkpoints be commits.
 
 - asked: 2026-10-08
 - blocking: []
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-13-s02-self-scan-and-github.md](../raw/owner/2026-10-13-s02-self-scan-and-github.md), owner answers (2026-10-13): "Private (Recommended)"; who creates and pushes: "I will do it". The owner creates a private repository and pushes after the P3 self-scan and the history rewrite (Q-221); Claude still never pushes. Name not given; Claude proposes `ferrum-rust-webclient`.
 
 Raised in adr-0011. It holds only the P1 exit review, because CI cannot run until the owner creates a
 remote and pushes to it.
@@ -840,8 +840,8 @@ raw/research/tauri-webview2-capabilities.md has a free-text entry). Those pages 
 
 - asked: 2026-10-09
 - blocking: []
-- status: open
-- answer: none yet. Ask when the owner wants the first push to GitHub; the push waits for this answer.
+- status: answered
+- answer: [raw/owner/2026-10-13-s02-self-scan-and-github.md](../raw/owner/2026-10-13-s02-self-scan-and-github.md), owner answer (2026-10-13): "Rewrite, keep backup (Recommended)": Claude saves a backup bundle of the current history, then rewrites the local history once so no commit holds the real machine values, before the first push.
 
 **Where we are:** on 2026-10-09 the committed test logs were masked (real IP addresses and the user-folder path
 replaced by names like `<LAN_IPV4_1>`), per the owner's choice "Mask files now, rewrite history before first push"

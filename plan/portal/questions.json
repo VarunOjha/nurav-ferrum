@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:63ab3d53ab33e79298323aa61e47302157e6037b61ff8b9bf9990dfb316ac3ad"
+    "content_hash": "sha256:abbd37e2a775c888d8b21ad8b4102704b04f6173dffa7401814d4e2187bee37c"
   },
   "items": [
     {
@@ -201,9 +201,9 @@
       "asked": "2026-10-08",
       "question": "What name, visibility and timing do you want for the GitHub repository?",
       "why_it_matters": "Automatic checks on GitHub cannot run until it exists. Needed only for the P1 review.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "A private repository; you create it and upload yourself, after the Phase 3 self-scan.",
+      "answered_on": "2026-10-13",
       "blocks": [],
       "category": "Tools & setup",
       "tags": [
@@ -889,9 +889,9 @@
       "asked": "2026-10-09",
       "question": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path?",
       "why_it_matters": "Old commits still hold the values masked on 9 Oct. A rewrite changes every commit id, so it must happen before any upload. It holds the first upload only.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes: rewrite the local history once before the first upload, after keeping a full backup copy.",
+      "answered_on": "2026-10-13",
       "blocks": [],
       "category": "Security & privacy",
       "tags": [
