@@ -5,7 +5,7 @@
   "summary": "Phase 3's new feature set is built and each part passed its own check. The Phase 3 end check still has to run cleanly: a trial run was stopped because the PC ran low on memory.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:8484c2001e3658c6ce580f59bd01aac77c38df590e307a5a72e706d67078a539"
+    "content_hash": "sha256:df7a3dd3ff687ef03d62a8846ad7b4d6bce1ebf7da1a145402eba96d12e8f4b3"
   },
   "updated": "2026-10-12",
   "where_we_are": [

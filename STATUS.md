@@ -329,7 +329,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
 - task: p3.13 docs and exit gate (after the feature set)
-- intent: Feature set built (p3.17 to p3.23) and P3 docs updated (da1cd89). The gate's trial run was stopped by low memory (see log). Next: owner closes Ferrum and heavy programs, says "Closed"; Claude reruns scripts/gates/p3-gate.ps1 -SaveEvidence on a clean commit, examines any repeating failure, sets P3 to gate-review only when it passes, then STOPS and reports.
+- intent: Gate run 1 failed only in check scripts (fixed in 7cb6a40, evidence in 6bf3756). Now: rerun scripts/gates/p3-gate.ps1 -SaveEvidence on the clean commit, commit its evidence with MANIFEST lines, set P3 to gate-review only when it passes, then STOP and report.
 - paths: wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, wiki/phases/phase-p3-tabs-sessions.md, plan/portal/*
 - rollback: evidence files are new files only
 

@@ -5086,6 +5086,14 @@
       "summary": "The new features are part of the Phase 3 test run now, and your checklist has seven new items (14 to 20) for them: look and logo, appearance settings, new tab, bookmarks, address-bar search, backup, y",
       "status": null,
       "related": []
+    },
+    {
+      "id": "7cb6a40",
+      "kind": "commit",
+      "title": "Commit: Check scripts fixed for the end check",
+      "summary": "Three check scripts now expect the current number of tests, and the app tests wait until Ferrum has finished starting before pressing keys.",
+      "status": null,
+      "related": []
     }
   ]
 }

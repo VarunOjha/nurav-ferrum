@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:c3593bb3d89945ccdf532c4ed3ca1832c7e085e5da6fbba33f19b1f47a01df40"
+    "content_hash": "sha256:e38e3d1b7babcb3f285159265701be3b7a5504425b167d35722765fa88ca8121"
   },
   "entries": [
     {
@@ -3431,6 +3431,26 @@
       "commit": null,
       "covers": [
         "## [2026-10-12] gate | phase-p3-tabs-sessions exit dry run stopped by low memory (not saved)"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "testing",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-gate-1",
+      "date": "2026-10-12",
+      "time": "19:54",
+      "title": "End check run 1: Ferrum passed, four check scripts were wrong",
+      "done": "The Phase 3 end check ran with Ferrum closed. Every app test (54), the release build and the code checks passed. Four checks failed because of faults in the check scripts: three expected old test counts, and one test pressed a key before Ferrum had finished starting. Claude fixed them.",
+      "next": "Claude runs the end check again.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "7cb6a40",
+      "covers": [
+        "## [2026-10-12] gate | phase-p3-tabs-sessions exit gate run 1 FAIL (check scripts); fixed"
       ],
       "phase": "phase-p3-tabs-sessions",
       "category": "Checked",
