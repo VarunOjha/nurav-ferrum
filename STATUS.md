@@ -21,13 +21,14 @@ sources:
   - raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md
   - raw/owner/2026-10-13-s03-p4-questions.md
   - raw/owner/2026-10-13-s03-p4-pages-approval.md
+  - raw/owner/2026-10-13-s03-security-engine-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s03
 current_phase: phase-p4-security
 current_task: p4.3
-next_action: "Owner re-approves comp-security-engine (stale after the p4.2 page update); then p4.3 (connect the engine to every navigation event), per wiki/phases/phase-p4-security.md; stop after the P4 exit gate (no P5 work). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [comp-security-engine]
+next_action: "p4.3: connect the security engine to every navigation event (top level, redirects, frames, new windows, links to other apps), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.3-check-every-navigation.ps1. Stop after the P4 exit gate (no P5 work). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: []
 last_handoff: handoff-2026-10-13-s02
 ---
 
@@ -55,7 +56,7 @@ manual checklist items 1 to 20 are still owed).
   (settings in one app) answered; adr-0015 updated; five P4 pages approved; P4 entry gate passed.
 - Alt+Tab focus check (deferred at the P3 sign-off) moved to the P4 hand checks; five keys re-approved (`2f9b541`).
 - p4.1 done (`ff7292e`): threat model (15 boundary edges, 26 threats, not-enforced list) in the security testing plan and SECURITY.md; check PASS.
-- p4.2 done (`56cd05d`): navigation policy engine in `crates/security`, 24 tests, 100 percent coverage; comp-security-engine approval stale (waits for the owner).
+- p4.2 done (`56cd05d`): navigation policy engine in `crates/security`, 24 tests, 100 percent coverage; comp-security-engine re-approved by the owner.
 
 ## Done this session (s02)
 
@@ -340,7 +341,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.2 committed in 56cd05d; p4.3 waits for the re-approval of comp-security-engine)
+(empty: p4.2 committed in 56cd05d; comp-security-engine re-approved; p4.3 next)
 
 ## Blockers
 

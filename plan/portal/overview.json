@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: the threat model and the site-rules engine are done. The security engine page needs your re-approval before Claude connects the engine to the app.",
+  "summary": "Phase 4 (security) is in progress: the threat model and the site-rules engine are done, and you re-approved the engine's page. Claude now connects the engine to every page load.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:dd0bbd23007e8280f9c060b392efbd051a2bf5d2f2152f81ff3eab6c37ea9136"
+    "content_hash": "sha256:bfb390808cdc553aeb51fdb42ca5fe045816d1605bd5140d865980463cf3f371"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Security engine page out of date: waiting for you",
+      "state": "All up to date",
       "ref": "comp-security-engine"
     },
     {
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
@@ -43,12 +43,12 @@
       },
       {
         "item": "Security engine page",
-        "state": "changed with the new code; needs your re-approval"
+        "state": "Re-approved by you"
       }
     ],
-    "why": "Nothing to run. The page describing the security engine changed with the code, so your earlier approval is out of date; the next task builds on it.",
+    "why": "Nothing to run; Claude continues with the next task: every page load, redirect, frame, new window and link to another app goes through the site-rules engine first.",
     "script": null,
-    "tell_claude": "\"Re-approve the security engine page\", or ask to see the change first."
+    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
     "open": 19,

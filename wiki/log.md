@@ -2251,3 +2251,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 08:11
 - pages: [comp-security-engine]
 - result: The p4.2 page update (same commit as the code, SCHEMA §9.8) staled comp-security-engine, which is in the P4 dependency set. p4.3 waits for the owner's re-approval (SCHEMA §10.4).
+
+## [2026-10-13] approval | comp-security-engine re-approved; P4 continues
+
+- session: s03
+- time: 12:16
+- pages: [comp-security-engine]
+- sources: [raw/owner/2026-10-13-s03-security-engine-reapproval.md]
+- result: The owner said "Re-approve the security engine page". Recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key. blocked_on cleared; p4.3 (connect the engine to every navigation event) is next.

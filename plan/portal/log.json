@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:6dda80d149edc33782dbe17647c8dd9dd28235974662a29c02c74c40092c9a19"
+    "content_hash": "sha256:1819044385da70f7a41559dad11c6d3a28c1bbc12d9843b645a89d7c480d633e"
   },
   "entries": [
     {
@@ -3709,6 +3709,31 @@
       "tags": [
         "blocklist",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-security-engine-reapproved",
+      "date": "2026-10-13",
+      "time": "12:16",
+      "title": "You re-approved the security engine page",
+      "done": "You re-approved the page describing the site-rules engine, after it changed with the new code. Claude recorded your words.",
+      "next": "Claude connects the engine to every page load: typed addresses, redirects, frames, new windows and links to other apps.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | comp-security-engine re-approved; P4 continues"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "blocklist"
       ]
     }
   ]
