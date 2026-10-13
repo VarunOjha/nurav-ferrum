@@ -33,7 +33,7 @@ current_phase: phase-p4-security
 current_task: p4.5
 next_action: "p4.5 (permission prompts: camera, microphone, location, notifications and clipboard read denied by default, per-site grants), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.5-permission-prompts.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
 blocked_on: []
-last_handoff: handoff-2026-10-13-s02
+last_handoff: handoff-2026-10-13-s03
 ---
 
 # STATUS — live state (read this first every session)

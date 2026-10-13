@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:48995091257766762374951954ffd1a56128dc08f2cced0eb250045abf6aaf7f"
+    "content_hash": "sha256:1d51eb4274c07a878af371070c03f3d67f43aa2b4cf47ef62cae28b93b3c429b"
   },
   "entries": [
     {
@@ -3911,6 +3911,26 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-handoff",
+      "date": "2026-10-13",
+      "time": "18:51",
+      "title": "Session ended: Phase 4 at 4 of 17 tasks",
+      "done": "Claude wrote the end-of-session note: Phase 3 signed off; in Phase 4 the threat model, the site rules, checks on every page load and the link-type rules are done. All approvals are up to date. One known check finding waits for the history cleanup.",
+      "next": "Next session: permission prompts (camera, microphone, location and others refused by default).",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] handoff | s03 ends: P4 at 4 of 17 tasks, p4.5 next"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "sessions",
+        "phases"
       ]
     }
   ]
