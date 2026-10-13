@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-app-notes"
+description = "Enables the app_notes command without any pre-configured scope."
+commands.allow = ["app_notes"]
+
+[[permission]]
+identifier = "deny-app-notes"
+description = "Denies the app_notes command without any pre-configured scope."
+commands.deny = ["app_notes"]

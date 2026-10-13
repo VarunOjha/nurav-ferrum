@@ -1,6 +1,7 @@
 //! Backup and restore (P3 feature set, p3.21, adr-0032): export bookmarks and history to one passphrase-locked file
 //! (`ferrum_core::backup`), and import such a file: look inside first, then merge or replace. Only the trusted shell
-//! may call these commands. The passphrase is never stored or logged and is wiped from memory after use; the slow key
+//! may call these commands. The passphrase is never stored or logged; Ferrum's own copies of it and of the key are
+//! wiped after use (the copy in the request from the shell is not under Ferrum's control). The slow key
 //! derivation runs off the main thread. Replace first writes a dated copy of `ferrum.db` beside it.
 
 use std::path::{Path, PathBuf};
@@ -112,7 +113,11 @@ pub async fn backup_export(
     off_main(move || {
         let contents = app.state::<Library>().lock().export(now_ms()).map_err(|e| e.to_string())?;
         let sealed = backup::seal(&contents, &passphrase).map_err(|e| e.to_string())?;
-        ferrum_core::fsutil::write_atomic(&p, &sealed).map_err(|e| format!("Cannot write the file: {e}"))?;
+        // Never over an existing file, even one that appeared during the slow key derivation (P3 self-scan).
+        ferrum_core::fsutil::write_new(&p, &sealed).map_err(|e| match e.kind() {
+            std::io::ErrorKind::AlreadyExists => "A file with this name exists already; choose another name.".to_string(),
+            _ => format!("Cannot write the file: {e}"),
+        })?;
         tracing::info!(target: "ferrum::backup", bookmarks = contents.bookmarks.len(), history = contents.history.len(), "backup exported");
         Ok(BackupSummary {
             bookmarks: contents.bookmarks.len(),

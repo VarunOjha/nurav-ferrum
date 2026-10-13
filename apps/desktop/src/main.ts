@@ -73,6 +73,7 @@ const top = $<HTMLDivElement>("top");
 const tabsEl = $<HTMLDivElement>("tabs");
 const newTab = $<HTMLButtonElement>("new-tab");
 const statusEl = $<HTMLSpanElement>("status");
+const sidebar = $<HTMLElement>("sidebar");
 const extBar = $<HTMLDivElement>("external-bar");
 const extText = $<HTMLSpanElement>("external-text");
 const extUri = $<HTMLElement>("external-uri");
@@ -95,6 +96,8 @@ const retry = $<HTMLButtonElement>("error-retry");
 const ui = new Map<number, TabUi>();
 /** The tab the settings screen covers (p3.14), if it is open. */
 let settingsCovering: number | null = null;
+// The empty tab whose view the new-tab page hides (declared here, before the first event can arrive).
+let newtabCovering: number | null = null;
 let list: TabList = { active: null, tabs: [] };
 const uiOf = (id: number): TabUi => {
   let u = ui.get(id);
@@ -250,6 +253,7 @@ async function hidePanelFor(id: number): Promise<void> {
   if (!u.panel) return;
   u.panel = null;
   if (id === list.active) render();
+  if (settingsCovering === id || newtabCovering === id) return; // another panel still hides this tab's view
   await invoke("shell_cover", { cover: false, tab: id });
 }
 
@@ -480,7 +484,6 @@ function shellCommand(action: string): void {
 
 // --- Sidebar (p3.15): open tabs and history, left of the content area. ---
 type HistoryEntry = { url: string; title: string; visited_at: number };
-const sidebar = $<HTMLElement>("sidebar");
 const sidebarBtn = $<HTMLButtonElement>("sidebar-btn");
 const sideTabs = $<HTMLUListElement>("side-tabs");
 const sideHistory = $<HTMLUListElement>("side-history");
@@ -815,6 +818,10 @@ async function choose(i: number): Promise<void> {
   else await invoke("tab_navigate", { input: s.url });
 }
 address.addEventListener("input", () => {
+  if (selected >= 0) {
+    selected = -1;
+    markSelected();
+  }
   window.clearTimeout(suggestTimer);
   suggestTimer = window.setTimeout(() => void updateSuggest(), 60);
 });
@@ -869,6 +876,7 @@ async function openBackup(): Promise<void> {
     settingsCovering = list.active;
     await invoke("shell_cover", { cover: true, tab: settingsCovering });
   }
+  render();
   bkPass1.focus();
 }
 async function closeBackup(): Promise<void> {
@@ -913,6 +921,13 @@ $<HTMLFormElement>("bk-import-form").addEventListener("submit", async (e) => {
     say(bkPreview, String(err), true);
   }
 });
+function disarmImport(): void {
+  bkChoose.hidden = true;
+  bkReplace.dataset.confirm = "";
+  bkReplace.textContent = "Replace mine";
+}
+// Changing the file or the passphrase after "look inside" means looking again before Merge or Replace.
+for (const el of [bkIn, bkPass3]) el.addEventListener("input", () => { if (!bkChoose.hidden) { disarmImport(); say(bkPreview, ""); } });
 async function runImport(replace: boolean): Promise<void> {
   say(bkImportStatus, "Importing\u2026");
   try {
@@ -923,6 +938,8 @@ async function runImport(replace: boolean): Promise<void> {
     say(bkImportStatus, `Added ${counts(r.bookmarks, r.history)}${r.skipped ? `; ${r.skipped} skipped (already here, or not a web page)` : ""}.${copy}`);
     await loadBookmarks();
   } catch (err) {
+    bkReplace.dataset.confirm = "";
+    bkReplace.textContent = "Replace mine";
     say(bkImportStatus, String(err), true);
   }
 }
@@ -941,7 +958,6 @@ $<HTMLButtonElement>("side-backup").addEventListener("click", () => void openBac
 
 // --- New-tab page (p3.22, adr-0033): over an empty tab, the logo, a search box that opens the address bar, the
 // bookmarks bar's favourites and the most visited pages. The empty tab's view is hidden meanwhile (shell_cover). ---
-let newtabCovering: number | null = null;
 function isBlank(u: TabUi | undefined): boolean {
   return Boolean(u) && (u!.uri === "" || u!.uri === "about:blank") && !u!.loading && !u!.panel;
 }
@@ -1091,6 +1107,7 @@ async function openSettings(): Promise<void> {
     settingsCovering = list.active;
     await invoke("shell_cover", { cover: true, tab: settingsCovering });
   }
+  render();
   setStartup.focus();
 }
 async function closeSettings(): Promise<void> {
@@ -1249,3 +1266,8 @@ invoke<string>("app_ping")
   .catch(() => {
     statusEl.textContent = "Bridge not available";
   });
+invoke<string[]>("app_notes")
+  .then((notes) => {
+    if (notes.length) statusEl.textContent = notes.join(" ");
+  })
+  .catch(() => {});

@@ -48,6 +48,7 @@ fn main() {
             "backup_import",
             "settings_get",
             "settings_set",
+            "app_notes",
             "shell_focused",
             "external_open_confirm",
             "external_cancel",

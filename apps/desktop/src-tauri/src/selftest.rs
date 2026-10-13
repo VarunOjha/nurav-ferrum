@@ -84,6 +84,11 @@ fn all_refused(report: &Option<Value>) -> bool {
         "event_listen",
         "event_emit",
         "settings_command",
+        "bookmark_command",
+        "history_command",
+        "suggest_command",
+        "backup_command",
+        "appearance_command",
     ]
     .iter()
     .all(|k| r[*k]["ok"] == json!(false))

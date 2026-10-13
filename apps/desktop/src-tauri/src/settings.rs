@@ -142,17 +142,42 @@ pub fn apply(current: &Config, input: &SettingsView) -> Result<Config, Vec<Strin
     }
 }
 
+/// The user settings file to save to, or why Ferrum must not write it this run.
+pub fn user_file(app: &AppHandle) -> Result<std::path::PathBuf, String> {
+    let s = app.state::<UserConfigPath>();
+    if let Some(why) = &s.1 {
+        return Err(format!(
+            "Your settings file was not changed: it could not be used when Ferrum started ({why}). Close Ferrum, \
+             fix or move that file, then start Ferrum again."
+        ));
+    }
+    s.0.clone()
+        .ok_or_else(|| "Ferrum does not know where its settings file is.".to_string())
+}
+
+/// Problems from start-up the shell shows once: settings that could not be used, a library kept in memory only.
+#[tauri::command]
+pub fn app_notes(app: AppHandle) -> Vec<String> {
+    let mut notes = Vec::new();
+    if let Some(why) = &app.state::<UserConfigPath>().1 {
+        notes.push(format!(
+            "Your settings file could not be used ({why}); Ferrum runs with the standard settings and will not \
+             change the file."
+        ));
+    }
+    if let Some(p) = &app.state::<crate::library::Library>().problem {
+        notes.push(p.clone());
+    }
+    notes
+}
+
 /// Saves the settings from the settings screen: everything is checked first; then the user settings file is written
 /// in one step and the new settings apply. On any problem nothing changes and the problems are returned.
 #[tauri::command]
 pub fn settings_set(app: AppHandle, input: SettingsView) -> Result<SettingsView, Vec<String>> {
     let current = app.state::<AppConfig>().get();
     let next = apply(&current, &input)?;
-    let Some(path) = app.state::<UserConfigPath>().0.clone() else {
-        return Err(vec![
-            "Ferrum does not know where its settings file is.".into(),
-        ]);
-    };
+    let path = user_file(&app).map_err(|e| vec![e])?;
     let loaded = config::validate(next.clone()).map_err(|e| vec![e.to_string()])?;
     config::save(&path, &loaded.config).map_err(|e| vec![e.to_string()])?;
     tracing::info!(target: "ferrum::config", config_hash = %config::hash(&loaded.config), "settings saved from the settings screen");

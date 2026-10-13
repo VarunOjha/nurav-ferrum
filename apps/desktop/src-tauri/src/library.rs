@@ -18,6 +18,8 @@ pub struct Library {
     pub path: Option<PathBuf>,
     /// False when the store is in memory only (self-tests, or a file Ferrum could not use).
     pub on_disk: bool,
+    /// Why the file is not used this run, in plain words for the shell (none when all is well or in self-tests).
+    pub problem: Option<String>,
     store: Mutex<Store>,
 }
 
@@ -40,28 +42,41 @@ pub fn open(app: &tauri::App, data_dir: Option<PathBuf>) -> Library {
         tracing::warn!(target: "ferrum::library", "no data folder: library kept in memory");
         return memory(None);
     };
-    let is_new = !p.exists();
     match Store::open(&p) {
         Ok(mut store) => {
-            if is_new && let Some(d) = &dir {
+            // Until it has been imported (and renamed), an old history.json is tried at every start, so a failed
+            // or interrupted first import is not lost (P3 self-scan, 2026-10-13).
+            if let Some(d) = &dir {
                 import_old_history(&mut store, d);
             }
             Library {
                 path: Some(p),
                 on_disk: true,
+                problem: None,
                 store: Mutex::new(store),
             }
         }
         Err(e @ StoreError::Newer(_)) => {
             tracing::warn!(target: "ferrum::library", error = %e, "library not used and not overwritten");
-            memory(Some(p))
+            let mut l = memory(Some(p));
+            l.problem = Some(
+                "Your bookmarks and history file is from a newer Ferrum, so it was left alone. This session's \
+                 bookmarks and history will not be kept."
+                    .into(),
+            );
+            l
         }
         Err(e) => {
             let backup = ferrum_core::fsutil::backup_broken(&p)
                 .map(|b| b.display().to_string())
                 .unwrap_or_else(|be| format!("(no copy: {be})"));
             tracing::warn!(target: "ferrum::library", error = %e, backup = %backup, "library file not used");
-            memory(Some(p))
+            let mut l = memory(Some(p));
+            l.problem = Some(format!(
+                "Your bookmarks and history file could not be opened ({e}); a copy was kept as {backup}. This \
+                 session's bookmarks and history will not be kept."
+            ));
+            l
         }
     }
 }
@@ -70,6 +85,7 @@ fn memory(path: Option<PathBuf>) -> Library {
     Library {
         path,
         on_disk: false,
+        problem: None,
         store: Mutex::new(Store::in_memory()),
     }
 }

@@ -42,6 +42,7 @@
     "allow-backup-preview",
     "allow-backup-import",
     "allow-settings-get",
+    "allow-app-notes",
     "allow-settings-set",
     "allow-shell-focused",
     "allow-external-open-confirm",

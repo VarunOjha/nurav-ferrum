@@ -102,7 +102,9 @@ fn relayout(window: &Window) -> tauri::Result<()> {
 
 /// Where the user's settings file is: `--user-config <path>` if given (tests use their own file), else
 /// `config.toml` in the app config folder (`%APPDATA%\dev.ferrum.desktop`).
-pub struct UserConfigPath(pub Option<PathBuf>);
+/// The user settings file, and why Ferrum must not overwrite it this run (it could not be used at start and no copy
+/// of it was kept: unreadable, or from a newer Ferrum). P3 self-scan, 2026-10-13.
+pub struct UserConfigPath(pub Option<PathBuf>, pub Option<String>);
 
 fn arg_after(flag: &str) -> Option<PathBuf> {
     let args: Vec<String> = std::env::args().collect();
@@ -116,14 +118,15 @@ fn arg_after(flag: &str) -> Option<PathBuf> {
 /// could not be used, why (logged once logging has started). Never starts with half-read settings: a user file
 /// that cannot be used is skipped (the defaults, or the override file, apply). A user file that cannot be read as
 /// TOML is first copied aside (`<name>.broken-<time>`), so nothing is lost; a file from a newer Ferrum is left
-/// exactly as it is (p3.4).
-fn load_config(user: Option<&std::path::Path>) -> (config::Loaded, Option<String>) {
+/// exactly as it is (p3.4). The third value says why the user file must not be overwritten this run, if so.
+fn load_config(user: Option<&std::path::Path>) -> (config::Loaded, Option<String>, Option<String>) {
     let over = arg_after("--config");
     let defaults = || config::validate(config::Config::default()).expect("defaults are valid");
     match config::load(user, over.as_deref()) {
-        Ok(l) => (l, None),
+        Ok(l) => (l, None, None),
         Err(e) => {
             let mut why = e.to_string();
+            let mut keep = None;
             let failed_path = match &e {
                 config::ConfigError::Parse { path, .. }
                 | config::ConfigError::NewerVersion { path, .. }
@@ -134,17 +137,23 @@ fn load_config(user: Option<&std::path::Path>) -> (config::Loaded, Option<String
             if let (config::ConfigError::Parse { .. }, true, Some(u)) = (&e, user_failed, user) {
                 match config::backup_broken(u) {
                     Ok(b) => why.push_str(&format!("; a copy was kept as {}", b.display())),
-                    Err(be) => why.push_str(&format!("; no backup copy could be made ({be})")),
+                    Err(be) => {
+                        why.push_str(&format!("; no backup copy could be made ({be})"));
+                        keep = Some(why.clone());
+                    }
                 }
+            } else if user_failed {
+                // Unreadable (perhaps locked for a moment) or from a newer Ferrum: saving now would replace it.
+                keep = Some(why.clone());
             }
             if user_failed && over.is_some() {
                 // The override file still applies (experiments and tests keep their data folder).
                 match config::load(None, over.as_deref()) {
-                    Ok(l) => return (l, Some(why)),
+                    Ok(l) => return (l, Some(why), keep),
                     Err(e2) => why.push_str(&format!("; the override file failed too: {e2}")),
                 }
             }
-            (defaults(), Some(why))
+            (defaults(), Some(why), keep)
         }
     }
 }
@@ -195,6 +204,7 @@ fn main() {
             history::library_suggest,
             settings::settings_get,
             settings::settings_set,
+            settings::app_notes,
             bookmarks::bookmark_list,
             bookmarks::bookmark_for,
             bookmarks::bookmark_add,
@@ -216,8 +226,8 @@ fn main() {
                     .ok()
                     .map(|d| d.join("config.toml"))
             });
-            let (loaded, config_error) = load_config(user_config.as_deref());
-            app.manage(UserConfigPath(user_config));
+            let (loaded, config_error, keep_user_file) = load_config(user_config.as_deref());
+            app.manage(UserConfigPath(user_config, keep_user_file));
             // Logs: <data_dir>/logs when a data folder is configured, else the app's log folder (p2.14).
             let log_dir = match &loaded.config.storage.data_dir {
                 Some(d) => Some(d.join("logs")),

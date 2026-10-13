@@ -3162,7 +3162,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 as a first version: one website area with address bar, back, forward, reload, loading and error states, and the bars that ask before links leave Ferrum. Tabs and the Ferrum panel ([the look you chose](ref:adr-0028)) come later. Risk: the multi-view feature is experimental in Tauri; it held up in P1 and P2.",
+      "summary": "The window you use. Built in P2 and grown in P3: tabs with one website view each, address bar with search of the past, bookmarks bar and sidebar, settings, downloads, encrypted backup and the Graphite look ([the look you chose](ref:adr-0033)). Risk: the multi-view feature is experimental in Tauri; it held up through P3.",
       "status": "Built (first working app)",
       "related": [
         "layer-controls"

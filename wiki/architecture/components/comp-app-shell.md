@@ -4,7 +4,7 @@ type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -224,6 +224,18 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   ([check-p3.22](../../raw/evidence/phase-p3-tabs-sessions/check-p3.22.txt); screenshots
   [dark](../../raw/evidence/phase-p3-tabs-sessions/design/p3.22-look-dark.png) and
   [light](../../raw/evidence/phase-p3-tabs-sessions/design/p3.22-look-light.png)).
+- P3 self-scan fixes (2026-10-13, owner request): (1) a user settings file that could not be used at start (unreadable,
+  from a newer Ferrum, or broken with no copy made) is never overwritten: Settings and Appearance refuse to save and say
+  why (`UserConfigPath` carries the reason; `settings::user_file`). (2) New shell-only command `app_notes`: start-up
+  problems (that settings file, or a `ferrum.db` that could not be used and is kept in memory) are shown in the status
+  area instead of only in the log. (3) An old `history.json` is imported at every start until it has been renamed, so a
+  failed first import is retried. (4) Backup export never replaces a file, even one that appeared during the key
+  derivation (`fsutil::write_new`); two session saves at the same moment use separate temporary files. (5) Shell:
+  changing the backup file or passphrase after "look inside" hides Merge and Replace again, and a failed replace asks
+  twice again; an error panel going away no longer shows the page over Settings, Backup or the new-tab page; the
+  new-tab page hides at once under Settings and Backup; typing again forgets the highlighted suggestion; variables
+  used by early events are declared before the first await. (6) The p2.3 lockdown probe now also tries the bookmark,
+  history, suggestion, backup and appearance commands from a website (all must be refused).
 - p3.8, downloads (`downloads.rs`): files go to `[downloads] folder` (else the Windows Downloads folder) under the
   name WebView2 suggests (the file name only; a name already on disk or already given out in this run gets
   ` (1)`, ` (2)`, ...: nothing is ever replaced). The shell's downloads bar (top band) shows each download: percent and

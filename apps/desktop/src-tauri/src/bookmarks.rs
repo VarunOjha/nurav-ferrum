@@ -8,7 +8,6 @@ use ferrum_core::store::{BAR_FOLDER, Bookmark};
 use serde::Serialize;
 use tauri::{AppHandle, Manager};
 
-use crate::UserConfigPath;
 use crate::content::AppConfig;
 use crate::library::{Library, now_ms};
 
@@ -131,9 +130,7 @@ pub fn appearance_set(
     if let Some(d) = &density {
         a.density = named("density", d)?;
     }
-    let Some(path) = app.state::<UserConfigPath>().0.clone() else {
-        return Err("Ferrum does not know where its settings file is.".into());
-    };
+    let path = crate::settings::user_file(&app)?;
     let loaded = config::validate(next).map_err(|e| e.to_string())?;
     config::save(&path, &loaded.config).map_err(|e| e.to_string())?;
     *app.state::<AppConfig>().0.write().unwrap() = loaded;
