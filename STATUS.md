@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: p3.13
-next_action: "Owner: close every Ferrum window and other heavy programs, and say \"Closed\". Then Claude runs scripts/gates/p3-gate.ps1 -SaveEvidence (about 30 minutes; real keys are pressed, so do not type meanwhile), examines any failure that repeats, and reports. After that the owner checks docs/testing/manual-checklist-p3.md items 1 to 20, re-approves the pages changed in P3 (comp-app-shell, comp-core, ov-arch-trust-boundaries, ov-arch-configuration, adr-0011, adr-0015, adr-0032, adr-0033) and says whether P3 is signed off. No P4 work."
+next_action: "Owner: review Phase 3. (1) Re-approve or comment on the six pages changed in P3: adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core. (2) Work through docs/testing/manual-checklist-p3.md items 1 to 20 with the release build (target/release/ferrum-desktop.exe) and tell Claude the results. (3) Say whether P3 is signed off. Claude records each in wiki/raw/owner/ with tools/approvals_record.py, reruns scripts/gates/p3-gate.ps1 -SaveEvidence, runs scripts/verify/p3.13-docs-gate-review.ps1, sets P3 done and pauses. No P4 work without an explicit go."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -328,10 +328,10 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.13 docs and exit gate (after the feature set)
-- intent: Gate run 1 failed only in check scripts (fixed in 7cb6a40, evidence in 6bf3756). Now: rerun scripts/gates/p3-gate.ps1 -SaveEvidence on the clean commit, commit its evidence with MANIFEST lines, set P3 to gate-review only when it passes, then STOP and report.
-- paths: wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, wiki/phases/phase-p3-tabs-sessions.md, plan/portal/*
-- rollback: evidence files are new files only
+- task: p3.13 docs and exit gate: waiting for the owner
+- intent: Gate run 2 (2d57975) passed every Claude item; P3 is gate-review. Waiting for the owner: re-approval of adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core; checklist items 1 to 20; P3 sign-off. Then: record them, rerun the gate, run scripts/verify/p3.13-docs-gate-review.ps1, set P3 done, PAUSE.
+- paths: wiki/raw/owner/*, plan/approvals.json, docs/testing/manual-checklist-p3.md, wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, wiki/phases/phase-p3-tabs-sessions.md, plan/portal/*
+- rollback: owner records and evidence are new files only
 
 ## Blockers
 
@@ -367,16 +367,22 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| New feature set | Built: 6 steps, each with its own passing check |
-| Phase 3 end check | A trial run was stopped because the PC ran low on memory; nothing saved |
-| Your Ferrum window | Open; it blocks the release build |
-| Phase 4 | Not started |
+| Phase 3 end check | Claude's part: all 30 checks passed |
+| Six changed pages | Waiting for your re-approval |
+| Your checklist (items 1 to 20) | Waiting for you |
+| Phase 3 sign-off | Waiting for you |
+| Phase 4 | Not started; needs your sign-off and an explicit go |
 
-**2. Why, and what it does.** The end check builds the release program and runs every test on one commit → it needs the program file free and enough memory → then you get saved evidence for your sign-off.
+**2. Why, and what it does.** Only you can approve the changed pages and sign off the phase → your hands-on check finds what automated tests cannot → then Phase 3 can close.
 
-**3. The script:** none. Close every Ferrum window and other heavy programs (many browser tabs, big apps).
+**3. The script:** run the release build to work through the checklist:
 
-**4. What to tell Claude:** "Closed".
+```powershell
+# Opens the Ferrum release build you will check (close it when you are done).
+& "$HOME\Documents\Projects\ferrum-rust-webclient\target\release\ferrum-desktop.exe"
+```
+
+**4. What to tell Claude:** your checklist results (item number, ok or what went wrong), "approve" (or comments) for the six pages, and whether Phase 3 is signed off.
 
 ## Pending owner approvals
 
@@ -387,4 +393,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-12, session s02 (feature set built; the P3 gate trial run was stopped by low memory; waiting for the owner to close Ferrum). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-12, session s02 (P3 end check: Claude's part all PASS; P3 waiting for the owner's review). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).

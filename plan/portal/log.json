@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e38e3d1b7babcb3f285159265701be3b7a5504425b167d35722765fa88ca8121"
+    "content_hash": "sha256:8658a10c683f2e2d48fc06ef159c225f8459fc7b6ab0c9264d75e76b9787b224"
   },
   "entries": [
     {
@@ -3451,6 +3451,26 @@
       "commit": "7cb6a40",
       "covers": [
         "## [2026-10-12] gate | phase-p3-tabs-sessions exit gate run 1 FAIL (check scripts); fixed"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Checked",
+      "tags": [
+        "testing",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-12-p3-gate-2",
+      "date": "2026-10-12",
+      "time": "20:23",
+      "title": "Phase 3 end check: Claude's part all passed; your review is next",
+      "done": "The Phase 3 end check ran again on one saved version: all 30 of Claude's checks passed, including every app test, the release build and the earlier Phase 2 tests. What is left is yours: re-approve six changed pages, work through the checklist, and decide on the sign-off.",
+      "next": "You review Phase 3; Claude waits. No Phase 4 work.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "2d57975",
+      "covers": [
+        "## [2026-10-12] gate | phase-p3-tabs-sessions exit ready for review again (after the feature set)"
       ],
       "phase": "phase-p3-tabs-sessions",
       "category": "Checked",

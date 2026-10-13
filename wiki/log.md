@@ -2110,3 +2110,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: scripts/gates/p3-gate.ps1 -SaveEvidence on 0dd59ae (owner had closed Ferrum; 9.3 GB free): 25 PASS, 4 FAIL, 3 WAIT, 2 YOURS. Part 3 all PASS: fmt and clippy, cargo test, cargo deny, shell lint/types/unit tests, release build, npm run p3 (54 passed), npm run p2 (26 passed) and p2.3, wiki lint. The 4 FAILs were in check scripts, not in Ferrum: p3.2, p3.7 and p3.8 expected test counts from before p3.16 and p3.18 added tests; p3.19's settings.spec pressed Ctrl+, before the shell's start-up had attached its key handler (also seen in the trial run). Fixed in 7cb6a40 (current counts; the shell marks html[data-ready] and the smoke helper waits for it); p3.2 and p3.14 checks PASS afterwards. WAITs: Part 1 and p3.17 (owner re-approvals) and p3.3 (Ferrum was not the active window when keys were due). Evidence committed in 6bf3756.
 - next: rerun scripts/gates/p3-gate.ps1 -SaveEvidence on the clean commit.
 - commit: 7cb6a40
+
+## [2026-10-12] gate | phase-p3-tabs-sessions exit ready for review again (after the feature set)
+
+- session: s02
+- time: 20:23
+- pages: [phase-p3-tabs-sessions]
+- sources: [raw/evidence/phase-p3-tabs-sessions/p3-gate.20261012-2022.txt]
+- result: scripts/gates/p3-gate.ps1 -SaveEvidence on d92ae4f: NOT READY with Claude's part complete (30 PASS, 2 WAIT, 2 YOURS; 1668 s). Every task check p3.1 to p3.23 PASS except p3.17, which waits on the owner's approval of adr-0033; test gate all PASS (fmt and clippy, cargo test, cargo deny, shell lint/types/unit tests, release build, npm run p3, npm run p2 and p2.3, wiki lint). Waiting for the owner: re-approval of adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell and comp-core (approvals_check: STALE); docs/testing/manual-checklist-p3.md items 1 to 20; the P3 sign-off. Evidence committed in 2d57975. Status set to gate-review. PAUSE: no P4 work.
+- next: owner reviews; Claude records the re-approvals, the checklist answers and the sign-off, reruns the gate, runs scripts/verify/p3.13-docs-gate-review.ps1, sets P3 to done and pauses.
+- commit: 2d57975

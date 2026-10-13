@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3's new feature set is built and each part passed its own check. The Phase 3 end check still has to run cleanly: a trial run was stopped because the PC ran low on memory.",
+  "summary": "Phase 3 is built and all of Claude's end checks passed. It now waits for your review: six changed pages, your checklist, and the sign-off.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:df7a3dd3ff687ef03d62a8846ad7b4d6bce1ebf7da1a145402eba96d12e8f4b3"
+    "content_hash": "sha256:6e81967a55857f152a515b80b7aabbd44276352a2d5cd37647aca3148d2956ad"
   },
   "updated": "2026-10-12",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: feature set built; end check to run",
+      "state": "P3 Tabs and sessions: waiting for your review",
       "ref": "phase-p3-tabs-sessions"
     },
     {
@@ -37,17 +37,17 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "Feature set",
-        "state": "built and checked"
+        "item": "End check",
+        "state": "Claude's part: all 30 passed"
       },
       {
-        "item": "End check",
-        "state": "needs Ferrum closed and free memory"
+        "item": "Your review",
+        "state": "6 pages, checklist, sign-off"
       }
     ],
-    "why": "The end check builds the release program and runs every test; it needs the program file free and enough memory.",
+    "why": "Only you can approve the changed pages and sign off; your hands-on check finds what tests cannot.",
     "script": null,
-    "tell_claude": "\"Closed\" once every Ferrum window and other heavy programs are closed."
+    "tell_claude": "Your checklist results, \"approve\" or comments for the six pages, and whether Phase 3 is signed off."
   },
   "questions_for_you": {
     "open": 23,
