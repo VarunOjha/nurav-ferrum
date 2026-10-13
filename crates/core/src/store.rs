@@ -139,6 +139,13 @@ pub fn check_url(url: &str) -> Result<(), StoreError> {
     if url.len() > MAX_URL {
         return Err(StoreError::Invalid("the address is too long".into()));
     }
+    // The parser would quietly drop spaces at the ends and tabs or line breaks inside; the stored text must be the
+    // address as checked, so such text is refused (P3 self-scan, 2026-10-13).
+    if url.trim() != url || url.chars().any(char::is_control) {
+        return Err(StoreError::Invalid(
+            "not a web address: it has spaces at the ends or hidden characters".into(),
+        ));
+    }
     match url::Url::parse(url) {
         Ok(u) if u.scheme() == "http" || u.scheme() == "https" => Ok(()),
         Ok(u) => Err(StoreError::Invalid(format!(
@@ -147,6 +154,12 @@ pub fn check_url(url: &str) -> Result<(), StoreError> {
         ))),
         Err(e) => Err(StoreError::Invalid(format!("not a web address: {e}"))),
     }
+}
+
+/// A time in milliseconds from a file (old history or a backup) as stored: values too large for the database are
+/// capped instead of wrapping round to negative times.
+fn stamp(ms: u64) -> i64 {
+    i64::try_from(ms).unwrap_or(i64::MAX)
 }
 
 /// `s` without control characters, cut to `max` characters.
@@ -231,6 +244,12 @@ impl Store {
                 "BEGIN; {SCHEMA} PRAGMA user_version = {SCHEMA_VERSION}; COMMIT;"
             ))?;
         }
+        // FTS5's own secure delete: removing one entry or bookmark (Shift+Delete, the history limit, an import that
+        // replaces) also removes its words from the index pages, not only Clear history (P3 self-scan, 2026-10-13).
+        conn.execute_batch(
+            "INSERT INTO history_words (history_words, rank) VALUES ('secure-delete', 1);
+             INSERT INTO bookmark_words (bookmark_words, rank) VALUES ('secure-delete', 1);",
+        )?;
         // Reading the index checks it is usable (a damaged file fails here, not later).
         conn.query_row("SELECT count(*) FROM history_words", [], |r| {
             r.get::<_, i64>(0)
@@ -369,7 +388,7 @@ impl Store {
                     st.execute(params![
                         e.url,
                         clean(&e.title, MAX_TITLE),
-                        e.visited_at as i64
+                        stamp(e.visited_at)
                     ])?;
                     n += 1;
                 }
@@ -433,7 +452,7 @@ impl Store {
                     title = b.url.chars().take(MAX_TITLE).collect();
                 }
                 let position: i64 = next.query_row(params![folder], |x| x.get(0))?;
-                add.execute(params![b.url, title, folder, position, b.created_at as i64])?;
+                add.execute(params![b.url, title, folder, position, stamp(b.created_at)])?;
                 r.bookmarks += 1;
             }
             let mut seen =
@@ -442,14 +461,14 @@ impl Store {
                 tx.prepare("INSERT INTO history (url, title, visited_at) VALUES (?1, ?2, ?3)")?;
             // Oldest first, so ids grow with time like normal visits.
             for e in c.history.iter().rev() {
-                if check_url(&e.url).is_err() || seen.exists(params![e.url, e.visited_at as i64])? {
+                if check_url(&e.url).is_err() || seen.exists(params![e.url, stamp(e.visited_at)])? {
                     r.skipped += 1;
                     continue;
                 }
                 visit.execute(params![
                     e.url,
                     clean(&e.title, MAX_TITLE),
-                    e.visited_at as i64
+                    stamp(e.visited_at)
                 ])?;
                 r.history += 1;
             }
@@ -777,6 +796,52 @@ mod tests {
             "a cleared title is still in the file"
         );
         assert!(text.contains("kept.example"));
+    }
+
+    #[test]
+    fn removing_one_entry_or_bookmark_leaves_its_words_nowhere_in_the_file() {
+        let p = temp("remove-one");
+        {
+            let mut s = Store::open(&p).unwrap();
+            for i in 0..50 {
+                s.visit(&format!("https://keep{i}.example/"), i).unwrap();
+            }
+            s.visit("https://gone-trace.example/x", 100).unwrap();
+            s.set_title("https://gone-trace.example/x", "Forgotten Marker")
+                .unwrap();
+            let id = s
+                .add_bookmark("https://dropped-mark.example/", "Dropped Marker", None, 1)
+                .unwrap();
+            s.remove_history_url("https://gone-trace.example/x")
+                .unwrap();
+            assert!(s.remove_bookmark(id.id).unwrap());
+            assert!(s.history("forgotten", 10).unwrap().is_empty());
+            assert!(s.search_bookmarks("dropped", 10).unwrap().is_empty());
+        }
+        let text = String::from_utf8_lossy(&std::fs::read(&p).unwrap()).to_lowercase();
+        for gone in [
+            "gone-trace",
+            "forgotten marker",
+            "dropped-mark",
+            "dropped marker",
+        ] {
+            assert!(!text.contains(gone), "'{gone}' is still in the file");
+        }
+        assert!(text.contains("keep49"));
+    }
+
+    #[test]
+    fn addresses_with_spaces_or_hidden_characters_are_refused() {
+        for bad in [
+            " https://a.example/",
+            "https://a.example/
+",
+            "https://a.	example/",
+        ] {
+            assert!(check_url(bad).is_err(), "{bad:?} was accepted");
+        }
+        assert!(check_url("https://a.example/").is_ok());
+        assert_eq!(stamp(u64::MAX), i64::MAX);
     }
 
     #[test]

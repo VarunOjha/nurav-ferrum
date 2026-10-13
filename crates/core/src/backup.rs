@@ -142,7 +142,9 @@ impl std::fmt::Display for BackupError {
                     "wrong passphrase, or the file was changed or damaged; nothing was imported"
                 )
             }
-            BackupError::TooLarge => write!(f, "the file is larger than 100 MB; refused"),
+            BackupError::TooLarge => {
+                write!(f, "a backup file is limited to 100 MB; this one is larger")
+            }
             BackupError::BadContents(m) => write!(f, "the backup's contents are not usable: {m}"),
             BackupError::Failed(m) => write!(f, "{m}"),
         }
@@ -189,10 +191,14 @@ pub fn seal_with(
     header.extend_from_slice(&cost.p.to_le_bytes());
     header.extend_from_slice(&salt);
     header.extend_from_slice(&nonce);
-    let k = key(passphrase, &salt, cost)?;
     let plain = Zeroizing::new(
         serde_json::to_vec(contents).map_err(|e| BackupError::Failed(e.to_string()))?,
     );
+    // A file that `open` would refuse is never written (16 bytes: the authentication tag).
+    if (HEADER + plain.len() + 16) as u64 > MAX_FILE {
+        return Err(BackupError::TooLarge);
+    }
+    let k = key(passphrase, &salt, cost)?;
     let cipher = XChaCha20Poly1305::new_from_slice(k.as_ref())
         .map_err(|e| BackupError::Failed(e.to_string()))?;
     let sealed = cipher

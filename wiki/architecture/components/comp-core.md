@@ -4,7 +4,7 @@ type: component
 title: "Core crate (shared types, config schema, traits)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/research/tauri-webview2-capabilities.md
@@ -92,6 +92,12 @@ Unit tests: `crates/core/tests/{config,address,oauth,tabs}.rs`.
   key and plaintext wiped after use; files over 100 MB refused. `seal`, `open`. Store gains `export`, `import` (merge
   skips what is there; replace empties first; one transaction; non-web addresses dropped) and `copy_to`
   (`VACUUM INTO`, never over an existing file). 8 unit tests ([check-p3.21](../../raw/evidence/phase-p3-tabs-sessions/check-p3.21.20261012-1618.txt)).
+- P3 self-scan fixes (2026-10-13): both word indexes use FTS5's own `secure-delete`, so removing one entry or bookmark
+  (Shift+Delete, the history limit, an import that replaces) also removes its words from the file, not only Clear
+  history; `check_url` refuses an address with spaces at the ends or hidden characters (the stored text is the text
+  checked); times from an old `history.json` or a backup are capped instead of wrapping to negative values; `seal`
+  refuses to write a backup over 100 MB (one `open` would refuse); `argon2` and `chacha20poly1305` are built with
+  their `zeroize` features, so their own copies of the key material are wiped too. Two more unit tests.
 - `config` (p3.8): `[downloads] folder` (none = the Windows Downloads folder).
 - `config` (p3.2): `[security] new_window` gains `"new-tab"`, now the default (`same-view` was the P2 default).
 - `config` (p3.4): the file carries `version` (`VERSION` = 2). A file without it is version 1 (P2) and is migrated
