@@ -251,6 +251,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 - [handoff-2026-10-09-s01](operations/handoffs/handoff-2026-10-09-s01.md) | final | Handoff s01 (2026-10-09/10): portal v2 built and checked; owner walkthrough, then P0 sign-off | End of session s01: v1 plan app, then portal v2 (rules, pipeline, content, scripts, portal, review fixes), hook on, owner next steps, open items
 - [handoff-2026-10-11-s02](operations/handoffs/handoff-2026-10-11-s02.md) | final | Handoff s02 (2026-10-11): P1 done and signed off; PAUSED before P2 | P1 17 of 17 tasks, gate passed, signed off; next: owner go for P2, Wave 3
 - [handoff-2026-10-12-s02](operations/handoffs/handoff-2026-10-12-s02.md) | final | Handoff s02 (2026-10-12): P2 signed off; P3 built and its gate passed; STOPPED for the owner's P3 review | Next: the owner's P3 review (checklist, re-approve adr-0011 and adr-0015, sign-off); no P4 work
+- [handoff-2026-10-13-s02](operations/handoffs/handoff-2026-10-13-s02.md) | final | Handoff s02 (2026-10-13): P3 feature set built, gate passed for Claude's part, self-scan fixes committed; end-check rerun, history cleanup and GitHub upload pending | Next: end check in a quiet window, history cleanup (Q-221), the owner's push (Q-105), then the P3 review; no P4 work
 
 ## Interactive plan
 

@@ -2149,3 +2149,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - deferred (known, not fixed now): a large restore holds the library lock (the window may pause during it); the import report can count entries the 50,000 limit drops at once; tab strip tabs are not reachable with the Tab key; Ctrl+T focus can be lost if the tab event arrives late; a few silent failures in the shell (refused suggestion, failed bookmark_add); --config overrides are saved into the user file by Settings (experiments only); smoke-test gaps (skipped tests would pass, some fixed sleeps, test data folders accumulate); p3.5 title still says "history position".
 - next: owner gives a quiet window; Claude reruns scripts/gates/p3-gate.ps1 -SaveEvidence; then the history rewrite (Q-221) and the push script for the owner.
 - commit: 03ad196
+
+## [2026-10-13] handoff | session s02 ends: owner uses Ferrum for 24 to 48 hours
+
+- session: s02
+- time: 01:15
+- pages: [handoff-2026-10-13-s02, phase-p3-tabs-sessions]
+- result: The owner closed the session to use Ferrum (desktop shortcut, the 2026-10-12 build) and will start a new session later with notes. Handoff written: [handoff-2026-10-13-s02](operations/handoffs/handoff-2026-10-13-s02.md). Pending: end-check rerun after the self-scan fixes, the history cleanup (Q-221), the owner's push (Q-105), the P3 review. Lint: quick_lint 0 errors, lint:wiki 0 errors, portal-sync clean. Tree clean after this commit.
+- next: see STATUS next_action.

@@ -23,9 +23,9 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: p3.13
-next_action: "Owner: give Claude a quiet window of about 35 minutes (do not use the PC; real keys are pressed). Claude then runs scripts/gates/p3-gate.ps1 -SaveEvidence, commits the evidence, backs up and cleans the git history (Q-221) and gives the owner one PowerShell script to create the private GitHub repository and push (Q-105). After that the owner's Phase 3 review: checklist items 1 to 20, re-approval of seven changed pages (adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core, phase-p3-tabs-sessions) and the P3 sign-off. No P4 work."
+next_action: "Owner is trying Ferrum (desktop shortcut) and will start a new session with notes. Then: when the owner says the PC is quiet (about 35 minutes), Claude runs pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence and commits the evidence; offers to refresh the desktop copy; does the history cleanup (Q-221; steps in wiki/operations/handoffs/handoff-2026-10-13-s02.md); gives the owner the push script (Q-105, private, the owner pushes). Then the owner's P3 review: checklist items 1 to 20, the Ferrum notes, re-approval of adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core, phase-p3-tabs-sessions, and the P3 sign-off. No P4 work."
 blocked_on: []
-last_handoff: handoff-2026-10-12-s02
+last_handoff: handoff-2026-10-13-s02
 ---
 
 # STATUS — live state (read this first every session)
@@ -328,10 +328,7 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.13 docs and exit gate: owner-requested P3 self-scan, then history rewrite (Q-221)
-- intent: Self-scan fixes committed (5a1532f, 834327b, 10b0455, 8d43c93, 03ad196). Next: in a quiet window, rerun scripts/gates/p3-gate.ps1 -SaveEvidence and commit its evidence; then git bundle backup outside the repo, one history rewrite with tools/mask.ps1 masking (scripts in %TEMP%/ferrum: hist_scan.py, hist_rewrite_prep.py), verify HEAD tree unchanged and the mask scan of all history; then give the owner the push script (Q-105: private, the owner pushes). P3 stays gate-review.
-- paths: wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, plan/portal/*, .git (rewrite)
-- rollback: evidence files are new files only; the rewrite is undone from the bundle backup
+(empty: session s02 ended 2026-10-13 with every change committed; the next step is in next_action and the handoff)
 
 ## Blockers
 
@@ -367,17 +364,17 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Self-scan of Phase 3 | Done: about 20 bugs fixed, 13 documents corrected, all committed |
-| App tests after the fixes | Not run yet: they need a quiet PC (about 35 minutes) |
-| History cleanup (Q-221) | Prepared, runs after the end check |
-| Upload to GitHub | You, with a script Claude gives you (private repository) |
+| Phase 3 | Built, self-checked and fixed; waiting for your review |
+| You | Trying Ferrum for 24 to 48 hours (desktop shortcut) |
+| App tests after the fixes | Waiting for a quiet PC (about 35 minutes) |
+| History cleanup and GitHub upload | Prepared; after the tests |
 | Phase 4 | Not started |
 
-**2. Why, and what it does.** The fixes changed app code → the end check proves nothing broke → then the history is cleaned and you upload a tested state.
+**2. Why, and what it does.** Your notes from daily use show what tests cannot → the end check proves the fixes broke nothing → then a clean history goes to your private GitHub.
 
-**3. The script:** none now. Close Ferrum and leave the PC alone for about 35 minutes when you are ready.
+**3. The script:** none now. In the next session, start Claude Code in the project folder.
 
-**4. What to tell Claude:** "Quiet now" when you step away.
+**4. What to tell Claude:** your Ferrum notes, and "Quiet now" when you can leave the PC for about 35 minutes.
 
 ## Pending owner approvals
 
@@ -388,4 +385,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-13, session s02 (P3 self-scan done and committed; end check rerun and history cleanup pending). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-13, session s02 ended (owner trying Ferrum; P3 gate-review). Last handoff: [handoff-2026-10-13-s02](wiki/operations/handoffs/handoff-2026-10-13-s02.md).

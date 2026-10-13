@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is built and was self-checked: about 20 bugs fixed and 13 documents corrected. The end check must run again on a quiet PC; then the history cleanup and your upload to GitHub.",
+  "summary": "Phase 3 is built, self-checked and fixed. You are trying Ferrum for a day or two; next session: the end check, the history cleanup, your GitHub upload and your Phase 3 review.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:968e5816a80f95b8d6063196fa13c18caaba3f074c066efeddbfce7be90a1858"
+    "content_hash": "sha256:6de5185e37ff279fb4325588cfbca1597e3022f67b5b03ac5d2ee6561a601f9e"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -37,17 +37,17 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "Self-scan",
-        "state": "done and committed"
+        "item": "Phase 3",
+        "state": "waiting for your review"
       },
       {
-        "item": "End check",
-        "state": "needs a quiet PC for about 35 minutes"
+        "item": "You",
+        "state": "trying Ferrum for 24 to 48 hours"
       }
     ],
-    "why": "The fixes changed app code; the end check proves nothing broke before you upload.",
+    "why": "Your notes from daily use show what tests cannot; then the end check, the history cleanup and the upload.",
     "script": null,
-    "tell_claude": "\"Quiet now\" when you step away from the PC."
+    "tell_claude": "Your Ferrum notes, and \"Quiet now\" when you can leave the PC for about 35 minutes."
   },
   "questions_for_you": {
     "open": 22,

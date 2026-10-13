@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8999642fc7751fb2ab7c52e85ec4008b4ac79a7a38c0e0b2f733c3ac3c337a12"
+    "content_hash": "sha256:6abcb0cb57655bd3991b72ec72c3f104f627241b91a3169cccfc86e31fef423b"
   },
   "entries": [
     {
@@ -3536,6 +3536,26 @@
       "category": "Fixed",
       "tags": [
         "testing",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-handoff",
+      "date": "2026-10-13",
+      "time": "01:15",
+      "title": "Session ended: you are trying Ferrum for a day or two",
+      "done": "You closed the session to use Ferrum for 24 to 48 hours and note what you like and what you miss compared with Chrome. Claude wrote a handoff so the next session picks up exactly here.",
+      "next": "Next session: the end check on a quiet PC, the history cleanup, your upload to GitHub, then your Phase 3 review with your notes.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] handoff | session s02 ends: owner uses Ferrum for 24 to 48 hours"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Planned",
+      "tags": [
+        "sessions",
         "phases"
       ]
     }
