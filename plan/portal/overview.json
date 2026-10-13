@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is built and all of Claude's end checks passed. It now waits for your review: six changed pages, your checklist, and the sign-off.",
+  "summary": "Phase 3 is built and was self-checked: about 20 bugs fixed and 13 documents corrected. The end check must run again on a quiet PC; then the history cleanup and your upload to GitHub.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:cd155fd9c806a9c894fdd8f5132f9c6d622c208dd320fe5d64cd3388dc3dd977"
+    "content_hash": "sha256:968e5816a80f95b8d6063196fa13c18caaba3f074c066efeddbfce7be90a1858"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -37,17 +37,17 @@
     "who": "you",
     "where_we_are": [
       {
-        "item": "End check",
-        "state": "Claude's part: all 30 passed"
+        "item": "Self-scan",
+        "state": "done and committed"
       },
       {
-        "item": "Your review",
-        "state": "6 pages, checklist, sign-off"
+        "item": "End check",
+        "state": "needs a quiet PC for about 35 minutes"
       }
     ],
-    "why": "Only you can approve the changed pages and sign off; your hands-on check finds what tests cannot.",
+    "why": "The fixes changed app code; the end check proves nothing broke before you upload.",
     "script": null,
-    "tell_claude": "Your checklist results, \"approve\" or comments for the six pages, and whether Phase 3 is signed off."
+    "tell_claude": "\"Quiet now\" when you step away from the PC."
   },
   "questions_for_you": {
     "open": 22,

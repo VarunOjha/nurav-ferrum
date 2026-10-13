@@ -23,7 +23,7 @@ approvable: false
 session: s02
 current_phase: phase-p3-tabs-sessions
 current_task: p3.13
-next_action: "Owner: review Phase 3. (1) Re-approve or comment on the six pages changed in P3: adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core. (2) Work through docs/testing/manual-checklist-p3.md items 1 to 20 with the release build (target/release/ferrum-desktop.exe) and tell Claude the results. (3) Say whether P3 is signed off. Claude records each in wiki/raw/owner/ with tools/approvals_record.py, reruns scripts/gates/p3-gate.ps1 -SaveEvidence, runs scripts/verify/p3.13-docs-gate-review.ps1, sets P3 done and pauses. No P4 work without an explicit go."
+next_action: "Owner: give Claude a quiet window of about 35 minutes (do not use the PC; real keys are pressed). Claude then runs scripts/gates/p3-gate.ps1 -SaveEvidence, commits the evidence, backs up and cleans the git history (Q-221) and gives the owner one PowerShell script to create the private GitHub repository and push (Q-105). After that the owner's Phase 3 review: checklist items 1 to 20, re-approval of seven changed pages (adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core, phase-p3-tabs-sessions) and the P3 sign-off. No P4 work."
 blocked_on: []
 last_handoff: handoff-2026-10-12-s02
 ---
@@ -329,9 +329,9 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
 - task: p3.13 docs and exit gate: owner-requested P3 self-scan, then history rewrite (Q-221)
-- intent: Five read-only review agents report on core, app, shell, docs and tests. Claude verifies each finding, fixes the real ones (one commit per fix area), updates docs and portal, reruns the affected checks. Then: git bundle backup outside the repo, one history rewrite replacing real machine values with masks (owner answer Q-221), and a push script for the owner (Q-105: private, the owner pushes). P3 stays gate-review.
-- paths: crates/core/src/*, apps/desktop/src-tauri/src/*, apps/desktop/src/*, apps/desktop/tests/smoke/*, scripts/verify/p3.*.ps1, README.md, SECURITY.md, docs/testing/manual-checklist-p3.md, wiki/components/*, wiki/decisions/adr-0032*, wiki/decisions/adr-0033*, plan/portal/*
-- rollback: git revert of the fix commits; the history rewrite is undone from the bundle backup
+- intent: Self-scan fixes committed (5a1532f, 834327b, 10b0455, 8d43c93, 03ad196). Next: in a quiet window, rerun scripts/gates/p3-gate.ps1 -SaveEvidence and commit its evidence; then git bundle backup outside the repo, one history rewrite with tools/mask.ps1 masking (scripts in %TEMP%/ferrum: hist_scan.py, hist_rewrite_prep.py), verify HEAD tree unchanged and the mask scan of all history; then give the owner the push script (Q-105: private, the owner pushes). P3 stays gate-review.
+- paths: wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, plan/portal/*, .git (rewrite)
+- rollback: evidence files are new files only; the rewrite is undone from the bundle backup
 
 ## Blockers
 
@@ -367,22 +367,17 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 end check | Claude's part: all 30 checks passed |
-| Six changed pages | Waiting for your re-approval |
-| Your checklist (items 1 to 20) | Waiting for you |
-| Phase 3 sign-off | Waiting for you |
-| Phase 4 | Not started; needs your sign-off and an explicit go |
+| Self-scan of Phase 3 | Done: about 20 bugs fixed, 13 documents corrected, all committed |
+| App tests after the fixes | Not run yet: they need a quiet PC (about 35 minutes) |
+| History cleanup (Q-221) | Prepared, runs after the end check |
+| Upload to GitHub | You, with a script Claude gives you (private repository) |
+| Phase 4 | Not started |
 
-**2. Why, and what it does.** Only you can approve the changed pages and sign off the phase → your hands-on check finds what automated tests cannot → then Phase 3 can close.
+**2. Why, and what it does.** The fixes changed app code → the end check proves nothing broke → then the history is cleaned and you upload a tested state.
 
-**3. The script:** run the release build to work through the checklist:
+**3. The script:** none now. Close Ferrum and leave the PC alone for about 35 minutes when you are ready.
 
-```powershell
-# Opens the Ferrum release build you will check (close it when you are done).
-& "$HOME\Documents\Projects\ferrum-rust-webclient\target\release\ferrum-desktop.exe"
-```
-
-**4. What to tell Claude:** your checklist results (item number, ok or what went wrong), "approve" (or comments) for the six pages, and whether Phase 3 is signed off.
+**4. What to tell Claude:** "Quiet now" when you step away.
 
 ## Pending owner approvals
 
@@ -393,4 +388,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-13, session s02 (P3 waiting for the owner's review; P3 self-scan in progress; Q-221 and Q-105 answered). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-13, session s02 (P3 self-scan done and committed; end check rerun and history cleanup pending). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).

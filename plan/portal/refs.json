@@ -5110,6 +5110,14 @@
       "summary": "Task Manager shows Ferrum's pages as \"WebView2 Manager\": accept it as a known limitation, or revisit later? Blocks nothing.",
       "status": "Open",
       "related": []
+    },
+    {
+      "id": "03ad196",
+      "kind": "commit",
+      "title": "Commit: Phase 3 self-scan fixes",
+      "summary": "Bug fixes and document corrections from the Phase 3 self-scan; the app tests run with the next end check.",
+      "status": null,
+      "related": []
     }
   ]
 }

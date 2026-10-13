@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:baca60b999eee04a3bbde5429855e7cb35e3b0c20d737669045826dd5ed3074f"
+    "content_hash": "sha256:8999642fc7751fb2ab7c52e85ec4008b4ac79a7a38c0e0b2f733c3ac3c337a12"
   },
   "entries": [
     {
@@ -3517,6 +3517,26 @@
       "tags": [
         "git",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-selfscan",
+      "date": "2026-10-13",
+      "time": "01:08",
+      "title": "Self-scan of Phase 3: bugs fixed, documents corrected",
+      "done": "Five reviewers read the Phase 3 code, tests and documents. No security hole was found. Claude fixed about 20 real bugs (for example, a settings file that failed to load could be overwritten, and deleted history could leave words in the database file) and corrected 13 out-of-date documents. The app tests still need a run on a quiet PC.",
+      "next": "You give Claude a quiet half hour for the end check; then the history cleanup and your upload to GitHub.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "03ad196",
+      "covers": [
+        "## [2026-10-13] code | P3 self-scan: findings fixed, docs corrected; gate rerun pending"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Fixed",
+      "tags": [
+        "testing",
+        "phases"
       ]
     }
   ]
