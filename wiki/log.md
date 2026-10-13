@@ -2309,3 +2309,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 13:41
 - pages: [comp-security-engine, comp-core, comp-app-shell]
 - result: The p4.4 page updates staled three components in the P4 dependency set; p4.5 waits for the owner's re-approval (SCHEMA §10.4).
+
+## [2026-10-13] approval | three component pages re-approved after p4.4
+
+- session: s03
+- time: 18:50
+- pages: [comp-security-engine, comp-core, comp-app-shell]
+- sources: [raw/owner/2026-10-13-s03-p4-4-components-reapproval.md]
+- result: The owner answered "Re-approve all three (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. The approved comp-security-engine page names the four always-refused link types. p4.5 is next.

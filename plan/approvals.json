@@ -517,13 +517,13 @@
     "comp-core": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-13T13:02:16-05:00",
+      "timestamp": "2026-10-13T18:50:28-05:00",
       "path": "wiki/architecture/components/comp-core.md",
-      "content_hash": "sha256:9d0387d32798f9cc580739d6368b039f9d148b0ee2214506099de832c1ab8866",
-      "scope_hash": "sha256:3b85f07582b58120809be9c3d1b4a0ac2ed0cb416817730b500a4585a511476a",
+      "content_hash": "sha256:3f732063b611af9a4619762a2bcb33a76065e68888bbe81585c39f77a73d1de5",
+      "scope_hash": "sha256:0aed3391a5439a6379db49b6e6aec72b92df7a50ade16462c753e362cf3595c2",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-3-components-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-4-components-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -645,6 +645,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-13T13:02:16-05:00",
+          "path": "wiki/architecture/components/comp-core.md",
+          "content_hash": "sha256:9d0387d32798f9cc580739d6368b039f9d148b0ee2214506099de832c1ab8866",
+          "scope_hash": "sha256:3b85f07582b58120809be9c3d1b4a0ac2ed0cb416817730b500a4585a511476a",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-3-components-reapproval.md"
         }
       ]
     },
@@ -794,13 +805,13 @@
     "comp-app-shell": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-13T13:02:16-05:00",
+      "timestamp": "2026-10-13T18:50:28-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:c04bf4e1bbfd74ead798877ddc0e8537dc5deb87fd4d00eb17892e87b902491b",
-      "scope_hash": "sha256:e5074e0ce8f653ddf66537a920d50a20f5f10dacf87df7f811e91dfd699027e8",
+      "content_hash": "sha256:01037444ad0212cbfde308e4c3ceb1a51cff2e78b996d136be34272695b56e4d",
+      "scope_hash": "sha256:623cce641963af4920f089aadc4b28e947bfbf15afcad0f26c833bfcc79f7b83",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-3-components-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-4-components-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -966,19 +977,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-13T13:02:16-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:c04bf4e1bbfd74ead798877ddc0e8537dc5deb87fd4d00eb17892e87b902491b",
+          "scope_hash": "sha256:e5074e0ce8f653ddf66537a920d50a20f5f10dacf87df7f811e91dfd699027e8",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-3-components-reapproval.md"
         }
       ]
     },
     "comp-security-engine": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-13T13:02:14-05:00",
+      "timestamp": "2026-10-13T18:50:27-05:00",
       "path": "wiki/architecture/components/comp-security-engine.md",
-      "content_hash": "sha256:b4ea32dbb4c2a758f8bde54f19aefeb6059690063d33d382e2576b5a568d82ff",
-      "scope_hash": "sha256:dc55be766cd8be0ada269ab3254b702a8d995897e6223ce2d40f0ad52f145a0e",
+      "content_hash": "sha256:6ebef505b178755da6305a6e33278c60d2c19a80a6a248e5b0da959570f0ee9f",
+      "scope_hash": "sha256:a2cb705df77abcdf68f58f230396407b122861f756f1d235673a47a960e05eb0",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-3-components-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-4-components-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1001,6 +1023,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s03-security-engine-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-13T13:02:14-05:00",
+          "path": "wiki/architecture/components/comp-security-engine.md",
+          "content_hash": "sha256:b4ea32dbb4c2a758f8bde54f19aefeb6059690063d33d382e2576b5a568d82ff",
+          "scope_hash": "sha256:dc55be766cd8be0ada269ab3254b702a8d995897e6223ce2d40f0ad52f145a0e",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-3-components-reapproval.md"
         }
       ]
     },

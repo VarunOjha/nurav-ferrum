@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:4b9466f7ea216d36ad38e62e15fc59884a7081fa9a6643b97f8eabcd602c9e9a"
+    "content_hash": "sha256:48995091257766762374951954ffd1a56128dc08f2cced0eb250045abf6aaf7f"
   },
   "entries": [
     {
@@ -3878,6 +3878,39 @@
       "tags": [
         "privacy",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-p4-4-reapproved",
+      "date": "2026-10-13",
+      "time": "18:50",
+      "title": "You re-approved three part pages after the link-types task",
+      "done": "You re-approved the pages for the security engine, the core library and the browser controls, including the four always-refused link types.",
+      "next": "Claude builds permission prompts: camera, microphone, location, notifications and clipboard reading are refused by default.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Approved"
+        },
+        {
+          "what": "Core library page",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | three component pages re-approved after p4.4"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]
