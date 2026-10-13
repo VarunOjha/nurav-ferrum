@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 0,
+    "done": 1,
     "total": 17
   },
   "step_order": [
@@ -26,7 +26,7 @@
       "what": "A threat model: what we protect, who might attack, where trust changes, and which threats are in or out of scope. The security document is completed.",
       "why": "Without a threat model, security work is guesswork: some risks get several defences and others none, and nobody can say which risks are left open.",
       "how": "Start from the part pages, which mark where trust changes; for each place, list who could attack (a bad site, a bad frame, a bad library, a local program) and what defends it.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Controls need a reason → list what we protect, who attacks and where trust changes, and map each threat to a control and test, or 'not enforced' → every later task traces to a threat.",
       "check": "The security document maps every boundary and threat to a control and a test, or says not enforced.",
       "script": "scripts/verify/p4.1-threat-model.ps1"

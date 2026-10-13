@@ -800,7 +800,7 @@
       "kind": "task",
       "title": "P4 task: Threat model",
       "summary": "Controls need a reason → list what we protect, who attacks and where trust changes, and map each threat to a control and test, or 'not enforced' → every later task traces to a threat.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]

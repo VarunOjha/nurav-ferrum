@@ -1,0 +1,20 @@
+Ferrum check p4.1: Threat model
+Why: every later task traces to a threat.
+Run at 2026-10-13 07:53 on commit 3920578 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Boundary edges read from the component pages
+         15 edges; test catalogue SEC ids: 14
+  PASS   Security testing plan: every edge listed with a control and a test (section 7.2)
+         15 edge rows match the component pages
+  PASS   SECURITY.md: every edge listed with a control and a test
+         15 edge rows match the component pages
+  PASS   Every threat has a control and a test or "not enforced" (section 7.3)
+         26 threats; 8 marked not enforced
+  PASS   The ten test areas of the brief (SEC-01 to SEC-10) each cover a threat
+         SEC-01 to SEC-10 all used
+  PASS   Both documents list what is not enforced
+         plan page 7 items, SECURITY.md 6 items
+------------------------------------------------------------------------
+RESULT: PASS - p4.1 (6 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.1 check passed".

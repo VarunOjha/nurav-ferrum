@@ -3,13 +3,15 @@ id: qual-security-testing-plan
 type: quality
 title: "Security testing plan: master prompt section 11 mapped to harmless fixtures"
 status: draft
-updated: 2026-10-11
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
-related: [qual-testing-strategy, qual-definition-of-done, qual-phase-gate-checklist, qual-ci-plan, ov-risk-register, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, comp-security-engine, comp-webview-manager, comp-app-shell, comp-network-logger, comp-webview2-runtime, adr-0007, adr-0008, adr-0010, adr-0015, exp-security-overhead, risk-r01, risk-r07, risk-r09, risk-r10, risk-r18, risk-r19]
+  - raw/owner/2026-10-11-s02-wave3-and-p2-questions.md
+  - raw/owner/2026-10-13-s03-p4-questions.md
+related: [ov-arch-trust-boundaries, comp-tab-content, comp-baseline-app, comp-benchmark-harness, comp-telemetry, comp-windows-os, comp-competitor-browsers, adr-0029, qual-testing-strategy, qual-definition-of-done, qual-phase-gate-checklist, qual-ci-plan, ov-risk-register, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, comp-security-engine, comp-webview-manager, comp-app-shell, comp-network-logger, comp-webview2-runtime, adr-0007, adr-0008, adr-0010, adr-0015, exp-security-overhead, risk-r01, risk-r07, risk-r09, risk-r10, risk-r18, risk-r19]
 approvable: true
 phase: phase-p4-security
 tags: [security, testing, fixtures, threat-model]
@@ -41,7 +43,7 @@ The master prompt (§11) requires automated tests for ten areas, harmless contro
 
 Security **correctness** tests live here. Security **overhead** (policy evaluation latency, isolation cost) is measured separately in `exp-security-overhead` (master prompt §7).
 
-## 1. Threat model summary (detailed version belongs on `comp-security-engine`)
+## 1. Threat model summary (full threat model: §7)
 
 | Item | Content |
 |---|---|
@@ -49,7 +51,7 @@ Security **correctness** tests live here. Security **overhead** (policy evaluati
 | Assets | Ferrum's native commands and the trusted shell (comp-app-shell); other sites' session data (profiles, adr-0010); the user's file system (downloads); the OS (external protocol handlers); the network log's integrity (adr-0008) |
 | Trust boundary | Tab webviews are untrusted; the shell webview and Rust host are trusted (adr-0007). Every tab-to-host message crosses the boundary |
 | Out of scope | Local malware or an administrator attacker; a compromised WebView2 runtime; Chromium renderer exploits (Ferrum relies on Chromium's sandbox and must not weaken it). Supply-chain risk is handled by dependency auditing ([qual-ci-plan](qual-ci-plan.md)), not here |
-| Posture | Open browsing with a blocklist; HTTP upgraded or warned; non-web schemes need confirmation (adr-0015, Q12) |
+| Posture | Open browsing with a blocklist that ships empty; `http:` loads as typed with a "not secure" warning bar; non-web schemes need confirmation (adr-0015, Q12; owner answers Q-112 and Q-113 of 2026-10-13) |
 
 Verified facts the tests are built around (TW §3, §4, §6):
 - The IPC bridge is attached to every webview, tabs included; protection is authorization in Rust. Remote origins reach no command unless a capability declares `remote`; `FETCH_CHANNEL_DATA_COMMAND` is exempt; the invoke key is in page context and is not a boundary.
@@ -69,14 +71,16 @@ Verified facts the tests are built around (TW §3, §4, §6):
 
 ## 3. Serving fixtures: an owner decision
 
-Fixtures need several **origins**. A local server on `127.0.0.1` gives distinct origins through distinct ports. The open question is the scheme:
+**Answered (Q-202, 2026-10-11, [owner answer](../raw/owner/2026-10-11-s02-wave3-and-p2-questions.md)): local HTTPS certificate.** The fixture server (p2.1) serves HTTPS on loopback with a name-constrained development CA installed for the owner's Windows user only; there is no loopback HTTP exception. The options as they were weighed:
+
+Fixtures need several **origins**. A local server on `127.0.0.1` gives distinct origins through distinct ports. The question was the scheme:
 
 | Option | Pros | Cons |
 |---|---|---|
 | HTTP on loopback, allowed only by a **test-build-only** policy exception compiled out of release builds | No certificate handling; nothing installed on the machine | The exception itself must be tested to be absent in release (SEC-12) |
 | HTTPS with a **locally trusted test CA** installed in the user certificate store | Exercises the real HTTPS path | Installs a root certificate on the owner's machine (security-relevant; needs approval and cleanup) |
 
-Ferrum must never bypass certificate validation (master prompt §5) to make fixtures work. Recommendation: HTTP-on-loopback test exception for most tests, plus SEC-13 to prove certificate errors are not bypassed. This is listed as an owner question in [ov-risk-register](../risks/ov-risk-register.md).
+Ferrum must never bypass certificate validation (master prompt §5) to make fixtures work. SEC-13 still proves that certificate errors are not bypassed.
 
 ## 4. Test catalogue
 
@@ -177,6 +181,12 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 - **Pass:** navigation fails with an error state; Ferrum offers no "proceed anyway" path (master prompt §5: do not bypass certificate validation). Expected default WebView2 behaviour: UNVERIFIED[phase-p4-security].
 - **Phase:** P2 (error state) and P4.
 
+### SEC-14 Logs carry no page content (addition, p4.9)
+
+- **Threat:** the security audit log or the network log stores page content, form data, cookies or full addresses with secrets in them.
+- **Pass:** a schema test validates every record the security suite produces: only the allowed fields (time, tab, origin, action, rule, decision for the audit log; adr-0008 fields for the network log) and no header, body or cookie field; each SEC test asserts its own audit record.
+- **Phase:** P4 (audit log); P5 (network log).
+
 ## 5. Traceability
 
 | Master prompt §11 item | Test | Risks |
@@ -195,3 +205,87 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 ## 6. Unverified items on this page
 
 All are listed in the frontmatter `unverified:` block and tagged inline in SEC-02, SEC-05, SEC-06, SEC-07, SEC-10 and SEC-13. One more applied to the whole E2E level, driving Ferrum tab webviews with Playwright over CDP in a test build: verified in P2 for the shell and the content view ([check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)).
+
+## 7. Threat model (p4.1)
+
+This section is the threat model that [phase-p4-security](../phases/phase-p4-security.md) task p4.1 asks for. It builds on the preliminary model in [ov-arch-trust-boundaries](../architecture/ov-arch-trust-boundaries.md) (assets A1 to A6, boundaries TB1 to TB6, rules R1 to R9) and replaces its STRIDE table as the place where threats are tracked. [SECURITY.md](../../SECURITY.md) is the short public version.
+
+**Words used in the "State" column.** *Enforced* = a control exists and a passing check is saved as evidence (the phase named). *Partly* = part of the control exists and is checked; P4 completes it. *Planned* = the control and its test are P4 tasks; nothing is claimed yet. *Not enforced* = Ferrum does not claim this protection: there is no control, or the control cannot be proven by a test. No property is called enforced without evidence under `wiki/raw/evidence/`.
+
+### 7.1 Adversaries
+
+| Id | Adversary | In scope | What Ferrum relies on |
+|---|---|---|---|
+| ADV1 | A malicious or compromised website in a tab: its scripts, ads, redirects, pop-ups and downloads | Yes, primary | Ferrum's controls (this page) plus Chromium's sandbox and same-origin policy, never weakened |
+| ADV1b | A malicious iframe inside an honest site | Yes | The same controls, applied to frame navigations through raw-COM `FrameNavigationStarting` |
+| ADV2 | A network attacker between Ferrum and a site | Yes for HTTPS; HTTP pages are open to it by the owner's choice (Q-112) | WebView2's certificate checks, never bypassed |
+| ADV3 | Another program running as the same Windows user, for example one that connects to a debugging port | Partly: the debugging port only | The port is never opened by Ferrum; benchmark runs only. Everything else such a program can do (read the data folder) is not enforced |
+| ADV4 | A compromised dependency (Rust crate, npm package) | Partly: known advisories only | `cargo deny`, `npm audit` and lockfiles ([qual-ci-plan](qual-ci-plan.md)); no test can prove a dependency is honest |
+| ADV5 | An administrator, malware running elevated, or a compromised WebView2 runtime | No | Out of scope |
+
+### 7.2 Trust-boundary edges
+
+Every `connects` edge with `crosses_trust_boundary: true` on a component page, in component-page order. The check script `scripts/verify/p4.1-threat-model.ps1` reads the component pages and fails if an edge is missing here or in SECURITY.md. The "Threats" column refers to §7.3.
+
+| Edge | From → to (kind) | Boundary | Threats | Control | Test |
+|---|---|---|---|---|---|
+| E01 | comp-app-shell → comp-webview2-runtime (webview2-com) | TB1 | T03 | The shell view loads only Ferrum's own bundled pages; its navigation handler denies every other address; strict CSP (rule R8) | SEC-12 |
+| E02 | comp-app-shell → comp-windows-os (os-api) | TB3 | T08 | Nothing is handed to Windows without the user's click on the confirmation bar; only the one address asked about is opened (p2.10); per-scheme allowlist (p4.4) | SEC-02 |
+| E03 | comp-baseline-app → comp-webview2-runtime (webview2-com) | TB4 | T22 | The baseline app is a benchmark tool, never shipped; it loads only benchmark fixtures and workload sites | not enforced |
+| E04 | comp-benchmark-harness → comp-competitor-browsers (process-spawn) | TB4 | T23 | Fresh temporary profiles; recorded policies; no flag that weakens browser security (CLAUDE.md §6) | not enforced |
+| E05 | comp-benchmark-harness → comp-competitor-browsers (cdp) | TB4 | T17 | Debugging port on loopback, during benchmark runs only | not enforced |
+| E06 | comp-benchmark-harness → comp-webview2-runtime (cdp) | TB4 | T17 | Ferrum never sets the debugging port; only test and benchmark runs set it for their own process | SEC-11 |
+| E07 | comp-benchmark-harness → comp-windows-os (os-api) | TB5 | T24 | Ferrum is never run elevated; any elevated energy sampler is a separate program (Q-123, open) | not enforced |
+| E08 | comp-tab-content → comp-app-shell (tauri-ipc) | TB1 | T01 | Tab views have no Tauri bridge (adr-0029); zero `remote` capabilities; app commands granted to the shell view only (rules R1 to R7) | SEC-03 |
+| E09 | comp-tab-content → comp-webview2-runtime (webview2-com) | TB1, TB3 | T02, T04, T05, T06, T07, T08, T09, T10, T16 | Every page-initiated request goes through the policy engine: navigation, redirect hop, frame, pop-up, scheme, permission and download (p4.2 to p4.6) | SEC-01 |
+| E10 | comp-telemetry → comp-windows-os (os-api) | none (read-only) | T18 | Read-only counter queries on Ferrum's own processes; no elevation | not enforced |
+| E11 | comp-webview-manager → comp-webview2-runtime (webview2-com) | TB2 | T11, T21 | Raw COM confined to one module with written unsafe invariants (adr-0019); one profile per site (adr-0010, p3.6) | SEC-06 |
+| E12 | comp-webview-manager → comp-webview2-runtime (cdp) | TB1 | T25 | The in-process DevTools session is used for measurement only; no secret is passed into a page; nothing is injected in normal use (p3.3) | not enforced |
+| E13 | comp-webview2-runtime → comp-webview-manager (webview2-com) | TB1 | T05, T06, T07, T15 | A handler for every event kind (navigation, frame, new window, download, permission, scheme, process failure); the engine parses addresses itself and denies what it cannot parse | SEC-08 |
+| E14 | comp-webview2-runtime → comp-app-shell (webview2-com) | TB1 | T01 | Only the shell view has a bridge; Tauri checks the browser-reported source of each message (rule R7) | SEC-03 |
+| E15 | comp-webview2-runtime → comp-tab-content (network) | TB1, TB2 | T12, T13, T14, T20, T26 | No certificate bypass; no browser flag that weakens web security or site isolation; Chromium's sandbox left as shipped | SEC-13 |
+
+E09, E13 and E15 carry many threats; their "Test" column names the main test, and §7.3 names every test.
+
+### 7.3 Threats, controls and tests
+
+| Threat | Adversary | Edges | Control (task) | Test | State |
+|---|---|---|---|---|---|
+| T01 A page calls Ferrum's commands, events or the exempt fetch-channel command | ADV1 | E08, E14 | No bridge in tab views; zero `remote` capabilities; shell-only commands (p2.3, p4.8) | SEC-03, SEC-12 | Partly (P2 and P3: app and settings commands refused) |
+| T02 A tab navigates to the app's own origin to be treated as local | ADV1 | E09 | Navigation handlers deny the app's origin for tabs (rule R4; p4.3, p4.8) | SEC-03, SEC-08 | Planned (P3 added no check) |
+| T03 The shell view is led to remote content | ADV1 | E01 | Shell navigation handler allows only the local origin; strict CSP (rule R8; p4.8) | SEC-12 | Planned |
+| T04 A page sends the tab to a blocked site (link, script, form, meta refresh, pop-up) | ADV1 | E09 | Blocklist in the policy engine (p4.2, p4.3) | SEC-01 | Planned |
+| T05 A redirect chain reaches a blocked site | ADV1 | E09, E13 | Every redirect hop re-evaluated (p4.3) | SEC-08 | Planned |
+| T06 An iframe loads a blocked site | ADV1b | E09, E13 | Raw-COM `FrameNavigationStarting` (p4.3) | SEC-08 | Planned |
+| T07 A malformed address slips past the filter or crashes it | ADV1 | E09, E13 | Fail-closed parsing (p2.5 address bar; p4.2 engine) | SEC-09 | Partly (P2: address bar) |
+| T08 A link silently starts another app | ADV1 | E02, E09 | Confirmation bar (p2.10); per-scheme allowlist; no silent launch (p4.4) | SEC-02 | Partly (P2: confirmation bar, stand-in launcher) |
+| T09 A page gets camera, microphone, location, notifications or clipboard without consent | ADV1 | E09 | Default deny, per-site grants, `SavesInProfile(FALSE)` (p4.5, p4.17) | SEC-05 | Planned |
+| T10 A download lands outside the download folder, replaces a file or runs | ADV1 | E09 | Download folder only, no replacing (p3.8); name sanitising, executable warning, no auto-open (p4.6) | SEC-07 | Partly (P3: folder and no replacing) |
+| T11 Site A reads site B's cookies or storage, or clearing A wipes B | ADV1 | E11 | One profile per site (p3.6); per-profile clearing and isolation modes (p4.7, p4.15) | SEC-06 | Partly (P3: framed-cookie test) |
+| T12 Cross-origin reads, because a browser protection was weakened | ADV1 | E15 | No weakening flags; same-origin policy and site isolation as shipped | SEC-04 | Planned |
+| T13 A man in the middle on HTTPS, through a certificate-error bypass | ADV2 | E15 | No "proceed anyway" path for certificate errors (p2.8) | SEC-13 | Partly (P2: no bypass code; the failure itself is tested in P4) |
+| T14 A man in the middle reads or changes a plain HTTP page | ADV2 | E15 | Visible "not secure" bar only (Q-112: HTTP allowed) | not enforced | Not enforced (owner's choice) |
+| T15 A renderer crash takes down the app | ADV1 | E13 | `ProcessFailed` handling, crashed-tab state and reload (p4.10) | SEC-10 | Planned |
+| T16 Pop-ups flood the screen or keep a link to the opener page | ADV1 | E09 | New tab per pop-up, at most one per tab per second, no opener link (p3.2); pop-up policy (p4.3) | SEC-01 | Partly (P3: rate limit) |
+| T17 Another program on the PC drives Ferrum through a debugging port | ADV3 | E05, E06 | Ferrum never sets the port; release builds have no debug arguments | SEC-11 | Partly (P2: never set by Ferrum; benchmark runs open it by design) |
+| T18 Another program reads Ferrum's data folder (history, sessions, logs) | ADV3 | E10 | Windows account protection only; backup files are encrypted (p3.21) | not enforced | Not enforced |
+| T19 A dependency is compromised | ADV4 | none | Known-advisory checks (`cargo deny`, `npm audit`), lockfiles | not enforced | Not enforced (detection of known advisories only) |
+| T20 A security or network log stores page content or secrets | ADV1 | E15 | Metadata-only records (adr-0008); audit log without page content (p4.9) | SEC-14 | Planned |
+| T21 The benchmark-only no-security build reaches users, or debug-only test commands run in release | ADV4 | E11 | Release-build static check (p4.16); test commands refuse in release builds (P3) | SEC-12 | Planned |
+| T22 The baseline benchmark app is used for normal browsing without Ferrum's controls | ADV1 | E03 | Not shipped; benchmark use only | not enforced | Not enforced |
+| T23 A benchmark run touches the owner's real browser profile or weakens a competitor browser | ADV4 | E04 | Fresh temporary profiles; recorded policies (P6 harness) | not enforced | Not enforced in P4 (P6 harness check) |
+| T24 An elevated energy sampler is misused | ADV3 | E07 | Separate program, read-only output; Ferrum never elevated (Q-123 open) | not enforced | Not enforced in P4 (P6) |
+| T25 A page tampers with a measurement script run through the DevTools session | ADV1 | E12 | Measurement only, no secrets; results cross-checked by out-of-process counters (P5, P6) | not enforced | Not enforced |
+| T26 A renderer exploit escapes the Chromium sandbox | ADV1 | E15 | Chromium sandbox left as shipped; WebView2 runtime kept up to date by Windows | not enforced | Not enforced (out of scope, ADV5 class) |
+
+### 7.4 Explicitly not enforced
+
+Ferrum makes no claim about these, and the docs must not imply one:
+
+- Plain HTTP pages are not protected from network attackers; Ferrum only shows a warning bar (T14).
+- Process isolation between sites: per-site profiles separate storage, not processes; what stays shared is measured in p4.7 (T11).
+- Other programs running as the same Windows user can read Ferrum's data folder (T18) and, during benchmark runs, drive web views through the debugging port (T17).
+- Dependencies are checked for known advisories only (T19).
+- Renderer sandbox escapes and an elevated or administrator attacker (T26, ADV5).
+- Benchmark tools (baseline app, harness, energy sampler, DevTools measurement scripts) are not hardened against the sites they load (T22 to T25).
+- Google sign-in does not work inside Ferrum tabs by design; Ferrum offers the system browser instead and never works around the block.

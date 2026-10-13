@@ -135,6 +135,8 @@ OAuth pop-ups are P4 work: UNVERIFIED[phase-p4-security].
 
 ## 6. Preliminary STRIDE table
 
+Since p4.1 (2026-10-13) threats are tracked in the full threat model, [qual-security-testing-plan §7](../quality/qual-security-testing-plan.md#7-threat-model-p41) (threats T01 to T26, each with a control and a test or "not enforced"). This table stays as the P0 starting point.
+
 | Threat | Boundary | Planned mitigation | Planned test (master prompt §11 item) |
 |---|---|---|---|
 | Elevation of privilege: remote page calls native command | TB1 | R1–R7 | Unauthorized native command invocation |

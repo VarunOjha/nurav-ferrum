@@ -1,7 +1,7 @@
 # Security
 
-Ferrum is a research prototype. Phase P3 (tabs and sessions, milestone M2) is built and waiting for the owner's
-review; there is no released build yet.
+Ferrum is a research prototype. Phases P2 and P3 (milestones M1 and M2) are done; P4 (security, milestone M3) is in
+progress. There is no released build yet.
 The canonical security design lives in the wiki; this file is the short entry point.
 
 ## Reporting a vulnerability
@@ -10,19 +10,67 @@ Until a public repository and a contact address exist, report problems privately
 (not in a public issue). Please include the Ferrum commit, Windows build and WebView2 runtime version.
 A reporting address will be added here before the first public release.
 
-## Threat model (outline)
+## Threat model
 
-- **Trust zones.** The shell web view (Ferrum's own UI) is trusted; every tab web view shows untrusted web
-  content and must never reach the shell's commands ([trust boundaries](wiki/architecture/ov-arch-trust-boundaries.md),
-  [isolation model](wiki/architecture/ov-arch-isolation-model.md), [adr-0007](wiki/decisions/adr-0007-child-webviews.md)).
-- **Per-site profiles** keep each site's cookies and storage apart ([adr-0010](wiki/decisions/adr-0010-isolation-webview2-profiles.md)).
-  Spike S2 showed one route where this works with one shared browser process
-  ([spike S2 report](wiki/raw/evidence/phase-p1-foundation/spike-s2-profiles.md)).
-- **Raw WebView2 calls** are confined to one audited module with written unsafe invariants
-  ([adr-0019](wiki/decisions/adr-0019-raw-webview2-com-boundary.md); draft invariants in the
-  [spike S3 report](wiki/raw/evidence/phase-p1-foundation/spike-s3-raw-com.md)).
-- **Navigation posture:** open web with a blocklist ([adr-0015](wiki/decisions/adr-0015-navigation-posture-open-blocklist.md)).
-- Security test plan: [qual-security-testing-plan](wiki/quality/qual-security-testing-plan.md). P4 builds and tests the security engine.
+The full threat model, with every threat mapped to a control and a test, is in
+[the security testing plan §7](wiki/quality/qual-security-testing-plan.md#7-threat-model-p41). This is the summary.
+
+**What Ferrum protects.** Its own commands and the trusted shell window; each site's cookies and storage from other
+sites; the user's files (downloads); other apps on the PC (links that start them); the history, bookmarks, sessions
+and logs in the data folder ([assets A1 to A6](wiki/architecture/ov-arch-trust-boundaries.md#1-assets)).
+
+**Who it protects against.** Mainly a malicious website in a tab, including its iframes, pop-ups, redirects and
+downloads. Also a network attacker on HTTPS connections. Partly another program on the same Windows account (the
+debugging port only) and a compromised dependency (known advisories only). Not an administrator or elevated malware.
+
+**Trust zones.** The shell web view (Ferrum's own UI) is trusted; every tab web view shows untrusted web content and
+has no bridge to Ferrum's commands ([trust boundaries](wiki/architecture/ov-arch-trust-boundaries.md),
+[isolation model](wiki/architecture/ov-arch-isolation-model.md), [adr-0029](wiki/decisions/adr-0029-profile-route-raw-com-tab-controllers.md)).
+Each site gets its own WebView2 profile ([adr-0010](wiki/decisions/adr-0010-isolation-webview2-profiles.md)). Raw
+WebView2 calls stay in one audited module with written unsafe invariants
+([adr-0019](wiki/decisions/adr-0019-raw-webview2-com-boundary.md)). Navigation posture: open web with a blocklist that
+ships empty; plain `http` pages load with a "not secure" bar
+([adr-0015](wiki/decisions/adr-0015-navigation-posture-open-blocklist.md)).
+
+### Where trust changes
+
+Every edge between components that crosses a trust boundary (from the component pages), its control and its test.
+"not enforced" means Ferrum makes no claim there.
+
+| Edge | From → to (kind) | Control | Test |
+|---|---|---|---|
+| E01 | comp-app-shell → comp-webview2-runtime (webview2-com) | Shell view shows only Ferrum's own pages | SEC-12 |
+| E02 | comp-app-shell → comp-windows-os (os-api) | Nothing goes to another app without the user's click | SEC-02 |
+| E03 | comp-baseline-app → comp-webview2-runtime (webview2-com) | Benchmark tool only, never shipped | not enforced |
+| E04 | comp-benchmark-harness → comp-competitor-browsers (process-spawn) | Fresh temporary profiles, no weakening flags | not enforced |
+| E05 | comp-benchmark-harness → comp-competitor-browsers (cdp) | Loopback debugging port, benchmark runs only | not enforced |
+| E06 | comp-benchmark-harness → comp-webview2-runtime (cdp) | Ferrum never opens the debugging port itself | SEC-11 |
+| E07 | comp-benchmark-harness → comp-windows-os (os-api) | Ferrum never runs elevated | not enforced |
+| E08 | comp-tab-content → comp-app-shell (tauri-ipc) | Tab views have no bridge; zero remote capabilities | SEC-03 |
+| E09 | comp-tab-content → comp-webview2-runtime (webview2-com) | Every page request goes through the policy engine | SEC-01 |
+| E10 | comp-telemetry → comp-windows-os (os-api) | Read-only counters on Ferrum's own processes | not enforced |
+| E11 | comp-webview-manager → comp-webview2-runtime (webview2-com) | One audited raw-COM module; one profile per site | SEC-06 |
+| E12 | comp-webview-manager → comp-webview2-runtime (cdp) | Measurement only, nothing injected in normal use | not enforced |
+| E13 | comp-webview2-runtime → comp-webview-manager (webview2-com) | A handler for every event; unparsable addresses denied | SEC-08 |
+| E14 | comp-webview2-runtime → comp-app-shell (webview2-com) | Only the shell view has a bridge | SEC-03 |
+| E15 | comp-webview2-runtime → comp-tab-content (network) | No certificate bypass; browser protections as shipped | SEC-13 |
+
+### Not enforced
+
+Ferrum makes no claim about these:
+
+- Plain HTTP pages are not protected from network attackers; Ferrum only shows a warning bar (owner's choice, Q-112).
+- Process isolation between sites: per-site profiles separate storage, not processes. What stays shared is measured
+  in P4 (task p4.7).
+- Other programs running as the same Windows user can read Ferrum's data folder and, during benchmark runs, drive web
+  views through the debugging port.
+- Dependencies are checked for known advisories only.
+- Renderer sandbox escapes, an administrator or elevated attacker, and a compromised WebView2 runtime.
+- Benchmark tools (baseline app, harness, energy sampler, measurement scripts) are not hardened against the sites they
+  load.
+
+P4 (milestone M3, in progress) builds the controls marked "Planned" in the full threat model and their tests; until a
+test passes, this file does not call a protection enforced.
 
 ## What the first version (M1, phase P2) does
 
@@ -32,7 +80,8 @@ Checked by the P2 task scripts (evidence: [wiki/raw/evidence/phase-p2-minimal-co
   capability has a `remote` section. The website view is a WebView2 controller Ferrum creates itself and has no Tauri
   bridge at all (check p2.3).
 - **Address rules.** Only `https`, `http` and `about:blank` load. `http` addresses typed in the address bar are
-  upgraded to `https` by default. `javascript:`, `data:`, `file:` and similar addresses are refused (task p2.5).
+  upgraded to `https` by default (P4 changes this to the owner's answer to Q-112: `http` loads as typed, with a
+  "not secure" bar). `javascript:`, `data:`, `file:` and similar addresses are refused (task p2.5).
 - **Links to other apps** (`mailto:` and custom schemes) are stopped and shown on a confirmation bar; nothing is
   handed to Windows without the user's click, and the app opens only the one link it asked about (p2.10).
 - **New windows** never open: they load in the same view, or (setting `new_window = "system-browser"`) in the
