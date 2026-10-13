@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:2102b031047939509802ef18324d678d6304414c2fa58c180fb2d9d9353c948c"
+    "content_hash": "sha256:6dda80d149edc33782dbe17647c8dd9dd28235974662a29c02c74c40092c9a19"
   },
   "entries": [
     {
@@ -3677,6 +3677,32 @@
       "commit": "ff7292e",
       "covers": [
         "## [2026-10-13] code | p4.1 threat model written; check script made real"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "blocklist",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-p4-2",
+      "date": "2026-10-13",
+      "time": "08:11",
+      "title": "Site-rules engine built and fully tested",
+      "done": "Claude built the part that decides whether an address may load: blocked and allowed sites, plain HTTP with a warning, links to other apps, and anything unreadable refused. 24 tests, including thousands of random addresses, reach every line of it. It is not connected to the app yet.",
+      "next": "You re-approve the security engine page (its description changed); then Claude connects the engine to every page load.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "56cd05d",
+      "covers": [
+        "## [2026-10-13] code | p4.2 navigation policy engine built and fully covered by tests",
+        "## [2026-10-13] gate | comp-security-engine approval stale"
       ],
       "phase": "phase-p4-security",
       "category": "Built",

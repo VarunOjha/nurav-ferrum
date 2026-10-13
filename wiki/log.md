@@ -2233,3 +2233,21 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Threat model in qual-security-testing-plan §7: 6 adversary classes, 15 trust-boundary edges (E01 to E15, read from the component pages), 26 threats (T01 to T26) each with a control and a SEC test or "not enforced" (8 not enforced), explicit not-enforced list; new SEC-14. SECURITY.md has the summary, the same edge table and its not-enforced list. scripts/verify/p4.1-threat-model.ps1 PASS 6 of 6 (a deliberately broken row made it FAIL). quick_lint 0 errors, lint:wiki 0 errors, mask scan 0.
 - next: p4.2 policy engine.
 - commit: ff7292e
+
+## [2026-10-13] code | p4.2 navigation policy engine built and fully covered by tests
+
+- session: s03
+- time: 08:11
+- pages: [comp-security-engine, phase-p4-security]
+- sources: [raw/evidence/phase-p4-security/check-p4.2.txt, raw/evidence/phase-p4-security/policy-coverage.txt]
+- result: crates/security: host rules (suffix, exact, IP; normalised like URLs; bad entries refused) and evaluate() (fail-closed reading, scheme rules, app-origin deny, blob same-origin only, blocklist, allowlist override by strict specificity, equal specificity blocks, allowlist-only mode, http warn or upgrade, external confirm or deny; stable rule ids). 24 tests (19 unit, 5 randomised at 4096 cases); coverage 100 percent of regions, functions and lines (LLVM branch coverage needs nightly: not reported). fmt, clippy -D warnings, workspace tests, cargo deny ok. cargo-llvm-cov installed; llvm-tools added to rust-toolchain.toml. Not yet wired into the app (p4.3).
+- stales: [comp-security-engine]
+- next: owner re-approves comp-security-engine; then p4.3.
+- commit: 56cd05d
+
+## [2026-10-13] gate | comp-security-engine approval stale
+
+- session: s03
+- time: 08:11
+- pages: [comp-security-engine]
+- result: The p4.2 page update (same commit as the code, SCHEMA §9.8) staled comp-security-engine, which is in the P4 dependency set. p4.3 waits for the owner's re-approval (SCHEMA §10.4).

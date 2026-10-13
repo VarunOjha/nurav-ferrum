@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is done and signed off. Phase 4 (security) is in progress: the threat model is written; next is the site-rules engine. Claude stops for your review when Phase 4 is done.",
+  "summary": "Phase 4 (security) is in progress: the threat model and the site-rules engine are done. The security engine page needs your re-approval before Claude connects the engine to the app.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:24ef20ae2cb3f0501be0d8955256ca251cc2bb194edc8c056f0c93c23f8b1b02"
+    "content_hash": "sha256:dd0bbd23007e8280f9c060b392efbd051a2bf5d2f2152f81ff3eab6c37ea9136"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,7 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All current"
+      "state": "Security engine page out of date: waiting for you",
+      "ref": "comp-security-engine"
     },
     {
       "item": "Your rule",
@@ -34,20 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "1 of 17 tasks done; next the site-rules engine"
+        "state": "2 of 17 tasks done"
       },
       {
-        "item": "Your Ferrum notes",
-        "state": "whenever you are ready"
+        "item": "Security engine page",
+        "state": "changed with the new code; needs your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude continues with Phase 4, task by task, and stops for your review when it is done.",
+    "why": "Nothing to run. The page describing the security engine changed with the code, so your earlier approval is out of date; the next task builds on it.",
     "script": null,
-    "tell_claude": "Your Ferrum notes at any time, and \"Quiet now\" when you can leave the PC for about 35 minutes."
+    "tell_claude": "\"Re-approve the security engine page\", or ask to see the change first."
   },
   "questions_for_you": {
     "open": 19,
