@@ -234,3 +234,13 @@ d3fe486ef28260ad4555c4db49d9b4cdb6b808f8aade35f853bc020ef7d6cab1  evidence/phase
 ff8a575e4288a08d9690b030a90ca9cb14095f232e723f10c8b462f2b6e2f11f  evidence/phase-p3-tabs-sessions/release-build.20261012-1939.txt
 3bc4e039fa97c391c0e8e4a6c401cbe45fa9d6b5c8c750f74047c4c3df825f90  evidence/phase-p3-tabs-sessions/shell-tests.20261012-1937.txt
 1c0da518a04f16cebf071f22237e8cf550c953f4243d45146769cf26b75e5098  evidence/phase-p3-tabs-sessions/wiki-lint.20261012-1945.txt
+2e7fe8ee339051e2e71971bc4e5c2a9a09b9b3c096b0456091712c3f31cf7c23  evidence/phase-p3-tabs-sessions/cargo-clippy.20261012-2015.txt
+bd6537ace2fb24eb6a6ee7ac0230f15019ff1a0e28e9daa85b4a9f7908a61f8f  evidence/phase-p3-tabs-sessions/cargo-deny.20261012-2015.txt
+3bdff181c575e93bc5c44e2270350d3bda1d4ceba4982c05cb01f6b5153132d0  evidence/phase-p3-tabs-sessions/cargo-fmt.20261012-2015.txt
+4e790a0c9cbf4b5c021ff1ea67a07a8cf972d59887a933af2174dff4ca49a752  evidence/phase-p3-tabs-sessions/cargo-test.20261012-2015.txt
+82780e60d74492a429fd372836227d29df8662892febdd133e2bc0ee9a70a22c  evidence/phase-p3-tabs-sessions/integration.20261012-2019.txt
+d4cdc5c50628f960c32d958427a94eb16842c1d78bd8307ba86f99a6df0f2b7b  evidence/phase-p3-tabs-sessions/p3-gate.20261012-2022.txt
+7ecd1d2054b424965b5b5eac12ccf656ceb60cdabbcf46081c79698e45503615  evidence/phase-p3-tabs-sessions/regression-smoke.20261012-2022.txt
+b3aa3e26cf595945d2879b1722af76ef3b3733b4a3975556ff643eb2e38d4e9b  evidence/phase-p3-tabs-sessions/release-build.20261012-2016.txt
+863dd62de2b592ef569c4959adccb1dc3ae5211cc80496e49b832b0afd9aad9a  evidence/phase-p3-tabs-sessions/shell-tests.20261012-2015.txt
+cd10fb9d4b3a36f35f9b533aeadb6bab75f17bbd299d301dc102191f43c6b316  evidence/phase-p3-tabs-sessions/wiki-lint.20261012-2022.txt

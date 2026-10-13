@@ -1,0 +1,48 @@
+Command output saved by scripts/gates/p3-gate.ps1 on 2026-10-12 20:15 at commit d92ae4f (with uncommitted changes)
+Exit code: 0
+
+### npm run lint (exit 0)
+
+> ferrum-desktop-shell@0.0.0 lint
+> tsc --noEmit -p tsconfig.lint.json
+
+### npm run typecheck (exit 0)
+
+> ferrum-desktop-shell@0.0.0 typecheck
+> tsc --noEmit
+
+### npm run test (exit 0)
+
+> ferrum-desktop-shell@0.0.0 test
+> node --test "src/**/*.test.ts"
+
+✔ a loaded page: state loaded, no panel, lock allowed (1.8192ms)
+✔ a site's own error page (404, 500) stays visible with a toolbar note (1.1342ms)
+✔ a failure without a page gets the shell's panel (0.2401ms)
+✔ a cancelled navigation is not an error (0.136ms)
+✔ the lock describes only pages that loaded (0.2101ms)
+✔ error texts: known codes in plain words, unknown codes get a general sentence (0.2836ms)
+✔ address text and blocked note (0.1773ms)
+✔ tab labels: title first, then the address without its scheme, else New tab (0.2292ms)
+✔ shell shortcuts follow the same table as the app (0.4762ms)
+✔ download lines: sizes in plain units, percent while running, done or failed (0.3209ms)
+✔ the start-up box takes one address per line (0.281ms)
+✔ tab icons are the app's PNG data addresses only (0.1409ms)
+✔ a tab showed a page only after a web page loaded (0.1544ms)
+✔ sidebar history lists each address once, newest first, with its title (0.5371ms)
+✔ bookmarks: only web pages; grouped by folder, the bar first, in saved order (10.426ms)
+✔ suggestions: words start words, any case; highlighted word starts (1.1025ms)
+✔ suggestions: grouped tabs, bookmarks, history; a page once; the active tab left out; limits (0.6703ms)
+✔ history rows say how long ago (1.0872ms)
+✔ every theme defines every colour token for light and dark (1.0495ms)
+✔ the look's tokens: theme colours, the accent for light or dark, the density's sizes (0.9389ms)
+✔ style.css writes no colour of its own (0.3486ms)
+✔ every token style.css uses is one a look sets (0.3486ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 174.0102
