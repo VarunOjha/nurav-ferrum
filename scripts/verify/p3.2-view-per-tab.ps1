@@ -74,7 +74,7 @@ public static class FerrumZ {
     $server = Start-Process -FilePath (Get-RepoPath 'target/debug/fixture-server.exe') -ArgumentList 'serve', '--port', '8443', '--exit-after', '30' -PassThru -WindowStyle Hidden
     Start-Sleep -Seconds 2
     $env:FERRUM_EXIT_AFTER = '15'
-    try { $app = Start-Process -FilePath (Get-RepoPath 'target/debug/ferrum-desktop.exe') -ArgumentList '--config', "`"$cfg`"" -PassThru }
+    try { $app = Start-Process -FilePath (Get-RepoPath 'target/debug/ferrum-desktop.exe') -ArgumentList '--config', "`"$cfg`"", '--user-config', "`"$(Join-Path $tmp 'user-config.toml')`"" -PassThru }
     finally { Remove-Item Env:FERRUM_EXIT_AFTER -ErrorAction SilentlyContinue }
     Start-Sleep -Seconds 8
     $app.Refresh()

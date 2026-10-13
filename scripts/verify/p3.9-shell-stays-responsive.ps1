@@ -38,7 +38,7 @@ Invoke-Step 'Smoke test: switch and type within 5 s while a tab spins; the busy 
     $r = Invoke-FerrumSmoke -Spec 'responsive'
     $line = ($r.Output -split "`r?`n" | Where-Object { $_ -match 'p3\.9 result:' } | Select-Object -Last 1)
     Add-LogText (Get-Tail $r.Output 6)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '1 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b1 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
     "responsive: 1 passed; $($line.Trim()) (test log, not a measurement)"
 }
 

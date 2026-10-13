@@ -48,7 +48,7 @@ Invoke-Step 'Settings file unit tests, one per required case' {
 Invoke-Step 'Smoke test: start-up sites in order; broken and newer settings files handled' {
     $r = Invoke-FerrumSmoke -Spec 'startup'
     Add-LogText (Get-Tail $r.Output 8)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '3 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b3 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
     'startup: 3 passed'
 }
 

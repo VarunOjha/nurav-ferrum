@@ -4,7 +4,7 @@
 // off when Windows asks for less motion. Screenshots of the shell in dark and light go to test-results/look-*.png.
 import path from "node:path";
 import { test, expect } from "@playwright/test";
-import { launch, go, call, tabList, type Ferrum } from "./ferrum.ts";
+import { launch, go, visit, call, tabList, type Ferrum } from "./ferrum.ts";
 import { base, dataDir } from "./paths.ts";
 
 let f: Ferrum;
@@ -27,8 +27,8 @@ test("light or dark follows Windows; Graphite's colours", async () => {
 });
 
 test("an empty tab shows the new-tab page; its search box opens the address bar", async () => {
-  await go(f, `${base}/counted/lookoften`);
-  await go(f, `${base}/landing?look`);
+  await visit(f, `${base}/counted/lookoften`);
+  await visit(f, `${base}/landing?look`);
   await go(f, `${base}/counted/lookoften`);
   await call(f, "bookmark_add", { url: `${base}/landing?fav`, title: "Fav page", folder: null });
   const id = await call<number>(f, "tab_new", { url: null });

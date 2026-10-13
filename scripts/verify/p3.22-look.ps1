@@ -58,6 +58,7 @@ Invoke-Step 'Shell unit tests: themes are data, no colour outside a theme' {
 
 Invoke-Step 'Smoke tests: the look, and the parts it could disturb' {
     $r = Invoke-FerrumSmoke -Spec 'look.spec', 'bookmarks.spec', 'address-search.spec', 'settings.spec', 'sidebar.spec', 'tabs.spec', 'loading-errors.spec', 'startup.spec'
+    if ($r.Output -match 'was not the active window') { Stop-Wait 'Ferrum was not the active window when keys were due; run the check again without using the PC meanwhile.' }
     Add-LogText (Get-Tail $r.Output 14)
     if ($r.ExitCode -ne 0 -or $r.Output -match '\d+ failed') { Stop-Fail "The smoke tests failed:`n$(Get-Tail $r.Output 30)" }
     foreach ($name in 'light or dark follows Windows', 'an empty tab shows the new-tab page', 'accent colour and density change at once',

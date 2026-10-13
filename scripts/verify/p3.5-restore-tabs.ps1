@@ -47,7 +47,7 @@ Invoke-Step 'Session file unit tests' {
 Invoke-Step 'Smoke test: normal exit, crash, unreachable site, restore switched off' {
     $r = Invoke-FerrumSmoke -Spec 'restore'
     Add-LogText (Get-Tail $r.Output 9)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '4 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b4 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
     'restore: 4 passed'
 }
 

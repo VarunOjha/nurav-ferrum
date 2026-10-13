@@ -53,6 +53,7 @@ Invoke-Step 'Shell unit tests (bookmark rules included)' {
 
 Invoke-Step 'Smoke tests: bookmarks; sidebar and settings still work' {
     $r = Invoke-FerrumSmoke -Spec 'bookmarks.spec', 'sidebar.spec', 'settings.spec'
+    if ($r.Output -match 'was not the active window') { Stop-Wait 'Ferrum was not the active window when keys were due; run the check again without using the PC meanwhile.' }
     Add-LogText (Get-Tail $r.Output 12)
     if ($r.ExitCode -ne 0 -or $r.Output -match '\d+ failed') { Stop-Fail "The smoke tests failed:`n$(Get-Tail $r.Output 25)" }
     foreach ($name in 'the star bookmarks the page into the bar', 'the bar opens pages', 'the sidebar lists every folder',

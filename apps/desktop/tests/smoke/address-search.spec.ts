@@ -3,7 +3,7 @@
 // Shift+Delete forgets a history page. The list is part of the shell's top band, so the page view moves down while it
 // is open and the two never overlap (a web view is always drawn above the shell).
 import { test, expect, type Page } from "@playwright/test";
-import { launch, go, call, tabList, type Ferrum } from "./ferrum.ts";
+import { launch, go, visit, call, tabList, type Ferrum } from "./ferrum.ts";
 import { base } from "./paths.ts";
 
 let f: Ferrum;
@@ -28,8 +28,8 @@ const heads = () => f.shell.locator("#suggest .sg-head").allTextContents();
 let first = 0;
 let other = 0;
 test("typing shows open tabs, bookmarks and history in groups, never under the page", async () => {
-  await go(f, `${base}/counted/sugg-alpha`);
-  await go(f, `${base}/counted/sugg-beta`);
+  await visit(f, `${base}/counted/sugg-alpha`);
+  await visit(f, `${base}/counted/sugg-beta`);
   await go(f, `${base}/landing?start`);
   await call(f, "bookmark_add", { url: `${base}/counted/sugg-saved`, title: "Sugg saved page", folder: "Work" });
   first = (await tabList(f)).active!;

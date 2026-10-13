@@ -47,7 +47,7 @@ Invoke-Step 'Smoke test: every shortcut with focus in the shell and in a page' {
     $r = Invoke-FerrumSmoke -Spec 'shortcuts'
     Add-LogText (Get-Tail $r.Output 14)
     if ($r.Output -match 'was not the active window') { Stop-Wait 'Ferrum was not the active window when keys were due; run the check again without using the PC meanwhile.' }
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '9 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b9 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
     'shortcuts: 9 passed'
 }
 

@@ -65,7 +65,10 @@ Invoke-Step 'Self-test: website calls refused in a Tauri view; no bridge at all 
     if (-not $r.tauri_view.all_calls_refused) { Stop-Fail 'A bridge call from the website in the Tauri view was NOT refused.' }
     if (-not $r.content_view.no_bridge) { Stop-Fail 'The Ferrum-created content view exposes a bridge (or did not report).' }
     if ($r.shell_positive_control_pings -lt 1) { Stop-Fail 'The shell could not use the bridge (positive control failed).' }
-    "Tauri view: 3 calls refused; content view: no bridge; shell pings: $($r.shell_positive_control_pings)"
+    foreach ($k in 'settings_command', 'bookmark_command', 'history_command', 'suggest_command', 'backup_command', 'appearance_command') {
+        if ($null -eq $r.tauri_view.report.$k) { Stop-Fail "The probe page did not try $k (old probe page?)." }
+    }
+    "Tauri view: 9 calls refused (bridge, events, settings, bookmarks, history, suggestions, backup, appearance); content view: no bridge; shell pings: $($r.shell_positive_control_pings)"
 }
 
 Complete-Check -SaveEvidence:$SaveEvidence

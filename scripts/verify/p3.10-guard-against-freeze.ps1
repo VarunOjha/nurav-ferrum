@@ -80,7 +80,7 @@ Invoke-Step 'The review checklist has the item' {
 Invoke-Step 'Smoke test: a burst of tab commands settles; pop-ups still open tabs' {
     $r = Invoke-FerrumSmoke -Spec 'no-freeze'
     Add-LogText (Get-Tail $r.Output 6)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '1 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b1 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
     'no-freeze: 1 passed'
 }
 

@@ -45,7 +45,7 @@ Invoke-Step 'Smoke test: bounds shrink and grow, tab and history choices, Ctrl+S
     $r = Invoke-FerrumSmoke -Spec 'sidebar'
     Add-LogText (Get-Tail $r.Output 7)
     if ($r.Output -match 'was not the active window') { Stop-Wait 'Ferrum was not the active window when keys were due; run the check again without using the PC meanwhile.' }
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '3 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b3 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
     'sidebar: 3 passed'
 }
 

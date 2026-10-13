@@ -50,7 +50,7 @@ Invoke-Step 'Site and profile unit tests' {
 Invoke-Step 'Smoke test: cookies apart (with a shared-profile control), sharing rules, the cross-site bar, settings after a restart' {
     $r = Invoke-FerrumSmoke -Spec 'profiles'
     Add-LogText (Get-Tail $r.Output 10)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '5 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b5 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
     'profiles: 5 passed'
 }
 

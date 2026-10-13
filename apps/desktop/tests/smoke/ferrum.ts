@@ -3,7 +3,7 @@
 import { execFileSync, spawn, type ChildProcess } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { chromium, type Browser, type Page } from "@playwright/test";
+import { expect, chromium, type Browser, type Page } from "@playwright/test";
 import { ferrumExe, cdpPort, dataDir } from "./paths.ts";
 
 export type Ferrum = {
@@ -126,6 +126,14 @@ export const waitGone = (f: Ferrum) => gone(f.proc, f.browser);
 export async function go(f: Ferrum, input: string): Promise<void> {
   await f.shell.fill("#address", input);
   await f.shell.press("#address", "Enter");
+}
+
+/** Opens `url` like go() and waits until the visit is in history (the next go() would otherwise cancel the load). */
+export async function visit(f: Ferrum, url: string): Promise<void> {
+  await go(f, url);
+  await expect
+    .poll(async () => (await call<{ url: string }[]>(f, "history_list", { query: null, limit: null })).some((e) => e.url === url), { timeout: 15_000 })
+    .toBe(true);
 }
 
 /** Calls an app command from the shell (the only web view allowed to). */

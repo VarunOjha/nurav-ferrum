@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
-import { launch, go, call, type Ferrum } from "./ferrum.ts";
+import { launch, go, visit, call, type Ferrum } from "./ferrum.ts";
 import { base, dataDir } from "./paths.ts";
 
 type Bookmark = { url: string; title: string; folder: string };
@@ -18,8 +18,8 @@ test.afterAll(async () => { await f?.quit(); });
 
 test("make a backup from the Backup and restore screen", async () => {
   f = await launch("backup-a", { data: dataA });
-  await go(f, `${base}/counted/bk-one`);
-  await go(f, `${base}/counted/bk-two`);
+  await visit(f, `${base}/counted/bk-one`);
+  await visit(f, `${base}/counted/bk-two`);
   await call(f, "bookmark_add", { url: `${base}/counted/bk-one`, title: "Backed up one", folder: "Work" });
   await call(f, "bookmark_add", { url: `${base}/landing?bk`, title: "Backed up bar", folder: null });
   await f.shell.locator("#sidebar-btn").click();
@@ -87,6 +87,16 @@ test("a fresh Ferrum: wrong passphrase and a changed byte are refused; merge, th
   await f.shell.locator("#bk-pass3").fill(PASS);
   await f.shell.locator("#bk-look").click();
   await expect(f.shell.locator("#bk-choose")).toBeVisible({ timeout: 20_000 });
+  await f.shell.locator("#bk-replace").click();
+  await expect(f.shell.locator("#bk-replace")).toHaveText(/Click again/);
+  // Changing the file after looking inside disarms Merge and Replace: the new file must be looked into first.
+  await f.shell.locator("#bk-in").fill(changed);
+  await expect(f.shell.locator("#bk-choose")).toBeHidden();
+  await f.shell.locator("#bk-in").fill(file);
+  await f.shell.locator("#bk-pass3").fill(PASS);
+  await f.shell.locator("#bk-look").click();
+  await expect(f.shell.locator("#bk-choose")).toBeVisible({ timeout: 20_000 });
+  await expect(f.shell.locator("#bk-replace")).toHaveText("Replace mine");
   await f.shell.locator("#bk-replace").click();
   await expect(f.shell.locator("#bk-replace")).toHaveText(/Click again/);
   await f.shell.locator("#bk-replace").click();

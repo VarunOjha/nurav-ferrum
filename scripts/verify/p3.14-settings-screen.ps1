@@ -48,7 +48,7 @@ Invoke-Step 'Shell unit tests (settings form logic included)' {
 Invoke-Step 'Smoke test: change, take effect, restart, refuse bad input with the file unchanged' {
     $r = Invoke-FerrumSmoke -Spec 'settings'
     Add-LogText (Get-Tail $r.Output 7)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '2 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b2 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
     'settings: 2 passed'
 }
 
