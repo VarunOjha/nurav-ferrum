@@ -303,10 +303,10 @@
     {
       "id": "comp-security-engine",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure and logs every refusal. Pure rules with no browser inside, so each rule can be tested on its own. Basic rules in P2, the full engine in P4.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules with no browser inside, so each rule is tested on its own. The address rules are built (P4) and fully tested; they are connected to the app next.",
       "group": "application",
       "layer": "layer-engine",
-      "status": "Planned",
+      "status": "Being built",
       "ours": true,
       "phase": "phase-p2-minimal-container",
       "connects": [
@@ -326,7 +326,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-security-engine.md",
-        "content_hash": "sha256:7d67612f4d8a95803c7bf75537a0b24165f1272992fcdca362903c850086de85"
+        "content_hash": "sha256:3b7b554478dbc5011a6507578a3ac345969b1f1970b3854071a3aca4b6ce506f"
       }
     },
     {

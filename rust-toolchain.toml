@@ -1,5 +1,5 @@
 # Pinned to the stable release observed in p1.1 (wiki/raw/evidence/phase-p1-foundation/toolchain.txt).
 [toolchain]
 channel = "1.99.0"
-components = ["rustfmt", "clippy"]
+components = ["rustfmt", "clippy", "llvm-tools"]
 profile = "minimal"

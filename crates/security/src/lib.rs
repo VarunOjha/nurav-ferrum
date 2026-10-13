@@ -1,18 +1,13 @@
-//! Decides which navigations, permissions and downloads are allowed.
+//! Decides which navigations, permissions and downloads are allowed (comp-security-engine).
 //!
-//! Empty library stub created in P1 (task p1.4). Design: the component page
-//! `wiki/architecture/components/comp-security-engine.md`. Real code arrives in the phase named there.
+//! P4 task p4.2 builds the navigation policy: [`rules`] reads blocklist and allowlist entries, [`policy`] decides
+//! one navigation with [`policy::evaluate`]. Pure code: no WebView, no Tauri, no input or output, so every rule is
+//! tested without a browser. The hooks that call it are in the app (p4.3). Design:
+//! `wiki/architecture/components/comp-security-engine.md`.
 #![forbid(unsafe_code)]
 
-/// The crate name, so the stub has one public item and one test.
-pub const CRATE_NAME: &str = "ferrum-security";
+pub mod policy;
+pub mod rules;
 
-#[cfg(test)]
-mod tests {
-    use super::CRATE_NAME;
-
-    #[test]
-    fn crate_name_matches_package() {
-        assert_eq!(CRATE_NAME, env!("CARGO_PKG_NAME"));
-    }
-}
+pub use policy::{Context, Decision, Policy, Request, RuleId, Verdict, evaluate};
+pub use rules::{HostRule, RuleError, RuleList};

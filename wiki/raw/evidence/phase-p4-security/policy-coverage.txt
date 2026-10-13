@@ -1,0 +1,10 @@
+Policy engine coverage (p4.2), cargo llvm-cov on commit ad857d3 (with uncommitted changes), 2026-10-13 08:10.
+Regions count each decision arm separately. LLVM branch coverage needs a nightly compiler; the pinned stable
+toolchain reports none, so the Branches columns are empty.
+
+Filename                      Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover    Branches   Missed Branches     Cover
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+policy.rs                         556                 0   100.00%          31                 0   100.00%         464                 0   100.00%           0                 0         -
+rules.rs                          269                 0   100.00%          23                 0   100.00%         143                 0   100.00%           0                 0         -
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                             825                 0   100.00%          54                 0   100.00%         607                 0   100.00%           0                 0         -

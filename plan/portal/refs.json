@@ -890,7 +890,7 @@
       "kind": "task",
       "title": "P4 task: Rules engine",
       "summary": "Navigation needs one decision point → plain Rust rules: block and allow lists, HTTPS upgrade, ask for other link types, deny anything unreadable → safe by default, every decision explained.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -3242,8 +3242,8 @@
       "id": "comp-security-engine",
       "kind": "component",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure and logs every refusal. Pure rules with no browser inside, so each rule can be tested on its own. Basic rules in P2, the full engine in P4.",
-      "status": "Planned",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules with no browser inside, so each rule is tested on its own. The address rules are built (P4) and fully tested; they are connected to the app next.",
+      "status": "Being built",
       "related": [
         "layer-engine"
       ]

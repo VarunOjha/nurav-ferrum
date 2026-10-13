@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 1,
+    "done": 2,
     "total": 17
   },
   "step_order": [
@@ -37,7 +37,7 @@
       "what": "A rules engine that decides if a navigation is allowed, with block and allow lists and a reason for every decision.",
       "why": "If each feature made its own allow or block choice, the choices would drift apart and gaps would open. One place makes every decision checkable and explainable.",
       "how": "Plain Rust code: HTTPS allowed, plain HTTP upgraded or warned, other link types need confirmation. A more specific allow beats a block. Tests cover every branch.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Navigation needs one decision point → plain Rust rules: block and allow lists, HTTPS upgrade, ask for other link types, deny anything unreadable → safe by default, every decision explained.",
       "check": "Tests per rule plus random inputs; every decision branch covered (report saved).",
       "script": "scripts/verify/p4.2-rules-engine.ps1"

@@ -1,0 +1,23 @@
+Ferrum check p4.2: Rules engine
+Why: safe by default, every decision explained.
+Run at 2026-10-13 08:10 on commit ad857d3 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Rule tests pass, including the three named cases (8 s)
+         24 tests passed
+  PASS   Randomised inputs: no crash, unreadable denied, blocked stays blocked
+         4 random properties x 4096 cases plus the seed corpus
+Filename                      Regions    Missed Regions     Cover   Functions  Missed Functions  Executed       Lines      Missed Lines     Cover    Branches   Missed Branches     Cover
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+policy.rs                         556                 0   100.00%          31                 0   100.00%         464                 0   100.00%           0                 0         -
+rules.rs                          269                 0   100.00%          23                 0   100.00%         143                 0   100.00%           0                 0         -
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TOTAL                             825                 0   100.00%          54                 0   100.00%         607                 0   100.00%           0                 0         -
+  PASS   Tests reach 100 percent of the engine code (coverage report) (6 s)
+         regions 825/825, functions 54/54, lines 607/607
+  PASS   The engine is pure: no files, network, unsafe code or Tauri
+         3 source files; build dependencies: ferrum-core, url
+         Coverage report saved: wiki/raw/evidence/phase-p4-security/policy-coverage.txt
+------------------------------------------------------------------------
+RESULT: PASS - p4.2 (4 PASS; 15 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.2 check passed".
