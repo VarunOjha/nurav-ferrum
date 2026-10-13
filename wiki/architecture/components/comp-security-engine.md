@@ -99,6 +99,17 @@ settings screen. Tests: three app rule tests and the live test `security-navigat
 from an allowed page, in a frame and in a `window.open`; malformed address; each refusal in the log), check script
 `scripts/verify/p4.3-check-every-navigation.ps1`.
 
+**p4.4, links to other apps.** Owner answer Q-224: any link type may be offered, always with the user's click. The
+engine refuses four types without asking (`RISKY_SCHEMES`: `ms-appinstaller`, `ms-msdt`, `search-ms`, `ms-officecmd`;
+each was used to make one click run or install something, sources in
+[raw/research/p4-risky-uri-schemes.md](../../raw/research/p4-risky-uri-schemes.md); Claude's proposal, for the owner's
+review) and, when the settings list `external_allowlist` is not empty, every type missing from it (rules
+`external-risky`, `external-not-listed`). In the app every request to show the confirmation bar
+(`external::request`: page links, links WebView2 hands over through `LaunchingExternalUriScheme`, typed addresses and
+pop-ups) and the confirming click (`external_open_confirm`, checked again in case settings changed) pass the engine.
+Tests: one engine test (coverage still 100 percent), one app test for the list's syntax, live spec `external-schemes`
+(3 passed; launcher replaced by a test stand-in), check script `scripts/verify/p4.4-ask-before-opening.ps1`.
+
 Not done yet: the shell shows the "not secure" warning as the address-bar sign only, not yet as a bar (owner answer
 Q-112 asks for a bar; planned with the security settings screen, p4.17). The audit log of refusals (p4.9) replaces
 the plain log lines.

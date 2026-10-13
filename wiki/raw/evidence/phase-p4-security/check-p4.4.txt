@@ -1,0 +1,21 @@
+Ferrum check p4.4: Ask before opening other apps
+Why: no program starts silently.
+Run at 2026-10-13 13:31 on commit d2ac17a (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Rules: risky link types always refused; unlisted types refused when a list is set
+         engine tests passed; four always-refused types listed
+  PASS   Settings: the list of allowed types is read, saved and checked; empty by default (10 s)
+         settings and app tests passed
+  PASS   Every request to open another app, and its confirmation, passes the rules
+         request and confirmation both call the rules
+Running 3 tests using 1 worker
+  ✓  1 external-schemes.spec.ts:39:3 › default settings: any type, always ask (Q-224) › a custom-scheme link asks first; without the click nothing is launched (3.1s)
+  ✓  2 external-schemes.spec.ts:56:3 › default settings: any type, always ask (Q-224) › always-refused link types never get the bar, clicked or typed (1.4s)
+  ✓  3 external-schemes.spec.ts:83:3 › a list of allowed types in settings › an unlisted type is refused; a listed type still asks and opens only after the click (828ms)
+  3 passed (42.2s)
+  PASS   Live test: confirmation bar, nothing launched without the click, risky and unlisted types refused (59 s)
+         external-schemes: 3 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.4 (4 PASS; 70 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.4 check passed".

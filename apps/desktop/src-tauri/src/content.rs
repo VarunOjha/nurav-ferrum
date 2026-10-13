@@ -465,7 +465,7 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
             } => external::on_new_window(&h, id, uri, *user_initiated),
             TabEvent::ExternalSchemeRequested { uri, .. } => {
                 let security = h.state::<AppConfig>().get().security;
-                external::on_page_navigation(&h, &security, uri);
+                external::on_page_navigation(&h, id, &security, uri);
             }
             _ => {}
         }
@@ -508,7 +508,7 @@ fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
             }
             Verdict::Confirm => {
                 let security = h.state::<AppConfig>().get().security;
-                external::on_page_navigation(&h, &security, &r.uri);
+                external::on_page_navigation(&h, id, &security, &r.uri);
                 return NavDecision::Cancel;
             }
             Verdict::Upgrade(url) => {
@@ -742,7 +742,7 @@ pub async fn tab_navigate(app: AppHandle, input: String) -> NavResult {
         }
         // Links to other apps: the shell asks first (p2.10); nothing is launched here.
         Outcome::Confirm { url } => {
-            external::request(&app, url.to_string());
+            external::request(&app, active(&app).unwrap_or(0), url.to_string());
             NavResult {
                 outcome: "confirm",
                 url: Some(url.to_string()),

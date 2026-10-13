@@ -27,6 +27,8 @@ fn missing_file_gives_defaults() {
     assert!(l.config.security.blocklist.is_empty());
     assert!(l.config.security.allowlist.is_empty());
     assert!(!l.config.security.allowlist_only);
+    // Owner answer Q-224: any link type to another app may be offered (always with a click).
+    assert!(l.config.security.external_allowlist.is_empty());
     assert_eq!(l.config.security.new_window, NewWindow::NewTab);
     assert!(l.config.session.startup_urls.is_empty());
 }
@@ -277,7 +279,8 @@ fn site_lists_are_read_and_saved() {
     let p = tmp(
         "lists.toml",
         "version = 3\n[security]\nblocklist = [\"example.com\", \"=ads.example.org\"]\n\
-         allowlist = [\"docs.example.com\"]\nallowlist_only = true\n",
+         allowlist = [\"docs.example.com\"]\nallowlist_only = true\n\
+         external_allowlist = [\"mailto\"]\n",
     );
     let l = config::load(Some(&p), None).unwrap();
     assert_eq!(
@@ -286,6 +289,7 @@ fn site_lists_are_read_and_saved() {
     );
     assert_eq!(l.config.security.allowlist, vec!["docs.example.com"]);
     assert!(l.config.security.allowlist_only);
+    assert_eq!(l.config.security.external_allowlist, vec!["mailto"]);
     let out = tmp("lists-saved.toml", "");
     config::save(&out, &l.config).unwrap();
     assert_eq!(config::load(Some(&out), None).unwrap().config, l.config);

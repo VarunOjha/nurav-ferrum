@@ -100,6 +100,8 @@ Unit tests: `crates/core/tests/{config,address,oauth}.rs` in P2; P3 adds `{tabs,
   checked); times from an old `history.json` or a backup are capped instead of wrapping to negative values; `seal`
   refuses to write a backup over 100 MB (one `open` would refuse); `argon2` and `chacha20poly1305` are built with
   their `zeroize` features, so their own copies of the key material are wiped too. Two more unit tests.
+- `config` (p4.4): `[security] external_allowlist` (link types to other apps that may be offered; empty = any type,
+  owner answer Q-224; the app checks the names when settings are loaded or saved).
 - `config` (p4.3): settings version 3. `[security]` gains `blocklist`, `allowlist` (lists of site rules, empty by
   default, owner answer Q-113; the rule syntax is checked by the security engine when settings are loaded or saved)
   and `allowlist_only` (false). The `http_policy` default becomes `warn` (owner answer Q-112); `migrate_v2` keeps

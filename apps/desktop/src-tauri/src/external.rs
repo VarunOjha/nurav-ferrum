@@ -66,8 +66,20 @@ pub fn cross_site_cancel(app: AppHandle) {
 pub struct PendingExternal(pub Mutex<Option<String>>);
 
 /// Asks the shell to confirm opening `url` in another app. The message is posted, so the shell sees it after the
-/// navigation event that triggered it.
-pub fn request(app: &AppHandle, url: String) {
+/// navigation event that triggered it. Every request passes the navigation policy first (p4.4): a link type that is
+/// always refused, or missing from the settings' list, is never offered; it is logged and noted on tab `tab`'s toolbar.
+pub fn request(app: &AppHandle, tab: u64, url: String) {
+    let d = crate::policy::decide(
+        &crate::policy::current(app),
+        tab,
+        Context::TopLevel,
+        &url,
+        None,
+    );
+    if d.verdict == Verdict::Deny {
+        blocked(app, tab, &url, d.rule.as_str(), false);
+        return;
+    }
     tracing::info!(target: "ferrum::external", site = %site(&url), "asking before opening outside Ferrum");
     *app.state::<PendingExternal>().0.lock().unwrap() = Some(url.clone());
     let scheme = url.split(':').next().unwrap_or("").to_string();
@@ -132,9 +144,9 @@ pub fn blocked(app: &AppHandle, tab: u64, uri: &str, why: &str, frame: bool) {
 
 /// A page-started navigation to a non-web address (called from the navigation gate, which cancels it): links to
 /// other apps are offered to the user; everything else stays blocked.
-pub fn on_page_navigation(app: &AppHandle, security: &Security, uri: &str) {
+pub fn on_page_navigation(app: &AppHandle, tab: u64, security: &Security, uri: &str) {
     if let Outcome::Confirm { url } = normalize(uri, security) {
-        request(app, url.to_string());
+        request(app, tab, url.to_string());
     }
 }
 
@@ -204,9 +216,9 @@ pub fn on_new_window(app: &AppHandle, tab: u64, uri: &str, user_initiated: bool)
                     tracing::warn!(target: "ferrum::external", error = %e, "system browser not opened");
                 }
             }
-            NewWindow::SystemBrowser => request(app, url.to_string()),
+            NewWindow::SystemBrowser => request(app, tab, url.to_string()),
         },
-        Outcome::Confirm { url } => request(app, url.to_string()),
+        Outcome::Confirm { url } => request(app, tab, url.to_string()),
         Outcome::Refuse(_) => blocked(app, tab, uri, "new-window", false),
     }
 }
@@ -239,6 +251,7 @@ fn launch(url: &str) -> Result<(), String> {
 /// The user clicked Open on the shell's confirmation bar.
 #[tauri::command]
 pub fn external_open_confirm(
+    app: AppHandle,
     pending: tauri::State<'_, PendingExternal>,
     cfg: tauri::State<'_, AppConfig>,
     uri: String,
@@ -247,6 +260,17 @@ pub fn external_open_confirm(
     if asked.as_deref() != Some(uri.as_str()) {
         tracing::warn!(target: "ferrum::external", site = %site(&uri), "confirmation refused: not the link Ferrum asked about");
         return Err("not the link Ferrum asked about".into());
+    }
+    // Checked again at the click (p4.4): the settings may have changed while the bar was showing.
+    let d = crate::policy::decide(
+        &crate::policy::current(&app),
+        0,
+        Context::TopLevel,
+        &uri,
+        None,
+    );
+    if d.verdict == Verdict::Deny {
+        return Err("this link may not be opened outside Ferrum".into());
     }
     if is_sign_in(&uri) {
         // A Google sign-in the app offered (the address is opened exactly as the page asked for it).

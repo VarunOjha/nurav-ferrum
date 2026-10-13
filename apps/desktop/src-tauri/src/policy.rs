@@ -23,12 +23,27 @@ pub fn build(config: &Config) -> Result<Policy, String> {
         RuleList::parse(&s.blocklist).map_err(|e| format!("Blocked sites list: {e}."))?;
     let allowlist =
         RuleList::parse(&s.allowlist).map_err(|e| format!("Allowed sites list: {e}."))?;
+    let mut external_allowlist = Vec::with_capacity(s.external_allowlist.len());
+    for raw in &s.external_allowlist {
+        let scheme = raw.trim().trim_end_matches(':').to_ascii_lowercase();
+        let ok = scheme.starts_with(|c: char| c.is_ascii_lowercase())
+            && scheme
+                .chars()
+                .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || "+-.".contains(c));
+        if !ok || matches!(scheme.as_str(), "http" | "https") {
+            return Err(format!(
+                "Allowed link types to other apps: {raw:?} is not a link type (use a name such as mailto)."
+            ));
+        }
+        external_allowlist.push(scheme);
+    }
     Ok(Policy {
         blocklist,
         allowlist,
         allowlist_only: s.allowlist_only,
         http: s.http_policy,
         external: s.external_schemes,
+        external_allowlist,
     })
 }
 
@@ -143,6 +158,23 @@ mod tests {
             "file:///C:/x.html",
         ] {
             assert!(!ok(u), "{u}");
+        }
+    }
+
+    #[test]
+    fn link_type_list_is_read_and_checked() {
+        let mut c = Config::default();
+        c.security.external_allowlist = vec!["MailTo:".into(), " tel ".into()];
+        let p = build(&c).unwrap();
+        assert_eq!(p.external_allowlist, vec!["mailto", "tel"]);
+        let d = decide(&p, 1, Context::TopLevel, "ferrum-test:x", None);
+        assert_eq!(
+            (d.verdict, d.rule),
+            (Verdict::Deny, RuleId::ExternalNotListed)
+        );
+        for bad in ["https", "mail to", "", "1abc", "x/y"] {
+            c.security.external_allowlist = vec![bad.into()];
+            assert!(build(&c).is_err(), "{bad:?}");
         }
     }
 

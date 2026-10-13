@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:c04bf4e1bbfd74ead798877ddc0e8537dc5deb87fd4d00eb17892e87b902491b"
+        "content_hash": "sha256:01037444ad0212cbfde308e4c3ceb1a51cff2e78b996d136be34272695b56e4d"
       }
     },
     {
@@ -303,7 +303,7 @@
     {
       "id": "comp-security-engine",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules with no browser inside, so each rule is tested on its own. Since P4 it decides every page load, redirect step, frame and pop-up.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules, each tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and always refuses four link types known to be abused.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Being built",
@@ -326,7 +326,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-security-engine.md",
-        "content_hash": "sha256:b4ea32dbb4c2a758f8bde54f19aefeb6059690063d33d382e2576b5a568d82ff"
+        "content_hash": "sha256:6ebef505b178755da6305a6e33278c60d2c19a80a6a248e5b0da959570f0ee9f"
       }
     },
     {
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:9d0387d32798f9cc580739d6368b039f9d148b0ee2214506099de832c1ab8866"
+        "content_hash": "sha256:3f732063b611af9a4619762a2bcb33a76065e68888bbe81585c39f77a73d1de5"
       }
     },
     {

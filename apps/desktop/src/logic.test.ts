@@ -55,6 +55,8 @@ test("address text and blocked note", () => {
   assert.equal(blockedText("https://other.example/", "allowlist-only"), "Blocked: other.example is not on your allowed sites list");
   assert.equal(blockedText("https://exa mple", "url-bad-character"), "Blocked: not a valid address");
   assert.equal(blockedText("data:text/html,x", "data-top-level"), "Blocked: data address");
+  assert.equal(blockedText("ms-msdt:x", "external-risky"), "Blocked: ms-msdt links are always refused (known to be abused)");
+  assert.equal(blockedText("ferrum-test:x", "external-not-listed"), "Blocked: ferrum-test links are not on your allowed list");
 });
 
 test("tab labels: title first, then the address without its scheme, else New tab", () => {

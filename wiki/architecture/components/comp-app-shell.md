@@ -292,4 +292,8 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   was a frame; the toolbar says why ("Blocked: host is on your blocked sites list", "... is not on your allowed sites
   list", "Blocked a frame: ...") and keeps the note through WebView2's "cancelled" end of the blocked load, until the
   tab's next page starts. A typed address the address bar refuses is logged with its reason only.
+- p4.4, links to other apps: `external::request` (every confirmation-bar request) and `external_open_confirm` (the
+  click) ask the security engine; a refused type gets a toolbar note instead of the bar ("Blocked: ms-msdt links are
+  always refused (known to be abused)", "... links are not on your allowed list"). Settings key
+  `external_allowlist`; a bad entry refuses the settings like a bad site rule.
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

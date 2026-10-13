@@ -188,6 +188,11 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "a button that opens the https address in href (or a path on this site) with window.open (p4.3)",
     },
+    Route {
+        path: "/links/risky",
+        status: 200,
+        purpose: "links of types Ferrum always refuses (ms-msdt:, search-ms:), for the p4.4 tests; harmless inside Ferrum",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -486,6 +491,14 @@ async fn links_schemes() -> Html<String> {
     )
 }
 
+async fn links_risky() -> Html<String> {
+    page(
+        "Risky links",
+        "<p><a id=\"msdt\" href=\"ms-msdt:/id%20PCWDiagnostic\">ms-msdt link</a></p>\
+         <p><a id=\"searchms\" href=\"search-ms:query=fixture\">search-ms link</a></p>",
+    )
+}
+
 async fn cookie_set() -> Response {
     let mut r = page("Cookie set", "<p>The cookie fixture=1 was set.</p>").into_response();
     r.headers_mut().insert(
@@ -643,6 +656,7 @@ pub fn router() -> Router {
         .route("/icon.png", get(icon_png))
         .route("/goto", get(goto))
         .route("/links/open", get(links_open))
+        .route("/links/risky", get(links_risky))
 }
 
 /// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`).

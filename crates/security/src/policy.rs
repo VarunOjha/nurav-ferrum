@@ -8,8 +8,10 @@
 //! 2. **Scheme.** `https` and `http` go on to the host checks. `about:blank` (and `about:srcdoc` in frames) is
 //!    allowed. `data:` is allowed in frames only, `blob:` only from the page that created it. `javascript:`,
 //!    `file:` and the browser's own pages are denied. Ferrum's own origin (`tauri:`, `http(s)://tauri.localhost`,
-//!    ...) is denied for tabs (rule R4, threat T02). Every other scheme leaves the browser: confirm or deny per
-//!    settings (threat T08).
+//!    ...) is denied for tabs (rule R4, threat T02). Every other scheme leaves the browser (threat T08): a few
+//!    known-abused ones ([`RISKY_SCHEMES`]) are always denied, schemes missing from a non-empty
+//!    `external_allowlist` are denied, and the rest are confirmed or denied per settings (owner answer Q-224: by
+//!    default any type may be offered, always with the user's click).
 //! 3. **Host.** The blocklist, the allowlist override (an allow rule strictly more specific than the block rule
 //!    wins; equal specificity blocks) and the optional allowlist-only mode (threats T04 to T06).
 //! 4. **Plain HTTP** is allowed with a "not secure" warning, or upgraded to HTTPS, per `http_policy` (owner answer
@@ -47,6 +49,11 @@ const FORBIDDEN_SCHEMES: &[&str] = &[
     "wss",
 ];
 
+/// Links to other apps that are refused without asking, because attackers have used them to make one click run or
+/// install something (sources: `wiki/raw/research/p4-risky-uri-schemes.md`; Claude's proposal for the owner's review,
+/// Q-224).
+pub const RISKY_SCHEMES: &[&str] = &["ms-appinstaller", "ms-msdt", "search-ms", "ms-officecmd"];
+
 /// The navigation posture, built from settings.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Policy {
@@ -60,6 +67,8 @@ pub struct Policy {
     pub http: HttpPolicy,
     /// What happens to links to other apps.
     pub external: ExternalSchemes,
+    /// The only link types to other apps that may be offered (lower-case scheme names); empty means any type.
+    pub external_allowlist: Vec<String>,
 }
 
 /// Where a navigation happens.
@@ -130,6 +139,10 @@ pub enum RuleId {
     ExternalConfirm,
     /// A link to another app, refused by settings.
     ExternalDenied,
+    /// A link type that is always refused ([`RISKY_SCHEMES`]).
+    ExternalRisky,
+    /// A link type missing from the settings' list of allowed types.
+    ExternalNotListed,
     /// A blocklist rule matched.
     Blocked,
     /// An allowlist rule more specific than the matching block rule.
@@ -161,6 +174,8 @@ impl RuleId {
             RuleId::BlobOtherOrigin => "blob-other-origin",
             RuleId::ExternalConfirm => "external-confirm",
             RuleId::ExternalDenied => "external-denied",
+            RuleId::ExternalRisky => "external-risky",
+            RuleId::ExternalNotListed => "external-not-listed",
             RuleId::Blocked => "blocklist",
             RuleId::AllowOverride => "allowlist-override",
             RuleId::NotAllowlisted => "allowlist-only",
@@ -229,6 +244,12 @@ pub fn evaluate(policy: &Policy, request: &Request<'_>) -> Decision {
         "blob" => blob(&url, request.initiator),
         s if APP_SCHEMES.contains(&s) => Decision::deny(RuleId::AppOrigin),
         s if FORBIDDEN_SCHEMES.contains(&s) => Decision::deny(RuleId::ForbiddenScheme),
+        s if RISKY_SCHEMES.contains(&s) => Decision::deny(RuleId::ExternalRisky),
+        s if !policy.external_allowlist.is_empty()
+            && !policy.external_allowlist.iter().any(|a| a == s) =>
+        {
+            Decision::deny(RuleId::ExternalNotListed)
+        }
         _ => match policy.external {
             ExternalSchemes::Confirm => Decision::new(Verdict::Confirm, RuleId::ExternalConfirm),
             ExternalSchemes::Deny => Decision::deny(RuleId::ExternalDenied),
@@ -661,6 +682,42 @@ mod tests {
     }
 
     #[test]
+    fn risky_and_unlisted_link_types_are_refused() {
+        let mut p = Policy::default();
+        for u in [
+            "ms-msdt:/id%20PCWDiagnostic",
+            "MS-MSDT:x",
+            "search-ms:query=x&crumb=location:%5C%5Chost%5Cshare",
+            "ms-appinstaller:?source=https://example.org/x.msix",
+            "ms-officecmd:{}",
+        ] {
+            let d = evaluate(&p, &top(u));
+            assert_eq!(
+                (d.verdict, d.rule),
+                (Verdict::Deny, RuleId::ExternalRisky),
+                "{u}"
+            );
+        }
+        // Any other type is offered by default (Q-224) ...
+        assert_eq!(
+            evaluate(&p, &top("ferrum-test:x")).verdict,
+            Verdict::Confirm
+        );
+        // ... and only the listed types once the list is not empty; the risky ones stay refused.
+        p.external_allowlist = vec!["mailto".into(), "ms-msdt".into()];
+        assert_eq!(
+            evaluate(&p, &top("mailto:a@example.org")).verdict,
+            Verdict::Confirm
+        );
+        let d = evaluate(&p, &top("ferrum-test:x"));
+        assert_eq!(
+            (d.verdict, d.rule),
+            (Verdict::Deny, RuleId::ExternalNotListed)
+        );
+        assert_eq!(evaluate(&p, &top("ms-msdt:x")).rule, RuleId::ExternalRisky);
+    }
+
+    #[test]
     fn blob_only_from_the_page_that_made_it() {
         let p = Policy::default();
         let req = |initiator| Request {
@@ -718,6 +775,8 @@ mod tests {
             RuleId::BlobOtherOrigin,
             RuleId::ExternalConfirm,
             RuleId::ExternalDenied,
+            RuleId::ExternalRisky,
+            RuleId::ExternalNotListed,
             RuleId::Blocked,
             RuleId::AllowOverride,
             RuleId::NotAllowlisted,

@@ -28,4 +28,4 @@ cargo test --locked -p fixture-server                         # routes, HTTPS, C
 301/302/303/307/308, a redirect chain and a loop, `target=_blank` and `window.open`, `mailto:` and `ferrum-test:` links,
 cookie set/read (Secure, HttpOnly, SameSite=Lax), a slow page (`/slow?ms=`, at most 30 s), 404 and 500 pages, and
 (p4.3) a redirect to any https address or path (`/goto?url=`) and a button that opens one with `window.open`
-(`/links/open?href=`).
+(`/links/open?href=`); (p4.4) links of types Ferrum always refuses (`/links/risky`).

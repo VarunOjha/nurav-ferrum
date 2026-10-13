@@ -100,6 +100,9 @@ pub struct Security {
     pub allowlist: Vec<String>,
     /// Only sites on the allowlist may load.
     pub allowlist_only: bool,
+    /// The only link types to other apps that may be offered (scheme names such as `mailto`); empty means any type,
+    /// always with the user's click (owner answer Q-224). Checked by the app when settings are loaded or saved.
+    pub external_allowlist: Vec<String>,
 }
 
 /// How sites are kept apart (adr-0010, adr-0029; p3.6).

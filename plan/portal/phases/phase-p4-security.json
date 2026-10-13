@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 3,
+    "done": 4,
     "total": 17
   },
   "step_order": [
@@ -59,7 +59,7 @@
       "what": "Links that would open another program on your PC first ask you.",
       "why": "Without this, a website could launch a program on your computer without asking, which attackers use to run their own code.",
       "how": "Catch WebView2's external-link event, ask for confirmation in the shell, and keep an allowlist per link type. A test proves nothing launches without consent.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Links can launch other programs → confirm in the shell, with an allowlist per link type → nothing launches silently.",
       "check": "Without consent the other program is never started.",
       "script": "scripts/verify/p4.4-ask-before-opening.ps1"

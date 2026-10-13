@@ -910,7 +910,7 @@
       "kind": "task",
       "title": "P4 task: Ask before opening other apps",
       "summary": "Links can launch other programs → confirm in the shell, with an allowlist per link type → nothing launches silently.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -3242,7 +3242,7 @@
       "id": "comp-security-engine",
       "kind": "component",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules with no browser inside, so each rule is tested on its own. Since P4 it decides every page load, redirect step, frame and pop-up.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules, each tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and always refuses four link types known to be abused.",
       "status": "Being built",
       "related": [
         "layer-engine"
