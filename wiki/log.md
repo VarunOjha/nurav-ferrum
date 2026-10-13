@@ -2259,3 +2259,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-security-engine]
 - sources: [raw/owner/2026-10-13-s03-security-engine-reapproval.md]
 - result: The owner said "Re-approve the security engine page". Recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key. blocked_on cleared; p4.3 (connect the engine to every navigation event) is next.
+
+## [2026-10-13] code | p4.3 every navigation passes the policy engine
+
+- session: s03
+- time: 13:00
+- pages: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell, ov-arch-configuration, qual-security-testing-plan, phase-p4-security]
+- sources: [raw/evidence/phase-p4-security/check-p4.3.txt]
+- result: The app asks the policy engine on every page navigation, redirect hop (NavigationStarting), frame (new FrameNavigationStarting gate) and new-window request; refusals are cancelled, logged with rule and context, and explained on the toolbar. The shell view uses Tauri on_navigation (Ferrum's own pages only). Settings version 3 adds blocklist, allowlist and allowlist_only; http_policy defaults to warn (Q-112). p4.3 check PASS 4/4 (live spec 5 passed); full smoke suite 85 passed on rerun (first run: 6 window-focus failures, NOT-FRONT); workspace tests, clippy and fmt clean. Open: the "not secure" bar (Q-112) is still the address-bar sign only. Stales approval of comp-security-engine, comp-webview-manager, comp-core and comp-app-shell.
+- stales: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell]
+- commit: 1323b3d
+
+## [2026-10-13] gate | four component approvals stale after p4.3
+
+- session: s03
+- time: 13:00
+- pages: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell]
+- result: The p4.3 page updates (same commit as the code, SCHEMA §9.8) staled four components in the P4 dependency set. p4.4 waits for the owner's re-approval (SCHEMA §10.4). Also found: lint:wiki RAW-IMMUTABLE on commit ff7292e (p4.1), which inserted the check-p4.1 MANIFEST line above the previous last line instead of appending it; every hash is still correct; fixing it needs a history rewrite, so it goes to the owner (fits the planned cleanup, Q-221).

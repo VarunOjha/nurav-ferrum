@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:1819044385da70f7a41559dad11c6d3a28c1bbc12d9843b645a89d7c480d633e"
+    "content_hash": "sha256:bc884cc03345ab0b0991369098b50b2ce9b76bc6d4b1e6db8a21cd202b485e70"
   },
   "entries": [
     {
@@ -3734,6 +3734,44 @@
       "tags": [
         "approvals",
         "blocklist"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-p4-3",
+      "date": "2026-10-13",
+      "time": "13:00",
+      "title": "Every page load now passes the site rules",
+      "done": "Claude connected the site-rules engine to every way a page can move: typed addresses, each redirect step, frames inside a page and pop-ups. A refusal is logged and the toolbar says why. Settings gained blocked and allowed sites lists, and plain HTTP now opens with a warning. Live test: a blocked test site stayed blocked on all paths. Full test suite: 85 passed.",
+      "next": "You re-approve four part pages that changed with the code, and decide how to fix one out-of-order line in the evidence register; then Claude builds the next task (links to other apps).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Tab & view manager page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Core library page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "1323b3d",
+      "covers": [
+        "## [2026-10-13] code | p4.3 every navigation passes the policy engine",
+        "## [2026-10-13] gate | four component approvals stale after p4.3"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "blocklist",
+        "web views"
       ]
     }
   ]

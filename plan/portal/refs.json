@@ -900,7 +900,7 @@
       "kind": "task",
       "title": "P4 task: Check every navigation path",
       "summary": "Tauri's hook misses unreadable addresses and embedded frames → also hook WebView2's own events and re-check each redirect → no way around the rules by redirect, frame or pop-up.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -5150,6 +5150,16 @@
       "summary": "Task p4.2: the site-rules engine and its tests.",
       "status": "Committed",
       "related": []
+    },
+    {
+      "id": "1323b3d",
+      "kind": "commit",
+      "title": "Commit 1323b3d",
+      "summary": "Every page load, redirect step, frame and pop-up passes the site rules; blocked and allowed sites lists in settings (task p4.3).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

@@ -26,9 +26,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s03
 current_phase: phase-p4-security
-current_task: p4.3
-next_action: "p4.3: connect the security engine to every navigation event (top level, redirects, frames, new windows, links to other apps), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.3-check-every-navigation.ps1. Stop after the P4 exit gate (no P5 work). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+current_task: p4.4
+next_action: "Owner re-approves comp-security-engine, comp-webview-manager, comp-core and comp-app-shell (stale after the p4.3 page updates) and decides how to fix the out-of-order MANIFEST line of commit ff7292e (lint:wiki RAW-IMMUTABLE); then p4.4 (links to other apps: confirmation and per-scheme list), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.4-ask-before-opening.ps1. Stop after the P4 exit gate (no P5 work). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell]
 last_handoff: handoff-2026-10-13-s02
 ---
 
@@ -57,6 +57,7 @@ manual checklist items 1 to 20 are still owed).
 - Alt+Tab focus check (deferred at the P3 sign-off) moved to the P4 hand checks; five keys re-approved (`2f9b541`).
 - p4.1 done (`ff7292e`): threat model (15 boundary edges, 26 threats, not-enforced list) in the security testing plan and SECURITY.md; check PASS.
 - p4.2 done (`56cd05d`): navigation policy engine in `crates/security`, 24 tests, 100 percent coverage; comp-security-engine re-approved by the owner.
+- p4.3 done (`1323b3d`): every page load, redirect step, frame and pop-up passes the engine; blocked and allowed sites lists in settings (version 3, HTTP warning default); shell view limited to Ferrum's own pages; check PASS, smoke 85 passed. Four component approvals stale; MANIFEST order slip (ff7292e) reported.
 
 ## Done this session (s02)
 
@@ -341,7 +342,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.2 committed in 56cd05d; comp-security-engine re-approved; p4.3 next)
+(empty: p4.3 committed in 1323b3d; four component approvals stale, waiting for the owner)
 
 ## Blockers
 
