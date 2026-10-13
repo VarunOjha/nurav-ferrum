@@ -16,6 +16,17 @@ pub enum TabEvent {
         /// Whether the gate let it start.
         allowed: bool,
     },
+    /// A frame inside the page (an iframe) is about to navigate. `allowed` is the navigation gate's decision.
+    FrameNavigationStarting {
+        /// WebView2's navigation id.
+        id: u64,
+        /// Target address.
+        uri: String,
+        /// Part of a redirect chain.
+        redirected: bool,
+        /// Whether the gate let it start.
+        allowed: bool,
+    },
     /// The view's address changed (also on redirects and same-document navigations).
     SourceChanged {
         /// The new address.
@@ -103,7 +114,8 @@ pub enum TabEvent {
     },
 }
 
-/// A top-level navigation that is about to start, as the navigation gate sees it.
+/// A navigation that is about to start, as the navigation gate sees it: the page itself (top level) or a frame in
+/// it. WebView2 raises one for the first request and again for every redirect hop.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NavRequest {
     /// Target address.
@@ -112,6 +124,8 @@ pub struct NavRequest {
     pub user_initiated: bool,
     /// Part of a redirect chain (the server chose the target, not the page).
     pub redirected: bool,
+    /// A frame inside the page (`FrameNavigationStarting`), not the page itself.
+    pub frame: bool,
 }
 
 /// A key pressed while a tab view had focus, as WebView2 reports it before the page sees it (accelerator keys:
@@ -137,38 +151,4 @@ pub enum NavDecision {
     Allow,
     /// Cancel it.
     Cancel,
-}
-
-/// The base navigation gate (P2, kept in P3) for page-started navigations: web pages (`https:`, `http:`) and `about:blank` may load;
-/// every other scheme is cancelled here (the app asks before links to other apps are opened, p2.10). The full policy
-/// engine (blocklist, adr-0015) arrives in P4.
-pub fn web_gate(uri: &str) -> NavDecision {
-    let scheme = uri.split(':').next().unwrap_or("").to_ascii_lowercase();
-    match scheme.as_str() {
-        "https" | "http" => NavDecision::Allow,
-        "about" if uri.eq_ignore_ascii_case("about:blank") => NavDecision::Allow,
-        _ => NavDecision::Cancel,
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{NavDecision, web_gate};
-
-    #[test]
-    fn gate_allows_web_pages_only() {
-        assert_eq!(web_gate("https://example.org/"), NavDecision::Allow);
-        assert_eq!(web_gate("http://example.org/"), NavDecision::Allow);
-        assert_eq!(web_gate("about:blank"), NavDecision::Allow);
-        for u in [
-            "javascript:alert(1)",
-            "file:///C:/x",
-            "data:text/html,x",
-            "mailto:a@b.c",
-            "about:settings",
-            "ferrum-test:x",
-        ] {
-            assert_eq!(web_gate(u), NavDecision::Cancel, "{u}");
-        }
-    }
 }

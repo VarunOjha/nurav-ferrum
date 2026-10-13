@@ -50,6 +50,11 @@ test("address text and blocked note", () => {
   assert.equal(addressText("about:blank"), "");
   assert.equal(addressText("https://example.org/a?b"), "https://example.org/a?b");
   assert.equal(blockedText("javascript:alert(1)"), "Blocked: javascript address");
+  assert.equal(blockedText("https://ads.example/x", "blocklist"), "Blocked: ads.example is on your blocked sites list");
+  assert.equal(blockedText("https://ads.example/x", "blocklist", true), "Blocked a frame: ads.example is on your blocked sites list");
+  assert.equal(blockedText("https://other.example/", "allowlist-only"), "Blocked: other.example is not on your allowed sites list");
+  assert.equal(blockedText("https://exa mple", "url-bad-character"), "Blocked: not a valid address");
+  assert.equal(blockedText("data:text/html,x", "data-top-level"), "Blocked: data address");
 });
 
 test("tab labels: title first, then the address without its scheme, else New tab", () => {

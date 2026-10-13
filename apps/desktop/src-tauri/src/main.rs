@@ -14,6 +14,7 @@ mod external;
 mod history;
 mod library;
 mod logging;
+mod policy;
 mod selftest;
 mod session;
 mod settings;
@@ -119,7 +120,26 @@ fn arg_after(flag: &str) -> Option<PathBuf> {
 /// that cannot be used is skipped (the defaults, or the override file, apply). A user file that cannot be read as
 /// TOML is first copied aside (`<name>.broken-<time>`), so nothing is lost; a file from a newer Ferrum is left
 /// exactly as it is (p3.4). The third value says why the user file must not be overwritten this run, if so.
+///
+/// The site lists must also make a valid navigation policy (p4.3): a file with a bad site rule is not used either, like
+/// any other invalid setting, so a typo never leaves Ferrum with half a blocked-sites list. That file is also kept
+/// as it is this run (the settings screen does not overwrite it), so the user's lists are not lost.
 fn load_config(user: Option<&std::path::Path>) -> (config::Loaded, Option<String>, Option<String>) {
+    let (loaded, why, keep) = read_config(user);
+    match policy::build(&loaded.config) {
+        Ok(_) => (loaded, why, keep),
+        Err(e) => {
+            let why = match why {
+                Some(w) => format!("{w}; {e}"),
+                None => e,
+            };
+            let defaults = config::validate(config::Config::default()).expect("defaults are valid");
+            (defaults, Some(why.clone()), Some(why))
+        }
+    }
+}
+
+fn read_config(user: Option<&std::path::Path>) -> (config::Loaded, Option<String>, Option<String>) {
     let over = arg_after("--config");
     let defaults = || config::validate(config::Config::default()).expect("defaults are valid");
     match config::load(user, over.as_deref()) {
@@ -252,6 +272,8 @@ fn main() {
                 tracing::warn!(target: "ferrum::config", error = %e, "settings not used; using the defaults");
             }
             let data_dir = loaded.config.storage.data_dir.clone();
+            let nav_policy = policy::build(&loaded.config).expect("load_config checked the site lists");
+            app.manage(policy::PolicyState(std::sync::RwLock::new(std::sync::Arc::new(nav_policy))));
             app.manage(AppConfig(std::sync::RwLock::new(loaded)));
             app.manage(session::store(app, data_dir.clone()));
             let lib = library::open(app, data_dir);
@@ -279,6 +301,8 @@ fn main() {
                 .to_logical::<f64>(window.scale_factor()?);
             let handle = app.handle().clone();
             let mut shell = WebviewBuilder::new("shell", WebviewUrl::App("index.html".into()))
+                // The shell may call the app, so it only ever shows Ferrum's own pages (p4.3).
+                .on_navigation(policy::shell_may_load)
                 .on_document_title_changed(move |_wv, t| {
                     *handle.state::<ShellTitle>().0.lock().unwrap() = t;
                 });

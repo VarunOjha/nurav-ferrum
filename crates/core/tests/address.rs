@@ -31,7 +31,7 @@ fn check(class: &str, input: &str, security: &Security, want: Want) {
 
 #[test]
 fn every_input_class() {
-    let d = Security::default(); // upgrade + confirm
+    let d = sec(HttpPolicy::Upgrade, ExternalSchemes::Confirm);
     let warn = sec(HttpPolicy::Warn, ExternalSchemes::Confirm);
     let deny = sec(HttpPolicy::Upgrade, ExternalSchemes::Deny);
     let cases: Vec<(&str, &str, &Security, Want)> = vec![

@@ -20,10 +20,10 @@ use sha2::{Digest, Sha256};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "kebab-case")]
 pub enum HttpPolicy {
-    /// Rewrite `http:` to `https:` before navigating (default).
-    #[default]
+    /// Rewrite `http:` to `https:` before navigating (the default up to settings version 2).
     Upgrade,
-    /// Keep `http:` but warn the user.
+    /// Keep `http:` and show the "not secure" warning (default from settings version 3, owner answer Q-112).
+    #[default]
     Warn,
 }
 
@@ -92,6 +92,14 @@ pub struct Security {
     pub google_oauth: GoogleOauth,
     /// New windows.
     pub new_window: NewWindow,
+    /// Sites that never load (adr-0015 rule 2; owner answer Q-113: empty until the user adds sites). One rule per
+    /// entry: `example.com` blocks the site and its subdomains, `=www.example.com` that host only. The rule syntax is
+    /// checked by `ferrum_security::RuleList` when the settings are loaded or saved.
+    pub blocklist: Vec<String>,
+    /// Sites that override a less specific block rule, and the only sites allowed in allowlist-only mode.
+    pub allowlist: Vec<String>,
+    /// Only sites on the allowlist may load.
+    pub allowlist_only: bool,
 }
 
 /// How sites are kept apart (adr-0010, adr-0029; p3.6).
@@ -205,7 +213,7 @@ pub struct Storage {
 }
 
 /// The settings file format this Ferrum writes.
-pub const VERSION: u32 = 2;
+pub const VERSION: u32 = 3;
 
 fn version_one() -> u32 {
     1
@@ -350,7 +358,7 @@ pub struct Loaded {
 }
 
 /// Parses one TOML layer. Each layer is a complete configuration; missing keys take their defaults. A version-1 file
-/// is migrated ([`migrate_v1`]); a file newer than [`VERSION`] is refused.
+/// is migrated ([`migrate_v1`], then [`migrate_v2`]); a file newer than [`VERSION`] is refused.
 pub fn parse(text: &str, origin: &Path) -> Result<Config, ConfigError> {
     let bad = |message: String| ConfigError::Parse {
         path: origin.to_path_buf(),
@@ -371,6 +379,9 @@ pub fn parse(text: &str, origin: &Path) -> Result<Config, ConfigError> {
     if version == 1 {
         migrate_v1(&mut table);
     }
+    if version <= 2 {
+        migrate_v2(&mut table);
+    }
     table
         .try_into::<Config>()
         .map_err(|e| bad(e.message().to_string()))
@@ -381,6 +392,7 @@ pub fn parse(text: &str, origin: &Path) -> Result<Config, ConfigError> {
 /// a new tab), the previous session is not restored (P2 never restored one), and all sites share one profile (the
 /// new default is a profile per site, which would hide the cookies the user already has).
 pub fn migrate_v1(table: &mut toml::Table) {
+    // (The version is set by migrate_v2, which every version-1 file passes through next.)
     let isolation = table
         .entry("isolation")
         .or_insert_with(|| toml::Value::Table(toml::Table::new()));
@@ -401,6 +413,18 @@ pub fn migrate_v1(table: &mut toml::Table) {
     if let toml::Value::Table(sec) = security {
         sec.entry("new_window")
             .or_insert_with(|| toml::Value::String("same-view".into()));
+    }
+}
+
+/// Version 2 (P3) to version 3 (P4). The `http_policy` default changed from upgrade to warn (owner answer Q-112); a
+/// version-2 file that does not choose keeps upgrade, as for version 1. The new site lists start empty.
+pub fn migrate_v2(table: &mut toml::Table) {
+    let security = table
+        .entry("security")
+        .or_insert_with(|| toml::Value::Table(toml::Table::new()));
+    if let toml::Value::Table(sec) = security {
+        sec.entry("http_policy")
+            .or_insert_with(|| toml::Value::String("upgrade".into()));
     }
     table.insert("version".into(), toml::Value::Integer(i64::from(VERSION)));
 }

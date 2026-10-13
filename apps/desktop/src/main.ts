@@ -28,7 +28,7 @@ type TabEvent = { tab: number } & (
 type LinkEvent =
   | { kind: "external-request"; uri: string; scheme: string }
   | { kind: "sign-in-offer"; uri: string }
-  | { kind: "blocked"; tab: number; uri: string; why: string }
+  | { kind: "blocked"; tab: number; uri: string; why: string; frame?: boolean }
   | { kind: "cross-site"; tab: number; uri: string; to: string; from: string };
 
 type TabSummary = { id: number; url: string; title: string; loading: boolean; profile: string; can_go_back: boolean; can_go_forward: boolean };
@@ -52,10 +52,15 @@ type TabUi = {
   hadPage: boolean;
   /** When a download from this tab last started (ms), so its navigation's end is not shown as an error. */
   downloadAt: number;
+  /** The note for the last thing Ferrum blocked in this tab (p4.3). It stays until the tab's next page starts loading:
+   * WebView2 reports a blocked load as "cancelled", which alone would clear the toolbar note. */
+  blockedNote: string;
+  /** The address that note is about (its specific note may arrive before the generic "not allowed" event). */
+  blockedUri: string;
 };
 const newUi = (): TabUi => ({
   uri: "", lastUri: "", loading: false, state: "idle", status: "", pageLoaded: false, canBack: false, canForward: false, panel: null,
-  icon: "", hadPage: false, downloadAt: 0,
+  icon: "", hadPage: false, downloadAt: 0, blockedNote: "", blockedUri: "",
 });
 /** How long after a download started a failed navigation of its tab counts as "became the download". */
 const DOWNLOAD_GRACE_MS = 3000;
@@ -271,10 +276,15 @@ await listen<TabEvent>("tab", async (e) => {
         u.loading = true;
         u.state = "loading";
         u.status = "Loading…";
+        u.blockedNote = "";
+        u.blockedUri = "";
         void hidePanelFor(ev.tab);
-      } else if (extBar.hidden || extUri.textContent !== ev.uri) {
-        // (A link to another app is not "blocked": the confirmation bar is asking about it.)
+      } else if ((extBar.hidden || extUri.textContent !== ev.uri) && u.blockedUri !== ev.uri) {
+        // (A link to another app is not "blocked": the confirmation bar is asking about it. An address the app already
+        // explained in a "blocked" message keeps that more specific note.)
         u.status = blockedText(ev.uri);
+        u.blockedNote = u.status;
+        u.blockedUri = ev.uri;
       }
       break;
     case "source-changed":
@@ -289,6 +299,7 @@ await listen<TabEvent>("tab", async (e) => {
       u.state = f.state;
       u.status = f.status;
       u.pageLoaded = f.pageLoaded;
+      if (!f.status && u.blockedNote) u.status = u.blockedNote;
       if (showedPage(u.uri, f.pageLoaded)) u.hadPage = true;
       // A navigation that turned into a download ends without a page; that is not an error (p3.16).
       if (f.panel && Date.now() - u.downloadAt < DOWNLOAD_GRACE_MS) {
@@ -329,10 +340,14 @@ await listen<LinkEvent>("link", async (e) => {
     case "cross-site":
       await showCrossSite(ev.uri, ev.to);
       break;
-    case "blocked":
+    case "blocked": {
       // The note belongs to the tab that asked (which may no longer be the active one).
-      uiOf(ev.tab).status = ev.why === "pop-up" ? "Pop-up blocked" : blockedText(ev.uri);
+      const b = uiOf(ev.tab);
+      b.status = ev.why === "pop-up" ? "Pop-up blocked" : blockedText(ev.uri, ev.why, ev.frame ?? false);
+      b.blockedNote = b.status;
+      b.blockedUri = ev.uri;
       break;
+    }
   }
   render();
 });

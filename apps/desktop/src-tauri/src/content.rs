@@ -15,7 +15,8 @@ use std::sync::atomic::{AtomicBool, AtomicIsize, Ordering};
 use ferrum_core::address::{Note, Outcome, Refusal, normalize, site};
 use ferrum_core::config::{GoogleOauth, Loaded};
 use ferrum_core::tabs::{Place, TabId, Tabs};
-use ferrum_webview_manager::tab::{NavDecision, NavRequest, TabEvent, web_gate};
+use ferrum_security::{Context, Verdict};
+use ferrum_webview_manager::tab::{NavDecision, NavRequest, TabEvent};
 use ferrum_webview_manager::webview2::{
     ContentView, ENVIRONMENT, Handlers, VIEWS, renderer_process_count,
 };
@@ -107,6 +108,13 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
         } => json!({
             "kind": "navigation-starting", "id": id, "uri": uri, "user_initiated": user_initiated,
             "redirected": redirected, "allowed": allowed }),
+        TabEvent::FrameNavigationStarting {
+            id,
+            uri,
+            redirected,
+            allowed,
+        } => json!({
+            "kind": "frame-navigation-starting", "id": id, "uri": uri, "redirected": redirected, "allowed": allowed }),
         TabEvent::SourceChanged { uri } => json!({"kind": "source-changed", "uri": uri}),
         TabEvent::NavigationCompleted {
             id,
@@ -464,37 +472,66 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
     })
 }
 
-/// The navigation gate of tab `id`'s view: web pages load; a link to another app is cancelled and offered to the
-/// user (p2.10); Google sign-in is offered in the normal browser (p2.13); everything else is cancelled. With per-site
-/// profiles (p3.6), a page that leads to another site's profile is stopped: an empty tab moves at once; otherwise the
-/// shell asks first (owner answer Q-209) and the tab moves only if the user agrees. A redirect stays in the tab's
-/// profile (the server, not the page, chose it; moving mid-redirect would break sign-in flows).
+/// The navigation gate of tab `id`'s view (p4.3: every navigation passes the policy engine, adr-0015). The page's own
+/// navigations, each redirect hop and each frame are decided by `crate::policy` from the settings in effect now:
+/// a refused address is cancelled, logged with its rule and noted on the tab's toolbar; a link to another app is
+/// cancelled and offered to the user (p2.10); an `http:` address under `http_policy = "upgrade"` is cancelled and
+/// opened again as `https:`. For the page itself, Google sign-in is then offered in the normal browser (p2.13), and
+/// with per-site profiles (p3.6) a page that leads to another site's profile is stopped: an empty tab moves at once;
+/// otherwise the shell asks first (owner answer Q-209) and the tab moves only if the user agrees. A redirect stays in
+/// the tab's profile (the server, not the page, chose it; moving mid-redirect would break sign-in flows).
 fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
     let h = app.clone();
-    let security = app.state::<AppConfig>().get().security;
     Rc::new(move |r: &NavRequest| {
-        let d = web_gate(&r.uri);
-        if d == NavDecision::Cancel {
-            external::on_page_navigation(&h, &security, &r.uri);
-            return d;
-        }
-        // The setting has one value today (offer-system-browser, owner answer Q-109).
-        let GoogleOauth::OfferSystemBrowser = security.google_oauth;
-        if external::is_sign_in(&r.uri) {
-            external::offer_sign_in(&h, &r.uri);
-            return NavDecision::Cancel;
-        }
-        let target = profile_for(&h, &r.uri);
+        let context = if r.frame {
+            Context::Frame
+        } else if r.redirected {
+            Context::Redirect
+        } else {
+            Context::TopLevel
+        };
         let (current, from) = {
             let t = h.state::<TabsState>();
             let t = t.0.lock().unwrap();
             match t.get(TabId(id)) {
                 Some(i) => (i.profile.clone(), i.url.clone()),
-                None => return d,
+                None => return NavDecision::Cancel,
             }
         };
+        // The tab's page started it (used for `blob:` addresses, which only their own origin may open).
+        let initiator = (!from.is_empty()).then_some(from.as_str());
+        let d = crate::policy::decide(&crate::policy::current(&h), id, context, &r.uri, initiator);
+        match d.verdict {
+            Verdict::Deny => {
+                external::blocked(&h, id, &r.uri, d.rule.as_str(), r.frame);
+                return NavDecision::Cancel;
+            }
+            Verdict::Confirm => {
+                let security = h.state::<AppConfig>().get().security;
+                external::on_page_navigation(&h, &security, &r.uri);
+                return NavDecision::Cancel;
+            }
+            Verdict::Upgrade(url) => {
+                if !r.frame {
+                    let h2 = h.clone();
+                    let _ = h.run_on_main_thread(move || navigate_tab(&h2, id, url));
+                }
+                return NavDecision::Cancel;
+            }
+            Verdict::Allow | Verdict::AllowInsecure => {}
+        }
+        if r.frame {
+            return NavDecision::Allow;
+        }
+        // The setting has one value today (offer-system-browser, owner answer Q-109).
+        let GoogleOauth::OfferSystemBrowser = h.state::<AppConfig>().get().security.google_oauth;
+        if external::is_sign_in(&r.uri) {
+            external::offer_sign_in(&h, &r.uri);
+            return NavDecision::Cancel;
+        }
+        let target = profile_for(&h, &r.uri);
         if target == current || r.redirected {
-            return d;
+            return NavDecision::Allow;
         }
         let uri = r.uri.clone();
         if current == ferrum_core::profiles::SHARED_PROFILE {
@@ -713,18 +750,22 @@ pub async fn tab_navigate(app: AppHandle, input: String) -> NavResult {
                 reason: None,
             }
         }
-        Outcome::Refuse(r) => NavResult {
-            outcome: "refused",
-            url: None,
-            note: None,
-            reason: Some(match r {
-                Refusal::Empty => "empty".into(),
-                Refusal::NotAnAddress => "not-an-address".into(),
-                Refusal::Malformed => "malformed".into(),
-                Refusal::ForbiddenScheme(s) => format!("forbidden-scheme:{s}"),
-                Refusal::ExternalDenied(s) => format!("external-denied:{s}"),
-            }),
-        },
+        Outcome::Refuse(r) => {
+            // The reason only: what was typed is not logged (it may be a search, not an address).
+            tracing::info!(target: "ferrum::policy", context = "address-bar", reason = ?r, "typed address refused");
+            NavResult {
+                outcome: "refused",
+                url: None,
+                note: None,
+                reason: Some(match r {
+                    Refusal::Empty => "empty".into(),
+                    Refusal::NotAnAddress => "not-an-address".into(),
+                    Refusal::Malformed => "malformed".into(),
+                    Refusal::ForbiddenScheme(s) => format!("forbidden-scheme:{s}"),
+                    Refusal::ExternalDenied(s) => format!("external-denied:{s}"),
+                }),
+            }
+        }
     }
 }
 

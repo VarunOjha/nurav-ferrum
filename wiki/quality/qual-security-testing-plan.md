@@ -252,11 +252,11 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | Threat | Adversary | Edges | Control (task) | Test | State |
 |---|---|---|---|---|---|
 | T01 A page calls Ferrum's commands, events or the exempt fetch-channel command | ADV1 | E08, E14 | No bridge in tab views; zero `remote` capabilities; shell-only commands (p2.3, p4.8) | SEC-03, SEC-12 | Partly (P2 and P3: app and settings commands refused) |
-| T02 A tab navigates to the app's own origin to be treated as local | ADV1 | E09 | Navigation handlers deny the app's origin for tabs (rule R4; p4.3, p4.8) | SEC-03, SEC-08 | Planned (P3 added no check) |
-| T03 The shell view is led to remote content | ADV1 | E01 | Shell navigation handler allows only the local origin; strict CSP (rule R8; p4.8) | SEC-12 | Planned |
-| T04 A page sends the tab to a blocked site (link, script, form, meta refresh, pop-up) | ADV1 | E09 | Blocklist in the policy engine (p4.2, p4.3) | SEC-01 | Planned |
-| T05 A redirect chain reaches a blocked site | ADV1 | E09, E13 | Every redirect hop re-evaluated (p4.3) | SEC-08 | Planned |
-| T06 An iframe loads a blocked site | ADV1b | E09, E13 | Raw-COM `FrameNavigationStarting` (p4.3) | SEC-08 | Planned |
+| T02 A tab navigates to the app's own origin to be treated as local | ADV1 | E09 | Navigation handlers deny the app's origin for tabs (rule R4; p4.3, p4.8) | SEC-03, SEC-08 | Built (p4.3: the engine's app-origin rule decides every tab navigation); test in p4.8 |
+| T03 The shell view is led to remote content | ADV1 | E01 | Shell navigation handler allows only the local origin; strict CSP (rule R8; p4.8) | SEC-12 | Handler built (p4.3, Tauri `on_navigation`, unit-tested); live test in p4.8 |
+| T04 A page sends the tab to a blocked site (link, script, form, meta refresh, pop-up) | ADV1 | E09 | Blocklist in the policy engine (p4.2, p4.3) | SEC-01 | Built; typed, redirect, frame and `window.open` tested live (p4.3) |
+| T05 A redirect chain reaches a blocked site | ADV1 | E09, E13 | Every redirect hop re-evaluated (p4.3) | SEC-08 | Built and tested live (p4.3, `security-navigation`) |
+| T06 An iframe loads a blocked site | ADV1b | E09, E13 | Raw-COM `FrameNavigationStarting` (p4.3) | SEC-08 | Built and tested live (p4.3, `security-navigation`) |
 | T07 A malformed address slips past the filter or crashes it | ADV1 | E09, E13 | Fail-closed parsing (p2.5 address bar; p4.2 engine) | SEC-09 | Partly (P2: address bar) |
 | T08 A link silently starts another app | ADV1 | E02, E09 | Confirmation bar (p2.10); per-scheme allowlist; no silent launch (p4.4) | SEC-02 | Partly (P2: confirmation bar, stand-in launcher) |
 | T09 A page gets camera, microphone, location, notifications or clipboard without consent | ADV1 | E09 | Default deny, per-site grants, `SavesInProfile(FALSE)` (p4.5, p4.17) | SEC-05 | Planned |
@@ -266,7 +266,7 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | T13 A man in the middle on HTTPS, through a certificate-error bypass | ADV2 | E15 | No "proceed anyway" path for certificate errors (p2.8) | SEC-13 | Partly (P2: no bypass code; the failure itself is tested in P4) |
 | T14 A man in the middle reads or changes a plain HTTP page | ADV2 | E15 | Visible "not secure" bar only (Q-112: HTTP allowed) | not enforced | Not enforced (owner's choice) |
 | T15 A renderer crash takes down the app | ADV1 | E13 | `ProcessFailed` handling, crashed-tab state and reload (p4.10) | SEC-10 | Planned |
-| T16 Pop-ups flood the screen or keep a link to the opener page | ADV1 | E09 | New tab per pop-up, at most one per tab per second, no opener link (p3.2); pop-up policy (p4.3) | SEC-01 | Partly (P3: rate limit) |
+| T16 Pop-ups flood the screen or keep a link to the opener page | ADV1 | E09 | New tab per pop-up, at most one per tab per second, no opener link (p3.2); pop-up policy (p4.3) | SEC-01 | Partly (P3: rate limit; p4.3: every pop-up address passes the policy) |
 | T17 Another program on the PC drives Ferrum through a debugging port | ADV3 | E05, E06 | Ferrum never sets the port; release builds have no debug arguments | SEC-11 | Partly (P2: never set by Ferrum; benchmark runs open it by design) |
 | T18 Another program reads Ferrum's data folder (history, sessions, logs) | ADV3 | E10 | Windows account protection only; backup files are encrypted (p3.21) | not enforced | Not enforced |
 | T19 A dependency is compromised | ADV4 | none | Known-advisory checks (`cargo deny`, `npm audit`), lockfiles | not enforced | Not enforced (detection of known advisories only) |

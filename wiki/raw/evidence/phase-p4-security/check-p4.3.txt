@@ -1,0 +1,23 @@
+Ferrum check p4.3: Check every navigation path
+Why: no way around the rules by redirect, frame or pop-up.
+Run at 2026-10-13 12:55 on commit d449b4f (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   App rule tests: settings become the rules, bad rules refused, malformed addresses refused (3 s)
+         three app rule tests passed
+  PASS   Settings tests: site lists read and saved; HTTP warning by default (1 s)
+         settings tests passed
+  PASS   The code asks the rules for the page, each redirect step, each frame and each new window
+         page, redirect, frame and new-window paths all call the rules
+Running 5 tests using 1 worker
+  ✓  1 security-navigation.spec.ts:43:1 › a typed blocked address is refused and logged (492ms)
+  ✓  2 security-navigation.spec.ts:51:1 › a redirect from an allowed page to the blocked host is refused and logged (525ms)
+  ✓  3 security-navigation.spec.ts:62:1 › a frame showing the blocked host is refused and logged; an allowed frame loads (504ms)
+  ✓  4 security-navigation.spec.ts:73:1 › window.open of the blocked host opens nothing and is logged; an allowed one opens a tab (2.1s)
+  ✓  5 security-navigation.spec.ts:89:1 › a malformed address is refused and logged (40ms)
+  5 passed (54.5s)
+  PASS   Live test: blocked host refused when typed, after a redirect, in a frame, in a pop-up; malformed refused; all logged (81 s)
+         security-navigation: 5 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.3 (4 PASS; 86 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.3 check passed".

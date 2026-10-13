@@ -37,7 +37,7 @@ test("change settings, see them take effect, restart, still there", async () => 
   await expect(f.shell.locator("#settings-status")).toHaveText("Saved");
   await expect(f.shell.locator("#settings-errors li")).toHaveCount(0);
   const saved = fs.readFileSync(userFile, "utf8");
-  expect(saved).toContain("version = 2");
+  expect(saved).toContain("version = 3");
   expect(saved).toContain(`${base}/landing?start=2`);
   expect(saved).toContain('profile = "work"');
   await f.shell.click("#settings-close");

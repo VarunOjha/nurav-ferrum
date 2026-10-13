@@ -83,9 +83,16 @@ export function addressText(uri: string): string {
   return uri === "about:blank" ? "" : uri;
 }
 
-/** Toolbar note for an address Ferrum stopped. */
-export function blockedText(uri: string): string {
-  return "Blocked: " + uri.split(":")[0] + " address";
+/** Toolbar note for an address Ferrum stopped. `why` is the policy rule that decided (p4.3), `frame` that it was a
+ * frame inside the page rather than the page itself. */
+export function blockedText(uri: string, why = "", frame = false): string {
+  let host = "";
+  try { host = new URL(uri).hostname; } catch { /* not an address: the generic note */ }
+  const what = frame ? "Blocked a frame: " : "Blocked: ";
+  if (host && why === "blocklist") return `${what}${host} is on your blocked sites list`;
+  if (host && why === "allowlist-only") return `${what}${host} is not on your allowed sites list`;
+  if (why.startsWith("url-")) return `${what}not a valid address`;
+  return what + uri.split(":")[0] + " address";
 }
 
 /** The tab strip label: the page title, else the address without its scheme, else "New tab". */

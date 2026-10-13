@@ -178,6 +178,16 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "the site icon of /icon (PNG) (p3.16)",
     },
+    Route {
+        path: "/goto?url=/landing",
+        status: 302,
+        purpose: "a redirect (302) to the https address in url (or a path on this site), for example another host (p4.3)",
+    },
+    Route {
+        path: "/links/open?href=/landing",
+        status: 200,
+        purpose: "a button that opens the https address in href (or a path on this site) with window.open (p4.3)",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -201,6 +211,7 @@ fn safe_target(s: &str) -> Option<String> {
 struct Target {
     src: Option<String>,
     href: Option<String>,
+    url: Option<String>,
 }
 
 async fn frame(Query(q): Query<Target>) -> Response {
@@ -215,6 +226,35 @@ async fn frame(Query(q): Query<Target>) -> Response {
         None => (
             StatusCode::BAD_REQUEST,
             page("Bad frame", "<p>src must be https or a path.</p>"),
+        )
+            .into_response(),
+    }
+}
+
+async fn goto(Query(q): Query<Target>) -> Response {
+    // safe_target escapes for HTML; a Location header needs the address as given, so check it the same way.
+    match q.url.as_deref().filter(|u| safe_target(u).is_some()) {
+        Some(url) => (StatusCode::FOUND, [(header::LOCATION, url.to_string())]).into_response(),
+        None => (
+            StatusCode::BAD_REQUEST,
+            page("Bad redirect", "<p>url must be https or a path.</p>"),
+        )
+            .into_response(),
+    }
+}
+
+async fn links_open(Query(q): Query<Target>) -> Response {
+    match q.href.as_deref().and_then(safe_target) {
+        Some(href) => page(
+            "Open",
+            &format!(
+                "<p><button id=\"open\" data-href=\"{href}\" onclick=\"window.open(this.dataset.href)\">Open {href} in a new window</button></p>"
+            ),
+        )
+        .into_response(),
+        None => (
+            StatusCode::BAD_REQUEST,
+            page("Bad link", "<p>href must be https or a path.</p>"),
         )
             .into_response(),
     }
@@ -601,6 +641,8 @@ pub fn router() -> Router {
         .route("/links/download", get(links_download))
         .route("/icon", get(icon_page))
         .route("/icon.png", get(icon_png))
+        .route("/goto", get(goto))
+        .route("/links/open", get(links_open))
 }
 
 /// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`).

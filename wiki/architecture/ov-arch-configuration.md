@@ -54,8 +54,11 @@ The **effective config** is serialised in canonical form and hashed (`config_sha
 
 TOML is proposed because experiment configs are human-edited. The owner chose TOML (Q-214); P2 uses the `toml` crate 1.1.8, pinned exactly and clean under `cargo deny`
 ([source readings](../raw/research/p2-source-readings.md) S3, [check-p2.4](../raw/evidence/phase-p2-minimal-container/check-p2.4.txt)). JSON via `serde_json` is the fallback.
-Keys built in P2 and P3 (`[session]`, `http_policy`, `external_schemes`, `google_oauth`, `new_window`, `[isolation] mode`)
-use the names and values in `crates/core/src/config.rs`, shown below; the code refuses any other spelling. The other
+Keys built in P2 to P4 (`[session]`, `http_policy`, `external_schemes`, `google_oauth`, `new_window`, `blocklist`,
+`allowlist`, `allowlist_only`, `[isolation] mode`) use the names and values in `crates/core/src/config.rs`, shown
+below; the code refuses any other spelling. Settings file version 3 (p4.3): the site lists live in the settings file
+itself, because the owner adds sites in Settings (Q-113), so the proposed separate `blocklist_files` key is dropped;
+`http_policy` defaults to `warn` (Q-112; a version-2 file that did not choose keeps `upgrade`). The other
 keys are still proposals and are not built (a file using them today is refused).
 
 ```toml
@@ -64,8 +67,10 @@ restore_on_startup = true
 startup_urls = ["https://example.org/"]
 
 [security]                      # adr-0015 open browsing + blocklist
-blocklist_files = ["blocklist.txt"]
-http_policy = "upgrade"         # upgrade | warn
+blocklist = []                  # "example.com" = site and subdomains, "=www.example.com" = that host only (empty, Q-113)
+allowlist = []                  # same syntax; a more specific allow rule beats a block rule
+allowlist_only = false          # true: only allowlisted sites load
+http_policy = "warn"            # warn | upgrade
 external_schemes = "confirm"    # confirm | deny
 permissions_default = "deny"    # deny | prompt
 downloads = "prompt"            # prompt | deny

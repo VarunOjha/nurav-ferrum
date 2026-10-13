@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 2,
+    "done": 3,
     "total": 17
   },
   "step_order": [
@@ -48,7 +48,7 @@
       "what": "Checks on every way a page can move: direct links, redirects, embedded frames, pop-ups and malformed addresses.",
       "why": "A rule that only some paths check is easy to get around: a blocked site could still load through a redirect, a frame or a pop-up.",
       "how": "Also hook WebView2's own navigation, frame and new-window events, and re-check every redirect step. Tests try each bypass and expect a denial and a log line.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Tauri's hook misses unreadable addresses and embedded frames → also hook WebView2's own events and re-check each redirect → no way around the rules by redirect, frame or pop-up.",
       "check": "A blocked site is denied and logged via direct link, redirect, frame, pop-up and malformed address.",
       "script": "scripts/verify/p4.3-check-every-navigation.ps1"

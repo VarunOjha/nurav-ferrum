@@ -18,6 +18,7 @@ serde_json = "1"
 base64 = "=0.22.1"
 zeroize = "=1.9.1"
 ferrum-core = { path = "../../../crates/core" }
+ferrum-security = { path = "../../../crates/security" }
 ferrum-webview-manager = { path = "../../../crates/webview-manager" }
 windows = { version = "=0.62.2", features = ["Win32_Foundation"] }
 tracing = "=0.1.44"

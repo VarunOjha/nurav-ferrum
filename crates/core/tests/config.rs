@@ -20,8 +20,13 @@ fn missing_file_gives_defaults() {
     let l = config::load(Some(Path::new("does-not-exist/config.toml")), None).unwrap();
     assert_eq!(l.config, Config::default());
     assert!(l.warnings.is_empty());
-    assert_eq!(l.config.security.http_policy, HttpPolicy::Upgrade);
+    // Owner answer Q-112: plain HTTP loads with the "not secure" warning (default from settings version 3).
+    assert_eq!(l.config.security.http_policy, HttpPolicy::Warn);
     assert_eq!(l.config.security.external_schemes, ExternalSchemes::Confirm);
+    // Owner answer Q-113: the site lists start empty.
+    assert!(l.config.security.blocklist.is_empty());
+    assert!(l.config.security.allowlist.is_empty());
+    assert!(!l.config.security.allowlist_only);
     assert_eq!(l.config.security.new_window, NewWindow::NewTab);
     assert!(l.config.session.startup_urls.is_empty());
 }
@@ -152,7 +157,7 @@ fn hash_is_stable_and_sensitive() {
     let mut b = Config::default();
     assert_eq!(config::hash(&a), config::hash(&b));
     assert!(config::hash(&a).starts_with("sha256:") && config::hash(&a).len() == 7 + 64);
-    b.security.http_policy = HttpPolicy::Warn;
+    b.security.http_policy = HttpPolicy::Upgrade;
     assert_ne!(config::hash(&a), config::hash(&b));
     // The canonical form parses back to the same configuration.
     assert_eq!(
@@ -252,6 +257,38 @@ fn version_one_file_is_migrated_and_keeps_its_behaviour() {
     let l = config::load(Some(&p), None).unwrap();
     assert_eq!(l.config.security.new_window, NewWindow::NewTab);
     assert!(l.config.session.restore_on_startup);
+    // ...but keeps HTTP upgrade, the version-2 default (p4.3; the warn default starts with version 3).
+    assert_eq!(l.config.version, config::VERSION);
+    assert_eq!(l.config.security.http_policy, HttpPolicy::Upgrade);
+    let p = tmp(
+        "v2warn.toml",
+        "version = 2\n[security]\nhttp_policy = \"warn\"\n",
+    );
+    let l = config::load(Some(&p), None).unwrap();
+    assert_eq!(l.config.security.http_policy, HttpPolicy::Warn);
+    // A version-3 file without the key gets the warn default.
+    let p = tmp("v3.toml", "version = 3\n");
+    let l = config::load(Some(&p), None).unwrap();
+    assert_eq!(l.config.security.http_policy, HttpPolicy::Warn);
+}
+
+#[test]
+fn site_lists_are_read_and_saved() {
+    let p = tmp(
+        "lists.toml",
+        "version = 3\n[security]\nblocklist = [\"example.com\", \"=ads.example.org\"]\n\
+         allowlist = [\"docs.example.com\"]\nallowlist_only = true\n",
+    );
+    let l = config::load(Some(&p), None).unwrap();
+    assert_eq!(
+        l.config.security.blocklist,
+        vec!["example.com", "=ads.example.org"]
+    );
+    assert_eq!(l.config.security.allowlist, vec!["docs.example.com"]);
+    assert!(l.config.security.allowlist_only);
+    let out = tmp("lists-saved.toml", "");
+    config::save(&out, &l.config).unwrap();
+    assert_eq!(config::load(Some(&out), None).unwrap().config, l.config);
 }
 
 #[test]

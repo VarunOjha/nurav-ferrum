@@ -93,7 +93,7 @@
       "name": "Security",
       "one_line_goal": "Blocking, permissions and isolation proven by tests; threat model written",
       "status": "In progress",
-      "tasks_done": 2,
+      "tasks_done": 3,
       "tasks_total": 17,
       "source": {
         "wiki_path": "wiki/phases/phase-p4-security.md",

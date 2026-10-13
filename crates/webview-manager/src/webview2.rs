@@ -37,7 +37,7 @@ use crate::tab::{KeyDown, NavDecision, NavRequest, TabEvent};
 
 /// Receives tab events (UI thread).
 pub type EventSink = Rc<dyn Fn(TabEvent)>;
-/// Decides whether a top-level navigation may start (UI thread).
+/// Decides whether a navigation may start: the page's own (each redirect hop again) or a frame's (UI thread).
 pub type NavGate = Rc<dyn Fn(&NavRequest) -> NavDecision>;
 /// Decides whether a key pressed in the view is Ferrum's (true: handled, the page never sees it) (UI thread).
 pub type KeyFilter = Rc<dyn Fn(KeyDown) -> bool>;
@@ -52,7 +52,7 @@ pub struct Handlers {
     pub downloads: DownloadFilter,
     /// Receives the view's events.
     pub sink: EventSink,
-    /// Decides each top-level navigation.
+    /// Decides each navigation of the page and of its frames, and each redirect hop.
     pub gate: NavGate,
     /// Takes Ferrum's keyboard shortcuts.
     pub keys: KeyFilter,
@@ -68,6 +68,7 @@ fn hr<T>(r: windows_core::Result<T>) -> Result<T, Error> {
 #[derive(Clone, Copy)]
 enum Ev {
     NavStarting,
+    FrameNavStarting,
     Source,
     NavCompleted,
     History,
@@ -151,6 +152,7 @@ impl ContentView {
         let core = self.core.clone();
 
         let s = sink.clone();
+        let g = gate.clone();
         let h = NavigationStartingEventHandler::create(Box::new(move |_sender, args| {
             if let Some(args) = args {
                 let (mut uri, mut id, mut user, mut redir) =
@@ -164,10 +166,11 @@ impl ContentView {
                     let _ = args.IsRedirected(&mut redir);
                     take_pwstr(uri)
                 };
-                let decision = gate(&NavRequest {
+                let decision = g(&NavRequest {
                     uri: uri.clone(),
                     user_initiated: user.as_bool(),
                     redirected: redir.as_bool(),
+                    frame: false,
                 });
                 if decision == NavDecision::Cancel {
                     // SAFETY: COM-1; cancelling inside the NavigationStarting callback is the documented use.
@@ -187,6 +190,47 @@ impl ContentView {
         // SAFETY: COM-1, COM-4: token kept for removal in close().
         hr(unsafe { core.add_NavigationStarting(&h, &mut t) })?;
         self.tokens.push((Ev::NavStarting, t));
+
+        // Frames (p4.3): every iframe navigation, and each of its redirect hops, passes the same gate. Without this
+        // handler a blocked site could still load inside a frame of an allowed page.
+        let s = sink.clone();
+        let g = gate.clone();
+        let h = NavigationStartingEventHandler::create(Box::new(move |_sender, args| {
+            if let Some(args) = args {
+                let (mut uri, mut id, mut user, mut redir) =
+                    (PWSTR::null(), 0u64, BOOL(0), BOOL(0));
+                // SAFETY: COM-1, COM-5: callback on the UI thread; out-pointers are locals; `uri` is copied and
+                // freed by take_pwstr.
+                let uri = unsafe {
+                    let _ = args.Uri(&mut uri);
+                    let _ = args.NavigationId(&mut id);
+                    let _ = args.IsUserInitiated(&mut user);
+                    let _ = args.IsRedirected(&mut redir);
+                    take_pwstr(uri)
+                };
+                let decision = g(&NavRequest {
+                    uri: uri.clone(),
+                    user_initiated: user.as_bool(),
+                    redirected: redir.as_bool(),
+                    frame: true,
+                });
+                if decision == NavDecision::Cancel {
+                    // SAFETY: COM-1; cancelling inside the FrameNavigationStarting callback is the documented use.
+                    let _ = unsafe { args.SetCancel(true) };
+                }
+                s(TabEvent::FrameNavigationStarting {
+                    id,
+                    uri,
+                    redirected: redir.as_bool(),
+                    allowed: decision == NavDecision::Allow,
+                });
+            }
+            Ok(())
+        }));
+        let mut t = 0i64;
+        // SAFETY: COM-1, COM-4: token kept for removal in close().
+        hr(unsafe { core.add_FrameNavigationStarting(&h, &mut t) })?;
+        self.tokens.push((Ev::FrameNavStarting, t));
 
         let s = sink.clone();
         let c = core.clone();
@@ -502,6 +546,7 @@ impl ContentView {
             unsafe {
                 let _ = match ev {
                     Ev::NavStarting => self.core.remove_NavigationStarting(*t),
+                    Ev::FrameNavStarting => self.core.remove_FrameNavigationStarting(*t),
                     Ev::Source => self.core.remove_SourceChanged(*t),
                     Ev::NavCompleted => self.core.remove_NavigationCompleted(*t),
                     Ev::History => self.core.remove_HistoryChanged(*t),

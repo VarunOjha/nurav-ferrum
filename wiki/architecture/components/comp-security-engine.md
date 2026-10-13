@@ -74,5 +74,31 @@ Evaluation order, defaults and the threat model: [ov-arch-trust-boundaries ยง5โ€
   no panic, unparseable input always denied, a blocked host denied however the address is written. Coverage
   (cargo-llvm-cov): 100 percent of regions, functions and lines of the engine; LLVM branch coverage needs a nightly
   compiler and is not reported ([coverage report](../../raw/evidence/phase-p4-security/policy-coverage.txt)).
-- **Not yet wired.** The app still uses the P2 address rules (`ferrum_core::address`) and its own hooks; p4.3
-  connects this engine to every navigation event, and the default `http_policy` becomes `warn` there.
+
+**p4.3, wired into every navigation** ([apps/desktop/src-tauri/src/policy.rs](../../../apps/desktop/src-tauri/src/policy.rs)).
+The app builds one `Policy` from the settings and replaces it when the settings screen saves. It is asked:
+
+- by the tab view's `NavigationStarting` gate for the page itself, and again for **each redirect hop** (context
+  `Redirect`);
+- by the new `FrameNavigationStarting` gate for **every frame** (context `Frame`; a refused frame is cancelled, the
+  page stays);
+- for **every new window** a page asks for, before the new-window setting applies (context `NewWindow`).
+
+A refusal cancels the navigation, is logged (`ferrum::policy`, "navigation denied": tab, context, scheme and host,
+rule name, matching list entry) and is noted on the tab's toolbar ("Blocked: host is on your blocked sites list"). A
+link to another app is offered on the confirmation bar; an `http:` address under `http_policy = "upgrade"` is
+cancelled and opened again as `https:`. The `blob:` check uses the tab's current page as the starter, also for frames
+(a frame's own origin is not reported by WebView2), so a cross-origin frame cannot open its own `blob:` addresses. The
+shell view has a stricter rule through Tauri's `on_navigation`: only Ferrum's own pages (threat T03). A typed address
+the address bar refuses is logged with its reason only (never the typed text).
+
+Settings (version 3): `[security] blocklist`, `allowlist`, `allowlist_only`; `http_policy` defaults to `warn`
+(owner answer Q-112); a version-2 file that did not choose keeps `upgrade`. A bad rule refuses the whole file at start
+(Ferrum runs with the standard settings, shows a note and does not overwrite the file) and refuses a save from the
+settings screen. Tests: three app rule tests and the live test `security-navigation` (blocked host typed, after a 302
+from an allowed page, in a frame and in a `window.open`; malformed address; each refusal in the log), check script
+`scripts/verify/p4.3-check-every-navigation.ps1`.
+
+Not done yet: the shell shows the "not secure" warning as the address-bar sign only, not yet as a bar (owner answer
+Q-112 asks for a bar; planned with the security settings screen, p4.17). The audit log of refusals (p4.9) replaces
+the plain log lines.

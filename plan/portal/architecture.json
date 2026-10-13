@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs with one website view each, address bar with search of the past, bookmarks bar and sidebar, settings, downloads, encrypted backup and the Graphite look ([the look you chose](ref:adr-0033)). Risk: the multi-view feature is experimental in Tauri; it held up through P3.",
+      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, and the toolbar itself can show only Ferrum's own pages.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:9f80349de7aeaa51c8408582df36e12a4a453ef1083684b680887f43cbbb601f"
+        "content_hash": "sha256:c04bf4e1bbfd74ead798877ddc0e8537dc5deb87fd4d00eb17892e87b902491b"
       }
     },
     {
@@ -260,7 +260,7 @@
     {
       "id": "comp-webview-manager",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Built in P2 for one view: navigation, history, new windows, links to other apps and developer tools work; downloads and permissions are checked in P3.",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, so every load passes the security rules.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (first working app)",
@@ -297,13 +297,13 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:ab47c5c0c59a4467e7659eaadb304a6a6e6402a6c627469759efc2f9637c2d1a"
+        "content_hash": "sha256:642620fc07b4ea5e52897169b5c8c5b2e4b5ffbdc44669361adefd9121bb4c58"
       }
     },
     {
       "id": "comp-security-engine",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules with no browser inside, so each rule is tested on its own. The address rules are built (P4) and fully tested; they are connected to the app next.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules with no browser inside, so each rule is tested on its own. Since P4 it decides every page load, redirect step, frame and pop-up.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Being built",
@@ -326,7 +326,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-security-engine.md",
-        "content_hash": "sha256:3b7b554478dbc5011a6507578a3ac345969b1f1970b3854071a3aca4b6ce506f"
+        "content_hash": "sha256:b4ea32dbb4c2a758f8bde54f19aefeb6059690063d33d382e2576b5a568d82ff"
       }
     },
     {
@@ -426,7 +426,7 @@
     {
       "id": "comp-core",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks, ids and record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself; everything else depends on it.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists), ids and record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
       "group": "application",
       "layer": "layer-base",
       "status": "Built (first working app)",
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:6d64b87a80fe9a4fd9f5912122b5c27e62136671bb408157ebeb24ffa5401397"
+        "content_hash": "sha256:9d0387d32798f9cc580739d6368b039f9d148b0ee2214506099de832c1ab8866"
       }
     },
     {

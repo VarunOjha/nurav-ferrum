@@ -131,9 +131,12 @@ pub fn apply(current: &Config, input: &SettingsView) -> Result<Config, Vec<Strin
         }
         Some(p)
     };
-    // The same rules as a settings file (sites, labels, start pages).
+    // The same rules as a settings file (sites, labels, start pages, site lists).
     if let Err(e) = config::validate(next.clone()) {
         problems.push(e.to_string());
+    }
+    if let Err(e) = crate::policy::build(&next) {
+        problems.push(e);
     }
     if problems.is_empty() {
         Ok(next)
@@ -179,8 +182,10 @@ pub fn settings_set(app: AppHandle, input: SettingsView) -> Result<SettingsView,
     let next = apply(&current, &input)?;
     let path = user_file(&app).map_err(|e| vec![e])?;
     let loaded = config::validate(next.clone()).map_err(|e| vec![e.to_string()])?;
+    let nav_policy = crate::policy::build(&loaded.config).map_err(|e| vec![e])?;
     config::save(&path, &loaded.config).map_err(|e| vec![e.to_string()])?;
     tracing::info!(target: "ferrum::config", config_hash = %config::hash(&loaded.config), "settings saved from the settings screen");
     *app.state::<AppConfig>().0.write().unwrap() = loaded;
+    crate::policy::replace(&app, nav_policy);
     Ok(view_of(&app, &next))
 }

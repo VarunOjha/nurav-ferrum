@@ -281,3 +281,15 @@ Known limitations of the P2 version (the tab-related ones are lifted above): one
 fix (`restore_focus`) awaits the owner's manual check (moved to P3); opening a link in another app has been tested only with a
 stand-in launcher (the owner's manual mailto check). The smoke robot uses WebView2's remote-debugging switch
 (adr-0031); it is an environment variable that also works on release builds.
+
+## Implementation status (P4, security)
+
+- p4.3, every navigation asks the security engine: the Tauri host's new `policy.rs` builds the navigation policy from
+  the settings (and again when the settings screen saves; a bad site rule refuses the save) and decides each tab
+  navigation, redirect hop, frame and new window (comp-security-engine, "Implementation status (P4)"). The shell view
+  itself gets Tauri's `on_navigation` hook: it may show only Ferrum's own pages (`http://tauri.localhost`), so the one
+  view that can call the app never shows a website (threat T03). The `blocked` message carries the rule and whether it
+  was a frame; the toolbar says why ("Blocked: host is on your blocked sites list", "... is not on your allowed sites
+  list", "Blocked a frame: ...") and keeps the note through WebView2's "cancelled" end of the blocked load, until the
+  tab's next page starts. A typed address the address bar refuses is logged with its reason only.
+- Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

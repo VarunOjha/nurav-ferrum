@@ -166,5 +166,14 @@ of it:
   `FaviconChanged { png }` (empty: the page has none). WebView2 gives the icon it already loaded; Ferrum makes no
   request of its own.
 
-Not yet built: the security engine's fail-closed gate, frame navigations and
-permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).
+## Implementation status (P4, security)
+
+- p4.3, every navigation through one gate: `FrameNavigationStarting` (token removed in `close`) passes each frame
+  navigation, and each of its redirect hops, to the same `Handlers::gate` as the page's own `NavigationStarting`;
+  `NavRequest` gained `frame`. A cancelled frame navigation is reported as tab event `FrameNavigationStarting { id,
+  uri, redirected, allowed }`. The P2 scheme-only gate (`tab::web_gate`) is removed: the app's gate asks the security
+  engine instead (comp-security-engine, "Implementation status (P4)"). Observed in the p4.3 live test: WebView2 ends a
+  cancelled page navigation with `NavigationCompleted` (not successful, web error "cancelled"), so the shell keeps its
+  "Blocked" note through that event.
+
+Not yet built: permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

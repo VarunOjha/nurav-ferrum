@@ -7,6 +7,7 @@ use std::sync::Mutex;
 use ferrum_core::address::{Outcome, normalize, site};
 use ferrum_core::config::{NewWindow, Security};
 use ferrum_core::oauth::{TestPattern, classify};
+use ferrum_security::{Context, Verdict};
 use serde_json::json;
 use tauri::{AppHandle, Emitter, Manager};
 
@@ -115,15 +116,16 @@ pub fn offer_sign_in(app: &AppHandle, uri: &str) {
     });
 }
 
-/// Tells the shell something tab `tab` asked for was blocked (shown as that tab's toolbar status).
-fn blocked(app: &AppHandle, tab: u64, uri: &str, why: &str) {
+/// Tells the shell something tab `tab` asked for was blocked (shown as that tab's toolbar status). `why` is the
+/// policy rule's name (for example `blocklist`) or `pop-up`; `frame` says it was a frame inside the page.
+pub fn blocked(app: &AppHandle, tab: u64, uri: &str, why: &str, frame: bool) {
     let h = app.clone();
     let (uri, why) = (uri.to_string(), why.to_string());
     let _ = app.run_on_main_thread(move || {
         let _ = h.emit_to(
             "shell",
             "link",
-            json!({"kind": "blocked", "tab": tab, "uri": uri, "why": why}),
+            json!({"kind": "blocked", "tab": tab, "uri": uri, "why": why, "frame": frame}),
         );
     });
 }
@@ -138,6 +140,9 @@ pub fn on_page_navigation(app: &AppHandle, security: &Security, uri: &str) {
 
 /// A page in tab `tab` asked for a new window (WebView2 opened none).
 ///
+/// The policy decides first (p4.3): a refused address opens nothing (logged with its rule, noted on the toolbar), a
+/// link to another app is offered on the confirmation bar, and an upgraded `http:` address continues as `https:`.
+///
 /// New tab (default since P3): the address opens in a new tab next to the active one, which becomes active. One tab
 /// may open at most one new tab per second; further requests are blocked with a toolbar note. The limit does not use
 /// WebView2's user-initiated flag, which reported a script-only pop-up as user-initiated in the P2 and P3 smoke runs;
@@ -147,6 +152,30 @@ pub fn on_page_navigation(app: &AppHandle, security: &Security, uri: &str) {
 /// offered on the confirmation bar first, so nothing leaves Ferrum silently.
 pub fn on_new_window(app: &AppHandle, tab: u64, uri: &str, user_initiated: bool) {
     let security = app.state::<AppConfig>().get().security;
+    let from = app
+        .state::<crate::content::TabsState>()
+        .0
+        .lock()
+        .unwrap()
+        .get(ferrum_core::tabs::TabId(tab))
+        .map(|i| i.url.clone())
+        .unwrap_or_default();
+    let d = crate::policy::decide(
+        &crate::policy::current(app),
+        tab,
+        Context::NewWindow,
+        uri,
+        (!from.is_empty()).then_some(from.as_str()),
+    );
+    let upgraded;
+    let uri = match &d.verdict {
+        Verdict::Deny => return blocked(app, tab, uri, d.rule.as_str(), false),
+        Verdict::Upgrade(u) => {
+            upgraded = u.clone();
+            upgraded.as_str()
+        }
+        Verdict::Allow | Verdict::AllowInsecure | Verdict::Confirm => uri,
+    };
     match normalize(uri, &security) {
         Outcome::Navigate { url, .. } => match security.new_window {
             NewWindow::NewTab => {
@@ -166,7 +195,7 @@ pub fn on_new_window(app: &AppHandle, tab: u64, uri: &str, user_initiated: bool)
                     open_tab(app, url.to_string(), Place::AfterActive, true);
                 } else {
                     tracing::info!(target: "ferrum::external", tab, site = %site(uri), "pop-up blocked (rate limit)");
-                    blocked(app, tab, uri, "pop-up");
+                    blocked(app, tab, uri, "pop-up", false);
                 }
             }
             NewWindow::SameView => navigate_tab(app, tab, url.to_string()),
@@ -178,7 +207,7 @@ pub fn on_new_window(app: &AppHandle, tab: u64, uri: &str, user_initiated: bool)
             NewWindow::SystemBrowser => request(app, url.to_string()),
         },
         Outcome::Confirm { url } => request(app, url.to_string()),
-        Outcome::Refuse(_) => blocked(app, tab, uri, "new-window"),
+        Outcome::Refuse(_) => blocked(app, tab, uri, "new-window", false),
     }
 }
 

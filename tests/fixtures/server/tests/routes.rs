@@ -38,6 +38,20 @@ async fn redirects_point_where_documented() {
     assert_eq!(
         get("/redirect/loop").await.headers()[header::LOCATION],
         "/redirect/loop"
+    ); // p4.3: a redirect to another host, and nothing that is not https or a path.
+    assert_eq!(
+        get("/goto?url=https://127.0.0.1:8443/landing")
+            .await
+            .headers()[header::LOCATION],
+        "https://127.0.0.1:8443/landing"
+    );
+    assert_eq!(
+        get("/goto?url=javascript:alert(1)").await.status(),
+        StatusCode::BAD_REQUEST
+    );
+    assert_eq!(
+        get("/goto?url=//evil.test/").await.status(),
+        StatusCode::BAD_REQUEST
     );
 }
 
