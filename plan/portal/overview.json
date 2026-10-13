@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 3 of 17 tasks done. Every page load, redirect, frame and pop-up now passes the site rules. Four part pages changed with the code and need your re-approval before the next task.",
+  "summary": "Phase 4 (security) is in progress: 3 of 17 tasks done. Every page load, redirect, frame and pop-up now passes the site rules, and you re-approved the changed part pages. Claude continues with links to other apps.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:a28d7d7d7f35b97f61e0084c81adc20dc83092286fb054f29ee973386e5cba07"
+    "content_hash": "sha256:f8f0db8f9bbc358fa495c4deb5737c8cf5e59bfa73a0c81275e9feb41f0dac23"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Four part pages out of date: waiting for you",
+      "state": "All up to date",
       "ref": "comp-security-engine"
     },
     {
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
@@ -43,16 +43,12 @@
       },
       {
         "item": "Part pages",
-        "state": "4 changed with the new code; need your re-approval"
-      },
-      {
-        "item": "Evidence register",
-        "state": "one line out of order in an older commit"
+        "state": "Re-approved by you"
       }
     ],
-    "why": "Nothing to run. The pages describing the security engine, the tab and view manager, the core library and the browser controls changed with the code, so your earlier approvals are out of date; the next task builds on them.",
+    "why": "Nothing to run; Claude continues with the next task: a link to another app (for example email) always asks you first, and only allowed link types are offered.",
     "script": null,
-    "tell_claude": "\"Re-approve the four part pages\", or ask to see the changes first."
+    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
     "open": 19,

@@ -2276,3 +2276,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 13:00
 - pages: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell]
 - result: The p4.3 page updates (same commit as the code, SCHEMA §9.8) staled four components in the P4 dependency set. p4.4 waits for the owner's re-approval (SCHEMA §10.4). Also found: lint:wiki RAW-IMMUTABLE on commit ff7292e (p4.1), which inserted the check-p4.1 MANIFEST line above the previous last line instead of appending it; every hash is still correct; fixing it needs a history rewrite, so it goes to the owner (fits the planned cleanup, Q-221).
+
+## [2026-10-13] approval | four component pages re-approved after p4.3; MANIFEST order slip goes to the history rewrite
+
+- session: s03
+- time: 13:02
+- pages: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell, ov-open-questions]
+- sources: [raw/owner/2026-10-13-s03-p4-3-components-reapproval.md, raw/owner/2026-10-13-s03-manifest-order-slip.md]
+- result: The owner answered "Re-approve all four (Recommended)": recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. On the ff7292e MANIFEST order slip the owner chose "Fix it in the history cleanup (Recommended)": noted under Q-221; lint:wiki reports that one known RAW-IMMUTABLE error until the rewrite. p4.4 is next.

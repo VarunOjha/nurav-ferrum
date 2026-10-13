@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:bc884cc03345ab0b0991369098b50b2ce9b76bc6d4b1e6db8a21cd202b485e70"
+    "content_hash": "sha256:41d13e3179e7d28e986fec85002ebaaff4e2b151d76596999b1108b211d9b83b"
   },
   "entries": [
     {
@@ -3772,6 +3772,48 @@
       "tags": [
         "blocklist",
         "web views"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-p4-3-reapproved",
+      "date": "2026-10-13",
+      "time": "13:02",
+      "title": "You re-approved four part pages; order slip fixed in the cleanup",
+      "done": "You re-approved the pages for the security engine, the tab and view manager, the core library and the browser controls. For the one evidence-register line Claude added out of order, you chose to fix it in the history cleanup before the first upload.",
+      "next": "Claude builds the next task: links to other apps always ask first, with a list of allowed link types.",
+      "decisions": [
+        {
+          "what": "Fix the out-of-order evidence-register line in the history cleanup before the first upload",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Approved"
+        },
+        {
+          "what": "Tab & view manager page",
+          "status": "Approved"
+        },
+        {
+          "what": "Core library page",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | four component pages re-approved after p4.3; MANIFEST order slip goes to the history rewrite"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "git"
       ]
     }
   ]

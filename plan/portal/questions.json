@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:37308c3ba32993a679d2a84f50e37f4001f0712cee3e5ec471fada297a497131"
+    "content_hash": "sha256:c215475976b9c0126076ccbbcf631f6f7d62ded8fe384495f91162b08a2a8306"
   },
   "items": [
     {
@@ -890,7 +890,7 @@
       "question": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path?",
       "why_it_matters": "Old commits still hold the values masked on 9 Oct. A rewrite changes every commit id, so it must happen before any upload. It holds the first upload only.",
       "status": "answered",
-      "answer": "Yes: rewrite the local history once before the first upload, after keeping a full backup copy.",
+      "answer": "Yes: rewrite the local history once before the first upload, after keeping a full backup copy. The same rewrite also puts back in order one evidence-register line Claude added out of order on 13 Oct.",
       "answered_on": "2026-10-13",
       "blocks": [],
       "category": "Security & privacy",

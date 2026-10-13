@@ -853,6 +853,11 @@ replaced by names like `<LAN_IPV4_1>`), per the owner's choice "Mask files now, 
 the local map) so no commit contains them, before the first push? This changes every commit id, so it must
 happen before anything is pushed. It holds no phase gate (`blocking: []`); it holds the first push only.
 
+**Also in that rewrite** (owner answer of 2026-10-13,
+[raw/owner/2026-10-13-s03-manifest-order-slip.md](../raw/owner/2026-10-13-s03-manifest-order-slip.md)): commit ff7292e
+inserted one `MANIFEST.sha256` line above the previous last line instead of appending it (every hash is correct); the
+rewrite makes that change append-only. Until then `lint:wiki` reports this one known RAW-IMMUTABLE error.
+
 ## Q-222 Allow the MPL-2.0 licence for libraries that Tauri brings in?
 
 - asked: 2026-10-11 13:21
