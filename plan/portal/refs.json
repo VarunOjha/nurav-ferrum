@@ -42,7 +42,7 @@
       "kind": "phase",
       "title": "P3 Tabs and sessions",
       "summary": "Goal: Many tabs, restored after a restart, with separate data per site. Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
-      "status": "In progress",
+      "status": "Waiting for your review",
       "related": [],
       "aliases": [
         "P3"
@@ -690,7 +690,7 @@
       "kind": "task",
       "title": "P3 task: Docs, gate, your review",
       "summary": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
-      "status": "In progress",
+      "status": "Waiting for you",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -5092,6 +5092,14 @@
       "kind": "commit",
       "title": "Commit: Check scripts fixed for the end check",
       "summary": "Three check scripts now expect the current number of tests, and the app tests wait until Ferrum has finished starting before pressing keys.",
+      "status": null,
+      "related": []
+    },
+    {
+      "id": "2d57975",
+      "kind": "commit",
+      "title": "Commit: Phase 3 end check evidence",
+      "summary": "The saved results of the Phase 3 end check: all of Claude's 30 checks passed; your review is what remains.",
       "status": null,
       "related": []
     }
