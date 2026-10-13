@@ -2120,3 +2120,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: scripts/gates/p3-gate.ps1 -SaveEvidence on d92ae4f: NOT READY with Claude's part complete (30 PASS, 2 WAIT, 2 YOURS; 1668 s). Every task check p3.1 to p3.23 PASS except p3.17, which waits on the owner's approval of adr-0033; test gate all PASS (fmt and clippy, cargo test, cargo deny, shell lint/types/unit tests, release build, npm run p3, npm run p2 and p2.3, wiki lint). Waiting for the owner: re-approval of adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell and comp-core (approvals_check: STALE); docs/testing/manual-checklist-p3.md items 1 to 20; the P3 sign-off. Evidence committed in 2d57975. Status set to gate-review. PAUSE: no P4 work.
 - next: owner reviews; Claude records the re-approvals, the checklist answers and the sign-off, reruns the gate, runs scripts/verify/p3.13-docs-gate-review.ps1, sets P3 to done and pauses.
 - commit: 2d57975
+
+## [2026-10-13] query | owner questions on the Task Manager name, the engine and the research claims; Q-223 registered
+
+- session: s02
+- time: 00:32
+- pages: [ov-open-questions, phase-p3-tabs-sessions]
+- sources: [raw/owner/2026-10-13-s02-task-manager-name-engine-and-claims.md, raw/research/webview2-task-manager-grouping.md]
+- result: Owner questions only, no decision or approval. Task Manager shows Ferrum's page processes as a separate "WebView2 Manager" group: a known Windows 11 / WebView2 issue with no supported setting (research note); Ferrum's own process is named Ferrum. Registered Q-223 (non-blocking): accept as a known limitation (recommended), a later spike, or revisit the engine. Explained that WebView2 shares the Chromium engine and adds control from Ferrum's code; tabulated hyp-01 to hyp-09 (draft, proposed thresholds, no results before P5/P6); Rust mainly helps hyp-02 and hyp-04. Started the release build and the plan portal for the owner. P3 stays in gate-review; no P4 work.
+- next: owner works through docs/testing/manual-checklist-p3.md items 1 to 20, re-approves the six changed pages, may answer Q-223, and decides on the P3 sign-off.

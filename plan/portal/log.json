@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8658a10c683f2e2d48fc06ef159c225f8459fc7b6ab0c9264d75e76b9787b224"
+    "content_hash": "sha256:91d1f29f85577b7190b1d396d26b25650cc5b8de8fb7e4f9885c910fa6cf9a73"
   },
   "entries": [
     {
@@ -3477,6 +3477,26 @@
       "tags": [
         "testing",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-q223",
+      "date": "2026-10-13",
+      "time": "00:32",
+      "title": "Your questions: Task Manager name, WebView2 and the research claims",
+      "done": "You asked why Task Manager shows \"WebView2 Manager\" and not Ferrum: it is Microsoft's engine, a known Windows 11 issue with no supported fix yet, so Claude registered a new open question. Claude also explained WebView2 versus shipping our own Chromium, the nine research claims, and where Rust helps.",
+      "next": "You review Phase 3: the checklist, the six changed pages and the sign-off.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] query | owner questions on the Task Manager name, the engine and the research claims; Q-223 registered"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Planned",
+      "tags": [
+        "WebView2",
+        "benchmarks"
       ]
     }
   ]
