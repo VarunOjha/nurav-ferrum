@@ -29,9 +29,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s03
 current_phase: phase-p4-security
-current_task: p4.4
-next_action: "p4.4: links to other apps (LaunchingExternalUriScheme: shell confirmation, per-scheme list, no silent launch), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.4-ask-before-opening.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+current_task: p4.5
+next_action: "Owner re-approves comp-security-engine, comp-core and comp-app-shell (stale after p4.4); then p4.5 (permission prompts: camera, microphone, location, notifications and clipboard read denied by default, per-site grants), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.5-permission-prompts.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [comp-security-engine, comp-core, comp-app-shell]
 last_handoff: handoff-2026-10-13-s02
 ---
 
@@ -62,6 +62,7 @@ manual checklist items 1 to 20 are still owed).
 - p4.2 done (`56cd05d`): navigation policy engine in `crates/security`, 24 tests, 100 percent coverage; comp-security-engine re-approved by the owner.
 - p4.3 done (`1323b3d`): every page load, redirect step, frame and pop-up passes the engine; blocked and allowed sites lists in settings (version 3, HTTP warning default); shell view limited to Ferrum's own pages; check PASS, smoke 85 passed. Four component pages re-approved by the owner; the MANIFEST order slip (ff7292e) is fixed in the history rewrite before the first push (owner's choice).
 - Q-224 answered before p4.4: any link type to other apps may be offered, always with a click; Claude proposes a sourced list of always-refused risky types for the owner's review.
+- p4.4 done (`b957705`): four abused link types always refused, optional list of allowed types, every request and click checked; check PASS. Three component approvals stale.
 
 ## Done this session (s02)
 
@@ -346,7 +347,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.3 committed in 1323b3d; four component pages re-approved; p4.4 next)
+(empty: p4.4 committed in b957705; three component approvals stale, waiting for the owner)
 
 ## Blockers
 

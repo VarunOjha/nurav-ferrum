@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:d5d71d0ce3bbb4e39531824df20666085fc8944c77e67a66618c74a614ae37f1"
+    "content_hash": "sha256:4b9466f7ea216d36ad38e62e15fc59884a7081fa9a6643b97f8eabcd602c9e9a"
   },
   "entries": [
     {
@@ -3839,6 +3839,45 @@
       "tags": [
         "privacy",
         "web views"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-p4-4",
+      "date": "2026-10-13",
+      "time": "13:41",
+      "title": "Links to other apps: risky types always refused",
+      "done": "As you chose, any link to another app may be offered, always with your click. Four link types that attackers have used to run or install things with one click are now always refused (sources saved for your review). A list in Settings can narrow the allowed types. Live test: nothing was launched without the click.",
+      "next": "You re-approve three part pages that changed with the code; then Claude builds permission prompts (camera, microphone, location and others refused by default).",
+      "decisions": [
+        {
+          "what": "Always refuse four abused link types (proposal, for your review)",
+          "by": "claude"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Core library page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "b957705",
+      "covers": [
+        "## [2026-10-13] code | p4.4 links to other apps: risky types refused, optional list of allowed types",
+        "## [2026-10-13] gate | three component approvals stale after p4.4"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "privacy",
+        "testing"
       ]
     }
   ]

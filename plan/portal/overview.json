@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 3 of 17 tasks done. Every page load, redirect, frame and pop-up now passes the site rules, and you re-approved the changed part pages. Claude continues with links to other apps.",
+  "summary": "Phase 4 (security) is in progress: 4 of 17 tasks done. Links to other apps always ask first, and four risky link types are always refused. Three part pages changed with the code and need your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:3efa532a81fa2b63fb036bcdd898d265074af37d4b79db6250e34f339333e30c"
+    "content_hash": "sha256:1bc14cad9d4120f78fa499bf96d3570a887a4ec1875a138b6f06a65256aeb7b6"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
+      "state": "Three part pages out of date: waiting for you",
       "ref": "comp-security-engine"
     },
     {
@@ -35,20 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "3 of 17 tasks done"
+        "state": "4 of 17 tasks done"
       },
       {
         "item": "Part pages",
-        "state": "Re-approved by you"
+        "state": "3 changed with the new code; need your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: a link to another app (for example email) always asks you first, and only allowed link types are offered.",
+    "why": "Nothing to run. The pages for the security engine, the core library and the browser controls changed with the code, so your earlier approvals are out of date; the next task builds on them.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "\"Re-approve the three part pages\", or ask to see the changes first."
   },
   "questions_for_you": {
     "open": 19,

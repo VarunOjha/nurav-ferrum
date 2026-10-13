@@ -2292,3 +2292,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ov-open-questions]
 - sources: [raw/owner/2026-10-13-s03-q224-link-types.md]
 - result: Before p4.4 the owner was asked which link types to other apps Ferrum may offer by default; answer "Any type, always ask (Recommended)". Registered as Q-224 (answered). Claude's proposed built-in list of always-refused risky types needs sources and the owner's review; it is not approved by this answer.
+
+## [2026-10-13] code | p4.4 links to other apps: risky types refused, optional list of allowed types
+
+- session: s03
+- time: 13:41
+- pages: [comp-security-engine, comp-core, comp-app-shell, ov-arch-configuration, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.4.txt, raw/research/p4-risky-uri-schemes.md]
+- result: Per Q-224 any link type to another app may be offered with a click; four abused types (ms-appinstaller, ms-msdt, search-ms, ms-officecmd) are always refused (Claude's proposal with sources, for the owner's review); optional settings list external_allowlist narrows the types. Every confirmation request and confirming click pass the engine. p4.4 check PASS 4/4 (live spec 3 passed, launcher mocked); p4.2 coverage still 100 percent; full smoke 87 passed, 1 failed (restore-after-crash active tab; passed 3 of 3 alone; older test timing gap, noted). Not yet verified: that LaunchingExternalUriScheme alone cancels reliably (in the live test the gate refused the risky links first); adr-0015's P4 claim stays open for the exit. Stales approval of comp-security-engine, comp-core and comp-app-shell.
+- stales: [comp-security-engine, comp-core, comp-app-shell]
+- commit: b957705
+
+## [2026-10-13] gate | three component approvals stale after p4.4
+
+- session: s03
+- time: 13:41
+- pages: [comp-security-engine, comp-core, comp-app-shell]
+- result: The p4.4 page updates staled three components in the P4 dependency set; p4.5 waits for the owner's re-approval (SCHEMA §10.4).

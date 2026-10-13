@@ -5170,6 +5170,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "b957705",
+      "kind": "commit",
+      "title": "Commit b957705",
+      "summary": "Links to other apps: four abused link types always refused, optional list of allowed types (task p4.4).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }
