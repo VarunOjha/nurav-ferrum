@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:91d1f29f85577b7190b1d396d26b25650cc5b8de8fb7e4f9885c910fa6cf9a73"
+    "content_hash": "sha256:baca60b999eee04a3bbde5429855e7cb35e3b0c20d737669045826dd5ed3074f"
   },
   "entries": [
     {
@@ -3497,6 +3497,26 @@
       "tags": [
         "WebView2",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-selfscan-github",
+      "date": "2026-10-13",
+      "time": "00:48",
+      "title": "Self-scan of Phase 3 started; GitHub upload decided",
+      "done": "You asked for a self-check of Phase 3 and a first upload to GitHub. You chose a private repository that you create and upload yourself, and a cleanup of the old history (with a backup) so no old commit holds your real IP addresses or user-folder path. Ferrum now has a desktop shortcut for your 24 to 48 hour trial.",
+      "next": "Claude finishes the self-scan and fixes, cleans the history, then gives you the upload script.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] query | owner asks for a P3 self-scan and the first GitHub upload; Q-221 and Q-105 answered"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Planned",
+      "tags": [
+        "git",
+        "testing"
       ]
     }
   ]

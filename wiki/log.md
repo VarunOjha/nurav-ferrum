@@ -2129,3 +2129,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-13-s02-task-manager-name-engine-and-claims.md, raw/research/webview2-task-manager-grouping.md]
 - result: Owner questions only, no decision or approval. Task Manager shows Ferrum's page processes as a separate "WebView2 Manager" group: a known Windows 11 / WebView2 issue with no supported setting (research note); Ferrum's own process is named Ferrum. Registered Q-223 (non-blocking): accept as a known limitation (recommended), a later spike, or revisit the engine. Explained that WebView2 shares the Chromium engine and adds control from Ferrum's code; tabulated hyp-01 to hyp-09 (draft, proposed thresholds, no results before P5/P6); Rust mainly helps hyp-02 and hyp-04. Started the release build and the plan portal for the owner. P3 stays in gate-review; no P4 work.
 - next: owner works through docs/testing/manual-checklist-p3.md items 1 to 20, re-approves the six changed pages, may answer Q-223, and decides on the P3 sign-off.
+
+## [2026-10-13] query | owner asks for a P3 self-scan and the first GitHub upload; Q-221 and Q-105 answered
+
+- session: s02
+- time: 00:48
+- pages: [ov-open-questions, phase-p3-tabs-sessions]
+- sources: [raw/owner/2026-10-13-s02-self-scan-and-github.md]
+- result: Owner asked whether Ferrum is installed (it is not: a built program file; Claude copied it to %LOCALAPPDATA%\Programs\Ferrum with a desktop shortcut for a 24 to 48 hour trial), asked for a P3 self-scan with doc updates and bug fixes, then a first upload to GitHub. Answers: Q-221 "Rewrite, keep backup (Recommended)"; Q-105 "Private (Recommended)" and "I will do it" (the owner creates the repository and pushes; Claude never pushes). Five read-only review agents started (core, app, shell, docs, tests). P3 stays in gate-review; no P4 work.
+- next: verify the review findings, fix the real ones (one commit each), update docs, rerun checks; then back up and rewrite history (Q-221) and give the owner the push script.

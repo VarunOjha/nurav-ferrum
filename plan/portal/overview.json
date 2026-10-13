@@ -5,7 +5,7 @@
   "summary": "Phase 3 is built and all of Claude's end checks passed. It now waits for your review: six changed pages, your checklist, and the sign-off.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:ecce0e98f6d927b22c9a56c0b2e7b2191832e0625b388b854aa3646f883c4d95"
+    "content_hash": "sha256:cd155fd9c806a9c894fdd8f5132f9c6d622c208dd320fe5d64cd3388dc3dd977"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -50,13 +50,7 @@
     "tell_claude": "Your checklist results, \"approve\" or comments for the six pages, and whether Phase 3 is signed off."
   },
   "questions_for_you": {
-    "open": 24,
-    "items": [
-      {
-        "id": "Q-221",
-        "question": "May Claude rewrite the local git history before the first upload to GitHub, so no old commit holds real IP addresses or your user-folder path?",
-        "asked": "2026-10-09"
-      }
-    ]
+    "open": 22,
+    "items": []
   }
 }

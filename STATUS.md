@@ -328,10 +328,10 @@ P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p3.13 docs and exit gate: waiting for the owner
-- intent: Gate run 2 (2d57975) passed every Claude item; P3 is gate-review. Waiting for the owner: re-approval of adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core; checklist items 1 to 20; P3 sign-off. Then: record them, rerun the gate, run scripts/verify/p3.13-docs-gate-review.ps1, set P3 done, PAUSE.
-- paths: wiki/raw/owner/*, plan/approvals.json, docs/testing/manual-checklist-p3.md, wiki/raw/evidence/phase-p3-tabs-sessions/*, wiki/raw/MANIFEST.sha256, wiki/phases/phase-p3-tabs-sessions.md, plan/portal/*
-- rollback: owner records and evidence are new files only
+- task: p3.13 docs and exit gate: owner-requested P3 self-scan, then history rewrite (Q-221)
+- intent: Five read-only review agents report on core, app, shell, docs and tests. Claude verifies each finding, fixes the real ones (one commit per fix area), updates docs and portal, reruns the affected checks. Then: git bundle backup outside the repo, one history rewrite replacing real machine values with masks (owner answer Q-221), and a push script for the owner (Q-105: private, the owner pushes). P3 stays gate-review.
+- paths: crates/core/src/*, apps/desktop/src-tauri/src/*, apps/desktop/src/*, apps/desktop/tests/smoke/*, scripts/verify/p3.*.ps1, README.md, SECURITY.md, docs/testing/manual-checklist-p3.md, wiki/components/*, wiki/decisions/adr-0032*, wiki/decisions/adr-0033*, plan/portal/*
+- rollback: git revert of the fix commits; the history rewrite is undone from the bundle backup
 
 ## Blockers
 
@@ -393,4 +393,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-13, session s02 (P3 waiting for the owner's review; owner questions on the Task Manager name recorded as Q-223). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
+2026-10-13, session s02 (P3 waiting for the owner's review; P3 self-scan in progress; Q-221 and Q-105 answered). Last handoff: [handoff-2026-10-12-s02](wiki/operations/handoffs/handoff-2026-10-12-s02.md).
