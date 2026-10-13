@@ -45,8 +45,8 @@ Invoke-Step 'History unit tests' {
 Invoke-Step 'Smoke test: recorded, searched, cleared (list and file); back/forward per tab' {
     $r = Invoke-FerrumSmoke -Spec 'history'
     Add-LogText (Get-Tail $r.Output 8)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '3 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
-    'history: 3 passed'
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b4 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    'history: 4 passed (including the move to ferrum.db from p3.18)'
 }
 
 Invoke-Step 'History files are never part of the project' {

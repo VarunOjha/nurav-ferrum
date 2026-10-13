@@ -1238,6 +1238,8 @@ applyList(await invoke<TabList>("tab_list"));
 useAppearance(await invoke<AppearanceView>("appearance_get"));
 await loadBookmarks();
 reportLayout();
+// Start-up is over: every listener above is in place (the smoke tests wait for this before pressing keys).
+document.documentElement.dataset.ready = "1";
 
 // The shell is the only web view allowed to use the app bridge (capability shell.json, p2.3).
 invoke<string>("app_ping")

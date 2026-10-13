@@ -85,6 +85,9 @@ export async function launch(name: string, opts: LaunchOptions = {}): Promise<Fe
     await new Promise((r) => setTimeout(r, 250));
   }
   if (!shell || all().length < 2) throw new Error("shell or first tab view not found over CDP");
+  // Then until the shell's start-up has run to the end (its key and button handlers are in place); on a busy PC a key
+  // pressed earlier would be lost.
+  await shell.waitForSelector("html[data-ready]", { state: "attached", timeout: 30_000 });
   const tabPages = () => all().filter((p) => p !== shell);
   const quit = async () => {
     await shell!.evaluate(() => (window as any).__TAURI_INTERNALS__.invoke("app_quit")).catch(() => {});

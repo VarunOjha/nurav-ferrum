@@ -48,8 +48,8 @@ Invoke-Step 'Raw WebView2 code stays in its one module' {
 Invoke-Step 'Smoke test: 20 tabs, one view each, only the active one shown, all released on close' {
     $r = Invoke-FerrumSmoke -Spec 'tabs'
     Add-LogText (Get-Tail $r.Output 10)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '1 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
-    'tabs: 1 passed'
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b2 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    'tabs: 2 passed (one view per tab; the tab icon test from p3.16)'
 }
 
 Invoke-Step 'Windows draws the tab view above the shell' {

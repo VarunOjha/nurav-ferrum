@@ -43,8 +43,8 @@ Invoke-Step 'Test server download pages' {
 Invoke-Step 'Smoke test: size and SHA-256, no replaced files, broken download failed, list cleared' {
     $r = Invoke-FerrumSmoke -Spec 'downloads'
     Add-LogText (Get-Tail $r.Output 9)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '4 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
-    'downloads: 4 passed'
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '\b5 passed') { Stop-Fail "The smoke test failed:`n$(Get-Tail $r.Output 20)" }
+    'downloads: 5 passed (including the new-window download from p3.16)'
 }
 
 Complete-Check -SaveEvidence:$SaveEvidence
