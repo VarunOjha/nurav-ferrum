@@ -5160,6 +5160,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "Q-224",
+      "kind": "question",
+      "title": "Question Q-224: link types to other apps",
+      "summary": "Which link types to other apps (for example email links) may Ferrum offer by default? Answer: any type, always with your click; a list of risky types is proposed for your review.",
+      "status": "Answered",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

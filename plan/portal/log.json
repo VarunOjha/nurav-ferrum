@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:41d13e3179e7d28e986fec85002ebaaff4e2b151d76596999b1108b211d9b83b"
+    "content_hash": "sha256:d5d71d0ce3bbb4e39531824df20666085fc8944c77e67a66618c74a614ae37f1"
   },
   "entries": [
     {
@@ -3814,6 +3814,31 @@
       "tags": [
         "approvals",
         "git"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-q224",
+      "date": "2026-10-13",
+      "time": "13:13",
+      "title": "You chose which link types to other apps Ferrum may offer",
+      "done": "You answered that any link type to another app may be offered, always with your click. Claude will propose a short list of risky types that are always refused, with sources, for your review.",
+      "next": "Claude builds the link-type handling and the proposed risky-types list.",
+      "decisions": [
+        {
+          "what": "Any link type to another app may be offered, always with a click",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | Q-224 answered: any link type to other apps may be offered, always with a click"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "privacy",
+        "web views"
       ]
     }
   ]

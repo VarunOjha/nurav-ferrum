@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:c215475976b9c0126076ccbbcf631f6f7d62ded8fe384495f91162b08a2a8306"
+    "content_hash": "sha256:9706fb880e63c332aed370fe274f3e37bd6202fbe538f71738c7d8bfa65fa84e"
   },
   "items": [
     {
@@ -931,6 +931,22 @@
       "tags": [
         "WebView2",
         "look & feel"
+      ]
+    },
+    {
+      "id": "Q-224",
+      "asked": "2026-10-13",
+      "time": "13:13",
+      "question": "Which link types to other apps (for example email links) may Ferrum offer by default?",
+      "why_it_matters": "Such a link starts another program on your PC. Ferrum always asks first; this decides which types it offers at all.",
+      "status": "answered",
+      "answer": "Any type may be offered, always with your click; you can narrow the list in Settings. Claude proposes a short list of known-risky types that are always refused, with sources, for your review.",
+      "answered_on": "2026-10-13",
+      "blocks": [],
+      "category": "Security & privacy",
+      "tags": [
+        "privacy",
+        "web views"
       ]
     }
   ]

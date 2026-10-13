@@ -2284,3 +2284,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell, ov-open-questions]
 - sources: [raw/owner/2026-10-13-s03-p4-3-components-reapproval.md, raw/owner/2026-10-13-s03-manifest-order-slip.md]
 - result: The owner answered "Re-approve all four (Recommended)": recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. On the ff7292e MANIFEST order slip the owner chose "Fix it in the history cleanup (Recommended)": noted under Q-221; lint:wiki reports that one known RAW-IMMUTABLE error until the rewrite. p4.4 is next.
+
+## [2026-10-13] approval | Q-224 answered: any link type to other apps may be offered, always with a click
+
+- session: s03
+- time: 13:13
+- pages: [ov-open-questions]
+- sources: [raw/owner/2026-10-13-s03-q224-link-types.md]
+- result: Before p4.4 the owner was asked which link types to other apps Ferrum may offer by default; answer "Any type, always ask (Recommended)". Registered as Q-224 (answered). Claude's proposed built-in list of always-refused risky types needs sources and the owner's review; it is not approved by this answer.

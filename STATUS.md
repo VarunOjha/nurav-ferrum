@@ -24,6 +24,7 @@ sources:
   - raw/owner/2026-10-13-s03-security-engine-reapproval.md
   - raw/owner/2026-10-13-s03-p4-3-components-reapproval.md
   - raw/owner/2026-10-13-s03-manifest-order-slip.md
+  - raw/owner/2026-10-13-s03-q224-link-types.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s03
@@ -60,6 +61,7 @@ manual checklist items 1 to 20 are still owed).
 - p4.1 done (`ff7292e`): threat model (15 boundary edges, 26 threats, not-enforced list) in the security testing plan and SECURITY.md; check PASS.
 - p4.2 done (`56cd05d`): navigation policy engine in `crates/security`, 24 tests, 100 percent coverage; comp-security-engine re-approved by the owner.
 - p4.3 done (`1323b3d`): every page load, redirect step, frame and pop-up passes the engine; blocked and allowed sites lists in settings (version 3, HTTP warning default); shell view limited to Ferrum's own pages; check PASS, smoke 85 passed. Four component pages re-approved by the owner; the MANIFEST order slip (ff7292e) is fixed in the history rewrite before the first push (owner's choice).
+- Q-224 answered before p4.4: any link type to other apps may be offered, always with a click; Claude proposes a sourced list of always-refused risky types for the owner's review.
 
 ## Done this session (s02)
 

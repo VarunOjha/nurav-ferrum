@@ -21,6 +21,7 @@ sources:
   - raw/owner/2026-10-11-s01-wave2-answers.md
   - raw/owner/2026-10-12-s02-p3-questions.md
   - raw/owner/2026-10-13-s03-p4-questions.md
+  - raw/owner/2026-10-13-s03-q224-link-types.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt
 related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability, adr-0028]
 approvable: false
@@ -87,7 +88,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P8 entry | Q-124, Q-206 |
 | Exit reviews only, or not blocking | Q-105, Q-215, Q-217 |
 | The first push to GitHub (not a phase gate) | Q-221 |
-| Answered | Q-112, Q-113, Q-212, Q-111, Q-125, Q-209, Q-109, Q-202, Q-214, Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
+| Answered | Q-224, Q-112, Q-113, Q-212, Q-111, Q-125, Q-209, Q-109, Q-202, Q-214, Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -894,3 +895,13 @@ upstream reports (Claude recommends this); (b) also run a short spike in a later
 no promise it works; (c) reconsider the engine (shipping Chromium ourselves) if Microsoft never fixes it. Option (c)
 would change the project's base (raw/01-scoping-decisions.md), give Ferrum the job of shipping every Chromium security
 fix, and rebuild most of P1 to P3; it would need its own ADR. Non-blocking: no phase waits on it.
+
+## Q-224 Which link types to other apps may Ferrum offer by default?
+
+- asked: 2026-10-13 13:13
+- blocking: []
+- status: answered
+- answer: [raw/owner/2026-10-13-s03-q224-link-types.md](../raw/owner/2026-10-13-s03-q224-link-types.md), owner answer (2026-10-13): "Any type, always ask (Recommended)": every link type may be offered, always with the user's click; a settings list can narrow it; Claude proposes a short built-in list of known-risky types that are always refused, with sources, for the owner's review.
+
+Raised by task p4.4 (per-scheme allowlist, adr-0015 rule 1). Since P2 every link to another app is offered on the
+shell's confirmation bar and nothing opens without the user's click.

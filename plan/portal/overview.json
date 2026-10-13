@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is in progress: 3 of 17 tasks done. Every page load, redirect, frame and pop-up now passes the site rules, and you re-approved the changed part pages. Claude continues with links to other apps.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:f8f0db8f9bbc358fa495c4deb5737c8cf5e59bfa73a0c81275e9feb41f0dac23"
+    "content_hash": "sha256:3efa532a81fa2b63fb036bcdd898d265074af37d4b79db6250e34f339333e30c"
   },
   "updated": "2026-10-13",
   "where_we_are": [
