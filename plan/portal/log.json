@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:6abcb0cb57655bd3991b72ec72c3f104f627241b91a3169cccfc86e31fef423b"
+    "content_hash": "sha256:738ffef193411ea776e40e04ad0f799ebbe283b20f8188396779e8db22c12e17"
   },
   "entries": [
     {
@@ -3557,6 +3557,87 @@
       "tags": [
         "sessions",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-p3-signoff",
+      "date": "2026-10-13",
+      "time": "07:47",
+      "title": "You signed off Phase 3 and said go for Phase 4 only",
+      "done": "You chose not to wait for your trial notes. You re-approved the seven pages changed during Phase 3 and signed it off. The end check on the latest fixes and the hand checklist are still owed; your notes come later as fixes.",
+      "next": "Answer the questions that hold Phase 4.",
+      "decisions": [
+        {
+          "what": "Sign off Phase 3 now, run the end check later",
+          "by": "you"
+        },
+        {
+          "what": "Build Phase 4 only, then pause",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Seven Phase 3 pages re-approved",
+          "status": "Approved"
+        },
+        {
+          "what": "Phase 3 sign-off",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] resume | session s03 starts; owner skips the trial notes for now",
+        "## [2026-10-13] approval | P3 pages re-approved and P3 signed off without the end-check rerun",
+        "## [2026-10-13] gate | phase-p3-tabs-sessions exit approved",
+        "## [2026-10-13] gate | phase-p4-security go-ahead given"
+      ],
+      "phase": "phase-p3-tabs-sessions",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s03-p4-entry",
+      "date": "2026-10-13",
+      "time": "07:47",
+      "title": "Phase 4 questions answered, pages approved, Phase 4 started",
+      "done": "You answered three questions: plain HTTP sites open with a warning bar, the block list starts empty, and options are settings in one program. Claude updated the site-rules decision to match. You approved the five Phase 4 pages, and the start check passed.",
+      "next": "Claude starts Phase 4 with the threat list.",
+      "decisions": [
+        {
+          "what": "HTTP sites allowed with a warning bar",
+          "by": "you"
+        },
+        {
+          "what": "Block list starts empty",
+          "by": "you"
+        },
+        {
+          "what": "Options are settings in one program",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Five Phase 4 planning pages",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] ingest | owner answers Q-112, Q-113 and Q-212",
+        "## [2026-10-13] approval | P4 dependency pages approved",
+        "## [2026-10-13] gate | phase-p4-security entry passed"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "blocklist",
+        "approvals"
       ]
     }
   ]

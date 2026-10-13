@@ -2,22 +2,22 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 3 is built, self-checked and fixed. You are trying Ferrum for a day or two; next session: the end check, the history cleanup, your GitHub upload and your Phase 3 review.",
+  "summary": "Phase 3 is done and signed off. Phase 4 (security) has started; Claude builds it task by task and stops for your review at the end.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:6de5185e37ff279fb4325588cfbca1597e3022f67b5b03ac5d2ee6561a601f9e"
+    "content_hash": "sha256:393c2f7726cb9d656868c925017efe990d778047341334852807e723773062d4"
   },
   "updated": "2026-10-13",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P3 Tabs and sessions: waiting for your review",
-      "ref": "phase-p3-tabs-sessions"
+      "state": "P4 Security: in progress",
+      "ref": "phase-p4-security"
     },
     {
-      "item": "Phase 1",
-      "state": "Done, signed off by you on 11 Oct",
-      "ref": "phase-p1-foundation"
+      "item": "Phase 3",
+      "state": "Done, signed off by you on 13 Oct; end check rerun still owed",
+      "ref": "phase-p3-tabs-sessions"
     },
     {
       "item": "Approvals",
@@ -29,28 +29,28 @@
     },
     {
       "item": "First upload to GitHub",
-      "state": "On hold until you answer the history-rewrite question",
+      "state": "After the end check and the history cleanup",
       "ref": "Q-221"
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
-        "item": "Phase 3",
-        "state": "waiting for your review"
+        "item": "Phase 4",
+        "state": "started; first task is the threat list"
       },
       {
-        "item": "You",
-        "state": "trying Ferrum for 24 to 48 hours"
+        "item": "Your Ferrum notes",
+        "state": "whenever you are ready"
       }
     ],
-    "why": "Your notes from daily use show what tests cannot; then the end check, the history cleanup and the upload.",
+    "why": "Nothing to run; Claude continues with Phase 4, task by task, and stops for your review when it is done.",
     "script": null,
-    "tell_claude": "Your Ferrum notes, and \"Quiet now\" when you can leave the PC for about 35 minutes."
+    "tell_claude": "Your Ferrum notes at any time, and \"Quiet now\" when you can leave the PC for about 35 minutes."
   },
   "questions_for_you": {
-    "open": 22,
+    "open": 19,
     "items": []
   }
 }

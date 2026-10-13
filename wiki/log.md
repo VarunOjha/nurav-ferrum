@@ -2157,3 +2157,59 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [handoff-2026-10-13-s02, phase-p3-tabs-sessions]
 - result: The owner closed the session to use Ferrum (desktop shortcut, the 2026-10-12 build) and will start a new session later with notes. Handoff written: [handoff-2026-10-13-s02](operations/handoffs/handoff-2026-10-13-s02.md). Pending: end-check rerun after the self-scan fixes, the history cleanup (Q-221), the owner's push (Q-105), the P3 review. Lint: quick_lint 0 errors, lint:wiki 0 errors, portal-sync clean. Tree clean after this commit.
 - next: see STATUS next_action.
+
+## [2026-10-13] resume | session s03 starts; owner skips the trial notes for now
+
+- session: s03
+- time: 07:47
+- result: Session start per SCHEMA §9.6: STATUS, last log entries, approvals (7 STALE), handoff-2026-10-13-s02, git clean, no stash, In-flight empty. Owner: "let's not wait for notes. I will provide them later. Let's continue to the other phases."
+- next: record the owner's P3 decision.
+
+## [2026-10-13] approval | P3 pages re-approved and P3 signed off without the end-check rerun
+
+- session: s03
+- time: 07:47
+- pages: [adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core, phase-p3-tabs-sessions]
+- sources: [raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md]
+- result: Owner chose "Sign off now, check later". Recorded approved with tools/approvals_record.py: the seven pages above and phase-p3-tabs-sessions#exit. Owed after the sign-off: the end-check rerun on the self-scan fixes (before the GitHub push) and manual checklist items 1 to 20 (with the owner's Ferrum notes, handled as fixes).
+
+## [2026-10-13] gate | phase-p3-tabs-sessions exit approved
+
+- session: s03
+- time: 07:47
+- pages: [phase-p3-tabs-sessions]
+- sources: [raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md]
+- result: phase-p3-tabs-sessions set to done (status only; approval APPROVED_VOLATILE_DRIFT). Exit-gate step 1 deviates by the owner's choice: the last full run (2d57975, on d92ae4f) predates the self-scan fixes; the rerun is owed.
+
+## [2026-10-13] gate | phase-p4-security go-ahead given
+
+- session: s03
+- time: 07:47
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md]
+- result: Owner: "P4 only, then pause (Recommended)". Claude builds P4 and stops after its exit gate; no P5 work without a new go.
+
+## [2026-10-13] ingest | owner answers Q-112, Q-113 and Q-212
+
+- session: s03
+- time: 07:47
+- pages: [ov-open-questions, adr-0015]
+- sources: [raw/owner/2026-10-13-s03-p4-questions.md]
+- result: Q-112 "Allow HTTP with a warning bar" (http: loads as typed, no automatic upgrade, visible not-secure bar); Q-113 "Empty, you add sites"; Q-212 "Settings in one app". adr-0015 rule 1 and rule 2 updated to the answers; follow-ups updated. 19 questions remain open.
+- stales: [adr-0015]
+
+## [2026-10-13] approval | P4 dependency pages approved
+
+- session: s03
+- time: 07:47
+- pages: [phase-p4-security, adr-0008, exp-security-overhead, exp-isolation-overhead, adr-0015]
+- sources: [raw/owner/2026-10-13-s03-p4-pages-approval.md]
+- result: Owner: "Approve all five (Recommended)". Recorded approved with tools/approvals_record.py; approvals_check shows no key outside APPROVED or APPROVED_VOLATILE_DRIFT.
+
+## [2026-10-13] gate | phase-p4-security entry passed
+
+- session: s03
+- time: 07:47
+- pages: [phase-p4-security]
+- result: (1) P3 done, phase-p3-tabs-sessions#exit APPROVED, go-ahead given. (2) Dependency set APPROVED: phase-p4-security, adr-0008, adr-0010, adr-0014, adr-0015, comp-security-engine, comp-webview-manager, comp-app-shell, exp-security-overhead, exp-isolation-overhead, schema. (3) No open question blocks it (Q-112, Q-113, Q-212 answered). (4) The only CONTRADICTION in the set (adr-0010) names Q-107, answered. phase-p4-security set to in-progress.
+- next: p4.1 threat model.

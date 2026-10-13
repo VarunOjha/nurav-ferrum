@@ -3,11 +3,12 @@ id: adr-0015
 type: decision
 title: "Default navigation posture is open browsing + blocklist"
 status: accepted
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
+  - raw/owner/2026-10-13-s03-p4-questions.md
 related: [adr-0007, adr-0008, adr-0010, adr-0019, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, comp-security-engine, comp-webview-manager, comp-app-shell, exp-security-overhead]
 approvable: true
 date: 2026-10-08
@@ -70,11 +71,11 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
 
 1. **Schemes:**
    - `https:` is allowed unless blocklisted.
-   - `http:` is first upgraded to HTTPS. If the upgrade fails, an interstitial warning is shown. The exact behaviour is open question Q-112.
+   - `http:` is loaded as typed, without an automatic HTTPS upgrade, and the shell shows a visible "not secure" warning bar while the page is on HTTP (owner answer to Q-112, 2026-10-13, [raw/owner/2026-10-13-s03-p4-questions.md](../raw/owner/2026-10-13-s03-p4-questions.md): "Allow HTTP with a warning bar"; this is the "warned" branch of the owner's Q12 words).
    - Non-web schemes (`mailto:`, `ms-*:`, custom app protocols) need **explicit user confirmation** and are logged.
    - `file:`, `javascript:` (as a top-level navigation), `data:` (as a top-level navigation) and the app's own local origin are **denied in tabs**.
 2. **Domain blocklist and allowlist** (master prompt §4 requires both; Q12 chose the default posture, it did not drop allowlists):
-   - The **blocklist** is a local, owner-editable list with exact-host and domain-suffix rules (subdomain matching). Its default contents and source are open question Q-113.
+   - The **blocklist** is a local, owner-editable list with exact-host and domain-suffix rules (subdomain matching). It ships empty apart from the security-suite fixture domains; the owner adds sites in Settings; no third-party lists until their licences and update process are reviewed (owner answer to Q-113, 2026-10-13).
    - The **allowlist** is a local, owner-editable list with the same rule syntax. It is used in two ways:
      - *Override:* an allowlist entry that is more specific than a matching blocklist rule wins (for example, allow `docs.example.com` while `example.com` and its subdomains are blocked). At equal specificity, block wins.
      - *Allowlist-only mode:* an optional mode, set globally or per profile, in which only allowlisted hosts may be navigated to and everything else is denied (this is option B, kept available as a configuration).
@@ -107,8 +108,8 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
 - P2 (M1): a minimal policy: scheme handling, fail-closed parse, no local origin; popups (`target=_blank`, `window.open`) open in the same view or in the system browser per configuration (task p2.10, since P2 has no tabs); Google OAuth detection with an "Open in system browser" offer (task p2.13).
 - P3: popups become new Ferrum tabs under the same policy (rule 5); per-site settings.
 - P4 (M3): the full engine (blocklist, allowlist override and allowlist-only mode, permissions default deny), the security test suite (master prompt §11) and the threat model.
-- Pending owner answers ([ov-open-questions](../overview/ov-open-questions.md)): Q-109 (OAuth hand-off UX; p2.13 builds it), Q-112 (HTTP behaviour), Q-113 (blocklist source).
-- Recommended defaults: Q-109: detect navigations to Google's OAuth authorization endpoints and show a bar offering to open the URL in the default browser, never spoof the user agent, and keep benchmark workloads free of Google logins. Q-112: always try HTTPS first; if that fails, show an interstitial with "Continue over HTTP (this time)" and an optional per-site remember toggle, each continue logged as a policy event. Q-113: a local owner-edited list that ships empty apart from the security-suite fixture domains; no third-party lists until their licences and update process are reviewed in a research note.
+- Owner answers ([ov-open-questions](../overview/ov-open-questions.md)): Q-109 (OAuth hand-off UX; p2.13 builds it), Q-112 (HTTP behaviour: allow with a warning bar) and Q-113 (blocklist ships empty) are answered.
+- Recommended defaults: Q-109: detect navigations to Google's OAuth authorization endpoints and show a bar offering to open the URL in the default browser, never spoof the user agent, and keep benchmark workloads free of Google logins. Q-112 (not chosen by the owner): always try HTTPS first; if that fails, show an interstitial with "Continue over HTTP (this time)" and an optional per-site remember toggle, each continue logged as a policy event. Q-113 (chosen): a local owner-edited list that ships empty apart from the security-suite fixture domains; no third-party lists until their licences and update process are reviewed in a research note.
 - `exp-security-overhead` measures policy-evaluation latency, separately from correctness tests (master prompt §7).
 
 ### Related risks and phases

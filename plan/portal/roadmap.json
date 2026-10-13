@@ -79,12 +79,12 @@
       "short": "P3",
       "name": "Tabs and sessions",
       "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
-      "status": "Waiting for your review",
-      "tasks_done": 22,
+      "status": "Done",
+      "tasks_done": 23,
       "tasks_total": 23,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-        "content_hash": "sha256:0171d6b49d2ee770f79ef0880f5f807bc195511689eb33e0233f5b5f8bcb31cd"
+        "content_hash": "sha256:7ce55b464468b6ff98e612879469058e4f5d73149cdad698ea0caeecd1dec50e"
       }
     },
     {
@@ -92,12 +92,12 @@
       "short": "P4",
       "name": "Security",
       "one_line_goal": "Blocking, permissions and isolation proven by tests; threat model written",
-      "status": "Not started",
+      "status": "In progress",
       "tasks_done": 0,
       "tasks_total": 17,
       "source": {
         "wiki_path": "wiki/phases/phase-p4-security.md",
-        "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+        "content_hash": "sha256:ff52b1ccf26e4dce618288cfafd5c811a9cadc3f4d2a7145e3f7498271c411ea"
       }
     },
     {

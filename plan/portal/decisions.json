@@ -447,7 +447,7 @@
       "id": "adr-0015",
       "number": 15,
       "title": "Open browsing with a blocklist",
-      "summary": "Any secure (HTTPS) site opens unless blocked. Plain HTTP is upgraded or warned about. Other link types (mail, apps) ask first. Local files and address-bar scripts are refused in tabs.",
+      "summary": "Any secure (HTTPS) site opens unless blocked. Plain HTTP sites open as typed, with a visible 'not secure' bar. The block list starts empty; you add sites. Other link types (mail, apps) ask first. Local files and address-bar scripts are refused in tabs.",
       "why": "Your choice: normal browsing, with guard rails where they matter.",
       "catch": "A blocklist is advice, not a sandbox, so security tests must be thorough; Google sign-in will likely fail in tabs.",
       "status": "Accepted",
@@ -471,7 +471,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0015-navigation-posture-open-blocklist.md",
-        "content_hash": "sha256:83e5dc591a230a087d327ce05059538a4dd8fae0bf3869a96e4e7c964989cb4b"
+        "content_hash": "sha256:d42dc571ea696b13c2b2b8f3af023cb990fee5a2df0d813bc083eb7ffa8bbf83"
       }
     },
     {

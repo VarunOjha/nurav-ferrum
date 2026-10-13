@@ -18,12 +18,15 @@ sources:
   - raw/owner/2026-10-11-s02-p1-signoff.md
   - raw/owner/2026-10-11-s02-p2-go-ahead.md
   - raw/owner/2026-10-11-s02-wave3-and-p2-questions.md
+  - raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md
+  - raw/owner/2026-10-13-s03-p4-questions.md
+  - raw/owner/2026-10-13-s03-p4-pages-approval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
-session: s02
-current_phase: phase-p3-tabs-sessions
-current_task: p3.13
-next_action: "Owner is trying Ferrum (desktop shortcut) and will start a new session with notes. Then: when the owner says the PC is quiet (about 35 minutes), Claude runs pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence and commits the evidence; offers to refresh the desktop copy; does the history cleanup (Q-221; steps in wiki/operations/handoffs/handoff-2026-10-13-s02.md); gives the owner the push script (Q-105, private, the owner pushes). Then the owner's P3 review: checklist items 1 to 20, the Ferrum notes, re-approval of adr-0011, adr-0015, adr-0032, adr-0033, comp-app-shell, comp-core, phase-p3-tabs-sessions, and the P3 sign-off. No P4 work."
+session: s03
+current_phase: phase-p4-security
+current_task: p4.1
+next_action: "Build P4 task by task, starting with p4.1 (threat model), per wiki/phases/phase-p4-security.md; stop after the P4 exit gate (no P5 work). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-13-s02
 ---
@@ -36,14 +39,20 @@ last_handoff: handoff-2026-10-13-s02
 
 ## Current phase
 
-**phase-p3-tabs-sessions — IN PROGRESS (session s02, entry passed 2026-10-12).** Owner's directive of 2026-10-12
-([raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md](wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md)):
-"consider auto approved for next phase and do that. Stop after the next phase is done." Q-111, Q-125, Q-209 answered
-([raw/owner/2026-10-12-s02-p3-questions.md](wiki/raw/owner/2026-10-12-s02-p3-questions.md)). **Stop after P3's exit gate:**
-the P3 sign-off and anything towards P4 or benchmarking wait for the owner. Standing rule: no kill commands and no
-deleting of things Claude did not create without asking.
+**phase-p4-security — IN PROGRESS (session s03, entry passed 2026-10-13).** Owner's words of 2026-10-13
+([raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md](wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md)):
+"Sign off now, check later" and "P4 only, then pause". **Stop after P4's exit gate:** P5 waits for the owner.
+Standing rule: no kill commands and no deleting of things Claude did not create without asking.
 
-P0, P1 and P2 are done and signed off (P2 on 2026-10-12).
+P0 to P3 are done and signed off (P3 on 2026-10-13, before the end-check rerun on the self-scan fixes; that rerun and
+manual checklist items 1 to 20 are still owed).
+
+## Done this session (s03)
+
+- Session start; owner skips the trial notes for now (notes come later, handled as fixes).
+- P3: seven stale pages re-approved; P3 signed off (`phase-p3-tabs-sessions#exit`); status done.
+- P4 go-ahead (P4 only, then pause). Q-112 (HTTP allowed with a warning bar), Q-113 (blocklist ships empty) and Q-212
+  (settings in one app) answered; adr-0015 updated; five P4 pages approved; P4 entry gate passed.
 
 ## Done this session (s02)
 
@@ -348,7 +357,7 @@ Exact install and verification commands: [wiki/operations/ops-environment-setup.
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **23 open**, 29 answered (Q-111, Q-125, Q-209 on 2026-10-12; Q-109, Q-202, Q-214 on 2026-10-11; Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
+[ov-open-questions](wiki/overview/ov-open-questions.md): **19 open**, answered include (Q-112, Q-113, Q-212 on 2026-10-13; Q-111, Q-125, Q-209 on 2026-10-12; Q-109, Q-202, Q-214 on 2026-10-11; Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
 Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003).
 Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
@@ -364,17 +373,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | Built, self-checked and fixed; waiting for your review |
-| You | Trying Ferrum for 24 to 48 hours (desktop shortcut) |
-| App tests after the fixes | Waiting for a quiet PC (about 35 minutes) |
-| History cleanup and GitHub upload | Prepared; after the tests |
-| Phase 4 | Not started |
+| Phase 3 | Done and signed off; end check rerun still owed |
+| Phase 4 (security) | Started; first task is the threat list |
+| Your Ferrum notes | Whenever you are ready |
 
-**2. Why, and what it does.** Your notes from daily use show what tests cannot → the end check proves the fixes broke nothing → then a clean history goes to your private GitHub.
+**2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.
 
-**3. The script:** none now. In the next session, start Claude Code in the project folder.
+**3. The script:** none now.
 
-**4. What to tell Claude:** your Ferrum notes, and "Quiet now" when you can leave the PC for about 35 minutes.
+**4. What to tell Claude:** your Ferrum notes at any time, and "Quiet now" when you can leave the PC for about 35 minutes.
 
 ## Pending owner approvals
 
@@ -385,4 +392,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-13, session s02 ended (owner trying Ferrum; P3 gate-review). Last handoff: [handoff-2026-10-13-s02](wiki/operations/handoffs/handoff-2026-10-13-s02.md).
+2026-10-13, session s03 (P3 signed off; P4 entry passed). Last handoff: [handoff-2026-10-13-s02](wiki/operations/handoffs/handoff-2026-10-13-s02.md).

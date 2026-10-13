@@ -20,6 +20,7 @@ sources:
   - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
   - raw/owner/2026-10-11-s01-wave2-answers.md
   - raw/owner/2026-10-12-s02-p3-questions.md
+  - raw/owner/2026-10-13-s03-p4-questions.md
   - raw/evidence/phase-p0-planning/interactive-plan/IP-1-scaffold.txt
 related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-arch-webview2-integration, qual-security-testing-plan, ov-research-threats-to-validity, ip-build-plan, ip-testing, ov-arch-configuration, ov-arch-repo-layout, ov-research-configurations, comp-baseline-app, ip-spec, ops-approval-workflow, ops-session-protocol, ops-wiki-maintenance, ov-research-plan, ov-research-objective-function, ov-research-statistical-analysis-plan, ov-research-workload-catalog, ov-research-traceability, ov-research-paper-plan, ov-research-fairness-protocol, wl-public-supplementary, adr-0001, adr-0003, adr-0005, adr-0008, adr-0009, adr-0010, adr-0011, adr-0012, adr-0013, adr-0014, adr-0015, adr-0016, adr-0017, adr-0018, adr-0019, adr-0020, adr-0021, adr-0027, risk-r01, risk-r04, comp-interactive-plan, phase-p0-planning, phase-p1-foundation, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, phase-p6-benchmark-harness, phase-p7-lifecycle, phase-p8-research-paper, exp-startup, exp-energy, exp-reliability, adr-0028]
 approvable: false
@@ -79,14 +80,14 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P1 entry | none (Q-106, Q-110, Q-211 answered 2026-10-11) |
 | P2 entry | none (Q-109, Q-202, Q-214 answered 2026-10-11) |
 | P3 entry | none (Q-111, Q-125, Q-209 answered 2026-10-12) |
-| P4 entry | Q-112, Q-113, Q-212 |
+| P4 entry | none (Q-112, Q-113, Q-212 answered 2026-10-13) |
 | P5 entry | Q-114, Q-115, Q-203 |
 | P6 entry (incl. exp-energy, exp-reliability) | Q-117, Q-118, Q-119, Q-120, Q-121, Q-123, Q-201, Q-204, Q-205, Q-213 |
-| P7 entry | Q-201, Q-208, Q-212 |
+| P7 entry | Q-201, Q-208 |
 | P8 entry | Q-124, Q-206 |
 | Exit reviews only, or not blocking | Q-105, Q-215, Q-217 |
 | The first push to GitHub (not a phase gate) | Q-221 |
-| Answered | Q-111, Q-125, Q-209, Q-109, Q-202, Q-214, Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
+| Answered | Q-112, Q-113, Q-212, Q-111, Q-125, Q-209, Q-109, Q-202, Q-214, Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
 
 The table is a convenience view; the `blocking` lines below are what the gate checker reads.
@@ -351,8 +352,8 @@ Raised in adr-0010.
 
 - asked: 2026-10-08
 - blocking: [phase-p4-security]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-13-s03-p4-questions.md](../raw/owner/2026-10-13-s03-p4-questions.md), owner answer (2026-10-13): "Allow HTTP with a warning bar": `http:` addresses load as typed, without an automatic HTTPS upgrade, with a visible "not secure" warning bar (adr-0015 rule 1 updated).
 
 Raised in adr-0015. Should Ferrum upgrade to HTTPS, and what should it show if the upgrade fails? P2
 ships a minimal interim behaviour.
@@ -361,8 +362,8 @@ ships a minimal interim behaviour.
 
 - asked: 2026-10-08
 - blocking: [phase-p4-security]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-13-s03-p4-questions.md](../raw/owner/2026-10-13-s03-p4-questions.md), owner answer (2026-10-13): "Empty, you add sites (Recommended)": the blocklist ships empty apart from the security-suite fixture domains; the owner adds sites in Settings; no third-party lists until their licences and update process are reviewed.
 
 Raised in adr-0015.
 
@@ -707,8 +708,8 @@ code. Recommended default: (a).
 
 - asked: 2026-10-08
 - blocking: [phase-p4-security, phase-p7-lifecycle]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-13-s03-p4-questions.md](../raw/owner/2026-10-13-s03-p4-questions.md), owner answer (2026-10-13): "Settings in one app (Recommended)": runtime settings on one identical binary; the only build-time exceptions are the benchmark-only no-security build and the optional adaptive-lifecycle feature.
 
 Master prompt §8 asks for "feature flags". Claude proposes runtime flags on one identical binary for the
 security policies, the isolation modes and all four lifecycle strategies, with two exceptions: a

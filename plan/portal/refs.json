@@ -42,7 +42,7 @@
       "kind": "phase",
       "title": "P3 Tabs and sessions",
       "summary": "Goal: Many tabs, restored after a restart, with separate data per site. Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
-      "status": "Waiting for your review",
+      "status": "Done",
       "related": [],
       "aliases": [
         "P3"
@@ -53,7 +53,7 @@
       "kind": "phase",
       "title": "P4 Security",
       "summary": "Goal: Blocking, permissions and isolation proven by tests; threat model written. Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [],
       "aliases": [
         "P4"
@@ -690,7 +690,7 @@
       "kind": "task",
       "title": "P3 task: Docs, gate, your review",
       "summary": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
-      "status": "Waiting for you",
+      "status": "Done",
       "related": [
         "phase-p3-tabs-sessions"
       ]
@@ -1736,7 +1736,7 @@
       "id": "adr-0015",
       "kind": "decision",
       "title": "Decision 15: Open browsing with a blocklist",
-      "summary": "Any secure (HTTPS) site opens unless blocked. Plain HTTP is upgraded or warned about. Other link types (mail, apps) ask first. Local files and address-bar scripts are refused in tabs. You decided.",
+      "summary": "Any secure (HTTPS) site opens unless blocked. Plain HTTP sites open as typed, with a visible 'not secure' bar. The block list starts empty; you add sites. Other link types (mail, apps) ask first. Local files and address-bar scripts are refused in tabs. You decided.",
       "status": "Accepted",
       "related": [
         "adr-0007",
@@ -3597,7 +3597,7 @@
       "kind": "question",
       "title": "What to do with http: addresses?",
       "summary": "What exactly should happen with http: addresses: upgrade to HTTPS, and what if the upgrade fails? P4 sets the final web address rules; P2 ships a simple interim version.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p4-security"
       ]
@@ -3607,7 +3607,7 @@
       "kind": "question",
       "title": "Default blocklist",
       "summary": "What should the default blocklist contain, and where should it come from? P4 builds the security policy engine that uses it.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p4-security"
       ]
@@ -3840,7 +3840,7 @@
       "kind": "question",
       "title": "Run-time switches or build options?",
       "summary": "Is it OK to switch security, isolation and tab-sleeping options at run time on one identical program, with two build-time exceptions? Your brief asks for 'feature flags'; this is Claude's reading of it. It shapes how P4 and P7 are built and benchmarked.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p4-security",
         "phase-p7-lifecycle"

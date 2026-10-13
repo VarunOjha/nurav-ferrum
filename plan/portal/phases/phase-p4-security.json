@@ -4,7 +4,7 @@
   "title": "Security",
   "one_line_goal": "Blocking, permissions and isolation proven by tests; threat model written",
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
-  "status": "Not started",
+  "status": "In progress",
   "progress": {
     "done": 0,
     "total": 17
@@ -270,6 +270,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p4-security.md",
-    "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36"
+    "content_hash": "sha256:ff52b1ccf26e4dce618288cfafd5c811a9cadc3f4d2a7145e3f7498271c411ea"
   }
 }

@@ -4,9 +4,9 @@
   "title": "Tabs and sessions",
   "one_line_goal": "Many tabs, restored after a restart, with separate data per site",
   "summary": "Tabs with shortcuts, restore after a crash, a profile per site, history, downloads, settings and a sidebar. Plus a small new feature set you asked for: bookmarks, search of the past, an encrypted backup, a fresh look and logo.",
-  "status": "Waiting for your review",
+  "status": "Done",
   "progress": {
-    "done": 22,
+    "done": 23,
     "total": 23
   },
   "step_order": [
@@ -181,7 +181,7 @@
       "what": "Update the docs, run the phase gate and hand over for your review.",
       "why": "Tests show the features work; only real use shows whether Ferrum is pleasant to work in. You decide whether that is good enough.",
       "how": "Update part pages, the README features and known limits, save all evidence. Then you do the hand checks: eight or more tabs, shortcuts, kill and restore, a real download.",
-      "status": "Waiting for you",
+      "status": "Done",
       "chain": "Tabs done → update part pages, known limits and the README, then run the gate → you use Ferrum for a real working session and approve.",
       "check": "All evidence saved; wiki clean; you approved the P3 exit.",
       "script": "scripts/verify/p3.13-docs-gate-review.ps1"
@@ -330,6 +330,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:0171d6b49d2ee770f79ef0880f5f807bc195511689eb33e0233f5b5f8bcb31cd"
+    "content_hash": "sha256:7ce55b464468b6ff98e612879469058e4f5d73149cdad698ea0caeecd1dec50e"
   }
 }

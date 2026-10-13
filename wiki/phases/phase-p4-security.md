@@ -2,8 +2,8 @@
 id: phase-p4-security
 type: phase
 title: "P4 Security (Milestone M3): policy engine, permissions, isolation tests, threat model"
-status: planned
-updated: 2026-10-08
+status: in-progress
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md

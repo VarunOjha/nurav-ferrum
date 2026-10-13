@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:abbd37e2a775c888d8b21ad8b4102704b04f6173dffa7401814d4e2187bee37c"
+    "content_hash": "sha256:37308c3ba32993a679d2a84f50e37f4001f0712cee3e5ec471fada297a497131"
   },
   "items": [
     {
@@ -317,9 +317,9 @@
       "asked": "2026-10-08",
       "question": "What exactly should happen with http: addresses: upgrade to HTTPS, and what if the upgrade fails?",
       "why_it_matters": "P4 sets the final web address rules; P2 ships a simple interim version.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Allow plain HTTP sites as typed, with a visible 'not secure' warning bar; no automatic switch to HTTPS.",
+      "answered_on": "2026-10-13",
       "blocks": [
         "phase-p4-security"
       ],
@@ -334,9 +334,9 @@
       "asked": "2026-10-08",
       "question": "What should the default blocklist contain, and where should it come from?",
       "why_it_matters": "P4 builds the security policy engine that uses it.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "The block list starts empty (apart from made-up test addresses for the security tests); you add sites in Settings. No outside lists until their licences and updates are checked.",
+      "answered_on": "2026-10-13",
       "blocks": [
         "phase-p4-security"
       ],
@@ -745,9 +745,9 @@
       "asked": "2026-10-08",
       "question": "Is it OK to switch security, isolation and tab-sleeping options at run time on one identical program, with two build-time exceptions?",
       "why_it_matters": "Your brief asks for 'feature flags'; this is Claude's reading of it. It shapes how P4 and P7 are built and benchmarked.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Settings in one program: options are chosen in the settings file. The only exceptions are a test-only build with security off (never shipped) and an optional switch for the experimental tab-sleeping code.",
+      "answered_on": "2026-10-13",
       "blocks": [
         "phase-p4-security",
         "phase-p7-lifecycle"
