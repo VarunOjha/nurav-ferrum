@@ -1,0 +1,6 @@
+Command output saved by scripts/gates/p3-gate.ps1 on 2026-10-12 19:36 at commit 0dd59ae (with uncommitted changes)
+Exit code: 0
+
+
+    Checking ferrum-desktop v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\src-tauri)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.42s
