@@ -2678,3 +2678,28 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-app-shell]
 - sources: [raw/owner/2026-10-14-s07-selftest-fix-reapproval.md]
 - result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. p4.18 continues: the set-aside code edits go back in.
+
+## [2026-10-14] ingest | SmartScreen research note; program downloads held by SmartScreen
+
+- session: s07
+- time: 17:23
+- pages: [ov-arch-data-flows, ov-open-questions, comp-webview-manager, comp-app-shell]
+- sources: [raw/research/smartscreen-webview2.md, raw/owner/2026-10-14-s07-p4-18-exe-download-find-cause.md, raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md]
+- result: Research note from official Microsoft pages (access dates 2026-10-14): SmartScreen checks sites and downloads; for a site not on the local top-traffic list WebView2 sends the address, site information, a device identifier and general location; for a download the file hash, name, download address and device identifier; apps that keep it on must tell users (SECURITY.md now does). Reported to the owner before anything was switched on. Then, with SmartScreen on, the full smoke suite found program downloads hanging (2 failures); the owner chose "find the cause first", then fix A (program files get WebView2's own download pop-up). The open claim about SmartScreen on ov-open-questions (Q-225) is settled by the note.
+
+## [2026-10-14] code | p4.18 SmartScreen back on in every environment
+
+- session: s07
+- time: 17:23
+- pages: [comp-webview-manager, comp-app-shell, ov-arch-isolation-model, ov-arch-data-flows, qual-security-testing-plan, qual-ci-plan, ov-open-questions]
+- sources: [raw/evidence/phase-p4-security/check-p4.18.txt, raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt]
+- result: SHELL_BROWSER_ARGUMENTS is Ferrum's own string without msSmartScreenProtection, set for the shell (Tauri additional_browser_args), the IPC self-test view and every site environment. Observed: no browser process in any isolation mode has the switch; Microsoft's demo phishing page is blocked ("Reported Unsafe Site: Navigation Blocked"), but Ferrum's own "could not be loaded" panel covers the warning (registered as Q-226, non-blocking, before the P4 review). Program files now get WebView2's own download pop-up (DownloadChoice.own_dialog; DownloadDialog event logged): the download waits there for SmartScreen's question; "Keep" is a manual check for the owner. p4.18 check PASS 6/6; cargo test --workspace 143 passed; clippy and fmt clean; full smoke 116 passed, 5 failed (shortcuts), shortcuts rerun 9 passed. Stales approval of comp-app-shell and comp-webview-manager.
+- stales: [comp-app-shell, comp-webview-manager]
+- commit: 768fe9d
+
+## [2026-10-14] gate | two component approvals stale after p4.18
+
+- session: s07
+- time: 17:23
+- pages: [comp-app-shell, comp-webview-manager]
+- result: Both are in the P4 dependency set; p4.11 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.

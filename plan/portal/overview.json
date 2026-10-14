@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 13 of 18 tasks done. Self-tests now use their own throwaway folder. You re-approved the browser controls page; Claude is switching SmartScreen back on.",
+  "summary": "Phase 4 (security) is in progress: 14 of 18 tasks done. SmartScreen is back on in every engine. Waiting for you to re-approve two part pages and answer one question; then Claude builds the combined security test suite.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:c3bd76f3fd33b21b92813ed762adcb70127cd9e923b68ba0453488729ec973aa"
+    "content_hash": "sha256:22a251661393610006576b71bbf42e7af27926c09dd2ce97db944af9383cdc78"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
+      "state": "Two part pages wait for your re-approval",
       "ref": "comp-app-shell"
     },
     {
@@ -39,19 +39,24 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "13 of 18 tasks done"
+        "state": "14 of 18 tasks done"
       },
       {
         "item": "Approvals",
-        "state": "All up to date"
+        "state": "Browser controls and tab manager pages wait for you"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: SmartScreen back on, starting with a research note on what it checks and sends.",
+    "why": "Nothing to run; Claude continues with the combined security test suite once you have re-approved the two pages.",
     "script": null,
     "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
-    "open": 19,
-    "items": []
+    "open": 20,
+    "items": [
+      {
+        "id": "Q-226",
+        "question": "Ferrum's \"could not be loaded\" panel covers SmartScreen's warning: what should you see when SmartScreen blocks a site?"
+      }
+    ]
   }
 }

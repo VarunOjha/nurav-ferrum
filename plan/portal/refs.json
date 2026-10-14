@@ -5311,6 +5311,16 @@
         "phase-p4-security",
         "Q-225"
       ]
+    },
+    {
+      "id": "768fe9d",
+      "kind": "commit",
+      "title": "Commit 768fe9d",
+      "summary": "SmartScreen back on in every browser engine; downloaded programs get Microsoft's Keep/Delete pop-up (task p4.18).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

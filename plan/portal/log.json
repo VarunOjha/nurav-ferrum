@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:3e07f73bf6dac0f2ac2d50fdbb6fd2d0eac4d0476ecca73b6eab9044201b65a6"
+    "content_hash": "sha256:88b86e4fbffa877c2fc97f6306777ddbedf80ac97402a657870e449919ab7441"
   },
   "entries": [
     {
@@ -4801,6 +4801,46 @@
       "tags": [
         "approvals",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s07-p4-18",
+      "date": "2026-10-14",
+      "time": "17:23",
+      "title": "SmartScreen is back on in every browser engine",
+      "done": "Claude wrote a research note on what SmartScreen sends to Microsoft, and SECURITY.md now tells you. Every Ferrum engine now runs with SmartScreen on. Microsoft's demo phishing page is blocked, but Ferrum's own \"could not be loaded\" panel covers the warning. Downloaded programs now get Microsoft's Keep/Delete pop-up, so they no longer hang.",
+      "next": "You re-approve two part pages and answer the question about Ferrum's panel; then Claude builds the combined security test suite.",
+      "decisions": [
+        {
+          "what": "Find the cause of the stuck program downloads first",
+          "by": "you"
+        },
+        {
+          "what": "Show Microsoft's Keep/Delete pop-up for downloaded programs",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Tab and view manager page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "768fe9d",
+      "covers": [
+        "## [2026-10-14] ingest | SmartScreen research note; program downloads held by SmartScreen",
+        "## [2026-10-14] code | p4.18 SmartScreen back on in every environment",
+        "## [2026-10-14] gate | two component approvals stale after p4.18"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "privacy",
+        "WebView2"
       ]
     }
   ]
