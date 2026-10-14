@@ -3,7 +3,7 @@ id: ov-arch-isolation-model
 type: overview
 title: "Architecture: isolation model (WebView2 profiles in a shared browser process)"
 status: review
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/research/p3-profiles-psl.md
   - raw/owner/2026-10-12-s02-p3-questions.md
@@ -16,17 +16,7 @@ approvable: true
 audience: both
 phase: phase-p0-planning
 tags: [isolation, profiles, webview2]
-unverified:
-  - claim: "The network service process is shared across all profiles on one UDF"
-    verify_in: phase-p4-security
-  - claim: "Renderer processes are never shared between different WebView2 profiles"
-    verify_in: phase-p4-security
-  - claim: "localStorage, IndexedDB, service workers and permissions are partitioned per profile"
-    verify_in: phase-p4-security
-  - claim: "HSTS state, DNS cache, socket pools and client-certificate selections are shared or partitioned across profiles"
-    verify_in: phase-p4-security
-  - claim: "Audio service and crashpad processes are shared across profiles on one UDF"
-    verify_in: phase-p4-security
+unverified: []
 ---
 
 # Isolation model
@@ -76,13 +66,16 @@ Applies to `per-site-profile` mode: one UDF, many profiles.
 | Resource | Shared across profiles? | Basis |
 |---|---|---|
 | Browser process (`msedgewebview2.exe` main) | **Shared** | VERIFIED: profiles share one UDF and one browser process (multi-profile doc, Tauri note §6) |
-| GPU process | **Expected shared**: one per process group, and the group is tied to the UDF | DERIVED (not verified) from VERIFIED process-model text ([measurement note §2.2](../raw/research/measurement-methodology.md)); confirm empirically in P4 |
-| Network service / utility processes | Probably shared | UNVERIFIED[phase-p4-security] |
-| Audio service, crashpad | Probably shared | UNVERIFIED[phase-p4-security] |
-| Renderer processes | Shared **across WebViews on a UDF** (VERIFIED). Not shared **across profiles** | UNVERIFIED[phase-p4-security] |
+| GPU process | **Shared**: one GPU process served the shell and tabs in three profiles | OBSERVED in P4 (p4.7 process inventory, [check-p4.7](../raw/evidence/phase-p4-security/check-p4.7.txt)) |
+| Utility processes (network service and other services) | **Shared**: two utility processes served every profile. WebView2's process list does not say which service each one runs | OBSERVED in P4 (p4.7, [check-p4.7](../raw/evidence/phase-p4-security/check-p4.7.txt)) |
+| Audio service, crash reporting | Not seen: no page played sound, and crash reporting is not a process kind WebView2 lists. Ferrum treats them as shared | Not tested (P4) |
+| Renderer processes | Shared **across WebViews on a UDF** (VERIFIED). In P4 each site's page ran in its own renderer (site A, site B, the empty tab and the shell: four renderers, none hosting two of them). Chromium also puts different sites in different renderers inside one profile, so this shows that no renderer was shared, not that profiles cause it | OBSERVED in P4 (p4.7, [check-p4.7](../raw/evidence/phase-p4-security/check-p4.7.txt)) |
 | Cookies, preferences, HTTP cache | **Separate** per profile | VERIFIED (multi-profile doc). Cookies observed in P3 (p3.6): a site's cookie set in its own tab was not sent by the same site framed in another site's tab; with one shared profile it was ([check-p3.6](../raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt)) |
-| localStorage, IndexedDB, service workers, permission grants | Expected separate | UNVERIFIED[phase-p4-security] |
-| HSTS, DNS cache, socket pools, client cert choices | Unknown | UNVERIFIED[phase-p4-security] |
+| localStorage, IndexedDB | **Separate** per profile: the same site in another profile saw none of its cookie, localStorage or IndexedDB values, and saw them again back in its own profile; clearing one site's profile left another site's data intact | OBSERVED in P4 (p4.7 live test, [check-p4.7](../raw/evidence/phase-p4-security/check-p4.7.txt)) |
+| Service workers | Not tested in P4 | Not tested |
+| Permission grants | Ferrum keeps none in any profile: every request is answered by Ferrum and WebView2 is told not to save it (p4.5) | OBSERVED in P4 ([check-p4.5](../raw/evidence/phase-p4-security/check-p4.5.txt)) |
+| HSTS, DNS cache, socket pools, client cert choices | Not tested in P4. They belong to the network service, which is one shared process (row above), so Ferrum treats them as shared | DERIVED from the observed shared utility processes; not tested |
+| InPrivate (private tabs) | A private tab (profile `ferrum-private`, InPrivate) saw no data of the same site's normal profile, and its own data was gone after the last private tab closed | OBSERVED in P4 (p4.7, [check-p4.7](../raw/evidence/phase-p4-security/check-p4.7.txt)) |
 | Environment options (browser args, extensions, proxy, language) | **Must be identical** for all WebViews on the UDF | VERIFIED (otherwise creation fails with `ERROR_INVALID_STATE`) |
 | Remote debugging port (benchmark runs) | **Shared**: one port serves the whole UDF | Flag is environment-level: VERIFIED (Tauri note §7). Observed in P3 (p3.6 smoke tests): one debugging port listed the shell and tab views of several profiles (`ferrum-default`, `site-site-a.localhost`, `site-site-b.localhost`, `user-work`) as pages ([check-p3.6](../raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt)) |
 | Runtime binaries (Evergreen) | **May share** mapped image pages with Edge, on eligible systems when versions match | Hard-linking on eligible systems when versions match: VERIFIED ([measurement note §6.2](../raw/research/measurement-methodology.md)); page sharing is DERIVED from it ("may share") |
@@ -98,4 +91,5 @@ Applies to `per-site-profile` mode: one UDF, many profiles.
 1. **Process inventory per mode.** Enumerate processes via `GetProcessExtendedInfos` plus an ETW/Job cross-check, and record process kinds (shared vs per-profile).
 2. **Storage isolation fixtures.** Site A sets cookie/localStorage/IndexedDB values. Site B in another profile must not read them (master prompt §11 "Session data isolation").
 3. **Cross-site navigation re-host test.** The profile switches; no state carries over.
-4. Each row tagged UNVERIFIED[phase-p4-security] above becomes VERIFIED or is corrected, with evidence under `wiki/raw/evidence/phase-p4-security/`.
+4. Each row tagged as unverified for P4 above becomes VERIFIED or is corrected, with evidence under `wiki/raw/evidence/phase-p4-security/`.
+   Done in P4 (p4.7): every such row is now observed, derived (said so) or "not tested" ([check-p4.7](../raw/evidence/phase-p4-security/check-p4.7.txt)).

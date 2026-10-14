@@ -21,9 +21,10 @@ use std::rc::Rc;
 use webview2_com::Microsoft::Web::WebView2::Win32::*;
 use webview2_com::{
     AcceleratorKeyPressedEventHandler, BytesReceivedChangedEventHandler,
-    CreateCoreWebView2ControllerCompletedHandler, DocumentTitleChangedEventHandler,
-    DownloadStartingEventHandler, FaviconChangedEventHandler, FocusChangedEventHandler,
-    GetFaviconCompletedHandler, HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
+    ClearBrowsingDataCompletedHandler, CreateCoreWebView2ControllerCompletedHandler,
+    DocumentTitleChangedEventHandler, DownloadStartingEventHandler, FaviconChangedEventHandler,
+    FocusChangedEventHandler, GetFaviconCompletedHandler, GetProcessExtendedInfosCompletedHandler,
+    HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
     NavigationCompletedEventHandler, NavigationStartingEventHandler,
     NewWindowRequestedEventHandler, PermissionRequestedEventHandler, SourceChangedEventHandler,
     StateChangedEventHandler, take_pwstr,
@@ -99,13 +100,16 @@ pub struct ContentView {
 
 impl ContentView {
     /// Starts creating a content view in `parent` (the Tauri window) from `env` (Tauri's environment), with its own
-    /// WebView2 profile `profile`. `devtools` allows the developer tools (WebView2's default is on; Ferrum passes
+    /// WebView2 profile `profile`. `private` makes it an InPrivate view (p4.7: nothing it stores outlives the
+    /// profile's last InPrivate view). `devtools` allows the developer tools (WebView2's default is on; Ferrum passes
     /// true only in debug builds, p2.12). `done` receives the view once WebView2 has created it.
+    #[allow(clippy::too_many_arguments)]
     pub fn create(
         env: &ICoreWebView2Environment,
         parent: isize,
         bounds: RECT,
         profile: &str,
+        private: bool,
         devtools: bool,
         handlers: Handlers,
         done: Box<dyn FnOnce(Result<ContentView, Error>)>,
@@ -115,6 +119,8 @@ impl ContentView {
         let opts = hr(unsafe { env10.CreateCoreWebView2ControllerOptions() })?;
         // SAFETY: COM-1; `opts` is live; the HSTRING outlives the call.
         hr(unsafe { opts.SetProfileName(&HSTRING::from(profile)) })?;
+        // SAFETY: COM-1; `opts` is live.
+        hr(unsafe { opts.SetIsInPrivateModeEnabled(private) })?;
         let handler = CreateCoreWebView2ControllerCompletedHandler::create(Box::new(
             move |res, controller| {
                 let built = (|| -> Result<ContentView, Error> {
@@ -651,6 +657,170 @@ fn permission_name(kind: COREWEBVIEW2_PERMISSION_KIND) -> Option<&'static str> {
         COREWEBVIEW2_PERMISSION_KIND_WINDOW_MANAGEMENT => "window-management",
         _ => return None,
     })
+}
+
+/// Deletes everything WebView2 stores for profile `profile` (cookies, storage, cache, history, permissions: its
+/// `ClearBrowsingDataAll`), leaving every other profile alone (p4.7). WebView2 reaches a profile only through a view,
+/// so a hidden helper view in that profile is created in `parent`, used and closed. `done` gets the result (UI
+/// thread); if WebView2 refuses the call itself, `done` gets that error at once.
+pub fn clear_profile(
+    env: &ICoreWebView2Environment,
+    parent: isize,
+    profile: &str,
+    done: Box<dyn FnOnce(Result<(), Error>)>,
+) -> Result<(), Error> {
+    let env10: ICoreWebView2Environment10 = hr(env.cast())?;
+    // SAFETY: COM-1 (caller's contract); `env10` is live.
+    let opts = hr(unsafe { env10.CreateCoreWebView2ControllerOptions() })?;
+    // SAFETY: COM-1; `opts` is live; the HSTRING outlives the call.
+    hr(unsafe { opts.SetProfileName(&HSTRING::from(profile)) })?;
+    let done = Rc::new(RefCell::new(Some(done)));
+    let finish = move |r: Result<(), Error>| {
+        if let Some(d) = done.borrow_mut().take() {
+            d(r);
+        }
+    };
+    let handler =
+        CreateCoreWebView2ControllerCompletedHandler::create(Box::new(move |res, controller| {
+            let controller = match hr(res).and_then(|()| controller.ok_or(Error::NoController)) {
+                Ok(c) => c,
+                Err(e) => {
+                    finish(Err(e));
+                    return Ok(());
+                }
+            };
+            // SAFETY: COM-1 (completion on the UI thread); `controller` is live; the helper view stays hidden.
+            let _ = unsafe { controller.SetIsVisible(false) };
+            let profile2 = (|| -> Result<ICoreWebView2Profile2, Error> {
+                // SAFETY: COM-1; `controller` is live; casts degrade to an error (COM-3).
+                let core = hr(unsafe { controller.CoreWebView2() })?;
+                let core13: ICoreWebView2_13 = hr(core.cast())?;
+                // SAFETY: COM-1; `core13` is live.
+                let profile = hr(unsafe { core13.Profile() })?;
+                hr(profile.cast())
+            })();
+            let c = controller.clone();
+            let f = finish.clone();
+            let cleared = ClearBrowsingDataCompletedHandler::create(Box::new(move |res| {
+                // SAFETY: COM-1, COM-4: the helper view registered no handlers; it is no longer needed.
+                let _ = unsafe { c.Close() };
+                f(hr(res));
+                Ok(())
+            }));
+            // SAFETY: COM-1, COM-2: the result arrives in `cleared`; nothing waits for it.
+            let started = profile2.and_then(|p| hr(unsafe { p.ClearBrowsingDataAll(&cleared) }));
+            if let Err(e) = started {
+                // SAFETY: COM-1, COM-4.
+                let _ = unsafe { controller.Close() };
+                finish(Err(e));
+            }
+            Ok(())
+        }));
+    // SAFETY: COM-1, COM-7; `parent` is the live Tauri window; the handler is kept alive by WebView2 until it fires.
+    hr(unsafe {
+        env10.CreateCoreWebView2ControllerWithOptions(HWND(parent as *mut _), &opts, &handler)
+    })
+}
+
+/// One WebView2 process as `GetProcessExtendedInfos` reports it (p4.7 process inspection).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ProcessEntry {
+    /// The process id.
+    pub pid: i32,
+    /// `browser`, `renderer`, `utility`, `sandbox-helper`, `gpu`, `ppapi-plugin`, `ppapi-broker` or `unknown`.
+    pub kind: &'static str,
+    /// The addresses of the frames this process renders (renderers only).
+    pub frames: Vec<String>,
+}
+
+/// Lists the processes of `env`'s browser with the frames each renderer hosts (`ICoreWebView2Environment13`). `done`
+/// gets the list (UI thread).
+pub fn process_inventory(
+    env: &ICoreWebView2Environment,
+    done: Box<dyn FnOnce(Result<Vec<ProcessEntry>, Error>)>,
+) -> Result<(), Error> {
+    let env13: ICoreWebView2Environment13 = hr(env.cast())?;
+    let handler = GetProcessExtendedInfosCompletedHandler::create(Box::new(move |res, list| {
+        done(hr(res).and_then(|()| read_processes(list)));
+        Ok(())
+    }));
+    // SAFETY: COM-1, COM-2: the list arrives in `handler`.
+    hr(unsafe { env13.GetProcessExtendedInfos(&handler) })
+}
+
+fn read_processes(
+    list: Option<ICoreWebView2ProcessExtendedInfoCollection>,
+) -> Result<Vec<ProcessEntry>, Error> {
+    let list = list.ok_or(Error::NoController)?;
+    let mut n = 0u32;
+    // SAFETY: COM-1 (inside the completion, on the UI thread); the out-pointer is a local.
+    hr(unsafe { list.Count(&mut n) })?;
+    let mut out = Vec::new();
+    for i in 0..n {
+        // SAFETY: COM-1; `i` is below Count.
+        let ext = hr(unsafe { list.GetValueAtIndex(i) })?;
+        // SAFETY: COM-1; `ext` is live.
+        let info = hr(unsafe { ext.ProcessInfo() })?;
+        let (mut pid, mut kind) = (0i32, COREWEBVIEW2_PROCESS_KIND::default());
+        // SAFETY: COM-1; out-pointers are locals.
+        unsafe {
+            let _ = info.ProcessId(&mut pid);
+            let _ = info.Kind(&mut kind);
+        }
+        let mut frames = Vec::new();
+        // The collection stays alive while its iterator is used. Observed in p4.7: releasing it first and then using the
+        // iterator ended the whole process (the iterator does not keep its collection alive).
+        // SAFETY: COM-1; `ext` is live.
+        let infos = unsafe { ext.AssociatedFrameInfos() };
+        let iter = infos.as_ref().map_err(Clone::clone).and_then(|fi| {
+            // SAFETY: COM-1; `fi` is live and outlives the iterator (`infos` is dropped after the loop).
+            unsafe { fi.GetIterator() }
+        });
+        if let Ok(it) = iter {
+            // At most 1000 frames per process: a bound in case the iterator never ends.
+            for _ in 0..1000 {
+                let mut has = BOOL(0);
+                // SAFETY: COM-1; the out-pointer is a local.
+                if unsafe { it.HasCurrent(&mut has) }.is_err() || !has.as_bool() {
+                    break;
+                }
+                // SAFETY: COM-1; `HasCurrent` said there is a current item; `take_pwstr` copies and frees the address
+                // (COM-5).
+                if let Ok(f) = unsafe { it.GetCurrent() } {
+                    let mut src = PWSTR::null();
+                    // SAFETY: COM-1, COM-5: `f` is live; the address is copied and freed by take_pwstr.
+                    let src = unsafe {
+                        let _ = f.Source(&mut src);
+                        take_pwstr(src)
+                    };
+                    frames.push(src);
+                }
+                // SAFETY: COM-1; the out-pointer is a local.
+                if unsafe { it.MoveNext(&mut has) }.is_err() {
+                    break;
+                }
+            }
+        }
+        out.push(ProcessEntry {
+            pid,
+            kind: process_kind_name(kind),
+            frames,
+        });
+    }
+    Ok(out)
+}
+
+fn process_kind_name(kind: COREWEBVIEW2_PROCESS_KIND) -> &'static str {
+    match kind {
+        COREWEBVIEW2_PROCESS_KIND_BROWSER => "browser",
+        COREWEBVIEW2_PROCESS_KIND_RENDERER => "renderer",
+        COREWEBVIEW2_PROCESS_KIND_UTILITY => "utility",
+        COREWEBVIEW2_PROCESS_KIND_SANDBOX_HELPER => "sandbox-helper",
+        COREWEBVIEW2_PROCESS_KIND_GPU => "gpu",
+        COREWEBVIEW2_PROCESS_KIND_PPAPI_PLUGIN => "ppapi-plugin",
+        COREWEBVIEW2_PROCESS_KIND_PPAPI_BROKER => "ppapi-broker",
+        _ => "unknown",
+    }
 }
 
 /// Reads a whole COM stream from where it stands; nothing when reading fails or it holds more than `max` bytes.

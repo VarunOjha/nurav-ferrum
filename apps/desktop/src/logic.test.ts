@@ -78,6 +78,7 @@ test("shell shortcuts follow the same table as the app", () => {
     [k("ArrowRight", "a"), "forward"], [k("F5"), "reload"], [k("r", "c"), "reload"], [k("S", "cs"), "toggle-sidebar"],
     [k(",", "c"), "settings"], [k("d", "c"), "bookmark-page"], [k("B", "cs"), "toggle-bookmarks-bar"],
     [k("O", "cs"), "show-bookmarks"],
+    [k("N", "cs"), "new-private-tab"],
   ];
   for (const [key, want] of cases) assert.equal(shortcutFor(key), want, JSON.stringify(key));
   for (const key of [k("t"), k("c", "c"), k("v", "c"), k("z", "c"), k("a", "c"), k("ArrowLeft"), k("Tab"), k("0", "c")]) {

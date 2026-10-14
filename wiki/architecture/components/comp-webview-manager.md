@@ -4,7 +4,7 @@ type: component
 title: "WebView manager (tab WebViews, navigation, sessions, raw COM layer)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-12
+updated: 2026-10-13
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -182,5 +182,18 @@ of it:
   cast fails, COM-3), so no answer is remembered in the profile; reported as tab event `PermissionRequested`. Observed
   in the p4.5 live test: a grant removed in settings took effect at the next request; a frame's request arrived at
   this page-level event.
+
+- p4.7, isolation: `ContentView::create` takes `private` (InPrivate view, `SetIsInPrivateModeEnabled`);
+  `clear_profile` deletes one profile's data (`ICoreWebView2Profile2::ClearBrowsingDataAll` through a hidden helper view
+  in that profile, closed afterwards); `process_inventory` lists WebView2's processes with the frames each renderer
+  hosts (`ICoreWebView2Environment13::GetProcessExtendedInfos`). Observed: releasing the frame list before using its
+  iterator ended the whole process, so the list is kept alive while it is read.
+- **What separate site profiles share, from the p4.7 tests and process inventory** ([check-p4.7](../../raw/evidence/phase-p4-security/check-p4.7.txt)):
+  one browser process, one GPU process and two utility processes serve every profile (and the shell); the network
+  service therefore is shared, and with it HSTS, DNS and connections (derived, not tested); the remote debugging port
+  when it is on (p3.6); the runtime files on disk. Kept apart per profile (tested): cookies, localStorage and
+  IndexedDB; clearing one site's profile leaves the others intact. Not shared in the test: renderers (each site's page
+  had its own; Chromium does this for different sites anyway). Not tested: service workers, audio. Full table:
+  [ov-arch-isolation-model](../ov-arch-isolation-model.md) §3.
 
 Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

@@ -1,0 +1,22 @@
+Ferrum check p4.7: Prove what is isolated
+Why: no claim of full isolation without evidence.
+Run at 2026-10-13 19:45 on commit f242ef5 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Code: private views, per-profile clearing, private tabs kept out of history and session
+         present; shortcut tests passed
+Running 4 tests using 1 worker
+  ✓  1 isolation.spec.ts:45:1 › a site's cookie, localStorage and IndexedDB stay in its own profile (2.1s)
+  ✓  2 isolation.spec.ts:63:1 › clearing site A's data leaves site B's intact (2.4s)
+  ✓  3 isolation.spec.ts:82:1 › a private tab sees no normal data, is kept out of the history, and forgets its own data (5.0s)
+PROCESS-INVENTORY {"processes":[{"frames":["https://site-b.localhost:8443/storage?i=1"],"kind":"renderer","pid":17968},{"frames":["https://site-a.localhost:8443/storage?i=1"],"kind":"renderer","pid":64352},{"frames":["about:blank"],"kind":"renderer","pid":47660},{"frames":["http://tauri.localhost/"],"kind":"renderer","pid":60884},{"frames":[],"kind":"browser","pid":17172},{"frames":[],"kind":"utility","pid":21964},{"frames":[],"kind":"utility","pid":34040},{"frames":[],"kind":"gpu","pid":73836}],"tabs":[{"id":1,"private":false,"profile":"ferrum-default","url":"about:blank"},{"id":12,"private":false,"profile":"site-site-a.localhost","url":"https://site-a.localhost:8443/storage?i=1"},{"id":13,"private":false,"profile":"site-site-b.localhost","url":"https://site-b.localhost:8443/storage?i=1"}]}
+  ✓  4 isolation.spec.ts:102:1 › process inventory: what two site profiles share (591ms)
+  4 passed (43.5s)
+PROCESS-INVENTORY {"processes":[{"frames":["https://site-b.localhost:8443/storage?i=1"],"kind":"renderer","pid":17968},{"frames":["https://site-a.localhost:8443/storage?i=1"],"kind":"renderer","pid":64352},{"frames":["about:blank"],"kind":"renderer","pid":47660},{"frames":["http://tauri.localhost/"],"kind":"renderer","pid":60884},{"frames":[],"kind":"browser","pid":17172},{"frames":[],"kind":"utility","pid":21964},{"frames":[],"kind":"utility","pid":34040},{"frames":[],"kind":"gpu","pid":73836}],"tabs":[{"id":1,"private":false,"profile":"ferrum-default","url":"about:blank"},{"id":12,"private":false,"profile":"site-site-a.localhost","url":"https://site-a.localhost:8443/storage?i=1"},{"id":13,"private":false,"profile":"site-site-b.localhost","url":"https://site-b.localhost:8443/storage?i=1"}]}
+  PASS   Live test: storage kept per profile, clearing one site, private tabs, process inventory (54 s)
+         isolation: 4 passed; process inventory recorded
+  PASS   The shared-resources list on the tab and view manager page cites the evidence
+         cited
+------------------------------------------------------------------------
+RESULT: PASS - p4.7 (3 PASS; 55 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.7 check passed".

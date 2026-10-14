@@ -9,6 +9,8 @@
 pub enum Shortcut {
     /// Ctrl+T: open an empty tab and put the cursor in the address bar.
     NewTab,
+    /// Ctrl+Shift+N: open an empty private tab (p4.7).
+    NewPrivateTab,
     /// Ctrl+W, Ctrl+F4: close the active tab.
     CloseTab,
     /// Ctrl+Tab, Ctrl+Page Down: the next tab to the right (wraps around).
@@ -98,6 +100,7 @@ pub fn for_key(k: KeyPress) -> Option<Shortcut> {
         (true, true, false) => match k.vk {
             vk::TAB => Some(PreviousTab),
             _ if letter(b'T') => Some(ReopenTab),
+            _ if letter(b'N') => Some(NewPrivateTab),
             _ if letter(b'S') => Some(ToggleSidebar),
             _ if letter(b'B') => Some(ToggleBookmarksBar),
             _ if letter(b'O') => Some(ShowBookmarks),
@@ -128,6 +131,7 @@ pub fn name(s: Shortcut) -> String {
     use Shortcut::*;
     match s {
         NewTab => "new-tab".into(),
+        NewPrivateTab => "new-private-tab".into(),
         CloseTab => "close-tab".into(),
         NextTab => "next-tab".into(),
         PreviousTab => "previous-tab".into(),

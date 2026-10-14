@@ -180,6 +180,7 @@ export function shortcutFor(k: ShellKey): string | null {
   if (k.ctrl && k.shift && !k.alt) {
     if (key === "Tab") return "previous-tab";
     if (key === "t") return "reopen-tab";
+    if (key === "n") return "new-private-tab";
     if (key === "s") return "toggle-sidebar";
     if (key === "b") return "toggle-bookmarks-bar";
     if (key === "o") return "show-bookmarks";

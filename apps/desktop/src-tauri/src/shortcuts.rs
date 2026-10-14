@@ -41,6 +41,10 @@ pub fn run(app: &AppHandle, s: Shortcut) {
             content::open_tab(app, BLANK.to_string(), Place::End, true);
             focus_address(app);
         }
+        Shortcut::NewPrivateTab => {
+            content::open_tab_as(app, BLANK.to_string(), Place::End, true, true);
+            focus_address(app);
+        }
         Shortcut::CloseTab => {
             if let Some(id) = content::active(app) {
                 content::close_tab(app, id);

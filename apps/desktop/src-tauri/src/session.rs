@@ -48,16 +48,21 @@ pub fn mark_dirty(app: &AppHandle) {
 fn snapshot(app: &AppHandle) -> Session {
     let t = app.state::<TabsState>();
     let t = t.0.lock().unwrap();
-    let active = t.active().and_then(|a| t.index_of(a));
-    let tabs = t
-        .iter()
-        .map(|(_, i)| SessionTab {
+    // Private tabs (p4.7) are never saved; the active position counts only the saved tabs.
+    let active = t.active();
+    let mut saved_active = None;
+    let mut tabs = Vec::new();
+    for (id, i) in t.iter().filter(|(_, i)| !i.private) {
+        if Some(id) == active {
+            saved_active = Some(tabs.len());
+        }
+        tabs.push(SessionTab {
             url: i.url.clone(),
             title: i.title.clone(),
             profile: i.profile.clone(),
-        })
-        .collect();
-    Session::now(tabs, active)
+        });
+    }
+    Session::now(tabs, saved_active)
 }
 
 /// Writes the session now (no-op when saving is off).

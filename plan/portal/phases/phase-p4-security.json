@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 6,
+    "done": 7,
     "total": 17
   },
   "step_order": [
@@ -92,7 +92,7 @@
       "what": "Settings for per-site profiles, optional private tabs and clearing one profile, plus a tested list of what profiles still share.",
       "why": "Saying 'each site is fully separate' without proof would mislead you and the paper's readers, because profiles still share some browser processes.",
       "how": "Configure the profile, private-tab and clearing settings, then look at which processes and files each profile really uses, instead of trusting the documentation.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Profiles share browser processes → test what is truly separate (cookies, storage, databases) and list what is shared → no claim of full isolation without evidence.",
       "check": "Site A's data is unreadable from B; clearing A leaves B intact; the shared list cites evidence.",
       "script": "scripts/verify/p4.7-prove-isolated.ps1"

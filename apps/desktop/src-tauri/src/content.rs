@@ -30,6 +30,10 @@ use crate::external;
 /// The address of an empty tab.
 pub const BLANK: &str = "about:blank";
 
+/// The WebView2 profile of private tabs (p4.7). Its views are InPrivate: nothing they store is kept after the last
+/// private tab closes, and they never share data with a site's normal profile.
+pub const PRIVATE_PROFILE: &str = "ferrum-private";
+
 /// The settings in effect. Behind a lock because the settings screen (p3.14) changes them while Ferrum runs.
 pub struct AppConfig(pub std::sync::RwLock<Loaded>);
 
@@ -86,6 +90,8 @@ pub struct TabInfo {
     pub can_go_forward: bool,
     /// The shell's error panel covers this tab (its view is hidden).
     pub covered: bool,
+    /// A private tab (p4.7): InPrivate view in its own profile; not in the history, not saved in the session.
+    pub private: bool,
     /// The tab's view exists.
     pub ready: bool,
     /// An address to load once the view exists.
@@ -234,6 +240,7 @@ pub fn snapshot(app: &AppHandle) -> Value {
         "tabs": t.iter().map(|(id, i)| json!({
             "id": id.0, "url": i.url, "title": i.title, "loading": i.loading, "profile": i.profile,
             "can_go_back": i.can_go_back, "can_go_forward": i.can_go_forward, "covered": i.covered, "ready": i.ready,
+            "private": i.private,
         })).collect::<Vec<_>>(),
     })
 }
@@ -256,6 +263,16 @@ fn update(app: &AppHandle, id: u64, f: impl FnOnce(&mut TabInfo)) -> bool {
     }
 }
 
+/// Whether tab `id` is a private tab (p4.7).
+pub fn is_private(app: &AppHandle, id: u64) -> bool {
+    app.state::<TabsState>()
+        .0
+        .lock()
+        .unwrap()
+        .get(TabId(id))
+        .is_some_and(|i| i.private)
+}
+
 /// The active tab's id.
 pub fn active(app: &AppHandle) -> Option<u64> {
     app.state::<TabsState>()
@@ -276,17 +293,33 @@ pub fn active_ready(app: &AppHandle) -> bool {
 /// Opens a tab showing `url` (an already normalised address or `about:blank`) and returns its id. The view is created
 /// later on the UI thread (never while the caller waits).
 pub fn open_tab(app: &AppHandle, url: String, place: Place, activate: bool) -> u64 {
-    let profile = profile_for(app, &url);
+    open_tab_as(app, url, place, activate, false)
+}
+
+/// Opens a tab like [`open_tab`]; `private` makes it a private tab (p4.7).
+pub fn open_tab_as(
+    app: &AppHandle,
+    url: String,
+    place: Place,
+    activate: bool,
+    private: bool,
+) -> u64 {
+    let profile = if private {
+        PRIVATE_PROFILE.to_string()
+    } else {
+        profile_for(app, &url)
+    };
     let id = app.state::<TabsState>().0.lock().unwrap().open(
         TabInfo {
             url: url.clone(),
             profile: profile.clone(),
+            private,
             ..TabInfo::default()
         },
         place,
         activate,
     );
-    tracing::info!(target: "ferrum::tabs", tab = id.0, site = %site(&url), "tab opened");
+    tracing::info!(target: "ferrum::tabs", tab = id.0, site = %site(&url), private, "tab opened");
     emit_tabs(app);
     create_view(app, id.0, profile, url);
     id.0
@@ -295,6 +328,7 @@ pub fn open_tab(app: &AppHandle, url: String, place: Place, activate: bool) -> u
 /// Queues the creation of the view of tab `id` in `profile`, which then loads `url`. If the tab already has a view
 /// (a profile change), the old view is closed once the new one exists.
 fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
+    let private = is_private(app, id);
     let h = app.clone();
     let _ = app.run_on_main_thread(move || {
         let Some(env) = ENVIRONMENT.with(|e| e.borrow().clone()) else {
@@ -317,6 +351,7 @@ fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
             hwnd,
             rect,
             &profile,
+            private,
             // Developer tools only in debug builds (p2.12); the shell gets the same rule from Tauri.
             cfg!(debug_assertions),
             Handlers {
@@ -417,15 +452,18 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
                 ..
             } => {
                 let mut title = String::new();
+                let mut private = false;
                 list_changed = update(&h, id, |i| {
                     i.loading = false;
                     title = i.title.clone();
+                    private = i.private;
                     if !uri.is_empty() {
                         i.url = uri.clone();
                     }
                 });
-                // A page that loaded goes into the history (p3.7); failed loads and error pages do not.
-                if *success && *http_status < 400 {
+                // A page that loaded goes into the history (p3.7); failed loads, error pages and private tabs (p4.7)
+                // do not.
+                if *success && *http_status < 400 && !private {
                     crate::history::visited(&h, uri, &title);
                 }
             }
@@ -440,11 +478,15 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
             }
             TabEvent::TitleChanged { title } => {
                 let mut url = String::new();
+                let mut private = false;
                 list_changed = update(&h, id, |i| {
                     i.title = title.clone();
                     url = i.url.clone();
+                    private = i.private;
                 });
-                crate::history::titled(&h, &url, title);
+                if !private {
+                    crate::history::titled(&h, &url, title);
+                }
             }
             _ => {}
         }
@@ -533,7 +575,12 @@ fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
             external::offer_sign_in(&h, &r.uri);
             return NavDecision::Cancel;
         }
-        let target = profile_for(&h, &r.uri);
+        // A private tab stays in the private profile whatever site it shows (p4.7).
+        let target = if current == PRIVATE_PROFILE {
+            current.clone()
+        } else {
+            profile_for(&h, &r.uri)
+        };
         if target == current || r.redirected {
             return NavDecision::Allow;
         }
@@ -592,7 +639,11 @@ pub fn with_content(app: &AppHandle, f: impl FnOnce(&ContentView) + Send + 'stat
 
 /// Loads `url` (already normalised) in tab `id`. A tab whose view is still being made loads it once it exists.
 pub fn navigate_tab(app: &AppHandle, id: u64, url: String) {
-    let profile = profile_for(app, &url);
+    let profile = if is_private(app, id) {
+        PRIVATE_PROFILE.to_string()
+    } else {
+        profile_for(app, &url)
+    };
     let mut new_view = false;
     let mut now = false;
     update(app, id, |i| {
@@ -789,6 +840,128 @@ pub async fn tab_new(app: AppHandle, url: Option<String>) -> Result<u64, String>
     Ok(open_tab(&app, target, Place::End, true))
 }
 
+/// Opens a private tab (p4.7, Ctrl+Shift+N): an InPrivate view in the private profile; its pages are not in the
+/// history and the tab is not saved in the session. `url` as for `tab_new`.
+#[tauri::command]
+pub async fn tab_new_private(app: AppHandle, url: Option<String>) -> Result<u64, String> {
+    let target = match url.as_deref().map(str::trim) {
+        None | Some("") | Some(BLANK) => BLANK.to_string(),
+        Some(input) => {
+            let security = app.state::<AppConfig>().get().security;
+            match normalize(input, &security) {
+                Outcome::Navigate { url, .. } => url.to_string(),
+                _ => return Err("not a web address".into()),
+            }
+        }
+    };
+    Ok(open_tab_as(&app, target, Place::End, true, true))
+}
+
+/// Deletes everything stored for `site` (cookies, storage, cache, permissions) in that site's own profile, and
+/// nothing else (p4.7). Refused while a tab of that site is open (its page could write the data again at once) and for
+/// sites in the shared or private profile. Shell only.
+#[tauri::command]
+pub async fn site_data_clear(app: AppHandle, site: String) -> Result<(), String> {
+    let site = site.trim().to_ascii_lowercase();
+    let profile = profile_for(&app, &format!("https://{site}/"));
+    if profile == ferrum_core::profiles::SHARED_PROFILE {
+        return Err(
+            "This site has no profile of its own (sites share one profile in these settings)."
+                .into(),
+        );
+    }
+    let open = app
+        .state::<TabsState>()
+        .0
+        .lock()
+        .unwrap()
+        .iter()
+        .any(|(_, i)| i.profile == profile);
+    if open {
+        return Err(format!("Close the tabs of {site} first."));
+    }
+    let hwnd = app.state::<MainHwnd>().0.load(Ordering::SeqCst);
+    let (tx, rx) = std::sync::mpsc::channel();
+    let p = profile.clone();
+    app.run_on_main_thread(move || {
+        let Some(env) = ENVIRONMENT.with(|e| e.borrow().clone()) else {
+            let _ = tx.send(Err("no WebView2 environment yet".to_string()));
+            return;
+        };
+        let t2 = tx.clone();
+        let started = ferrum_webview_manager::webview2::clear_profile(
+            &env,
+            hwnd,
+            &p,
+            Box::new(move |r| {
+                let _ = t2.send(r.map_err(|e| e.to_string()));
+            }),
+        );
+        if let Err(e) = started {
+            let _ = tx.send(Err(e.to_string()));
+        }
+    })
+    .map_err(|e| e.to_string())?;
+    let r = tauri::async_runtime::spawn_blocking(move || {
+        rx.recv_timeout(std::time::Duration::from_secs(30))
+    })
+    .await
+    .map_err(|e| e.to_string())?
+    .map_err(|_| "WebView2 did not answer in time".to_string())?;
+    match &r {
+        Ok(()) => {
+            tracing::info!(target: "ferrum::profiles", site = %site, profile = %profile, "site data cleared")
+        }
+        Err(e) => {
+            tracing::warn!(target: "ferrum::profiles", site = %site, error = %e, "site data not cleared")
+        }
+    }
+    r
+}
+
+/// Test hook (debug builds only): every WebView2 process with its kind and, for renderers, the addresses of the frames
+/// it hosts, plus each tab's profile, so a test can see which processes the profiles share (p4.7).
+#[tauri::command]
+pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    let tabs: Vec<Value> = {
+        let t = app.state::<TabsState>();
+        let t = t.0.lock().unwrap();
+        t.iter()
+            .map(|(id, i)| json!({"id": id.0, "url": i.url, "profile": i.profile, "private": i.private}))
+            .collect()
+    };
+    let (tx, rx) = std::sync::mpsc::channel();
+    app.run_on_main_thread(move || {
+        let Some(env) = ENVIRONMENT.with(|e| e.borrow().clone()) else {
+            let _ = tx.send(Err("no WebView2 environment yet".to_string()));
+            return;
+        };
+        let t2 = tx.clone();
+        if let Err(e) = ferrum_webview_manager::webview2::process_inventory(
+            &env,
+            Box::new(move |r| {
+                let _ = t2.send(r.map_err(|e| e.to_string()));
+            }),
+        ) {
+            let _ = tx.send(Err(e.to_string()));
+        }
+    })
+    .map_err(|e| e.to_string())?;
+    let list = tauri::async_runtime::spawn_blocking(move || {
+        rx.recv_timeout(std::time::Duration::from_secs(10))
+    })
+    .await
+    .map_err(|e| e.to_string())?
+    .map_err(|_| "WebView2 did not answer in time".to_string())??;
+    Ok(json!({
+        "tabs": tabs,
+        "processes": list.iter().map(|p| json!({"pid": p.pid, "kind": p.kind, "frames": p.frames})).collect::<Vec<_>>(),
+    }))
+}
+
 /// Closes a tab (the active one when `id` is missing).
 #[tauri::command]
 pub fn tab_close(app: AppHandle, id: Option<u64>) -> bool {
@@ -878,6 +1051,7 @@ pub fn reopen(app: &AppHandle) -> Option<u64> {
             url: url.clone(),
             title: info.title.clone(),
             profile: info.profile.clone(),
+            private: info.private,
             ..TabInfo::default()
         };
         (id.0, url, info.profile.clone())

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-tab-new-private"
+description = "Enables the tab_new_private command without any pre-configured scope."
+commands.allow = ["tab_new_private"]
+
+[[permission]]
+identifier = "deny-tab-new-private"
+description = "Denies the tab_new_private command without any pre-configured scope."
+commands.deny = ["tab_new_private"]

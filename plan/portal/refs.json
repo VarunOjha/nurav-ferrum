@@ -940,7 +940,7 @@
       "kind": "task",
       "title": "P4 task: Prove what is really isolated",
       "summary": "Profiles share browser processes → test what is truly separate (cookies, storage, databases) and list what is shared → no claim of full isolation without evidence.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]

@@ -303,4 +303,9 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
 - p4.6, downloads: the host saves under the security engine's cleaned name and sends `program: true` for program
   types; the download line then shows "⚠ Program file: open it only if you trust the site". Nothing in Ferrum opens a
   downloaded file.
+- p4.7, private tabs and clearing a site: Ctrl+Shift+N (or `tab_new_private`) opens a private tab: an InPrivate view in
+  the profile `ferrum-private`, marked "Private" on the tab strip, kept out of the history and never saved in the
+  session; a private tab stays in that profile whatever site it shows. `site_data_clear { site }` deletes everything
+  stored for one site in its own profile (refused while a tab of that site is open, or when sites share one profile).
+  A settings screen button for it is p4.17. Test hook `test_processes` (debug builds) returns the process inventory.
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

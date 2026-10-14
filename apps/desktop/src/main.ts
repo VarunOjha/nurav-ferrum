@@ -31,7 +31,7 @@ type LinkEvent =
   | { kind: "blocked"; tab: number; uri: string; why: string; frame?: boolean }
   | { kind: "cross-site"; tab: number; uri: string; to: string; from: string };
 
-type TabSummary = { id: number; url: string; title: string; loading: boolean; profile: string; can_go_back: boolean; can_go_forward: boolean };
+type TabSummary = { id: number; url: string; title: string; loading: boolean; profile: string; can_go_back: boolean; can_go_forward: boolean; private?: boolean };
 type TabList = { active: number | null; tabs: TabSummary[] };
 type NavResult = { outcome: "navigate" | "confirm" | "refused"; url: string | null; note: string | null; reason: string | null };
 
@@ -178,6 +178,15 @@ function renderStrip(): void {
       const label = document.createElement("span");
       label.className = "tab-label";
       label.textContent = tabLabel(t.title, t.url);
+      if (t.private) {
+        // p4.7: a private tab says so; its pages are not kept.
+        el.dataset.private = "true";
+        el.title = `Private tab: ${t.url}`;
+        const mark = document.createElement("span");
+        mark.className = "tab-private";
+        mark.textContent = "Private";
+        el.append(mark);
+      }
       if (t.loading) el.classList.add("loading");
       const close = document.createElement("button");
       close.className = "tab-close";
@@ -459,6 +468,10 @@ async function runShortcut(name: string): Promise<void> {
   switch (name) {
     case "new-tab":
       await invoke("tab_new", { url: null });
+      focusAddress();
+      break;
+    case "new-private-tab":
+      await invoke("tab_new_private", { url: null });
       focusAddress();
       break;
     case "close-tab":

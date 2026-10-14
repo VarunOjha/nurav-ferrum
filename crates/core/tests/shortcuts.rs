@@ -43,6 +43,7 @@ fn every_browser_shortcut_maps() {
         (ctrl_shift(vk::TAB), PreviousTab),
         (ctrl(vk::PRIOR), PreviousTab),
         (ctrl_shift(b'T' as u32), ReopenTab),
+        (ctrl_shift(b'N' as u32), NewPrivateTab),
         (ctrl(b'1' as u32), SelectTab(0)),
         (ctrl(b'8' as u32), SelectTab(7)),
         (ctrl(b'9' as u32), LastTab),

@@ -203,6 +203,11 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "a small text download whose file name is exactly the name given (path tricks, program types) (p4.6)",
     },
+    Route {
+        path: "/storage",
+        status: 200,
+        purpose: "script functions that write and read a cookie, localStorage and IndexedDB (p4.7)",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -533,6 +538,24 @@ async fn download_named(Query(q): Query<Named>) -> Response {
     r
 }
 
+/// p4.7: `store.write(v)` puts `v` in a cookie, in localStorage and in IndexedDB; `store.read()` returns what the page
+/// can see of the three (`{cookie, local, idb}`, empty strings when nothing is there). For the profile isolation tests.
+async fn storage() -> Html<String> {
+    page(
+        "Storage",
+        "<p id=\"storage\">Storage probe (called by the tests).</p>\
+         <script>\
+         const db = () => new Promise((ok, bad) => { const r = indexedDB.open('iso', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => ok(r.result); r.onerror = () => bad(r.error); });\
+         const idbGet = async () => { const d = await db(); return new Promise((ok) => { const q = d.transaction('kv').objectStore('kv').get('v'); q.onsuccess = () => { d.close(); ok(q.result || ''); }; q.onerror = () => { d.close(); ok(''); }; }); };\
+         const idbPut = async (v) => { const d = await db(); return new Promise((ok, bad) => { const t = d.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, 'v'); t.oncomplete = () => { d.close(); ok(); }; t.onerror = () => bad(t.error); }); };\
+         window.store = {\
+           write: async (v) => { document.cookie = 'iso=' + v + '; Path=/; Secure; SameSite=Lax; Max-Age=3600'; localStorage.setItem('iso', v); await idbPut(v); return 'ok'; },\
+           read: async () => ({ cookie: (document.cookie.match(/(?:^|; )iso=([^;]*)/) || [, ''])[1], local: localStorage.getItem('iso') || '', idb: await idbGet() }),\
+         };\
+         </script>",
+    )
+}
+
 /// p4.5: each `ask.<kind>()` asks for one permission and resolves to "granted", "denied" or the error's name, so a
 /// test can read the answer the page gets. Nothing is recorded or sent anywhere.
 async fn perm() -> Html<String> {
@@ -719,6 +742,7 @@ pub fn router() -> Router {
         .route("/links/open", get(links_open))
         .route("/links/risky", get(links_risky))
         .route("/perm", get(perm))
+        .route("/storage", get(storage))
         .route("/download/named", get(download_named))
 }
 
