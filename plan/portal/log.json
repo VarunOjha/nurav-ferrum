@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:28e8c5ba65fd6263317ab4ce13a07b7656cc59893e800a48a221a6f54755907b"
+    "content_hash": "sha256:3e07f73bf6dac0f2ac2d50fdbb6fd2d0eac4d0476ecca73b6eab9044201b65a6"
   },
   "entries": [
     {
@@ -4775,6 +4775,31 @@
       "category": "Fixed",
       "tags": [
         "privacy",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s07-selftest-fix-reapproved",
+      "date": "2026-10-14",
+      "time": "16:13",
+      "title": "You re-approved the browser controls page after the self-test fix",
+      "done": "You re-approved the browser controls page, which now explains that self-tests use their own throwaway folder.",
+      "next": "Claude puts the SmartScreen change back in, builds it and writes its check.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] approval | comp-app-shell re-approved after the self-test fix"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
         "testing"
       ]
     }

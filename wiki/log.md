@@ -2670,3 +2670,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 16:08
 - pages: [comp-app-shell]
 - result: comp-app-shell is in the P4 dependency set; p4.18 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set. The p4.18 code edits stay set aside (patch in the session scratchpad) until then.
+
+## [2026-10-14] approval | comp-app-shell re-approved after the self-test fix
+
+- session: s07
+- time: 16:13
+- pages: [comp-app-shell]
+- sources: [raw/owner/2026-10-14-s07-selftest-fix-reapproval.md]
+- result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. p4.18 continues: the set-aside code edits go back in.
