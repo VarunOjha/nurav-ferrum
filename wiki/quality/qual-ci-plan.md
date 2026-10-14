@@ -3,7 +3,7 @@ id: qual-ci-plan
 type: quality
 title: "CI plan: GitHub Actions jobs and local equivalents"
 status: draft
-updated: 2026-10-12
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -91,7 +91,7 @@ All jobs: `runs-on: windows-latest`, `permissions: contents: read`, no secrets, 
 | `plan-app` | in `interactive_plan/`: `npm ci`, lint, typecheck, `vitest run`, `next build`, Playwright E2E against `next start` on loopback with a temporary data directory | any step fails | P0 code; CI job added in P1 when CI first exists |
 | `wiki-lint` | in `interactive_plan/`: `npm ci`, then `npm run lint:wiki` | any lint error (warnings are listed, not fatal) | P1 (lint itself built in P0) |
 | `hash-parity` | run the SCHEMA §10.2 Python reference and the TypeScript implementation on the shared test vectors and compare | any mismatch (risk-r22) | P1 |
-| `security-static` | scan capability files for any `remote` section; scan browser-argument configuration for weakening flags; check release configuration does not enable devtools or a debug port | any finding (risk-r19, SEC-12) | P2 |
+| `security-static` | scan capability files for any `remote` section; scan browser-argument configuration for weakening flags; check release configuration does not enable devtools or a debug port; prove the release build has no `bench-nosecurity` ablation (feature off, no marker text, positive control) | any finding (risk-r19, SEC-12) | P2; built so far: the `bench-nosecurity` part (p4.16, `scripts/security-static-check.ps1`, run after `rust-build`, [nosecurity-absent](../raw/evidence/phase-p4-security/nosecurity-absent.txt)); the other scans not yet (the browser-argument scan would flag wry's default that turns SmartScreen off, p4.18) |
 | `repro-check` | verify the toolchain file and every lockfile are committed and unchanged after the jobs above; optionally build the release binary twice from clean and compare SHA-256 hashes (UNVERIFIED[phase-p4-security]: P2 and P3 built release binaries but did not run the comparison; it needs the CI runners, and the first push is deferred, Q-221) | a missing or modified lockfile or toolchain file; a hash mismatch only once the comparison is verified and adopted | P1 |
 | `app-e2e` | build Ferrum in test mode and run the smoke E2E suite | any test fails | after the runner capability is verified (UNVERIFIED[phase-p4-security]; re-targeted in P1 and again in P2 because the first push is deferred); until then this suite runs only locally (it passed locally in P2, [check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)) |
 

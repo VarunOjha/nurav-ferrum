@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, and can give each site its own data folder and browser engine.",
+      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, can give each site its own data folder, and the benchmark-only build starts only in its own test folder.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:49a8bd5d934b15dd25385d306dcd923ad47fa3f3e241116a11c8437b3e30b9cd"
+        "content_hash": "sha256:d05207f2352afee132d66469cbf551959f8a45ca10b9826b16dca3d927f16d71"
       }
     },
     {
@@ -303,7 +303,7 @@
     {
       "id": "comp-security-engine",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, refuses four abused link types, and gives no permission (camera, location, ...) unless you allow the site.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and gives no permission unless you allow the site. A separate benchmark-only build can skip the site rules; the normal app is checked never to contain it.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Being built",
@@ -326,7 +326,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-security-engine.md",
-        "content_hash": "sha256:32d692541cacfe64835d7d6b87534bd6c1b2bdfc86f6d428a1e3669f53cf8bc2"
+        "content_hash": "sha256:48a75cd1e56494e5bfcd1e9ee21046382a5fca6d4b2039e1d8572d124c4eb879"
       }
     },
     {

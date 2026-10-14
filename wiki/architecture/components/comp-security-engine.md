@@ -3,7 +3,7 @@ id: comp-security-engine
 type: component
 title: "Security policy engine"
 status: in-progress
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -147,6 +147,18 @@ checks that a secret in an address or in typed text never reaches the file
 finished, or was refused, before the address bar's command replied, the reply cleared the toolbar note ("HTTP 404",
 "Blocked …"); the shell now clears it only when no page event came in meanwhile (affected tests 3 of 3 clean after the
 fix; the redirect test prints the shell's event order if it ever fails again).
+
+**p4.16, benchmark-only ablation build** (cfg-ferrum-nosecurity-bench, for exp-security-overhead). Cargo feature
+`bench-nosecurity` on this crate (forwarded by ferrum-desktop's feature of the same name). With it, `evaluate` lets
+every web address (`http`, `https`, `about`, `data`, `blob`) load with rule `bench-nosecurity-ablation-rule`, without
+the blocklist, allowlist, HTTP policy or address rules; an address that cannot be read follows the normal rules. Kept
+on even in this build, narrower than the phase page's "every policy decision returns allow" on purpose (told to the
+owner in chat on 2026-10-14): Ferrum's own origin (`tauri:`, `http(s)://tauri.localhost`), the forbidden schemes (local files, `javascript:`, browser pages) and links to other apps (still confirmed or refused) keep their rules, and permission refusals and download cleaning are unchanged. `is_bench_nosecurity()` says which build this is. The rule variant and its name
+exist only in the ablation build, so their text is a marker: `scripts/security-static-check.ps1` proves the normal
+release program has the feature off (cargo tree) and contains none of the markers, while an ablation build made as a
+positive control contains all of them ([nosecurity-absent](../../raw/evidence/phase-p4-security/nosecurity-absent.txt),
+[check-p4.16](../../raw/evidence/phase-p4-security/check-p4.16.txt)); CI runs it after the release build. Tests: one in the normal build, two
+with the feature (`tests/bench_nosecurity.rs`; the other tests expect the normal rules and are not run with it).
 
 Not done yet: the shell shows the "not secure" warning as the address-bar sign only, not yet as a bar (owner answer
 Q-112 asks for a bar; planned with the security settings screen, p4.17). The audit log of refusals (p4.9) replaces

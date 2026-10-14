@@ -11,6 +11,12 @@ publish.workspace = true
 ferrum-core = { path = "../core" }
 url = "=2.5.8"
 
+[features]
+# Benchmark-only ablation (p4.16, cfg-ferrum-nosecurity-bench, exp-security-overhead): the navigation policy lets every
+# web address load without its rules. Never in a release artefact: the p4.16 check and CI prove the normal release
+# build is made without it. Local test pages only.
+bench-nosecurity = []
+
 [lints]
 workspace = true
 

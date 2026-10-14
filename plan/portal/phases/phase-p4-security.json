@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 11,
+    "done": 12,
     "total": 18
   },
   "step_order": [
@@ -158,7 +158,7 @@
       "what": "A build-time switch that turns all security rules off, for benchmarks on local test pages only.",
       "why": "Without a version that has no security, its cost cannot be measured. If that version were ever shipped, every protection would be gone.",
       "how": "Add a compile-time option that makes every rule answer 'allow', keep it out of release builds, and require a benchmark-only start argument to run it.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Measuring security's cost needs a version without it → a build-time switch for local test pages only, proven absent from release builds → no risk of shipping it.",
       "check": "With the switch everything is allowed; the release build is scanned and the switch is absent.",
       "script": "scripts/verify/p4.16-no-security-switch.ps1"

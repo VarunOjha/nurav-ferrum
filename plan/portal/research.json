@@ -701,7 +701,7 @@
     {
       "id": "exp-security-overhead",
       "title": "Cost of the security checks",
-      "summary": "Run: 300 mixed navigations, some to blocked sites, all local. Compare: normal Ferrum versus a test-only build with the checks off. Measure: time per security decision, page-load time (allowed pages only), memory.",
+      "summary": "Run: 300 mixed navigations, some to blocked sites, all local. Compare: normal Ferrum versus a test-only build without the site rules (built in P4; Ferrum's own pages, local files and links to other apps stay protected). Measure: time per security decision, page-load time (allowed pages only), memory.",
       "status": "Designed, not run",
       "category": "Experiment",
       "tags": [
@@ -720,7 +720,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/experiments/exp-security-overhead.md",
-        "content_hash": "sha256:580bdb5d50fa9bfbf0e4f3be2009a02ca65161021bcefac7621540a50df2d3bd"
+        "content_hash": "sha256:50405c98793d3a6ee617a008dace2c4ba56b6513757877a43b5946a84a0b9400"
       },
       "phase": "phase-p6-benchmark-harness"
     },

@@ -180,7 +180,26 @@ fn read_config(user: Option<&std::path::Path>) -> (config::Loaded, Option<String
     }
 }
 
+/// The argument the benchmark-only ablation build needs before it starts (p4.16).
+#[cfg(feature = "bench-nosecurity")]
+const BENCHMARK_MODE_ARG: &str = "--benchmark-mode";
+
+/// The window title: the ablation build says what it is.
+#[cfg(feature = "bench-nosecurity")]
+const WINDOW_TITLE: &str = "Ferrum (benchmark build without site rules)";
+#[cfg(not(feature = "bench-nosecurity"))]
+const WINDOW_TITLE: &str = "Ferrum";
+
 fn main() {
+    // p4.16: the benchmark-only ablation build (feature bench-nosecurity) runs only when started for a benchmark by
+    // name, so it cannot be opened by accident.
+    #[cfg(feature = "bench-nosecurity")]
+    if !std::env::args().any(|a| a == BENCHMARK_MODE_ARG) {
+        eprintln!(
+            "[ferrum] benchmark-nosecurity-build: this build has no site rules and starts only with {BENCHMARK_MODE_ARG}"
+        );
+        std::process::exit(2);
+    }
     tauri::Builder::default()
         .manage(BridgeStats::default())
         .manage(Insets::default())
@@ -253,6 +272,17 @@ fn main() {
                     .map(|d| d.join("config.toml"))
             });
             let (loaded, config_error, keep_user_file) = load_config(user_config.as_deref());
+            // p4.16: the benchmark build never touches a real profile. It needs settings that load without a problem
+            // and name a data folder of their own; otherwise it stops before opening any file (found in p4.16: with a
+            // mistyped --config path it fell back to the standard settings and the user's own data folder).
+            #[cfg(feature = "bench-nosecurity")]
+            if config_error.is_some() || loaded.config.storage.data_dir.is_none() {
+                eprintln!(
+                    "[ferrum] benchmark-nosecurity-build: needs --config with [storage] data_dir that loads without problems; not started ({})",
+                    config_error.as_deref().unwrap_or("no data_dir")
+                );
+                std::process::exit(2);
+            }
             app.manage(UserConfigPath(user_config, keep_user_file));
             // Logs: <data_dir>/logs when a data folder is configured, else the app's log folder (p2.14).
             let log_dir = match &loaded.config.storage.data_dir {
@@ -303,8 +333,11 @@ fn main() {
                     handle.exit(0);
                 });
             }
+            if ferrum_security::policy::is_bench_nosecurity() {
+                tracing::warn!(target: "ferrum::app", "benchmark build without site rules (bench-nosecurity); local test pages only");
+            }
             let window = tauri::window::WindowBuilder::new(app, "main")
-                .title("Ferrum")
+                .title(WINDOW_TITLE)
                 .inner_size(1280.0, 800.0)
                 .min_inner_size(480.0, 320.0)
                 .build()?;

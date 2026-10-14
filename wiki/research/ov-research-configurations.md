@@ -3,7 +3,7 @@ id: ov-research-configurations
 type: overview
 title: "Benchmark configurations and lifecycle strategies"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/research/measurement-methodology.md
@@ -81,7 +81,7 @@ The state names are the ones in master prompt §5 Phase 4. Where suspend (sleep)
 | `cfg-edge-matched` | Matched comparison: Edge with sleeping tabs off | As above |
 | `cfg-ferrum-fixed-idle` | Strategy 2 | See above |
 | `cfg-ferrum-mempressure` | Strategy 3 | See above |
-| `cfg-ferrum-nosecurity-bench` | Ablation for [exp-security-overhead](experiments/exp-security-overhead.md). Every policy decision returns "allow" | Benchmark-only build flag, never shipped, local fixtures only |
+| `cfg-ferrum-nosecurity-bench` | Ablation for [exp-security-overhead](experiments/exp-security-overhead.md). Every web address loads without the navigation rules; Ferrum's own origin, local files, links to other apps and permission refusals keep their rules (p4.16) | Benchmark-only build (`--features bench-nosecurity`), never shipped, starts only with `--benchmark-mode` and its own data folder, local fixtures only |
 | `cfg-ferrum-shared-profile` | Isolation: every tab in the default profile | [exp-isolation-overhead](experiments/exp-isolation-overhead.md) |
 | `cfg-ferrum-profile-per-site` | Isolation: one WebView2 profile per site in a shared browser process (`adr-0010`) | Depends on `risk-r01`. Tauri 2.12.1 does not expose the profile name ([Tauri/WebView2 note](../raw/research/tauri-webview2-capabilities.md) §6) |
 | `cfg-ferrum-udf-per-site` | Isolation: one user data folder per site, so one browser process group per site | Works with Tauri today (`data_directory`) |

@@ -24,5 +24,10 @@ windows = { version = "=0.62.2", features = ["Win32_Foundation"] }
 tracing = "=0.1.44"
 tracing-subscriber = { version = "=0.3.23", default-features = false, features = ["fmt", "json", "std"] }
 
+[features]
+# Benchmark-only ablation build without the site rules (p4.16, cfg-ferrum-nosecurity-bench). Never in a release
+# artefact; it starts only with --benchmark-mode.
+bench-nosecurity = ["ferrum-security/bench-nosecurity"]
+
 [lints]
 workspace = true

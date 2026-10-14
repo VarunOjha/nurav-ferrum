@@ -36,7 +36,7 @@ Cargo features are reserved for build-level concerns only:
 |---|---|---|
 | `tauri/unstable` | ferrum-desktop, ferrum-webview-manager | Multi-webview (`add_child`), always on (adr-0007) |
 | `devtools` | ferrum-desktop | DevTools in release builds. **Off** in release by default (Tauri note §4: release needs the feature) |
-| `bench-nosecurity` | ferrum-security | Ablation build for exp-security-overhead only; never in release artefacts (see §4) |
+| `bench-nosecurity` | ferrum-security (forwarded by ferrum-desktop) | Ablation build for exp-security-overhead only; never in release artefacts (see §4); built in p4.16 |
 
 Benchmark-only behaviour, such as the remote debugging port, comes from **environment variables set by the harness** (`WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS`, `WEBVIEW2_USER_DATA_FOLDER`; both VERIFIED in Tauri note §7). No benchmark code path exists in the product, with one exception: the `bench-nosecurity` ablation build (§4).
 
@@ -135,7 +135,10 @@ The canonical list of `cfg-*` ids lives in [ov-research-configurations](../resea
 | cfg-ferrum-udf-per-site | ferrum-desktop release | `isolation.mode = "per-site-udf"` (built in p4.15) |
 | cfg-ferrum-nosecurity-bench | **separate build** with Cargo feature `bench-nosecurity` | see below |
 
-**The one exception to "one binary": `bench-nosecurity`.** exp-security-overhead needs an ablation where every policy decision returns "allow". A runtime switch that disables security in the shipped binary would be a security hazard, so the ablation is a **Cargo feature on `ferrum-security`**, `bench-nosecurity`. CI asserts that release artefacts are never built with it. The experiment must state the confound: two different binaries are being compared.
+**The one exception to "one binary": `bench-nosecurity`.** exp-security-overhead needs an ablation where every policy decision returns "allow". A runtime switch that disables security in the shipped binary would be a security hazard, so the ablation is a **Cargo feature on `ferrum-security`**, `bench-nosecurity`. CI asserts that release artefacts are never built with it. The experiment must state the confound: two different binaries are being compared. Built in p4.16: the
+ablation skips the web rules only (Ferrum's own origin (`tauri:`, `http(s)://tauri.localhost`), the forbidden schemes (local files, `javascript:`, browser pages) and links to other apps (still confirmed or refused) keep their rules, and permission refusals and download cleaning are unchanged); it starts only with `--benchmark-mode` and its own `[storage] data_dir`;
+`scripts/security-static-check.ps1` (CI step `security-static`) proves the normal release program does not contain it
+([nosecurity-absent](../raw/evidence/phase-p4-security/nosecurity-absent.txt)).
 
 ## 4a. Versions and safe writing (built in P3, p3.4)
 

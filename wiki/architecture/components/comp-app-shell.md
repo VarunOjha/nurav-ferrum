@@ -347,4 +347,12 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   unknown-mode case. In the test setup a site's browser took about 0.5 s to start when no other site browser ran and
   about 5 s when one did (seen in the logs of two runs; cause not found; every browser gets the same debugging-port
   switch from the test, which may play a part). Not a measurement: P6 times start-up without that switch.
+- p4.16, the benchmark-only ablation build (feature `bench-nosecurity`, see comp-security-engine): it starts only with
+  `--benchmark-mode` (otherwise it prints why and exits with code 2), and only with settings that load without a problem
+  and name their own `[storage] data_dir` (otherwise exit 2 before any file is opened). Its window title says
+  "Ferrum (benchmark build without site rules)" and its log says so at start. The data-folder rule was added after a
+  mistake in the first version of the p4.16 check: the program was started with an unquoted settings path containing
+  a space, fell back to the standard settings and ran for about 8 seconds in the owner's own data folder (it restored
+  the owner's six saved tabs, loaded them, likely added those page loads to the history and rewrote the session file
+  with the same tabs; the owner's settings file was not written). Reported to the owner the same day.
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

@@ -56,6 +56,7 @@ Step 'rust-fmt' '.' 'cargo fmt --all -- --check'
 Step 'rust-clippy' '.' 'cargo clippy --locked --workspace --all-targets --all-features -- -D warnings'
 Step 'rust-test' '.' 'cargo test --locked --workspace --all-targets'
 Step 'rust-build' '.' 'cargo build --locked --workspace --release'
+Step 'security-static' '.' 'pwsh -NoProfile -File scripts/security-static-check.ps1'
 # Job: rust-deps
 Step 'rust-deps' '.' 'cargo deny check'
 # Job: plan-app

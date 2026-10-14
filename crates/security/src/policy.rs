@@ -155,6 +155,10 @@ pub enum RuleId {
     HttpWarn,
     /// Plain HTTP, upgraded.
     HttpUpgrade,
+    /// The benchmark-only ablation build let a web address load without the rules (p4.16; feature
+    /// `bench-nosecurity`, never in a release artefact).
+    #[cfg(feature = "bench-nosecurity")]
+    BenchNoSecurity,
 }
 
 impl RuleId {
@@ -182,6 +186,8 @@ impl RuleId {
             RuleId::Https => "https",
             RuleId::HttpWarn => "http-warn",
             RuleId::HttpUpgrade => "http-upgrade",
+            #[cfg(feature = "bench-nosecurity")]
+            RuleId::BenchNoSecurity => BENCH_NOSECURITY_RULE,
         }
     }
 }
@@ -219,8 +225,41 @@ impl Decision {
     }
 }
 
+/// The rule name of the ablation build (p4.16). Its text is the marker the p4.16 check looks for in a binary: present
+/// in an ablation build, absent from the normal release build.
+#[cfg(feature = "bench-nosecurity")]
+pub const BENCH_NOSECURITY_RULE: &str = "bench-nosecurity-ablation-rule";
+
+/// Whether this build is the benchmark-only ablation (feature `bench-nosecurity`, p4.16).
+pub const fn is_bench_nosecurity() -> bool {
+    cfg!(feature = "bench-nosecurity")
+}
+
+/// Ablation build only (p4.16): a web address (`http`, `https`, `about`, `data`, `blob`) loads without the blocklist,
+/// allowlist, HTTP policy or address rules, so exp-security-overhead can compare a build without them. Not skipped even
+/// here: Ferrum's own origin, the forbidden schemes (local files, script, browser pages) and links to other apps (they
+/// still need the user's click), because they keep pages away from Ferrum and the PC rather than cost time; an
+/// address that cannot be read also follows the normal rules. `None`: the normal rules decide.
+#[cfg(feature = "bench-nosecurity")]
+fn bench_nosecurity(request: &Request<'_>) -> Option<Decision> {
+    let url = Url::parse(request.url).ok()?;
+    let web = match url.scheme() {
+        "http" | "https" => {
+            let host = url.host_str().unwrap_or_default();
+            !APP_HOSTS.contains(&host.strip_suffix('.').unwrap_or(host))
+        }
+        "about" | "data" | "blob" => true,
+        _ => false,
+    };
+    web.then(|| Decision::new(Verdict::Allow, RuleId::BenchNoSecurity))
+}
+
 /// Decides one navigation. Never panics; anything it cannot read is denied.
 pub fn evaluate(policy: &Policy, request: &Request<'_>) -> Decision {
+    #[cfg(feature = "bench-nosecurity")]
+    if let Some(d) = bench_nosecurity(request) {
+        return d;
+    }
     let raw = request.url;
     if raw.len() > MAX_URL_BYTES {
         return Decision::deny(RuleId::TooLong);
