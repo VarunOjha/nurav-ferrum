@@ -5190,6 +5190,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "a341b0a",
+      "kind": "commit",
+      "title": "Commit a341b0a",
+      "summary": "Downloads get safe names and programs a warning; nothing opens a download (task p4.6).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

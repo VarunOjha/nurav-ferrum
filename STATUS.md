@@ -31,9 +31,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s04
 current_phase: phase-p4-security
-current_task: p4.6
-next_action: "p4.6 (safe downloads: configured folder only, no auto-open, warning for programs, file-name cleaning), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.6-safe-downloads.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+current_task: p4.7
+next_action: "Owner re-approves comp-security-engine and comp-app-shell (stale after p4.6); then p4.7 (session storage and isolation: what profiles and tabs share, established by tests and process inspection), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.7-prove-isolated.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [comp-security-engine, comp-app-shell]
 last_handoff: handoff-2026-10-13-s03
 ---
 
@@ -66,6 +66,7 @@ manual checklist items 1 to 20 are still owed).
 - Q-224 answered before p4.4: any link type to other apps may be offered, always with a click; Claude proposes a sourced list of always-refused risky types for the owner's review.
 - p4.4 done (`b957705`): four abused link types always refused, optional list of allowed types, every request and click checked; check PASS. Three component pages re-approved by the owner.
 - Session s04 (same chat, after the s03 handoff): p4.5 done (`17af021`): every permission refused unless granted per site; check PASS. Four component pages re-approved by the owner.
+- p4.6 done (`a341b0a`): safe download names, program warning, nothing opens a download; check PASS. Two component approvals stale.
 
 ## Done this session (s02)
 
@@ -350,7 +351,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.5 committed in 17af021; four component pages re-approved; p4.6 next)
+(empty: p4.6 committed in a341b0a; two component approvals stale, waiting for the owner)
 
 ## Blockers
 

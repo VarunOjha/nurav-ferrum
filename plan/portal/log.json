@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f1b6c9271826da3ea584030c5d0f62c70553edb1b6a0df041655a0e94b6bdca6"
+    "content_hash": "sha256:89b058b522021219c65865f32146661adefb693e978c07fd6460b095ee0883f0"
   },
   "entries": [
     {
@@ -4026,6 +4026,36 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-6",
+      "date": "2026-10-13",
+      "time": "19:31",
+      "title": "Downloads: safe names, a warning for programs",
+      "done": "A site's file name is cleaned before saving, so it cannot climb out of your download folder or hide a program's real type. Program files show a warning on their download line, and Ferrum never opens a download. Live test: all four tricky names landed safely in the folder.",
+      "next": "You re-approve two part pages that changed with the code; then Claude checks and documents what profiles and tabs still share.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "a341b0a",
+      "covers": [
+        "## [2026-10-13] code | p4.6 safe download names and program warning",
+        "## [2026-10-13] gate | two component approvals stale after p4.6"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "privacy",
+        "testing"
       ]
     }
   ]

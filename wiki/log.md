@@ -2356,3 +2356,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell]
 - sources: [raw/owner/2026-10-13-s04-p4-5-components-reapproval.md]
 - result: The owner answered "Re-approve all four (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.6 is next.
+
+## [2026-10-13] code | p4.6 safe download names and program warning
+
+- session: s04
+- time: 19:31
+- pages: [comp-security-engine, comp-app-shell, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.6.txt, raw/evidence/phase-p4-security/check-p4.2.20261013-1924.txt, raw/evidence/phase-p4-security/policy-coverage.20261013-1924.txt]
+- result: Download names cleaned by the engine; saved only in the configured folder; program types warned on the download line; nothing opens a download. p4.6 check PASS 3/3 (live spec 4 passed). Observed (local test server only): WebView2 had already cleaned the names; no Zone.Identifier stream on the saved setup.exe. Engine coverage 1182/1182 regions. Full smoke 93 passed, 3 failed with NOT-FRONT (another window was active). Stales approval of comp-security-engine and comp-app-shell.
+- stales: [comp-security-engine, comp-app-shell]
+- commit: a341b0a
+
+## [2026-10-13] gate | two component approvals stale after p4.6
+
+- session: s04
+- time: 19:31
+- pages: [comp-security-engine, comp-app-shell]
+- result: The p4.6 page updates staled two components in the P4 dependency set; p4.7 waits for the owner's re-approval (SCHEMA §10.4).
