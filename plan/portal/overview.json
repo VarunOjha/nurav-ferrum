@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 6 of 17 tasks done. Downloads now get safe names, programs get a warning, and nothing opens by itself. Two part pages changed with the code and need your re-approval.",
+  "summary": "Phase 4 (security) is in progress: 6 of 17 tasks done, and you re-approved the changed part pages. Claude continues with checking what site profiles and tabs still share.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b92a2f7a32ee06cfae143e43e1f06a8a8c3d60ef1c92b8b39333931d0e71a030"
+    "content_hash": "sha256:2c8b3197adc2c7fa2ed6fcf33d6379df2d2c70a6f55357dc12fbf21f63202f4f"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Two part pages out of date: waiting for you",
+      "state": "All up to date",
       "ref": "comp-security-engine"
     },
     {
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
@@ -43,12 +43,12 @@
       },
       {
         "item": "Part pages",
-        "state": "2 changed with the new code; need your re-approval"
+        "state": "Re-approved by you"
       }
     ],
-    "why": "Nothing to run. The pages for the security engine and the browser controls changed with the code, so your earlier approvals are out of date; the next task builds on them.",
+    "why": "Nothing to run; Claude continues with the next task: find out, by tests and by looking at the running processes, exactly what separate site profiles and tabs still share, and write it down.",
     "script": null,
-    "tell_claude": "\"Re-approve the two part pages\", or ask to see the changes first."
+    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
     "open": 19,

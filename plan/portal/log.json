@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:89b058b522021219c65865f32146661adefb693e978c07fd6460b095ee0883f0"
+    "content_hash": "sha256:e965ca8dd2bcaec18edf4436c26db862e09bf88672bcd0519ccce2a5c67c6db3"
   },
   "entries": [
     {
@@ -4056,6 +4056,35 @@
       "tags": [
         "privacy",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-6-reapproved",
+      "date": "2026-10-13",
+      "time": "19:33",
+      "title": "You re-approved two part pages after the downloads task",
+      "done": "You re-approved the pages for the security engine and the browser controls.",
+      "next": "Claude checks and documents what separate site profiles and tabs still share, by tests and by looking at the running processes.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | two component pages re-approved after p4.6"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]

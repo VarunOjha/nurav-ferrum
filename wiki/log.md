@@ -2373,3 +2373,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 19:31
 - pages: [comp-security-engine, comp-app-shell]
 - result: The p4.6 page updates staled two components in the P4 dependency set; p4.7 waits for the owner's re-approval (SCHEMA §10.4).
+
+## [2026-10-13] approval | two component pages re-approved after p4.6
+
+- session: s04
+- time: 19:33
+- pages: [comp-security-engine, comp-app-shell]
+- sources: [raw/owner/2026-10-13-s04-p4-6-components-reapproval.md]
+- result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.7 is next.
