@@ -5270,6 +5270,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "8f92b1e",
+      "kind": "commit",
+      "title": "Commit 8f92b1e",
+      "summary": "Benchmark-only build without the site rules, proven missing from the normal app (task p4.16).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

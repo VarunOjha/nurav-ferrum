@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 11 of 18 tasks done. Claude is building a benchmark-only version without the site rules, which the normal app can never contain.",
+  "summary": "Phase 4 (security) is in progress: 12 of 18 tasks done. The benchmark-only build without the site rules exists and is proven missing from the normal app. Three pages wait for your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:a79c4f274c2146901112684b41bceb46a5a38182735d09e03be9169758e261ce"
+    "content_hash": "sha256:86294522998e209e0d3b0c47eab109355bb4c3493ab85f70a20127aa350381c0"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "phase-p4-security"
+      "state": "Three pages wait for your re-approval",
+      "ref": "comp-security-engine"
     },
     {
       "item": "Your rule",
@@ -35,20 +35,24 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "11 of 18 tasks done"
+        "state": "12 of 18 tasks done"
       },
       {
-        "item": "Approvals",
-        "state": "All up to date"
+        "item": "Benchmark-only build",
+        "state": "Built; proven missing from the normal app"
+      },
+      {
+        "item": "Pages",
+        "state": "3 wait for your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude builds the benchmark-only version without the site rules and proves the normal app does not contain it.",
+    "why": "Nothing to run. The task changed three pages, so they need your approval again. Claude also tells you about a short test run that touched your own Ferrum data, and asks whether to tidy it.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "Answer Claude's questions in Claude Code."
   },
   "questions_for_you": {
     "open": 19,

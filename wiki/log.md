@@ -2573,3 +2573,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 14:03
 - pages: [status-live, phase-p4-security]
 - result: The owner asked what SmartScreen gives and confirmed "Let's add it, no worries, continue" (same decision as the recorded Q-225 answer; p4.18 already planned). In-flight record written for p4.16 before any task file is touched; the ablation is narrower than "every decision returns allow" (Ferrum's own origin, forbidden schemes, links to other apps and permission refusals stay on), to be reported to the owner with the task.
+
+## [2026-10-14] code | p4.16 benchmark-only build without the site rules
+
+- session: s06
+- time: 14:30
+- pages: [comp-security-engine, comp-app-shell, ov-arch-configuration, exp-security-overhead, ov-research-configurations, qual-ci-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.16.txt, raw/evidence/phase-p4-security/nosecurity-absent.txt]
+- result: Cargo feature bench-nosecurity (cfg-ferrum-nosecurity-bench): every web address loads without the navigation rules; Ferrum's own origin, forbidden schemes, links to other apps, permission refusals and download cleaning keep theirs (narrower than the phase page's "every policy decision", on purpose, to be confirmed by the owner). Starts only with --benchmark-mode and its own [storage] data_dir. scripts/security-static-check.ps1 (CI step security-static): feature off in the normal build, no marker text in the normal release program, all markers in an ablation build, refusal without the argument. Incident: the first check version started the ablation with an unquoted settings path; it ran about 8 s in the owner's real data folder (restored and loaded his six saved tabs; log, history and session files written; settings file not written); fixed by the data_dir rule and Invoke-Native; no cleanup done. p4.16 check PASS 4/4; cargo test --workspace ok. Stales approval of comp-app-shell, comp-security-engine and exp-security-overhead.
+- stales: [comp-app-shell, comp-security-engine, exp-security-overhead]
+- commit: 8f92b1e
+
+## [2026-10-14] gate | three approvals stale after p4.16
+
+- session: s06
+- time: 14:30
+- pages: [comp-app-shell, comp-security-engine, exp-security-overhead]
+- result: All three are in the P4 dependency set; p4.17 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.

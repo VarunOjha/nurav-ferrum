@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:cf19f8f87b9d95c9f65622d2cde7f009d12f0954da90f60553c0f6f2a912f03a"
+    "content_hash": "sha256:99560c0402bd0763c911bd28913bced147583f732143a823012539e5d8aa6047"
   },
   "entries": [
     {
@@ -4548,6 +4548,40 @@
       "category": "Planned",
       "tags": [
         "privacy",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-16",
+      "date": "2026-10-14",
+      "time": "14:30",
+      "title": "A benchmark-only build without the site rules, proven missing from the normal app",
+      "done": "A separate build skips the site rules so P6 can measure what they cost. It keeps Ferrum's own pages, local files and links to other apps protected, and starts only for a benchmark in its own test folder. A check proves the normal app does not contain it. A first test run wrongly ran for 8 seconds in your own Ferrum data; fixed so it cannot happen again.",
+      "next": "You re-approve three pages; then Claude builds the security settings screen.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Security policy page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Security cost experiment",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "8f92b1e",
+      "covers": [
+        "## [2026-10-14] code | p4.16 benchmark-only build without the site rules",
+        "## [2026-10-14] gate | three approvals stale after p4.16"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "blocklist",
         "benchmarks"
       ]
     }
