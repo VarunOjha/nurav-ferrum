@@ -2638,3 +2638,18 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [handoff-2026-10-14-s06, status-live]
 - result: Partial handoff updated: P4 at 13 of 18 (p4.15, p4.16, p4.17 done this session); nothing in flight; all approvals current; quick lint 0 errors. Stopped before p4.18 because the context is large (CLAUDE.md section 4).
 - next: p4.18
+
+## [2026-10-14] resume | s07 starts; p4.18 next
+
+- session: s07
+- time: 15:53
+- pages: [status-live, phase-p4-security, handoff-2026-10-14-s06]
+- result: New chat after /clear; the owner asked for the start-up checks first. Tree clean at e042985, In-flight empty, no stash, no index.lock: nothing half-done. approvals_check: nothing STALE, PENDING or otherwise not approved. No open question blocks phase-p4-security; P4 entry conditions still hold. The owner's own Ferrum runs from target/release (pid 384): no build into that folder, no kill.
+
+## [2026-10-14] plan | p4.18 in flight
+
+- session: s07
+- time: 15:53
+- pages: [status-live]
+- result: In-flight record written for p4.18 (SmartScreen back on, owner answer Q-225) before any task file is touched: research note first, then one browser-argument string for the shell, the IPC self-test probe and the site environments, then the check script.
+- next: p4.18 research note

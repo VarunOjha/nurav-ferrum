@@ -38,7 +38,7 @@ sources:
   - raw/owner/2026-10-14-s06-p4-17-components-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
-session: s06
+session: s07
 current_phase: phase-p4-security
 current_task: p4.18
 next_action: "p4.18 (SmartScreen back on in every WebView2 environment, owner answer Q-225): research note first, then Ferrum sets the browser arguments itself for the shell and the site environments without msSmartScreenProtection; per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.18-smartscreen-on.ps1 (to be written in p4.18). At the P4 exit review align the p4.16 wording on the phase page with the narrower ablation the owner accepted. Remaining after it: p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
@@ -364,7 +364,12 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.17 committed in cb7286c; two component pages re-approved; p4.18 next)
+- task: p4.18 (SmartScreen back on in every WebView2 environment; owner answer Q-225)
+- session: s07
+- intent: research note on SmartScreen in WebView2 (official Microsoft sources, access dates) first and reported to the owner; then Ferrum sets the browser arguments itself, one constant for the shell (Tauri additional_browser_args), the IPC self-test probe (same folder, so same options) and the site environments, without msSmartScreenProtection; autoplay and the two Edge-menu switches unchanged; check script with static and live parts; component pages, SECURITY.md, data-flows page updated in the same commit
+- planned paths: wiki/raw/research/smartscreen-webview2.md, crates/webview-manager/src/webview2.rs, apps/desktop/src-tauri/src/main.rs, apps/desktop/src-tauri/src/selftest.rs, apps/desktop/tests/ (a new live spec), scripts/verify/p4.18-smartscreen-on.ps1, wiki/raw/evidence/phase-p4-security/check-p4.18.txt (+ MANIFEST), SECURITY.md, wiki/architecture/components/comp-webview-manager.md, wiki/architecture/components/comp-app-shell.md, wiki/architecture/ov-arch-isolation-model.md, wiki/architecture/ov-arch-data-flows.md, wiki/quality/qual-security-testing-plan.md, wiki/quality/qual-ci-plan.md, wiki/overview/ov-open-questions.md, wiki/index.md, plan/portal/*.json
+- builds: never into target/release (the owner's Ferrum runs from there, pid 384); tests use their own data folders, never the owner's real one; no camera or microphone
+- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 ## Blockers
 

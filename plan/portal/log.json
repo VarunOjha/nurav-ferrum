@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:beb75392c81568276d66d7c9cf765196ad5e5e0a86695278acd24601d1e76bc1"
+    "content_hash": "sha256:39820b3a18a00fe1df5369c2e4943beb348a127ab908bbcae2383f9f99c37bc9"
   },
   "entries": [
     {
@@ -4724,6 +4724,27 @@
       "tags": [
         "sessions",
         "wiki"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s07-resume",
+      "date": "2026-10-14",
+      "time": "15:53",
+      "title": "New session: start-up checks clean; SmartScreen task started",
+      "done": "Claude checked the saved state: nothing was left half-done, all approvals are current and Phase 4 may continue. Your own Ferrum keeps running untouched. Claude wrote the \"task in progress\" note for switching SmartScreen back on.",
+      "next": "Claude writes the SmartScreen research note and tells you what it sends to Microsoft.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] resume | s07 starts; p4.18 next",
+        "## [2026-10-14] plan | p4.18 in flight"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "sessions",
+        "privacy"
       ]
     }
   ]

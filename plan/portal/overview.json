@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 13 of 18 tasks done. You re-approved the two part pages. Claude continues with switching SmartScreen back on.",
+  "summary": "Phase 4 (security) is in progress: 13 of 18 tasks done. Claude is switching SmartScreen back on, starting with a research note on what it sends to Microsoft.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:4c788bf76215736a0b82d0219ec9f94ce7a0aa85a7d9c76c4fbc83cba5b51d1a"
+    "content_hash": "sha256:31f8251140975ad10531f742e9254f0ab86cdfcab68bb7280eb6914d4664c276"
   },
   "updated": "2026-10-14",
   "where_we_are": [
