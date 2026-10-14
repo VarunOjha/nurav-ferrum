@@ -33,7 +33,7 @@ sources:
   - raw/owner/2026-10-13-s04-p4-9-components-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
-session: s04
+session: s05
 current_phase: phase-p4-security
 current_task: p4.10
 next_action: "p4.10 (recovery from crashed page and browser processes: ProcessFailed, crashed-tab state, reload, no shell crash), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.10-recover-crashes.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
@@ -358,7 +358,10 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.9 committed in 5027ee1; two component pages re-approved; p4.10 next)
+- task: p4.10 (session s05)
+- intent: recover from crashed page processes. WebView2's ProcessFailed event is handled per tab (renderer exited, renderer not responding, frame renderer exited, browser exited); a crashed tab shows the shell's panel with a Reload button and is marked crashed in the tab list; reload recovers it; the shell stays up. A browser-process exit (all views dead) is handled by restarting Ferrum, whose session restore reopens the tabs, if it can be triggered and tested; otherwise recorded as not tested. Debug-only test hook loads the browser's own crash pages (edge://kill, spike S3 method).
+- paths: crates/webview-manager/src/{webview2.rs,tab.rs}; apps/desktop/src-tauri/src/{content.rs,main.rs}; apps/desktop/src/{main.ts,logic.ts,logic.test.ts}; apps/desktop/index.html; apps/desktop/tests/smoke/{crash-recovery.spec.ts,ferrum.ts}; scripts/verify/p4.10-recover-crashes.ps1; wiki/architecture/components/{comp-webview-manager,comp-app-shell}.md; wiki/quality/qual-security-testing-plan.md; wiki/raw/evidence/phase-p4-security/; plan/portal/{architecture,phases/phase-p4-security,roadmap}.json
+- rollback: git checkout -- <paths>; delete the new spec and check script
 
 ## Blockers
 

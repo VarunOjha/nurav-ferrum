@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:81b1d5b1f6d1b038044ff9bacda55079f89e1cf52e82d936a6d25b8c0e805e4a"
+    "content_hash": "sha256:175086b524d0251eb6a9fe3c8f9870bc7f8db017eb62511f9cecea4e18e59a13"
   },
   "entries": [
     {
@@ -4296,6 +4296,26 @@
       "commit": null,
       "covers": [
         "## [2026-10-13] handoff | s04 ends: P4 at 9 of 17 tasks, p4.10 next"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "sessions",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s05-resume",
+      "date": "2026-10-13",
+      "time": "23:17",
+      "title": "New session: Phase 4 continues",
+      "done": "You said to continue. Claude checked that nothing was left half-done and all approvals were current, then wrote down what the next task will change before starting it.",
+      "next": "Claude builds recovery from crashed pages.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] resume | s05 starts: owner says \"Continue\""
       ],
       "phase": "phase-p4-security",
       "category": "Checked",

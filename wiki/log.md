@@ -2470,3 +2470,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 20:50
 - pages: [handoff-2026-10-13-s04, status-live]
 - result: Handoff written (context large). quick_lint 0 errors; lint:wiki only the known ff7292e finding; portal-sync clean. Next: p4.10 crash recovery.
+
+## [2026-10-13] resume | s05 starts: owner says "Continue"
+
+- session: s05
+- time: 23:17
+- pages: [status-live, phase-p4-security]
+- result: Same chat as s04 after its handoff. Tree clean at 52f2e5b, no stash, approvals_check shows nothing STALE or PENDING, no open question blocks P4; entry conditions still hold. In-flight record written for p4.10 (crash recovery) before any task file is touched.
