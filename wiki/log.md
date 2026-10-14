@@ -2630,3 +2630,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-app-shell, comp-security-engine]
 - sources: [raw/owner/2026-10-14-s06-p4-17-components-reapproval.md]
 - result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. p4.18 is next.
+
+## [2026-10-14] handoff | s06 handoff updated after p4.17
+
+- session: s06
+- time: 15:38
+- pages: [handoff-2026-10-14-s06, status-live]
+- result: Partial handoff updated: P4 at 13 of 18 (p4.15, p4.16, p4.17 done this session); nothing in flight; all approvals current; quick lint 0 errors. Stopped before p4.18 because the context is large (CLAUDE.md section 4).
+- next: p4.18

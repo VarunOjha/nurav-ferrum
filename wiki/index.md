@@ -254,7 +254,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 - [handoff-2026-10-13-s02](operations/handoffs/handoff-2026-10-13-s02.md) | final | Handoff s02 (2026-10-13): P3 feature set built, gate passed for Claude's part, self-scan fixes committed; end-check rerun, history cleanup and GitHub upload pending | Next: end check in a quiet window, history cleanup (Q-221), the owner's push (Q-105), then the P3 review; no P4 work
 - [handoff-2026-10-13-s03](operations/handoffs/handoff-2026-10-13-s03.md) | final | Handoff s03 (2026-10-13): P3 signed off; P4 tasks p4.1 to p4.4 done; p4.5 next | P4 at 4 of 17; all approvals current; known MANIFEST order finding
 - [handoff-2026-10-13-s04](operations/handoffs/handoff-2026-10-13-s04.md) | final | Handoff s04 (2026-10-13): P4 tasks p4.5 to p4.9 done (9 of 17); p4.10 next | P4 at 9 of 17; all approvals current; full smoke 106 passed
-- [handoff-2026-10-14-s06](operations/handoffs/handoff-2026-10-14-s06.md) | partial | Handoff s06 (2026-10-14): p4.15 done (11 of 18); Q-225 answered, p4.18 added; p4.16 next | Written early after the overnight shutdown; nothing in flight; all approvals current
+- [handoff-2026-10-14-s06](operations/handoffs/handoff-2026-10-14-s06.md) | partial | Handoff s06 (2026-10-14): p4.15 to p4.17 done (13 of 18); p4.18 SmartScreen next | Nothing in flight; all approvals current; mishap in p4.16 recorded
 
 ## Interactive plan
 

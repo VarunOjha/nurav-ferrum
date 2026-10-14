@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8de891834866971d6d19ab8ea2e4b00859b49eb9031cfa9555910e5ddbd4db58"
+    "content_hash": "sha256:beb75392c81568276d66d7c9cf765196ad5e5e0a86695278acd24601d1e76bc1"
   },
   "entries": [
     {
@@ -4704,6 +4704,26 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-handoff-updated",
+      "date": "2026-10-14",
+      "time": "15:38",
+      "title": "Checkpoint note updated: three tasks done this session",
+      "done": "Claude updated the session's handoff note: isolation modes, the benchmark-only build and the security settings are done; nothing is half-finished.",
+      "next": "In a fresh session, Claude switches SmartScreen back on.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] handoff | s06 handoff updated after p4.17"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "sessions",
+        "wiki"
       ]
     }
   ]
