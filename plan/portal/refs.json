@@ -5220,6 +5220,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "5027ee1",
+      "kind": "commit",
+      "title": "Commit 5027ee1",
+      "summary": "Security audit log of every refusal; an older toolbar-note glitch fixed (task p4.9).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

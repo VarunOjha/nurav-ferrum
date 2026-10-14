@@ -2438,3 +2438,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-app-shell]
 - sources: [raw/owner/2026-10-13-s04-p4-8-app-shell-reapproval.md]
 - result: The owner answered "Re-approve it (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.9 is next.
+
+## [2026-10-13] code | p4.9 security audit log of every refusal
+
+- session: s04
+- time: 20:45
+- pages: [comp-security-engine, comp-app-shell, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.9.txt]
+- result: Every refusal is one JSON line in audit.jsonl (time, tab, origin as scheme and host, action, rule, decision; rotation at 1 MB). The live security specs of p4.3, p4.4, p4.5 and p4.8 now require their audit lines, every line is schema-checked, and a secret in an address or typed text never reaches the file. Found and fixed an older shell race (a late address-bar reply cleared an HTTP 404 or Blocked note). p4.9 check PASS 3/3; full smoke 106 passed. Stales approval of comp-security-engine and comp-app-shell.
+- stales: [comp-security-engine, comp-app-shell]
+- commit: 5027ee1
+
+## [2026-10-13] gate | two component approvals stale after p4.9
+
+- session: s04
+- time: 20:45
+- pages: [comp-security-engine, comp-app-shell]
+- result: The p4.9 page updates staled two components in the P4 dependency set; p4.10 waits for the owner's re-approval (SCHEMA §10.4).

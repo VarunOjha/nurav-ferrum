@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:2248fe51f1ceb1155ecfce1f3db2cccc9dbd7829c1e4c680e0a86b76571e50a9"
+    "content_hash": "sha256:6e559acdf68d6dc3e75dd5bdb2a20287fd851e1ffd25240e425b31c9602f8d30"
   },
   "entries": [
     {
@@ -4222,6 +4222,36 @@
       "category": "Decided",
       "tags": [
         "approvals",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-9",
+      "date": "2026-10-13",
+      "time": "20:45",
+      "title": "Every refusal is now written to a security log",
+      "done": "Each time Ferrum refuses something, one short line goes to a security log: when, which tab, which site (never the full address), what was refused and by which rule. Every security test now also checks its line, and a secret in an address or in typed text never reaches the file. Claude also fixed an older glitch where a toolbar note could vanish. Full test suite: 106 passed.",
+      "next": "You re-approve two part pages that changed with the code; then Claude builds recovery from crashed pages.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "5027ee1",
+      "covers": [
+        "## [2026-10-13] code | p4.9 security audit log of every refusal",
+        "## [2026-10-13] gate | two component approvals stale after p4.9"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "privacy",
         "testing"
       ]
     }

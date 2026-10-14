@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 8 of 17 tasks done, and you re-approved the changed page. Claude continues with the security audit log.",
+  "summary": "Phase 4 (security) is in progress: 9 of 17 tasks done. Every refusal is now written to a security log without private details. Two part pages changed with the code and need your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:4fc79c7368410e06e7fc734e92b9a893dd959b92fdfb31c98c70a15895b67b22"
+    "content_hash": "sha256:3593cc9ba365d6ee000722ea987c69157fa324c677e648198b919f8c6b4488ad"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "comp-app-shell"
+      "state": "Two part pages out of date: waiting for you",
+      "ref": "comp-security-engine"
     },
     {
       "item": "Your rule",
@@ -35,20 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "8 of 17 tasks done"
+        "state": "9 of 17 tasks done"
       },
       {
-        "item": "Browser controls page",
-        "state": "Re-approved by you"
+        "item": "Part pages",
+        "state": "2 changed with the new code; need your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: every refused action is written as one line to a security log, kept small, without any page content.",
+    "why": "Nothing to run. The pages for the security engine and the browser controls changed with the code, so your earlier approvals are out of date; the next task builds on them.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "\"Re-approve the two part pages\", or ask to see the changes first."
   },
   "questions_for_you": {
     "open": 19,
