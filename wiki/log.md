@@ -2477,3 +2477,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 23:17
 - pages: [status-live, phase-p4-security]
 - result: Same chat as s04 after its handoff. Tree clean at 52f2e5b, no stash, approvals_check shows nothing STALE or PENDING, no open question blocks P4; entry conditions still hold. In-flight record written for p4.10 (crash recovery) before any task file is touched.
+
+## [2026-10-13] code | p4.10 recovery from crashed page and browser processes
+
+- session: s05
+- time: 23:41
+- pages: [comp-webview-manager, comp-app-shell, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.10.txt]
+- result: ProcessFailed is handled per tab view and BrowserProcessExited on the environment. A tab whose page process ends or hangs is marked crashed and covered by the shell's panel with Reload, which loads the page again in a new process; another site's tab and the shell keep working. A browser-process failure saves the session, closes Ferrum and starts it again with its tabs (no restart loop within 60 s). Test hook test_crash_tab (debug only) loads edge://kill (spike S3) or edge://inducebrowsercrashforrealz once. Observed: two same-site tabs had separate page processes (shared case asserted, not seen). p4.10 check PASS 3/3; full smoke 109 passed. SEC-10 claim closed. Stales approval of comp-app-shell and comp-webview-manager.
+- stales: [comp-app-shell, comp-webview-manager]
+- commit: ea16ba1
+
+## [2026-10-13] gate | two component approvals stale after p4.10
+
+- session: s05
+- time: 23:41
+- pages: [comp-app-shell, comp-webview-manager]
+- result: The p4.10 page updates staled two components in the P4 dependency set; the next task waits for the owner's re-approval (SCHEMA §10.4).

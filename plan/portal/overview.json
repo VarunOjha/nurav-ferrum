@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 9 of 17 tasks done, and all part pages are approved. Claude is building recovery from crashed pages.",
+  "summary": "Phase 4 (security) is in progress: 10 of 17 tasks done. Two part pages changed with the last task and wait for your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:ed5c73dd9a82a742da2171ee93fbbd3e69c01184394c8fa82dadf7fdb03274f7"
+    "content_hash": "sha256:7dab152424325beff962ebc229bca5064b77a902af7c34ae0c1d76830be9faab"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "comp-security-engine"
+      "state": "Two part pages wait for your re-approval",
+      "ref": "comp-app-shell"
     },
     {
       "item": "Your rule",
@@ -35,20 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "9 of 17 tasks done"
+        "state": "10 of 17 tasks done"
       },
       {
         "item": "Part pages",
-        "state": "Re-approved by you"
+        "state": "Two wait for your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: when a page's process crashes, the tab shows a clear state with a reload button, and Ferrum's window stays up.",
+    "why": "Nothing to run. The crash-recovery task changed the pages for the browser controls and the tab and view manager, so they need your approval again before Claude continues.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "Answer Claude's question in chat: re-approve both pages, or ask for changes."
   },
   "questions_for_you": {
     "open": 19,

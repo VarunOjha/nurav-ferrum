@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:175086b524d0251eb6a9fe3c8f9870bc7f8db017eb62511f9cecea4e18e59a13"
+    "content_hash": "sha256:5e80d564fea32c34b5fdd723dbc48b36b9f3a7c1bf4a4e80fd6e98bed77d2426"
   },
   "entries": [
     {
@@ -4322,6 +4322,36 @@
       "tags": [
         "sessions",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s05-p4-10",
+      "date": "2026-10-13",
+      "time": "23:41",
+      "title": "A crashed page no longer takes anything else down",
+      "done": "When a tab's page process crashes or hangs, that tab shows \"This page stopped working\" with a Reload button; other tabs and the window keep working, and Reload brings the page back. If the whole browser engine stops, Ferrum restarts by itself and reopens your tabs. Tests crash a tab and the engine on purpose. Full test suite: 109 passed.",
+      "next": "You re-approve two part pages that changed with the code; then Claude builds the choice of isolation modes.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Tab & view manager page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "ea16ba1",
+      "covers": [
+        "## [2026-10-13] code | p4.10 recovery from crashed page and browser processes",
+        "## [2026-10-13] gate | two component approvals stale after p4.10"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "web views",
+        "testing"
       ]
     }
   ]

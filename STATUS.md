@@ -35,9 +35,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s05
 current_phase: phase-p4-security
-current_task: p4.10
-next_action: "p4.10 (recovery from crashed page and browser processes: ProcessFailed, crashed-tab state, reload, no shell crash), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.10-recover-crashes.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+current_task: p4.15
+next_action: "After the owner re-approves comp-app-shell and comp-webview-manager (staled by p4.10): p4.15 (isolation modes selectable by configuration: shared profile, profile per site, user data folder per site), per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.15-selectable-isolation-modes.ps1. Remaining after it: p4.16, p4.17, p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [comp-app-shell, comp-webview-manager]
 last_handoff: handoff-2026-10-13-s04
 ---
 
@@ -74,6 +74,7 @@ manual checklist items 1 to 20 are still owed).
 - p4.7 done (`f525169`): isolation proven by tests (storage per profile, clearing one site, private tabs, process inventory); check PASS; full smoke 100 passed. Three component pages re-approved by the owner.
 - p4.8 done (`55dcb6f`): websites cannot reach Ferrum's controls or pages, tested; check PASS; full smoke 105 passed. comp-app-shell re-approved by the owner.
 - p4.9 done (`5027ee1`): security audit log (six fields, origin only, rotation), required by every security test; older address-bar race fixed; check PASS; full smoke 106 passed. Two component pages re-approved by the owner. Process slip: no write-ahead In-flight record was written for p4.7 (logged).
+- Session s05 (same chat, after the s04 handoff): p4.10 done (`ea16ba1`): a crashed tab is marked and covered with Reload; other tabs and the shell keep working; a browser-engine failure restarts Ferrum with its tabs; check PASS; full smoke 109 passed. comp-app-shell and comp-webview-manager wait for re-approval.
 
 ## Done this session (s02)
 
@@ -358,10 +359,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p4.10 (session s05)
-- intent: recover from crashed page processes. WebView2's ProcessFailed event is handled per tab (renderer exited, renderer not responding, frame renderer exited, browser exited); a crashed tab shows the shell's panel with a Reload button and is marked crashed in the tab list; reload recovers it; the shell stays up. A browser-process exit (all views dead) is handled by restarting Ferrum, whose session restore reopens the tabs, if it can be triggered and tested; otherwise recorded as not tested. Debug-only test hook loads the browser's own crash pages (edge://kill, spike S3 method).
-- paths: crates/webview-manager/src/{webview2.rs,tab.rs}; apps/desktop/src-tauri/src/{content.rs,main.rs}; apps/desktop/src/{main.ts,logic.ts,logic.test.ts}; apps/desktop/index.html; apps/desktop/tests/smoke/{crash-recovery.spec.ts,ferrum.ts}; scripts/verify/p4.10-recover-crashes.ps1; wiki/architecture/components/{comp-webview-manager,comp-app-shell}.md; wiki/quality/qual-security-testing-plan.md; wiki/raw/evidence/phase-p4-security/; plan/portal/{architecture,phases/phase-p4-security,roadmap}.json
-- rollback: git checkout -- <paths>; delete the new spec and check script
+(empty: p4.10 committed in ea16ba1; comp-app-shell and comp-webview-manager wait for re-approval; p4.15 next)
 
 ## Blockers
 
