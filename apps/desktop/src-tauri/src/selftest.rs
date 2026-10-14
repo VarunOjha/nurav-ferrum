@@ -142,6 +142,8 @@ pub fn start_ipc(app: AppHandle, width: f64, height: f64) {
             Err(e) => return finish(&app, json!({"error": format!("bad url: {e}")})),
         };
         let probe = WebviewBuilder::new("probe", WebviewUrl::External(parsed))
+            // Same folder as the shell, so the same browser arguments (COM-7, p4.18).
+            .additional_browser_args(ferrum_webview_manager::webview2::SHELL_BROWSER_ARGUMENTS)
             .on_document_title_changed(move |_wv, t| {
                 if t.starts_with("IPC-PROBE:") {
                     *t2.lock().unwrap() = Some(t);

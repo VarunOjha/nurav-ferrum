@@ -361,6 +361,8 @@ fn main() {
                 .to_logical::<f64>(window.scale_factor()?);
             let handle = app.handle().clone();
             let mut shell = WebviewBuilder::new("shell", WebviewUrl::App("index.html".into()))
+                // Ferrum's own browser arguments, the same in every environment; SmartScreen stays on (p4.18).
+                .additional_browser_args(ferrum_webview_manager::webview2::SHELL_BROWSER_ARGUMENTS)
                 // The shell may call the app, so it only ever shows Ferrum's own pages (p4.3).
                 .on_navigation(policy::shell_may_load)
                 .on_document_title_changed(move |_wv, t| {

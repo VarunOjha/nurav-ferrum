@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 13,
+    "done": 14,
     "total": 18
   },
   "step_order": [
@@ -180,10 +180,10 @@
       "what": "Microsoft's SmartScreen check of sites and downloads switched back on in every browser engine Ferrum starts, as you decided.",
       "why": "A library default switched it off without anyone choosing it, so known-bad sites and downloads get no warning in Ferrum today.",
       "how": "Write a research note on what SmartScreen checks and sends first. Then Ferrum sets the browser switches itself, the same for every engine; autoplay is left as it is.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "A library default turned SmartScreen off → Ferrum sets the browser switches itself, the same for every engine, with SmartScreen on → known-bad sites and downloads get Microsoft's warning again.",
       "check": "No engine has SmartScreen switched off (checked automatically); Microsoft's test page shows what WebView2 does, recorded as seen.",
-      "script": null
+      "script": "scripts/verify/p4.18-smartscreen-on.ps1"
     },
     {
       "id": "p4.12",

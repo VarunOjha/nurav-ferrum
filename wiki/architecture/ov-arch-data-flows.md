@@ -3,13 +3,14 @@ id: ov-arch-data-flows
 type: overview
 title: "Architecture: runtime data flows"
 status: review
-updated: 2026-10-09
+updated: 2026-10-14
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
   - raw/research/nextjs-stack.md
   - raw/01-scoping-decisions.md
   - raw/00-master-prompt.md
+  - raw/research/smartscreen-webview2.md
 related: [ov-arch-system-overview, ov-arch-trust-boundaries, ov-arch-webview2-integration, ov-arch-lifecycle-state-machine, ov-arch-configuration, comp-app-shell, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-benchmark-harness, comp-interactive-plan, comp-tab-content, comp-webview2-runtime, adr-0008, adr-0016, phase-p5-telemetry, risk-r08, adr-0019]
 approvable: true
 audience: both
@@ -167,3 +168,19 @@ flowchart LR
 ```
 
 The plan app is planning tooling (adr-0016, superseded by adr-0023). It has **no connection to Ferrum's runtime**, is never shipped, and is never started by the product. From portal v2 (task p0.17) it is read-only: it reads plain-language JSON (adr-0024) and never writes `plan/approvals.json`; Claude records approvals the owner gives in Claude Code (wiki SCHEMA §10.1).
+
+## 7. SmartScreen reputation checks: data that leaves the PC
+
+Every Ferrum browser engine keeps Microsoft Defender SmartScreen on (p4.18, owner answer Q-225). The WebView2 runtime,
+not Ferrum, sends these checks to Microsoft's SmartScreen service over HTTPS
+([research note](../raw/research/smartscreen-webview2.md), sections 2 and 3):
+
+| When | What is sent |
+|---|---|
+| A site on the local list of very popular sites | nothing |
+| Any other site | the address, information about the site, a device identifier, general location |
+| A download completes | the file's hash, name and download address, a device identifier |
+
+Whether the address is sent with its query part is not stated by Microsoft (note, 2.7). Ferrum has no control over
+this flow other than leaving SmartScreen on; the Windows setting "SmartScreen for Microsoft Edge" switches it off for
+every WebView2 app. SECURITY.md carries the notice Microsoft asks apps to give their users.

@@ -170,6 +170,7 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
         | TabEvent::DownloadFinished { download, .. } => {
             json!({"kind": "download", "download": download})
         }
+        TabEvent::DownloadDialog { open } => json!({"kind": "download-dialog", "open": open}),
     };
     v["tab"] = json!(tab);
     v

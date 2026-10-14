@@ -5,6 +5,7 @@ title: "Architecture: isolation model (WebView2 profiles in a shared browser pro
 status: review
 updated: 2026-10-14
 sources:
+  - raw/evidence/phase-p4-security/check-p4.18.txt
   - raw/research/p3-profiles-psl.md
   - raw/owner/2026-10-12-s02-p3-questions.md
   - raw/01-scoping-decisions.md
@@ -92,7 +93,7 @@ Applies to `per-site-profile` mode: one UDF, many profiles.
 | Browser, GPU and utility processes | **Separate per site**: with two sites open, three environments (the shell's and one per site), each with one browser, one GPU and two utility processes (3, 3 and 6 in all) | OBSERVED in p4.15 ([isolation-modes](../raw/evidence/phase-p4-security/isolation-modes.md)) |
 | User data folder | One per site profile, `<data folder>/udf/<profile>`; two sites given the same named profile share one; empty and private tabs stay in the shell's folder | OBSERVED (folders checked in the p4.15 test) |
 | Renderers | Each site's page in its own renderer, in its own environment | OBSERVED in p4.15 |
-| Environment options | Copied from the shell's environment, so they are the same in all three modes (including wry's default switches: SmartScreen off, autoplay allowed; Q-225) | By construction (code), not a test |
+| Environment options | The same in all three modes: Ferrum's own browser switches (SmartScreen on, autoplay allowed; p4.18, Q-225), the user's language, no extensions | OBSERVED in p4.18 (browser process command lines, [check-p4.18](../raw/evidence/phase-p4-security/check-p4.18.txt)) |
 | Browser process lifetime | A site's browser ended by itself when its last tab closed; opening the site again started a new one | OBSERVED in p4.15 (app log) |
 | Start-up of a site's browser | About 0.5 s when no other site browser ran, about 5 s when one did, in the test setup (two runs, from the app log; cause not found) | OBSERVED, not measured (P6) |
 | Remote debugging port | Every site browser gets the same switch from the test environment; the tests read site pages through their titles and do not rely on the port for them. Whether the site browsers opened it was not checked | Not tested |

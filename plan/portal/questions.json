@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:5ebf0dcca0ee1dadf390d8242aec8582dc895b72b8f53b46104a320fcfff383d"
+    "content_hash": "sha256:6e56ce28ddeb498aa5e8807eb1084f94d919f7c62a05cba546163f985ac06b90"
   },
   "items": [
     {
@@ -956,8 +956,24 @@
       "question": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on?",
       "why_it_matters": "A library default switched it off in every tab; nobody chose it, and Ferrum's rule is never to weaken the browser's safety. Claude recommends turning it on, after checking what it sends to Microsoft. It should be settled before the Phase 4 review.",
       "status": "answered",
-      "answer": "Turn it back on: SmartScreen goes back on for every Ferrum engine together before the Phase 4 review, after a research note on what it sends to Microsoft and a test that it works. Autoplay stays a separate choice.",
+      "answer": "Turn it back on: SmartScreen goes back on for every Ferrum engine together before the Phase 4 review, after a research note on what it sends to Microsoft and a test that it works. Autoplay stays a separate choice. Done in task p4.18: Microsoft's demo phishing page is now blocked.",
       "answered_on": "2026-10-14",
+      "blocks": [],
+      "category": "Security & privacy",
+      "tags": [
+        "privacy",
+        "WebView2"
+      ]
+    },
+    {
+      "id": "Q-226",
+      "asked": "2026-10-14",
+      "time": "16:29",
+      "question": "Ferrum's \"could not be loaded\" panel covers SmartScreen's warning: what should you see when SmartScreen blocks a site?",
+      "why_it_matters": "SmartScreen now blocks a known phishing page, but Ferrum draws its own generic \"could not be loaded\" panel on top, so you don't see why. Claude recommends a clear Ferrum message saying Microsoft Defender SmartScreen reported the site as unsafe. It should be settled before the Phase 4 review.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
       "blocks": [],
       "category": "Security & privacy",
       "tags": [

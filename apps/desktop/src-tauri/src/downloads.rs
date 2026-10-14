@@ -80,7 +80,15 @@ pub fn chooser(app: &AppHandle) -> ferrum_webview_manager::webview2::DownloadFil
         let mut reserved = reserved.0.lock().unwrap();
         let path = target(&dir, suggested, |p| reserved.contains(p));
         reserved.insert(path.clone());
-        Some(path.to_string_lossy().into_owned())
+        // Program files get WebView2's own download pop-up too, where SmartScreen asks "Keep or delete?" about an
+        // unknown or dangerous program; hidden, the download would wait for ever (p4.18, owner answer).
+        let own_dialog = path
+            .file_name()
+            .is_some_and(|n| ferrum_security::downloads::is_program(&n.to_string_lossy()));
+        Some(ferrum_webview_manager::webview2::DownloadChoice {
+            path: path.to_string_lossy().into_owned(),
+            own_dialog,
+        })
     })
 }
 
@@ -158,6 +166,10 @@ pub fn shell_message(app: &AppHandle, tab: u64, e: &TabEvent) -> Option<Value> {
                 json!({"kind": if *completed { "completed" } else { "failed" }, "download": download,
                         "file": file(path), "path": path, "received": received, "reason": interrupt_reason}),
             )
+        }
+        TabEvent::DownloadDialog { open } => {
+            tracing::info!(target: "ferrum::downloads", tab, open, "WebView2 download pop-up");
+            None
         }
         _ => None,
     }

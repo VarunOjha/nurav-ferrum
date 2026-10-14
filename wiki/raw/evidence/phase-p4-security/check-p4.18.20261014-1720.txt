@@ -1,0 +1,34 @@
+Ferrum check p4.18: SmartScreen back on
+Why: you get the same protection Edge gives, and the documents say what it sends.
+Run at 2026-10-14 17:18 on commit 8421183 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Research note with access dates, cited by SECURITY.md and the data-flows page
+         8 dated sources; cited by SECURITY.md and the data-flows page
+  PASS   Unit test: the switches keep SmartScreen on and keep the menu and autoplay switches (2 s)
+         browser_arguments_keep_smartscreen_on passed
+  PASS   Source: one set of switches for every engine; nothing else switches SmartScreen off
+         shell, self-test view and site engines use SHELL_BROWSER_ARGUMENTS; no other line switches SmartScreen off
+SMARTSCREEN-ARGS {"mode":"shared","environments":["shell"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+SMARTSCREEN-ARGS {"mode":"per-site","environments":["shell"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+SMARTSCREEN-ARGS {"mode":"per-site-udf","environments":["shell","site-site-a.localhost","site-site-b.localhost"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-a.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-b.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+SMARTSCREEN-DEMO {"mode":"per-site","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"https://demo.smartscreen.msft.net/phishingdemo.html","ferrum_error_panel":"This page could not be loaded The page could not be loaded. https://demo.smartscreen.msft.net/phishingdemo.html Try again WebView2 error status 0","warning_seen":true}
+SMARTSCREEN-DEMO {"mode":"per-site-udf","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"about:blank","ferrum_error_panel":"This page could not be loaded The page could not be loaded. https://demo.smartscreen.msft.net/phishingdemo.html Try again WebView2 error status 0","warning_seen":true}
+  ✓  6 smartscreen.spec.ts:42:3 › mode per-site: no browser process has SmartScreen switched off (4.3s)
+SMARTSCREEN-ARGS {"mode":"per-site-udf","environments":["shell","site-site-a.localhost","site-site-b.localhost"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-a.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-b.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+  ✓  7 smartscreen.spec.ts:42:3 › mode per-site-udf: no browser process has SmartScreen switched off (10.1s)
+SMARTSCREEN-DEMO {"mode":"per-site","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"https://demo.smartscreen.msft.net/phishingdemo.html","ferrum_error_panel":"This page could not be loaded The page could not be loaded. https://demo.smartscreen.msft.net/phishingdemo.html Try again WebView2 error status 0","warning_seen":true}
+  ✓  8 smartscreen.spec.ts:75:3 › mode per-site: Microsoft's SmartScreen demo phishing page, as observed (11.0s)
+SMARTSCREEN-DEMO {"mode":"per-site-udf","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"about:blank","ferrum_error_panel":"This page could not be loaded The page could not be loaded. https://demo.smartscreen.msft.net/phishingdemo.html Try again WebView2 error status 0","warning_seen":true}
+  ✓  9 smartscreen.spec.ts:75:3 › mode per-site-udf: Microsoft's SmartScreen demo phishing page, as observed (5.5s)
+  9 passed (1.6m)
+  PASS   Live: no browser engine runs with SmartScreen switched off (shared, per-site, per-site-udf) (108 s)
+         5 browser engines in 3 modes, none with SmartScreen switched off (shell's engine, and each site's under per-site-udf)
+  PASS   Live: Microsoft's demo phishing page, as observed
+         per-site: tab title 'Reported Unsafe Site: Navigation Blocked'; Ferrum's panel shown on top: 'This page could not be loaded The page could not be loaded. https://demo.smartscreen.msft.net/phishingdemo.html Try again WebView2 error status 0'
+                  per-site-udf: tab title 'Reported Unsafe Site: Navigation Blocked'; Ferrum's panel shown on top: 'This page could not be loaded The page could not be loaded. https://demo.smartscreen.msft.net/phishingdemo.html Try again WebView2 error status 0'
+  PASS   Live: a downloaded program waits in WebView2's own pop-up for SmartScreen's question
+         safe-downloads passed: program downloads held with the pop-up opened and the warning shown; nothing opened
+------------------------------------------------------------------------
+RESULT: PASS - p4.18 (6 PASS; 111 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.18 check passed".

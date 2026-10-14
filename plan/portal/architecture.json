@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, and settings for blocked sites, site permissions and clearing site data. Its self-tests run only in their own throwaway folder.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, and Microsoft's Keep/Delete pop-up for downloaded programs. Self-tests use their own throwaway folder.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:fd060a0b8da6b10ac1100ec0022d84efb38bce96fb1cdfdb30d4307e9fa895d9"
+        "content_hash": "sha256:b3dd3efcc0c2e1c59cdddb15d65df82ceb128b27720d409d281b030bdd9518b4"
       }
     },
     {
@@ -260,7 +260,7 @@
     {
       "id": "comp-webview-manager",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, notices crashes, and can start a separate browser engine for a site.",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, notices crashes, can start a separate browser engine for a site, and gives every engine the same switches with SmartScreen on.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (first working app)",
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:237cfa5a248aaaa52b5323d939603ddbeb428f306481757adefbcf1c614c6efc"
+        "content_hash": "sha256:d3a43149c80f06b60a0160a994ccb04669918155f548efe1aedcd4f1adcb11da"
       }
     },
     {

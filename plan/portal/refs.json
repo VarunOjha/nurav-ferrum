@@ -3162,7 +3162,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, and settings for blocked sites, site permissions and clearing site data. Its self-tests run only in their own throwaway folder.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, and Microsoft's Keep/Delete pop-up for downloaded programs. Self-tests use their own throwaway folder.",
       "status": "Built (first working app)",
       "related": [
         "layer-controls"
@@ -3272,7 +3272,7 @@
       "id": "comp-webview-manager",
       "kind": "component",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, notices crashes, and can start a separate browser engine for a site.",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, notices crashes, can start a separate browser engine for a site, and gives every engine the same switches with SmartScreen on.",
       "status": "Built (first working app)",
       "related": [
         "layer-engine"
@@ -5245,7 +5245,7 @@
       "id": "Q-225",
       "kind": "question",
       "title": "Question Q-225: SmartScreen switched off",
-      "summary": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on? Answer: yes, in every engine, before the Phase 4 review (task p4.18).",
+      "summary": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on? Answer: yes, in every engine, before the Phase 4 review. Done in task p4.18.",
       "status": "Answered",
       "related": [
         "phase-p4-security"
@@ -5266,7 +5266,7 @@
       "kind": "task",
       "title": "P4 task: SmartScreen back on",
       "summary": "A library default turned SmartScreen off → Ferrum sets the browser switches itself, the same for every engine, with SmartScreen on → known-bad sites and downloads get Microsoft's warning again.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -5299,6 +5299,17 @@
       "status": "Committed",
       "related": [
         "phase-p4-security"
+      ]
+    },
+    {
+      "id": "Q-226",
+      "kind": "question",
+      "title": "Question Q-226: Ferrum's panel covers SmartScreen's warning",
+      "summary": "Ferrum's \"could not be loaded\" panel covers SmartScreen's warning: what should you see when SmartScreen blocks a site? Claude recommends a clear Ferrum message naming SmartScreen.",
+      "status": "Open",
+      "related": [
+        "phase-p4-security",
+        "Q-225"
       ]
     }
   ]

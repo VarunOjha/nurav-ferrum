@@ -6,6 +6,10 @@ status: implemented
 last_verified_commit: ebc79ca
 updated: 2026-10-14
 sources:
+  - raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt
+  - raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md
+  - raw/research/smartscreen-webview2.md
+  - raw/evidence/phase-p4-security/check-p4.18.txt
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -383,3 +387,17 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   (arguments passed one by one, so paths with spaces stay whole)
   ([selftest-own-folder](../../raw/evidence/phase-p4-security/selftest-own-folder.txt): both refusals exit 2; the p4.8
   check passed with the self-test's browser data and log in its own folder).
+- p4.18, SmartScreen back on (owner answer Q-225): the shell's `WebviewBuilder` (and the IPC self-test's probe view,
+  which shares its folder) sets `additional_browser_args(SHELL_BROWSER_ARGUMENTS)`, so Tauri's environment no longer
+  gets wry's default switches that turned SmartScreen off; tab views come from that environment (adr-0029). Observed
+  ([check-p4.18](../../raw/evidence/phase-p4-security/check-p4.18.txt)): Microsoft's demo phishing page is blocked
+  (tab title "Reported Unsafe Site: Navigation Blocked"), but Ferrum's own error panel ("This page could not be
+  loaded", WebView2 error status 0) is drawn over Microsoft's warning page, so the user sees Ferrum's panel, not
+  Microsoft's explanation (owner question Q-226). Program downloads (owner answer,
+  [raw](../../raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md)): the download chooser sets `own_dialog` for a file
+  the security engine calls a program (`is_program`), so WebView2's own download pop-up shows for it and SmartScreen can
+  ask "Keep or delete?"; Ferrum's own download line still shows it with the program warning, as "running" until the
+  answer. The host logs the pop-up opening and closing ("WebView2 download pop-up"). Live spec `safe-downloads`: the two
+  program-file tests expect the download held and the pop-up opened (the test cannot click inside the pop-up); a file
+  type SmartScreen holds that Ferrum does not call a program would still wait unseen (not observed, not tested)
+  ([check-p4.18 second run](../../raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt)).

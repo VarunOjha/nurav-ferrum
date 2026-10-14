@@ -5,6 +5,7 @@ title: "Security testing plan: master prompt section 11 mapped to harmless fixtu
 status: draft
 updated: 2026-10-14
 sources:
+  - raw/evidence/phase-p4-security/check-p4.18.txt
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -141,7 +142,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 
 - **Threat:** a page writes outside the download folder, auto-downloads many files, or gets a file executed.
 - **Fixture:** a server route that returns plain text with: a normal name; a name containing `..\` path traversal; an executable-looking extension; and a page that triggers several downloads at once.
-- **Pass:** files land only inside the configured download folder with sanitised names; risky types prompt or are blocked per policy; multiple automatic downloads require permission; nothing is opened or executed automatically; each decision is logged. Whether WebView2 applies Mark-of-the-Web is recorded, not assumed (UNVERIFIED[phase-p4-security]).
+- **Pass:** files land only inside the configured download folder with sanitised names; risky types prompt or are blocked per policy; multiple automatic downloads require permission; nothing is opened or executed automatically; each decision is logged. Whether WebView2 applies Mark-of-the-Web is recorded, not assumed (UNVERIFIED[phase-p4-security]). With SmartScreen on (p4.18), a program file gets WebView2's own download pop-up, where SmartScreen asks about an unknown program; the test expects the download held and the pop-up opened; answering "Keep" is a manual check at the P4 review.
 - **Phase:** basic download management in P3; security behaviour in P4.
 
 ### SEC-08 Redirect-based policy bypass (item 8)
@@ -174,7 +175,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 
 ### SEC-12 Static configuration checks (addition)
 
-- **Pass:** no capability file has a `remote` section; the shell capability targets the shell webview label; an app ACL manifest exists; browser arguments contain no weakening flag; the test-only loopback exception and devtools are absent from release configuration.
+- **Pass:** no capability file has a `remote` section; the shell capability targets the shell webview label; an app ACL manifest exists; browser arguments contain no weakening flag (SmartScreen part built in p4.18: source scan, and the switches of every browser process observed live, [check-p4.18](../raw/evidence/phase-p4-security/check-p4.18.txt)); the test-only loopback exception and devtools are absent from release configuration.
 - **Runs in** the `security-static` CI job ([qual-ci-plan](qual-ci-plan.md)).
 - **Phase:** P2 onward.
 
@@ -246,7 +247,7 @@ Every `connects` edge with `crosses_trust_boundary: true` on a component page, i
 | E12 | comp-webview-manager → comp-webview2-runtime (cdp) | TB1 | T25 | The in-process DevTools session is used for measurement only; no secret is passed into a page; nothing is injected in normal use (p3.3) | not enforced |
 | E13 | comp-webview2-runtime → comp-webview-manager (webview2-com) | TB1 | T05, T06, T07, T15 | A handler for every event kind (navigation, frame, new window, download, permission, scheme, process failure); the engine parses addresses itself and denies what it cannot parse | SEC-08 |
 | E14 | comp-webview2-runtime → comp-app-shell (webview2-com) | TB1 | T01 | Only the shell view has a bridge; Tauri checks the browser-reported source of each message (rule R7) | SEC-03 |
-| E15 | comp-webview2-runtime → comp-tab-content (network) | TB1, TB2 | T12, T13, T14, T20, T26 | No certificate bypass; no browser flag that weakens web security or site isolation; Chromium's sandbox left as shipped | SEC-13 |
+| E15 | comp-webview2-runtime → comp-tab-content (network) | TB1, TB2 | T12, T13, T14, T20, T26 | No certificate bypass; no browser flag that weakens web security or site isolation; SmartScreen left on (p4.18); Chromium's sandbox left as shipped | SEC-13 |
 
 E09, E13 and E15 carry many threats; their "Test" column names the main test, and §7.3 names every test.
 

@@ -2,6 +2,9 @@
 // to climb out of the download folder, a program type, a right-to-left mark that hides the real extension, and a
 // Windows device name. Each file lands in the configured folder under a safe name; program files get the warning on
 // their download line; nothing is opened (the launcher is replaced by a test stand-in that only writes a line).
+// p4.18: with SmartScreen on, a program file also gets WebView2's own download pop-up, where SmartScreen asks "Keep or
+// delete?" about an unknown program; the download waits there for the user, so the tests see it held ("running"), not
+// finished. Answering "Keep" is a manual check (the test cannot click inside WebView2's pop-up).
 import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
@@ -26,15 +29,22 @@ test.beforeAll(async () => {
 test.afterAll(async () => { await f?.quit(); });
 
 const files = () => (fs.existsSync(folder) ? fs.readdirSync(folder) : []);
-/** Downloads `name` and returns the one new file name in the folder, once its line says done. */
-async function download(name: string): Promise<string> {
+/** Downloads `name` and returns the one new file name in the folder, once its line says done (or, for a program file
+ * that SmartScreen holds for the user's answer, `held`: once its line is there and still running). */
+async function download(name: string, held = false): Promise<string> {
   const before = new Set(files());
   await go(f, `${base}/download/named?name=${encodeURIComponent(name)}`);
   await expect.poll(() => files().filter((n) => !before.has(n) && !n.endsWith(".crdownload")).length, { timeout: 20_000 }).toBe(1);
   const got = files().find((n) => !before.has(n) && !n.endsWith(".crdownload"))!;
-  await expect(f.shell.locator("#download-list li", { hasText: got })).toHaveAttribute("data-state", "completed", { timeout: 20_000 });
+  await expect(f.shell.locator("#download-list li", { hasText: got })).toHaveAttribute("data-state", held ? "running" : "completed", { timeout: 20_000 });
   return got;
 }
+/** Ferrum logged that WebView2's own download pop-up opened (p4.18). */
+const popUpOpened = () => {
+  const log = path.join(data, "logs", "ferrum.jsonl");
+  return fs.existsSync(log) && fs.readFileSync(log, "utf8").split(/\r?\n/)
+    .some((l) => l.includes('"WebView2 download pop-up"') && l.includes('"open":true'));
+};
 const line = (file: string) => f.shell.locator("#download-list li", { hasText: file });
 const noLaunches = () => expect(fs.existsSync(path.join(data, "launches.txt"))).toBe(false);
 
@@ -48,9 +58,11 @@ test("a name that climbs out of the folder lands inside it, under a plain name",
 });
 
 test("a program file is saved with the warning and is not opened", async () => {
-  const got = await download("setup.exe");
+  const got = await download("setup.exe", true);
   expect(got).toBe("setup.exe");
   await expect(line(got)).toContainText(WARNING);
+  // SmartScreen's question is asked in WebView2's own pop-up, which Ferrum lets open for program files (p4.18).
+  await expect.poll(popUpOpened, { timeout: 10_000 }).toBe(true);
   await f.shell.waitForTimeout(1000);
   noLaunches();
   // Observation only (not a pass condition): whether Windows' "downloaded from the internet" mark was added.
@@ -58,7 +70,7 @@ test("a program file is saved with the warning and is not opened", async () => {
 });
 
 test("a right-to-left mark cannot hide a program's real extension", async () => {
-  const got = await download("photo‮gpj.exe");
+  const got = await download("photo‮gpj.exe", true);
   expect(got).not.toContain("‮");
   expect(got.toLowerCase().endsWith(".exe")).toBe(true);
   await expect(line(got)).toContainText(WARNING);

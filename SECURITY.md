@@ -68,6 +68,8 @@ Ferrum makes no claim about these:
 - Renderer sandbox escapes, an administrator or elevated attacker, and a compromised WebView2 runtime.
 - Benchmark tools (baseline app, harness, energy sampler, measurement scripts) are not hardened against the sites they
   load.
+- SmartScreen when Windows switches it off, or when someone who can start programs as you sets
+  `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` to switch it off (the same limit as the debugging port below).
 
 P4 (milestone M3, in progress) builds the controls marked "Planned" in the full threat model and their tests; until a
 test passes, this file does not call a protection enforced.
@@ -135,6 +137,33 @@ Checked by the P3 task scripts (evidence: [wiki/raw/evidence/phase-p3-tabs-sessi
 - **Pop-ups**: at most one new tab per tab per second; WebView2's "user initiated" flag is not trusted (it was true
   for a script-only pop-up). A real pop-up policy is P4.
 - **Debug-only test commands** (`test_stats`, `test_focus`, `test_crash`) refuse in release builds.
+
+## SmartScreen (Microsoft Defender SmartScreen) is on
+
+Ferrum leaves Microsoft Defender SmartScreen on in every browser engine it starts (P4 task p4.18, owner answer Q-225).
+Before p4.18 it was off: the library under Tauri switches it off by default, and Ferrum now sets the browser switches
+itself without that part. SmartScreen warns about sites and downloads that Microsoft lists as phishing or malware.
+
+**What it sends to Microsoft** (Microsoft's own description, collected in
+[the SmartScreen research note](wiki/raw/research/smartscreen-webview2.md)):
+
+- for a site on the list of very popular sites kept on your PC: nothing;
+- for any other site: the address, some information about the site, an identifier unique to your device and your
+  general location;
+- when a download finishes: the file's hash, its name, where it came from and the device identifier.
+
+Requests are encrypted (HTTPS). Microsoft says it uses the data only for its security services. Microsoft asks every
+app that keeps SmartScreen on to tell its users this; this section is that notice. Windows can switch SmartScreen off
+for all WebView2 apps ("SmartScreen for Microsoft Edge" in Windows Security); Ferrum then has no SmartScreen either.
+
+Checked: the browser engines of all three isolation modes run without the SmartScreen-off switch, and Microsoft's
+demo phishing page is blocked (its tab is titled "Reported Unsafe Site: Navigation Blocked")
+([check-p4.18](wiki/raw/evidence/phase-p4-security/check-p4.18.txt)). Known gap: Ferrum's own "This page could not be
+loaded" panel is shown on top of Microsoft's warning page, so you see Ferrum's panel, not Microsoft's explanation.
+
+For a downloaded program (for example a `.exe`), Ferrum lets WebView2's own download pop-up show, because SmartScreen
+asks there whether to keep an unknown or dangerous program; until you answer, the download waits (Ferrum's download
+list shows it as running, with its program warning).
 
 ## Debug port (benchmarks and debugging only)
 

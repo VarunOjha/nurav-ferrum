@@ -6,6 +6,10 @@ status: implemented
 last_verified_commit: ebc79ca
 updated: 2026-10-14
 sources:
+  - raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt
+  - raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md
+  - raw/research/smartscreen-webview2.md
+  - raw/evidence/phase-p4-security/check-p4.18.txt
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -210,8 +214,8 @@ of it:
   site's own folder (`CreateCoreWebView2EnvironmentWithOptions`), once per key, and hands it to every caller (callers
   that ask while it is being made wait for the same one); `site_environment_ready`, `site_environments` and
   `close_all_views` (closes every tab view and forgets the site environments; the app calls it when Ferrum is asked to
-  exit). Options are copied from Tauri's environment (COM-7): `SHELL_BROWSER_ARGUMENTS` (wry 0.57's default, which
-  Ferrum never changed: it turns SmartScreen off and allows autoplay; owner question Q-225), the user's interface
+  exit). Options are copied from Tauri's environment (COM-7): `SHELL_BROWSER_ARGUMENTS` (Ferrum's own switches since p4.18,
+  see below), the user's interface
   language, no extensions, the default scroll bars. `Environment` names the environment type for the app; `Error`
   gained `NoEnvironment`. Observed in the p4.15 live test ([check-p4.15](../../raw/evidence/phase-p4-security/check-p4.15.txt),
   [isolation-modes](../../raw/evidence/phase-p4-security/isolation-modes.md)): with two sites open, three environments (the shell's and one per
@@ -221,3 +225,20 @@ of it:
   request fixed it (the process then ended in about 0.1 s in that run).
 
 Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).
+- p4.18, SmartScreen back on (owner answer Q-225): `SHELL_BROWSER_ARGUMENTS` is now Ferrum's own string,
+  `--disable-features=msWebOOUI,msPdfOOUI --autoplay-policy=no-user-gesture-required` (wry 0.57's default without
+  `msSmartScreenProtection`; the two Edge-menu switches and autoplay kept). The app passes it to Tauri for the shell's
+  environment (and the IPC self-test's view, same folder), and `site_environment` uses it for every site environment,
+  so all environments stay identical (COM-7). Unit test `browser_arguments_keep_smartscreen_on`. Observed live
+  ([check-p4.18](../../raw/evidence/phase-p4-security/check-p4.18.txt)): in all three isolation modes no browser process
+  has `msSmartScreenProtection` on its command line; Microsoft's demo phishing page is blocked (tab title "Reported
+  Unsafe Site: Navigation Blocked"). What SmartScreen sends: [research note](../../raw/research/smartscreen-webview2.md).
+  Downloads changed with it (owner answer, [raw](../../raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md)): with
+  SmartScreen on, a program download from the test server stayed in progress for ever (watched 120 s; the partial file
+  is removed when Ferrum closes), most likely because SmartScreen waits for a "Keep or delete?" answer in WebView2's own
+  download pop-up, which `Handled` hid. `DownloadFilter` now returns a `DownloadChoice { path, own_dialog }`; with
+  `own_dialog` the pop-up is not hidden (`SetHandled(false)`). New tab event `DownloadDialog { open }` from
+  `IsDefaultDownloadDialogOpenChanged` (ICoreWebView2_9; token removed in `close`). Observed: the pop-up opens about
+  0.4 s after a program download starts and the download waits there; whether "Keep" then completes it is a manual
+  check ([check-p4.18 second run](../../raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt)). No WebView2 function was found that lets the app answer
+  SmartScreen's question itself.

@@ -28,10 +28,11 @@ use webview2_com::{
     CreateCoreWebView2EnvironmentCompletedHandler, DocumentTitleChangedEventHandler,
     DownloadStartingEventHandler, FaviconChangedEventHandler, FocusChangedEventHandler,
     GetFaviconCompletedHandler, GetProcessExtendedInfosCompletedHandler,
-    HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
-    NavigationCompletedEventHandler, NavigationStartingEventHandler,
-    NewWindowRequestedEventHandler, PermissionRequestedEventHandler, ProcessFailedEventHandler,
-    SourceChangedEventHandler, StateChangedEventHandler, take_pwstr,
+    HistoryChangedEventHandler, IsDefaultDownloadDialogOpenChangedEventHandler,
+    LaunchingExternalUriSchemeEventHandler, NavigationCompletedEventHandler,
+    NavigationStartingEventHandler, NewWindowRequestedEventHandler,
+    PermissionRequestedEventHandler, ProcessFailedEventHandler, SourceChangedEventHandler,
+    StateChangedEventHandler, take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows::Win32::System::Com::IStream;
@@ -50,9 +51,18 @@ pub type KeyFilter = Rc<dyn Fn(KeyDown) -> bool>;
 /// Decides a permission request (true: allow) (UI thread).
 pub type PermissionFilter = Rc<dyn Fn(&PermissionAsk) -> bool>;
 
-/// Chooses where a download is saved: given its address and WebView2's suggested path, the full path to save to, or
-/// `None` to refuse the download (UI thread).
-pub type DownloadFilter = Rc<dyn Fn(&str, &str) -> Option<String>>;
+/// Chooses where a download is saved: given its address and WebView2's suggested path, the file to save to, or `None`
+/// to refuse the download (UI thread).
+pub type DownloadFilter = Rc<dyn Fn(&str, &str) -> Option<DownloadChoice>>;
+
+/// Where a download goes, and whether WebView2's own download pop-up may show for it.
+pub struct DownloadChoice {
+    /// The full path to save to.
+    pub path: String,
+    /// Let WebView2's own download pop-up show (p4.18, owner answer: program files). SmartScreen holds an unknown or
+    /// dangerous program until the user answers "Keep" or "Delete" there; with the pop-up hidden it waits for ever.
+    pub own_dialog: bool,
+}
 
 /// What a tab view reports to, and asks of, the app.
 pub struct Handlers {
@@ -89,6 +99,7 @@ enum Ev {
     LaunchExternal,
     Accelerator,
     Download,
+    DownloadDialog,
     Favicon,
     ProcessFailed,
 }
@@ -494,6 +505,28 @@ impl ContentView {
             hr(unsafe { core4.add_DownloadStarting(&h, &mut t) })?;
             self.tokens.push((Ev::Download, t));
         }
+        // WebView2's own download pop-up, shown for program files (p4.18): its opening and closing are reported, so
+        // the app can log them (SmartScreen's "Keep or delete?" question is asked there).
+        if let Ok(core9) = core.cast::<ICoreWebView2_9>() {
+            let s = sink.clone();
+            let h = IsDefaultDownloadDialogOpenChangedEventHandler::create(Box::new(
+                move |sender, _args| {
+                    let mut open = BOOL::default();
+                    if let Some(c9) = sender.and_then(|c| c.cast::<ICoreWebView2_9>().ok()) {
+                        // SAFETY: COM-1; the out-pointer is a local.
+                        let _ = unsafe { c9.IsDefaultDownloadDialogOpen(&mut open) };
+                    }
+                    s(TabEvent::DownloadDialog {
+                        open: open.as_bool(),
+                    });
+                    Ok(())
+                },
+            ));
+            let mut t = 0i64;
+            // SAFETY: COM-1, COM-4: token kept for close().
+            hr(unsafe { core9.add_IsDefaultDownloadDialogOpenChanged(&h, &mut t) })?;
+            self.tokens.push((Ev::DownloadDialog, t));
+        }
 
         // Site icons (p3.16): when the page's icon changes, WebView2 hands over the icon it already loaded, as PNG (no
         // extra request). The icon arrives in a completion callback (COM-2); an empty one means the page has none.
@@ -653,6 +686,10 @@ impl ContentView {
                     Ev::Accelerator => self.controller.remove_AcceleratorKeyPressed(*t),
                     Ev::Download => match self.core.cast::<ICoreWebView2_4>() {
                         Ok(c4) => c4.remove_DownloadStarting(*t),
+                        Err(e) => Err(e),
+                    },
+                    Ev::DownloadDialog => match self.core.cast::<ICoreWebView2_9>() {
+                        Ok(c9) => c9.remove_IsDefaultDownloadDialogOpenChanged(*t),
                         Err(e) => Err(e),
                     },
                     Ev::Favicon => match self.core.cast::<ICoreWebView2_15>() {
@@ -937,15 +974,16 @@ fn start_download(
         let _ = args.ResultFilePath(&mut suggested);
         (take_pwstr(uri), take_pwstr(suggested))
     };
-    let Some(path) = choose(&uri, &suggested) else {
+    let Some(DownloadChoice { path, own_dialog }) = choose(&uri, &suggested) else {
         // SAFETY: COM-1; cancelling inside the callback is the documented use.
         let _ = unsafe { args.SetCancel(true) };
         return;
     };
-    // SAFETY: COM-1; the HSTRING outlives the calls. Handled = true: WebView2 shows no download pop-up of its own.
+    // SAFETY: COM-1; the HSTRING outlives the calls. Handled = true: WebView2 shows no download pop-up of its own,
+    // except where the app allows it (program files, so SmartScreen can ask, p4.18).
     unsafe {
         let _ = args.SetResultFilePath(&HSTRING::from(path.as_str()));
-        let _ = args.SetHandled(true);
+        let _ = args.SetHandled(!own_dialog);
     }
     let id = NEXT_DOWNLOAD.with(|n| {
         let v = n.get() + 1;
@@ -1098,12 +1136,13 @@ pub fn save_environment(env: &ICoreWebView2Environment) {
     ENVIRONMENT.with(|e| *e.borrow_mut() = Some(env.clone()));
 }
 
-/// The browser arguments of Tauri's environment, which Ferrum does not set (so wry 0.57's default applies, read in its
-/// source `src/webview2/mod.rs`, `create_environment`): wry turns off the "mini menu", the PDF menu and SmartScreen
-/// (`msSmartScreenProtection`), and adds the autoplay switch because Tauri leaves wry's `autoplay` on. A site
-/// environment (p4.15) gets the same string so the three isolation modes differ only in how sites are kept apart.
-/// Whether SmartScreen should stay off is the owner's question (Q-225), for every environment together.
-pub const SHELL_BROWSER_ARGUMENTS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --autoplay-policy=no-user-gesture-required";
+/// The browser arguments of every Ferrum WebView2 environment: the shell's (set through Tauri's
+/// `additional_browser_args`, which replaces wry 0.57's default string), the IPC self-test probe's (same folder, so same
+/// options) and each site environment (p4.15). It is wry's default without `msSmartScreenProtection`, so SmartScreen
+/// stays on (owner answer Q-225, p4.18; what it checks and sends: `raw/research/smartscreen-webview2.md`). The two
+/// Edge-menu switches (`msWebOOUI`, `msPdfOOUI`) and the autoplay switch (Tauri leaves wry's `autoplay` on) are kept.
+pub const SHELL_BROWSER_ARGUMENTS: &str =
+    "--disable-features=msWebOOUI,msPdfOOUI --autoplay-policy=no-user-gesture-required";
 
 /// A WebView2 environment (Tauri's, or a site's own, p4.15), named for callers outside this module.
 pub type Environment = ICoreWebView2Environment;
@@ -1283,4 +1322,28 @@ thread_local! {
     static DOWNLOADS: RefCell<HashMap<u64, (ICoreWebView2DownloadOperation, i64, i64)>> = RefCell::new(HashMap::new());
     /// The last download id handed out.
     static NEXT_DOWNLOAD: Cell<u64> = const { Cell::new(0) };
+}
+
+#[cfg(test)]
+mod tests {
+    use super::SHELL_BROWSER_ARGUMENTS;
+
+    /// p4.18 (owner answer Q-225): SmartScreen is not switched off; the Edge-menu and autoplay switches stay.
+    #[test]
+    fn browser_arguments_keep_smartscreen_on() {
+        assert!(!SHELL_BROWSER_ARGUMENTS.contains("msSmartScreenProtection"));
+        let disabled = SHELL_BROWSER_ARGUMENTS
+            .split_whitespace()
+            .find_map(|a| a.strip_prefix("--disable-features="))
+            .expect("one --disable-features switch");
+        assert_eq!(
+            disabled.split(',').collect::<Vec<_>>(),
+            ["msWebOOUI", "msPdfOOUI"]
+        );
+        assert!(
+            SHELL_BROWSER_ARGUMENTS
+                .split_whitespace()
+                .any(|a| a == "--autoplay-policy=no-user-gesture-required")
+        );
+    }
 }

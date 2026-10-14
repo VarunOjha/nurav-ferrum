@@ -133,6 +133,11 @@ pub enum TabEvent {
         /// Bytes received.
         received: i64,
     },
+    /// WebView2's own download pop-up opened or closed (shown for program files, p4.18).
+    DownloadDialog {
+        /// It is open now.
+        open: bool,
+    },
 }
 
 /// Which WebView2 process failed (p4.10; WebView2's `COREWEBVIEW2_PROCESS_FAILED_KIND`).
