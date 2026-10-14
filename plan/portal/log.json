@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:6e559acdf68d6dc3e75dd5bdb2a20287fd851e1ffd25240e425b31c9602f8d30"
+    "content_hash": "sha256:b0417160a774ff86afb87facd8820d6f068f7f9b3a57251e99ea30f15a1c9622"
   },
   "entries": [
     {
@@ -4252,6 +4252,35 @@
       "category": "Built",
       "tags": [
         "privacy",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-9-reapproved",
+      "date": "2026-10-13",
+      "time": "20:49",
+      "title": "You re-approved two part pages after the audit-log task",
+      "done": "You re-approved the pages for the security engine and the browser controls.",
+      "next": "Claude builds recovery from crashed pages: a crashed tab shows a clear state and can be reloaded, and the window never goes down with it.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | two component pages re-approved after p4.9"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
         "testing"
       ]
     }
