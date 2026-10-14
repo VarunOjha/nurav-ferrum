@@ -2566,3 +2566,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [handoff-2026-10-14-s06, status-live]
 - result: Written early as a checkpoint (status partial) after last night's shutdown. P4 at 11 of 18; nothing in flight; all approvals current; quick lint 0 errors.
 - next: p4.16
+
+## [2026-10-14] plan | p4.16 in flight; owner confirms SmartScreen
+
+- session: s06
+- time: 14:03
+- pages: [status-live, phase-p4-security]
+- result: The owner asked what SmartScreen gives and confirmed "Let's add it, no worries, continue" (same decision as the recorded Q-225 answer; p4.18 already planned). In-flight record written for p4.16 before any task file is touched; the ablation is narrower than "every decision returns allow" (Ferrum's own origin, forbidden schemes, links to other apps and permission refusals stay on), to be reported to the owner with the task.

@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 11 of 18 tasks done. You re-approved the Phase 4 page with the new SmartScreen task. Claude continues with the benchmark-only switch.",
+  "summary": "Phase 4 (security) is in progress: 11 of 18 tasks done. Claude is building a benchmark-only version without the site rules, which the normal app can never contain.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:cdf60e0c49e68a7d173ece637bebe5b2f58892b3c088919286703c136d14589c"
+    "content_hash": "sha256:a79c4f274c2146901112684b41bceb46a5a38182735d09e03be9169758e261ce"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -46,7 +46,7 @@
         "state": "All up to date"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: a benchmark-only switch that turns the safety rules off, proven missing from the normal app.",
+    "why": "Nothing to run; Claude builds the benchmark-only version without the site rules and proves the normal app does not contain it.",
     "script": null,
     "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },

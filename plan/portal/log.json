@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:635960514c788fa564410b120908df33280fe8e901472b7bbdda971c1a03e2a6"
+    "content_hash": "sha256:cf19f8f87b9d95c9f65622d2cde7f009d12f0954da90f60553c0f6f2a912f03a"
   },
   "entries": [
     {
@@ -4524,6 +4524,31 @@
       "tags": [
         "sessions",
         "wiki"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-16-start",
+      "date": "2026-10-14",
+      "time": "14:03",
+      "title": "You confirmed SmartScreen; the benchmark-only switch starts",
+      "done": "You confirmed turning SmartScreen back on (already planned as its own task). Claude wrote down what the next task will change before starting it.",
+      "next": "Claude builds the benchmark-only version without the site rules. It keeps the protections that matter even in tests: Ferrum's own pages, local files and links to other apps.",
+      "decisions": [
+        {
+          "what": "SmartScreen goes back on (confirmed)",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] plan | p4.16 in flight; owner confirms SmartScreen"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Planned",
+      "tags": [
+        "privacy",
+        "benchmarks"
       ]
     }
   ]

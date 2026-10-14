@@ -362,7 +362,10 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.15 committed in e565aba; three component pages re-approved; p4.18 added and the phase page re-approved; p4.16 next)
+- task: p4.16 (session s06)
+- intent: Cargo feature `bench-nosecurity` on ferrum-security (forwarded by ferrum-desktop): navigation evaluation allows every web address (http, https, about, data, blob) with rule `bench-nosecurity`, skipping the blocklist, allowlist, HTTP policy and address checks. Kept on even then (narrower than "every decision", reported to the owner): Ferrum's own origin, forbidden schemes (file, javascript, browser pages), links to other apps (still confirmed), permission refusals, download cleaning. The ablation binary refuses to start without `--benchmark-mode` and says it is a benchmark build. Unit test under the feature; a static check builds the normal release binary and proves the feature is off (cargo tree) and its marker strings absent (binary scan), with an ablation build as positive control; evidence raw/evidence/phase-p4-security/nosecurity-absent.txt; CI step.
+- paths: crates/security/{Cargo.toml,src/policy.rs,tests/bench_nosecurity.rs}; apps/desktop/src-tauri/{Cargo.toml,src/main.rs}; .github/workflows/ci.yml; scripts/verify/p4.16-no-security-switch.ps1; wiki/architecture/components/{comp-security-engine,comp-app-shell}.md; wiki/architecture/ov-arch-configuration.md; wiki/research/experiments/exp-security-overhead.md; wiki/raw/evidence/phase-p4-security/; plan/portal/{architecture,research,phases/phase-p4-security,roadmap,refs}.json
+- rollback: git checkout -- <paths>; delete the new test and evidence files
 
 ## Blockers
 
@@ -399,7 +402,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 11 of 18 tasks done (p4.18, SmartScreen back on, added after your answer); phase page re-approved; p4.16 next |
+| Phase 4 (security) | 11 of 18 tasks done; p4.16 (benchmark-only no-security build) in progress |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.
