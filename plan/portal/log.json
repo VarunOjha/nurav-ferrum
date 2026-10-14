@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:a7f1f2a6acdcb395bcf518f041146801eadf9c9002ef06bb16316f6d5cebc6ae"
+    "content_hash": "sha256:e3991dd1740feaf9476082e7486cb451020ccba19749c472b8a1ca07b6cbf7e3"
   },
   "entries": [
     {
@@ -4119,6 +4119,26 @@
       "tags": [
         "isolation",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-7-status-fix",
+      "date": "2026-10-13",
+      "time": "19:54",
+      "title": "Status file caught up after a missed step",
+      "done": "Claude had not written the usual work-in-progress note before task 7, so the status file was not updated with it. The work was already committed and checked; the status file now shows task 7 done and task 8 next.",
+      "next": "You re-approve three part pages; then task 8.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] fix | p4.7 had no write-ahead record; STATUS caught up"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Fixed",
+      "tags": [
+        "sessions",
+        "phases"
       ]
     }
   ]

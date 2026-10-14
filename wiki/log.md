@@ -2398,3 +2398,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 19:53
 - pages: [comp-webview-manager, comp-app-shell, comp-core]
 - result: The p4.7 page updates staled three components in the P4 dependency set; p4.8 waits for the owner's re-approval (SCHEMA §10.4).
+
+## [2026-10-13] fix | p4.7 had no write-ahead record; STATUS caught up
+
+- session: s04
+- time: 19:54
+- pages: [status-live]
+- result: Claude started p4.7 without filling the STATUS In-flight record (CLAUDE.md §2 write-ahead), and the checkpoint commit 39475f8 then left STATUS unchanged. The work was committed and verified (f525169), so nothing was lost; STATUS now records p4.7 done, p4.8 next and the three stale approvals. Write-ahead is done before every following task.
