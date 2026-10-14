@@ -5180,6 +5180,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "17af021",
+      "kind": "commit",
+      "title": "Commit 17af021",
+      "summary": "Websites get no permission (camera, location and more) unless the site is granted it in settings (task p4.5).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

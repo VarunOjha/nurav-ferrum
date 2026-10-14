@@ -2324,3 +2324,27 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 18:51
 - pages: [handoff-2026-10-13-s03, status-live]
 - result: Handoff written (context large). quick_lint 0 errors; lint:wiki: only the known ff7292e MANIFEST-order finding (owner: fix in the Q-221 rewrite); portal-sync clean. Next: p4.5 permission prompts.
+
+## [2026-10-13] resume | s04 starts: owner says "Continue with phase 4"
+
+- session: s04
+- time: 18:55
+- pages: [status-live, phase-p4-security]
+- result: Same chat as s03 after its handoff. Tree clean at 2c78cd6, no stash, approvals_check shows nothing STALE or PENDING, no open question blocks P4; entry conditions still hold. Next: p4.5 permission controls.
+
+## [2026-10-13] code | p4.5 permissions refused unless granted per site
+
+- session: s04
+- time: 19:11
+- pages: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell, ov-arch-configuration, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.5.txt, raw/evidence/phase-p4-security/check-p4.2.20261013-1904.txt, raw/evidence/phase-p4-security/policy-coverage.20261013-1904.txt]
+- result: Every permission kind is refused unless the page's site has a grant in [[sites]] permissions; PermissionRequested answered by Ferrum with SavesInProfile(false); every request logged, refusals noted on the toolbar; settings screen keeps grants. p4.5 check PASS 4/4 (live spec 4 passed: refusals seen by page script, also in a frame; grant honoured and revocable); engine coverage 1018/1018 regions; full smoke 91 passed plus the settings spec fixed for the new row shape (2 of 2). Stales approval of comp-security-engine, comp-webview-manager, comp-core and comp-app-shell.
+- stales: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell]
+- commit: 17af021
+
+## [2026-10-13] gate | four component approvals stale after p4.5
+
+- session: s04
+- time: 19:11
+- pages: [comp-security-engine, comp-webview-manager, comp-core, comp-app-shell]
+- result: The p4.5 page updates staled four components in the P4 dependency set; p4.6 waits for the owner's re-approval (SCHEMA §10.4).

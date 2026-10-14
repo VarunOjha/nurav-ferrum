@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:1d51eb4274c07a878af371070c03f3d67f43aa2b4cf47ef62cae28b93b3c429b"
+    "content_hash": "sha256:8daa191c47559176e9516c2129e56b5c47780d219da4b1c4bab858634bb573d2"
   },
   "entries": [
     {
@@ -3931,6 +3931,64 @@
       "tags": [
         "sessions",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-resume",
+      "date": "2026-10-13",
+      "time": "18:55",
+      "title": "New session: Phase 4 continues",
+      "done": "You said to continue with Phase 4. Claude checked that nothing was left half-done and all approvals were current.",
+      "next": "Claude builds permission prompts.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] resume | s04 starts: owner says \"Continue with phase 4\""
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "sessions",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-5",
+      "date": "2026-10-13",
+      "time": "19:11",
+      "title": "Websites get no permission unless you allow the site",
+      "done": "A website asking for the camera, microphone, location, notifications, clipboard or anything else now gets a refusal, unless you allowed that kind for that site in Settings. WebView2 remembers no answer, so removing a grant works at once. Live test: the page itself saw the refusals, also inside a frame; a grant worked and could be removed.",
+      "next": "You re-approve four part pages that changed with the code; then Claude builds safe downloads.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Tab & view manager page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Core library page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "17af021",
+      "covers": [
+        "## [2026-10-13] code | p4.5 permissions refused unless granted per site",
+        "## [2026-10-13] gate | four component approvals stale after p4.5"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "privacy",
+        "testing"
       ]
     }
   ]
