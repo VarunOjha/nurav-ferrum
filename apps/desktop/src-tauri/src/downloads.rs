@@ -68,10 +68,12 @@ pub fn chooser(app: &AppHandle) -> ferrum_webview_manager::webview2::DownloadFil
     std::rc::Rc::new(move |uri: &str, suggested: &str| {
         let Some(dir) = folder(&h) else {
             tracing::warn!(target: "ferrum::downloads", site = %site(uri), "download refused: no download folder");
+            crate::audit::record(0, "download", uri, "no-download-folder");
             return None;
         };
         if let Err(e) = std::fs::create_dir_all(&dir) {
             tracing::warn!(target: "ferrum::downloads", error = %e, "download refused: folder not usable");
+            crate::audit::record(0, "download", uri, "download-folder-not-usable");
             return None;
         }
         let reserved = h.state::<Reserved>();

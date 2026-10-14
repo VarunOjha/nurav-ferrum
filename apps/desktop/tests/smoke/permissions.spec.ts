@@ -4,17 +4,22 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
-import { launch, go, call, type Ferrum } from "./ferrum.ts";
+import { launch, go, call, audited, type Ferrum } from "./ferrum.ts";
 import { base } from "./paths.ts";
 
 type LogLine = { target: string; fields: Record<string, unknown> };
-const permLog = (f: Ferrum, message: string, kind: string) => {
+const permAppLog = (f: Ferrum, message: string, kind: string) => {
   const p = path.join(f.data, "logs", "ferrum.jsonl");
   if (!fs.existsSync(p)) return 0;
   return fs.readFileSync(p, "utf8").split(/\r?\n/).filter(Boolean)
     .map((l) => { try { return JSON.parse(l) as LogLine; } catch { return null; } })
     .filter((l) => l?.target === "ferrum::policy" && l.fields.message === message && l.fields.kind === kind).length;
 };
+// p4.9: a refusal counts only when the security audit log (schema-checked) has it too.
+const permLog = (f: Ferrum, message: string, kind: string) =>
+  message === "permission denied"
+    ? Math.min(permAppLog(f, message, kind), audited(f, { action: `permission-${kind}` }))
+    : permAppLog(f, message, kind);
 const href = (f: Ferrum) => f.content.evaluate(() => location.href).catch(() => "(loading)");
 const openPerm = async (f: Ferrum) => {
   await go(f, `${base}/perm`);

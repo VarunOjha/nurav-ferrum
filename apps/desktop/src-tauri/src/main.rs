@@ -6,6 +6,7 @@
 #![forbid(unsafe_code)]
 #![windows_subsystem = "windows"]
 
+mod audit;
 mod backup;
 mod bookmarks;
 mod content;
@@ -257,6 +258,12 @@ fn main() {
                 None => app.path().app_log_dir().ok(),
             };
             let log_file = log_dir.as_deref().map(logging::init);
+            // The security audit log (p4.9) sits next to the app log.
+            if let Some(dir) = log_dir.as_deref()
+                && let Err(e) = audit::init(dir)
+            {
+                eprintln!("[ferrum] audit log not started: {e}");
+            }
             tracing::info!(
                 target: "ferrum::app",
                 version = env!("CARGO_PKG_VERSION"),

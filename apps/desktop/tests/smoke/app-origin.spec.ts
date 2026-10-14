@@ -5,17 +5,19 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
-import { launch, go, call, tabList, type Ferrum } from "./ferrum.ts";
+import { launch, go, call, tabList, audited, type Ferrum } from "./ferrum.ts";
 import { base } from "./paths.ts";
 
 type LogLine = { target: string; fields: Record<string, unknown> };
-const appOriginDenials = (f: Ferrum) => {
+const appOriginLog = (f: Ferrum) => {
   const p = path.join(f.data, "logs", "ferrum.jsonl");
   if (!fs.existsSync(p)) return 0;
   return fs.readFileSync(p, "utf8").split(/\r?\n/).filter(Boolean)
     .map((l) => { try { return JSON.parse(l) as LogLine; } catch { return null; } })
     .filter((l) => l?.target === "ferrum::policy" && l.fields.message === "navigation denied" && l.fields.rule === "app-origin").length;
 };
+// p4.9: a refusal counts only when the security audit log (schema-checked) has it too.
+const appOriginDenials = (f: Ferrum) => Math.min(appOriginLog(f), audited(f, { rule: "app-origin" }));
 const href = (f: Ferrum) => f.content.evaluate(() => location.href).catch(() => "(loading)");
 const open = async (f: Ferrum, sel: string) => {
   await go(f, `${base}/links/app-origin`);
@@ -73,5 +75,6 @@ test("the shell itself cannot be led to a website (threat T03)", async () => {
   expect(f.shell.url()).toBe(shellUrl);
   const p = path.join(f.data, "logs", "ferrum.jsonl");
   expect(fs.readFileSync(p, "utf8")).toContain("shell-app-only");
+  expect(audited(f, { tab: 0, action: "shell", rule: "shell-app-only" })).toBeGreaterThan(0);
   expect(await call<string>(f, "app_ping")).toBeTruthy(); // the shell still works
 });

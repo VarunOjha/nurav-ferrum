@@ -5,7 +5,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
-import { launch, go, call, type Ferrum } from "./ferrum.ts";
+import { launch, go, call, auditRecords, type Ferrum } from "./ferrum.ts";
 import { base } from "./paths.ts";
 
 const href = (f: Ferrum) => f.content.evaluate(() => location.href).catch(() => "(loading)");
@@ -26,7 +26,9 @@ const deniedRules = (f: Ferrum): string[] => {
   return fs.readFileSync(p, "utf8").split(/\r?\n/).filter(Boolean)
     .map((l) => { try { return JSON.parse(l) as LogLine; } catch { return null; } })
     .filter((l): l is LogLine => l !== null && l.target === "ferrum::policy" && l.fields.message === "navigation denied")
-    .map((l) => String(l.fields.rule));
+    .map((l) => String(l.fields.rule))
+    // p4.9: only refusals that are also in the security audit log (schema-checked) count.
+    .filter((rule) => auditRecords(f).some((r) => r.rule === rule));
 };
 const bar = (f: Ferrum) => f.shell.locator("#external-bar");
 const status = (f: Ferrum) => f.shell.locator("#status");

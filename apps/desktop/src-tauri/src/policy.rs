@@ -70,6 +70,7 @@ pub fn decide_permission(config: &Config, tab: u64, ask: &PermissionAsk) -> Perm
         tracing::info!(target: "ferrum::policy", tab, kind = k, site = %site(&ask.uri), rule = d.rule.as_str(), "permission granted");
     } else {
         tracing::info!(target: "ferrum::policy", tab, kind = k, site = %site(&ask.uri), rule = d.rule.as_str(), "permission denied");
+        crate::audit::record(tab, &format!("permission-{k}"), &ask.uri, d.rule.as_str());
     }
     d
 }
@@ -107,6 +108,7 @@ pub fn shell_may_load(url: &tauri::Url) -> bool {
     );
     if !ok {
         tracing::warn!(target: "ferrum::policy", context = "shell", site = %site(url.as_str()), rule = "shell-app-only", "navigation denied");
+        crate::audit::record(0, "shell", url.as_str(), "shell-app-only");
     }
     ok
 }
@@ -129,10 +131,13 @@ pub fn decide(
     );
     let ctx = context_name(context);
     match &d.verdict {
-        Verdict::Deny => tracing::info!(
-            target: "ferrum::policy", tab, context = ctx, site = %site(uri), rule = d.rule.as_str(),
-            matched = d.matched.as_deref().unwrap_or(""), "navigation denied"
-        ),
+        Verdict::Deny => {
+            tracing::info!(
+                target: "ferrum::policy", tab, context = ctx, site = %site(uri), rule = d.rule.as_str(),
+                matched = d.matched.as_deref().unwrap_or(""), "navigation denied"
+            );
+            crate::audit::record(tab, ctx, uri, d.rule.as_str());
+        }
         Verdict::Upgrade(_) => tracing::info!(
             target: "ferrum::policy", tab, context = ctx, site = %site(uri), rule = d.rule.as_str(),
             "navigation upgraded to https"

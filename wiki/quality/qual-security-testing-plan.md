@@ -270,7 +270,7 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | T17 Another program on the PC drives Ferrum through a debugging port | ADV3 | E05, E06 | Ferrum never sets the port; release builds have no debug arguments | SEC-11 | Partly (P2: never set by Ferrum; benchmark runs open it by design) |
 | T18 Another program reads Ferrum's data folder (history, sessions, logs) | ADV3 | E10 | Windows account protection only; backup files are encrypted (p3.21) | not enforced | Not enforced |
 | T19 A dependency is compromised | ADV4 | none | Known-advisory checks (`cargo deny`, `npm audit`), lockfiles | not enforced | Not enforced (detection of known advisories only) |
-| T20 A security or network log stores page content or secrets | ADV1 | E15 | Metadata-only records (adr-0008); audit log without page content (p4.9) | SEC-14 | Planned |
+| T20 A security or network log stores page content or secrets | ADV1 | E15 | Metadata-only records (adr-0008); audit log without page content (p4.9) | SEC-14 | Built and tested (p4.9: audit lines schema-checked in every security test; secret in address and typed text never written); network log P5 |
 | T21 The benchmark-only no-security build reaches users, or debug-only test commands run in release | ADV4 | E11 | Release-build static check (p4.16); test commands refuse in release builds (P3) | SEC-12 | Planned |
 | T22 The baseline benchmark app is used for normal browsing without Ferrum's controls | ADV1 | E03 | Not shipped; benchmark use only | not enforced | Not enforced |
 | T23 A benchmark run touches the owner's real browser profile or weakens a competitor browser | ADV4 | E04 | Fresh temporary profiles; recorded policies (P6 harness) | not enforced | Not enforced in P4 (P6 harness check) |

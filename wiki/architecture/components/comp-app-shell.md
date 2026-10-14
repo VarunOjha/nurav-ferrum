@@ -317,4 +317,9 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   (`tauri.localhost`, `tauri:`, `ipc.localhost`) are refused and logged, and the shell sent to a website stays on its
   own page. One capability file, shell only, no `remote` section; no code uses Tauri's invoke key
   ([check-p4.8.20261013-2009.txt](../../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt)).
+- p4.9, security audit log: module `audit.rs` (one JSON line per refusal in `audit.jsonl`, six fields, origin only,
+  rotation at 1 MB); called from the navigation, permission and shell checks, the address bar, the pop-up limit, the
+  link confirmation and downloads. Details on comp-security-engine.
+- Fixed in p4.9 (older race): a late reply to the address bar no longer clears a note the page already set ("HTTP
+  404", "Blocked …"); the shell counts page events and clears only when none came in meanwhile.
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

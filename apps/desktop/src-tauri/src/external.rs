@@ -207,6 +207,7 @@ pub fn on_new_window(app: &AppHandle, tab: u64, uri: &str, user_initiated: bool)
                     open_tab(app, url.to_string(), Place::AfterActive, true);
                 } else {
                     tracing::info!(target: "ferrum::external", tab, site = %site(uri), "pop-up blocked (rate limit)");
+                    crate::audit::record(tab, "new-window", uri, "pop-up-rate-limit");
                     blocked(app, tab, uri, "pop-up", false);
                 }
             }
@@ -259,6 +260,7 @@ pub fn external_open_confirm(
     let asked = pending.0.lock().unwrap().take();
     if asked.as_deref() != Some(uri.as_str()) {
         tracing::warn!(target: "ferrum::external", site = %site(&uri), "confirmation refused: not the link Ferrum asked about");
+        crate::audit::record(0, "link-to-app-confirm", &uri, "not-the-link-asked-about");
         return Err("not the link Ferrum asked about".into());
     }
     // Checked again at the click (p4.4): the settings may have changed while the bar was showing.

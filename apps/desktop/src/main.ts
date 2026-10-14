@@ -57,10 +57,13 @@ type TabUi = {
   blockedNote: string;
   /** The address that note is about (its specific note may arrive before the generic "not allowed" event). */
   blockedUri: string;
+  /** Page events seen so far (navigation starting or completed), so a late reply to the address bar does not wipe a
+   * note those events already set (found in p4.9: an HTTP 404 or "Blocked" note was cleared by the reply). */
+  navEvents: number;
 };
 const newUi = (): TabUi => ({
   uri: "", lastUri: "", loading: false, state: "idle", status: "", pageLoaded: false, canBack: false, canForward: false, panel: null,
-  icon: "", hadPage: false, downloadAt: 0, blockedNote: "", blockedUri: "",
+  icon: "", hadPage: false, downloadAt: 0, blockedNote: "", blockedUri: "", navEvents: 0,
 });
 /** How long after a download started a failed navigation of its tab counts as "became the download". */
 const DOWNLOAD_GRACE_MS = 3000;
@@ -277,6 +280,7 @@ await listen<TabEvent>("tab", async (e) => {
   received.push([ev.kind, uri]);
   document.title = "EVENTS:" + JSON.stringify(received.slice(-200));
   const u = uiOf(ev.tab);
+  if (ev.kind === "navigation-starting" || ev.kind === "navigation-completed") u.navEvents++;
   switch (ev.kind) {
     case "navigation-starting":
       if (ev.allowed) {
@@ -1225,12 +1229,14 @@ form.addEventListener("submit", async (e) => {
   closeSuggest();
   const input = address.value;
   address.blur(); // let the address bar follow the page from now on
+  const seen = activeUi()?.navEvents ?? 0;
   const r = await invoke<NavResult>("tab_navigate", { input });
   const u = activeUi();
   if (r.outcome === "navigate") {
     // The navigation-starting event usually arrives before this reply; keep its "Loading…" (owner checklist 2026-10-12).
     if (u && r.note === "upgraded-from-http") u.status = "Using the secure https address";
-    else if (u && !u.loading) u.status = "";
+    // Only when no page event came in meanwhile: otherwise the page's own note (an error, "Blocked …") stays.
+    else if (u && !u.loading && u.navEvents === seen) u.status = "";
   } else if (r.outcome === "refused" && u) {
     u.status = "Not loaded: " + (r.reason ?? "unknown");
   } else if (r.outcome === "refused") {

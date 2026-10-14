@@ -161,3 +161,31 @@ export function realKeys(f: Ferrum, keys: string): void {
     .trim();
   if (out !== "SENT") throw new Error(`Ferrum was not the active window, so the keys ${keys} were not sent (${out})`);
 }
+
+/** One line of Ferrum's security audit log (p4.9). */
+export type AuditRecord = { time: string; tab: number; origin: string; action: string; rule: string; decision: "deny" };
+
+/**
+ * Every record of the run's security audit log (`<data>/logs/audit.jsonl`), each one checked against the schema
+ * (p4.9, SEC-14): exactly the six fields, a UTC time, a whole tab number, an origin that is a scheme and host only (or
+ * "(typed)"), non-empty action and rule, decision "deny". A record that breaks the schema fails the test.
+ */
+export function auditRecords(f: Ferrum): AuditRecord[] {
+  const p = path.join(f.data, "logs", "audit.jsonl");
+  if (!fs.existsSync(p)) return [];
+  return fs.readFileSync(p, "utf8").split(/\r?\n/).filter(Boolean).map((line) => {
+    const r = JSON.parse(line) as Record<string, unknown>;
+    expect(Object.keys(r).sort(), line).toEqual(["action", "decision", "origin", "rule", "tab", "time"]);
+    expect(r.time, line).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+    expect(Number.isInteger(r.tab) && (r.tab as number) >= 0, line).toBe(true);
+    expect(r.origin, line).toMatch(/^(\(typed\)|\(not an address\)|[a-z][a-z0-9+.-]*:(\/\/[^/?#\s]+)?)$/);
+    expect(typeof r.action === "string" && r.action.length > 0, line).toBe(true);
+    expect(typeof r.rule === "string" && r.rule.length > 0, line).toBe(true);
+    expect(r.decision, line).toBe("deny");
+    return r as AuditRecord;
+  });
+}
+
+/** How many audit records match all the given fields. */
+export const audited = (f: Ferrum, want: Partial<AuditRecord>) =>
+  auditRecords(f).filter((r) => Object.entries(want).every(([k, v]) => (r as Record<string, unknown>)[k] === v)).length;

@@ -1,0 +1,27 @@
+Ferrum check p4.9: Security audit log
+Why: you can see what Ferrum blocked, and nothing private leaks.
+Run at 2026-10-13 20:42 on commit dde27cd (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: six fields, origin only, UTC times, rotation (9 s)
+         three unit tests passed
+  PASS   Every place that refuses something writes an audit line
+         audit calls present at every refusal point
+  ✓   8 external-schemes.spec.ts:58:3 › default settings: any type, always ask (Q-224) › always-refused link types never get the bar, clicked or typed (1.1s)
+  ✓   9 external-schemes.spec.ts:85:3 › a list of allowed types in settings › an unlisted type is refused; a listed type still asks and opens only after the click (681ms)
+  ✓  10 permissions.spec.ts:38:3 › default settings: every permission refused › notifications, location and clipboard reading are refused and logged (359ms)
+  ✓  11 permissions.spec.ts:49:3 › default settings: every permission refused › camera and microphone are refused (520ms)
+  ✓  12 permissions.spec.ts:59:3 › default settings: every permission refused › a frame on the page is refused too (258ms)
+  ✓  13 permissions.spec.ts:79:3 › a per-site grant › is honoured, and removing it in settings takes effect at the next request (650ms)
+  ✓  14 security-navigation.spec.ts:51:1 › a typed blocked address is refused and logged (291ms)
+  ✓  15 security-navigation.spec.ts:59:1 › a redirect from an allowed page to the blocked host is refused and logged (528ms)
+  ✓  16 security-navigation.spec.ts:70:1 › a frame showing the blocked host is refused and logged; an allowed frame loads (340ms)
+  ✓  17 security-navigation.spec.ts:81:1 › window.open of the blocked host opens nothing and is logged; an allowed one opens a tab (1.7s)
+  ✓  18 security-navigation.spec.ts:97:1 › a malformed address is refused and logged (31ms)
+  18 passed (1.0m)
+AUDIT-SAMPLE [{"action":"page","decision":"deny","origin":"https://127.0.0.1:8443","rule":"blocklist","tab":1,"time":"2026-10-14T01:43:37.989Z"},{"action":"frame","decision":"deny","origin":"https://127.0.0.1:8443","rule":"blocklist","tab":1,"time":"2026-10-14T01:43:38.074Z"},{"action":"new-window","decision":"deny","origin":"https://127.0.0.1:8443","rule":"blocklist","tab":1,"time":"2026-10-14T01:43:38.471Z"},{"action":"page","decision":"deny","origin":"ms-msdt:","rule":"external-risky","tab":1,"time":"2026-10-14T01:43:38.712Z"},{"action":"permission-notifications","decision":"deny","origin":"https://localhost:8443","rule":"permission-not-granted","tab":1,"time":"2026-10-14T01:43:39.017Z"},{"action":"address-bar","decision":"deny","origin":"(typed)","rule":"typed-malformed","tab":1,"time":"2026-10-14T01:43:39.042Z"}]
+  PASS   Live tests: each security test finds its audit line; all lines pass the schema; no page content (73 s)
+         audit-log 1, security-navigation 5, external-schemes 3, permissions 4, app-origin 5: 18 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.9 (3 PASS; 82 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.9 check passed".

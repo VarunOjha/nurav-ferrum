@@ -808,6 +808,15 @@ pub async fn tab_navigate(app: AppHandle, input: String) -> NavResult {
         Outcome::Refuse(r) => {
             // The reason only: what was typed is not logged (it may be a search, not an address).
             tracing::info!(target: "ferrum::policy", context = "address-bar", reason = ?r, "typed address refused");
+            let rule = match &r {
+                Refusal::Empty => "typed-empty",
+                Refusal::NotAnAddress => "typed-not-an-address",
+                Refusal::Malformed => "typed-malformed",
+                Refusal::ForbiddenScheme(_) => "typed-forbidden-scheme",
+                Refusal::ExternalDenied(_) => "typed-external-denied",
+            };
+            // What was typed is not kept: the origin is "(typed)".
+            crate::audit::record(active(&app).unwrap_or(0), "address-bar", "", rule);
             NavResult {
                 outcome: "refused",
                 url: None,

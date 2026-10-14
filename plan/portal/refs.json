@@ -960,7 +960,7 @@
       "kind": "task",
       "title": "P4 task: Security audit log",
       "summary": "Denials need a record → one log line per denied action, old logs rolled over, with no page content → evidence without privacy leaks.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]

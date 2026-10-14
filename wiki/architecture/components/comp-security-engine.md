@@ -134,6 +134,20 @@ cleaning is a second layer; the saved `setup.exe` had no "downloaded from the in
 whether downloads from real websites get that mark was not tested. Tests: three engine tests (coverage still 100
 percent), live spec `safe-downloads` (4 passed), check script `scripts/verify/p4.6-safe-downloads.ps1`.
 
+**p4.9, security audit log** ([apps/desktop/src-tauri/src/audit.rs](../../../apps/desktop/src-tauri/src/audit.rs)).
+The engine stays pure; the app writes one JSON line per refusal to `audit.jsonl` next to `ferrum.jsonl`: `time` (UTC,
+milliseconds), `tab` (0 when none), `origin` (scheme and host only; `(typed)` for the address bar), `action` (`page`,
+`redirect`, `frame`, `new-window`, `permission-<kind>`, `address-bar`, `shell`, `download`, `link-to-app-confirm`),
+`rule` (the engine's rule name, or `pop-up-rate-limit`, `typed-*`, `shell-app-only`, `no-download-folder`,
+`not-the-link-asked-about`) and `decision` (`deny`). Nothing else: no path, query, fragment, typed text or page
+content. At 1 MB the file is rotated (three older files kept). Tests: three unit tests; the live security tests of
+p4.3, p4.4, p4.5 and p4.8 now also require their audit line, every line passes a schema check, and spec `audit-log`
+checks that a secret in an address or in typed text never reaches the file
+([check-p4.9](../../raw/evidence/phase-p4-security/check-p4.9.txt)). Found during p4.9 (older shell race, P3): when a page
+finished, or was refused, before the address bar's command replied, the reply cleared the toolbar note ("HTTP 404",
+"Blocked …"); the shell now clears it only when no page event came in meanwhile (affected tests 3 of 3 clean after the
+fix; the redirect test prints the shell's event order if it ever fails again).
+
 Not done yet: the shell shows the "not secure" warning as the address-bar sign only, not yet as a bar (owner answer
 Q-112 asks for a bar; planned with the security settings screen, p4.17). The audit log of refusals (p4.9) replaces
 the plain log lines.

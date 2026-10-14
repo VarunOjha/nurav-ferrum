@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 8,
+    "done": 9,
     "total": 17
   },
   "step_order": [
@@ -114,7 +114,7 @@
       "what": "A security log with one line per blocked action: time, tab, site, action, rule and decision.",
       "why": "Without a record you cannot tell whether a block happened or why. Storing page content would turn the log itself into a privacy risk.",
       "how": "Write lines to a log file that is rolled over when it grows. Each security test checks its log line exists, and a format test checks every line.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Denials need a record → one log line per denied action, old logs rolled over, with no page content → evidence without privacy leaks.",
       "check": "Each security test finds its record; all records match the format.",
       "script": "scripts/verify/p4.9-security-audit-log.ps1"
