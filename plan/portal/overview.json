@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 10 of 17 tasks done. The PC shut down overnight after the last task was saved, so nothing was lost. Claude is building the choice of isolation modes.",
+  "summary": "Phase 4 (security) is in progress: 11 of 17 tasks done. Ferrum can now keep sites apart in three ways, chosen in the settings file. Waiting for you to re-approve three part pages, and a new security question about SmartScreen.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:fb8001ff4eae984ecfe531ceb8b8de9608a4aad27902b84813dc6fc846152c9c"
+    "content_hash": "sha256:750568511378fb22309a997c8da5b4ae1108e51348ccf5e4ed529133a38af884"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
+      "state": "Three part pages wait for your re-approval",
       "ref": "comp-app-shell"
     },
     {
@@ -35,27 +35,32 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "10 of 17 tasks done"
-      },
-      {
-        "item": "Overnight shutdown",
-        "state": "Nothing lost; last task was saved"
+        "state": "11 of 17 tasks done"
       },
       {
         "item": "Isolation modes",
-        "state": "Claude is building it now"
+        "state": "Built and tested: 3 modes"
+      },
+      {
+        "item": "Part pages",
+        "state": "3 wait for your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: isolation modes, so the settings file can choose how strictly sites are kept apart, including a separate browser engine per site.",
+    "why": "Nothing to run. The isolation-modes task changed three part pages, so they need your approval again before the next task. Separately, Claude found that SmartScreen is off in Ferrum's engine and asks whether to turn it on.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "Answer the two questions in Claude Code: re-approve the part pages, and choose what to do about SmartScreen (or \"decide later\")."
   },
   "questions_for_you": {
-    "open": 19,
-    "items": []
+    "open": 20,
+    "items": [
+      {
+        "id": "Q-225",
+        "question": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on?"
+      }
+    ]
   }
 }

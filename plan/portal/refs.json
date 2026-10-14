@@ -5250,6 +5250,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "e565aba",
+      "kind": "commit",
+      "title": "Commit e565aba",
+      "summary": "Isolation modes: shared, a profile per site, or a data folder per site (task p4.15).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

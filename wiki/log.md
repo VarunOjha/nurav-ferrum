@@ -2509,3 +2509,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 12:47
 - pages: [status-live, phase-p4-security]
 - result: New chat; the owner asked for an analysis first, then said "Continue". Session s05 ended at 23:46 on 2026-10-13 right after its p4.10 bookkeeping, without a handoff, lint or STATUS `updated`/`last_handoff` refresh (the PC shut down). Nothing lost: tree clean at c27f247, In-flight empty, no stash, no index.lock, no file changed after the last commit. Lint run now in place of s05's: quick lint 0 errors, portal-sync clean, lint:wiki only the known ff7292e RAW-IMMUTABLE error. approvals_check: nothing STALE or PENDING (five keys APPROVED_VOLATILE_DRIFT, which counts as approved). P4 entry conditions still hold. STATUS fixed: the "Next action" table still said 2 of 17 tasks. In-flight record written for p4.15 before any task file is touched.
+
+## [2026-10-14] code | p4.15 isolation modes shared, per-site and per-site-udf
+
+- session: s06
+- time: 13:26
+- pages: [comp-webview-manager, comp-app-shell, comp-core, ov-arch-isolation-model, ov-arch-configuration, qual-security-testing-plan, ov-open-questions]
+- sources: [raw/evidence/phase-p4-security/check-p4.15.txt, raw/evidence/phase-p4-security/isolation-modes.md]
+- result: `[isolation] mode = "per-site-udf"` added: each site profile gets its own user data folder and WebView2 environment made by Ferrum with the shell's options; empty and private tabs stay with the shell; the mode is read at start and an unknown value is refused (file copied aside, defaults). Observed: with two sites open, browser processes shared 1, per-site 1, per-site-udf 3 (one per environment, each with its own GPU and two utility processes); a site's browser ends when its last tab closes. Fixed while testing: Ferrum's process stayed up over 15 s after quit while a site environment was held; every view is now closed on the exit request. Found: wry's default browser arguments turn SmartScreen off in every environment, registered as Q-225 (non-blocking, before the P4 exit review). p4.15 check PASS 3/3; full smoke 111 passed, 2 failed NOT-FRONT (real-key shortcut tests, another window in front), shortcut spec rerun passed. Stales approval of comp-app-shell, comp-webview-manager and comp-core.
+- stales: [comp-app-shell, comp-webview-manager, comp-core]
+- commit: e565aba
+
+## [2026-10-14] gate | three component approvals stale after p4.15
+
+- session: s06
+- time: 13:26
+- pages: [comp-app-shell, comp-webview-manager, comp-core]
+- result: The p4.15 page updates staled comp-app-shell and comp-webview-manager (in the P4 dependency set) and comp-core (outside it); p4.16 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.

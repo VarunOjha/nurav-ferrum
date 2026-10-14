@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:34daa8539696e3563c4186ff8a97b869625efc7cb62186f1bc7eb9da2a789eec"
+    "content_hash": "sha256:187bf1bc7c36f1fc0a17358a39e82cc660f6901b74f95ad28ff1cfda7d571697"
   },
   "entries": [
     {
@@ -4401,6 +4401,40 @@
       "tags": [
         "sessions",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-15",
+      "date": "2026-10-14",
+      "time": "13:26",
+      "title": "Three ways to keep sites apart, chosen in the settings file",
+      "done": "Ferrum can share one profile for all sites, give each site its own profile, or give each site its own data folder and its own browser engine. The same two test sites ran in all three: each site's data stayed with it. With two sites open the last mode used 3 browser processes instead of 1. Claude also fixed a slow exit, and found that SmartScreen is switched off.",
+      "next": "You re-approve three part pages and answer the SmartScreen question; then Claude builds the benchmark-only switch that turns the safety rules off.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Tab & view manager page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Core library page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "e565aba",
+      "covers": [
+        "## [2026-10-14] code | p4.15 isolation modes shared, per-site and per-site-udf",
+        "## [2026-10-14] gate | three component approvals stale after p4.15"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "isolation",
+        "testing"
       ]
     }
   ]
