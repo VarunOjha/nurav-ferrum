@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f83b1e8673f908a3a69438c69f857136e38d7fca73476c214f7a62c0218ebcab"
+    "content_hash": "sha256:34daa8539696e3563c4186ff8a97b869625efc7cb62186f1bc7eb9da2a789eec"
   },
   "entries": [
     {
@@ -4381,6 +4381,26 @@
       "tags": [
         "approvals",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-resume",
+      "date": "2026-10-14",
+      "time": "12:47",
+      "title": "New session after the PC shut down: nothing was lost",
+      "done": "Your PC shut down overnight. Claude checked: the last task (crash recovery) was fully saved and nothing was half-done. Only the end-of-session paperwork was missing, so Claude ran its wiki checks now: no new problems.",
+      "next": "Claude builds the choice of isolation modes.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] resume | s06 starts after the PC shut down overnight"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "sessions",
+        "phases"
       ]
     }
   ]

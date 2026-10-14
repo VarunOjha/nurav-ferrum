@@ -2502,3 +2502,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-app-shell, comp-webview-manager]
 - sources: [raw/owner/2026-10-13-s05-p4-10-components-reapproval.md]
 - result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.15 is next.
+
+## [2026-10-14] resume | s06 starts after the PC shut down overnight
+
+- session: s06
+- time: 12:47
+- pages: [status-live, phase-p4-security]
+- result: New chat; the owner asked for an analysis first, then said "Continue". Session s05 ended at 23:46 on 2026-10-13 right after its p4.10 bookkeeping, without a handoff, lint or STATUS `updated`/`last_handoff` refresh (the PC shut down). Nothing lost: tree clean at c27f247, In-flight empty, no stash, no index.lock, no file changed after the last commit. Lint run now in place of s05's: quick lint 0 errors, portal-sync clean, lint:wiki only the known ff7292e RAW-IMMUTABLE error. approvals_check: nothing STALE or PENDING (five keys APPROVED_VOLATILE_DRIFT, which counts as approved). P4 entry conditions still hold. STATUS fixed: the "Next action" table still said 2 of 17 tasks. In-flight record written for p4.15 before any task file is touched.

@@ -3,7 +3,7 @@ id: status-live
 type: status
 title: "Ferrum live status and next action"
 status: active
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -34,7 +34,7 @@ sources:
   - raw/owner/2026-10-13-s05-p4-10-components-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
-session: s05
+session: s06
 current_phase: phase-p4-security
 current_task: p4.15
 next_action: "p4.15 (isolation modes selectable by configuration: shared profile, profile per site, user data folder per site), per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.15-selectable-isolation-modes.ps1. Remaining after it: p4.16, p4.17, p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
@@ -360,7 +360,10 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.10 committed in ea16ba1; two component pages re-approved; p4.15 next)
+- task: p4.15 (session s06)
+- intent: a third isolation mode, `isolation.mode = "per-site-udf"` (cfg-ferrum-udf-per-site): each site's profile gets its own WebView2 user data folder and environment (its own browser process group), created by Ferrum with the same environment options as Tauri's (wry 0.57 defaults copied, so the modes stay comparable); empty and private tabs stay in Tauri's environment. The mode is read at start (a change applies after a restart; an unknown value is refused). Site data clearing, process inventory and crash reload work per environment. Live test: the same two-site storage fixture per mode (cookie, localStorage, IndexedDB), read through the tab title because CDP reaches only the main browser; browser-process count per mode to raw/evidence/phase-p4-security/isolation-modes.md; any mode that fails is recorded with its error. New question: wry's default arguments turn SmartScreen off (found while reading wry; owner's decision).
+- paths: crates/core/src/{config.rs,profiles.rs}; crates/webview-manager/src/webview2.rs; apps/desktop/src-tauri/src/{content.rs,main.rs,settings.rs}; apps/desktop/src-tauri/Cargo.toml; crates/webview-manager/Cargo.toml; apps/desktop/src/main.ts; tests/fixtures/server/src/lib.rs; apps/desktop/tests/smoke/{isolation-modes.spec.ts,ferrum.ts}; scripts/verify/p4.15-selectable-isolation-modes.ps1; wiki/architecture/components/{comp-webview-manager,comp-app-shell,comp-core}.md; wiki/architecture/{ov-arch-configuration,ov-arch-isolation-model}.md; wiki/quality/qual-security-testing-plan.md; wiki/overview/ov-open-questions.md; wiki/raw/evidence/phase-p4-security/; plan/portal/{architecture,questions,phases/phase-p4-security,roadmap,refs}.json
+- rollback: git checkout -- <paths>; delete the new spec and evidence files
 
 ## Blockers
 
@@ -397,7 +400,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 2 of 17 tasks done (threat model, site-rules engine); waiting for your re-approval of the security engine page |
+| Phase 4 (security) | 10 of 17 tasks done; p4.15 (isolation modes) in progress |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.
@@ -415,4 +418,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-13, session s03 (P3 signed off; P4 entry passed). Last handoff: [handoff-2026-10-13-s02](wiki/operations/handoffs/handoff-2026-10-13-s02.md).
+2026-10-14, session s06 (P4 continues after the PC shut down overnight; session s05 ended without a handoff, nothing lost). Last handoff: [handoff-2026-10-13-s04](wiki/operations/handoffs/handoff-2026-10-13-s04.md).

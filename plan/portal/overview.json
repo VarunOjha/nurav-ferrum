@@ -2,12 +2,12 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 10 of 17 tasks done, and you re-approved the changed part pages. Claude continues with the choice of isolation modes.",
+  "summary": "Phase 4 (security) is in progress: 10 of 17 tasks done. The PC shut down overnight after the last task was saved, so nothing was lost. Claude is building the choice of isolation modes.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:77ccea775051fa7d55f98429688d6fff0f91c3d8923c36a78f6974401d58e19a"
+    "content_hash": "sha256:fb8001ff4eae984ecfe531ceb8b8de9608a4aad27902b84813dc6fc846152c9c"
   },
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "where_we_are": [
     {
       "item": "Current phase",
@@ -42,11 +42,15 @@
         "state": "10 of 17 tasks done"
       },
       {
-        "item": "Part pages",
-        "state": "Re-approved by you"
+        "item": "Overnight shutdown",
+        "state": "Nothing lost; last task was saved"
+      },
+      {
+        "item": "Isolation modes",
+        "state": "Claude is building it now"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: isolation modes, so the settings file can choose how strictly sites are kept apart.",
+    "why": "Nothing to run; Claude continues with the next task: isolation modes, so the settings file can choose how strictly sites are kept apart, including a separate browser engine per site.",
     "script": null,
     "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
