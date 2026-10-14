@@ -2399,7 +2399,7 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-webview-manager, comp-app-shell, comp-core]
 - result: The p4.7 page updates staled three components in the P4 dependency set; p4.8 waits for the owner's re-approval (SCHEMA §10.4).
 
-## [2026-10-13] fix | p4.7 had no write-ahead record; STATUS caught up
+## [2026-10-13] correct | p4.7 had no write-ahead record; STATUS caught up
 
 - session: s04
 - time: 19:54
