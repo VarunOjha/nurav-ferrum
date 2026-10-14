@@ -28,6 +28,7 @@
     "allow-site-data-clear",
     "allow-test-focus",
     "allow-test-crash",
+    "allow-test-crash-tab",
     "allow-history-list",
     "allow-history-clear",
     "allow-history-remove",

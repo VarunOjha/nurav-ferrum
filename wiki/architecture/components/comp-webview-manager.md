@@ -196,4 +196,14 @@ of it:
   had its own; Chromium does this for different sites anyway). Not tested: service workers, audio. Full table:
   [ov-arch-isolation-model](../ov-arch-isolation-model.md) §3.
 
+- p4.10, failed processes: `ProcessFailed` (token removed in `close`) is reported as tab event `ProcessFailed { failure,
+  reason, exit_code }`; `ProcessFailure` names WebView2's kind (`BrowserExited`, `RendererExited`,
+  `RendererUnresponsive`, `FrameRendererExited`, `Other`) and `page_lost()` says whether the tab needs a reload (the
+  first three). `watch_browser_exit` registers `BrowserProcessExited` (ICoreWebView2Environment5) on the environment for
+  the app's whole run (failed or normal exit). Observed in the p4.10 live test ([check-p4.10](../../raw/evidence/phase-p4-security/check-p4.10.txt)):
+  the browser's own `edge://kill` page (spike S3 method) raised `RendererExited` with reason 2 (terminated) and exit
+  code 1 on the tab's view, the view stayed usable and a new navigation started a new page process; another site's tab
+  and the shell kept running. Two tabs of the same site had separate page processes in this test, so only the killed tab was marked; the test asserts the rule either way (every tab whose page ran in the ended process is marked crashed), but the shared case itself was not seen. `edge://inducebrowsercrashforrealz` ended the browser process: every tab view
+  got `BrowserExited`, then the environment's `BrowserProcessExited` (failed) arrived.
+
 Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

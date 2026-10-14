@@ -84,6 +84,17 @@ pub enum TabEvent {
         /// Whether it was allowed.
         allowed: bool,
     },
+    /// A WebView2 process this view depends on failed (p4.10). For a renderer failure the view stays usable: a reload
+    /// (or any navigation) starts a new renderer. For [`ProcessFailure::BrowserExited`] every view of the environment is
+    /// gone.
+    ProcessFailed {
+        /// Which process failed.
+        failure: ProcessFailure,
+        /// WebView2's reason code (`COREWEBVIEW2_PROCESS_FAILED_REASON`; 0 when WebView2 gave none).
+        reason: i32,
+        /// The process's exit code (0 when WebView2 gave none).
+        exit_code: i32,
+    },
     /// The page's icon changed (p3.16): the icon as PNG bytes, as WebView2 already has it (empty: the page has none).
     FaviconChanged {
         /// PNG image bytes.
@@ -122,6 +133,45 @@ pub enum TabEvent {
         /// Bytes received.
         received: i64,
     },
+}
+
+/// Which WebView2 process failed (p4.10; WebView2's `COREWEBVIEW2_PROCESS_FAILED_KIND`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ProcessFailure {
+    /// The browser process ended: every view of the environment is gone, the shell's too.
+    BrowserExited,
+    /// The page's renderer process ended: the page is gone; the view can load it again.
+    RendererExited,
+    /// The page's renderer stopped responding to input.
+    RendererUnresponsive,
+    /// The renderer of a frame inside the page ended (that frame is gone; the page itself still runs).
+    FrameRendererExited,
+    /// A helper process ended (GPU, utility, sandbox helper, ...): WebView2 starts it again by itself. The number is
+    /// WebView2's kind.
+    Other(i32),
+}
+
+impl ProcessFailure {
+    /// The name the app's events and logs use.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            ProcessFailure::BrowserExited => "browser-exited",
+            ProcessFailure::RendererExited => "renderer-exited",
+            ProcessFailure::RendererUnresponsive => "renderer-unresponsive",
+            ProcessFailure::FrameRendererExited => "frame-renderer-exited",
+            ProcessFailure::Other(_) => "helper-exited",
+        }
+    }
+
+    /// True when the page itself is gone or frozen, so the tab needs a reload.
+    pub fn page_lost(&self) -> bool {
+        matches!(
+            self,
+            ProcessFailure::BrowserExited
+                | ProcessFailure::RendererExited
+                | ProcessFailure::RendererUnresponsive
+        )
+    }
 }
 
 /// A navigation that is about to start, as the navigation gate sees it: the page itself (top level) or a frame in

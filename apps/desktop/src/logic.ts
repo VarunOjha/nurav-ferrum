@@ -30,6 +30,18 @@ export function webErrorText(code: number): string {
   return WEB_ERRORS[code] ?? "The page could not be loaded.";
 }
 
+/** The crash panel's sentence for a failed page process (p4.10; the app's `failure` names). */
+export function crashText(failure: string): string {
+  switch (failure) {
+    case "renderer-unresponsive":
+      return "The page stopped responding. Reload to start it again.";
+    case "browser-exited":
+      return "The browser engine stopped. Ferrum starts again and brings your tabs back.";
+    default:
+      return "The page's process ended unexpectedly. Reload to open the page again. Your other tabs are not affected.";
+  }
+}
+
 export type ToolbarState = "idle" | "loading" | "loaded" | "http-error" | "failed";
 
 /** What the shell shows when a navigation finished. */

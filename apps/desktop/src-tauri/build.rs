@@ -33,6 +33,7 @@ fn main() {
             "site_data_clear",
             "test_focus",
             "test_crash",
+            "test_crash_tab",
             "history_list",
             "history_clear",
             "history_remove",

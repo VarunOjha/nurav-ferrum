@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-test-crash-tab"
+description = "Enables the test_crash_tab command without any pre-configured scope."
+commands.allow = ["test_crash_tab"]
+
+[[permission]]
+identifier = "deny-test-crash-tab"
+description = "Denies the test_crash_tab command without any pre-configured scope."
+commands.deny = ["test_crash_tab"]

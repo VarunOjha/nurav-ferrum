@@ -1,0 +1,21 @@
+Ferrum check p4.10: Recovery from crashed pages
+Why: one bad page never takes down the window or the other tabs, and an engine crash costs no tabs.
+Run at 2026-10-13 23:38 on commit ffe3f1e (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: crash page allowed once for one tab; no restart loop (11 s)
+         two unit tests passed
+  PASS   The code listens for failed processes and the engine exit; the crash hook is debug-only
+         ProcessFailed added and removed per tab view; engine exit watched; crash hook debug-only
+Running 3 tests using 1 worker
+CRASH-SHARED tab A and tab A2 do not share a page process
+  ✓  1 crash-recovery.spec.ts:35:3 › a tab's page process fails › a crashed tab shows the crash panel, the rest keeps working, and Reload brings the page back (1.2s)
+  ✓  2 crash-recovery.spec.ts:88:1 › a tab's page process fails › crash pages are refused outside the debug test hook (1.6s)
+  ✓  3 crash-recovery.spec.ts:111:3 › the browser engine fails › Ferrum starts again by itself and brings the tabs back (4.9s)
+  3 passed (49.6s)
+CRASH-SHARED tab A and tab A2 do not share a page process
+  PASS   Live tests: a crashed tab is marked, covered and reloaded; the engine crash restarts Ferrum with its tabs (62 s)
+         crash-recovery: 3 passed (tab crash and reload, crash pages refused outside the hook, engine crash and restart)
+------------------------------------------------------------------------
+RESULT: PASS - p4.10 (3 PASS; 74 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.10 check passed".

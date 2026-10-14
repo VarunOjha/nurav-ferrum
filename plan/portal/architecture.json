@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, and the toolbar itself can show only Ferrum's own pages.",
+      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, and the toolbar can show only Ferrum's own pages.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:1e302a22d95c204ba7ffb89e171fbad12e87ae779cf7bdc338ab59c67314c768"
+        "content_hash": "sha256:f968cf50880fae356847d7972603441820fb08be0992cfb6b8a8edfdcc1fd1a8"
       }
     },
     {
@@ -260,7 +260,7 @@
     {
       "id": "comp-webview-manager",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, so every load passes the security rules.",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page and notices when a page's process or the browser engine crashes.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (first working app)",
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:13e1e750807ff512db7d9102c7c3dde4eb2d6e58139f717d0b2e484c3e957a40"
+        "content_hash": "sha256:5878e19cc54bb7338209bac3da2eb8a37ab59a349ad5a8161a2f163ade98058e"
       }
     },
     {

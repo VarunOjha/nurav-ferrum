@@ -27,8 +27,6 @@ unverified:
     verify_in: phase-p4-security
   - claim: "WebView2 marks downloaded files with Mark-of-the-Web"
     verify_in: phase-p4-security
-  - claim: "Terminating a renderer process from the harness raises ProcessFailed on the affected webview without crashing the host"
-    verify_in: phase-p4-security
   - claim: "navigator.permissions.query in the page reflects a host-side PermissionRequested denial (with SavesInProfile false) in WebView2"
     verify_in: phase-p4-security
   - claim: "Separate WebView2 profiles keep cookies, localStorage and IndexedDB of the same origin apart"
@@ -159,9 +157,9 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 ### SEC-10 Recovery after renderer crashes (item 10)
 
 - **Threat:** a crashed renderer takes down the shell or leaves the app unusable.
-- **Steps:** with three tabs open, the test finds a tab's renderer PID via WebView2 process info and terminates that process from the harness (harmless to the system).
-- **Pass:** the affected tab shows a crash state with a reload action; reload restores it; the shell and unaffected tabs keep working; the event is logged. Tabs sharing the killed renderer are reported as affected, not hidden (renderers can be shared across webviews on one data folder, [measurement-methodology](../raw/research/measurement-methodology.md) §2.2). Relies on raw-COM `ProcessFailed` (UNVERIFIED[phase-p4-security]).
-- **Phase:** P4; crash-state UI from P3.
+- **Steps:** with three tabs open (two of one site, one of another), a debug-only test hook lets the active tab load the browser's own `edge://kill` page once, which ends that tab's renderer (the method of spike S3; no process is killed from outside). The process inventory taken before tells which tabs shared that renderer. A second test ends the browser process itself the same way (`edge://inducebrowsercrashforrealz`).
+- **Pass:** the affected tab shows a crash state with a reload action; reload restores it; the shell and unaffected tabs keep working; the event is logged. Tabs sharing the killed renderer are reported as affected, not hidden (renderers can be shared across webviews on one data folder, [measurement-methodology](../raw/research/measurement-methodology.md) §2.2). After a browser-process failure Ferrum starts again by itself and restores the tabs. Built on raw-COM `ProcessFailed`, observed working in p4.10 ([check-p4.10](../raw/evidence/phase-p4-security/check-p4.10.txt)).
+- **Phase:** P4 (p4.10, live spec `crash-recovery`).
 
 ### SEC-11 Debug port never in release builds (addition)
 
@@ -204,7 +202,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 
 ## 6. Unverified items on this page
 
-All are listed in the frontmatter `unverified:` block and tagged inline in SEC-02, SEC-05, SEC-06, SEC-07, SEC-10 and SEC-13. One more applied to the whole E2E level, driving Ferrum tab webviews with Playwright over CDP in a test build: verified in P2 for the shell and the content view ([check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)).
+All are listed in the frontmatter `unverified:` block and tagged inline in SEC-02, SEC-05, SEC-06, SEC-07 and SEC-13 (the SEC-10 item was observed in p4.10 and is closed). One more applied to the whole E2E level, driving Ferrum tab webviews with Playwright over CDP in a test build: verified in P2 for the shell and the content view ([check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)).
 
 ## 7. Threat model (p4.1)
 
@@ -265,7 +263,7 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | T12 Cross-origin reads, because a browser protection was weakened | ADV1 | E15 | No weakening flags; same-origin policy and site isolation as shipped | SEC-04 | Planned |
 | T13 A man in the middle on HTTPS, through a certificate-error bypass | ADV2 | E15 | No "proceed anyway" path for certificate errors (p2.8) | SEC-13 | Partly (P2: no bypass code; the failure itself is tested in P4) |
 | T14 A man in the middle reads or changes a plain HTTP page | ADV2 | E15 | Visible "not secure" bar only (Q-112: HTTP allowed) | not enforced | Not enforced (owner's choice) |
-| T15 A renderer crash takes down the app | ADV1 | E13 | `ProcessFailed` handling, crashed-tab state and reload (p4.10) | SEC-10 | Planned |
+| T15 A renderer crash takes down the app | ADV1 | E13 | `ProcessFailed` handling, crashed-tab state and reload; restart with session restore after a browser-process failure (p4.10) | SEC-10 | Built and tested live (p4.10, `crash-recovery`: crashed tab marked and covered, other tab and shell keep working, reload recovers; engine failure restarts Ferrum with its tabs) |
 | T16 Pop-ups flood the screen or keep a link to the opener page | ADV1 | E09 | New tab per pop-up, at most one per tab per second, no opener link (p3.2); pop-up policy (p4.3) | SEC-01 | Partly (P3: rate limit; p4.3: every pop-up address passes the policy) |
 | T17 Another program on the PC drives Ferrum through a debugging port | ADV3 | E05, E06 | Ferrum never sets the port; release builds have no debug arguments | SEC-11 | Partly (P2: never set by Ferrum; benchmark runs open it by design) |
 | T18 Another program reads Ferrum's data folder (history, sessions, logs) | ADV3 | E10 | Windows account protection only; backup files are encrypted (p3.21) | not enforced | Not enforced |

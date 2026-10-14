@@ -94,6 +94,8 @@ pub struct TabInfo {
     pub private: bool,
     /// The tab's view exists.
     pub ready: bool,
+    /// The tab's page process ended or hangs (p4.10): the shell covers the tab until it is loaded again.
+    pub crashed: bool,
     /// An address to load once the view exists.
     #[serde(skip)]
     pub pending: Option<String>,
@@ -151,6 +153,14 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
         }
         // The site icon as a data address the shell's image may show (its CSP allows `data:` images only).
         TabEvent::FaviconChanged { png } => json!({"kind": "favicon", "icon": icon_data_url(png)}),
+        TabEvent::ProcessFailed {
+            failure,
+            reason,
+            exit_code,
+        } => json!({
+            "kind": "process-failed", "failure": failure.as_str(), "page_lost": failure.page_lost(),
+            "reason": reason, "exit_code": exit_code,
+        }),
         // Downloads go to the shell as their own `download` messages (downloads.rs).
         TabEvent::DownloadStarted { download, .. }
         | TabEvent::DownloadProgress { download, .. }
@@ -206,6 +216,11 @@ fn log_event(tab: u64, e: &TabEvent) {
         TabEvent::ExternalSchemeRequested { uri, .. } => {
             tracing::info!(target: "ferrum::nav", tab, site = %site(uri), "link to another app stopped by WebView2")
         }
+        TabEvent::ProcessFailed {
+            failure,
+            reason,
+            exit_code,
+        } => crate::recovery::on_process_failed(tab, *failure, *reason, *exit_code),
         _ => {}
     }
 }
@@ -240,7 +255,7 @@ pub fn snapshot(app: &AppHandle) -> Value {
         "tabs": t.iter().map(|(id, i)| json!({
             "id": id.0, "url": i.url, "title": i.title, "loading": i.loading, "profile": i.profile,
             "can_go_back": i.can_go_back, "can_go_forward": i.can_go_forward, "covered": i.covered, "ready": i.ready,
-            "private": i.private,
+            "private": i.private, "crashed": i.crashed,
         })).collect::<Vec<_>>(),
     })
 }
@@ -436,14 +451,20 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
                 .store(true, Ordering::SeqCst),
             TabEvent::NavigationStarting {
                 uri, allowed: true, ..
-            } => {
+            } if !crate::recovery::is_crash_page(uri) => {
                 list_changed = update(&h, id, |i| {
                     i.loading = true;
                     i.url = uri.clone();
                 })
             }
-            TabEvent::SourceChanged { uri } => {
+            TabEvent::SourceChanged { uri } if !crate::recovery::is_crash_page(uri) => {
                 list_changed = update(&h, id, |i| i.url = uri.clone())
+            }
+            TabEvent::ProcessFailed { failure, .. } if failure.page_lost() => {
+                list_changed = update(&h, id, |i| {
+                    i.crashed = true;
+                    i.loading = false;
+                })
             }
             TabEvent::NavigationCompleted {
                 uri,
@@ -457,7 +478,10 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
                     i.loading = false;
                     title = i.title.clone();
                     private = i.private;
-                    if !uri.is_empty() {
+                    if *success {
+                        i.crashed = false; // a page loaded again (p4.10)
+                    }
+                    if !uri.is_empty() && !crate::recovery::is_crash_page(uri) {
                         i.url = uri.clone();
                     }
                 });
@@ -529,6 +553,10 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
 fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
     let h = app.clone();
     Rc::new(move |r: &NavRequest| {
+        // Debug builds only: the crash test hook allowed this tab one crash page (p4.10).
+        if !r.frame && crate::recovery::take_armed(id, &r.uri) {
+            return NavDecision::Allow;
+        }
         let context = if r.frame {
             Context::Frame
         } else if r.redirected {
@@ -1093,12 +1121,30 @@ pub fn tab_forward(app: AppHandle) {
     });
 }
 
-/// Reload the active tab.
+/// Reload the active tab. A crashed tab (p4.10) loads its last address again, which starts a new page process.
 #[tauri::command]
 pub fn tab_reload(app: AppHandle) {
-    with_content(&app, |v| {
-        let _ = v.reload();
-    });
+    let Some(id) = active(&app) else { return };
+    let crashed = {
+        let t = app.state::<TabsState>();
+        let t = t.0.lock().unwrap();
+        t.get(TabId(id))
+            .filter(|i| i.crashed)
+            .map(|i| i.url.clone())
+    };
+    match crashed {
+        Some(url) => {
+            tracing::info!(target: "ferrum::recovery", tab = id, site = %site(&url), "crashed tab reloaded");
+            with_view(&app, id, move |v| {
+                if let Err(e) = v.navigate(&url) {
+                    tracing::warn!(target: "ferrum::recovery", tab = id, error = %e, "crashed tab not reloaded");
+                }
+            });
+        }
+        None => with_view(&app, id, |v| {
+            let _ = v.reload();
+        }),
+    }
 }
 
 /// Stop loading in the active tab.

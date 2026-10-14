@@ -20,21 +20,22 @@ use std::rc::Rc;
 
 use webview2_com::Microsoft::Web::WebView2::Win32::*;
 use webview2_com::{
-    AcceleratorKeyPressedEventHandler, BytesReceivedChangedEventHandler,
-    ClearBrowsingDataCompletedHandler, CreateCoreWebView2ControllerCompletedHandler,
-    DocumentTitleChangedEventHandler, DownloadStartingEventHandler, FaviconChangedEventHandler,
-    FocusChangedEventHandler, GetFaviconCompletedHandler, GetProcessExtendedInfosCompletedHandler,
+    AcceleratorKeyPressedEventHandler, BrowserProcessExitedEventHandler,
+    BytesReceivedChangedEventHandler, ClearBrowsingDataCompletedHandler,
+    CreateCoreWebView2ControllerCompletedHandler, DocumentTitleChangedEventHandler,
+    DownloadStartingEventHandler, FaviconChangedEventHandler, FocusChangedEventHandler,
+    GetFaviconCompletedHandler, GetProcessExtendedInfosCompletedHandler,
     HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
     NavigationCompletedEventHandler, NavigationStartingEventHandler,
-    NewWindowRequestedEventHandler, PermissionRequestedEventHandler, SourceChangedEventHandler,
-    StateChangedEventHandler, take_pwstr,
+    NewWindowRequestedEventHandler, PermissionRequestedEventHandler, ProcessFailedEventHandler,
+    SourceChangedEventHandler, StateChangedEventHandler, take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows::Win32::System::Com::IStream;
 use windows_core::{BOOL, HSTRING, Interface, PWSTR};
 
 use crate::Error;
-use crate::tab::{KeyDown, NavDecision, NavRequest, PermissionAsk, TabEvent};
+use crate::tab::{KeyDown, NavDecision, NavRequest, PermissionAsk, ProcessFailure, TabEvent};
 
 /// Receives tab events (UI thread).
 pub type EventSink = Rc<dyn Fn(TabEvent)>;
@@ -86,6 +87,7 @@ enum Ev {
     Accelerator,
     Download,
     Favicon,
+    ProcessFailed,
 }
 
 /// The largest site icon passed on (bytes of PNG); a larger one is dropped (the tab shows no icon).
@@ -515,6 +517,37 @@ impl ContentView {
             self.tokens.push((Ev::Favicon, t));
         }
 
+        // p4.10: a failed process is reported with its kind, WebView2's reason and the exit code (spike S3).
+        let s = sink.clone();
+        let h = ProcessFailedEventHandler::create(Box::new(move |_sender, args| {
+            let Some(args) = args else { return Ok(()) };
+            let mut kind = COREWEBVIEW2_PROCESS_FAILED_KIND::default();
+            // SAFETY: COM-1, COM-3; out-pointers are locals; the newer arguments interface is optional.
+            let (reason, exit_code) = unsafe {
+                let _ = args.ProcessFailedKind(&mut kind);
+                match args.cast::<ICoreWebView2ProcessFailedEventArgs2>() {
+                    Ok(a2) => {
+                        let mut reason = COREWEBVIEW2_PROCESS_FAILED_REASON::default();
+                        let mut code = 0i32;
+                        let _ = a2.Reason(&mut reason);
+                        let _ = a2.ExitCode(&mut code);
+                        (reason.0, code)
+                    }
+                    Err(_) => (0, 0),
+                }
+            };
+            s(TabEvent::ProcessFailed {
+                failure: process_failure(kind),
+                reason,
+                exit_code,
+            });
+            Ok(())
+        }));
+        let mut t = 0i64;
+        // SAFETY: COM-1, COM-4.
+        hr(unsafe { core.add_ProcessFailed(&h, &mut t) })?;
+        self.tokens.push((Ev::ProcessFailed, t));
+
         let s = sink;
         let h = FocusChangedEventHandler::create(Box::new(move |_sender, _args| {
             s(TabEvent::GotFocus);
@@ -624,6 +657,7 @@ impl ContentView {
                         Err(e) => Err(e),
                     },
                     Ev::NewWindow => self.core.remove_NewWindowRequested(*t),
+                    Ev::ProcessFailed => self.core.remove_ProcessFailed(*t),
                     Ev::Permission => self.core.remove_PermissionRequested(*t),
                     Ev::LaunchExternal => match self.core.cast::<ICoreWebView2_18>() {
                         Ok(c18) => c18.remove_LaunchingExternalUriScheme(*t),
@@ -635,6 +669,44 @@ impl ContentView {
         // SAFETY: COM-1, COM-4.
         let _ = unsafe { self.controller.Close() };
     }
+}
+
+/// Ferrum's name for a WebView2 process failure kind (p4.10).
+fn process_failure(kind: COREWEBVIEW2_PROCESS_FAILED_KIND) -> ProcessFailure {
+    match kind {
+        COREWEBVIEW2_PROCESS_FAILED_KIND_BROWSER_PROCESS_EXITED => ProcessFailure::BrowserExited,
+        COREWEBVIEW2_PROCESS_FAILED_KIND_RENDER_PROCESS_EXITED => ProcessFailure::RendererExited,
+        COREWEBVIEW2_PROCESS_FAILED_KIND_RENDER_PROCESS_UNRESPONSIVE => {
+            ProcessFailure::RendererUnresponsive
+        }
+        COREWEBVIEW2_PROCESS_FAILED_KIND_FRAME_RENDER_PROCESS_EXITED => {
+            ProcessFailure::FrameRendererExited
+        }
+        other => ProcessFailure::Other(other.0),
+    }
+}
+
+/// Calls `exited(failed)` when the browser process of `env` has ended and released everything (p4.10;
+/// ICoreWebView2Environment5 `BrowserProcessExited`): `failed` is true for a crash, false for a normal shutdown. Every
+/// view of the environment (the shell's too) is unusable afterwards. The handler stays registered for the life of the
+/// environment (it is the app's for its whole run), so its token is not kept.
+pub fn watch_browser_exit(
+    env: &ICoreWebView2Environment,
+    exited: Box<dyn Fn(bool)>,
+) -> Result<(), Error> {
+    let env5: ICoreWebView2Environment5 = hr(env.cast())?;
+    let h = BrowserProcessExitedEventHandler::create(Box::new(move |_sender, args| {
+        let mut kind = COREWEBVIEW2_BROWSER_PROCESS_EXIT_KIND::default();
+        if let Some(args) = args {
+            // SAFETY: COM-1; the out-pointer is a local.
+            let _ = unsafe { args.BrowserProcessExitKind(&mut kind) };
+        }
+        exited(kind == COREWEBVIEW2_BROWSER_PROCESS_EXIT_KIND_FAILED);
+        Ok(())
+    }));
+    let mut t = 0i64;
+    // SAFETY: COM-1; `env5` is live; the handler is kept alive by WebView2 while registered.
+    hr(unsafe { env5.add_BrowserProcessExited(&h, &mut t) })
 }
 
 /// The settings name of a WebView2 permission kind (the names of `ferrum_core::config::PermissionKind`); `None` for a

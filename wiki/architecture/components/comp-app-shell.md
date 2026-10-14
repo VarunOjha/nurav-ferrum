@@ -322,4 +322,15 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   link confirmation and downloads. Details on comp-security-engine.
 - Fixed in p4.9 (older race): a late reply to the address bar no longer clears a note the page already set ("HTTP
   404", "Blocked …"); the shell counts page events and clears only when none came in meanwhile.
+- p4.10, recovery from failed processes: module `recovery.rs`. When a tab's page process ends or stops responding,
+  the tab is marked `crashed` (in the tab list) and the shell covers it with its panel ("This page stopped working",
+  plain words per failure, button Reload); Reload (`tab_reload`) loads the tab's last address again, which starts a new
+  page process, and a page that loads clears the mark. A frame's or helper process's failure is only logged. When the
+  browser process fails, every view (the shell's too) is gone for this run, so the host saves the session, closes and
+  starts Ferrum again with the same arguments; the session restore brings the tabs back. A second engine failure within
+  60 seconds of such a restart closes Ferrum instead (no restart loop; the restart time travels in
+  `FERRUM_RECOVERY_RESTARTED_AT`). Test hook `test_crash_tab { id, page }` (debug builds only) lets one tab load one of
+  the browser's crash pages (`edge://kill`, `edge://gpucrash`, `edge://inducebrowsercrashforrealz`) once; the navigation
+  gate lets that one load through, and a crash page never becomes the tab's address. In every other case `edge:`
+  addresses stay refused by the policy (rule `scheme-forbidden`, audited). Live spec `crash-recovery` (3 passed).
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

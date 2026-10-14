@@ -73,6 +73,17 @@ export async function launch(name: string, opts: LaunchOptions = {}): Promise<Fe
     // The app's own messages go to app.log in the run's data folder (for diagnosing a failed run).
     stdio: ["ignore", fs.openSync(path.join(data, "app.log"), "a"), fs.openSync(path.join(data, "app.log"), "a")],
   });
+  return connect(proc, data);
+}
+
+/**
+ * Connects to a Ferrum that started by itself (p4.10: after a browser-engine failure Ferrum starts again). Its process
+ * is not this test's child, so `proc` stays the ended one; quit() still waits until the new instance has closed (its
+ * debugging port is free).
+ */
+export const reattach = (old: Ferrum) => connect(old.proc, old.data);
+
+async function connect(proc: ChildProcess, data: string): Promise<Ferrum> {
   await waitCdp(30_000);
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
   const all = () => browser.contexts().flatMap((c) => c.pages()).filter((p) => !p.isClosed());

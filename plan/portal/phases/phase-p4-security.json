@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 9,
+    "done": 10,
     "total": 17
   },
   "step_order": [
@@ -124,8 +124,8 @@
       "title": "Recover from crashes",
       "what": "Recovery when a tab's page process or the browser process crashes.",
       "why": "Without recovery, one crashing website could take every other tab and the whole window down with it.",
-      "how": "Listen to WebView2's crash and exit events and show a crashed tab with a reload option. A test crashes a tab on purpose, using a method from a P1 experiment, then reloads it.",
-      "status": "Not started",
+      "how": "Listen to WebView2's crash and exit events. A crashed tab gets a panel with Reload; if the whole engine stops, Ferrum restarts and reopens the tabs. Tests crash a tab and the engine on purpose.",
+      "status": "Done",
       "chain": "Page processes crash → show a crashed tab, allow reload, keep the shell alive → one bad site cannot take Ferrum down.",
       "check": "A deliberate crash shows the crashed state; reload works; the shell stays responsive.",
       "script": "scripts/verify/p4.10-recover-crashes.ps1"

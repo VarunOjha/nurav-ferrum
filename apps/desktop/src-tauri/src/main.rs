@@ -16,6 +16,7 @@ mod history;
 mod library;
 mod logging;
 mod policy;
+mod recovery;
 mod selftest;
 mod session;
 mod settings;
@@ -218,6 +219,7 @@ fn main() {
             content::tab_list,
             content::test_stats,
             content::test_processes,
+            recovery::test_crash_tab,
             content::tab_new_private,
             content::site_data_clear,
             content::test_focus,
@@ -337,6 +339,14 @@ fn main() {
             let handle = app.handle().clone();
             shell_view.with_webview(move |pw| {
                 ferrum_webview_manager::webview2::save_environment(&pw.environment());
+                // A browser-process failure ends every view; Ferrum restarts and restores its tabs (p4.10).
+                let h = handle.clone();
+                if let Err(e) = ferrum_webview_manager::webview2::watch_browser_exit(
+                    &pw.environment(),
+                    Box::new(move |failed| recovery::browser_exited(&h, failed)),
+                ) {
+                    tracing::warn!(target: "ferrum::recovery", error = %e, "browser exit not watched");
+                }
                 // The shell fills the window; tab views must be drawn above it.
                 if let Err(e) = ferrum_webview_manager::webview2::send_to_back(&pw.controller()) {
                     tracing::warn!(target: "ferrum::app", error = %e, "shell not moved behind the tab views");
@@ -369,6 +379,7 @@ fn main() {
             // Save the tab list one last time when Ferrum closes normally (p3.5).
             if let tauri::RunEvent::Exit = event {
                 session::save_now(app);
+                recovery::restart_if_wanted();
             }
         });
 }

@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, agoText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -44,6 +44,13 @@ test("error texts: known codes in plain words, unknown codes get a general sente
   assert.match(webErrorText(13), /name could not be found/);
   for (const c of [1, 2, 4, 5]) assert.match(webErrorText(c), /no(t)? offer a way around certificate errors/);
   assert.equal(webErrorText(999), "The page could not be loaded.");
+});
+
+test("crash texts: each failure in plain words, with what to do", () => {
+  assert.match(crashText("renderer-exited"), /ended unexpectedly\. Reload/);
+  assert.match(crashText("renderer-unresponsive"), /stopped responding\. Reload/);
+  assert.match(crashText("browser-exited"), /starts again/);
+  assert.equal(crashText("something-new"), crashText("renderer-exited"));
 });
 
 test("address text and blocked note", () => {

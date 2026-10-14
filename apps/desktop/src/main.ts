@@ -11,7 +11,7 @@ import "@fontsource/ibm-plex-mono/latin-500.css";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { ACCENTS, DENSITIES, THEMES, applyLook } from "./themes.ts";
-import { PROGRAM_WARNING, addressText, agoText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
+import { PROGRAM_WARNING, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -23,6 +23,7 @@ type TabEvent = { tab: number } & (
   | { kind: "got-focus" }
   | { kind: "new-window"; uri: string; user_initiated: boolean }
   | { kind: "external-scheme"; uri: string; user_initiated: boolean }
+  | { kind: "process-failed"; failure: string; page_lost: boolean; reason: number; exit_code: number }
 );
 // Messages about links (not tied to one tab's view).
 type LinkEvent =
@@ -45,7 +46,8 @@ type TabUi = {
   pageLoaded: boolean;
   canBack: boolean;
   canForward: boolean;
-  panel: { uri: string; webError: number } | null;
+  /** The shell's panel over the tab: a page that could not load, or (`crash` set, p4.10) a page whose process failed. */
+  panel: { uri: string; webError: number; crash?: string } | null;
   /** The site's icon (a PNG data address from the app), or "". */
   icon: string;
   /** A web page loaded in this tab at some point (p3.16). */
@@ -96,6 +98,7 @@ const lock = $<HTMLSpanElement>("lock");
 const toolbar = $<HTMLElement>("toolbar");
 const panel = $<HTMLElement>("error-panel");
 const emptyPanel = $<HTMLElement>("empty-panel");
+const errorTitle = $<HTMLHeadingElement>("error-title");
 const errorText = $<HTMLParagraphElement>("error-text");
 const errorAddress = $<HTMLParagraphElement>("error-address");
 const errorCode = $<HTMLParagraphElement>("error-code");
@@ -159,9 +162,13 @@ function render(): void {
   document.getElementById("star")?.dispatchEvent(new Event("ferrum-render"));
   renderNewTab();
   if (u?.panel) {
-    errorText.textContent = webErrorText(u.panel.webError);
+    const crash = u.panel.crash;
+    panel.dataset.kind = crash ? "crashed" : "load-error";
+    errorTitle.textContent = crash ? "This page stopped working" : "This page could not be loaded";
+    errorText.textContent = crash ? crashText(crash) : webErrorText(u.panel.webError);
     errorAddress.textContent = u.panel.uri;
-    errorCode.textContent = `WebView2 error status ${u.panel.webError}`;
+    errorCode.textContent = crash ? `Page process: ${crash}` : `WebView2 error status ${u.panel.webError}`;
+    retry.textContent = crash ? "Reload" : "Try again";
     panel.hidden = false;
   } else {
     panel.hidden = true;
@@ -260,8 +267,8 @@ function applyList(next: TabList): void {
 // window title is set by the app, not by this page).
 const received: [string, string][] = [];
 
-async function showPanelFor(id: number, uri: string, webError: number): Promise<void> {
-  uiOf(id).panel = { uri, webError };
+async function showPanelFor(id: number, uri: string, webError: number, crash?: string): Promise<void> {
+  uiOf(id).panel = crash ? { uri, webError, crash } : { uri, webError };
   if (id === list.active) render();
   await invoke("shell_cover", { cover: true, tab: id });
 }
@@ -305,6 +312,8 @@ await listen<TabEvent>("tab", async (e) => {
       break;
     case "navigation-completed": {
       u.loading = false;
+      // The crash panel stays until a page loads again (p4.10).
+      if (u.panel?.crash && !ev.success) break;
       // The final address (after redirects): a redirect back to the current address raises no source-changed.
       if (ev.uri) u.uri = ev.uri;
       // A site's own error page stays with a toolbar note; no page at all gets the shell's panel (logic.ts).
@@ -326,6 +335,15 @@ await listen<TabEvent>("tab", async (e) => {
       renderStrip();
       renderSideTabs();
       return;
+    case "process-failed":
+      // p4.10: the page is gone (or frozen): cover the tab with the crash panel; Reload loads it again.
+      if (!ev.page_lost) return;
+      u.loading = false;
+      u.state = "failed";
+      u.status = "Page stopped working";
+      u.pageLoaded = false;
+      await showPanelFor(ev.tab, u.uri || u.lastUri, 0, ev.failure);
+      break;
     case "history-changed":
       u.canBack = ev.can_go_back;
       u.canForward = ev.can_go_forward;
