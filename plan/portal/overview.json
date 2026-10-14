@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 13 of 18 tasks done. The settings screen now manages blocked sites and site permissions, and plain-HTTP pages show a \"not secure\" bar. Two part pages wait for your re-approval.",
+  "summary": "Phase 4 (security) is in progress: 13 of 18 tasks done. You re-approved the two part pages. Claude continues with switching SmartScreen back on.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:ccef25ddaf06c31f92e41f82e87385e20b7984864c13466223970e0c3e21d606"
+    "content_hash": "sha256:4c788bf76215736a0b82d0219ec9f94ce7a0aa85a7d9c76c4fbc83cba5b51d1a"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Two part pages wait for your re-approval",
+      "state": "All up to date",
       "ref": "comp-app-shell"
     },
     {
@@ -35,24 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
         "state": "13 of 18 tasks done"
       },
       {
-        "item": "Security settings",
-        "state": "Built and tested"
-      },
-      {
-        "item": "Part pages",
-        "state": "2 wait for your re-approval"
+        "item": "Approvals",
+        "state": "All up to date"
       }
     ],
-    "why": "Nothing to run. The task changed two part pages, so they need your approval again before Claude switches SmartScreen back on.",
+    "why": "Nothing to run; Claude continues with the next task: SmartScreen back on, starting with a research note on what it checks and sends.",
     "script": null,
-    "tell_claude": "Re-approve the two part pages in Claude Code (or ask to see the changes)."
+    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
     "open": 19,

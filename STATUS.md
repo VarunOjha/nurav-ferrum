@@ -35,13 +35,14 @@ sources:
   - raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md
   - raw/owner/2026-10-14-s06-p4-18-phase-reapproval.md
   - raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md
+  - raw/owner/2026-10-14-s06-p4-17-components-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s06
 current_phase: phase-p4-security
 current_task: p4.18
-next_action: "Ask the owner to re-approve comp-app-shell and comp-security-engine (staled by p4.17, one question). Then p4.18 (SmartScreen back on in every WebView2 environment, owner answer Q-225): research note first, then Ferrum sets the browser arguments itself for the shell and the site environments without msSmartScreenProtection; per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.18-smartscreen-on.ps1 (to be written in p4.18). At the P4 exit review align the p4.16 wording on the phase page with the narrower ablation the owner accepted. Remaining after it: p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [comp-app-shell, comp-security-engine]
+next_action: "p4.18 (SmartScreen back on in every WebView2 environment, owner answer Q-225): research note first, then Ferrum sets the browser arguments itself for the shell and the site environments without msSmartScreenProtection; per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.18-smartscreen-on.ps1 (to be written in p4.18). At the P4 exit review align the p4.16 wording on the phase page with the narrower ablation the owner accepted. Remaining after it: p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: []
 last_handoff: handoff-2026-10-14-s06
 ---
 
@@ -363,7 +364,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.17 committed in cb7286c; two component pages wait for re-approval; p4.18 next)
+(empty: p4.17 committed in cb7286c; two component pages re-approved; p4.18 next)
 
 ## Blockers
 
@@ -400,7 +401,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 13 of 18 tasks done; waiting for your re-approval of two part pages changed by p4.17 |
+| Phase 4 (security) | 13 of 18 tasks done; p4.18 (SmartScreen back on) next |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.

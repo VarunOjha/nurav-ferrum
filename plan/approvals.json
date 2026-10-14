@@ -838,13 +838,13 @@
     "comp-app-shell": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-14T14:32:12-05:00",
+      "timestamp": "2026-10-14T15:37:46-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:d05207f2352afee132d66469cbf551959f8a45ca10b9826b16dca3d927f16d71",
-      "scope_hash": "sha256:dfc478c004d768bf75db92f8ad756362c2ec56bde5b9091917cf02fc9d788bf3",
+      "content_hash": "sha256:f8d4be2d351ea7e34f477f8110b4da1441b5fa11250ccd5a2f2671af78576270",
+      "scope_hash": "sha256:ed0fba858afb627245a056c93807ad03a54ee2097fec6ca5620bc51eaab60de3",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md",
+      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-17-components-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1109,19 +1109,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-14T14:32:12-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:d05207f2352afee132d66469cbf551959f8a45ca10b9826b16dca3d927f16d71",
+          "scope_hash": "sha256:dfc478c004d768bf75db92f8ad756362c2ec56bde5b9091917cf02fc9d788bf3",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md"
         }
       ]
     },
     "comp-security-engine": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-14T14:32:12-05:00",
+      "timestamp": "2026-10-14T15:37:46-05:00",
       "path": "wiki/architecture/components/comp-security-engine.md",
-      "content_hash": "sha256:48a75cd1e56494e5bfcd1e9ee21046382a5fca6d4b2039e1d8572d124c4eb879",
-      "scope_hash": "sha256:074667c72af8e3e8e6bdfd9c363da097539238e4b2e249b01f48e48b7a73edf3",
+      "content_hash": "sha256:9a7ad055eeae1c964d8e3b170773b758c07fa3d9edc23b02a99937868685787c",
+      "scope_hash": "sha256:878daccdbfe97323f52500cf9c7ca4579b23cbcd1ad428f8fe97547e55e69826",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md",
+      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-17-components-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1199,6 +1210,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s04-p4-9-components-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-14T14:32:12-05:00",
+          "path": "wiki/architecture/components/comp-security-engine.md",
+          "content_hash": "sha256:48a75cd1e56494e5bfcd1e9ee21046382a5fca6d4b2039e1d8572d124c4eb879",
+          "scope_hash": "sha256:074667c72af8e3e8e6bdfd9c363da097539238e4b2e249b01f48e48b7a73edf3",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md"
         }
       ]
     },

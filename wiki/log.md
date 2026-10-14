@@ -2622,3 +2622,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 15:04
 - pages: [comp-app-shell, comp-security-engine]
 - result: Both are in the P4 dependency set; p4.18 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-14] approval | two component pages re-approved after p4.17
+
+- session: s06
+- time: 15:37
+- pages: [comp-app-shell, comp-security-engine]
+- sources: [raw/owner/2026-10-14-s06-p4-17-components-reapproval.md]
+- result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. p4.18 is next.

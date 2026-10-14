@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:c786efcef39912b017059ebdc8f9b33edcfb5c55e934fc76dbd61e1d7b134250"
+    "content_hash": "sha256:8de891834866971d6d19ab8ea2e4b00859b49eb9031cfa9555910e5ddbd4db58"
   },
   "entries": [
     {
@@ -4674,6 +4674,35 @@
       "category": "Built",
       "tags": [
         "blocklist",
+        "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-17-reapproved",
+      "date": "2026-10-14",
+      "time": "15:37",
+      "title": "You re-approved two part pages after the security settings task",
+      "done": "You re-approved the pages for the browser controls and the security policy.",
+      "next": "Claude switches SmartScreen back on, starting with a research note.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        },
+        {
+          "what": "Security policy page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] approval | two component pages re-approved after p4.17"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
         "privacy"
       ]
     }
