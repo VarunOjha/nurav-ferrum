@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:ac52deb38133bcc1f8ea30e54e63f0f3f835dd289bea1efa07975ed83e95b5bc"
+    "content_hash": "sha256:018e270836b8e7ac69473d23899ddfcca41ebc2211db6530e78581d45ea6c137"
   },
   "entries": [
     {
@@ -4625,6 +4625,26 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-17-start",
+      "date": "2026-10-14",
+      "time": "14:33",
+      "title": "The security settings screen starts",
+      "done": "Claude wrote down what the next task will change before starting it: blocked sites and site permissions in the settings screen, and the \"not secure\" bar for plain-HTTP pages you asked for.",
+      "next": "Claude builds and tests it.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] plan | p4.17 in flight"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Planned",
+      "tags": [
+        "blocklist",
+        "sessions"
       ]
     }
   ]

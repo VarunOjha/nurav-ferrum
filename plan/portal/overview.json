@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 12 of 18 tasks done. You re-approved the three pages and chose to leave the short test run in your data as it is. Claude continues with the security settings screen.",
+  "summary": "Phase 4 (security) is in progress: 12 of 18 tasks done. Claude is building the security settings: blocked sites and site permissions in the settings screen, plus the \"not secure\" bar.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:ab6e51496fa0ef615da5ce38149af697919a281965f3f4a0eaf0d0bd8666ce60"
+    "content_hash": "sha256:24f71e6a332a24f8759c4bdd4506eb53c3cff683bc812dee800370400ff4e568"
   },
   "updated": "2026-10-14",
   "where_we_are": [

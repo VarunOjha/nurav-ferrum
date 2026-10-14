@@ -363,7 +363,10 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.16 committed in 8f92b1e; three pages re-approved; p4.17 next)
+- task: p4.17 (session s06)
+- intent: security settings in the settings screen. Host `settings.rs`: `SettingsView.blocklist` (None keeps the current list; every entry checked by the security engine's rule parser, problems in plain words); the navigation policy is rebuilt on save (as today). Shell: a "Blocked sites" box (one rule per line) and, per site row, check boxes for camera, microphone, location, notifications and clipboard reading (other granted kinds kept). Also the "not secure" bar for plain-HTTP pages (owner answer Q-112; planned with p4.17 on comp-app-shell). No new host command: the p2.3 IPC test already refuses settings_set from a website. Live spec: add a blocked site and a grant through the screen, restart, both kept and enforced (blocked navigation audited; grant honoured), then revoke.
+- paths: apps/desktop/src-tauri/src/settings.rs; apps/desktop/src/{main.ts,logic.ts,logic.test.ts,style.css}; apps/desktop/index.html; apps/desktop/tests/smoke/security-settings.spec.ts; scripts/verify/p4.17-security-settings-screen.ps1; wiki/architecture/components/{comp-app-shell,comp-security-engine}.md; wiki/quality/qual-security-testing-plan.md; wiki/raw/evidence/phase-p4-security/; plan/portal/{architecture,phases/phase-p4-security,roadmap,refs}.json
+- rollback: git checkout -- <paths>; delete the new spec and evidence files
 
 ## Blockers
 
@@ -400,7 +403,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 12 of 18 tasks done; p4.17 (security settings screen) next |
+| Phase 4 (security) | 12 of 18 tasks done; p4.17 (security settings screen) in progress |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.
