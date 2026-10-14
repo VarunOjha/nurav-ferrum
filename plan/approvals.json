@@ -1562,15 +1562,27 @@
     },
     "phase-p4-security": {
       "status": "approved",
-      "comment": "Approve all five (Recommended)",
-      "timestamp": "2026-10-13T07:47:01-05:00",
+      "comment": "",
+      "timestamp": "2026-10-14T13:56:36-05:00",
       "path": "wiki/phases/phase-p4-security.md",
-      "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36",
-      "scope_hash": "sha256:491f40076b4b289e961ea563f6e26e9ad444489e4d7dec0f649ed48555173c69",
+      "content_hash": "sha256:883571aacab08708e36bfe01d39ee837aa66cb6c2dc6368e1e1b1bb3c06e1c2c",
+      "scope_hash": "sha256:f6d4ee1ec6c028c5833d680785b31cdbe9a2c6c672514e28c09ed458f0eb4512",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-18-phase-reapproval.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "Approve all five (Recommended)",
+          "timestamp": "2026-10-13T07:47:01-05:00",
+          "path": "wiki/phases/phase-p4-security.md",
+          "content_hash": "sha256:95435a9c39f3451fce11b87c3f1905285288cbb5bd1e70c7744ff25752405f36",
+          "scope_hash": "sha256:491f40076b4b289e961ea563f6e26e9ad444489e4d7dec0f649ed48555173c69",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md"
+        }
+      ]
     },
     "adr-0008": {
       "status": "approved",

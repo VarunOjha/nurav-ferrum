@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f60e9f4c072c1e256f288145a144f68a2639acf70adb06a11ff74c166b29c1c1"
+    "content_hash": "sha256:e39e53927e7109273499bdc680ac25118f8f2b10441b162a6ce84042dca9cf23"
   },
   "entries": [
     {
@@ -4479,6 +4479,31 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-phase-reapproved",
+      "date": "2026-10-14",
+      "time": "13:56",
+      "title": "You re-approved the Phase 4 page with the SmartScreen task",
+      "done": "You re-approved the Phase 4 plan, which now includes switching SmartScreen back on.",
+      "next": "Claude builds the benchmark-only switch that turns the safety rules off.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Phase 4 page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] approval | phase-p4-security re-approved with task p4.18"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]

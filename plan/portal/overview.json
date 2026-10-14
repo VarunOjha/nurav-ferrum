@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 11 of 18 tasks done. Ferrum can now keep sites apart in three ways. You re-approved the part pages and chose to turn SmartScreen back on, which added a task; the phase page waits for your re-approval.",
+  "summary": "Phase 4 (security) is in progress: 11 of 18 tasks done. You re-approved the Phase 4 page with the new SmartScreen task. Claude continues with the benchmark-only switch.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:963d69f4e9fec6b95dbde89bc2355102156f4a07b290e44f6d03694aa57957a8"
+    "content_hash": "sha256:c111a23a5fb003838bbd52f3dc9cf8acc89a972009373b36335751ec64a6d12d"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "The Phase 4 page waits for your re-approval (one task added)",
+      "state": "All up to date",
       "ref": "phase-p4-security"
     },
     {
@@ -35,24 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
         "state": "11 of 18 tasks done"
       },
       {
-        "item": "SmartScreen",
-        "state": "You chose: turn it back on (new task)"
-      },
-      {
-        "item": "Phase 4 page",
-        "state": "Waits for your re-approval"
+        "item": "Approvals",
+        "state": "All up to date"
       }
     ],
-    "why": "Nothing to run. Your SmartScreen answer added one task to the Phase 4 page, so the page needs your approval again before Claude continues with the next task.",
+    "why": "Nothing to run; Claude continues with the next task: a benchmark-only switch that turns the safety rules off, proven missing from the normal app.",
     "script": null,
-    "tell_claude": "Re-approve the Phase 4 page in Claude Code (or ask to see the change first)."
+    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
     "open": 19,

@@ -2550,3 +2550,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 13:52
 - pages: [phase-p4-security]
 - result: The P4 page itself is in the P4 dependency set; no further P4 task starts until the owner re-approves it (SCHEMA §10.4). blocked_on set to phase-p4-security.
+
+## [2026-10-14] approval | phase-p4-security re-approved with task p4.18
+
+- session: s06
+- time: 13:56
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-14-s06-p4-18-phase-reapproval.md]
+- result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. p4.16 is next.
