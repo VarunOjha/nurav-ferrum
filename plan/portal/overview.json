@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 10 of 17 tasks done. Two part pages changed with the last task and wait for your re-approval.",
+  "summary": "Phase 4 (security) is in progress: 10 of 17 tasks done, and you re-approved the changed part pages. Claude continues with the choice of isolation modes.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:7dab152424325beff962ebc229bca5064b77a902af7c34ae0c1d76830be9faab"
+    "content_hash": "sha256:77ccea775051fa7d55f98429688d6fff0f91c3d8923c36a78f6974401d58e19a"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Two part pages wait for your re-approval",
+      "state": "All up to date",
       "ref": "comp-app-shell"
     },
     {
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
@@ -43,12 +43,12 @@
       },
       {
         "item": "Part pages",
-        "state": "Two wait for your re-approval"
+        "state": "Re-approved by you"
       }
     ],
-    "why": "Nothing to run. The crash-recovery task changed the pages for the browser controls and the tab and view manager, so they need your approval again before Claude continues.",
+    "why": "Nothing to run; Claude continues with the next task: isolation modes, so the settings file can choose how strictly sites are kept apart.",
     "script": null,
-    "tell_claude": "Answer Claude's question in chat: re-approve both pages, or ask for changes."
+    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
     "open": 19,

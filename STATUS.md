@@ -31,13 +31,14 @@ sources:
   - raw/owner/2026-10-13-s04-p4-7-components-reapproval.md
   - raw/owner/2026-10-13-s04-p4-8-app-shell-reapproval.md
   - raw/owner/2026-10-13-s04-p4-9-components-reapproval.md
+  - raw/owner/2026-10-13-s05-p4-10-components-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s05
 current_phase: phase-p4-security
 current_task: p4.15
-next_action: "After the owner re-approves comp-app-shell and comp-webview-manager (staled by p4.10): p4.15 (isolation modes selectable by configuration: shared profile, profile per site, user data folder per site), per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.15-selectable-isolation-modes.ps1. Remaining after it: p4.16, p4.17, p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [comp-app-shell, comp-webview-manager]
+next_action: "p4.15 (isolation modes selectable by configuration: shared profile, profile per site, user data folder per site), per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.15-selectable-isolation-modes.ps1. Remaining after it: p4.16, p4.17, p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: []
 last_handoff: handoff-2026-10-13-s04
 ---
 
@@ -74,7 +75,7 @@ manual checklist items 1 to 20 are still owed).
 - p4.7 done (`f525169`): isolation proven by tests (storage per profile, clearing one site, private tabs, process inventory); check PASS; full smoke 100 passed. Three component pages re-approved by the owner.
 - p4.8 done (`55dcb6f`): websites cannot reach Ferrum's controls or pages, tested; check PASS; full smoke 105 passed. comp-app-shell re-approved by the owner.
 - p4.9 done (`5027ee1`): security audit log (six fields, origin only, rotation), required by every security test; older address-bar race fixed; check PASS; full smoke 106 passed. Two component pages re-approved by the owner. Process slip: no write-ahead In-flight record was written for p4.7 (logged).
-- Session s05 (same chat, after the s04 handoff): p4.10 done (`ea16ba1`): a crashed tab is marked and covered with Reload; other tabs and the shell keep working; a browser-engine failure restarts Ferrum with its tabs; check PASS; full smoke 109 passed. comp-app-shell and comp-webview-manager wait for re-approval.
+- Session s05 (same chat, after the s04 handoff): p4.10 done (`ea16ba1`): a crashed tab is marked and covered with Reload; other tabs and the shell keep working; a browser-engine failure restarts Ferrum with its tabs; check PASS; full smoke 109 passed. Two component pages re-approved by the owner.
 
 ## Done this session (s02)
 
@@ -359,7 +360,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.10 committed in ea16ba1; comp-app-shell and comp-webview-manager wait for re-approval; p4.15 next)
+(empty: p4.10 committed in ea16ba1; two component pages re-approved; p4.15 next)
 
 ## Blockers
 

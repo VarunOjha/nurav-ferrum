@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5e80d564fea32c34b5fdd723dbc48b36b9f3a7c1bf4a4e80fd6e98bed77d2426"
+    "content_hash": "sha256:f83b1e8673f908a3a69438c69f857136e38d7fca73476c214f7a62c0218ebcab"
   },
   "entries": [
     {
@@ -4351,6 +4351,35 @@
       "category": "Built",
       "tags": [
         "web views",
+        "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s05-p4-10-reapproved",
+      "date": "2026-10-13",
+      "time": "23:46",
+      "title": "You re-approved two part pages after the crash-recovery task",
+      "done": "You re-approved the pages for the browser controls and the tab and view manager.",
+      "next": "Claude builds the choice of isolation modes: how strictly sites are kept apart, set in the settings file.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        },
+        {
+          "what": "Tab & view manager page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | two component pages re-approved after p4.10"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
         "testing"
       ]
     }

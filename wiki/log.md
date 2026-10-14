@@ -2494,3 +2494,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 23:41
 - pages: [comp-app-shell, comp-webview-manager]
 - result: The p4.10 page updates staled two components in the P4 dependency set; the next task waits for the owner's re-approval (SCHEMA §10.4).
+
+## [2026-10-13] approval | two component pages re-approved after p4.10
+
+- session: s05
+- time: 23:46
+- pages: [comp-app-shell, comp-webview-manager]
+- sources: [raw/owner/2026-10-13-s05-p4-10-components-reapproval.md]
+- result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.15 is next.
