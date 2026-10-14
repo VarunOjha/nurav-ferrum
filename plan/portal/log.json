@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8daa191c47559176e9516c2129e56b5c47780d219da4b1c4bab858634bb573d2"
+    "content_hash": "sha256:f1b6c9271826da3ea584030c5d0f62c70553edb1b6a0df041655a0e94b6bdca6"
   },
   "entries": [
     {
@@ -3989,6 +3989,43 @@
       "tags": [
         "privacy",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-5-reapproved",
+      "date": "2026-10-13",
+      "time": "19:19",
+      "title": "You re-approved four part pages after the permissions task",
+      "done": "You re-approved the pages for the security engine, the tab and view manager, the core library and the browser controls.",
+      "next": "Claude builds safe downloads: the chosen folder only, nothing opens by itself, a warning for programs, and cleaned file names.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security engine page",
+          "status": "Approved"
+        },
+        {
+          "what": "Tab & view manager page",
+          "status": "Approved"
+        },
+        {
+          "what": "Core library page",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | four component pages re-approved after p4.5"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]
