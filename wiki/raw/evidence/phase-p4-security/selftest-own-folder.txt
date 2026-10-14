@@ -1,0 +1,28 @@
+# Self-test uses its own settings and data folder (fix before p4.18, owner answer 2026-10-14)
+
+Recorded 2026-10-14 16:05 by Claude, session s07, on commit 3fd3b7f with the fix uncommitted (the p4.18 code edits set aside).
+
+## 1. Refusal: debug Ferrum started with FERRUM_SELFTEST=nav (scratchpad script, Invoke-Native)
+
+no --user-config: exit 2; [ferrum] self-test: needs its own --user-config file; not started
+--user-config but no data_dir: exit 2; [ferrum] self-test: needs --config with [storage] data_dir that loads without problems; not started (no data_dir)
+
+## 2. scripts/verify/p4.8-no-app-access.ps1 (runs the IPC self-test through scripts/lib/Ferrum.SelfTest.ps1)
+
+Run at 2026-10-14 16:03 on commit 3fd3b7f (with uncommitted changes)
+  PASS   Self-test: every way into the app refused from a website; no bridge in tabs; shell still works (70 s)
+         16 ways in refused by the permission check; channel fetch reached but empty (Ferrum has no channels: missing channel id header); no bridge in tabs; shell call works
+  PASS   Live test: links, pop-up and typed address to Ferrum own pages refused and logged; shell stays on its own page (71 s)
+         app-origin: 5 passed (including: the shell cannot be led to a website)
+  PASS   Commands allowed for the shell only; nothing relies on the invoke key
+         one capability, shell only, no remote section, no invoke key
+RESULT: PASS - p4.8 (3 PASS; 141 s)
+
+## 3. The self-test's throwaway folder after the run
+
+folder: <USERPROFILE>/AppData/Local/Temp/ferrum-selftest-ipc-22184-620097640
+config.toml:
+[storage]
+data_dir = "<USERPROFILE>/AppData/Local/Temp/ferrum-selftest-ipc-22184-620097640"
+entries: EBWebView config.toml logs result.json 
+logs: ferrum.jsonl 

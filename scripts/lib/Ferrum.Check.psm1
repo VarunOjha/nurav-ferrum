@@ -237,6 +237,8 @@ function Invoke-Native {
     <#
       Runs a program and returns { ExitCode, Output } (standard output, then error output). It never
       throws for a non-zero exit code; the caller decides. -InputText is sent to the program's stdin.
+      -NoWait starts it and returns the Process at once (output not captured; the caller waits). Arguments are passed
+      one by one (ProcessStartInfo.ArgumentList), so paths with spaces stay whole.
     #>
     param(
         [Parameter(Mandatory)][string]$FilePath,
@@ -244,7 +246,8 @@ function Invoke-Native {
         [string]$WorkingDirectory = $script:RepoRoot,
         [hashtable]$Environment = @{},
         [string]$InputText,
-        [int]$TimeoutSeconds = 1800
+        [int]$TimeoutSeconds = 1800,
+        [switch]$NoWait
     )
     $exe = if (Test-Path -LiteralPath $FilePath -PathType Leaf) { $FilePath } else { Find-Tool $FilePath }
     if (-not $exe) { Stop-Fail "The program '$FilePath' is not installed or not on PATH." }
@@ -253,6 +256,10 @@ function Invoke-Native {
     foreach ($a in $ArgumentList) { $psi.ArgumentList.Add($a) }
     $psi.WorkingDirectory = $WorkingDirectory
     $psi.UseShellExecute = $false
+    if ($NoWait) {
+        foreach ($k in $Environment.Keys) { $psi.Environment[$k] = [string]$Environment[$k] }
+        return [System.Diagnostics.Process]::Start($psi)
+    }
     $psi.RedirectStandardOutput = $true
     $psi.RedirectStandardError = $true
     $psi.RedirectStandardInput = [bool]$InputText

@@ -10,6 +10,8 @@ sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/owner/2026-10-10-s01-browser-ui-choice.md
+  - raw/owner/2026-10-14-s07-selftest-real-data-fix-first.md
+  - raw/evidence/phase-p4-security/selftest-own-folder.txt
 related: [ov-arch-system-overview, ov-arch-trust-boundaries, ov-arch-data-flows, ov-arch-configuration, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-core, comp-tab-content, comp-webview2-runtime, comp-windows-os, adr-0006, adr-0007, adr-0015, adr-0028, risk-r02, phase-p2-minimal-container, phase-p3-tabs-sessions]
 approvable: true
 path: apps/desktop/
@@ -170,7 +172,7 @@ Built in P2 and checked by the task scripts (evidence in [the P2 evidence folder
   second while it changes and on a normal exit (`RunEvent::Exit`), atomically; on start the last session opens again
   (same order, same active tab) when `restore_on_startup` is on, else the start-up pages. An unreadable session file is
   copied aside; one from a newer Ferrum is neither restored nor overwritten. Self-test runs (`FERRUM_SELFTEST`) never
-  read or write it (they use the real data folder). Debug-only `test_crash` ends the process at once for the crash
+  read or write it (since the fix before p4.18 they also run in their own throwaway data folder, see below). Debug-only `test_crash` ends the process at once for the crash
   test (no kill command). Known limit: back/forward history is not restored (WebView2 cannot give a new view a
   history); each tab reopens its last address ([check-p3.5](../../raw/evidence/phase-p3-tabs-sessions/check-p3.5.txt)).
 - p3.6, per-site profiles: each tab's view is created in the profile of its address (`profile_for`). The navigation
@@ -371,3 +373,13 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   "Clear data" empties one site's cookie, localStorage and IndexedDB.
   The camera grant is checked as kept and shown but not used by the test, since asking would switch on the PC's real
   camera (found when a first run got `NotReadableError`: granted by Ferrum, but the device could not start).
+- Fix before p4.18 (owner answer 2026-10-14, [raw](../../raw/owner/2026-10-14-s07-selftest-real-data-fix-first.md)):
+  the built-in self-tests (`FERRUM_SELFTEST`: ipc, nav, devtools, panic) used to start without their own settings, so
+  they read the user's real settings file and ran in the real WebView2 data folder (tabs, history and bookmarks were
+  never written in self-test mode). The p4.17 check ran one this way while the owner's own Ferrum was open. Now a
+  self-test needs its own `--user-config` file (checked before any file is read) and settings naming their own
+  `[storage] data_dir`; otherwise it prints why and exits with code 2. The check helpers make a throwaway folder per
+  run (`New-SelfTestFolder` in `scripts/lib/Ferrum.SelfTest.ps1`) and start the program with `Invoke-Native -NoWait`
+  (arguments passed one by one, so paths with spaces stay whole)
+  ([selftest-own-folder](../../raw/evidence/phase-p4-security/selftest-own-folder.txt): both refusals exit 2; the p4.8
+  check passed with the self-test's browser data and log in its own folder).

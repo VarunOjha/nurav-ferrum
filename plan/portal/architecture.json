@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with Reload, shows a \"not secure\" bar for plain-HTTP pages, and its settings screen manages blocked sites, site permissions and clearing a site's data.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, and settings for blocked sites, site permissions and clearing site data. Its self-tests run only in their own throwaway folder.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:f8d4be2d351ea7e34f477f8110b4da1441b5fa11250ccd5a2f2671af78576270"
+        "content_hash": "sha256:fd060a0b8da6b10ac1100ec0022d84efb38bce96fb1cdfdb30d4307e9fa895d9"
       }
     },
     {

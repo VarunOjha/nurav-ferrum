@@ -91,9 +91,10 @@ Invoke-Step 'A deliberate test crash is written to the log as one panic line (de
     New-Item -ItemType Directory -Force -Path $dir | Out-Null
     $cfg = Join-Path $dir 'config.toml'
     Set-Content -LiteralPath $cfg -Value "[storage]`ndata_dir = $(ConvertTo-Json ($dir -replace '\\', '/'))"
-    $env:FERRUM_SELFTEST = 'panic'; $env:FERRUM_SELFTEST_OUT = Join-Path $dir 'out.json'
-    try { $app = Start-Process -FilePath (Get-RepoPath 'target/debug/ferrum-desktop.exe') -ArgumentList '--config', "`"$cfg`"" -PassThru }
-    finally { Remove-Item Env:FERRUM_SELFTEST, Env:FERRUM_SELFTEST_OUT -ErrorAction SilentlyContinue }
+    # Its own user settings file too, never the real one (fix found in p4.18).
+    $app = Invoke-Native -NoWait -FilePath (Get-RepoPath 'target/debug/ferrum-desktop.exe') `
+        -ArgumentList '--config', $cfg, '--user-config', (Join-Path $dir 'user-config.toml') `
+        -Environment @{ FERRUM_SELFTEST = 'panic'; FERRUM_SELFTEST_OUT = (Join-Path $dir 'out.json') }
     if (-not $app.WaitForExit(60000)) { Stop-Fail 'The app did not finish the panic self-test (left running; close it by hand).' }
     if ($app.ExitCode -ne 0) { Stop-Fail "The app exited with code $($app.ExitCode) after the test crash." }
     $log = Join-Path $dir 'logs/ferrum.jsonl'

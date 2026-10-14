@@ -32,6 +32,7 @@ param([switch]$SaveEvidence)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
+. (Join-Path $PSScriptRoot '../lib/Ferrum.SelfTest.ps1')
 
 Start-Check -Id 'p2.12' -Title 'Developer tools only in test builds' -Phase 'phase-p2-minimal-container' `
     -Why 'nobody opens them by accident in the real app.'
@@ -77,10 +78,11 @@ function Get-DevToolsWindows {
 function Invoke-DevToolsSelfTest {
     param([Parameter(Mandatory)][string]$Exe)
     if (Get-DevToolsWindows) { Stop-Wait 'A DevTools window is already open on this PC; close it and run the check again.' }
-    $out = Join-Path ([IO.Path]::GetTempPath()) "ferrum-devtools-$PID-$([IO.Path]::GetFileNameWithoutExtension((Split-Path -Parent $Exe)))-$(Get-Random).json"
-    $env:FERRUM_SELFTEST = 'devtools'; $env:FERRUM_SELFTEST_OUT = $out
-    try { $app = Start-Process -FilePath (Get-RepoPath $Exe) -PassThru }
-    finally { Remove-Item Env:FERRUM_SELFTEST, Env:FERRUM_SELFTEST_OUT -ErrorAction SilentlyContinue }
+    # Its own throwaway settings and data folder, never the real ones (fix found in p4.18).
+    $run = New-SelfTestFolder -Name "devtools-$(Split-Path -Leaf (Split-Path -Parent $Exe))"
+    $out = Join-Path $run.Dir 'result.json'
+    $app = Invoke-Native -NoWait -FilePath (Get-RepoPath $Exe) -ArgumentList $run.Args `
+        -Environment @{ FERRUM_SELFTEST = 'devtools'; FERRUM_SELFTEST_OUT = $out }
     $shell = New-Object -ComObject WScript.Shell
     $attempts = [ordered]@{}
     $done = @{}

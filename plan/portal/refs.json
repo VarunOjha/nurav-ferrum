@@ -3162,7 +3162,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with Reload, shows a \"not secure\" bar for plain-HTTP pages, and its settings screen manages blocked sites, site permissions and clearing a site's data.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, and settings for blocked sites, site permissions and clearing site data. Its self-tests run only in their own throwaway folder.",
       "status": "Built (first working app)",
       "related": [
         "layer-controls"

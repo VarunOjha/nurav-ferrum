@@ -8,9 +8,25 @@
   (fixture-server, task p2.1) with a self-stop timer, runs the app in self-test mode, waits for both to finish by
   themselves (nothing is killed) and returns the self-test's JSON result. Needs the local development certificate
   installed (p2.1) and port 8443 free.
+  Every self-test run gets its own throwaway settings file and data folder (New-SelfTestFolder), never the user's real
+  ones; Ferrum refuses a self-test without them (fix found in p4.18).
   Dot-source after Ferrum.Check.psm1:  . scripts/lib/Ferrum.SelfTest.ps1; $r = Invoke-FerrumSelfTest -Name nav
 #>
 Set-StrictMode -Version Latest
+
+function New-SelfTestFolder {
+    <#
+      A new throwaway folder for one self-test run, in the temp folder: settings that name it as Ferrum's data folder,
+      and an own (empty) user settings file, so the run never reads or writes the user's real settings or WebView2 data.
+      Returns { Dir, Args } (Args = the command-line arguments for Ferrum).
+    #>
+    param([Parameter(Mandatory)][string]$Name)
+    $dir = Join-Path ([IO.Path]::GetTempPath()) "ferrum-selftest-$Name-$PID-$(Get-Random)"
+    New-Item -ItemType Directory -Force -Path $dir | Out-Null
+    $cfg = Join-Path $dir 'config.toml'
+    Set-Content -LiteralPath $cfg -Value "[storage]`ndata_dir = $(ConvertTo-Json ($dir -replace '\\', '/'))"
+    [pscustomobject]@{ Dir = $dir; Args = @('--config', $cfg, '--user-config', (Join-Path $dir 'user-config.toml')) }
+}
 
 function Invoke-FerrumSelfTest {
     param(
@@ -23,15 +39,14 @@ function Invoke-FerrumSelfTest {
     [void](Assert-Cargo @('build', '--locked', '-p', 'ferrum-desktop', '-p', 'fixture-server'))
     $busy = Get-NetTCPConnection -LocalPort 8443 -State Listen -ErrorAction SilentlyContinue
     if ($busy) { Stop-Wait 'Port 8443 is in use (a test server from an earlier run may still be stopping); run the check again in a minute.' }
-    $out = Join-Path ([IO.Path]::GetTempPath()) "ferrum-selftest-$Name-$PID.json"
-    $server = Start-Process -FilePath (Get-RepoPath 'target/debug/fixture-server.exe') -ArgumentList 'serve', '--port', '8443', '--exit-after', "$ServerSeconds" -PassThru -WindowStyle Hidden
+    $run = New-SelfTestFolder -Name $Name
+    $out = Join-Path $run.Dir 'result.json'
+    $server = Invoke-Native -NoWait -FilePath (Get-RepoPath 'target/debug/fixture-server.exe') -ArgumentList 'serve', '--port', '8443', '--exit-after', "$ServerSeconds"
     Start-Sleep -Seconds 2
-    $env:FERRUM_SELFTEST = $Name; $env:FERRUM_SELFTEST_OUT = $out
-    try {
-        $app = Start-Process -FilePath (Get-RepoPath 'target/debug/ferrum-desktop.exe') -PassThru
-        if (-not $app.WaitForExit($AppTimeoutSeconds * 1000)) { Stop-Fail "The app did not finish its '$Name' self-test within $AppTimeoutSeconds s (left running; close it by hand)." }
-    }
-    finally { Remove-Item Env:FERRUM_SELFTEST, Env:FERRUM_SELFTEST_OUT -ErrorAction SilentlyContinue }
+    $app = Invoke-Native -NoWait -FilePath (Get-RepoPath 'target/debug/ferrum-desktop.exe') -ArgumentList $run.Args `
+        -Environment @{ FERRUM_SELFTEST = $Name; FERRUM_SELFTEST_OUT = $out }
+    if (-not $app.WaitForExit($AppTimeoutSeconds * 1000)) { Stop-Fail "The app did not finish its '$Name' self-test within $AppTimeoutSeconds s (left running; close it by hand)." }
+    if ($app.ExitCode -eq 2) { Stop-Fail "Ferrum refused to start the '$Name' self-test (exit code 2: no own settings or data folder)." }
     [void]$server.WaitForExit(($ServerSeconds + 15) * 1000)
     if (-not (Test-Path -LiteralPath $out)) { Stop-Fail "The '$Name' self-test wrote no result." }
     $raw = Get-Content -LiteralPath $out -Raw

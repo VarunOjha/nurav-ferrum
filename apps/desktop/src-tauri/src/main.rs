@@ -265,6 +265,14 @@ fn main() {
             content::shell_focused
         ])
         .setup(|app| {
+            // A self-test (FERRUM_SELFTEST) never touches the user's real settings or data: it needs its own
+            // --user-config file (checked here, before any file is read) and settings naming a data folder of its own
+            // (checked after loading); otherwise it stops (found in p4.18: the self-tests used the real ones).
+            let selftest = std::env::var_os("FERRUM_SELFTEST").is_some();
+            if selftest && arg_after("--user-config").is_none() {
+                eprintln!("[ferrum] self-test: needs its own --user-config file; not started");
+                std::process::exit(2);
+            }
             let user_config = arg_after("--user-config").or_else(|| {
                 app.path()
                     .app_config_dir()
@@ -279,6 +287,13 @@ fn main() {
             if config_error.is_some() || loaded.config.storage.data_dir.is_none() {
                 eprintln!(
                     "[ferrum] benchmark-nosecurity-build: needs --config with [storage] data_dir that loads without problems; not started ({})",
+                    config_error.as_deref().unwrap_or("no data_dir")
+                );
+                std::process::exit(2);
+            }
+            if selftest && (config_error.is_some() || loaded.config.storage.data_dir.is_none()) {
+                eprintln!(
+                    "[ferrum] self-test: needs --config with [storage] data_dir that loads without problems; not started ({})",
                     config_error.as_deref().unwrap_or("no data_dir")
                 );
                 std::process::exit(2);
