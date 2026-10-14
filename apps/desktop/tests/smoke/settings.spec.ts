@@ -57,7 +57,7 @@ test("change settings, see them take effect, restart, still there", async () => 
     `${base}/landing?start=1`, `${base}/landing?start=2`,
   ]);
   const v = await call<{ sites: { site: string; profile: string }[]; download_folder: string; restore_on_startup: boolean }>(f, "settings_get");
-  expect(v.sites).toEqual([{ site: "site-a.localhost", profile: "work" }]);
+  expect(v.sites).toEqual([{ site: "site-a.localhost", profile: "work", permissions: [] }]); // p4.5: grants travel with the row
   expect(v.download_folder).toBe(folder);
   expect(v.restore_on_startup).toBe(false);
 });

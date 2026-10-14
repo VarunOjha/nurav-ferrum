@@ -193,6 +193,11 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "links of types Ferrum always refuses (ms-msdt:, search-ms:), for the p4.4 tests; harmless inside Ferrum",
     },
+    Route {
+        path: "/perm",
+        status: 200,
+        purpose: "script functions that ask for notifications, location, camera, microphone and clipboard reading (p4.5)",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -491,6 +496,25 @@ async fn links_schemes() -> Html<String> {
     )
 }
 
+/// p4.5: each `ask.<kind>()` asks for one permission and resolves to "granted", "denied" or the error's name, so a
+/// test can read the answer the page gets. Nothing is recorded or sent anywhere.
+async fn perm() -> Html<String> {
+    page(
+        "Permissions",
+        "<p id=\"perm\">Permission requests (called by the tests).</p>\
+         <script>\
+         const media = (c) => navigator.mediaDevices.getUserMedia(c).then((s) => { s.getTracks().forEach((t) => t.stop()); return 'granted'; }, (e) => e.name);\
+         window.ask = {\
+           notifications: () => Notification.requestPermission(),\
+           geolocation: () => new Promise((r) => navigator.geolocation.getCurrentPosition(() => r('granted'), (e) => r(e.code === 1 ? 'denied' : 'error-' + e.code), { timeout: 8000 })),\
+           camera: () => media({ video: true }),\
+           microphone: () => media({ audio: true }),\
+           clipboard: () => navigator.clipboard.readText().then(() => 'granted', (e) => e.name),\
+         };\
+         </script>",
+    )
+}
+
 async fn links_risky() -> Html<String> {
     page(
         "Risky links",
@@ -657,6 +681,7 @@ pub fn router() -> Router {
         .route("/goto", get(goto))
         .route("/links/open", get(links_open))
         .route("/links/risky", get(links_risky))
+        .route("/perm", get(perm))
 }
 
 /// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`).

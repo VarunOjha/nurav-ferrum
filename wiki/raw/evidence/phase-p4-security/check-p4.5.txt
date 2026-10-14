@@ -1,0 +1,22 @@
+Ferrum check p4.5: Permission prompts
+Why: nothing sensitive is handed out by default.
+Run at 2026-10-13 19:04 on commit 2c78cd6 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Rules: every kind refused by default; a grant covers its site and kind only
+         three engine tests passed
+  PASS   Settings: per-site grants read, saved and checked; the app follows them (8 s)
+         settings and app tests passed
+  PASS   Ferrum answers every permission request and WebView2 keeps no answer
+         handler registered, state set, not saved in the profile
+Running 4 tests using 1 worker
+  ✓  1 permissions.spec.ts:33:3 › default settings: every permission refused › notifications, location and clipboard reading are refused and logged (364ms)
+  ✓  2 permissions.spec.ts:44:3 › default settings: every permission refused › camera and microphone are refused (669ms)
+  ✓  3 permissions.spec.ts:54:3 › default settings: every permission refused › a frame on the page is refused too (292ms)
+  ✓  4 permissions.spec.ts:74:3 › a per-site grant › is honoured, and removing it in settings takes effect at the next request (565ms)
+  4 passed (49.9s)
+  PASS   Live test: page script sees refusals (also in a frame); grant honoured and revocable; all logged (65 s)
+         permissions: 4 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.5 (4 PASS; 74 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.5 check passed".

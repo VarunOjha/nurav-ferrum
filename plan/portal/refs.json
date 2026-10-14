@@ -920,7 +920,7 @@
       "kind": "task",
       "title": "P4 task: Permission prompts",
       "summary": "Camera, microphone, location, notifications and clipboard are sensitive → deny by default, allow per site, never stored inside WebView2 → you control access.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -3242,7 +3242,7 @@
       "id": "comp-security-engine",
       "kind": "component",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules, each tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and always refuses four link types known to be abused.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, refuses four abused link types, and gives no permission (camera, location, ...) unless you allow the site.",
       "status": "Being built",
       "related": [
         "layer-engine"

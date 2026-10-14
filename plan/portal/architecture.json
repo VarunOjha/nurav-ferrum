@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:01037444ad0212cbfde308e4c3ceb1a51cff2e78b996d136be34272695b56e4d"
+        "content_hash": "sha256:aa6e8aec1c59f9b1c558fb92ea9864581e56370f6e34d865cd96d6dee532ffe3"
       }
     },
     {
@@ -297,13 +297,13 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:642620fc07b4ea5e52897169b5c8c5b2e4b5ffbdc44669361adefd9121bb4c58"
+        "content_hash": "sha256:a61496a50e349157f59156aa24b86a689048f56c14bb74ff6ad60034feca6dc7"
       }
     },
     {
       "id": "comp-security-engine",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure. Pure rules, each tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and always refuses four link types known to be abused.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, refuses four abused link types, and gives no permission (camera, location, ...) unless you allow the site.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Being built",
@@ -326,7 +326,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-security-engine.md",
-        "content_hash": "sha256:6ebef505b178755da6305a6e33278c60d2c19a80a6a248e5b0da959570f0ee9f"
+        "content_hash": "sha256:353120a1b0d1678f69b5fb4634176b94a45ed562c3370c21b635d8c5a3b455c2"
       }
     },
     {
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:3f732063b611af9a4619762a2bcb33a76065e68888bbe81585c39f77a73d1de5"
+        "content_hash": "sha256:69a78e408b43b8f8b3fd63a582bd701e3b2aa5e596efcaa2f7caeabe313639d6"
       }
     },
     {

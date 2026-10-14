@@ -135,6 +135,81 @@ pub struct SiteSettings {
     /// domains of one sign-in system): 1 to 40 lower-case letters, digits, `-` or `_`.
     #[serde(default)]
     pub profile: Option<String>,
+    /// Permissions this site may use (p4.5, adr-0015). Every kind not listed here is refused: a site gets nothing
+    /// sensitive (camera, microphone, location, notifications, clipboard reading, ...) unless the user grants it here.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub permissions: Vec<PermissionKind>,
+}
+
+/// A permission a web page can ask for (the kinds WebView2 reports, p4.5).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum PermissionKind {
+    /// The camera.
+    Camera,
+    /// The microphone.
+    Microphone,
+    /// The device's location.
+    Geolocation,
+    /// Showing notifications.
+    Notifications,
+    /// Reading the clipboard.
+    ClipboardRead,
+    /// Motion and other sensors.
+    OtherSensors,
+    /// Starting several downloads without a click each.
+    MultipleAutomaticDownloads,
+    /// Reading and writing files the user picks.
+    FileReadWrite,
+    /// Playing media with sound before a click.
+    Autoplay,
+    /// Listing the fonts on the PC.
+    LocalFonts,
+    /// Full access to MIDI devices.
+    MidiSystemExclusiveMessages,
+    /// Placing windows across screens.
+    WindowManagement,
+}
+
+impl PermissionKind {
+    /// Every kind, in a fixed order.
+    pub const ALL: [PermissionKind; 12] = [
+        PermissionKind::Camera,
+        PermissionKind::Microphone,
+        PermissionKind::Geolocation,
+        PermissionKind::Notifications,
+        PermissionKind::ClipboardRead,
+        PermissionKind::OtherSensors,
+        PermissionKind::MultipleAutomaticDownloads,
+        PermissionKind::FileReadWrite,
+        PermissionKind::Autoplay,
+        PermissionKind::LocalFonts,
+        PermissionKind::MidiSystemExclusiveMessages,
+        PermissionKind::WindowManagement,
+    ];
+
+    /// The settings name (`camera`, `clipboard-read`, ...).
+    pub fn name(self) -> &'static str {
+        match self {
+            PermissionKind::Camera => "camera",
+            PermissionKind::Microphone => "microphone",
+            PermissionKind::Geolocation => "geolocation",
+            PermissionKind::Notifications => "notifications",
+            PermissionKind::ClipboardRead => "clipboard-read",
+            PermissionKind::OtherSensors => "other-sensors",
+            PermissionKind::MultipleAutomaticDownloads => "multiple-automatic-downloads",
+            PermissionKind::FileReadWrite => "file-read-write",
+            PermissionKind::Autoplay => "autoplay",
+            PermissionKind::LocalFonts => "local-fonts",
+            PermissionKind::MidiSystemExclusiveMessages => "midi-system-exclusive-messages",
+            PermissionKind::WindowManagement => "window-management",
+        }
+    }
+
+    /// The kind with this settings name.
+    pub fn from_name(name: &str) -> Option<PermissionKind> {
+        PermissionKind::ALL.into_iter().find(|k| k.name() == name)
+    }
 }
 
 /// `[downloads]`: where downloads go (p3.8).

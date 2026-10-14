@@ -296,4 +296,8 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   click) ask the security engine; a refused type gets a toolbar note instead of the bar ("Blocked: ms-msdt links are
   always refused (known to be abused)", "... links are not on your allowed list"). Settings key
   `external_allowlist`; a bad entry refuses the settings like a bad site rule.
+- p4.5, permissions: `policy::permission_filter` decides each request of a tab from the settings in effect now
+  (security engine), logs it and notes a refusal on the toolbar ("Blocked: camera for example.com (allow it in
+  Settings)"). The settings screen's site rows carry the grants (`SiteRow.permissions`; left out, the site keeps its
+  grants), so saving the screen never drops them.
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

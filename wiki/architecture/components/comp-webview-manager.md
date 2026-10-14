@@ -176,4 +176,11 @@ of it:
   cancelled page navigation with `NavigationCompleted` (not successful, web error "cancelled"), so the shell keeps its
   "Blocked" note through that event.
 
-Not yet built: permissions (P4); `procinfo` and `netlog` (P5); the lifecycle actuator (P7).
+- p4.5, permissions: `PermissionRequested` (token removed in `close`) hands each request to `Handlers::permissions`
+  (`PermissionAsk`: page address, kind as its settings name, user-initiated), sets `State` to allow or deny, and sets
+  `SavesInProfile(false)` through `ICoreWebView2PermissionRequestedEventArgs3` (degrades to WebView2's default when the
+  cast fails, COM-3), so no answer is remembered in the profile; reported as tab event `PermissionRequested`. Observed
+  in the p4.5 live test: a grant removed in settings took effect at the next request; a frame's request arrived at
+  this page-level event.
+
+Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

@@ -1,37 +1,79 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-  Check for task p4.5 (P4 Security): Permission prompts.  DRAFT: not ready until P4.
+  Check for task p4.5 (P4 Security): websites get no permission (camera, microphone, location, ...) unless you grant it.
 
 .DESCRIPTION
-  Status         : DRAFT. Its real checks are written when P4 starts; until then it only lists them and
-                   ends NOT READY.
-  What it checks : (planned) Each kind is denied by default; a grant works and can be revoked.
-  Why            : Camera, microphone, location, notifications and clipboard are sensitive → deny by
-                   default, allow per site, never stored inside WebView2 → you control access.
-  What it changes: nothing.
-  How long       : under a second while it is a draft.
+  What it checks : (1) the rules: every permission kind is refused by default, a grant covers only its site and kind,
+                   and plain-HTTP or unreadable pages never get one; (2) the settings: per-site grants are read, saved
+                   and checked (a misspelt kind is refused), and the settings screen keeps them; (3) the code: Ferrum
+                   answers every permission request itself and tells WebView2 not to remember the answer; (4) live test
+                   with Ferrum and a local test page: notifications, location and clipboard reading are refused as seen
+                   by the page's own script (camera and microphone too; on a PC without them the page sees "no device"),
+                   also inside a frame; each request is logged; a per-site grant works, and removing it in settings
+                   takes effect at the next request.
+  Why            : a page that gets the camera or the location without asking you is a privacy leak → Ferrum refuses
+                   every kind unless you allow that site → nothing sensitive is handed out by default.
+  What it changes: nothing (builds the app and the test pages in target/; test data under the smoke-test folder).
+  How long       : about two minutes (builds, then Ferrum opens and closes by itself twice).
   How to run     : pwsh -NoProfile -File scripts/verify/p4.5-permission-prompts.ps1
-  Result         : NOT READY until P4 starts (this is a draft); then PASS or FAIL.
-  Tell Claude    : nothing. "Not ready until P4" is the expected result for now.
+  Result         : PASS (every checked step is fine) or FAIL (the line says what).
+  Tell Claude    : nothing if it passes. If it fails, paste the FAIL lines and say "p4.5 check failed".
 
-  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers:
-                   scripts/lib/Ferrum.Check.psm1). The planned command, from the verify field of the phase
-                   page:
-    Security tests: fixture requests each permission kind; default deny observed in page script; a
-    per-site grant is honoured and revocable.
+  For Claude     : exit codes 0 = PASS, 1 = FAIL, 2 = NOT READY (shared helpers: scripts/lib/Ferrum.Check.psm1).
+    Do not use the PC while the live test runs. Phase-page verify field: Security tests: fixture requests each
+    permission kind; default deny observed in page script; a per-site grant is honoured and revocable.
 #>
 [CmdletBinding()]
 param([switch]$SaveEvidence)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../lib/Ferrum.Check.psm1') -Force
+. (Join-Path $PSScriptRoot '../lib/Ferrum.SelfTest.ps1')
 
 Start-Check -Id 'p4.5' -Title 'Permission prompts' -Phase 'phase-p4-security' `
-    -Why 'you control access.'
+    -Why 'nothing sensitive is handed out by default.'
 
-# TODO(P4): replace each planned step below with an Invoke-Step that really checks it.
-Add-TodoStep 'Each kind is denied by default' 'Planned check; written when P4 starts.'
-Add-TodoStep 'A grant works and can be revoked' 'Planned check; written when P4 starts.'
+$cargoBin = Join-Path $env:USERPROFILE '.cargo/bin'
+if ((Test-Path -LiteralPath $cargoBin) -and ($env:PATH -notlike "*$cargoBin*")) { $env:PATH = "$cargoBin;$env:PATH" }
 
-Complete-Check -SaveEvidence:$SaveEvidence -NotReadyUntil 'P4'
+function Assert-Passed {
+    param([string]$Output, [string[]]$Names)
+    foreach ($n in $Names) {
+        if ($Output -notmatch "(?m)^test (\S+::)?$([regex]::Escape($n)) \.\.\. ok") { Stop-Fail "Test '$n' did not run or did not pass." }
+    }
+}
+
+Invoke-Step 'Rules: every kind refused by default; a grant covers its site and kind only' {
+    $r = Assert-Cargo @('test', '--locked', '-p', 'ferrum-security', '--lib', 'permissions::')
+    Assert-Passed $r.Output @('every_kind_is_refused_by_default', 'a_grant_covers_its_site_and_kind_only',
+        'insecure_unreadable_and_unknown_requests_are_refused')
+    'three engine tests passed'
+}
+
+Invoke-Step 'Settings: per-site grants read, saved and checked; the app follows them' {
+    $c = Assert-Cargo @('test', '--locked', '-p', 'ferrum-core', '--test', 'config')
+    Assert-Passed $c.Output @('site_permission_grants_are_read_checked_and_saved')
+    $a = Assert-Cargo @('test', '--locked', '-p', 'ferrum-desktop', 'policy::')
+    Assert-Passed $a.Output @('permissions_follow_the_site_grants')
+    'settings and app tests passed'
+}
+
+Invoke-Step 'Ferrum answers every permission request and WebView2 keeps no answer' {
+    $wv = Read-RepoText 'crates/webview-manager/src/webview2.rs'
+    foreach ($need in 'add_PermissionRequested', 'remove_PermissionRequested', 'SetSavesInProfile(false)', 'COREWEBVIEW2_PERMISSION_STATE_DENY') {
+        if (-not $wv.Contains($need)) { Stop-Fail "webview2.rs no longer has '$need'." }
+    }
+    $content = Read-RepoText 'apps/desktop/src-tauri/src/content.rs'
+    if ($content -notmatch 'permissions:\s*crate::policy::permission_filter') { Stop-Fail 'Tab views are created without the permission filter.' }
+    'handler registered, state set, not saved in the profile'
+}
+
+Invoke-Step 'Live test: page script sees refusals (also in a frame); grant honoured and revocable; all logged' {
+    $r = Invoke-FerrumSmoke -Spec 'permissions'
+    Add-LogText (Get-Tail $r.Output 10)
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '4 passed') { Stop-Fail "The live test failed:`n$(Get-Tail $r.Output 30)" }
+    'permissions: 4 passed'
+}
+
+Complete-Check -SaveEvidence:$SaveEvidence

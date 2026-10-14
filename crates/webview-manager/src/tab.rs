@@ -74,6 +74,16 @@ pub enum TabEvent {
         /// Caused by a user gesture.
         user_initiated: bool,
     },
+    /// A page asked for a permission (camera, location, ...; p4.5) and the app decided. WebView2 does not keep the
+    /// answer in the profile.
+    PermissionRequested {
+        /// The address of the page (or frame) that asked.
+        uri: String,
+        /// The kind's settings name (`camera`, ...), or `unknown`.
+        kind: String,
+        /// Whether it was allowed.
+        allowed: bool,
+    },
     /// The page's icon changed (p3.16): the icon as PNG bytes, as WebView2 already has it (empty: the page has none).
     FaviconChanged {
         /// PNG image bytes.
@@ -126,6 +136,18 @@ pub struct NavRequest {
     pub redirected: bool,
     /// A frame inside the page (`FrameNavigationStarting`), not the page itself.
     pub frame: bool,
+}
+
+/// A permission request as the app sees it (p4.5).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PermissionAsk {
+    /// The address of the page (or frame) that asked.
+    pub uri: String,
+    /// The kind's settings name (`camera`, `clipboard-read`, ...; the names of `ferrum_core::config::PermissionKind`),
+    /// or `None` for a kind this version does not know.
+    pub kind: Option<&'static str>,
+    /// Caused by a user gesture.
+    pub user_initiated: bool,
 }
 
 /// A key pressed while a tab view had focus, as WebView2 reports it before the page sees it (accelerator keys:

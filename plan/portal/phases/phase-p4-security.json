@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 4,
+    "done": 5,
     "total": 17
   },
   "step_order": [
@@ -70,7 +70,7 @@
       "what": "Ferrum, not WebView2, decides on camera, microphone, location, notifications and clipboard reading.",
       "why": "A website with silent camera, microphone or location access could spy on you. Decisions stored inside WebView2 would be out of your sight and control.",
       "how": "Send permission requests to the rules engine, keep per-site grants in settings, and tell WebView2 not to save decisions itself. Tests check deny, grant and revoke.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Camera, microphone, location, notifications and clipboard are sensitive → deny by default, allow per site, never stored inside WebView2 → you control access.",
       "check": "Each kind is denied by default; a grant works and can be revoked.",
       "script": "scripts/verify/p4.5-permission-prompts.ps1"

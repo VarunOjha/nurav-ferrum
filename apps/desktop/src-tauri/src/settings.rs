@@ -8,7 +8,7 @@
 use std::path::PathBuf;
 
 use ferrum_core::address::{Outcome, normalize};
-use ferrum_core::config::{self, Config, SiteSettings};
+use ferrum_core::config::{self, Config, PermissionKind, SiteSettings};
 use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Manager};
 
@@ -22,6 +22,9 @@ pub struct SiteRow {
     pub site: String,
     /// A named profile, or empty for the site's own.
     pub profile: String,
+    /// Permissions granted to the site (p4.5), by settings name (`camera`, ...). Missing: keep what the site has.
+    #[serde(default)]
+    pub permissions: Option<Vec<String>>,
 }
 
 /// What the settings screen shows and edits.
@@ -56,6 +59,7 @@ fn view_of(app: &AppHandle, c: &Config) -> SettingsView {
             .map(|s| SiteRow {
                 site: s.site.clone(),
                 profile: s.profile.clone().unwrap_or_default(),
+                permissions: Some(s.permissions.iter().map(|k| k.name().to_string()).collect()),
             })
             .collect(),
         download_folder: c
@@ -114,9 +118,34 @@ pub fn apply(current: &Config, input: &SettingsView) -> Result<Config, Vec<Strin
         .sites
         .iter()
         .filter(|r| !r.site.trim().is_empty())
-        .map(|r| SiteSettings {
-            site: r.site.trim().to_ascii_lowercase(),
-            profile: Some(r.profile.trim().to_string()).filter(|p| !p.is_empty()),
+        .map(|r| {
+            let site = r.site.trim().to_ascii_lowercase();
+            let permissions = match &r.permissions {
+                // The screen did not send them: the site keeps its grants.
+                None => current
+                    .sites
+                    .iter()
+                    .find(|c| c.site == site)
+                    .map(|c| c.permissions.clone())
+                    .unwrap_or_default(),
+                Some(names) => names
+                    .iter()
+                    .filter_map(|n| {
+                        let k = PermissionKind::from_name(n.trim());
+                        if k.is_none() {
+                            problems.push(format!(
+                                "Permission \"{n}\" for {site} is not a permission name."
+                            ));
+                        }
+                        k
+                    })
+                    .collect(),
+            };
+            SiteSettings {
+                site,
+                profile: Some(r.profile.trim().to_string()).filter(|p| !p.is_empty()),
+                permissions,
+            }
         })
         .collect();
     let folder = input.download_folder.trim();

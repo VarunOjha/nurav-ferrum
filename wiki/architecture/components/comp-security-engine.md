@@ -110,6 +110,18 @@ pop-ups) and the confirming click (`external_open_confirm`, checked again in cas
 Tests: one engine test (coverage still 100 percent), one app test for the list's syntax, live spec `external-schemes`
 (3 passed; launcher replaced by a test stand-in), check script `scripts/verify/p4.4-ask-before-opening.ps1`.
 
+**p4.5, permissions** ([crates/security/src/permissions.rs](../../../crates/security/src/permissions.rs)). Every
+permission kind WebView2 reports (camera, microphone, location, notifications, clipboard reading, sensors, automatic
+downloads, file access, autoplay, local fonts, MIDI, window placement) is refused unless the page's site has a grant
+in settings (`[[sites]] permissions`, compared by registrable domain like per-site profiles); `http:` and unreadable
+pages never get one, and an unknown kind is refused. Rules `permission-granted`, `permission-not-granted`,
+`permission-not-secure-site`, `permission-unknown-kind`. The app asks it from WebView2's `PermissionRequested`
+(comp-webview-manager), logs every request (kind, scheme and host, rule) and notes refusals on the toolbar. Observed in
+the live test: a frame's request reaches the page-level `PermissionRequested` and is refused there; the camera request
+reached Ferrum on this PC. Tests: three engine tests (coverage still 100 percent), one settings test, one app test, live
+spec `permissions` (4 passed), check script `scripts/verify/p4.5-permission-prompts.ps1`. The settings screen for
+grants is p4.17; until then grants are written in the settings file, and the screen keeps them.
+
 Not done yet: the shell shows the "not secure" warning as the address-bar sign only, not yet as a bar (owner answer
 Q-112 asks for a bar; planned with the security settings screen, p4.17). The audit log of refusals (p4.9) replaces
 the plain log lines.

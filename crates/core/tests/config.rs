@@ -377,3 +377,40 @@ fn appearance_theme_accent_density() {
         );
     }
 }
+
+// --- p4.5: per-site permission grants ---
+
+#[test]
+fn site_permission_grants_are_read_checked_and_saved() {
+    use ferrum_core::config::PermissionKind;
+    let p = tmp(
+        "grants.toml",
+        "version = 3\n[[sites]]\nsite = \"example.com\"\npermissions = [\"camera\", \"clipboard-read\"]\n",
+    );
+    let l = config::load(Some(&p), None).unwrap();
+    assert_eq!(
+        l.config.sites[0].permissions,
+        vec![PermissionKind::Camera, PermissionKind::ClipboardRead]
+    );
+    let out = tmp("grants-saved.toml", "");
+    config::save(&out, &l.config).unwrap();
+    assert_eq!(config::load(Some(&out), None).unwrap().config, l.config);
+    // A misspelt kind is refused, not ignored.
+    let bad = tmp(
+        "grants-bad.toml",
+        "version = 3\n[[sites]]\nsite = \"example.com\"\npermissions = [\"camra\"]\n",
+    );
+    assert!(config::load(Some(&bad), None).is_err());
+    // The settings names and the file names are the same, and every kind has one.
+    for k in PermissionKind::ALL {
+        assert_eq!(PermissionKind::from_name(k.name()), Some(k));
+        let text = toml::to_string(&ferrum_core::config::SiteSettings {
+            site: "example.com".into(),
+            profile: None,
+            permissions: vec![k],
+        })
+        .unwrap();
+        assert!(text.contains(&format!("\"{}\"", k.name())), "{text}");
+    }
+    assert_eq!(PermissionKind::from_name("everything"), None);
+}

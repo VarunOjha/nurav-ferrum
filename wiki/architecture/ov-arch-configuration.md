@@ -73,7 +73,8 @@ allowlist_only = false          # true: only allowlisted sites load
 external_allowlist = []         # link types to other apps that may be offered; empty = any, always asked (Q-224)
 http_policy = "warn"            # warn | upgrade
 external_schemes = "confirm"    # confirm | deny
-permissions_default = "deny"    # deny | prompt
+                                # permissions: every kind refused unless granted per site (p4.5):
+                                # [[sites]] site = "example.com", permissions = ["camera", "notifications"]
 downloads = "prompt"            # prompt | deny
 google_oauth = "offer-system-browser" # the only value; never spoof UA (Q-109)
 new_window = "new-tab"          # new-tab | same-view | system-browser

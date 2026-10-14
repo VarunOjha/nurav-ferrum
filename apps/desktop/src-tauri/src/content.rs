@@ -140,6 +140,9 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
             uri,
             user_initiated,
         } => json!({"kind": "external-scheme", "uri": uri, "user_initiated": user_initiated}),
+        TabEvent::PermissionRequested { uri, kind, allowed } => {
+            json!({"kind": "permission", "uri": uri, "permission": kind, "allowed": allowed})
+        }
         // The site icon as a data address the shell's image may show (its CSP allows `data:` images only).
         TabEvent::FaviconChanged { png } => json!({"kind": "favicon", "icon": icon_data_url(png)}),
         // Downloads go to the shell as their own `download` messages (downloads.rs).
@@ -321,6 +324,7 @@ fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
                 gate: gate(&h, id),
                 keys: crate::shortcuts::filter(&h),
                 downloads: crate::downloads::chooser(&h),
+                permissions: crate::policy::permission_filter(&h, id),
             },
             Box::new({
                 let h = h.clone();

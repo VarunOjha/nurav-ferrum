@@ -25,15 +25,15 @@ use webview2_com::{
     DownloadStartingEventHandler, FaviconChangedEventHandler, FocusChangedEventHandler,
     GetFaviconCompletedHandler, HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
     NavigationCompletedEventHandler, NavigationStartingEventHandler,
-    NewWindowRequestedEventHandler, SourceChangedEventHandler, StateChangedEventHandler,
-    take_pwstr,
+    NewWindowRequestedEventHandler, PermissionRequestedEventHandler, SourceChangedEventHandler,
+    StateChangedEventHandler, take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows::Win32::System::Com::IStream;
 use windows_core::{BOOL, HSTRING, Interface, PWSTR};
 
 use crate::Error;
-use crate::tab::{KeyDown, NavDecision, NavRequest, TabEvent};
+use crate::tab::{KeyDown, NavDecision, NavRequest, PermissionAsk, TabEvent};
 
 /// Receives tab events (UI thread).
 pub type EventSink = Rc<dyn Fn(TabEvent)>;
@@ -41,6 +41,9 @@ pub type EventSink = Rc<dyn Fn(TabEvent)>;
 pub type NavGate = Rc<dyn Fn(&NavRequest) -> NavDecision>;
 /// Decides whether a key pressed in the view is Ferrum's (true: handled, the page never sees it) (UI thread).
 pub type KeyFilter = Rc<dyn Fn(KeyDown) -> bool>;
+
+/// Decides a permission request (true: allow) (UI thread).
+pub type PermissionFilter = Rc<dyn Fn(&PermissionAsk) -> bool>;
 
 /// Chooses where a download is saved: given its address and WebView2's suggested path, the full path to save to, or
 /// `None` to refuse the download (UI thread).
@@ -56,6 +59,8 @@ pub struct Handlers {
     pub gate: NavGate,
     /// Takes Ferrum's keyboard shortcuts.
     pub keys: KeyFilter,
+    /// Decides permission requests (p4.5).
+    pub permissions: PermissionFilter,
 }
 
 fn hr<T>(r: windows_core::Result<T>) -> Result<T, Error> {
@@ -75,6 +80,7 @@ enum Ev {
     Title,
     GotFocus,
     NewWindow,
+    Permission,
     LaunchExternal,
     Accelerator,
     Download,
@@ -148,6 +154,7 @@ impl ContentView {
             gate,
             keys,
             downloads,
+            permissions,
         } = handlers;
         let core = self.core.clone();
 
@@ -346,6 +353,55 @@ impl ContentView {
         // SAFETY: COM-1, COM-4.
         hr(unsafe { core.add_NewWindowRequested(&h, &mut t) })?;
         self.tokens.push((Ev::NewWindow, t));
+
+        // Permissions (p4.5): every request (camera, location, notifications, ...) is decided by the app; WebView2 shows
+        // no prompt of its own and, where the runtime supports it (Args3), keeps no answer in the profile, so a grant
+        // removed in settings takes effect at the next request.
+        let s = sink.clone();
+        let h = PermissionRequestedEventHandler::create(Box::new(move |_sender, args| {
+            if let Some(args) = args {
+                let (mut uri, mut kind, mut user) = (
+                    PWSTR::null(),
+                    COREWEBVIEW2_PERMISSION_KIND::default(),
+                    BOOL(0),
+                );
+                // SAFETY: COM-1, COM-5: UI-thread callback; out-pointers are locals; `uri` copied and freed by take_pwstr.
+                let uri = unsafe {
+                    let _ = args.Uri(&mut uri);
+                    let _ = args.PermissionKind(&mut kind);
+                    let _ = args.IsUserInitiated(&mut user);
+                    take_pwstr(uri)
+                };
+                let name = permission_name(kind);
+                let allow = permissions(&PermissionAsk {
+                    uri: uri.clone(),
+                    kind: name,
+                    user_initiated: user.as_bool(),
+                });
+                // SAFETY: COM-1; setting the state inside the callback is the documented use; the Args3 cast degrades
+                // to "saved by WebView2's default" (COM-3).
+                unsafe {
+                    if let Ok(a3) = args.cast::<ICoreWebView2PermissionRequestedEventArgs3>() {
+                        let _ = a3.SetSavesInProfile(false);
+                    }
+                    let _ = args.SetState(if allow {
+                        COREWEBVIEW2_PERMISSION_STATE_ALLOW
+                    } else {
+                        COREWEBVIEW2_PERMISSION_STATE_DENY
+                    });
+                }
+                s(TabEvent::PermissionRequested {
+                    uri,
+                    kind: name.unwrap_or("unknown").to_string(),
+                    allowed: allow,
+                });
+            }
+            Ok(())
+        }));
+        let mut t = 0i64;
+        // SAFETY: COM-1, COM-4: token kept for close().
+        hr(unsafe { core.add_PermissionRequested(&h, &mut t) })?;
+        self.tokens.push((Ev::Permission, t));
 
         // Safety net for links to other apps that do not pass the navigation gate (for example from a frame):
         // WebView2 never launches them itself; Ferrum reports them and asks the user (p2.10).
@@ -562,6 +618,7 @@ impl ContentView {
                         Err(e) => Err(e),
                     },
                     Ev::NewWindow => self.core.remove_NewWindowRequested(*t),
+                    Ev::Permission => self.core.remove_PermissionRequested(*t),
                     Ev::LaunchExternal => match self.core.cast::<ICoreWebView2_18>() {
                         Ok(c18) => c18.remove_LaunchingExternalUriScheme(*t),
                         Err(e) => Err(e),
@@ -572,6 +629,28 @@ impl ContentView {
         // SAFETY: COM-1, COM-4.
         let _ = unsafe { self.controller.Close() };
     }
+}
+
+/// The settings name of a WebView2 permission kind (the names of `ferrum_core::config::PermissionKind`); `None` for a
+/// kind this version does not know.
+fn permission_name(kind: COREWEBVIEW2_PERMISSION_KIND) -> Option<&'static str> {
+    Some(match kind {
+        COREWEBVIEW2_PERMISSION_KIND_CAMERA => "camera",
+        COREWEBVIEW2_PERMISSION_KIND_MICROPHONE => "microphone",
+        COREWEBVIEW2_PERMISSION_KIND_GEOLOCATION => "geolocation",
+        COREWEBVIEW2_PERMISSION_KIND_NOTIFICATIONS => "notifications",
+        COREWEBVIEW2_PERMISSION_KIND_CLIPBOARD_READ => "clipboard-read",
+        COREWEBVIEW2_PERMISSION_KIND_OTHER_SENSORS => "other-sensors",
+        COREWEBVIEW2_PERMISSION_KIND_MULTIPLE_AUTOMATIC_DOWNLOADS => "multiple-automatic-downloads",
+        COREWEBVIEW2_PERMISSION_KIND_FILE_READ_WRITE => "file-read-write",
+        COREWEBVIEW2_PERMISSION_KIND_AUTOPLAY => "autoplay",
+        COREWEBVIEW2_PERMISSION_KIND_LOCAL_FONTS => "local-fonts",
+        COREWEBVIEW2_PERMISSION_KIND_MIDI_SYSTEM_EXCLUSIVE_MESSAGES => {
+            "midi-system-exclusive-messages"
+        }
+        COREWEBVIEW2_PERMISSION_KIND_WINDOW_MANAGEMENT => "window-management",
+        _ => return None,
+    })
 }
 
 /// Reads a whole COM stream from where it stands; nothing when reading fails or it holds more than `max` bytes.

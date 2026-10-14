@@ -91,6 +91,10 @@ export function blockedText(uri: string, why = "", frame = false): string {
   const what = frame ? "Blocked a frame: " : "Blocked: ";
   if (host && why === "blocklist") return `${what}${host} is on your blocked sites list`;
   if (host && why === "allowlist-only") return `${what}${host} is not on your allowed sites list`;
+  if (why.startsWith("permission:")) {
+    const kind = why.slice("permission:".length).replace(/-/g, " ");
+    return `${what}${kind} for ${host || "this page"} (allow it in Settings)`;
+  }
   if (why.startsWith("url-")) return `${what}not a valid address`;
   const scheme = (uri.split(":")[0] ?? "").toLowerCase();
   if (why === "external-risky") return `${what}${scheme} links are always refused (known to be abused)`;
