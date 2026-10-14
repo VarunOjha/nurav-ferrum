@@ -2381,3 +2381,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-security-engine, comp-app-shell]
 - sources: [raw/owner/2026-10-13-s04-p4-6-components-reapproval.md]
 - result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.7 is next.
+
+## [2026-10-13] code | p4.7 isolation proven by tests; private tabs; clearing one site
+
+- session: s04
+- time: 19:53
+- pages: [comp-webview-manager, comp-app-shell, comp-core, ov-arch-isolation-model, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.7.txt]
+- result: Live tests: cookie, localStorage and IndexedDB stay in a site's own profile (the same site in another profile sees nothing; back in its own profile the data returns); clearing site A leaves site B intact; a private tab (InPrivate, profile ferrum-private) sees no normal data, stays out of the history and forgets its data. Process inventory: one browser, one GPU and two utility processes serve every profile; four renderers, none hosting two sites' pages. ov-arch-isolation-model §3 claims closed (observed, derived or "not tested"). Found: releasing the frame-info collection before its iterator ended the process; fixed. p4.7 check PASS 3/3; full smoke 100 passed. Stales approval of comp-webview-manager, comp-app-shell and comp-core.
+- stales: [comp-webview-manager, comp-app-shell, comp-core]
+- commit: f525169
+
+## [2026-10-13] gate | three component approvals stale after p4.7
+
+- session: s04
+- time: 19:53
+- pages: [comp-webview-manager, comp-app-shell, comp-core]
+- result: The p4.7 page updates staled three components in the P4 dependency set; p4.8 waits for the owner's re-approval (SCHEMA §10.4).

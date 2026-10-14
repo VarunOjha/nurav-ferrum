@@ -5200,6 +5200,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "f525169",
+      "kind": "commit",
+      "title": "Commit f525169",
+      "summary": "Isolation between site profiles proven by tests; private tabs; clearing one site's data (task p4.7).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

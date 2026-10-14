@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e965ca8dd2bcaec18edf4436c26db862e09bf88672bcd0519ccce2a5c67c6db3"
+    "content_hash": "sha256:a7f1f2a6acdcb395bcf518f041146801eadf9c9002ef06bb16316f6d5cebc6ae"
   },
   "entries": [
     {
@@ -4085,6 +4085,40 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-7",
+      "date": "2026-10-13",
+      "time": "19:53",
+      "title": "Tested what site profiles keep apart; private tabs added",
+      "done": "Tests showed that a site's cookies and stored data stay in its own profile, and that clearing one site's data leaves the others alone. New: private tabs (Ctrl+Shift+N) that keep nothing and stay out of the history. The running processes show what all sites share: one browser process, one graphics process and two helper processes. Full test suite: 100 passed.",
+      "next": "You re-approve three part pages that changed with the code; then Claude proves websites cannot reach Ferrum's own controls.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Tab & view manager page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Core library page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "f525169",
+      "covers": [
+        "## [2026-10-13] code | p4.7 isolation proven by tests; private tabs; clearing one site",
+        "## [2026-10-13] gate | three component approvals stale after p4.7"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "isolation",
+        "testing"
       ]
     }
   ]

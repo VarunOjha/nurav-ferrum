@@ -2,7 +2,7 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 6 of 17 tasks done, and you re-approved the changed part pages. Claude continues with checking what site profiles and tabs still share.",
+  "summary": "Phase 4 (security) is in progress: 7 of 17 tasks done. Tests now prove what separate site profiles keep apart, and private tabs exist. Three part pages changed with the code and need your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
     "content_hash": "sha256:2c8b3197adc2c7fa2ed6fcf33d6379df2d2c70a6f55357dc12fbf21f63202f4f"
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "comp-security-engine"
+      "state": "Three part pages out of date: waiting for you",
+      "ref": "comp-webview-manager"
     },
     {
       "item": "Your rule",
@@ -35,20 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "6 of 17 tasks done"
+        "state": "7 of 17 tasks done"
       },
       {
         "item": "Part pages",
-        "state": "Re-approved by you"
+        "state": "3 changed with the new code; need your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: find out, by tests and by looking at the running processes, exactly what separate site profiles and tabs still share, and write it down.",
+    "why": "Nothing to run. The pages for the tab and view manager, the browser controls and the core library changed with the code, so your earlier approvals are out of date; the next task builds on them.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "\"Re-approve the three part pages\", or ask to see the changes first."
   },
   "questions_for_you": {
     "open": 19,
