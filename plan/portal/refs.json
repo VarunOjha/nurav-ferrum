@@ -950,7 +950,7 @@
       "kind": "task",
       "title": "P4 task: No app access for websites",
       "summary": "Websites must not reach app internals → test every channel, including one internal command the permission system skips, and block loading the app's own pages → native access stays closed.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]

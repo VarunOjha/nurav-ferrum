@@ -2,8 +2,9 @@
 //! app by themselves (checks never kill it). Inert unless the variable is set. Fixture pages come from the local
 //! HTTPS test server (`fixture-server`, task p2.1) at `FERRUM_SELFTEST_BASE` (default `https://localhost:8443`).
 //!
-//! - `ipc` (p2.3, extended in p2.6): the fixture page `/ipc-probe` tries the app bridge (app command, event listen,
-//!   event emit) (a) in an untrusted **Tauri** web view: every call must be refused; and (b) in the **content view
+//! - `ipc` (p2.3, extended in p2.6 and p4.8): the fixture page `/ipc-probe` tries the app bridge (app commands
+//!   including those added in P4, event listen and emit, Tauri's core plugin commands, the internal channel-fetch
+//!   command) (a) in an untrusted **Tauri** web view: every call must be refused; and (b) in the **content view
 //!   Ferrum creates itself** (adr-0029): there must be no bridge at all. The shell's own call must still work.
 //! - `nav` (p2.6): the content view visits two fixture pages; the app must report, for each, navigation starting →
 //!   address changed → navigation completed (success, HTTP 200) in that order, and the shell must receive the same
@@ -89,6 +90,14 @@ fn all_refused(report: &Option<Value>) -> bool {
         "suggest_command",
         "backup_command",
         "appearance_command",
+        "private_tab_command",
+        "site_clear_command",
+        "processes_command",
+        "plugin_app",
+        "plugin_path",
+        "plugin_webview",
+        "plugin_window",
+        "channel_fetch",
     ]
     .iter()
     .all(|k| r[*k]["ok"] == json!(false))

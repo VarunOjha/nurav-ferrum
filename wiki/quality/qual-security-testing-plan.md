@@ -251,9 +251,9 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 
 | Threat | Adversary | Edges | Control (task) | Test | State |
 |---|---|---|---|---|---|
-| T01 A page calls Ferrum's commands, events or the exempt fetch-channel command | ADV1 | E08, E14 | No bridge in tab views; zero `remote` capabilities; shell-only commands (p2.3, p4.8) | SEC-03, SEC-12 | Partly (P2 and P3: app and settings commands refused) |
-| T02 A tab navigates to the app's own origin to be treated as local | ADV1 | E09 | Navigation handlers deny the app's origin for tabs (rule R4; p4.3, p4.8) | SEC-03, SEC-08 | Built (p4.3: the engine's app-origin rule decides every tab navigation); test in p4.8 |
-| T03 The shell view is led to remote content | ADV1 | E01 | Shell navigation handler allows only the local origin; strict CSP (rule R8; p4.8) | SEC-12 | Handler built (p4.3, Tauri `on_navigation`, unit-tested); live test in p4.8 |
+| T01 A page calls Ferrum's commands, events or the exempt fetch-channel command | ADV1 | E08, E14 | No bridge in tab views; zero `remote` capabilities; shell-only commands (p2.3, p4.8) | SEC-03, SEC-12 | Built and tested (p4.8): 16 ways in refused by the permission check from a website in a Tauri view; the exempt channel-fetch command is reached there but returns nothing (Ferrum creates no channels, checked); Ferrum tab views have no bridge |
+| T02 A tab navigates to the app's own origin to be treated as local | ADV1 | E09 | Navigation handlers deny the app's origin for tabs (rule R4; p4.3, p4.8) | SEC-03, SEC-08 | Built and tested live (p4.8, `app-origin`: link, pop-up and typed address refused and logged) |
+| T03 The shell view is led to remote content | ADV1 | E01 | Shell navigation handler allows only the local origin; strict CSP (rule R8; p4.8) | SEC-12 | Built and tested live (p4.8: the shell sent to a website stays on its own page; logged `shell-app-only`) |
 | T04 A page sends the tab to a blocked site (link, script, form, meta refresh, pop-up) | ADV1 | E09 | Blocklist in the policy engine (p4.2, p4.3) | SEC-01 | Built; typed, redirect, frame and `window.open` tested live (p4.3) |
 | T05 A redirect chain reaches a blocked site | ADV1 | E09, E13 | Every redirect hop re-evaluated (p4.3) | SEC-08 | Built and tested live (p4.3, `security-navigation`) |
 | T06 An iframe loads a blocked site | ADV1b | E09, E13 | Raw-COM `FrameNavigationStarting` (p4.3) | SEC-08 | Built and tested live (p4.3, `security-navigation`) |

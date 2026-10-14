@@ -1,0 +1,22 @@
+Ferrum check p4.8: No app access for websites
+Why: a website cannot act as Ferrum.
+Run at 2026-10-13 20:07 on commit 16cafe8 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Self-test: every way into the app refused from a website; no bridge in tabs; shell still works (64 s)
+         16 ways in refused by the permission check; channel fetch reached but empty (Ferrum has no channels: missing channel id header); no bridge in tabs; shell call works
+Running 5 tests using 1 worker
+  ✓  1 app-origin.spec.ts:33:1 › a tab's page has no bridge to the app; the shell's does (303ms)
+  ✓  2 app-origin.spec.ts:40:1 › links to Ferrum's own pages are refused and logged (1.1s)
+  ✓  3 app-origin.spec.ts:51:1 › a pop-up to Ferrum's own page opens nothing and is logged (224ms)
+  ✓  4 app-origin.spec.ts:60:1 › typing Ferrum's own address in the address bar does not load it in the tab (238ms)
+  ✓  5 app-origin.spec.ts:69:1 › the shell itself cannot be led to a website (threat T03) (1.5s)
+  5 passed (47.8s)
+  PASS   Live test: links, pop-up and typed address to Ferrum own pages refused and logged; shell stays on its own page (66 s)
+         app-origin: 5 passed (including: the shell cannot be led to a website)
+  PASS   Commands allowed for the shell only; nothing relies on the invoke key
+         one capability, shell only, no remote section, no invoke key
+         Self-test result saved: wiki/raw/evidence/phase-p4-security/p4.8-ipc-selftest.20261013-2009.json
+------------------------------------------------------------------------
+RESULT: PASS - p4.8 (3 PASS; 131 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.8 check passed".

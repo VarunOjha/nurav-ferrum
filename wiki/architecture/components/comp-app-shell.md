@@ -308,4 +308,13 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   session; a private tab stays in that profile whatever site it shows. `site_data_clear { site }` deletes everything
   stored for one site in its own profile (refused while a tab of that site is open, or when sites share one profile).
   A settings screen button for it is p4.17. Test hook `test_processes` (debug builds) returns the process inventory.
+- p4.8, no app access for websites, tested: the IPC self-test's probe page (a website in an extra Tauri view) tries
+  16 ways into the app (Ferrum's commands including the P4 ones, event listen and emit, Tauri's app, path, webview
+  and window plugin commands): all refused by the permission check. Tauri's internal channel-fetch command is exempt
+  from that check, so the page reaches it, but it answers "missing channel id header": Ferrum creates no channels, so
+  there is nothing to fetch (the check fails if channels are ever added). In Ferrum's own tab views the page finds no
+  bridge at all. Live spec `app-origin` (5 passed): links, a pop-up and a typed address to Ferrum's own pages
+  (`tauri.localhost`, `tauri:`, `ipc.localhost`) are refused and logged, and the shell sent to a website stays on its
+  own page. One capability file, shell only, no `remote` section; no code uses Tauri's invoke key
+  ([check-p4.8.20261013-2009.txt](../../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt)).
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 7,
+    "done": 8,
     "total": 17
   },
   "step_order": [
@@ -103,7 +103,7 @@
       "what": "Websites cannot reach any app command, built-in command, app message channel or the app's own pages.",
       "why": "If one channel were left open, any website could control Ferrum and, through it, your files. The bridge is present in every view, so only checks keep it shut.",
       "how": "From a remote test page, try every path, including one internal command the permission system skips, and a jump to the app's own pages. All must fail.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Websites must not reach app internals → test every channel, including one internal command the permission system skips, and block loading the app's own pages → native access stays closed.",
       "check": "Every listed path fails from a remote test page.",
       "script": "scripts/verify/p4.8-no-app-access.ps1"

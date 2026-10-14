@@ -208,6 +208,11 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "script functions that write and read a cookie, localStorage and IndexedDB (p4.7)",
     },
+    Route {
+        path: "/links/app-origin",
+        status: 200,
+        purpose: "links and a pop-up to Ferrum's own pages (tauri.localhost, tauri:, ipc.localhost), which tabs must refuse (p4.8)",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -538,6 +543,18 @@ async fn download_named(Query(q): Query<Named>) -> Response {
     r
 }
 
+/// p4.8: links and a pop-up button to Ferrum's own pages (how Tauri serves the shell on Windows, its scheme and its
+/// bridge host). A tab must refuse every one; inside Ferrum they would otherwise be the trusted shell.
+async fn links_app_origin() -> Html<String> {
+    page(
+        "App origin",
+        "<p><a id=\"app-http\" href=\"http://tauri.localhost/index.html\">http://tauri.localhost/index.html</a></p>\
+         <p><a id=\"app-scheme\" href=\"tauri://localhost/index.html\">tauri://localhost/index.html</a></p>\
+         <p><a id=\"app-ipc\" href=\"http://ipc.localhost/app_ping\">http://ipc.localhost/app_ping</a></p>\
+         <p><button id=\"app-open\" onclick=\"window.open('http://tauri.localhost/index.html')\">window.open the app</button></p>",
+    )
+}
+
 /// p4.7: `store.write(v)` puts `v` in a cookie, in localStorage and in IndexedDB; `store.read()` returns what the page
 /// can see of the three (`{cookie, local, idb}`, empty strings when nothing is there). For the profile isolation tests.
 async fn storage() -> Html<String> {
@@ -639,6 +656,15 @@ const IPC_PROBE: &str = r#"<p id="r">probing</p><script>
     r.suggest_command = await tryCall("library_suggest", { query: "a" });
     r.backup_command = await tryCall("backup_export", { path: "C:\\evil.ferrum-backup", passphrase: "0123456789abcdef" });
     r.appearance_command = await tryCall("appearance_set", { bookmarksBar: false });
+    // P4 (p4.8): the commands added in P4, Tauri's own plugin commands and the internal channel-fetch command.
+    r.private_tab_command = await tryCall("tab_new_private", { url: null });
+    r.site_clear_command = await tryCall("site_data_clear", { site: "localhost" });
+    r.processes_command = await tryCall("test_processes");
+    r.plugin_app = await tryCall("plugin:app|version");
+    r.plugin_path = await tryCall("plugin:path|resolve_directory", { directory: 1 });
+    r.plugin_webview = await tryCall("plugin:webview|get_all_webviews");
+    r.plugin_window = await tryCall("plugin:window|title", { label: "main" });
+    r.channel_fetch = await tryCall("plugin:__TAURI_CHANNEL__|fetch", {});
   }
   document.getElementById("r").textContent = JSON.stringify(r);
   document.title = "IPC-PROBE:" + JSON.stringify(r);
@@ -743,6 +769,7 @@ pub fn router() -> Router {
         .route("/links/risky", get(links_risky))
         .route("/perm", get(perm))
         .route("/storage", get(storage))
+        .route("/links/app-origin", get(links_app_origin))
         .route("/download/named", get(download_named))
 }
 
