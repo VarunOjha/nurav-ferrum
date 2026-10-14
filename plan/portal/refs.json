@@ -5210,6 +5210,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "55dcb6f",
+      "kind": "commit",
+      "title": "Commit 55dcb6f",
+      "summary": "Tests prove websites cannot reach Ferrum's controls or its own pages (task p4.8).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:40305cef7ee4375f2217c0ae72e7ecad68d4a4016205fcd05ee76451d9db8ea4"
+    "content_hash": "sha256:70a18783c99ca082b4caac9fce0f3cc1bcee236d0c76bd499c6de62665498a41"
   },
   "entries": [
     {
@@ -4171,6 +4171,32 @@
       "category": "Decided",
       "tags": [
         "approvals",
+        "isolation"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-8",
+      "date": "2026-10-13",
+      "time": "20:15",
+      "title": "Proven: websites cannot reach Ferrum's own controls",
+      "done": "A test page tried 16 ways into Ferrum's controls; all were refused. One internal Tauri command can be reached but has nothing to give, because Ferrum uses no data channels; the check now fails if that ever changes. Ferrum's tabs have no bridge to the app at all, tabs refuse Ferrum's own pages, and the toolbar cannot be sent to a website. Full test suite: 105 passed.",
+      "next": "You re-approve the browser controls page; then Claude builds the security audit log.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "55dcb6f",
+      "covers": [
+        "## [2026-10-13] code | p4.8 websites cannot reach Ferrum's controls or pages",
+        "## [2026-10-13] gate | comp-app-shell approval stale after p4.8"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "testing",
         "isolation"
       ]
     }

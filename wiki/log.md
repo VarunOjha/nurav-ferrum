@@ -2413,3 +2413,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-webview-manager, comp-app-shell, comp-core]
 - sources: [raw/owner/2026-10-13-s04-p4-7-components-reapproval.md]
 - result: The owner answered "Re-approve all three (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.8 is next.
+
+## [2026-10-13] code | p4.8 websites cannot reach Ferrum's controls or pages
+
+- session: s04
+- time: 20:15
+- pages: [comp-app-shell, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt, raw/evidence/phase-p4-security/p4.8-ipc-selftest.20261013-2009.json]
+- result: 16 ways into the app refused by Tauri's permission check from a website in a Tauri view; the exempt channel-fetch command is reached there but returns nothing because Ferrum creates no channels (the check now fails if channels are added); no bridge in Ferrum's tab views; links, pop-up and typed address to Ferrum's own pages refused and logged; the shell sent to a website stays on its own page (closes the T03 live test promised in p4.3). p4.8 check PASS 3/3; full smoke 105 passed. Stales approval of comp-app-shell.
+- stales: [comp-app-shell]
+- commit: 55dcb6f
+
+## [2026-10-13] gate | comp-app-shell approval stale after p4.8
+
+- session: s04
+- time: 20:15
+- pages: [comp-app-shell]
+- result: The p4.8 page update staled comp-app-shell, in the P4 dependency set; p4.9 waits for the owner's re-approval (SCHEMA §10.4).

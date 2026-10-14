@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 7 of 17 tasks done, and you re-approved the changed part pages. Claude continues with proving websites cannot reach Ferrum's own controls.",
+  "summary": "Phase 4 (security) is in progress: 8 of 17 tasks done. Tests prove websites cannot reach Ferrum's own controls or pages. The browser controls page changed with the work and needs your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:bfa45c5cf7c5f6505dbce13d9ffae99c70273168d67e9956681969944e762d0e"
+    "content_hash": "sha256:48763cd077f52628700d39732eb49d492dbe1a0fe8a23ff782a5fd6b817b1536"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "comp-webview-manager"
+      "state": "Browser controls page out of date: waiting for you",
+      "ref": "comp-app-shell"
     },
     {
       "item": "Your rule",
@@ -35,20 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "7 of 17 tasks done"
+        "state": "8 of 17 tasks done"
       },
       {
-        "item": "Part pages",
-        "state": "Re-approved by you"
+        "item": "Browser controls page",
+        "state": "changed with the new tests; needs your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: tests that a website cannot call any of Ferrum's commands, listen to its messages or load Ferrum's own pages.",
+    "why": "Nothing to run. The browser controls page changed with this task, so your earlier approval is out of date; the next task builds on it.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "\"Re-approve the browser controls page\", or ask to see the change first."
   },
   "questions_for_you": {
     "open": 19,
