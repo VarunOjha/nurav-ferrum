@@ -41,7 +41,7 @@ current_phase: phase-p4-security
 current_task: p4.16
 next_action: "p4.16 (benchmark-only security ablation flag cfg-ferrum-nosecurity-bench, absent from release builds), per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.16-no-security-switch.ps1. Remaining after it: p4.17, p4.18, p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
 blocked_on: []
-last_handoff: handoff-2026-10-13-s04
+last_handoff: handoff-2026-10-14-s06
 ---
 
 # STATUS — live state (read this first every session)
@@ -417,4 +417,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-14, session s06 (P4 continues after the PC shut down overnight; session s05 ended without a handoff, nothing lost). Last handoff: [handoff-2026-10-13-s04](wiki/operations/handoffs/handoff-2026-10-13-s04.md).
+2026-10-14, session s06 (P4 continues after the PC shut down overnight; session s05 ended without a handoff, nothing lost). Last handoff: [handoff-2026-10-14-s06](wiki/operations/handoffs/handoff-2026-10-14-s06.md) (partial).

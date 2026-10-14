@@ -2558,3 +2558,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [phase-p4-security]
 - sources: [raw/owner/2026-10-14-s06-p4-18-phase-reapproval.md]
 - result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. p4.16 is next.
+
+## [2026-10-14] handoff | s06 partial handoff before p4.16
+
+- session: s06
+- time: 13:57
+- pages: [handoff-2026-10-14-s06, status-live]
+- result: Written early as a checkpoint (status partial) after last night's shutdown. P4 at 11 of 18; nothing in flight; all approvals current; quick lint 0 errors.
+- next: p4.16

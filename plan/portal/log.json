@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e39e53927e7109273499bdc680ac25118f8f2b10441b162a6ce84042dca9cf23"
+    "content_hash": "sha256:635960514c788fa564410b120908df33280fe8e901472b7bbdda971c1a03e2a6"
   },
   "entries": [
     {
@@ -4504,6 +4504,26 @@
       "tags": [
         "approvals",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-handoff-partial",
+      "date": "2026-10-14",
+      "time": "13:57",
+      "title": "Checkpoint note written early, in case the PC stops again",
+      "done": "Claude wrote the session's handoff note early: what is done, and that nothing is half-finished.",
+      "next": "Claude builds the benchmark-only switch that turns the safety rules off.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] handoff | s06 partial handoff before p4.16"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "sessions",
+        "wiki"
       ]
     }
   ]
