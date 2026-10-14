@@ -11,7 +11,7 @@ import "@fontsource/ibm-plex-mono/latin-500.css";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { ACCENTS, DENSITIES, THEMES, applyLook } from "./themes.ts";
-import { addressText, agoText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
+import { PROGRAM_WARNING, addressText, agoText, blockedText, bookmarkFolders, canBookmark, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -356,10 +356,10 @@ await listen<TabList>("tabs", (e) => applyList(e.payload));
 
 // --- Downloads (p3.8): one line each in the top band; the app saves the files (downloads.rs). ---
 type DownloadMsg =
-  | { kind: "started"; download: number; tab: number; file: string; path: string; total: number; received: number; replaces: number | null }
+  | { kind: "started"; download: number; tab: number; file: string; path: string; total: number; received: number; replaces: number | null; program?: boolean }
   | { kind: "progress"; download: number; received: number; total: number }
   | { kind: "completed" | "failed"; download: number; file: string; path: string; received: number; reason: number };
-type DownloadLine = { file: string; path: string; received: number; total: number; state: "running" | "completed" | "failed" };
+type DownloadLine = { file: string; path: string; received: number; total: number; state: "running" | "completed" | "failed"; program?: boolean };
 const downloadsEl = $<HTMLDivElement>("downloads");
 const downloadList = $<HTMLUListElement>("download-list");
 const downloadLines = new Map<number, DownloadLine>();
@@ -377,6 +377,13 @@ function renderDownloads(): void {
       state.className = "dl-state";
       state.textContent = downloadText(d.state, d.received, d.total);
       li.append(name, state);
+      if (d.program) {
+        // p4.6: a program file runs code when opened. Ferrum never opens it; the user decides, warned.
+        const warn = document.createElement("span");
+        warn.className = "dl-warning";
+        warn.textContent = PROGRAM_WARNING;
+        li.append(warn);
+      }
       return li;
     }),
   );
@@ -417,7 +424,7 @@ await listen<DownloadMsg>("download", (e) => {
   if (m.kind === "started") {
     // A retry of a download that broke off replaces the older line (the app tells which).
     if (m.replaces !== null) downloadLines.delete(m.replaces);
-    downloadLines.set(m.download, { file: m.file, path: m.path, received: 0, total: m.total, state: "running" });
+    downloadLines.set(m.download, { file: m.file, path: m.path, received: 0, total: m.total, state: "running", program: m.program ?? false });
     void startedIn(m.tab, m.download, m.replaces);
   } else if (d && m.kind === "progress") {
     d.received = m.received;

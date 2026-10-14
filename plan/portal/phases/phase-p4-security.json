@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 5,
+    "done": 6,
     "total": 17
   },
   "step_order": [
@@ -81,7 +81,7 @@
       "what": "Safer downloads: only into the set folder, never opened automatically, a warning for program files, cleaned file names.",
       "why": "A download named to look harmless could be saved outside the folder or start a program by itself. That is a common way to infect a computer.",
       "how": "Save files only into the set folder, strip unsafe parts from each file name, never open a file by itself, and warn on program types. Whether Windows marks downloads as unsafe is not checked yet.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Downloads can hide tricks → configured folder only, no auto-open, a warning for programs, cleaned file names → no folder-escape tricks.",
       "check": "Trick names and program files land cleaned in the folder, with a warning.",
       "script": "scripts/verify/p4.6-safe-downloads.ps1"

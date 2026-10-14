@@ -122,6 +122,18 @@ reached Ferrum on this PC. Tests: three engine tests (coverage still 100 percent
 spec `permissions` (4 passed), check script `scripts/verify/p4.5-permission-prompts.ps1`. The settings screen for
 grants is p4.17; until then grants are written in the settings file, and the screen keeps them.
 
+**p4.6, downloads** ([crates/security/src/downloads.rs](../../../crates/security/src/downloads.rs)).
+`clean_file_name` keeps only the last part of a site's file name and removes control, invisible and
+direction-changing characters, replaces the characters Windows forbids with `_`, drops trailing dots and spaces, puts
+`_` before device names (`CON`, `NUL`, `COM1`, ...) and shortens names over 200 characters, keeping the extension.
+`is_program` recognises Ferrum's list of program types (`PROGRAM_EXTENSIONS`: executables, installers, scripts,
+shortcuts, disk images and similar); the shell warns on such a download's line. The app saves only in the configured
+folder (since p3.8) and has no code that opens a download. Observed in the p4.6 live test (local test server only):
+WebView2 had already cleaned the names it suggested (`_.._escape-attempt.txt`, `photo_gpj.exe`, `_CON.txt`), so this
+cleaning is a second layer; the saved `setup.exe` had no "downloaded from the internet" mark (Zone.Identifier stream);
+whether downloads from real websites get that mark was not tested. Tests: three engine tests (coverage still 100
+percent), live spec `safe-downloads` (4 passed), check script `scripts/verify/p4.6-safe-downloads.ps1`.
+
 Not done yet: the shell shows the "not secure" warning as the address-bar sign only, not yet as a bar (owner answer
 Q-112 asks for a bar; planned with the security settings screen, p4.17). The audit log of refusals (p4.9) replaces
 the plain log lines.

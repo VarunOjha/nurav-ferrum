@@ -1,8 +1,12 @@
 //! Basic downloads (P3 task p3.8): WebView2 reports each download before it starts (`webview2::Handlers::downloads`);
 //! Ferrum saves it in the download folder (`[downloads] folder`, else the Windows Downloads folder) under the name
 //! WebView2 suggests (never a path from the site: only the file name is used, and an existing file is never replaced:
-//! `name (1).ext`, `name (2).ext`, ...). Progress, completion and failure go to the shell (event `download`). Risky
-//! file types and "ask where to save" are P4 work (adr-0015).
+//! `name (1).ext`, `name (2).ext`, ...). Progress, completion and failure go to the shell (event `download`).
+//!
+//! P4 task p4.6: the name is cleaned by the security engine (`ferrum_security::downloads::clean_file_name`: no path
+//! parts, no control or direction-changing characters, no characters Windows forbids, no device names, a length
+//! limit), and a program type (`is_program`) is flagged so the shell shows a warning on its line. Ferrum never opens a
+//! downloaded file: there is no code that does, and WebView2's own download pop-up (with its "Open" button) is off.
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -43,11 +47,7 @@ pub fn folder(app: &AppHandle) -> Option<PathBuf> {
 /// `dir` joined with the file name of `suggested` (only the name: a site cannot choose the folder), made unique so an
 /// existing file (or one `taken` says is in use) is never replaced.
 pub fn target(dir: &Path, suggested: &str, taken: impl Fn(&Path) -> bool) -> PathBuf {
-    let name = Path::new(suggested)
-        .file_name()
-        .map(|n| n.to_string_lossy().into_owned())
-        .filter(|n| !n.is_empty() && n != "." && n != "..")
-        .unwrap_or_else(|| "download".to_string());
+    let name = ferrum_security::downloads::clean_file_name(suggested);
     let first = dir.join(&name);
     if !first.exists() && !taken(&first) {
         return first;
@@ -98,7 +98,8 @@ pub fn shell_message(app: &AppHandle, tab: u64, e: &TabEvent) -> Option<Value> {
             path,
             total,
         } => {
-            tracing::info!(target: "ferrum::downloads", tab, download, site = %site(uri), total, "download started");
+            let program = ferrum_security::downloads::is_program(&file(path));
+            tracing::info!(target: "ferrum::downloads", tab, download, site = %site(uri), total, program, "download started");
             let replaces = app
                 .state::<Running>()
                 .0
@@ -107,7 +108,7 @@ pub fn shell_message(app: &AppHandle, tab: u64, e: &TabEvent) -> Option<Value> {
                 .insert(uri.clone(), *download);
             Some(
                 json!({"kind": "started", "download": download, "tab": tab, "file": file(path), "path": path,
-                        "total": total, "received": 0, "replaces": replaces}),
+                        "total": total, "received": 0, "replaces": replaces, "program": program}),
             )
         }
         TabEvent::DownloadProgress {

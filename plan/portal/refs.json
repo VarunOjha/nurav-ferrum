@@ -930,7 +930,7 @@
       "kind": "task",
       "title": "P4 task: Safe downloads",
       "summary": "Downloads can hide tricks → configured folder only, no auto-open, a warning for programs, cleaned file names → no folder-escape tricks.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]

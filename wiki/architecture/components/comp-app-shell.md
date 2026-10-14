@@ -300,4 +300,7 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   (security engine), logs it and notes a refusal on the toolbar ("Blocked: camera for example.com (allow it in
   Settings)"). The settings screen's site rows carry the grants (`SiteRow.permissions`; left out, the site keeps its
   grants), so saving the screen never drops them.
+- p4.6, downloads: the host saves under the security engine's cleaned name and sends `program: true` for program
+  types; the download line then shows "⚠ Program file: open it only if you trust the site". Nothing in Ferrum opens a
+  downloaded file.
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

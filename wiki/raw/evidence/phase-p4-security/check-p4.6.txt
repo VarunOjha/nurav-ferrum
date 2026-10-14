@@ -1,0 +1,21 @@
+Ferrum check p4.6: Safe downloads
+Why: nothing lands elsewhere or runs by itself.
+Run at 2026-10-13 19:25 on commit 91b801f (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Rules: file names cleaned; program types recognised
+         three engine tests passed
+  PASS   The app saves under the cleaned name, marks programs, and never opens a download
+         cleaned name, program flag, no open call
+Running 4 tests using 1 worker
+  ✓  1 safe-downloads.spec.ts:41:1 › a name that climbs out of the folder lands inside it, under a plain name (455ms)
+Zone.Identifier on setup.exe: false
+  ✓  2 safe-downloads.spec.ts:50:1 › a program file is saved with the warning and is not opened (1.3s)
+  ✓  3 safe-downloads.spec.ts:60:1 › a right-to-left mark cannot hide a program's real extension (246ms)
+  ✓  4 safe-downloads.spec.ts:68:1 › a Windows device name is not used as a file name (225ms)
+  4 passed (40.4s)
+  PASS   Live test: climbing name, program warning, hidden extension, device name (53 s)
+         safe-downloads: 4 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.6 (3 PASS; 54 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.6 check passed".

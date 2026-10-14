@@ -131,6 +131,9 @@ export function downloadText(state: "running" | "completed" | "failed", received
   return `${sizeText(received)} so far`;
 }
 
+/** The warning on the download line of a program file (p4.6). */
+export const PROGRAM_WARNING = "⚠ Program file: open it only if you trust the site";
+
 /** The start-up sites box: one address per line, blank lines and surrounding spaces dropped. */
 export function linesOf(text: string): string[] {
   return text.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0);

@@ -97,6 +97,7 @@ body { display: flex; flex-direction: column; }
 #download-list .dl-file { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 40%; }
 #download-list .dl-state { color: var(--muted); }
 #download-list li[data-state="failed"] .dl-state { color: var(--accent); }
+#download-list .dl-warning { font-weight: 600; color: var(--text); }
 #downloads button { padding: 4px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
 #external-uri { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
 #external-bar button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }

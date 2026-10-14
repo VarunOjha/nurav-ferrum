@@ -198,6 +198,11 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "script functions that ask for notifications, location, camera, microphone and clipboard reading (p4.5)",
     },
+    Route {
+        path: "/download/named?name=fixture.txt",
+        status: 200,
+        purpose: "a small text download whose file name is exactly the name given (path tricks, program types) (p4.6)",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -496,6 +501,38 @@ async fn links_schemes() -> Html<String> {
     )
 }
 
+#[derive(serde::Deserialize)]
+struct Named {
+    name: Option<String>,
+}
+
+/// p4.6: a small download whose file name is exactly `name` (any characters, including `..\`, quotes or a right-to-left
+/// mark), sent as RFC 5987 `filename*` so nothing is lost on the way. The content is a fixed line of text: nothing in
+/// it runs, whatever the name says.
+async fn download_named(Query(q): Query<Named>) -> Response {
+    let name = q.name.unwrap_or_else(|| "fixture.txt".into());
+    let encoded: String = name
+        .bytes()
+        .map(|b| {
+            if b.is_ascii_alphanumeric() || b"-._~".contains(&b) {
+                (b as char).to_string()
+            } else {
+                format!("%{b:02X}")
+            }
+        })
+        .collect();
+    let mut r = "Ferrum fixture download. This file does nothing.\n".into_response();
+    let h = r.headers_mut();
+    h.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("application/octet-stream"),
+    );
+    if let Ok(v) = HeaderValue::from_str(&format!("attachment; filename*=UTF-8''{encoded}")) {
+        h.insert(header::CONTENT_DISPOSITION, v);
+    }
+    r
+}
+
 /// p4.5: each `ask.<kind>()` asks for one permission and resolves to "granted", "denied" or the error's name, so a
 /// test can read the answer the page gets. Nothing is recorded or sent anywhere.
 async fn perm() -> Html<String> {
@@ -682,6 +719,7 @@ pub fn router() -> Router {
         .route("/links/open", get(links_open))
         .route("/links/risky", get(links_risky))
         .route("/perm", get(perm))
+        .route("/download/named", get(download_named))
 }
 
 /// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`).
