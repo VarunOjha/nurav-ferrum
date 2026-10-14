@@ -2653,3 +2653,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [status-live]
 - result: In-flight record written for p4.18 (SmartScreen back on, owner answer Q-225) before any task file is touched: research note first, then one browser-argument string for the shell, the IPC self-test probe and the site environments, then the check script.
 - next: p4.18 research note
+
+## [2026-10-14] code | self-tests run only in their own settings and data folder
+
+- session: s07
+- time: 16:08
+- pages: [comp-app-shell]
+- sources: [raw/owner/2026-10-14-s07-selftest-real-data-fix-first.md, raw/evidence/phase-p4-security/selftest-own-folder.txt]
+- result: Found during p4.18 before anything ran and reported to the owner: the built-in self-tests (FERRUM_SELFTEST ipc, nav, devtools, panic) started without their own settings, so they read the owner's real settings file and ran in the real WebView2 data folder; the p4.17 check ran one at about 15:00 while the owner's Ferrum (pid 384) was open (tabs, history and bookmarks are never written in self-test mode; the data folder was not inspected). Owner answer "Fix it first". Ferrum now refuses a self-test without its own --user-config (checked before any file is read) or without settings naming their own data_dir (exit 2); the check helpers make a throwaway folder per run (New-SelfTestFolder) and start programs with Invoke-Native -NoWait. Checks with the p4.18 code edits set aside: fmt and clippy clean, both refusals exit 2, p4.8 check PASS 3/3 with the self-test's data in its own folder; p2.12 and p2.14 parse-checked only (p2.12 builds into target/release). A second MANIFEST line (fb0d4cc) corrects the evidence fingerprint to the normalised hash. Stales approval of comp-app-shell.
+- stales: [comp-app-shell]
+- commit: 3014814
+
+## [2026-10-14] gate | comp-app-shell approval stale after the self-test fix
+
+- session: s07
+- time: 16:08
+- pages: [comp-app-shell]
+- result: comp-app-shell is in the P4 dependency set; p4.18 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set. The p4.18 code edits stay set aside (patch in the session scratchpad) until then.

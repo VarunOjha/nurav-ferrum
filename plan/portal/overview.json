@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 13 of 18 tasks done. Claude is switching SmartScreen back on, starting with a research note on what it sends to Microsoft.",
+  "summary": "Phase 4 (security) is in progress: 13 of 18 tasks done. Self-tests now use their own throwaway folder, never your real data. Waiting for you to re-approve the browser controls page; then Claude switches SmartScreen back on.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:31f8251140975ad10531f742e9254f0ab86cdfcab68bb7280eb6914d4664c276"
+    "content_hash": "sha256:8fe5a2a41b6c4ecb8edc65eaa08f5f25b5e32429525d4c8122464c17326a320d"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
+      "state": "Browser controls page waits for your re-approval",
       "ref": "comp-app-shell"
     },
     {

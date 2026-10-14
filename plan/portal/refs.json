@@ -5290,6 +5290,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "3014814",
+      "kind": "commit",
+      "title": "Commit 3014814",
+      "summary": "Self-tests run only in their own throwaway settings and data folder; Ferrum refuses a self-test without one (fix before task p4.18).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

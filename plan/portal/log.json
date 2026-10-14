@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:39820b3a18a00fe1df5369c2e4943beb348a127ab908bbcae2383f9f99c37bc9"
+    "content_hash": "sha256:28e8c5ba65fd6263317ab4ce13a07b7656cc59893e800a48a221a6f54755907b"
   },
   "entries": [
     {
@@ -4745,6 +4745,37 @@
       "tags": [
         "sessions",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s07-selftest-fix",
+      "date": "2026-10-14",
+      "time": "16:08",
+      "title": "Self-tests no longer touch your real Ferrum data",
+      "done": "Claude found that Ferrum's built-in self-tests used your real settings and browser data, and stopped to tell you. You chose to fix it first. Now each self-test gets its own throwaway folder, and Ferrum refuses to run a self-test without one. A check that uses the self-test passed this way.",
+      "next": "You re-approve the browser controls page; then Claude continues switching SmartScreen back on.",
+      "decisions": [
+        {
+          "what": "Fix the self-test's use of your real data before continuing",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "3014814",
+      "covers": [
+        "## [2026-10-14] code | self-tests run only in their own settings and data folder",
+        "## [2026-10-14] gate | comp-app-shell approval stale after the self-test fix"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Fixed",
+      "tags": [
+        "privacy",
+        "testing"
       ]
     }
   ]
