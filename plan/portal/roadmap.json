@@ -94,10 +94,10 @@
       "one_line_goal": "Blocking, permissions and isolation proven by tests; threat model written",
       "status": "In progress",
       "tasks_done": 11,
-      "tasks_total": 17,
+      "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p4-security.md",
-        "content_hash": "sha256:ff52b1ccf26e4dce618288cfafd5c811a9cadc3f4d2a7145e3f7498271c411ea"
+        "content_hash": "sha256:883571aacab08708e36bfe01d39ee837aa66cb6c2dc6368e1e1b1bb3c06e1c2c"
       }
     },
     {

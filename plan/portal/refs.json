@@ -5245,8 +5245,8 @@
       "id": "Q-225",
       "kind": "question",
       "title": "Question Q-225: SmartScreen switched off",
-      "summary": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on? Found while building the isolation modes.",
-      "status": "Open",
+      "summary": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on? Answer: yes, in every engine, before the Phase 4 review (task p4.18).",
+      "status": "Answered",
       "related": [
         "phase-p4-security"
       ]
@@ -5257,6 +5257,16 @@
       "title": "Commit e565aba",
       "summary": "Isolation modes: shared, a profile per site, or a data folder per site (task p4.15).",
       "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
+    },
+    {
+      "id": "p4.18",
+      "kind": "task",
+      "title": "P4 task: SmartScreen back on",
+      "summary": "A library default turned SmartScreen off → Ferrum sets the browser switches itself, the same for every engine, with SmartScreen on → known-bad sites and downloads get Microsoft's warning again.",
+      "status": "Not started",
       "related": [
         "phase-p4-security"
       ]

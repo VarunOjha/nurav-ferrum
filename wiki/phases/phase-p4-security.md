@@ -3,12 +3,13 @@ id: phase-p4-security
 type: phase
 title: "P4 Security (Milestone M3): policy engine, permissions, isolation tests, threat model"
 status: in-progress
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
+  - raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md
 related: [phase-p3-tabs-sessions, phase-p5-telemetry, phase-p6-benchmark-harness, comp-security-engine, comp-webview-manager, comp-app-shell, risk-r01, risk-r03, adr-0010, adr-0015, exp-security-overhead, exp-isolation-overhead]
 approvable: true
 phase: phase-p4-security
@@ -34,6 +35,7 @@ deliverables:
   - "Isolation modes shared-profile, profile-per-site and udf-per-site selectable by configuration, with the per-site user-data-folder feasibility finding documented (p4.15)."
   - "Benchmark-only ablation feature cfg-ferrum-nosecurity-bench, proven absent from release builds (p4.16)."
   - "Settings UI for blocklist and per-site permission grants (p4.17)."
+  - "SmartScreen switched back on in every WebView2 environment, with a research note on what it checks and sends (p4.18, owner answer Q-225)."
   - "Designs (not results) for exp-security-overhead and exp-isolation-overhead, with microbenchmark harnesses."
 tasks:
   - id: p4.1
@@ -78,6 +80,9 @@ tasks:
   - id: p4.17
     title: "Settings UI for security: blocklist editing and per-site permission grants (view, grant, revoke) in the trusted shell settings interface from p3.14, writing config only through host commands"
     verify: "Integration test adds a blocklist domain and a camera grant through the settings UI host commands, restarts, and asserts both persisted and enforced (blocked navigation logged; grant honoured, then revoked); the p2.3 IPC denial test shows remote tabs cannot call these commands."
+  - id: p4.18
+    title: "SmartScreen back on in every WebView2 environment (owner answer Q-225): Ferrum sets the browser arguments itself, the same for the shell's and the site environments, without msSmartScreenProtection; autoplay and the two Edge-menu switches unchanged"
+    verify: "A research note in raw/research (access dates) says what SmartScreen checks and sends inside WebView2, cited by the privacy page and SECURITY.md; an automated check proves no environment's browser arguments contain msSmartScreenProtection (shell and site environments); a live check opens Microsoft's SmartScreen test page named in the note and records what WebView2 shows, as observed (a missing warning is recorded, not hidden)."
   - id: p4.12
     title: "Overhead experiment design: microbenchmark harness for policy evaluation latency and permission-check overhead; designs for exp-security-overhead and exp-isolation-overhead finalised for P6 campaigns"
     verify: "Microbenchmarks run and save raw output as evidence of harness operation only (no claims); experiment pages updated with workloads, metrics and analysis plan; owner approves them."
@@ -187,6 +192,8 @@ flowchart LR
   p4_15 --> p4_11
   p4_16 --> p4_11
   p4_17 --> p4_11
+  p4_15 --> p4_18["p4.18 SmartScreen back on"]
+  p4_18 --> p4_11
   p4_7 --> p4_11["p4.11 security suite"]
   p4_8 --> p4_11
   p4_9 --> p4_11
@@ -196,7 +203,7 @@ flowchart LR
   p4_13["p4.13 literature batch 4"] --> p4_14
 ```
 
-The threat model comes first so that every later task can be traced to a threat it mitigates. Task ids are stable identifiers, not an ordering: p4.15 to p4.17 were added after review and slot in before p4.11 as the diagram shows.
+The threat model comes first so that every later task can be traced to a threat it mitigates. Task ids are stable identifiers, not an ordering: p4.15 to p4.17 were added after review and slot in before p4.11 as the diagram shows; p4.18 was added during P4 (owner answer Q-225, [raw](../raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md)).
 
 ## Checkpoints and interruption recovery
 

@@ -7,7 +7,7 @@
   "status": "In progress",
   "progress": {
     "done": 11,
-    "total": 17
+    "total": 18
   },
   "step_order": [
     "Threat model",
@@ -175,6 +175,17 @@
       "script": "scripts/verify/p4.17-security-settings-screen.ps1"
     },
     {
+      "id": "p4.18",
+      "title": "SmartScreen back on",
+      "what": "Microsoft's SmartScreen check of sites and downloads switched back on in every browser engine Ferrum starts, as you decided.",
+      "why": "A library default switched it off without anyone choosing it, so known-bad sites and downloads get no warning in Ferrum today.",
+      "how": "Write a research note on what SmartScreen checks and sends first. Then Ferrum sets the browser switches itself, the same for every engine; autoplay is left as it is.",
+      "status": "Not started",
+      "chain": "A library default turned SmartScreen off → Ferrum sets the browser switches itself, the same for every engine, with SmartScreen on → known-bad sites and downloads get Microsoft's warning again.",
+      "check": "No engine has SmartScreen switched off (checked automatically); Microsoft's test page shows what WebView2 does, recorded as seen.",
+      "script": null
+    },
+    {
       "id": "p4.12",
       "title": "Design the cost experiments",
       "what": "Small timing tests for the rules engine and permission checks, plus finished designs for the two security-cost experiments.",
@@ -270,6 +281,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p4-security.md",
-    "content_hash": "sha256:ff52b1ccf26e4dce618288cfafd5c811a9cadc3f4d2a7145e3f7498271c411ea"
+    "content_hash": "sha256:883571aacab08708e36bfe01d39ee837aa66cb6c2dc6368e1e1b1bb3c06e1c2c"
   }
 }

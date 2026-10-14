@@ -2526,3 +2526,27 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 13:26
 - pages: [comp-app-shell, comp-webview-manager, comp-core]
 - result: The p4.15 page updates staled comp-app-shell and comp-webview-manager (in the P4 dependency set) and comp-core (outside it); p4.16 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-14] approval | three component pages re-approved after p4.15
+
+- session: s06
+- time: 13:52
+- pages: [comp-app-shell, comp-webview-manager, comp-core]
+- sources: [raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md]
+- result: The owner answered "Re-approve all three (Recommended)"; recorded with tools/approvals_record.py for comp-app-shell, comp-webview-manager and comp-core; approvals_check shows none of them STALE.
+
+## [2026-10-14] plan | Q-225 answered: SmartScreen back on; task p4.18 added to P4
+
+- session: s06
+- time: 13:52
+- pages: [ov-open-questions, phase-p4-security]
+- sources: [raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md]
+- result: The owner answered Q-225 "Turn it back on (Recommended)". Ingested: Q-225 answered on the register; new task p4.18 on the P4 page (Ferrum sets the browser arguments itself, the same for every environment, without msSmartScreenProtection; research note first; a check of every environment's arguments and a live check against Microsoft's test page), slotted before p4.11; one more deliverable line. Stales approval of phase-p4-security.
+- stales: [phase-p4-security]
+
+## [2026-10-14] gate | phase-p4-security approval stale after adding p4.18
+
+- session: s06
+- time: 13:52
+- pages: [phase-p4-security]
+- result: The P4 page itself is in the P4 dependency set; no further P4 task starts until the owner re-approves it (SCHEMA §10.4). blocked_on set to phase-p4-security.

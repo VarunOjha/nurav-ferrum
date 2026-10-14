@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 11 of 17 tasks done. Ferrum can now keep sites apart in three ways, chosen in the settings file. Waiting for you to re-approve three part pages, and a new security question about SmartScreen.",
+  "summary": "Phase 4 (security) is in progress: 11 of 18 tasks done. Ferrum can now keep sites apart in three ways. You re-approved the part pages and chose to turn SmartScreen back on, which added a task; the phase page waits for your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:750568511378fb22309a997c8da5b4ae1108e51348ccf5e4ed529133a38af884"
+    "content_hash": "sha256:963d69f4e9fec6b95dbde89bc2355102156f4a07b290e44f6d03694aa57957a8"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "Three part pages wait for your re-approval",
-      "ref": "comp-app-shell"
+      "state": "The Phase 4 page waits for your re-approval (one task added)",
+      "ref": "phase-p4-security"
     },
     {
       "item": "Your rule",
@@ -39,28 +39,23 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "11 of 17 tasks done"
+        "state": "11 of 18 tasks done"
       },
       {
-        "item": "Isolation modes",
-        "state": "Built and tested: 3 modes"
+        "item": "SmartScreen",
+        "state": "You chose: turn it back on (new task)"
       },
       {
-        "item": "Part pages",
-        "state": "3 wait for your re-approval"
+        "item": "Phase 4 page",
+        "state": "Waits for your re-approval"
       }
     ],
-    "why": "Nothing to run. The isolation-modes task changed three part pages, so they need your approval again before the next task. Separately, Claude found that SmartScreen is off in Ferrum's engine and asks whether to turn it on.",
+    "why": "Nothing to run. Your SmartScreen answer added one task to the Phase 4 page, so the page needs your approval again before Claude continues with the next task.",
     "script": null,
-    "tell_claude": "Answer the two questions in Claude Code: re-approve the part pages, and choose what to do about SmartScreen (or \"decide later\")."
+    "tell_claude": "Re-approve the Phase 4 page in Claude Code (or ask to see the change first)."
   },
   "questions_for_you": {
-    "open": 20,
-    "items": [
-      {
-        "id": "Q-225",
-        "question": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on?"
-      }
-    ]
+    "open": 19,
+    "items": []
   }
 }

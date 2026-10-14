@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:187bf1bc7c36f1fc0a17358a39e82cc660f6901b74f95ad28ff1cfda7d571697"
+    "content_hash": "sha256:f60e9f4c072c1e256f288145a144f68a2639acf70adb06a11ff74c166b29c1c1"
   },
   "entries": [
     {
@@ -4435,6 +4435,50 @@
       "tags": [
         "isolation",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-15-reapproved",
+      "date": "2026-10-14",
+      "time": "13:52",
+      "title": "You re-approved three part pages and chose to turn SmartScreen back on",
+      "done": "You re-approved the pages for the browser controls, the tab and view manager, and the core library. You chose to switch SmartScreen back on, so Claude added a task for it to Phase 4.",
+      "next": "You re-approve the Phase 4 page with its new task; then Claude builds the benchmark-only switch that turns the safety rules off.",
+      "decisions": [
+        {
+          "what": "Turn SmartScreen back on in every engine, before the Phase 4 review",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        },
+        {
+          "what": "Tab & view manager page",
+          "status": "Approved"
+        },
+        {
+          "what": "Core library page",
+          "status": "Approved"
+        },
+        {
+          "what": "Phase 4 page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] approval | three component pages re-approved after p4.15",
+        "## [2026-10-14] plan | Q-225 answered: SmartScreen back on; task p4.18 added to P4",
+        "## [2026-10-14] gate | phase-p4-security approval stale after adding p4.18"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]

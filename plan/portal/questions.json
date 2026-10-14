@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:ce3036d838ab38f6a3d6a648771197ad277453a0877f4722e477b2899e67c548"
+    "content_hash": "sha256:5ebf0dcca0ee1dadf390d8242aec8582dc895b72b8f53b46104a320fcfff383d"
   },
   "items": [
     {
@@ -955,9 +955,9 @@
       "time": "13:14",
       "question": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on?",
       "why_it_matters": "A library default switched it off in every tab; nobody chose it, and Ferrum's rule is never to weaken the browser's safety. Claude recommends turning it on, after checking what it sends to Microsoft. It should be settled before the Phase 4 review.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Turn it back on: SmartScreen goes back on for every Ferrum engine together before the Phase 4 review, after a research note on what it sends to Microsoft and a test that it works. Autoplay stays a separate choice.",
+      "answered_on": "2026-10-14",
       "blocks": [],
       "category": "Security & privacy",
       "tags": [
