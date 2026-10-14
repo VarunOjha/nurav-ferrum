@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:70a18783c99ca082b4caac9fce0f3cc1bcee236d0c76bd499c6de62665498a41"
+    "content_hash": "sha256:2248fe51f1ceb1155ecfce1f3db2cccc9dbd7829c1e4c680e0a86b76571e50a9"
   },
   "entries": [
     {
@@ -4198,6 +4198,31 @@
       "tags": [
         "testing",
         "isolation"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-8-reapproved",
+      "date": "2026-10-13",
+      "time": "20:17",
+      "title": "You re-approved the browser controls page after task 8",
+      "done": "You re-approved the browser controls page with the test results for websites and Ferrum's own controls.",
+      "next": "Claude builds the security audit log: every refused action as one line, kept small, without page content.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | comp-app-shell re-approved after p4.8"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "testing"
       ]
     }
   ]

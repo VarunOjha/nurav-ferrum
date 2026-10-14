@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 8 of 17 tasks done. Tests prove websites cannot reach Ferrum's own controls or pages. The browser controls page changed with the work and needs your re-approval.",
+  "summary": "Phase 4 (security) is in progress: 8 of 17 tasks done, and you re-approved the changed page. Claude continues with the security audit log.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:48763cd077f52628700d39732eb49d492dbe1a0fe8a23ff782a5fd6b817b1536"
+    "content_hash": "sha256:4fc79c7368410e06e7fc734e92b9a893dd959b92fdfb31c98c70a15895b67b22"
   },
   "updated": "2026-10-13",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Browser controls page out of date: waiting for you",
+      "state": "All up to date",
       "ref": "comp-app-shell"
     },
     {
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
@@ -43,12 +43,12 @@
       },
       {
         "item": "Browser controls page",
-        "state": "changed with the new tests; needs your re-approval"
+        "state": "Re-approved by you"
       }
     ],
-    "why": "Nothing to run. The browser controls page changed with this task, so your earlier approval is out of date; the next task builds on it.",
+    "why": "Nothing to run; Claude continues with the next task: every refused action is written as one line to a security log, kept small, without any page content.",
     "script": null,
-    "tell_claude": "\"Re-approve the browser controls page\", or ask to see the change first."
+    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
     "open": 19,
