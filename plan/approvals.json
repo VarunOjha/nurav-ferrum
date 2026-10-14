@@ -838,13 +838,13 @@
     "comp-app-shell": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-14T13:51:32-05:00",
+      "timestamp": "2026-10-14T14:32:12-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:49a8bd5d934b15dd25385d306dcd923ad47fa3f3e241116a11c8437b3e30b9cd",
-      "scope_hash": "sha256:36447181ef91a1bf1541c63a93fb7f081efc782b8f1df16a6bb1f76dde281a28",
+      "content_hash": "sha256:d05207f2352afee132d66469cbf551959f8a45ca10b9826b16dca3d927f16d71",
+      "scope_hash": "sha256:dfc478c004d768bf75db92f8ad756362c2ec56bde5b9091917cf02fc9d788bf3",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md",
+      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md",
       "history": [
         {
           "status": "approved",
@@ -1098,19 +1098,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s05-p4-10-components-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-14T13:51:32-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:49a8bd5d934b15dd25385d306dcd923ad47fa3f3e241116a11c8437b3e30b9cd",
+          "scope_hash": "sha256:36447181ef91a1bf1541c63a93fb7f081efc782b8f1df16a6bb1f76dde281a28",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md"
         }
       ]
     },
     "comp-security-engine": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-13T20:49:54-05:00",
+      "timestamp": "2026-10-14T14:32:12-05:00",
       "path": "wiki/architecture/components/comp-security-engine.md",
-      "content_hash": "sha256:32d692541cacfe64835d7d6b87534bd6c1b2bdfc86f6d428a1e3669f53cf8bc2",
-      "scope_hash": "sha256:62bc21e47c70abbd3ffcae46bfeb25558ef69844cb49ded7a53ceea804e5ffd1",
+      "content_hash": "sha256:48a75cd1e56494e5bfcd1e9ee21046382a5fca6d4b2039e1d8572d124c4eb879",
+      "scope_hash": "sha256:074667c72af8e3e8e6bdfd9c363da097539238e4b2e249b01f48e48b7a73edf3",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s04-p4-9-components-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md",
       "history": [
         {
           "status": "approved",
@@ -1177,6 +1188,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s04-p4-6-components-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-13T20:49:54-05:00",
+          "path": "wiki/architecture/components/comp-security-engine.md",
+          "content_hash": "sha256:32d692541cacfe64835d7d6b87534bd6c1b2bdfc86f6d428a1e3669f53cf8bc2",
+          "scope_hash": "sha256:62bc21e47c70abbd3ffcae46bfeb25558ef69844cb49ded7a53ceea804e5ffd1",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s04-p4-9-components-reapproval.md"
         }
       ]
     },
@@ -1598,15 +1620,27 @@
     },
     "exp-security-overhead": {
       "status": "approved",
-      "comment": "Approve all five (Recommended)",
-      "timestamp": "2026-10-13T07:47:02-05:00",
+      "comment": "",
+      "timestamp": "2026-10-14T14:32:12-05:00",
       "path": "wiki/research/experiments/exp-security-overhead.md",
-      "content_hash": "sha256:580bdb5d50fa9bfbf0e4f3be2009a02ca65161021bcefac7621540a50df2d3bd",
-      "scope_hash": "sha256:0d1c6412541801ddf0c7b4f93e4f48ee378cc908e12a3a36525f2ba134c6414e",
+      "content_hash": "sha256:50405c98793d3a6ee617a008dace2c4ba56b6513757877a43b5946a84a0b9400",
+      "scope_hash": "sha256:091c5c1056b286cdfbeea0057e7f2ce1eae640c41886048a6f8b14806183f95c",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "Approve all five (Recommended)",
+          "timestamp": "2026-10-13T07:47:02-05:00",
+          "path": "wiki/research/experiments/exp-security-overhead.md",
+          "content_hash": "sha256:580bdb5d50fa9bfbf0e4f3be2009a02ca65161021bcefac7621540a50df2d3bd",
+          "scope_hash": "sha256:0d1c6412541801ddf0c7b4f93e4f48ee378cc908e12a3a36525f2ba134c6414e",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md"
+        }
+      ]
     },
     "exp-isolation-overhead": {
       "status": "approved",

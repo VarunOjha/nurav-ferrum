@@ -34,13 +34,14 @@ sources:
   - raw/owner/2026-10-13-s05-p4-10-components-reapproval.md
   - raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md
   - raw/owner/2026-10-14-s06-p4-18-phase-reapproval.md
+  - raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s06
 current_phase: phase-p4-security
 current_task: p4.17
-next_action: "Ask the owner to re-approve comp-app-shell, comp-security-engine and exp-security-overhead (staled by p4.16; the ablation is narrower than the phase page says, on purpose), and tell him about the 8-second run of the ablation build in his real data folder (leave it, or remove the six history visits). Then p4.17 (security settings screen: blocklist and per-site permission grants), per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.17-security-settings-screen.ps1. Remaining after it: p4.18, p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [comp-app-shell, comp-security-engine, exp-security-overhead]
+next_action: "p4.17 (security settings screen: blocklist and per-site permission grants), per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first; verify with pwsh -NoProfile -File scripts/verify/p4.17-security-settings-screen.ps1. At the P4 exit review align the p4.16 wording on the phase page with the narrower ablation the owner accepted. Remaining after it: p4.18, p4.11, p4.12, p4.13, then the exit gate p4.14; stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: []
 last_handoff: handoff-2026-10-14-s06
 ---
 
@@ -362,7 +363,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.16 committed in 8f92b1e; three pages wait for re-approval; p4.17 next)
+(empty: p4.16 committed in 8f92b1e; three pages re-approved; p4.17 next)
 
 ## Blockers
 
@@ -399,7 +400,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 12 of 18 tasks done; waiting for your re-approval of three pages changed by p4.16 |
+| Phase 4 (security) | 12 of 18 tasks done; p4.17 (security settings screen) next |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.

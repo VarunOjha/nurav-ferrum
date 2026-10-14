@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:99560c0402bd0763c911bd28913bced147583f732143a823012539e5d8aa6047"
+    "content_hash": "sha256:ac52deb38133bcc1f8ea30e54e63f0f3f835dd289bea1efa07975ed83e95b5bc"
   },
   "entries": [
     {
@@ -4582,6 +4582,48 @@
       "category": "Built",
       "tags": [
         "blocklist",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-16-reapproved",
+      "date": "2026-10-14",
+      "time": "14:32",
+      "title": "You re-approved three pages and left the short test run as it is",
+      "done": "You re-approved the browser controls, the security policy and the security cost experiment, with the narrower benchmark build. You chose to leave the 8-second test run in your data as it is.",
+      "next": "Claude builds the security settings screen.",
+      "decisions": [
+        {
+          "what": "The benchmark build keeps Ferrum's own pages, local files and links to other apps protected",
+          "by": "you"
+        },
+        {
+          "what": "No cleanup of the short test run in your data",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        },
+        {
+          "what": "Security policy page",
+          "status": "Approved"
+        },
+        {
+          "what": "Security cost experiment",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-14] approval | three pages re-approved after p4.16; mishap left as it is"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
         "benchmarks"
       ]
     }

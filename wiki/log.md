@@ -2590,3 +2590,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 14:30
 - pages: [comp-app-shell, comp-security-engine, exp-security-overhead]
 - result: All three are in the P4 dependency set; p4.17 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-14] approval | three pages re-approved after p4.16; mishap left as it is
+
+- session: s06
+- time: 14:32
+- pages: [comp-app-shell, comp-security-engine, exp-security-overhead]
+- sources: [raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md]
+- result: The owner answered "Re-approve, narrower build (Recommended)" (recorded with tools/approvals_record.py for the three keys; the phase page's p4.16 wording is aligned at the P4 exit review) and "Leave it as it is (Recommended)" for the 8-second run in his data folder (no cleanup). approvals_check shows nothing STALE or PENDING; blocked_on cleared. p4.17 is next.

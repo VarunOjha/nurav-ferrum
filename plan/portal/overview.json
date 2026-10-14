@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 12 of 18 tasks done. The benchmark-only build without the site rules exists and is proven missing from the normal app. Three pages wait for your re-approval.",
+  "summary": "Phase 4 (security) is in progress: 12 of 18 tasks done. You re-approved the three pages and chose to leave the short test run in your data as it is. Claude continues with the security settings screen.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:86294522998e209e0d3b0c47eab109355bb4c3493ab85f70a20127aa350381c0"
+    "content_hash": "sha256:ab6e51496fa0ef615da5ce38149af697919a281965f3f4a0eaf0d0bd8666ce60"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Three pages wait for your re-approval",
+      "state": "All up to date",
       "ref": "comp-security-engine"
     },
     {
@@ -35,24 +35,20 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
         "state": "12 of 18 tasks done"
       },
       {
-        "item": "Benchmark-only build",
-        "state": "Built; proven missing from the normal app"
-      },
-      {
-        "item": "Pages",
-        "state": "3 wait for your re-approval"
+        "item": "Approvals",
+        "state": "All up to date"
       }
     ],
-    "why": "Nothing to run. The task changed three pages, so they need your approval again. Claude also tells you about a short test run that touched your own Ferrum data, and asks whether to tidy it.",
+    "why": "Nothing to run; Claude continues with the next task: the security settings screen, where you manage blocked sites and site permissions.",
     "script": null,
-    "tell_claude": "Answer Claude's questions in Claude Code."
+    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },
   "questions_for_you": {
     "open": 19,
