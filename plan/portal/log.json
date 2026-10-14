@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b50a9ef00ba72ec09086b4cd7a26ee369a2712ac0d3d1e59a22703d8ab8f6038"
+    "content_hash": "sha256:40305cef7ee4375f2217c0ae72e7ecad68d4a4016205fcd05ee76451d9db8ea4"
   },
   "entries": [
     {
@@ -4139,6 +4139,39 @@
       "tags": [
         "sessions",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-p4-7-reapproved",
+      "date": "2026-10-13",
+      "time": "19:56",
+      "title": "You re-approved three part pages after the isolation task",
+      "done": "You re-approved the pages for the tab and view manager, the browser controls and the core library.",
+      "next": "Claude proves that websites cannot reach Ferrum's own controls or its own pages.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Tab & view manager page",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        },
+        {
+          "what": "Core library page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] approval | three component pages re-approved after p4.7"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "isolation"
       ]
     }
   ]

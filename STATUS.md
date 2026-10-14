@@ -28,13 +28,14 @@ sources:
   - raw/owner/2026-10-13-s03-p4-4-components-reapproval.md
   - raw/owner/2026-10-13-s04-p4-5-components-reapproval.md
   - raw/owner/2026-10-13-s04-p4-6-components-reapproval.md
+  - raw/owner/2026-10-13-s04-p4-7-components-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s04
 current_phase: phase-p4-security
 current_task: p4.8
-next_action: "Owner re-approves comp-webview-manager, comp-app-shell and comp-core (stale after p4.7); then p4.8 (no app access for websites: app commands, plugin commands, events and the internal fetch channel unreachable from pages; tabs cannot load the app origin), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.8-no-app-access.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [comp-webview-manager, comp-app-shell, comp-core]
+next_action: "p4.8 (no app access for websites: app commands, plugin commands, events and the internal fetch channel unreachable from pages; tabs cannot load the app origin), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.8-no-app-access.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: []
 last_handoff: handoff-2026-10-13-s03
 ---
 
@@ -68,7 +69,7 @@ manual checklist items 1 to 20 are still owed).
 - p4.4 done (`b957705`): four abused link types always refused, optional list of allowed types, every request and click checked; check PASS. Three component pages re-approved by the owner.
 - Session s04 (same chat, after the s03 handoff): p4.5 done (`17af021`): every permission refused unless granted per site; check PASS. Four component pages re-approved by the owner.
 - p4.6 done (`a341b0a`): safe download names, program warning, nothing opens a download; check PASS. Two component pages re-approved by the owner.
-- p4.7 done (`f525169`): isolation proven by tests (storage per profile, clearing one site, private tabs, process inventory); check PASS; full smoke 100 passed. Three component approvals stale. Process slip: no write-ahead In-flight record was written for p4.7 (logged).
+- p4.7 done (`f525169`): isolation proven by tests (storage per profile, clearing one site, private tabs, process inventory); check PASS; full smoke 100 passed. Three component pages re-approved by the owner. Process slip: no write-ahead In-flight record was written for p4.7 (logged).
 
 ## Done this session (s02)
 
@@ -353,7 +354,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.7 committed in f525169; three component approvals stale, waiting for the owner)
+(empty: p4.7 committed in f525169; three component pages re-approved; p4.8 next)
 
 ## Blockers
 

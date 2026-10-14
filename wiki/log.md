@@ -2405,3 +2405,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 19:54
 - pages: [status-live]
 - result: Claude started p4.7 without filling the STATUS In-flight record (CLAUDE.md §2 write-ahead), and the checkpoint commit 39475f8 then left STATUS unchanged. The work was committed and verified (f525169), so nothing was lost; STATUS now records p4.7 done, p4.8 next and the three stale approvals. Write-ahead is done before every following task.
+
+## [2026-10-13] approval | three component pages re-approved after p4.7
+
+- session: s04
+- time: 19:56
+- pages: [comp-webview-manager, comp-app-shell, comp-core]
+- sources: [raw/owner/2026-10-13-s04-p4-7-components-reapproval.md]
+- result: The owner answered "Re-approve all three (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.8 is next.
