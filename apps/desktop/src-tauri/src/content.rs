@@ -1,5 +1,7 @@
 //! The tab web views (P2 task p2.6, P3 task p3.2): one WebView2 controller per tab, created by
 //! `ferrum-webview-manager` from Tauri's environment (adr-0029) and placed in the content area the shell leaves free.
+//! In isolation mode `per-site-udf` (p4.15) a site's views come from that site's own environment instead, on its own
+//! user data folder `<data folder>/udf/<profile>` ([`with_environment`]).
 //! The tab list itself is `ferrum_core::tabs::Tabs` (p3.1). This module is safe Rust: all COM calls live in
 //! `ferrum_webview_manager::webview2`, which runs on the UI thread (thread-locals `VIEWS` and `ENVIRONMENT`).
 //!
@@ -18,7 +20,8 @@ use ferrum_core::tabs::{Place, TabId, Tabs};
 use ferrum_security::{Context, Verdict};
 use ferrum_webview_manager::tab::{NavDecision, NavRequest, TabEvent};
 use ferrum_webview_manager::webview2::{
-    ContentView, ENVIRONMENT, Handlers, VIEWS, renderer_process_count,
+    ContentView, ENVIRONMENT, Environment, EnvironmentDone, Handlers, VIEWS,
+    renderer_process_count, site_environment, site_environment_ready, site_environments,
 };
 use serde::Serialize;
 use serde_json::{Value, json};
@@ -246,6 +249,44 @@ pub fn profile_for(app: &AppHandle, url: &str) -> String {
     ferrum_core::profiles::profile_for_url(&app.state::<AppConfig>().get(), url)
 }
 
+/// The user data folder of `profile` when the isolation mode gives it one of its own (p4.15): `udf/<profile>` in the
+/// configured data folder, else in the app's local data folder (where Tauri keeps the shell's). `None` for a profile
+/// that lives in the shell's folder.
+pub fn own_folder(app: &AppHandle, profile: &str) -> Option<std::path::PathBuf> {
+    let config = app.state::<AppConfig>().get();
+    let name = ferrum_core::profiles::own_folder(config.isolation.mode, profile)?;
+    let base = match config.storage.data_dir {
+        Some(d) => d,
+        None => app.path().app_local_data_dir().ok()?,
+    };
+    Some(base.join("udf").join(name))
+}
+
+/// UI thread: calls `then` with the WebView2 environment the views of `profile` come from: Tauri's, or (isolation mode
+/// `per-site-udf`, p4.15) the profile's own on its own user data folder, made on first use. Calls nothing if the
+/// environment could not even be started (that is logged).
+fn with_environment(app: &AppHandle, profile: &str, then: EnvironmentDone) {
+    let Some(folder) = own_folder(app, profile) else {
+        match ENVIRONMENT.with(|e| e.borrow().clone()) {
+            Some(env) => then(Ok(env)),
+            None => then(Err(ferrum_webview_manager::Error::NoEnvironment)),
+        }
+        return;
+    };
+    let exited = Rc::new(|key: &str, failed: bool| {
+        if failed {
+            // Its tabs are told by ProcessFailed and show the crashed panel; Reload makes a new environment.
+            tracing::error!(target: "ferrum::recovery", environment = key, "a site's browser process failed; its tabs are marked crashed");
+        } else {
+            tracing::info!(target: "ferrum::profiles", environment = key, "a site's browser process ended");
+        }
+    });
+    tracing::info!(target: "ferrum::profiles", profile, folder = %folder.display(), "site environment wanted");
+    if let Err(e) = site_environment(profile, &folder, exited, then) {
+        tracing::error!(target: "ferrum::profiles", profile, error = %e, "site environment not started");
+    }
+}
+
 /// The tab list as the shell shows it.
 pub fn snapshot(app: &AppHandle) -> Value {
     let t = app.state::<TabsState>();
@@ -346,10 +387,30 @@ fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
     let private = is_private(app, id);
     let h = app.clone();
     let _ = app.run_on_main_thread(move || {
-        let Some(env) = ENVIRONMENT.with(|e| e.borrow().clone()) else {
-            tracing::error!(target: "ferrum::tabs", tab = id, "no WebView2 environment yet; view not created");
-            return;
-        };
+        let wanted = profile.clone();
+        with_environment(
+            &h.clone(),
+            &wanted,
+            Box::new(move |env| match env {
+                Ok(env) => create_view_in(&h, id, profile, url, private, &env),
+                Err(e) => {
+                    tracing::error!(target: "ferrum::tabs", tab = id, error = %e, "no WebView2 environment; view not created")
+                }
+            }),
+        );
+    });
+}
+
+/// UI thread: creates the view of tab `id` from `env` (see [`create_view`]).
+fn create_view_in(
+    h: &AppHandle,
+    id: u64,
+    profile: String,
+    url: String,
+    private: bool,
+    env: &Environment,
+) {
+    {
         let Some(window) = h.get_window("main") else {
             return;
         };
@@ -362,7 +423,7 @@ fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
         };
         let hwnd = h.state::<MainHwnd>().0.load(Ordering::SeqCst);
         let res = ContentView::create(
-            &env,
+            env,
             hwnd,
             rect,
             &profile,
@@ -370,11 +431,11 @@ fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
             // Developer tools only in debug builds (p2.12); the shell gets the same rule from Tauri.
             cfg!(debug_assertions),
             Handlers {
-                sink: sink(&h, id),
-                gate: gate(&h, id),
-                keys: crate::shortcuts::filter(&h),
-                downloads: crate::downloads::chooser(&h),
-                permissions: crate::policy::permission_filter(&h, id),
+                sink: sink(h, id),
+                gate: gate(h, id),
+                keys: crate::shortcuts::filter(h),
+                downloads: crate::downloads::chooser(h),
+                permissions: crate::policy::permission_filter(h, id),
             },
             Box::new({
                 let h = h.clone();
@@ -390,7 +451,7 @@ fn create_view(app: &AppHandle, id: u64, profile: String, url: String) {
         if let Err(e) = res {
             tracing::error!(target: "ferrum::tabs", tab = id, error = %e, "tab view creation failed to start");
         }
-    });
+    }
 }
 
 /// UI thread: WebView2 created the view of tab `id`.
@@ -920,23 +981,34 @@ pub async fn site_data_clear(app: AppHandle, site: String) -> Result<(), String>
     let hwnd = app.state::<MainHwnd>().0.load(Ordering::SeqCst);
     let (tx, rx) = std::sync::mpsc::channel();
     let p = profile.clone();
+    let h = app.clone();
     app.run_on_main_thread(move || {
-        let Some(env) = ENVIRONMENT.with(|e| e.borrow().clone()) else {
-            let _ = tx.send(Err("no WebView2 environment yet".to_string()));
-            return;
-        };
-        let t2 = tx.clone();
-        let started = ferrum_webview_manager::webview2::clear_profile(
-            &env,
-            hwnd,
-            &p,
-            Box::new(move |r| {
-                let _ = t2.send(r.map_err(|e| e.to_string()));
+        // The site's own environment in mode per-site-udf (p4.15), else Tauri's.
+        with_environment(
+            &h,
+            &p.clone(),
+            Box::new(move |env| {
+                let env = match env {
+                    Ok(env) => env,
+                    Err(e) => {
+                        let _ = tx.send(Err(e.to_string()));
+                        return;
+                    }
+                };
+                let t2 = tx.clone();
+                let started = ferrum_webview_manager::webview2::clear_profile(
+                    &env,
+                    hwnd,
+                    &p,
+                    Box::new(move |r| {
+                        let _ = t2.send(r.map_err(|e| e.to_string()));
+                    }),
+                );
+                if let Err(e) = started {
+                    let _ = tx.send(Err(e.to_string()));
+                }
             }),
         );
-        if let Err(e) = started {
-            let _ = tx.send(Err(e.to_string()));
-        }
     })
     .map_err(|e| e.to_string())?;
     let r = tauri::async_runtime::spawn_blocking(move || {
@@ -957,7 +1029,8 @@ pub async fn site_data_clear(app: AppHandle, site: String) -> Result<(), String>
 }
 
 /// Test hook (debug builds only): every WebView2 process with its kind and, for renderers, the addresses of the frames
-/// it hosts, plus each tab's profile, so a test can see which processes the profiles share (p4.7).
+/// it hosts, plus each tab's profile, so a test can see which processes the profiles share (p4.7). Each process names
+/// its environment (p4.15): `shell` for Tauri's, else the site profile whose own environment it belongs to.
 #[tauri::command]
 pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
     if !cfg!(debug_assertions) {
@@ -971,31 +1044,59 @@ pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
             .collect()
     };
     let (tx, rx) = std::sync::mpsc::channel();
+    let (ntx, nrx) = std::sync::mpsc::channel();
     app.run_on_main_thread(move || {
         let Some(env) = ENVIRONMENT.with(|e| e.borrow().clone()) else {
-            let _ = tx.send(Err("no WebView2 environment yet".to_string()));
+            let _ = ntx.send(0usize);
             return;
         };
-        let t2 = tx.clone();
-        if let Err(e) = ferrum_webview_manager::webview2::process_inventory(
-            &env,
-            Box::new(move |r| {
-                let _ = t2.send(r.map_err(|e| e.to_string()));
-            }),
-        ) {
-            let _ = tx.send(Err(e.to_string()));
+        let mut envs = vec![("shell".to_string(), env)];
+        envs.extend(site_environments());
+        let _ = ntx.send(envs.len());
+        for (label, env) in envs {
+            let (t2, l2) = (tx.clone(), label.clone());
+            if let Err(e) = ferrum_webview_manager::webview2::process_inventory(
+                &env,
+                Box::new(move |r| {
+                    let _ = t2.send((l2, r.map_err(|e| e.to_string())));
+                }),
+            ) {
+                let _ = tx.send((label, Err(e.to_string())));
+            }
         }
     })
     .map_err(|e| e.to_string())?;
-    let list = tauri::async_runtime::spawn_blocking(move || {
-        rx.recv_timeout(std::time::Duration::from_secs(10))
+    let lists = tauri::async_runtime::spawn_blocking(move || {
+        let n = nrx
+            .recv_timeout(std::time::Duration::from_secs(10))
+            .map_err(|_| "WebView2 did not answer in time".to_string())?;
+        if n == 0 {
+            return Err("no WebView2 environment yet".to_string());
+        }
+        let mut out = Vec::new();
+        for _ in 0..n {
+            let (label, r) = rx
+                .recv_timeout(std::time::Duration::from_secs(10))
+                .map_err(|_| "WebView2 did not answer in time".to_string())?;
+            out.push((label, r?));
+        }
+        Ok(out)
     })
     .await
-    .map_err(|e| e.to_string())?
-    .map_err(|_| "WebView2 did not answer in time".to_string())??;
+    .map_err(|e| e.to_string())??;
+    let mut processes = Vec::new();
+    for (label, list) in &lists {
+        for p in list {
+            processes.push(
+                json!({"pid": p.pid, "kind": p.kind, "frames": p.frames, "environment": label}),
+            );
+        }
+    }
     Ok(json!({
         "tabs": tabs,
-        "processes": list.iter().map(|p| json!({"pid": p.pid, "kind": p.kind, "frames": p.frames})).collect::<Vec<_>>(),
+        "mode": app.state::<AppConfig>().get().isolation.mode.name(),
+        "environments": lists.iter().map(|(l, _)| l.clone()).collect::<Vec<_>>(),
+        "processes": processes,
     }))
 }
 
@@ -1130,10 +1231,27 @@ pub fn tab_reload(app: AppHandle) {
         let t = t.0.lock().unwrap();
         t.get(TabId(id))
             .filter(|i| i.crashed)
-            .map(|i| i.url.clone())
+            .map(|i| (i.url.clone(), i.profile.clone()))
     };
     match crashed {
-        Some(url) => {
+        Some((url, profile)) if own_folder(&app, &profile).is_some() => {
+            // Mode per-site-udf (p4.15): if the site's browser process is gone, the view is dead too; a new view (in a
+            // new environment when needed) replaces it.
+            tracing::info!(target: "ferrum::recovery", tab = id, site = %site(&url), "crashed tab reloaded in its site's environment");
+            let h = app.clone();
+            let _ = app.run_on_main_thread(move || {
+                if site_environment_ready(&profile) {
+                    with_view(&h, id, move |v| {
+                        if let Err(e) = v.navigate(&url) {
+                            tracing::warn!(target: "ferrum::recovery", tab = id, error = %e, "crashed tab not reloaded");
+                        }
+                    });
+                } else {
+                    create_view(&h, id, profile, url);
+                }
+            });
+        }
+        Some((url, _)) => {
             tracing::info!(target: "ferrum::recovery", tab = id, site = %site(&url), "crashed tab reloaded");
             with_view(&app, id, move |v| {
                 if let Err(e) = v.navigate(&url) {
@@ -1207,10 +1325,15 @@ pub async fn test_stats(app: AppHandle) -> Result<Value, String> {
                 .map(|(id, _)| *id)
                 .collect()
         });
+        // Tauri's environment and every site environment (p4.15).
         let renderers = ENVIRONMENT.with(|e| {
-            e.borrow()
-                .as_ref()
-                .map(|env| renderer_process_count(env).map_err(|e| e.to_string()))
+            e.borrow().as_ref().map(|env| {
+                let mut n = renderer_process_count(env).map_err(|e| e.to_string())?;
+                for (_, site) in site_environments() {
+                    n += renderer_process_count(&site).map_err(|e| e.to_string())?;
+                }
+                Ok::<u32, String>(n)
+            })
         });
         let _ = tx.send((views, renderers, shown));
     })

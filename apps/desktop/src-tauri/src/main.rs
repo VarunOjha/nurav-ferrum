@@ -376,6 +376,10 @@ fn main() {
         .build(tauri::generate_context!())
         .expect("Ferrum failed to start")
         .run(|app, event| {
+            // Before the windows go: close the tab views and release the site environments (p4.15).
+            if let tauri::RunEvent::ExitRequested { .. } = event {
+                ferrum_webview_manager::webview2::close_all_views();
+            }
             // Save the tab list one last time when Ferrum closes normally (p3.5).
             if let tauri::RunEvent::Exit = event {
                 session::save_now(app);

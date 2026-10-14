@@ -4,7 +4,7 @@ type: component
 title: "Core crate (shared types, config schema, traits)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/research/tauri-webview2-capabilities.md
@@ -100,6 +100,10 @@ Unit tests: `crates/core/tests/{config,address,oauth}.rs` in P2; P3 adds `{tabs,
   checked); times from an old `history.json` or a backup are capped instead of wrapping to negative values; `seal`
   refuses to write a backup over 100 MB (one `open` would refuse); `argon2` and `chacha20poly1305` are built with
   their `zeroize` features, so their own copies of the key material are wiped too. Two more unit tests.
+- `config` and `profiles` (p4.15): `IsolationMode::PerSiteUdf` (settings value `per-site-udf`, configuration
+  cfg-ferrum-udf-per-site) and `IsolationMode::name`; profiles are chosen as in `per-site`; `profiles::own_folder` says
+  which profiles get their own user data folder (only in that mode, only `site-…` and `user-…` profiles; the folder is
+  named after the profile). Two more tests (the mode and its folders; unknown modes refused).
 - `shortcuts` (p4.7): Ctrl+Shift+N opens a private tab (`NewPrivateTab`, name `new-private-tab`); test updated.
 - `config` (p4.5): `[[sites]] permissions` (per-site grants) with the `PermissionKind` enum (twelve kinds, settings names
   such as `camera`, `clipboard-read`; a misspelt kind is refused). One more test.

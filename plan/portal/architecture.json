@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, and the toolbar can show only Ferrum's own pages.",
+      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, and can give each site its own data folder and browser engine.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:f968cf50880fae356847d7972603441820fb08be0992cfb6b8a8edfdcc1fd1a8"
+        "content_hash": "sha256:49a8bd5d934b15dd25385d306dcd923ad47fa3f3e241116a11c8437b3e30b9cd"
       }
     },
     {
@@ -260,7 +260,7 @@
     {
       "id": "comp-webview-manager",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page and notices when a page's process or the browser engine crashes.",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, notices crashes, and can start a separate browser engine for a site.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (first working app)",
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:5878e19cc54bb7338209bac3da2eb8a37ab59a349ad5a8161a2f163ade98058e"
+        "content_hash": "sha256:237cfa5a248aaaa52b5323d939603ddbeb428f306481757adefbcf1c614c6efc"
       }
     },
     {
@@ -426,7 +426,7 @@
     {
       "id": "comp-core",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists), ids and record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart), ids and record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
       "group": "application",
       "layer": "layer-base",
       "status": "Built (first working app)",
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:e087c557206f750766242d64873e81c48fdd6143339c46a45159ddbdcd797905"
+        "content_hash": "sha256:d55cfe80a4381832ec0fd798c76eccc357dc2e53d519a5d3245d9473c44441b2"
       }
     },
     {

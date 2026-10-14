@@ -41,7 +41,7 @@ pub struct SettingsView {
     /// Shown only: the folder used when none is chosen.
     #[serde(default)]
     pub default_download_folder: String,
-    /// Shown only: whether sites are kept apart ("per-site" or "shared").
+    /// Shown only: how sites are kept apart ("per-site", "shared" or "per-site-udf").
     #[serde(default)]
     pub isolation: String,
     /// Shown only: the settings file that is written.
@@ -73,10 +73,7 @@ fn view_of(app: &AppHandle, c: &Config) -> SettingsView {
             .download_dir()
             .map(|p| p.display().to_string())
             .unwrap_or_default(),
-        isolation: match c.isolation.mode {
-            config::IsolationMode::PerSite => "per-site".into(),
-            config::IsolationMode::Shared => "shared".into(),
-        },
+        isolation: c.isolation.mode.name().into(),
         file: app
             .state::<UserConfigPath>()
             .0

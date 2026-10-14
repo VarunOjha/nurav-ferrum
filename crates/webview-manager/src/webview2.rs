@@ -9,7 +9,9 @@
 //! - **COM-4 Tokens and Close**: every `add_*` keeps its token; [`ContentView::close`] removes them all and closes the
 //!   controller.
 //! - **COM-5 No borrowed COM data outlives its callback**: `PWSTR`s are copied with `take_pwstr` (frees them once).
-//! - **COM-7 Identical environment options**: the controller is created from Tauri's own environment.
+//! - **COM-7 Identical environment options**: the controller is created from Tauri's own environment, or (isolation
+//!   mode `per-site-udf`, p4.15) from a site's environment on its own user data folder, which no other environment
+//!   uses and which gets the same options as Tauri's ([`SHELL_BROWSER_ARGUMENTS`], language, no extensions).
 //! - Handlers never call back into the same web view synchronously; they only copy plain data out.
 
 #![allow(unsafe_code)]
@@ -22,7 +24,8 @@ use webview2_com::Microsoft::Web::WebView2::Win32::*;
 use webview2_com::{
     AcceleratorKeyPressedEventHandler, BrowserProcessExitedEventHandler,
     BytesReceivedChangedEventHandler, ClearBrowsingDataCompletedHandler,
-    CreateCoreWebView2ControllerCompletedHandler, DocumentTitleChangedEventHandler,
+    CoreWebView2EnvironmentOptions, CreateCoreWebView2ControllerCompletedHandler,
+    CreateCoreWebView2EnvironmentCompletedHandler, DocumentTitleChangedEventHandler,
     DownloadStartingEventHandler, FaviconChangedEventHandler, FocusChangedEventHandler,
     GetFaviconCompletedHandler, GetProcessExtendedInfosCompletedHandler,
     HistoryChangedEventHandler, LaunchingExternalUriSchemeEventHandler,
@@ -32,7 +35,7 @@ use webview2_com::{
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows::Win32::System::Com::IStream;
-use windows_core::{BOOL, HSTRING, Interface, PWSTR};
+use windows_core::{BOOL, HSTRING, Interface, PCWSTR, PWSTR};
 
 use crate::Error;
 use crate::tab::{KeyDown, NavDecision, NavRequest, PermissionAsk, ProcessFailure, TabEvent};
@@ -1095,11 +1098,187 @@ pub fn save_environment(env: &ICoreWebView2Environment) {
     ENVIRONMENT.with(|e| *e.borrow_mut() = Some(env.clone()));
 }
 
+/// The browser arguments of Tauri's environment, which Ferrum does not set (so wry 0.57's default applies, read in its
+/// source `src/webview2/mod.rs`, `create_environment`): wry turns off the "mini menu", the PDF menu and SmartScreen
+/// (`msSmartScreenProtection`), and adds the autoplay switch because Tauri leaves wry's `autoplay` on. A site
+/// environment (p4.15) gets the same string so the three isolation modes differ only in how sites are kept apart.
+/// Whether SmartScreen should stay off is the owner's question (Q-225), for every environment together.
+pub const SHELL_BROWSER_ARGUMENTS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --autoplay-policy=no-user-gesture-required";
+
+/// A WebView2 environment (Tauri's, or a site's own, p4.15), named for callers outside this module.
+pub type Environment = ICoreWebView2Environment;
+
+/// Receives a site environment, or why it could not be made (UI thread).
+pub type EnvironmentDone = Box<dyn FnOnce(Result<ICoreWebView2Environment, Error>)>;
+
+/// Told when a site environment's browser process has ended: the environment's key and whether it failed (UI thread).
+pub type EnvironmentExited = Rc<dyn Fn(&str, bool)>;
+
+/// A site environment (p4.15): being created (the callers waiting for it), or ready.
+enum SiteEnvironment {
+    Pending(Vec<EnvironmentDone>),
+    Ready(ICoreWebView2Environment),
+}
+
+/// The user interface language, as wry passes it to Tauri's environment.
+fn user_language() -> String {
+    use windows::Win32::Globalization::{
+        GetUserDefaultUILanguage, LCIDToLocaleName, LOCALE_ALLOW_NEUTRAL_NAMES, MAX_LOCALE_NAME,
+    };
+    let mut lang = [0u16; MAX_LOCALE_NAME as usize];
+    // SAFETY: no COM; both calls only read the user's setting and write into the local buffer, whose length is passed
+    // with it.
+    let n = unsafe {
+        let lcid = GetUserDefaultUILanguage();
+        LCIDToLocaleName(lcid as u32, Some(&mut lang), LOCALE_ALLOW_NEUTRAL_NAMES)
+    };
+    if n == 0 {
+        return String::new();
+    }
+    let end = lang.iter().position(|c| *c == 0).unwrap_or(lang.len());
+    String::from_utf16_lossy(&lang[..end])
+}
+
+/// Calls `done` with the WebView2 environment whose user data folder is `folder` (isolation mode `per-site-udf`,
+/// p4.15): made on first use with Tauri's options (COM-7), then reused. `key` names it (the site's profile); while it
+/// is being made, further callers wait for the same one. When its browser process ends, it is forgotten (the next
+/// caller makes a new one) and `exited` is told. Each environment is one browser process with its own helper
+/// processes (renderers, GPU, utilities).
+pub fn site_environment(
+    key: &str,
+    folder: &std::path::Path,
+    exited: EnvironmentExited,
+    done: EnvironmentDone,
+) -> Result<(), Error> {
+    let mut done = Some(done);
+    let ready = SITE_ENVIRONMENTS.with(|m| {
+        let mut m = m.borrow_mut();
+        match m.get_mut(key) {
+            Some(SiteEnvironment::Ready(env)) => Some(Some(env.clone())),
+            Some(SiteEnvironment::Pending(waiting)) => {
+                waiting.extend(done.take());
+                Some(None)
+            }
+            None => {
+                m.insert(key.to_string(), SiteEnvironment::Pending(Vec::new()));
+                None
+            }
+        }
+    });
+    match ready {
+        Some(Some(env)) => {
+            if let Some(d) = done.take() {
+                d(Ok(env));
+            }
+            return Ok(());
+        }
+        Some(None) => return Ok(()),
+        None => {}
+    }
+    let Some(first) = done.take() else {
+        return Ok(());
+    };
+    let options = CoreWebView2EnvironmentOptions::default();
+    // SAFETY: COM-1; `options` is Ferrum's own object; the setters only store the values.
+    unsafe {
+        options.set_additional_browser_arguments(SHELL_BROWSER_ARGUMENTS.to_string());
+        options.set_are_browser_extensions_enabled(false);
+        options.set_language(user_language());
+        options.set_scroll_bar_style(COREWEBVIEW2_SCROLLBAR_STYLE_DEFAULT);
+    }
+    let name = key.to_string();
+    let handler =
+        CreateCoreWebView2EnvironmentCompletedHandler::create(Box::new(move |res, env| {
+            let made = hr(res).and_then(|()| env.ok_or(Error::NoEnvironment));
+            let waiting = SITE_ENVIRONMENTS.with(|m| {
+                let mut m = m.borrow_mut();
+                let waiting = match m.remove(&name) {
+                    Some(SiteEnvironment::Pending(w)) => w,
+                    _ => Vec::new(),
+                };
+                if let Ok(env) = &made {
+                    m.insert(name.clone(), SiteEnvironment::Ready(env.clone()));
+                }
+                waiting
+            });
+            if let Ok(env) = &made {
+                let (n, ex) = (name.clone(), exited.clone());
+                let watched = watch_browser_exit(
+                    env,
+                    Box::new(move |failed| {
+                        SITE_ENVIRONMENTS.with(|m| m.borrow_mut().remove(&n));
+                        ex(&n, failed);
+                    }),
+                );
+                if watched.is_err() {
+                    // Not watched: after a crash the dead environment stays in the list; its tabs still show the
+                    // crashed panel (ProcessFailed). Reported like a normal end so the app logs it.
+                    exited(&format!("{name} (exit not watched)"), false);
+                }
+            }
+            for d in std::iter::once(first).chain(waiting) {
+                d(made.clone());
+            }
+            Ok(())
+        }));
+    let folder = HSTRING::from(folder.as_os_str());
+    // SAFETY: COM-1 (UI thread, caller's contract), COM-2: the environment arrives in `handler`, which WebView2 keeps
+    // alive until it fires; the HSTRING and the options outlive the call; no browser folder is named (the installed
+    // runtime, as for Tauri).
+    let started = hr(unsafe {
+        CreateCoreWebView2EnvironmentWithOptions(
+            PCWSTR::null(),
+            &folder,
+            &ICoreWebView2EnvironmentOptions::from(options),
+            &handler,
+        )
+    });
+    if started.is_err() {
+        SITE_ENVIRONMENTS.with(|m| m.borrow_mut().remove(key));
+    }
+    started
+}
+
+/// At exit (UI thread, while the message loop still runs): closes every tab view and forgets the site environments
+/// (p4.15). Observed in p4.15: when a site environment was still held as Ferrum ended, its process did not exit for
+/// more than 15 seconds after the quit; releasing everything first lets it end at once.
+pub fn close_all_views() {
+    let views: Vec<ContentView> = VIEWS.with(|m| m.borrow_mut().drain().map(|(_, v)| v).collect());
+    for v in views {
+        v.close();
+    }
+    SITE_ENVIRONMENTS.with(|m| m.borrow_mut().clear());
+}
+
+/// Whether the site environment `key` exists and its browser process is running (p4.15).
+pub fn site_environment_ready(key: &str) -> bool {
+    SITE_ENVIRONMENTS.with(|m| matches!(m.borrow().get(key), Some(SiteEnvironment::Ready(_))))
+}
+
+/// The site environments that are ready, by key (p4.15; for the process inventory).
+pub fn site_environments() -> Vec<(String, ICoreWebView2Environment)> {
+    SITE_ENVIRONMENTS.with(|m| {
+        let mut all: Vec<_> = m
+            .borrow()
+            .iter()
+            .filter_map(|(k, e)| match e {
+                SiteEnvironment::Ready(env) => Some((k.clone(), env.clone())),
+                SiteEnvironment::Pending(_) => None,
+            })
+            .collect();
+        all.sort_by(|a, b| a.0.cmp(&b.0));
+        all
+    })
+}
+
 thread_local! {
     /// The tab views of this UI thread, by tab id (P3: one view per tab). UI thread only (COM-1).
     pub static VIEWS: RefCell<HashMap<u64, ContentView>> = RefCell::new(HashMap::new());
-    /// Tauri's WebView2 environment, saved when the first tab view is created (every tab view comes from it, COM-7).
+    /// Tauri's WebView2 environment, saved when the first tab view is created (every tab view comes from it, COM-7,
+    /// except the views of sites with their own user data folder).
     pub static ENVIRONMENT: RefCell<Option<ICoreWebView2Environment>> = const { RefCell::new(None) };
+    /// The environments of sites with their own user data folder (p4.15), by key (the site's profile).
+    static SITE_ENVIRONMENTS: RefCell<HashMap<String, SiteEnvironment>> = RefCell::new(HashMap::new());
     /// Downloads in progress: the operation and its two handler tokens, by Ferrum's download id (p3.8).
     static DOWNLOADS: RefCell<HashMap<u64, (ICoreWebView2DownloadOperation, i64, i64)>> = RefCell::new(HashMap::new());
     /// The last download id handed out.

@@ -1150,6 +1150,7 @@ function fillSettings(v: SettingsView): void {
   setFolder.placeholder = v.default_download_folder;
   $<HTMLParagraphElement>("set-isolation").textContent =
     v.isolation === "per-site" ? "Each site keeps its own cookies and storage. Sites given the same named profile share one."
+      : v.isolation === "per-site-udf" ? "Each site keeps its own cookies and storage in its own data folder, with its own browser engine. Sites given the same named profile share one."
       : "All sites share one profile (isolation is off in the settings file).";
   $<HTMLParagraphElement>("set-file").textContent = v.file ? `Saved to ${v.file}` : "";
 }

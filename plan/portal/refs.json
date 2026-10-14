@@ -860,7 +860,7 @@
       "kind": "task",
       "title": "P4 task: Selectable isolation modes",
       "summary": "Isolation has a cost → three modes set in config (shared, a profile per site, a data folder per site), observed rather than assumed → P6 can compare them.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -3162,7 +3162,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, and the toolbar can show only Ferrum's own pages.",
+      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, and can give each site its own data folder and browser engine.",
       "status": "Built (first working app)",
       "related": [
         "layer-controls"
@@ -3196,7 +3196,7 @@
       "id": "comp-core",
       "kind": "component",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists), ids and record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart), ids and record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
       "status": "Built (first working app)",
       "related": [
         "layer-base"
@@ -3272,7 +3272,7 @@
       "id": "comp-webview-manager",
       "kind": "component",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page and notices when a page's process or the browser engine crashes.",
+      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, notices crashes, and can start a separate browser engine for a site.",
       "status": "Built (first working app)",
       "related": [
         "layer-engine"
@@ -5237,6 +5237,16 @@
       "title": "Commit ea16ba1",
       "summary": "The code change for recovery from crashed pages and a crashed browser engine (Phase 4).",
       "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
+    },
+    {
+      "id": "Q-225",
+      "kind": "question",
+      "title": "Question Q-225: SmartScreen switched off",
+      "summary": "SmartScreen, Microsoft's check of sites and downloads, is switched off in Ferrum's browser engine: should Ferrum turn it back on? Found while building the isolation modes.",
+      "status": "Open",
       "related": [
         "phase-p4-security"
       ]

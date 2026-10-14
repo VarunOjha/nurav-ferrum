@@ -105,23 +105,40 @@ pub struct Security {
     pub external_allowlist: Vec<String>,
 }
 
-/// How sites are kept apart (adr-0010, adr-0029; p3.6).
+/// How sites are kept apart (adr-0010, adr-0029; p3.6, p4.15). Read when Ferrum starts: a change applies after a
+/// restart. The three modes are the benchmark configurations cfg-ferrum-profile-per-site, cfg-ferrum-shared-profile
+/// and cfg-ferrum-udf-per-site.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "kebab-case")]
 pub enum IsolationMode {
     /// One WebView2 profile per site (its registrable domain, owner answer Q-111): cookies and storage stay apart
-    /// (default from settings version 2).
+    /// (default from settings version 2). All profiles share one user data folder and one browser process.
     #[default]
     PerSite,
     /// One profile for every site (the P2 behaviour; also a benchmark configuration).
     Shared,
+    /// One WebView2 user data folder per site (p4.15): each site's profile lives in its own folder with its own
+    /// WebView2 environment, so its own browser process and helper processes. Empty and private tabs stay in the
+    /// shell's folder.
+    PerSiteUdf,
+}
+
+impl IsolationMode {
+    /// The settings value (`per-site`, `shared`, `per-site-udf`).
+    pub fn name(self) -> &'static str {
+        match self {
+            IsolationMode::PerSite => "per-site",
+            IsolationMode::Shared => "shared",
+            IsolationMode::PerSiteUdf => "per-site-udf",
+        }
+    }
 }
 
 /// `[isolation]`: keeping sites apart.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(deny_unknown_fields, default)]
 pub struct Isolation {
-    /// Per-site profiles or one shared profile.
+    /// Per-site profiles, one shared profile, or a user data folder per site.
     pub mode: IsolationMode,
 }
 

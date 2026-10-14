@@ -3,7 +3,7 @@ id: ov-open-questions
 type: overview
 title: "Open questions for the owner (canonical register)"
 status: draft
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -27,7 +27,9 @@ related: [ov-project, schema, ov-arch-data-flows, ov-arch-isolation-model, ov-ar
 approvable: false
 audience: owner
 tags: [questions, owner]
-unverified: []
+unverified:
+  - claim: "What SmartScreen checks and sends inside WebView2 (Q-225)"
+    verify_in: phase-p4-security
 ---
 
 # Open questions for the owner
@@ -86,7 +88,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P6 entry (incl. exp-energy, exp-reliability) | Q-117, Q-118, Q-119, Q-120, Q-121, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208 |
 | P8 entry | Q-124, Q-206 |
-| Exit reviews only, or not blocking | Q-105, Q-215, Q-217 |
+| Exit reviews only, or not blocking | Q-105, Q-215, Q-217, Q-225 (before the P4 exit review) |
 | The first push to GitHub (not a phase gate) | Q-221 |
 | Answered | Q-224, Q-112, Q-113, Q-212, Q-111, Q-125, Q-209, Q-109, Q-202, Q-214, Q-004, Q-005, Q-006, Q-007, Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-107, Q-108, Q-110, Q-116, Q-122, Q-222, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220 |
 | Withdrawn (duplicates) | Q-001, Q-002, Q-003 |
@@ -905,3 +907,27 @@ fix, and rebuild most of P1 to P3; it would need its own ADR. Non-blocking: no p
 
 Raised by task p4.4 (per-scheme allowlist, adr-0015 rule 1). Since P2 every link to another app is offered on the
 shell's confirmation bar and nothing opens without the user's click.
+
+## Q-225 SmartScreen is switched off in Ferrum's browser engine: turn it back on?
+
+- asked: 2026-10-14 13:14
+- blocking: []
+- status: open
+- answer: none yet
+
+**Where we are:** found in p4.15 while copying the shell's browser options for the new per-site environments. Ferrum
+never sets WebView2's browser arguments, so the default of wry 0.57 (the library under Tauri) applies:
+`--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection`, plus `--autoplay-policy=no-user-gesture-required`
+because Tauri leaves wry's autoplay on (read in wry's source, `src/webview2/mod.rs`, `create_environment`; the
+Tauri capabilities note records the same default string, [research note §4](../raw/research/tauri-webview2-capabilities.md)).
+So SmartScreen (Microsoft's check of sites and downloads against lists of known-bad ones; what it does inside WebView2
+is UNVERIFIED[phase-p4-security]) is off in every Ferrum tab, and pages may play sound without a click. This may also explain the p4.6 observation that a downloaded `setup.exe` had no
+Zone.Identifier mark (not tested). The other two switches only hide Edge menus. Ferrum's rule is not to weaken the
+browser's security (CLAUDE.md §6); this was inherited, not chosen.
+
+**Question:** (a) turn SmartScreen back on and keep the rest of wry's defaults, with autoplay left as a separate choice
+(Claude recommends this; Claude first writes a research note on what SmartScreen sends to Microsoft, for the privacy
+page and SECURITY.md, and a test that it really works in WebView2);
+(b) keep it off and list it under "not enforced" in SECURITY.md; (c) decide later. All environments must change
+together so the isolation modes stay comparable, and the shell's environment can only change at start. Not blocking any
+task now; it should be settled before the P4 exit review.

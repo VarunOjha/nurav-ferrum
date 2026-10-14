@@ -4,7 +4,7 @@ type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -333,4 +333,18 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   the browser's crash pages (`edge://kill`, `edge://gpucrash`, `edge://inducebrowsercrashforrealz`) once; the navigation
   gate lets that one load through, and a crash page never becomes the tab's address. In every other case `edge:`
   addresses stay refused by the policy (rule `scheme-forbidden`, audited). Live spec `crash-recovery` (3 passed).
+- p4.15, isolation modes: `[isolation] mode` may also be `per-site-udf`. Then a site's tabs come from that site's own
+  WebView2 environment on its own folder, `<data folder>/udf/<profile>` (the configured data folder, else the app's
+  local data folder); empty and private tabs stay in Tauri's environment. `content::with_environment` picks the
+  environment for a profile; tab views, clearing a site's data and the crash reload use it (a crashed tab whose site
+  browser has gone gets a new view, in a new environment). The mode is read at start; the settings screen shows it
+  (with a sentence per mode) but does not change it, so a change in the settings file applies after a restart; an
+  unknown mode makes the user's file unusable like any other bad setting (it is copied aside and the standard settings
+  apply, logged). When Ferrum is asked to exit, it first closes every tab view and releases the site environments (see
+  comp-webview-manager). Test hook `test_processes` now covers every environment (each process names its environment;
+  the reply also gives the mode) and `test_stats` counts renderers in all of them. Live spec `isolation-modes` (4
+  passed, [check-p4.15](../../raw/evidence/phase-p4-security/check-p4.15.txt)): the same two test sites in each mode, the restart case and the
+  unknown-mode case. In the test setup a site's browser took about 0.5 s to start when no other site browser ran and
+  about 5 s when one did (seen in the logs of two runs; cause not found; every browser gets the same debugging-port
+  switch from the test, which may play a part). Not a measurement: P6 times start-up without that switch.
 - Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.

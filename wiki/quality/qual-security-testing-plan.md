@@ -3,7 +3,7 @@ id: qual-security-testing-plan
 type: quality
 title: "Security testing plan: master prompt section 11 mapped to harmless fixtures"
 status: draft
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -131,6 +131,11 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 - **Pass:** P2 sees none of P1's data; clearing P1 leaves P2 and the shell intact. The test also records both tabs' browser process id, to document what remains shared (master prompt §5 Phase 3: document which resources remain shared).
 - **Depends on** the profile route chosen for risk-r01. Isolation by profile itself is UNVERIFIED[phase-p4-security].
 - **Phase:** P4 (a first version runs inside the risk-r01 spike in P1).
+- **Per isolation mode (p4.15, live spec `isolation-modes`):** the same two test sites run under `shared`, `per-site`
+  and `per-site-udf`; each site's data stays with it in every mode, a site moved to another named profile sees an
+  empty store under `per-site` and `per-site-udf` (its own data under `shared`), and the browser processes are counted
+  per mode ([check-p4.15](../raw/evidence/phase-p4-security/check-p4.15.txt),
+  [isolation-modes](../raw/evidence/phase-p4-security/isolation-modes.md)).
 
 ### SEC-07 Download handling (item 7)
 
@@ -259,7 +264,7 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | T08 A link silently starts another app | ADV1 | E02, E09 | Confirmation bar (p2.10); per-scheme allowlist; no silent launch (p4.4) | SEC-02 | Built and tested live (p4.4, `external-schemes`: no launch without the click; four abused types always refused; optional list of allowed types) |
 | T09 A page gets camera, microphone, location, notifications or clipboard without consent | ADV1 | E09 | Default deny, per-site grants, `SavesInProfile(FALSE)` (p4.5, p4.17) | SEC-05 | Built and tested live (p4.5, `permissions`: every kind refused by default as seen by the page, also in a frame; grant honoured and revocable); settings screen for grants p4.17 |
 | T10 A download lands outside the download folder, replaces a file or runs | ADV1 | E09 | Download folder only, no replacing (p3.8); name sanitising, executable warning, no auto-open (p4.6) | SEC-07 | Built and tested live (p4.6, `safe-downloads`: name cleaned, folder kept, program warning, nothing opened; no "downloaded from the internet" mark seen on a local test download) |
-| T11 Site A reads site B's cookies or storage, or clearing A wipes B | ADV1 | E11 | One profile per site (p3.6); per-profile clearing and isolation modes (p4.7, p4.15) | SEC-06 | Built and tested live (p4.7, `isolation`: cookie, localStorage and IndexedDB kept per profile; clearing site A leaves B; private tabs); isolation modes p4.15 |
+| T11 Site A reads site B's cookies or storage, or clearing A wipes B | ADV1 | E11 | One profile per site (p3.6); per-profile clearing and isolation modes (p4.7, p4.15) | SEC-06 | Built and tested live (p4.7, `isolation`: cookie, localStorage and IndexedDB kept per profile; clearing site A leaves B; private tabs); the three isolation modes tested live in p4.15 (`isolation-modes`) |
 | T12 Cross-origin reads, because a browser protection was weakened | ADV1 | E15 | No weakening flags; same-origin policy and site isolation as shipped | SEC-04 | Planned |
 | T13 A man in the middle on HTTPS, through a certificate-error bypass | ADV2 | E15 | No "proceed anyway" path for certificate errors (p2.8) | SEC-13 | Partly (P2: no bypass code; the failure itself is tested in P4) |
 | T14 A man in the middle reads or changes a plain HTTP page | ADV2 | E15 | Visible "not secure" bar only (Q-112: HTTP allowed) | not enforced | Not enforced (owner's choice) |

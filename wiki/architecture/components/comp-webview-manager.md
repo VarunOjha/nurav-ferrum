@@ -4,7 +4,7 @@ type: component
 title: "WebView manager (tab WebViews, navigation, sessions, raw COM layer)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -36,7 +36,7 @@ interfaces:
   - "Safe COM wrappers: try_suspend, resume, set_memory_level, go_back, go_forward, process_infos, enable_netlog, run_probe"
 connects:
   - to: comp-webview2-runtime
-    label: "create, position, show and hide child tab WebViews; navigate; TrySuspend/Resume; Close (controllers Ferrum creates with raw COM from Tauri's environment, adr-0029)"
+    label: "create, position, show and hide child tab WebViews; navigate; TrySuspend/Resume; Close (controllers Ferrum creates with raw COM from Tauri's environment, adr-0029, or in isolation mode per-site-udf from a site's own environment, p4.15)"
     kind: webview2-com
     crosses_trust_boundary: true
   - to: comp-webview2-runtime
@@ -205,5 +205,19 @@ of it:
   code 1 on the tab's view, the view stayed usable and a new navigation started a new page process; another site's tab
   and the shell kept running. Two tabs of the same site had separate page processes in this test, so only the killed tab was marked; the test asserts the rule either way (every tab whose page ran in the ended process is marked crashed), but the shared case itself was not seen. `edge://inducebrowsercrashforrealz` ended the browser process: every tab view
   got `BrowserExited`, then the environment's `BrowserProcessExited` (failed) arrived.
+
+- p4.15, a user data folder per site: `site_environment(key, folder, exited, done)` makes a WebView2 environment on a
+  site's own folder (`CreateCoreWebView2EnvironmentWithOptions`), once per key, and hands it to every caller (callers
+  that ask while it is being made wait for the same one); `site_environment_ready`, `site_environments` and
+  `close_all_views` (closes every tab view and forgets the site environments; the app calls it when Ferrum is asked to
+  exit). Options are copied from Tauri's environment (COM-7): `SHELL_BROWSER_ARGUMENTS` (wry 0.57's default, which
+  Ferrum never changed: it turns SmartScreen off and allows autoplay; owner question Q-225), the user's interface
+  language, no extensions, the default scroll bars. `Environment` names the environment type for the app; `Error`
+  gained `NoEnvironment`. Observed in the p4.15 live test ([check-p4.15](../../raw/evidence/phase-p4-security/check-p4.15.txt),
+  [isolation-modes](../../raw/evidence/phase-p4-security/isolation-modes.md)): with two sites open, three environments (the shell's and one per
+  site), each with its own browser, GPU and two utility processes; a site's browser process ended by itself when the
+  site's last tab closed, and a new one started when the site was opened again. When a site environment was still held
+  as Ferrum ended, Ferrum's process did not exit for more than 15 seconds after the quit; `close_all_views` on the exit
+  request fixed it (the process then ended in about 0.1 s in that run).
 
 Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).

@@ -3,7 +3,7 @@ id: ov-arch-configuration
 type: overview
 title: "Architecture: configuration model and lifecycle policy flags"
 status: review
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -80,7 +80,7 @@ google_oauth = "offer-system-browser" # the only value; never spoof UA (Q-109)
 new_window = "new-tab"          # new-tab | same-view | system-browser
 
 [isolation]                     # adr-0010; see ov-arch-isolation-model
-mode = "per-site"               # per-site | shared (built); per-site-udf | private: not built
+mode = "per-site"               # per-site | shared | per-site-udf (p4.15); read at start
                                 # no key for cross-site links: Ferrum asks, then re-hosts the tab (Q-209)
 
 [lifecycle]                     # see ov-arch-lifecycle-state-machine
@@ -132,7 +132,7 @@ The canonical list of `cfg-*` ids lives in [ov-research-configurations](../resea
 | cfg-ferrum-adaptive | ferrum-desktop release | `lifecycle.policy = "adaptive"` + weights |
 | cfg-ferrum-shared-profile | ferrum-desktop release | `isolation.mode = "shared"` |
 | cfg-ferrum-profile-per-site | ferrum-desktop release (needs a profile-capable TabHost backend, risk-r01) | `isolation.mode = "per-site"` |
-| cfg-ferrum-udf-per-site | ferrum-desktop release | `isolation.mode = "per-site-udf"` (not built yet) |
+| cfg-ferrum-udf-per-site | ferrum-desktop release | `isolation.mode = "per-site-udf"` (built in p4.15) |
 | cfg-ferrum-nosecurity-bench | **separate build** with Cargo feature `bench-nosecurity` | see below |
 
 **The one exception to "one binary": `bench-nosecurity`.** exp-security-overhead needs an ablation where every policy decision returns "allow". A runtime switch that disables security in the shipped binary would be a security hazard, so the ablation is a **Cargo feature on `ferrum-security`**, `bench-nosecurity`. CI asserts that release artefacts are never built with it. The experiment must state the confound: two different binaries are being compared.

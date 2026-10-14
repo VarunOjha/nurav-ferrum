@@ -15,6 +15,8 @@ pub enum Error {
     },
     /// WebView2 reported success but returned no controller.
     NoController,
+    /// WebView2 reported success but returned no environment (p4.15).
+    NoEnvironment,
 }
 
 impl fmt::Display for Error {
@@ -24,6 +26,7 @@ impl fmt::Display for Error {
                 write!(f, "WebView2 call failed: 0x{code:08X} {message}")
             }
             Error::NoController => f.write_str("WebView2 returned no controller"),
+            Error::NoEnvironment => f.write_str("WebView2 returned no environment"),
         }
     }
 }

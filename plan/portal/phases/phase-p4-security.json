@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 10,
+    "done": 11,
     "total": 17
   },
   "step_order": [
@@ -144,10 +144,10 @@
     {
       "id": "p4.15",
       "title": "Selectable isolation modes",
-      "what": "Three isolation modes you can pick in settings: everything shared, a profile per site, or a separate data folder per site.",
+      "what": "Three isolation modes you can pick in the settings file: everything shared, a profile per site, or a separate data folder (and browser engine) per site.",
       "why": "Stronger isolation costs memory and processes. Without all three modes working, P6 could not measure that cost, and you could not choose your balance.",
       "how": "Add a setting that picks the mode at start: all tabs in one profile, one profile per site, or one data folder per site. Then observe what each mode really shares.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Isolation has a cost → three modes set in config (shared, a profile per site, a data folder per site), observed rather than assumed → P6 can compare them.",
       "check": "The same two-site test per mode shows the expected separation; process counts recorded; any mode that fails is recorded with its error.",
       "script": "scripts/verify/p4.15-selectable-isolation-modes.ps1"

@@ -3,7 +3,7 @@ id: ov-arch-isolation-model
 type: overview
 title: "Architecture: isolation model (WebView2 profiles in a shared browser process)"
 status: review
-updated: 2026-10-13
+updated: 2026-10-14
 sources:
   - raw/research/p3-profiles-psl.md
   - raw/owner/2026-10-12-s02-p3-questions.md
@@ -27,12 +27,16 @@ Owner decision Q7 / adr-0010: **default site isolation = WebView2 profiles in a 
 
 | Mode | Mechanism | Browser process | Storage | Availability |
 |---|---|---|---|---|
-| `shared` | All tabs in the default profile of one UDF | shared | **shared** across all sites (and with the shell) | Stock Tauri today (VERIFIED APIs) |
-| `per-site-profile` (**target, Q7**) | One named WebView2 profile per site, one UDF | shared | per profile: cookies, preferences, cache (VERIFIED) | Needs a profile-capable tab backend (risk-r01; [integration §3](ov-arch-webview2-integration.md)) |
-| `per-site-udf` | One UDF per site (`data_directory`) | **separate process group per UDF** (VERIFIED) | separate | Works today (VERIFIED). Higher memory per Microsoft docs; contradicts Q7 |
-| `private` (per tab) | `incognito` = `IsInPrivateModeEnabled` per controller (VERIFIED) | shared | ephemeral | Works today (VERIFIED) |
+| `shared` | All tabs in the default profile of one UDF | shared | **shared** across all sites (and with the shell) | Built (P2) |
+| `per-site` (**default, Q7**; called `per-site-profile` in early plans) | One named WebView2 profile per site, one UDF | shared | per profile: cookies, preferences, cache (VERIFIED) | Built (p3.6, adr-0029) |
+| `per-site-udf` | One UDF per site, with its own WebView2 environment made by Ferrum | **separate process group per UDF** (VERIFIED; observed in p4.15) | separate | Built (p4.15). Higher memory per Microsoft docs; not the default (Q7) |
+| `private` (per tab, not a mode) | `IsInPrivateModeEnabled` per controller (VERIFIED) | shared | ephemeral | Built (p4.7) |
 
-The mode is a **runtime** switch, so exp-isolation-overhead can compare the modes on one binary.
+The mode is a **runtime** setting read at start (a change applies after a restart), so exp-isolation-overhead can compare
+the modes on one binary. The three modes were run on the same two-site test in p4.15 ([check-p4.15](../raw/evidence/phase-p4-security/check-p4.15.txt)):
+each site's cookie, localStorage and IndexedDB stayed with that site in every mode; a site moved to another named
+profile saw an empty store under `per-site` and `per-site-udf` and its own data under `shared` (named profiles do not
+apply there). No mode was found infeasible.
 
 ## 2. Site → profile assignment (`per-site-profile`)
 
@@ -80,6 +84,19 @@ Applies to `per-site-profile` mode: one UDF, many profiles.
 | Remote debugging port (benchmark runs) | **Shared**: one port serves the whole UDF | Flag is environment-level: VERIFIED (Tauri note §7). Observed in P3 (p3.6 smoke tests): one debugging port listed the shell and tab views of several profiles (`ferrum-default`, `site-site-a.localhost`, `site-site-b.localhost`, `user-work`) as pages ([check-p3.6](../raw/evidence/phase-p3-tabs-sessions/check-p3.6.txt)) |
 | Runtime binaries (Evergreen) | **May share** mapped image pages with Edge, on eligible systems when versions match | Hard-linking on eligible systems when versions match: VERIFIED ([measurement note §6.2](../raw/research/measurement-methodology.md)); page sharing is DERIVED from it ("may share") |
 | Ferrum host process (Rust) | Shared | by design |
+
+## 3a. What `per-site-udf` separates (p4.15, observed)
+
+| Resource | Under `per-site-udf` | Basis |
+|---|---|---|
+| Browser, GPU and utility processes | **Separate per site**: with two sites open, three environments (the shell's and one per site), each with one browser, one GPU and two utility processes (3, 3 and 6 in all) | OBSERVED in p4.15 ([isolation-modes](../raw/evidence/phase-p4-security/isolation-modes.md)) |
+| User data folder | One per site profile, `<data folder>/udf/<profile>`; two sites given the same named profile share one; empty and private tabs stay in the shell's folder | OBSERVED (folders checked in the p4.15 test) |
+| Renderers | Each site's page in its own renderer, in its own environment | OBSERVED in p4.15 |
+| Environment options | Copied from the shell's environment, so they are the same in all three modes (including wry's default switches: SmartScreen off, autoplay allowed; Q-225) | By construction (code), not a test |
+| Browser process lifetime | A site's browser ended by itself when its last tab closed; opening the site again started a new one | OBSERVED in p4.15 (app log) |
+| Start-up of a site's browser | About 0.5 s when no other site browser ran, about 5 s when one did, in the test setup (two runs, from the app log; cause not found) | OBSERVED, not measured (P6) |
+| Remote debugging port | Every site browser gets the same switch from the test environment; the tests read site pages through their titles and do not rely on the port for them. Whether the site browsers opened it was not checked | Not tested |
+| Ferrum host process, runtime binaries | Shared, as in the other modes | by design / §3 |
 
 ## 4. Consequences for measurement (risk-r05)
 

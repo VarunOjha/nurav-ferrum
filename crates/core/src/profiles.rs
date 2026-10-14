@@ -71,14 +71,14 @@ pub fn profile_for_label(label: &str) -> String {
     format!("user-{label}")
 }
 
-/// The profile a page at `url` uses under `config` (p3.6): with per-site isolation, the profile named for its site
+/// The profile a page at `url` uses under `config` (p3.6): with per-site isolation (either kind), the profile named for its site
 /// in `[[sites]]`, else the site's own profile; the shared profile for a page without a site (`about:blank`) and when
 /// isolation is off.
 pub fn profile_for_url(config: &crate::config::Config, url: &str) -> String {
     use crate::config::IsolationMode;
     match config.isolation.mode {
         IsolationMode::Shared => SHARED_PROFILE.to_string(),
-        IsolationMode::PerSite => match site_key(url) {
+        IsolationMode::PerSite | IsolationMode::PerSiteUdf => match site_key(url) {
             None => SHARED_PROFILE.to_string(),
             Some(site) => config
                 .sites
@@ -89,4 +89,15 @@ pub fn profile_for_url(config: &crate::config::Config, url: &str) -> String {
                 .unwrap_or_else(|| profile_for_site(&site)),
         },
     }
+}
+
+/// The folder name of the user data folder of `profile` under `mode` (p4.15), or `None` when the profile lives in the
+/// shell's folder. Only in [`IsolationMode::PerSiteUdf`](crate::config::IsolationMode::PerSiteUdf), and only for a
+/// site's profile (`site-...`) or a user's named profile (`user-...`): the shared and private profiles stay with the
+/// shell. The profile name is the folder name: a valid profile name is also a valid Windows folder name (no `\ / : * ?
+/// " < > |`, no final period or space).
+pub fn own_folder(mode: crate::config::IsolationMode, profile: &str) -> Option<&str> {
+    let per_site = profile.starts_with("site-") || profile.starts_with("user-");
+    (mode == crate::config::IsolationMode::PerSiteUdf && per_site && valid_profile_name(profile))
+        .then_some(profile)
 }

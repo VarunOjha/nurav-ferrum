@@ -206,7 +206,7 @@ pub const ROUTES: &[Route] = &[
     Route {
         path: "/storage",
         status: 200,
-        purpose: "script functions that write and read a cookie, localStorage and IndexedDB (p4.7)",
+        purpose: "script functions that write and read a cookie, localStorage and IndexedDB (p4.7); ?auto=write:v or ?auto=read shows the result in the title (p4.15)",
     },
     Route {
         path: "/links/app-origin",
@@ -557,6 +557,8 @@ async fn links_app_origin() -> Html<String> {
 
 /// p4.7: `store.write(v)` puts `v` in a cookie, in localStorage and in IndexedDB; `store.read()` returns what the page
 /// can see of the three (`{cookie, local, idb}`, empty strings when nothing is there). For the profile isolation tests.
+/// With `?auto=write:<v>` (or `?auto=read`) the page does it by itself and shows what it then sees in its title,
+/// `stored c=<cookie> l=<local> i=<idb>` (p4.15: the tests read a tab's title where they cannot reach its page).
 async fn storage() -> Html<String> {
     page(
         "Storage",
@@ -569,6 +571,11 @@ async fn storage() -> Html<String> {
            write: async (v) => { document.cookie = 'iso=' + v + '; Path=/; Secure; SameSite=Lax; Max-Age=3600'; localStorage.setItem('iso', v); await idbPut(v); return 'ok'; },\
            read: async () => ({ cookie: (document.cookie.match(/(?:^|; )iso=([^;]*)/) || [, ''])[1], local: localStorage.getItem('iso') || '', idb: await idbGet() }),\
          };\
+         const auto = new URLSearchParams(location.search).get('auto');\
+         if (auto) (async () => {\
+           try { if (auto.startsWith('write:')) await store.write(auto.slice(6)); const r = await store.read(); document.title = 'stored c=' + r.cookie + ' l=' + r.local + ' i=' + r.idb; }\
+           catch (e) { document.title = 'stored error ' + e; }\
+         })();\
          </script>",
     )
 }

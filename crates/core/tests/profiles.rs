@@ -137,3 +137,40 @@ fn version_one_files_keep_one_shared_profile() {
     .unwrap();
     assert_eq!(c.isolation.mode, IsolationMode::Shared);
 }
+
+#[test]
+fn per_site_udf_mode_gives_each_site_profile_its_own_folder() {
+    use ferrum_core::config::{self, IsolationMode};
+    use ferrum_core::profiles::{own_folder, profile_for_url};
+    let text = "version = 3\n[isolation]\nmode = \"per-site-udf\"\n[[sites]]\nsite = \"site-a.localhost\"\nprofile = \"work\"\n";
+    let l = config::validate(config::parse(text, std::path::Path::new("t.toml")).unwrap()).unwrap();
+    assert_eq!(l.config.isolation.mode, IsolationMode::PerSiteUdf);
+    assert_eq!(l.config.isolation.mode.name(), "per-site-udf");
+    // Profiles are chosen as in per-site mode.
+    let a = profile_for_url(&l.config, "https://one.site-a.localhost/");
+    let b = profile_for_url(&l.config, "https://site-b.localhost/");
+    assert_eq!(a, "user-work");
+    assert_eq!(b, "site-site-b.localhost");
+    let mode = l.config.isolation.mode;
+    assert_eq!(own_folder(mode, &a), Some("user-work"));
+    assert_eq!(own_folder(mode, &b), Some("site-site-b.localhost"));
+    // Empty and private tabs stay in the shell's folder.
+    assert_eq!(own_folder(mode, SHARED_PROFILE), None);
+    assert_eq!(own_folder(mode, "ferrum-private"), None);
+    // The other modes give no profile a folder of its own.
+    for other in [IsolationMode::PerSite, IsolationMode::Shared] {
+        assert_eq!(own_folder(other, &b), None);
+    }
+    // The saved file keeps the value.
+    assert!(config::canonical(&l.config).contains("mode = \"per-site-udf\""));
+}
+
+#[test]
+fn an_unknown_isolation_mode_is_refused() {
+    use ferrum_core::config;
+    for bad in ["udf", "per-site-UDF", "profile-per-site", ""] {
+        let text = format!("version = 3\n[isolation]\nmode = \"{bad}\"\n");
+        let e = config::parse(&text, std::path::Path::new("t.toml"));
+        assert!(e.is_err(), "{bad:?} was accepted");
+    }
+}
