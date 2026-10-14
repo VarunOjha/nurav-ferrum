@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:018e270836b8e7ac69473d23899ddfcca41ebc2211db6530e78581d45ea6c137"
+    "content_hash": "sha256:c786efcef39912b017059ebdc8f9b33edcfb5c55e934fc76dbd61e1d7b134250"
   },
   "entries": [
     {
@@ -4645,6 +4645,36 @@
       "tags": [
         "blocklist",
         "sessions"
+      ]
+    },
+    {
+      "id": "log-2026-10-14-s06-p4-17",
+      "date": "2026-10-14",
+      "time": "15:04",
+      "title": "Blocked sites and site permissions in the settings screen; a \"not secure\" bar",
+      "done": "In Settings you can now list blocked sites, tick what each site may use (camera, microphone, location, notifications, clipboard reading) and clear a site's stored data. Plain-HTTP pages show a \"not secure\" bar. Tests set everything in the screen, restart Ferrum and check it is kept and enforced; websites still cannot reach these settings.",
+      "next": "You re-approve two part pages; then Claude switches SmartScreen back on.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        },
+        {
+          "what": "Security policy page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "cb7286c",
+      "covers": [
+        "## [2026-10-14] code | p4.17 security settings screen and the not-secure bar",
+        "## [2026-10-14] gate | two component approvals stale after p4.17"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "blocklist",
+        "privacy"
       ]
     }
   ]

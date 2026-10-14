@@ -5280,6 +5280,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "cb7286c",
+      "kind": "commit",
+      "title": "Commit cb7286c",
+      "summary": "Blocked sites, site permissions and the \"not secure\" bar in the settings screen (task p4.17).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

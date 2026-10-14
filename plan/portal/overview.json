@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 12 of 18 tasks done. Claude is building the security settings: blocked sites and site permissions in the settings screen, plus the \"not secure\" bar.",
+  "summary": "Phase 4 (security) is in progress: 13 of 18 tasks done. The settings screen now manages blocked sites and site permissions, and plain-HTTP pages show a \"not secure\" bar. Two part pages wait for your re-approval.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:24f71e6a332a24f8759c4bdd4506eb53c3cff683bc812dee800370400ff4e568"
+    "content_hash": "sha256:ccef25ddaf06c31f92e41f82e87385e20b7984864c13466223970e0c3e21d606"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "comp-security-engine"
+      "state": "Two part pages wait for your re-approval",
+      "ref": "comp-app-shell"
     },
     {
       "item": "Your rule",
@@ -35,20 +35,24 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "12 of 18 tasks done"
+        "state": "13 of 18 tasks done"
       },
       {
-        "item": "Approvals",
-        "state": "All up to date"
+        "item": "Security settings",
+        "state": "Built and tested"
+      },
+      {
+        "item": "Part pages",
+        "state": "2 wait for your re-approval"
       }
     ],
-    "why": "Nothing to run; Claude continues with the next task: the security settings screen, where you manage blocked sites and site permissions.",
+    "why": "Nothing to run. The task changed two part pages, so they need your approval again before Claude switches SmartScreen back on.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "Re-approve the two part pages in Claude Code (or ask to see the changes)."
   },
   "questions_for_you": {
     "open": 19,

@@ -2605,3 +2605,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 14:33
 - pages: [status-live]
 - result: In-flight record written for p4.17 (security settings screen) before any task file is touched; it includes the "not secure" bar for plain HTTP (owner answer Q-112), which comp-app-shell planned with p4.17.
+
+## [2026-10-14] code | p4.17 security settings screen and the not-secure bar
+
+- session: s06
+- time: 15:04
+- pages: [comp-app-shell, comp-security-engine, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.17.txt]
+- result: The settings screen edits blocked sites (each line checked by the engine's rule parser, refused by name, policy rebuilt on save), per-site grants (camera, microphone, location, notifications, clipboard reading; other kinds kept) and has "Clear data" per site (the p4.7 command; promised for p4.17 on comp-app-shell). The "not secure" bar for plain-HTTP pages (owner answer Q-112). Test server --http-port (plain HTTP on loopback). No new host command; the P2 IPC self-test refuses settings_set from a website. The camera grant is checked as kept and shown, not used (a first run asked the real camera and got NotReadableError). p4.17 check PASS 3/3 (9 live tests); full smoke 113 passed, 2 failed NOT-FRONT, then security-settings and shortcuts 12 passed. Stales approval of comp-app-shell and comp-security-engine.
+- stales: [comp-app-shell, comp-security-engine]
+- commit: cb7286c
+
+## [2026-10-14] gate | two component approvals stale after p4.17
+
+- session: s06
+- time: 15:04
+- pages: [comp-app-shell, comp-security-engine]
+- result: Both are in the P4 dependency set; p4.18 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
