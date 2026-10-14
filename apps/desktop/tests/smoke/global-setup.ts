@@ -7,7 +7,7 @@ import { fixtureExe, base, caCert } from "./paths.ts";
 export default async function globalSetup(): Promise<void> {
   if (!fs.existsSync(fixtureExe)) throw new Error(`build first: ${fixtureExe}`);
   // --exit-after is a safety net: the server stops by itself even if teardown never runs.
-  const child = spawn(fixtureExe, ["serve", "--port", "8443", "--exit-after", "1800"], { stdio: "ignore", detached: false });
+  const child = spawn(fixtureExe, ["serve", "--port", "8443", "--http-port", "8080", "--exit-after", "1800"], { stdio: "ignore", detached: false });
   child.unref();
   const ca = fs.readFileSync(caCert);
   for (let i = 0; i < 50; i++) {

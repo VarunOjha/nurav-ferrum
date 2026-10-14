@@ -73,6 +73,7 @@ async fn main() -> ExitCode {
             let port: u16 = flag(&args, "--port")
                 .and_then(|p| p.parse().ok())
                 .unwrap_or(8443);
+            let http_port: Option<u16> = flag(&args, "--http-port").and_then(|p| p.parse().ok());
             let exit_after = flag(&args, "--exit-after")
                 .and_then(|s| s.parse().ok())
                 .map(Duration::from_secs);
@@ -85,7 +86,10 @@ async fn main() -> ExitCode {
             };
             let addr = SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), port);
             println!("serving https://localhost:{port}/ (exit after: {exit_after:?})");
-            match serve(addr, tls, exit_after).await {
+            if let Some(p) = http_port {
+                println!("also serving plain http://localhost:{p}/");
+            }
+            match serve(addr, tls, exit_after, http_port).await {
                 Ok(()) => ExitCode::SUCCESS,
                 Err(e) => {
                     eprintln!("server error: {e}");

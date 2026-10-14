@@ -780,13 +780,25 @@ pub fn router() -> Router {
         .route("/download/named", get(download_named))
 }
 
-/// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`).
-/// The server stops by itself; it never needs to be killed.
+/// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`), and, when
+/// `http_port` is given, the same pages over plain HTTP on that port of the same (loopback) address (p4.17: the "not
+/// secure" bar), stopped together with the HTTPS server. The server stops by itself; it never needs to be killed.
 pub async fn serve(
     addr: std::net::SocketAddr,
     tls: std::sync::Arc<rustls::ServerConfig>,
     exit_after: Option<Duration>,
+    http_port: Option<u16>,
 ) -> std::io::Result<()> {
+    let plain = http_port.map(|port| {
+        let h = axum_server::Handle::new();
+        let at = std::net::SocketAddr::new(addr.ip(), port);
+        let task = tokio::spawn(
+            axum_server::bind(at)
+                .handle(h.clone())
+                .serve(router().into_make_service()),
+        );
+        (h, task)
+    });
     let handle = axum_server::Handle::new();
     let _ = SHUTDOWN.set(handle.clone());
     if let Some(after) = exit_after {
@@ -796,11 +808,16 @@ pub async fn serve(
             h.graceful_shutdown(Some(Duration::from_secs(2)));
         });
     }
-    axum_server::bind_rustls(
+    let result = axum_server::bind_rustls(
         addr,
         axum_server::tls_rustls::RustlsConfig::from_config(tls),
     )
     .handle(handle)
     .serve(router().into_make_service())
-    .await
+    .await;
+    if let Some((h, task)) = plain {
+        h.graceful_shutdown(Some(Duration::from_secs(2)));
+        let _ = task.await;
+    }
+    result
 }

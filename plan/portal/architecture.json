@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, can give each site its own data folder, and the benchmark-only build starts only in its own test folder.",
+      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with Reload, shows a \"not secure\" bar for plain-HTTP pages, and its settings screen manages blocked sites, site permissions and clearing a site's data.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:d05207f2352afee132d66469cbf551959f8a45ca10b9826b16dca3d927f16d71"
+        "content_hash": "sha256:f8d4be2d351ea7e34f477f8110b4da1441b5fa11250ccd5a2f2671af78576270"
       }
     },
     {
@@ -303,7 +303,7 @@
     {
       "id": "comp-security-engine",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and gives no permission unless you allow the site. A separate benchmark-only build can skip the site rules; the normal app is checked never to contain it.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and gives no permission unless you allow the site in the settings screen. A separate benchmark-only build can skip the site rules; the normal app is checked never to contain it.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Being built",
@@ -326,7 +326,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-security-engine.md",
-        "content_hash": "sha256:48a75cd1e56494e5bfcd1e9ee21046382a5fca6d4b2039e1d8572d124c4eb879"
+        "content_hash": "sha256:9a7ad055eeae1c964d8e3b170773b758c07fa3d9edc23b02a99937868685787c"
       }
     },
     {

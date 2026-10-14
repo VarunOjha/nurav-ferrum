@@ -11,7 +11,7 @@ import "@fontsource/ibm-plex-mono/latin-500.css";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { ACCENTS, DENSITIES, THEMES, applyLook } from "./themes.ts";
-import { PROGRAM_WARNING, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
+import { PERMISSION_CHOICES, PROGRAM_WARNING, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, insecureBarText, linesOf, lockFor, mergePermissions, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -83,6 +83,7 @@ const top = $<HTMLDivElement>("top");
 const tabsEl = $<HTMLDivElement>("tabs");
 const newTab = $<HTMLButtonElement>("new-tab");
 const statusEl = $<HTMLSpanElement>("status");
+const insecureBar = $<HTMLDivElement>("insecure-bar");
 const sidebar = $<HTMLElement>("sidebar");
 const extBar = $<HTMLDivElement>("external-bar");
 const extText = $<HTMLSpanElement>("external-text");
@@ -157,6 +158,9 @@ function render(): void {
   const l = lockFor(u?.uri ?? "", u?.pageLoaded ?? false);
   lock.textContent = l.text;
   lock.title = l.title;
+  const insecure = insecureBarText(u?.uri ?? "", u?.pageLoaded ?? false);
+  insecureBar.textContent = insecure ?? "";
+  insecureBar.hidden = insecure === null;
   statusEl.textContent = u?.status ?? "";
   // The star follows the active tab's page (an event: render can run before the bookmark code below has started).
   document.getElementById("star")?.dispatchEvent(new Event("ferrum-render"));
@@ -1107,10 +1111,10 @@ setTheme.addEventListener("change", () => void saveAppearance({ theme: setTheme.
 setDensity.addEventListener("change", () => void saveAppearance({ density: setDensity.value }));
 
 // --- Settings (p3.14): shown in the content area; the app checks and saves (settings.rs). ---
-type SiteRow = { site: string; profile: string };
+type SiteRow = { site: string; profile: string; permissions?: string[] };
 type SettingsView = {
   startup_urls: string[]; restore_on_startup: boolean; sites: SiteRow[]; download_folder: string;
-  default_download_folder: string; isolation: string; file: string;
+  blocklist?: string[]; default_download_folder: string; isolation: string; file: string;
 };
 const settingsPanel = $<HTMLElement>("settings-panel");
 const settingsForm = $<HTMLFormElement>("settings-form");
@@ -1118,6 +1122,7 @@ const setStartup = $<HTMLTextAreaElement>("set-startup");
 const setRestore = $<HTMLInputElement>("set-restore");
 const setSitesBody = document.querySelector("#set-sites tbody") as HTMLTableSectionElement;
 const setFolder = $<HTMLInputElement>("set-folder");
+const setBlocklist = $<HTMLTextAreaElement>("set-blocklist");
 const settingsErrors = $<HTMLUListElement>("settings-errors");
 const settingsStatus = $<HTMLSpanElement>("settings-status");
 function siteRow(r: SiteRow): HTMLTableRowElement {
@@ -1138,8 +1143,41 @@ function siteRow(r: SiteRow): HTMLTableRowElement {
   b.type = "button";
   b.textContent = "Remove";
   b.addEventListener("click", () => tr.remove());
-  del.append(b);
-  tr.append(cell(r.site, "set-site", "Site"), cell(r.profile, "set-profile", "Named profile"), del);
+  // p4.17: delete what the site stored (cookies, storage, cache) in its own profile (p4.7, `site_data_clear`).
+  const clear = document.createElement("button");
+  clear.type = "button";
+  clear.className = "set-clear";
+  clear.textContent = "Clear data";
+  clear.title = "Delete this site's cookies, storage and cache";
+  clear.addEventListener("click", async () => {
+    const site = (tr.querySelector(".set-site") as HTMLInputElement).value.trim().toLowerCase();
+    if (!site) return;
+    try {
+      await invoke("site_data_clear", { site });
+      settingsStatus.textContent = `Cleared the data of ${site}`;
+    } catch (err) {
+      settingsStatus.textContent = `Not cleared: ${String(err)}`;
+    }
+  });
+  del.append(clear, b);
+  // p4.17: the site's permissions as check boxes; kinds not shown here are kept (data-previous).
+  const granted = r.permissions ?? [];
+  const perms = document.createElement("td");
+  const box = document.createElement("div");
+  box.className = "set-perms";
+  box.dataset.previous = JSON.stringify(granted);
+  for (const c of PERMISSION_CHOICES) {
+    const label = document.createElement("label");
+    const i = document.createElement("input");
+    i.type = "checkbox";
+    i.className = "set-perm";
+    i.value = c.name;
+    i.checked = granted.includes(c.name);
+    label.append(i, c.label);
+    box.append(label);
+  }
+  perms.append(box);
+  tr.append(cell(r.site, "set-site", "Site"), cell(r.profile, "set-profile", "Named profile"), perms, del);
   return tr;
 }
 function fillSettings(v: SettingsView): void {
@@ -1148,6 +1186,7 @@ function fillSettings(v: SettingsView): void {
   setSitesBody.replaceChildren(...v.sites.map(siteRow));
   setFolder.value = v.download_folder;
   setFolder.placeholder = v.default_download_folder;
+  setBlocklist.value = (v.blocklist ?? []).join("\n");
   $<HTMLParagraphElement>("set-isolation").textContent =
     v.isolation === "per-site" ? "Each site keeps its own cookies and storage. Sites given the same named profile share one."
       : v.isolation === "per-site-udf" ? "Each site keeps its own cookies and storage in its own data folder, with its own browser engine. Sites given the same named profile share one."
@@ -1189,8 +1228,13 @@ settingsForm.addEventListener("submit", async (e) => {
     sites: [...setSitesBody.querySelectorAll("tr")].map((tr) => ({
       site: (tr.querySelector(".set-site") as HTMLInputElement).value,
       profile: (tr.querySelector(".set-profile") as HTMLInputElement).value,
+      permissions: mergePermissions(
+        JSON.parse((tr.querySelector(".set-perms") as HTMLElement).dataset.previous ?? "[]") as string[],
+        [...tr.querySelectorAll<HTMLInputElement>(".set-perm")].filter((i) => i.checked).map((i) => i.value),
+      ),
     })),
     download_folder: setFolder.value,
+    blocklist: linesOf(setBlocklist.value),
     default_download_folder: "", isolation: "", file: "",
   };
   try {

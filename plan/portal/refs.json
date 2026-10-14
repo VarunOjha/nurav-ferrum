@@ -880,7 +880,7 @@
       "kind": "task",
       "title": "P4 task: Security settings screen",
       "summary": "You manage blocked sites and permissions → add them to the settings screen through checked app commands → websites still cannot touch them.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -3162,7 +3162,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with a Reload button, can give each site its own data folder, and the benchmark-only build starts only in its own test folder.",
+      "summary": "The window you use. Built in P2 and grown in P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). Since P4 it says why a site was blocked, shows a crashed tab with Reload, shows a \"not secure\" bar for plain-HTTP pages, and its settings screen manages blocked sites, site permissions and clearing a site's data.",
       "status": "Built (first working app)",
       "related": [
         "layer-controls"
@@ -3242,7 +3242,7 @@
       "id": "comp-security-engine",
       "kind": "component",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and gives no permission unless you allow the site. A separate benchmark-only build can skip the site rules; the normal app is checked never to contain it.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and gives no permission unless you allow the site in the settings screen. A separate benchmark-only build can skip the site rules; the normal app is checked never to contain it.",
       "status": "Being built",
       "related": [
         "layer-engine"

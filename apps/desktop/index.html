@@ -28,6 +28,8 @@
         <button id="settings-btn" class="nav" type="button" title="Settings (Ctrl+,)" aria-label="Settings">&#x2699;</button>
         <div id="progress" aria-hidden="true"></div>
       </header>
+      <!-- The "not secure" bar (owner answer Q-112, p4.17): a plain-HTTP page that loaded. Part of the top band. -->
+      <div id="insecure-bar" role="status" hidden></div>
       <!-- Address-bar suggestions (p3.20): part of the top band, so the page view moves down while the list is open and
            never covers it (a web view is always drawn above the shell, issue 15682). -->
       <div id="suggest" role="listbox" aria-label="Suggestions" hidden></div>
@@ -91,10 +93,17 @@
             <legend>Sites and profiles</legend>
             <p class="hint" id="set-isolation"></p>
             <table id="set-sites">
-              <thead><tr><th scope="col">Site (main domain)</th><th scope="col">Named profile (empty: its own)</th><th></th></tr></thead>
+              <thead><tr><th scope="col">Site (main domain)</th><th scope="col">Named profile (empty: its own)</th><th scope="col">Allowed to use</th><th></th></tr></thead>
               <tbody></tbody>
             </table>
             <button id="set-add-site" type="button">Add a site</button>
+            <p class="hint">Every site is refused camera, microphone, location, notifications and clipboard reading unless you tick it here.</p>
+          </fieldset>
+          <fieldset>
+            <legend>Blocked sites</legend>
+            <label for="set-blocklist">Sites that never load, one per line</label>
+            <textarea id="set-blocklist" rows="4" spellcheck="false"></textarea>
+            <p class="hint"><code>example.com</code> blocks the site and all its subdomains; <code>=www.example.com</code> blocks only that address. Applies at once, also to links from other sites.</p>
           </fieldset>
           <fieldset>
             <legend>Appearance</legend>

@@ -77,6 +77,34 @@ export function lockFor(uri: string, pageLoaded: boolean): { text: string; title
   return { text: "", title: "" };
 }
 
+/**
+ * The "not secure" bar (owner answer Q-112, p4.17): shown for a plain-HTTP page that loaded; `null` otherwise.
+ */
+export function insecureBarText(uri: string, pageLoaded: boolean): string | null {
+  if (!pageLoaded || !uri.startsWith("http:")) return null;
+  return "Not secure: this page uses plain http, so others on your network could read or change what you see and send.";
+}
+
+/** The permissions the settings screen offers per site (p4.17): settings name and plain label. */
+export const PERMISSION_CHOICES: readonly { name: string; label: string }[] = [
+  { name: "camera", label: "Camera" },
+  { name: "microphone", label: "Microphone" },
+  { name: "geolocation", label: "Location" },
+  { name: "notifications", label: "Notifications" },
+  { name: "clipboard-read", label: "Clipboard reading" },
+];
+
+/**
+ * A site's grants after the screen is saved: the kinds the screen does not show are kept as they were (they can be
+ * set in the settings file), the shown kinds are exactly the ticked ones, in the screen's order.
+ */
+export function mergePermissions(previous: readonly string[], ticked: readonly string[]): string[] {
+  const shown = new Set(PERMISSION_CHOICES.map((c) => c.name));
+  const kept = previous.filter((p) => !shown.has(p));
+  const chosen = PERMISSION_CHOICES.map((c) => c.name).filter((n) => ticked.includes(n));
+  return [...kept, ...chosen];
+}
+
 /** The tab's icon as the shell may show it: only a PNG data address made by the app (p3.16); anything else gives none. */
 export function iconSrc(icon: string): string {
   return icon.startsWith("data:image/png;base64,") ? icon : "";

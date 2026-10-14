@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 12,
+    "done": 13,
     "total": 18
   },
   "step_order": [
@@ -169,7 +169,7 @@
       "what": "Settings screen sections for the blocked-sites list and per-site permissions: view, allow, revoke.",
       "why": "Without a screen you would have to edit files to block a site or revoke a camera grant. If websites could reach these commands, they could unblock themselves.",
       "how": "Add them to the P3 settings screen, saving only through checked app commands. A test adds a block and a camera grant, restarts, and checks both are kept and enforced.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "You manage blocked sites and permissions → add them to the settings screen through checked app commands → websites still cannot touch them.",
       "check": "A block and a grant persist after restart and are enforced; revoking works; websites cannot call these commands.",
       "script": "scripts/verify/p4.17-security-settings-screen.ps1"

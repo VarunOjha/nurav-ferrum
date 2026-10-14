@@ -48,8 +48,8 @@ function Invoke-FerrumSmoke {
     $b = Invoke-Npm -Arguments @('run', 'build') -Folder 'apps/desktop'
     if ($b.ExitCode -ne 0) { Stop-Fail "Shell build failed: $(Get-Tail $b.Output 5)" }
     [void](Assert-Cargo @('build', '--locked', '-p', 'ferrum-desktop', '-p', 'fixture-server'))
-    $busy = Get-NetTCPConnection -LocalPort 8443, 9339 -State Listen -ErrorAction SilentlyContinue
-    if ($busy) { Stop-Wait 'Port 8443 or 9339 is in use (an earlier test run may still be stopping); run the check again in a minute.' }
+    $busy = Get-NetTCPConnection -LocalPort 8443, 8080, 9339 -State Listen -ErrorAction SilentlyContinue
+    if ($busy) { Stop-Wait 'Port 8443, 8080 or 9339 is in use (an earlier test run may still be stopping); run the check again in a minute.' }
     $pwArgs = @('playwright', 'test') + @($Spec | Where-Object { $_ })
     $folder = Get-RepoPath 'apps/desktop/tests/smoke'
     if (-not (Test-Path -LiteralPath (Join-Path $folder 'node_modules'))) {

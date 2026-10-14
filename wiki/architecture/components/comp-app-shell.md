@@ -307,7 +307,7 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   the profile `ferrum-private`, marked "Private" on the tab strip, kept out of the history and never saved in the
   session; a private tab stays in that profile whatever site it shows. `site_data_clear { site }` deletes everything
   stored for one site in its own profile (refused while a tab of that site is open, or when sites share one profile).
-  A settings screen button for it is p4.17. Test hook `test_processes` (debug builds) returns the process inventory.
+  The settings screen's button for it ("Clear data" per site row) came with p4.17. Test hook `test_processes` (debug builds) returns the process inventory.
 - p4.8, no app access for websites, tested: the IPC self-test's probe page (a website in an extra Tauri view) tries
   16 ways into the app (Ferrum's commands including the P4 ones, event listen and emit, Tauri's app, path, webview
   and window plugin commands): all refused by the permission check. Tauri's internal channel-fetch command is exempt
@@ -355,4 +355,19 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   a space, fell back to the standard settings and ran for about 8 seconds in the owner's own data folder (it restored
   the owner's six saved tabs, loaded them, likely added those page loads to the history and rewrote the session file
   with the same tabs; the owner's settings file was not written). Reported to the owner the same day.
-- Not yet: the "not secure" bar for plain HTTP (owner answer Q-112); today the address bar shows the warning sign only.
+- p4.17, security settings in the settings screen: a "Blocked sites" box (one rule per line, `example.com` or
+  `=www.example.com`) and, per site row, check boxes "Allowed to use": camera, microphone, location, notifications,
+  clipboard reading (`PERMISSION_CHOICES`); kinds the screen does not show stay as the settings file has them
+  (`mergePermissions`). The host's `SettingsView` gained `blocklist` (missing: keep the current list); each line is
+  checked by the security engine's rule parser, so a bad line is refused by name and nothing is saved; a save rebuilds
+  the navigation policy at once (as before). No new host command: the P2 IPC self-test still shows a website's
+  `settings_set` refused. The "not secure" bar (owner answer Q-112): `#insecure-bar` in the top band, shown for a
+  plain-HTTP page that loaded ("Not secure: this page uses plain http, so others on your network could read or change
+  what you see and send."), hidden otherwise; the address-bar sign stays. The test server gained `--http-port` (the
+  same pages over plain HTTP on loopback; the smoke suite uses 8080). Each site row also has "Clear data", which calls
+  `site_data_clear` (p4.7) and shows the result next to Save. Live spec `security-settings` (3 passed,
+  [check-p4.17](../../raw/evidence/phase-p4-security/check-p4.17.txt)): set in the screen, kept after a restart, enforced (blocked address
+  refused and audited; notification grant honoured), revoked by unticking; a bad rule refused; the bar for HTTP only;
+  "Clear data" empties one site's cookie, localStorage and IndexedDB.
+  The camera grant is checked as kept and shown but not used by the test, since asking would switch on the PC's real
+  camera (found when a first run got `NotReadableError`: granted by Ferrum, but the device could not start).

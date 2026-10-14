@@ -119,8 +119,8 @@ pages never get one, and an unknown kind is refused. Rules `permission-granted`,
 (comp-webview-manager), logs every request (kind, scheme and host, rule) and notes refusals on the toolbar. Observed in
 the live test: a frame's request reaches the page-level `PermissionRequested` and is refused there; the camera request
 reached Ferrum on this PC. Tests: three engine tests (coverage still 100 percent), one settings test, one app test, live
-spec `permissions` (4 passed), check script `scripts/verify/p4.5-permission-prompts.ps1`. The settings screen for
-grants is p4.17; until then grants are written in the settings file, and the screen keeps them.
+spec `permissions` (4 passed), check script `scripts/verify/p4.5-permission-prompts.ps1`. The settings screen edits
+the grants since p4.17 (below).
 
 **p4.6, downloads** ([crates/security/src/downloads.rs](../../../crates/security/src/downloads.rs)).
 `clean_file_name` keeps only the last part of a site's file name and removes control, invisible and
@@ -160,6 +160,7 @@ positive control contains all of them ([nosecurity-absent](../../raw/evidence/ph
 [check-p4.16](../../raw/evidence/phase-p4-security/check-p4.16.txt)); CI runs it after the release build. Tests: one in the normal build, two
 with the feature (`tests/bench_nosecurity.rs`; the other tests expect the normal rules and are not run with it).
 
-Not done yet: the shell shows the "not secure" warning as the address-bar sign only, not yet as a bar (owner answer
-Q-112 asks for a bar; planned with the security settings screen, p4.17). The audit log of refusals (p4.9) replaces
-the plain log lines.
+**p4.17, the settings screen edits the engine's lists**: blocked sites and per-site grants are edited in the shell's
+settings screen; every blocked-site line goes through `HostRule::parse` before it is saved, and the saved settings
+rebuild the policy at once (comp-app-shell; [check-p4.17](../../raw/evidence/phase-p4-security/check-p4.17.txt)). The "not secure" bar for plain
+HTTP (owner answer Q-112) is built there too. The audit log of refusals (p4.9) replaces the plain log lines.

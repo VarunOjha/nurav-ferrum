@@ -1,8 +1,8 @@
 //! The settings screen's host side (P3 task p3.14). The shell shows the settings and sends changes here; it never
 //! touches the file. `settings_set` checks every value first (start-up sites by the address-bar rules, per-site
 //! entries by the settings rules, the download folder must exist) and only then writes the user settings file in one
-//! step (`ferrum_core::config::save`, atomic) and applies the new settings: per-site profiles and the download folder
-//! at once, start-up sites and restore at the next start. Invalid input changes nothing. Only the shell may call these
+//! step (`ferrum_core::config::save`, atomic) and applies the new settings: per-site profiles, permission grants, the
+//! blocked sites (p4.17) and the download folder at once, start-up sites and restore at the next start. Invalid input changes nothing. Only the shell may call these
 //! commands (capability `shell.json`); pages have no bridge (p2.3 test).
 
 use std::path::PathBuf;
@@ -38,6 +38,10 @@ pub struct SettingsView {
     pub sites: Vec<SiteRow>,
     /// The chosen download folder (empty = the Windows Downloads folder).
     pub download_folder: String,
+    /// Blocked sites, one rule each (p4.17; `[security] blocklist`): `example.com` blocks the site and its subdomains,
+    /// `=www.example.com` that host only. Missing: keep the current list.
+    #[serde(default)]
+    pub blocklist: Option<Vec<String>>,
     /// Shown only: the folder used when none is chosen.
     #[serde(default)]
     pub default_download_folder: String,
@@ -68,6 +72,7 @@ fn view_of(app: &AppHandle, c: &Config) -> SettingsView {
             .as_ref()
             .map(|p| p.display().to_string())
             .unwrap_or_default(),
+        blocklist: Some(c.security.blocklist.clone()),
         default_download_folder: app
             .path()
             .download_dir()
@@ -145,6 +150,22 @@ pub fn apply(current: &Config, input: &SettingsView) -> Result<Config, Vec<Strin
             }
         })
         .collect();
+    // Blocked sites (p4.17): each line checked by the security engine's own rule parser, so the message names the line.
+    if let Some(lines) = &input.blocklist {
+        let mut rules = Vec::new();
+        for raw in lines.iter().map(|l| l.trim()).filter(|l| !l.is_empty()) {
+            let rule = raw.to_ascii_lowercase();
+            match ferrum_security::HostRule::parse(&rule) {
+                Ok(_) => {
+                    if !rules.contains(&rule) {
+                        rules.push(rule);
+                    }
+                }
+                Err(e) => problems.push(format!("Blocked site \"{raw}\": {e}.")),
+            }
+        }
+        next.security.blocklist = rules;
+    }
     let folder = input.download_folder.trim();
     next.downloads.folder = if folder.is_empty() {
         None
@@ -214,4 +235,70 @@ pub fn settings_set(app: AppHandle, input: SettingsView) -> Result<SettingsView,
     *app.state::<AppConfig>().0.write().unwrap() = loaded;
     crate::policy::replace(&app, nav_policy);
     Ok(view_of(&app, &next))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn input(current: &Config, blocklist: Option<Vec<&str>>) -> SettingsView {
+        SettingsView {
+            startup_urls: current.session.startup_urls.clone(),
+            restore_on_startup: current.session.restore_on_startup,
+            sites: Vec::new(),
+            download_folder: String::new(),
+            blocklist: blocklist.map(|b| b.into_iter().map(String::from).collect()),
+            default_download_folder: String::new(),
+            isolation: String::new(),
+            file: String::new(),
+        }
+    }
+
+    #[test]
+    fn blocked_sites_are_checked_cleaned_and_kept_when_not_sent() {
+        let mut current = Config::default();
+        current.security.blocklist = vec!["old.example".into()];
+        // Not sent: the current list stays.
+        let next = apply(&current, &input(&current, None)).unwrap();
+        assert_eq!(next.security.blocklist, vec!["old.example".to_string()]);
+        // Sent: trimmed, lower case, empty lines and repeats dropped.
+        let next = apply(
+            &current,
+            &input(
+                &current,
+                Some(vec![
+                    " Blocked.Example ",
+                    "",
+                    "=www.other.example",
+                    "blocked.example",
+                ]),
+            ),
+        )
+        .unwrap();
+        assert_eq!(
+            next.security.blocklist,
+            vec![
+                "blocked.example".to_string(),
+                "=www.other.example".to_string()
+            ]
+        );
+        // An empty list clears it.
+        let next = apply(&current, &input(&current, Some(vec![]))).unwrap();
+        assert!(next.security.blocklist.is_empty());
+    }
+
+    #[test]
+    fn a_bad_blocked_site_is_refused_with_its_line() {
+        let current = Config::default();
+        let e = apply(
+            &current,
+            &input(&current, Some(vec!["https://evil.example/path"])),
+        )
+        .unwrap_err();
+        assert!(
+            e.iter()
+                .any(|p| p.starts_with("Blocked site \"https://evil.example/path\"")),
+            "{e:?}"
+        );
+    }
 }

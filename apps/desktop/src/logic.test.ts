@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { insecureBarText, mergePermissions, PERMISSION_CHOICES, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -189,4 +189,18 @@ test("history rows say how long ago", () => {
   assert.equal(agoText(now - 30 * 3_600_000, now), "yesterday");
   assert.equal(agoText(now - 3 * 86_400_000, now), "3 days ago");
   assert.equal(agoText(Date.UTC(2026, 0, 2), now), "2026-01-02");
+});
+
+test("the not-secure bar: only for a plain-HTTP page that loaded", () => {
+  assert.match(insecureBarText("http://example.org/", true) ?? "", /^Not secure/);
+  assert.equal(insecureBarText("http://example.org/", false), null);
+  assert.equal(insecureBarText("https://example.org/", true), null);
+  assert.equal(insecureBarText("about:blank", true), null);
+});
+
+test("site permissions: shown kinds follow the boxes, other kinds are kept", () => {
+  assert.deepEqual(PERMISSION_CHOICES.map((c) => c.name), ["camera", "microphone", "geolocation", "notifications", "clipboard-read"]);
+  assert.deepEqual(mergePermissions([], ["notifications", "camera"]), ["camera", "notifications"]);
+  assert.deepEqual(mergePermissions(["camera", "midi-system-exclusive-messages"], []), ["midi-system-exclusive-messages"]);
+  assert.deepEqual(mergePermissions(["autoplay"], ["geolocation"]), ["autoplay", "geolocation"]);
 });
