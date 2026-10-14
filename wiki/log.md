@@ -2463,3 +2463,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-security-engine, comp-app-shell]
 - sources: [raw/owner/2026-10-13-s04-p4-9-components-reapproval.md]
 - result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows no STALE or PENDING key; blocked_on cleared. p4.10 is next.
+
+## [2026-10-13] handoff | s04 ends: P4 at 9 of 17 tasks, p4.10 next
+
+- session: s04
+- time: 20:50
+- pages: [handoff-2026-10-13-s04, status-live]
+- result: Handoff written (context large). quick_lint 0 errors; lint:wiki only the known ff7292e finding; portal-sync clean. Next: p4.10 crash recovery.

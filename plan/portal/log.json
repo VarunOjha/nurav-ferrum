@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b0417160a774ff86afb87facd8820d6f068f7f9b3a57251e99ea30f15a1c9622"
+    "content_hash": "sha256:81b1d5b1f6d1b038044ff9bacda55079f89e1cf52e82d936a6d25b8c0e805e4a"
   },
   "entries": [
     {
@@ -4282,6 +4282,26 @@
       "tags": [
         "approvals",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-13-s04-handoff",
+      "date": "2026-10-13",
+      "time": "20:50",
+      "title": "Session ended: Phase 4 at 9 of 17 tasks",
+      "done": "Claude wrote the end-of-session note. This session: permissions, safe downloads, proven isolation with private tabs, no app access for websites, and the security log. All approvals are up to date; the full test suite passed 106 of 106.",
+      "next": "Next session: recovery from crashed pages.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-13] handoff | s04 ends: P4 at 9 of 17 tasks, p4.10 next"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "sessions",
+        "phases"
       ]
     }
   ]

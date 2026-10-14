@@ -38,7 +38,7 @@ current_phase: phase-p4-security
 current_task: p4.10
 next_action: "p4.10 (recovery from crashed page and browser processes: ProcessFailed, crashed-tab state, reload, no shell crash), per wiki/phases/phase-p4-security.md; verify with pwsh -NoProfile -File scripts/verify/p4.10-recover-crashes.ps1. Stop after the P4 exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
 blocked_on: []
-last_handoff: handoff-2026-10-13-s03
+last_handoff: handoff-2026-10-13-s04
 ---
 
 # STATUS — live state (read this first every session)
