@@ -1,0 +1,16 @@
+Ferrum check p4.13: Literature batch 4
+Why: nothing is cited that nobody opened.
+Run at 2026-10-15 12:56 on commit 06cbcb8 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The note exists, gives the access date, and labels every source
+         12 sources, each labelled; access date stated
+  PASS   Every source names a page that is listed in the note's header
+         14 web addresses listed
+  PASS   The related-work page cites the note (section H)
+         section H cites literature-batch-4
+  PASS   The note has its fingerprint line and matches it
+         fingerprint matches
+------------------------------------------------------------------------
+RESULT: PASS - p4.13 (4 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.13 check passed".

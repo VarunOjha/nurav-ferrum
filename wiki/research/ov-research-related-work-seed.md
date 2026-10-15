@@ -3,9 +3,10 @@ id: ov-research-related-work-seed
 type: overview
 title: "Related-work seed (verified entries only)"
 status: draft
-updated: 2026-10-12
+updated: 2026-10-15
 sources:
   - raw/research/literature-batch-3.md
+  - raw/research/literature-batch-4.md
   - raw/research/related-work-seed.md
 related:
   - ov-research-plan
@@ -85,6 +86,24 @@ tags:
 | G2 | Young, Algorithmica 11(6) 1994, doi 10.1007/BF01189992 | Crossref metadata; batch 3 read Cao and Irani's text and reference list naming it as the origin of GreedyDual (L8) | The competitive-analysis root of cost-aware eviction and the origin of GreedyDual |
 | G3 | O'Neil, O'Neil, Weikum, "LRU-K", SIGMOD 1993, doi 10.1145/170036.170081 | Crossref metadata plus abstract | Analogue for predicting tab revisits from activation history |
 | G4 | Megiddo and Modha, IEEE Computer 37(4) 2004, doi 10.1109/MC.2004.1297303 | Crossref metadata | A self-tuning recency/frequency balance. Analogue for an adaptive policy |
+
+## H. Embedded-browser and WebView security (batch 4, p4.13)
+
+All read on 2026-10-15 ([literature-batch-4](../raw/research/literature-batch-4.md); landing pages and abstracts, not full texts).
+
+| Id | Source | Verified | Relevance |
+|---|---|---|---|
+| H1 | The Chromium Projects, "Site Isolation" | Page read (L2) | Threats, limits (sites not origins, CORB best effort, none in Android WebView) and a vendor memory figure; extends D1 for the paper's security section |
+| H2 | Luo, Hao, Du, Yin, "Attacks on WebView in the Android System", ACSAC 2011, pp. 343–352 | Repository page (L3) | Founding argument that an embedded browser changes the web's security model |
+| H3 | Tuncay, Demetriou, Gunter, "Draco", ACM CCS 2016 | Lab page plus abstract (L4) | Per-origin access control for WebView bridges; Ferrum instead gives tab views no bridge |
+| H4 | Microsoft, "Develop secure WebView2 apps" (ms.date 2026-07-14) | Page read (L5) | Vendor baseline Ferrum follows: content untrusted, navigation events, non-elevated host |
+| H5 | Electron, "Security" tutorial | Page read (L6) | Peer framework checklist, for a comparison table |
+| H6 | Tauri, "Isolation Pattern" (updated 2025-07-10) | Page read (L7) | Tauri's own bridge defence and its Windows limit |
+| H7 | Georgiev, Jana, Shmatikov, NDSS 2014 | Symposium page plus abstract (L8) | Web-to-native origin confusion in hybrid frameworks |
+| H8 | Yang, Huang, Gu, Mendoza, IEEE S&P 2018, doi 10.1109/SP.2018.00043 | Lab page and NSF PAR record (L9) | Origin lost in hybrid postMessage; any future channel must carry the origin |
+| H9 | Mutchler et al., "A Large-Scale Study of Mobile Web App Security", MoST 2015 | Author page plus abstract (L10) | Scale of WebView flaws (28% of about one million apps) |
+| H10 | Nguyen, Stock, AsiaCCS 2025 | Publication page plus abstract (L11) | WebView permission confused deputies; Ferrum's per-site, default-deny grants |
+| H11 | Yu et al., "Buzz to Boom", arXiv:2607.20698 (preprint, 2026-07-22) | arXiv abstract (L12) | IPC message chains in Electron apps; a possible later test method. Not peer reviewed |
 
 ## What this means for the research plan
 

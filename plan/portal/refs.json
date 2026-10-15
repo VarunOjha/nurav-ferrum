@@ -840,7 +840,7 @@
       "kind": "task",
       "title": "P4 task: Literature batch 4",
       "summary": "The paper needs security context → read site-isolation and embedded-browser security studies → the trade-offs are grounded.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
