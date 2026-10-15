@@ -830,7 +830,7 @@
       "kind": "task",
       "title": "P4 task: Design the cost experiments",
       "summary": "Security costs time and memory → build small timing tests and finish the experiment designs, claiming no numbers → P6 measures it properly.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -2603,7 +2603,7 @@
       "id": "exp-isolation-overhead",
       "kind": "experiment",
       "title": "Cost of keeping sites apart",
-      "summary": "Run: active tabs on 1, 2, 4 and 8 sites. Compare: one shared profile, one profile per site, one data folder per site. Measure: extra memory and processes per site, plus a list of what stays shared.",
+      "summary": "Run: active tabs on 1, 2, 4 and 8 sites. Compare: one shared profile, one profile per site, one data folder per site (all three built in P4). Measure: extra memory and processes per site, plus a list of what stays shared.",
       "status": "Designed, not run",
       "related": [
         "hyp-13",
@@ -2702,7 +2702,7 @@
       "id": "exp-security-overhead",
       "kind": "experiment",
       "title": "Cost of the security checks",
-      "summary": "Run: 300 mixed navigations, some to blocked sites, all local. Compare: normal Ferrum versus a test-only build without the site rules (built in P4; Ferrum's own pages, local files and links to other apps stay protected). Measure: time per security decision, page-load time (allowed pages only), memory.",
+      "summary": "Run: 300 mixed navigations, some to blocked sites, all local. Compare: normal Ferrum versus a test-only build without the site rules (built in P4). Measure: time per security decision (with a timing tool built in P4), page-load time (allowed pages only), memory.",
       "status": "Designed, not run",
       "related": [
         "hyp-12",
@@ -2864,7 +2864,7 @@
       "id": "metric-policy-eval-latency",
       "kind": "metric",
       "title": "Time per security decision",
-      "summary": "How long Ferrum takes to decide allow, block or ask for one navigation or permission request (not counting your answer). Unit: µs.",
+      "summary": "How long Ferrum takes to decide allow, block or ask for one navigation or permission request (not counting your answer). A timing tool for it exists since P4; nothing measured yet.",
       "status": "Proposed, not checked",
       "related": [
         "exp-security-overhead"

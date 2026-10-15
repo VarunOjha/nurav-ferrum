@@ -3,8 +3,9 @@ id: metric-policy-eval-latency
 type: metric
 title: "Navigation policy evaluation latency"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-15
 sources:
+  - raw/evidence/phase-p4-security/microbench-harness-run.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -18,7 +19,7 @@ definition: "Wall-clock duration of one evaluation of Ferrum's navigation/permis
 boundary_start: "Entry of the policy evaluation function (tracing span open, QPC)"
 boundary_end: "Return of the decision (tracing span close)"
 method: "tracing spans in comp-security-engine recorded to telemetry; per trial median/p95/p99 over all evaluations; also an in-process micro-benchmark (Rust bench) for regression tracking, reported separately."
-tool: "tracing crate spans + Ferrum telemetry exporter; cargo bench harness (TBD)"
+tool: "tracing crate spans + Ferrum telemetry exporter; microbenchmark harness crates/security/examples/microbench.rs (p4.12)"
 normalization: microseconds
 support: unverified
 phase: phase-p4-security
@@ -44,7 +45,7 @@ unverified:
 
 **Method.** tracing spans in comp-security-engine recorded to telemetry; per trial median/p95/p99 over all evaluations; also an in-process micro-benchmark (Rust bench) for regression tracking, reported separately.
 
-**Tool.** tracing crate spans + Ferrum telemetry exporter; cargo bench harness (TBD)
+**Tool.** tracing crate spans + Ferrum telemetry exporter; microbenchmark harness `crates/security/examples/microbench.rs` (built in p4.12; [harness run](../../raw/evidence/phase-p4-security/microbench-harness-run.txt), harness operation only, not a result)
 
 **Normalisation.** microseconds
 

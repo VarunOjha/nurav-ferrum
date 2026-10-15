@@ -3,8 +3,9 @@ id: exp-security-overhead
 type: experiment
 title: "Security-control overhead"
 status: designed
-updated: 2026-10-14
+updated: 2026-10-15
 sources:
+  - raw/evidence/phase-p4-security/microbench-harness-run.txt
   - raw/00-master-prompt.md
   - raw/research/measurement-methodology.md
   - raw/research/related-work-seed.md
@@ -64,6 +65,21 @@ tags:
 1. `cfg-ferrum-nosecurity-bench` is a benchmark-only build (Cargo feature `bench-nosecurity`, built in p4.16) in which the navigation policy lets every web address load without its rules. Ferrum's own origin (`tauri:`, `http(s)://tauri.localhost`), the forbidden schemes (local files, `javascript:`, browser pages) and links to other apps (still confirmed or refused) keep their rules, and permission refusals and download cleaning are unchanged, so the ablation measures the cost of the web rules, not of those protections. It starts only with `--benchmark-mode` and its own data folder, is never shipped (proven per release by `scripts/security-static-check.ps1`, [nosecurity-absent](../../raw/evidence/phase-p4-security/nosecurity-absent.txt)) and is never used with public sites ([ov-research-configurations](../ov-research-configurations.md)). It is a second binary: the comparison carries a build confound, stated with the results.
 2. Compare only allowed navigations for latency. Blocked navigations have no counterpart in the ablation.
 3. Report the span instrumentation overhead next to the results.
+
+## Microbenchmark harness (built in p4.12)
+
+`crates/security/examples/microbench.rs` times the security engine itself, without a browser: one navigation decision
+(`evaluate`) and one permission decision (`Grants::decide`). Cases: five addresses (an allowed HTTPS page, a blocked
+subdomain, a plain-HTTP page, a link to another app, a malformed address) against block lists of 0, 10 and 1000 rules,
+and a granted and a not-granted site against 0, 10 and 100 per-site grants. Each case runs one warm-up batch, then
+`--batches` batches of `--iters` calls, and prints one CSV line per batch (`kind,case,size,batch,iterations,total_ns,
+ns_per_call`). Command (never into `target/release`):
+`cargo run --release --locked -p ferrum-security --example microbench --target-dir target/bench -- --batches 30 --iters 20000`.
+It feeds [metric-policy-eval-latency](../metrics/metric-policy-eval-latency.md) as the in-process regression series,
+reported apart from the in-app spans. The p4.12 run only shows that the harness works
+([microbench-harness-run](../../raw/evidence/phase-p4-security/microbench-harness-run.txt): 630 batch lines, uncontrolled
+machine state); its numbers are not results. In P6 the harness runs under the fairness protocol on the measurement
+machine, and its raw output goes to `raw/bench/<run-id>/`.
 
 ## Analysis
 

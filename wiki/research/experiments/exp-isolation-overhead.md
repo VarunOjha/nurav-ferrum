@@ -3,8 +3,9 @@ id: exp-isolation-overhead
 type: experiment
 title: "Isolation-model overhead and shared resources"
 status: designed
-updated: 2026-10-08
+updated: 2026-10-15
 sources:
+  - raw/evidence/phase-p4-security/isolation-modes.md
   - raw/00-master-prompt.md
   - raw/research/measurement-methodology.md
   - raw/research/related-work-seed.md
@@ -64,6 +65,20 @@ tags:
 1. Vary `distinct_sites` over {1, 2, 4, 8} (proposed) in wl-multi-active.
 2. Produce the **shared-resource inventory** that master prompt §5 Phase 3 asks for. For each configuration, list which processes, caches, cookies and storage areas are shared, each backed by an observation or a document citation. Never claim complete isolation without validating it.
 3. `cfg-ferrum-profile-per-site` depends on `risk-r01` and `adr-0010`. If it cannot be built, the experiment runs with the other two configurations and `hyp-13` is withdrawn.
+
+## What P4 built for it (p4.12 review)
+
+- All three configurations exist (p4.15): `[isolation] mode` = `shared`, `per-site` or `per-site-udf`, chosen at start;
+  `cfg-ferrum-profile-per-site` could be built, so step 3 does not apply.
+- The process inventory: Ferrum's test command `test_processes` (debug and test builds) lists every WebView2 process
+  with its kind, frames and environment; the live spec `isolation-modes` records it per mode
+  ([isolation-modes](../../raw/evidence/phase-p4-security/isolation-modes.md)). P6 takes process counts and memory from
+  the harness's own process-tree sampling, not from this test command.
+- The shared-resource inventory of step 2 starts from the p4.7 and p4.15 observations
+  ([check-p4.7](../../raw/evidence/phase-p4-security/check-p4.7.txt),
+  [isolation-modes](../../raw/evidence/phase-p4-security/isolation-modes.md)); the P4 exit gate collects them in
+  `shared-resources.md`; P6 repeats the inventory per configuration.
+- No microbenchmark: the cost of a mode is a whole-browser cost (processes, memory), measured only in P6.
 
 ## Analysis
 

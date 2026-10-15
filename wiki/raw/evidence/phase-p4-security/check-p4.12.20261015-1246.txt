@@ -1,0 +1,14 @@
+Ferrum check p4.12: Overhead experiment designs and the microbenchmark harness
+Why: the measurements later follow a plan written before any data exists.
+Run at 2026-10-15 12:46 on commit 02af8db (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The harness builds and runs (short run, own build folder)
+         21 cases x 2 batches printed as CSV
+  PASS   The saved harness run exists and is marked "not a result"
+         630 batch lines; marked as evidence of harness operation only
+  PASS   Both experiment pages: workloads, metrics, analysis plan, what P4 built; no results
+         exp-security-overhead and exp-isolation-overhead: designed, no results, P4 parts described
+------------------------------------------------------------------------
+RESULT: PASS - p4.12 (3 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.12 check passed".

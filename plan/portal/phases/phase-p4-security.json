@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 16,
+    "done": 17,
     "total": 19
   },
   "step_order": [
@@ -202,10 +202,10 @@
       "what": "Small timing tests for the rules engine and permission checks, plus finished designs for the two security-cost experiments.",
       "why": "Measuring without a design written first invites picking the numbers that look best. P6 needs the plan ready and approved before any campaign runs.",
       "how": "Write small timing tests for the rules engine and permission checks, and finish both experiment pages with their workloads, measures and analysis plan.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "Security costs time and memory → build small timing tests and finish the experiment designs, claiming no numbers → P6 measures it properly.",
       "check": "Small timing tests run (proof the tool works, not results); experiment pages updated; you approve them.",
-      "script": "scripts/verify/p4.12-design-cost-experiments.ps1"
+      "script": "scripts/verify/p4.12-overhead-designs.ps1"
     },
     {
       "id": "p4.13",

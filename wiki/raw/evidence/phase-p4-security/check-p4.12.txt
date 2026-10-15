@@ -1,0 +1,13 @@
+Ferrum check p4.12: Overhead experiment designs and the microbenchmark harness
+Why: the measurements later follow a plan written before any data exists.
+Run at 2026-10-15 12:46 on commit 02af8db (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The harness builds and runs (short run, own build folder)
+         21 cases x 2 batches printed as CSV
+  PASS   The saved harness run exists and is marked "not a result"
+         630 batch lines; marked as evidence of harness operation only
+  FAIL   Both experiment pages: workloads, metrics, analysis plan, what P4 built; no results
+         wiki/research/experiments/exp-security-overhead.md has no workloads.
+------------------------------------------------------------------------
+RESULT: FAIL - p4.12 (2 PASS, 1 FAIL; 1 s)
+What to tell Claude: "p4.12 check failed at: Both experiment pages: workloads, metrics, analysis plan, what P4 built; no results", and paste the FAIL lines above.

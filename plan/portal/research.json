@@ -701,7 +701,7 @@
     {
       "id": "exp-security-overhead",
       "title": "Cost of the security checks",
-      "summary": "Run: 300 mixed navigations, some to blocked sites, all local. Compare: normal Ferrum versus a test-only build without the site rules (built in P4; Ferrum's own pages, local files and links to other apps stay protected). Measure: time per security decision, page-load time (allowed pages only), memory.",
+      "summary": "Run: 300 mixed navigations, some to blocked sites, all local. Compare: normal Ferrum versus a test-only build without the site rules (built in P4). Measure: time per security decision (with a timing tool built in P4), page-load time (allowed pages only), memory.",
       "status": "Designed, not run",
       "category": "Experiment",
       "tags": [
@@ -720,14 +720,14 @@
       ],
       "source": {
         "wiki_path": "wiki/research/experiments/exp-security-overhead.md",
-        "content_hash": "sha256:50405c98793d3a6ee617a008dace2c4ba56b6513757877a43b5946a84a0b9400"
+        "content_hash": "sha256:95e1819e65153f7b8b6ef248195072c3adda96d0365758cfaec7744ceb5a392d"
       },
       "phase": "phase-p6-benchmark-harness"
     },
     {
       "id": "exp-isolation-overhead",
       "title": "Cost of keeping sites apart",
-      "summary": "Run: active tabs on 1, 2, 4 and 8 sites. Compare: one shared profile, one profile per site, one data folder per site. Measure: extra memory and processes per site, plus a list of what stays shared.",
+      "summary": "Run: active tabs on 1, 2, 4 and 8 sites. Compare: one shared profile, one profile per site, one data folder per site (all three built in P4). Measure: extra memory and processes per site, plus a list of what stays shared.",
       "status": "Designed, not run",
       "category": "Experiment",
       "tags": [
@@ -745,7 +745,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/experiments/exp-isolation-overhead.md",
-        "content_hash": "sha256:4b3be3073ddfe304b1eb27bf32f7745de71f662ab90eaa867c25faa5f8bee0e4"
+        "content_hash": "sha256:3cfc73ebf8aa6df4eaccd69fb05bd174fc2ac1f7ba3aa6387f5ccd7933c98dd0"
       },
       "phase": "phase-p6-benchmark-harness"
     },
@@ -1296,7 +1296,7 @@
     {
       "id": "metric-policy-eval-latency",
       "title": "Time per security decision",
-      "summary": "How long Ferrum takes to decide allow, block or ask for one navigation or permission request (not counting your answer).",
+      "summary": "How long Ferrum takes to decide allow, block or ask for one navigation or permission request (not counting your answer). A timing tool for it exists since P4; nothing measured yet.",
       "status": "Proposed, not checked",
       "category": "Measure",
       "tags": [
@@ -1309,7 +1309,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-policy-eval-latency.md",
-        "content_hash": "sha256:6f1349b6d81618d93b56361e5ad68221853a59f28f2cd505ce096e2f2fcec748"
+        "content_hash": "sha256:834f5e9f8543bbb1c51fbafb01fe996db50e60157dd346247c7a9bc10fe565c7"
       },
       "unit": "µs"
     },
