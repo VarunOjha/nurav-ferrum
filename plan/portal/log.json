@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7ef664e9e709bb6c92271fb1a7ed13b8636f3fc14b2ca1c51dad3957ebafa09a"
+    "content_hash": "sha256:305aee873fe1ee761426d4fb71c46c9a7b43379e109b7ec1d000e3e5b96c4159"
   },
   "entries": [
     {
@@ -5052,6 +5052,36 @@
       "tags": [
         "benchmarks",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-13-start",
+      "date": "2026-10-15",
+      "time": "12:54",
+      "title": "You approved the two experiment designs; the literature note started",
+      "done": "You approved both cost experiment designs. Claude re-read all 12 sources for the literature note (site isolation, embedded-browser and WebView security) and wrote the \"task in progress\" note.",
+      "next": "Claude writes the literature note and adds it to the related-work page.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Cost of the security checks",
+          "status": "Approved"
+        },
+        {
+          "what": "Cost of keeping sites apart",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] approval | two overhead experiment designs approved after p4.12",
+        "## [2026-10-15] plan | p4.13 in flight"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "paper"
       ]
     }
   ]

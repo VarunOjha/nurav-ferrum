@@ -2834,3 +2834,19 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 12:48
 - pages: [exp-security-overhead, exp-isolation-overhead]
 - result: Both are in the P4 dependency set (P4 experiments); p4.13 and the exit gate wait for the owner's approval. blocked_on set.
+
+## [2026-10-15] approval | two overhead experiment designs approved after p4.12
+
+- session: s07
+- time: 12:54
+- pages: [exp-security-overhead, exp-isolation-overhead]
+- sources: [raw/owner/2026-10-15-s07-p4-12-experiments-approval.md]
+- result: The owner answered "Approve both (Recommended)"; recorded with tools/approvals_record.py for both pages; approvals_check shows nothing STALE or PENDING; blocked_on cleared.
+
+## [2026-10-15] plan | p4.13 in flight
+
+- session: s07
+- time: 12:54
+- pages: [status-live]
+- result: In-flight record written for p4.13 (literature batch 4). Sources were gathered by a research helper during the p4.11 suite run and every one was re-read by Claude in this session (12 sources; two of the helper's details were not on the pages Claude read and are not used).
+- next: p4.13

@@ -42,7 +42,7 @@ session: s07
 current_phase: phase-p4-security
 current_task: p4.13
 next_action: "After the owner approves exp-security-overhead and exp-isolation-overhead (stale after p4.12): p4.13 literature batch 4 (findings saved in the session scratchpad lit4-findings.md; re-verify before writing the note) per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first. Then p4.12, p4.13 and the exit gate p4.14 (align the p4.16 wording on the phase page; add the owner's one-time \"Keep\" check of a program download to the manual checklist; Q-226 answered before the review); stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [exp-security-overhead, exp-isolation-overhead]
+blocked_on: []
 last_handoff: handoff-2026-10-14-s06
 ---
 
@@ -364,7 +364,11 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.12 committed in 4777605; exp-security-overhead and exp-isolation-overhead wait for the owner's approval; p4.13 next)
+- task: p4.13 (literature batch 4: site isolation, embedded-browser security, WebView security studies)
+- session: s07
+- intent: raw research note with access dates and VERIFIED labels for 12 sources read on 2026-10-15; section H on the related-work page; check script
+- planned paths: wiki/raw/research/literature-batch-4.md (+ MANIFEST), wiki/research/ov-research-related-work-seed.md, scripts/verify/p4.13-literature-batch-4.ps1, wiki/raw/evidence/phase-p4-security/check-p4.13.txt, wiki/index.md, plan/portal/*.json
+- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 ## Blockers
 

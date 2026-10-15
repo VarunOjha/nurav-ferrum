@@ -1709,13 +1709,13 @@
     "exp-security-overhead": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-14T14:32:12-05:00",
+      "timestamp": "2026-10-15T12:54:28-05:00",
       "path": "wiki/research/experiments/exp-security-overhead.md",
-      "content_hash": "sha256:50405c98793d3a6ee617a008dace2c4ba56b6513757877a43b5946a84a0b9400",
-      "scope_hash": "sha256:091c5c1056b286cdfbeea0057e7f2ce1eae640c41886048a6f8b14806183f95c",
+      "content_hash": "sha256:95e1819e65153f7b8b6ef248195072c3adda96d0365758cfaec7744ceb5a392d",
+      "scope_hash": "sha256:df58105d32968cdc20424a96ef9e46e775f41ed49ed9d7db592474130c0c7ea9",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md",
+      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-12-experiments-approval.md",
       "history": [
         {
           "status": "approved",
@@ -1727,20 +1727,43 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-14T14:32:12-05:00",
+          "path": "wiki/research/experiments/exp-security-overhead.md",
+          "content_hash": "sha256:50405c98793d3a6ee617a008dace2c4ba56b6513757877a43b5946a84a0b9400",
+          "scope_hash": "sha256:091c5c1056b286cdfbeea0057e7f2ce1eae640c41886048a6f8b14806183f95c",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md"
         }
       ]
     },
     "exp-isolation-overhead": {
       "status": "approved",
-      "comment": "Approve all five (Recommended)",
-      "timestamp": "2026-10-13T07:47:02-05:00",
+      "comment": "",
+      "timestamp": "2026-10-15T12:54:28-05:00",
       "path": "wiki/research/experiments/exp-isolation-overhead.md",
-      "content_hash": "sha256:4b3be3073ddfe304b1eb27bf32f7745de71f662ab90eaa867c25faa5f8bee0e4",
-      "scope_hash": "sha256:c8fbef8a1b702acc6743bb1803f34d65776479a459fd914de91cc9744500a9ce",
+      "content_hash": "sha256:3cfc73ebf8aa6df4eaccd69fb05bd174fc2ac1f7ba3aa6387f5ccd7933c98dd0",
+      "scope_hash": "sha256:9cb899ef64a8c28961158a813bec4f5234ed7e2ed22ac51beb48ad05b82d64f0",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-12-experiments-approval.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "Approve all five (Recommended)",
+          "timestamp": "2026-10-13T07:47:02-05:00",
+          "path": "wiki/research/experiments/exp-isolation-overhead.md",
+          "content_hash": "sha256:4b3be3073ddfe304b1eb27bf32f7745de71f662ab90eaa867c25faa5f8bee0e4",
+          "scope_hash": "sha256:c8fbef8a1b702acc6743bb1803f34d65776479a459fd914de91cc9744500a9ce",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md"
+        }
+      ]
     }
   }
 }

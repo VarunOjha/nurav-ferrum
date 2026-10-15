@@ -213,7 +213,7 @@
       "what": "A batch of reading on site isolation, embedded-browser security and WebView security studies.",
       "why": "Without this reading the paper could present known trade-offs as new, or miss attacks others have already described.",
       "how": "Read studies on site isolation and embedded-browser and WebView security, and write one dated note per source.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "The paper needs security context → read site-isolation and embedded-browser security studies → the trade-offs are grounded.",
       "check": "New dated notes.",
       "script": "scripts/verify/p4.13-literature-batch-4.ps1"
