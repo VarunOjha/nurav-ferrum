@@ -139,7 +139,7 @@
       "status": "Done",
       "chain": "Your brief lists ten security tests → one suite mapping each to a test, kept apart from speed tests → coverage is visible.",
       "check": "The suite passes, including allowlist cases; the mapping table is published.",
-      "script": "scripts/verify/p4.11-security-suite.ps1"
+      "script": "scripts/verify/p4.11-security-test-suite.ps1"
     },
     {
       "id": "p4.15",
@@ -205,7 +205,7 @@
       "status": "Done",
       "chain": "Security costs time and memory → build small timing tests and finish the experiment designs, claiming no numbers → P6 measures it properly.",
       "check": "Small timing tests run (proof the tool works, not results); experiment pages updated; you approve them.",
-      "script": "scripts/verify/p4.12-overhead-designs.ps1"
+      "script": "scripts/verify/p4.12-design-cost-experiments.ps1"
     },
     {
       "id": "p4.13",
