@@ -6,11 +6,8 @@
 // warning is printed, not hidden, and does not fail the test (the Windows setting can switch SmartScreen off, note 3.2).
 // p4.19 (owner answer Q-226): when the block is seen, Ferrum's own SmartScreen panel shows (no "Try again") and the block
 // is in the audit log; an ordinary page that breaks off after the server's 200 still gets the usual panel.
-import { execFileSync } from "node:child_process";
-import fs from "node:fs";
-import path from "node:path";
 import { test, expect } from "@playwright/test";
-import { launch, call, tabList, audited, type Ferrum } from "./ferrum.ts";
+import { launch, call, tabList, audited, appLog, commandLines, switchValues, type Ferrum } from "./ferrum.ts";
 import { base } from "./paths.ts";
 
 const A = "https://site-a.localhost:8443";
@@ -25,29 +22,6 @@ async function openSite(f: Ferrum, url: string): Promise<number> {
     .toMatch(/^stored /);
   return id;
 }
-
-/** Command lines of the given processes (Windows), by pid. */
-function commandLines(pids: number[]): Map<number, string> {
-  const script = `Get-CimInstance Win32_Process -Filter "ProcessId=${pids.join(" OR ProcessId=")}" | ` +
-    `ForEach-Object { "$($_.ProcessId)\`t$($_.CommandLine)" }`;
-  const out = execFileSync("powershell.exe", ["-NoProfile", "-Command", script], { encoding: "utf8" });
-  const m = new Map<number, string>();
-  for (const line of out.split(/\r?\n/).filter(Boolean)) {
-    const [pid, ...rest] = line.split("\t");
-    m.set(Number(pid), rest.join("\t"));
-  }
-  return m;
-}
-
-/** Ferrum's own log of the run (logs/ferrum.jsonl). */
-const appLog = (f: Ferrum) => {
-  const p = path.join(f.data, "logs", "ferrum.jsonl");
-  return fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "";
-};
-
-/** The values of one switch (`--name=value`), all occurrences, in order. */
-const switchValues = (cmd: string, name: string) =>
-  [...cmd.matchAll(new RegExp(`--${name}=("[^"]*"|\\S+)`, "g"))].map((x) => x[1]!.replace(/^"|"$/g, ""));
 
 for (const mode of ["shared", "per-site", "per-site-udf"] as const) {
   test(`mode ${mode}: no browser process has SmartScreen switched off`, async () => {

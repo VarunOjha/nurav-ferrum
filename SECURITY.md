@@ -184,6 +184,15 @@ Embedded web views are a known problem for Google sign-in; Ferrum must not weake
 to get around it. The owner chose the hand-off (Q-109 in [open questions](wiki/overview/ov-open-questions.md)):
 Ferrum recognises Google's sign-in address and offers "Open in browser"; nothing opens without the user's click.
 
+## Running every security test
+
+`pwsh -NoProfile -File scripts/security-suite.ps1` runs all of Ferrum's security tests in one go (P4 task p4.11): the
+security engine's tests, the self-test where a website tries every way into the app, the live tests for the ten areas of
+security testing (blocked sites, links to other apps, app commands, cross-site reads, permissions, separate site data,
+downloads, redirects, malformed addresses, crash recovery), the audit log and SmartScreen, and the release build scan.
+Which test covers which area: [security testing plan](wiki/quality/qual-security-testing-plan.md#5-traceability).
+Result: [security-suite](wiki/raw/evidence/phase-p4-security/security-suite.20261015-1234.txt).
+
 ## Rules Ferrum keeps
 
 No weakening of WebView2/Chromium security, certificate validation or OAuth restrictions, not even for

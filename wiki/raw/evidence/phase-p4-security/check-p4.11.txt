@@ -1,0 +1,49 @@
+Ferrum check p4.11: Security test suite
+Why: anyone can rerun the whole suite after a change.
+Run at 2026-10-15 12:09 on commit bc5cc56 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The item -> test table on the security testing page names tests that exist
+         10 items; 16 spec files and 2 named Rust tests exist
+  PASS   Security engine tests (rules, allowlist and blocklist, malformed addresses; 100 percent branch coverage in p4.2) (9 s)
+         test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s; test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s; test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.39s; test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  PASS   Other unit tests: app, tab and view manager, core; shell (31 s)
+         99 Rust tests passed; shell: ℹ pass 26
+  FAIL   Item 3: IPC self-test, a website tries every way into the app (60 s)
+         The probe page did not load in the Tauri view.
+  PASS   Live security tests (items 1 to 10, audit log, SmartScreen) (246 s)
+         69 passed (3.9m) (16 spec files)
+  PASS   Release build scan: no "no security" benchmark switch (SEC-12; own build folder) (324 s)
+         release build has no bench-nosecurity feature or marker texts; positive control found them in the benchmark build
+  PASS   The app never sets a debugging port itself (SEC-11)
+         no remote-debugging-port in the app's code (tests and benchmarks set it for their own runs only)
+RESULT: FAIL - security-suite (5 PASS, 1 FAIL; 670 s)
+Evidence saved (masked): wiki/raw/evidence/phase-p4-security/security-suite.txt
+  FAIL   One command runs the whole suite and passes (672 s)
+         The suite did not pass:
+         Ferrum check security-suite: Security test suite (master prompt section 11, items 1 to 10)
+         Why: you can rerun every security test after any change and see each area's result.
+         Run at 2026-10-15 12:09 on commit bc5cc56 (with uncommitted changes)
+         ------------------------------------------------------------------------
+           PASS   Security engine tests (rules, allowlist and blocklist, malformed addresses; 100 percent branch coverage in p4.2) (9 s)
+                  test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s; test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s; test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.39s; test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+           PASS   Other unit tests: app, tab and view manager, core; shell (31 s)
+                  99 Rust tests passed; shell: ℹ pass 26
+         serving https://localhost:8443/ (exit after: Some(50s))
+           FAIL   Item 3: IPC self-test, a website tries every way into the app (60 s)
+                  The probe page did not load in the Tauri view.
+           PASS   Live security tests (items 1 to 10, audit log, SmartScreen) (246 s)
+                  69 passed (3.9m) (16 spec files)
+           PASS   Release build scan: no "no security" benchmark switch (SEC-12; own build folder) (324 s)
+                  release build has no bench-nosecurity feature or marker texts; positive control found them in the benchmark build
+           PASS   The app never sets a debugging port itself (SEC-11)
+                  no remote-debugging-port in the app's code (tests and benchmarks set it for their own runs only)
+         ------------------------------------------------------------------------
+         RESULT: FAIL - security-suite (5 PASS, 1 FAIL; 670 s)
+         What to tell Claude: "security-suite check failed at: Item 3: IPC self-test, a website tries every way into the app", and paste the FAIL lines above.
+         Evidence saved (masked): wiki/raw/evidence/phase-p4-security/security-suite.txt
+         Claude adds its fingerprint line to wiki/raw/MANIFEST.sha256 when it commits it.
+         [ferrum selftest] {"all_probe_calls_refused":false,"content_view":{"events":8,"no_bridge":true,"ready":true,"report":{"bridge":false,"ipc":false}},"pass":false,"probe_url":"https://localhost:8443/ipc-probe","selftest":"ipc","shell_positive_control_pings":1,"tauri_view":{"all_calls_refused":false,"created":false,"report":null}}
+         [1015/121032.459:ERROR:ui\gfx\win\window_impl.cc:172] Failed to unregister class Chrome_WidgetWin_0. Error = 1412
+------------------------------------------------------------------------
+RESULT: FAIL - p4.11 (1 PASS, 1 FAIL; 672 s)
+What to tell Claude: "p4.11 check failed at: One command runs the whole suite and passes", and paste the FAIL lines above.

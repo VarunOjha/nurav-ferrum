@@ -6,6 +6,7 @@ status: implemented
 last_verified_commit: ebc79ca
 updated: 2026-10-15
 sources:
+  - raw/owner/2026-10-15-s07-p4-11-probe-folder-fix.md
   - raw/owner/2026-10-15-s07-p4-19-blank-page-fix.md
   - raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md
   - raw/evidence/phase-p4-security/check-p4.19.txt
@@ -389,7 +390,12 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   run (`New-SelfTestFolder` in `scripts/lib/Ferrum.SelfTest.ps1`) and start the program with `Invoke-Native -NoWait`
   (arguments passed one by one, so paths with spaces stay whole)
   ([selftest-own-folder](../../raw/evidence/phase-p4-security/selftest-own-folder.txt): both refusals exit 2; the p4.8
-  check passed with the self-test's browser data and log in its own folder).
+  check passed with the self-test's browser data and log in its own folder). Correction (p4.11, owner answer,
+  [raw](../../raw/owner/2026-10-15-s07-p4-11-probe-folder-fix.md)): that fix covered the shell view only. The IPC
+  self-test's probe view (an extra Tauri view loading the stand-in website) was built without a data folder, so it
+  still used the default one, the user's real folder (in the p4.8 check of 2026-10-14 about 16:03 most likely next to
+  the owner's open Ferrum; on 2026-10-15 WebView2 refused to create it there because the browser switches differed).
+  The probe now uses the self-test's data folder, and the self-test refuses to create it without one.
 - p4.18, SmartScreen back on (owner answer Q-225): the shell's `WebviewBuilder` (and the IPC self-test's probe view,
   which shares its folder) sets `additional_browser_args(SHELL_BROWSER_ARGUMENTS)`, so Tauri's environment no longer
   gets wry's default switches that turned SmartScreen off; tab views come from that environment (adr-0029). Observed

@@ -5,6 +5,7 @@ title: "Security testing plan: master prompt section 11 mapped to harmless fixtu
 status: draft
 updated: 2026-10-15
 sources:
+  - raw/evidence/phase-p4-security/security-suite.20261015-1234.txt
   - raw/evidence/phase-p4-security/check-p4.19.txt
   - raw/evidence/phase-p4-security/check-p4.18.txt
   - raw/00-master-prompt.md
@@ -116,6 +117,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 - **Fixture:** origin A embeds an iframe from origin B and tries to read `contentDocument`, read B's cookies, `fetch` B without CORS headers, and read a cross-origin response body.
 - **Pass:** every read is blocked by the browser, as in a stock Chromium configuration; the test also asserts that the effective browser arguments contain no flag that disables web security or site isolation (shared with SEC-12).
 - **Phase:** P4.
+- **Built (p4.11):** `cross-origin.spec`: site-a.localhost reads a frame of site-b.localhost (`contentDocument` null, document access `SecurityError`), fetches B in CORS mode (`TypeError`) and no-CORS mode (opaque, status 0, empty body), and does not see B's cookie; every browser process has no switch that weakens web security, site isolation or SmartScreen ([security-suite](../raw/evidence/phase-p4-security/security-suite.20261015-1234.txt)).
 
 ### SEC-05 Permission denial (item 5)
 
@@ -194,18 +196,28 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 
 ## 5. Traceability
 
-| Master prompt §11 item | Test | Risks |
-|---|---|---|
-| Blocked-domain navigation | SEC-01 | risk-r07 |
-| External protocol handling | SEC-02 | risk-r07, risk-r18 |
-| Unauthorized native command invocation | SEC-03, SEC-12 | risk-r19 |
-| Cross-origin access attempts | SEC-04 | risk-r19 |
-| Permission denial | SEC-05 | risk-r19 |
-| Session data isolation | SEC-06 | risk-r01, risk-r09 |
-| Download handling | SEC-07 | risk-r07 |
-| Redirect-based policy bypass | SEC-08 | risk-r07 |
-| Malformed URL handling | SEC-09 | risk-r07 |
-| Application recovery after renderer crashes | SEC-10 | risk-r18 |
+The whole suite runs with one command, apart from every performance test: `pwsh -NoProfile -File scripts/security-suite.ps1`
+(p4.11; result [security-suite](../raw/evidence/phase-p4-security/security-suite.20261015-1234.txt), 6 of 6 parts passed; the
+first run, [security-suite.txt](../raw/evidence/phase-p4-security/security-suite.txt), failed because the self-test's
+probe view could not be created, fixed in p4.11). Live tests are the spec files in
+`apps/desktop/tests/smoke/`; Rust tests are in `crates/security/src/policy.rs`.
+
+| Master prompt §11 item | Test | Test ids (what runs) | Risks |
+|---|---|---|---|
+| 1 Blocked-domain navigation | SEC-01 | `security-navigation.spec` (typed, frame, window.open), `security-settings.spec` (blocked site set in the screen); Rust `allowlist_more_specific_than_block_wins`, `allowlist_only_mode_denies_everything_not_listed` and the rest of the engine tests | risk-r07 |
+| 2 External protocol handling | SEC-02 | `external-schemes.spec`, `new-windows-links.spec` (mailto and custom-scheme links ask first) | risk-r07, risk-r18 |
+| 3 Unauthorized native command invocation | SEC-03, SEC-12 | IPC self-test (`FERRUM_SELFTEST=ipc`, own data folder), `app-origin.spec` | risk-r19 |
+| 4 Cross-origin access attempts | SEC-04 | `cross-origin.spec` (frame, CORS and no-CORS reads, another site's cookie; no weakening browser switch) | risk-r19 |
+| 5 Permission denial | SEC-05 | `permissions.spec`, `security-settings.spec` (grant kept, honoured, revoked) | risk-r19 |
+| 6 Session data isolation | SEC-06 | `isolation.spec`, `isolation-modes.spec`, `profiles.spec` | risk-r01, risk-r09 |
+| 7 Download handling | SEC-07 | `safe-downloads.spec`, `downloads.spec` | risk-r07 |
+| 8 Redirect-based policy bypass | SEC-08 | `security-navigation.spec` (302 to the blocked host), `redirects.spec` | risk-r07 |
+| 9 Malformed URL handling | SEC-09 | `security-navigation.spec` (malformed address); Rust engine tests (randomised input, unparseable always denied) | risk-r07 |
+| 10 Application recovery after renderer crashes | SEC-10 | `crash-recovery.spec` | risk-r18 |
+| Additions | SEC-11, SEC-12, SEC-14 | source scan (no debugging port in the app), `scripts/security-static-check.ps1` (release build), `audit-log.spec`; SmartScreen `smartscreen.spec` (p4.18, p4.19) | risk-r19 |
+
+Not in the suite: SEC-13 (certificate errors) has no live test yet (P2: no bypass code exists); the real-key shortcut
+tests and every performance measurement stay outside it.
 
 ## 6. Unverified items on this page
 
@@ -267,7 +279,7 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | T09 A page gets camera, microphone, location, notifications or clipboard without consent | ADV1 | E09 | Default deny, per-site grants, `SavesInProfile(FALSE)` (p4.5, p4.17) | SEC-05 | Built and tested live (p4.5, `permissions`: every kind refused by default as seen by the page, also in a frame; grant honoured and revocable); grants set, kept after a restart, honoured and revoked through the settings screen (p4.17, `security-settings`) |
 | T10 A download lands outside the download folder, replaces a file or runs | ADV1 | E09 | Download folder only, no replacing (p3.8); name sanitising, executable warning, no auto-open (p4.6) | SEC-07 | Built and tested live (p4.6, `safe-downloads`: name cleaned, folder kept, program warning, nothing opened; no "downloaded from the internet" mark seen on a local test download) |
 | T11 Site A reads site B's cookies or storage, or clearing A wipes B | ADV1 | E11 | One profile per site (p3.6); per-profile clearing and isolation modes (p4.7, p4.15) | SEC-06 | Built and tested live (p4.7, `isolation`: cookie, localStorage and IndexedDB kept per profile; clearing site A leaves B; private tabs); the three isolation modes tested live in p4.15 (`isolation-modes`) |
-| T12 Cross-origin reads, because a browser protection was weakened | ADV1 | E15 | No weakening flags; same-origin policy and site isolation as shipped | SEC-04 | Planned |
+| T12 Cross-origin reads, because a browser protection was weakened | ADV1 | E15 | No weakening flags; same-origin policy and site isolation as shipped | SEC-04 | Built and tested live (p4.11, `cross-origin`: every cross-site read refused; no weakening switch on any browser process) |
 | T13 A man in the middle on HTTPS, through a certificate-error bypass | ADV2 | E15 | No "proceed anyway" path for certificate errors (p2.8) | SEC-13 | Partly (P2: no bypass code; the failure itself is tested in P4) |
 | T14 A man in the middle reads or changes a plain HTTP page | ADV2 | E15 | Visible "not secure" bar only (Q-112: HTTP allowed) | not enforced | Not enforced (owner's choice); the bar is built and tested live (p4.17, `security-settings`) |
 | T15 A renderer crash takes down the app | ADV1 | E13 | `ProcessFailed` handling, crashed-tab state and reload; restart with session restore after a browser-process failure (p4.10) | SEC-10 | Built and tested live (p4.10, `crash-recovery`: crashed tab marked and covered, other tab and shell keep working, reload recovers; engine failure restarts Ferrum with its tabs) |

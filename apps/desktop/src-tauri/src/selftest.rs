@@ -17,7 +17,7 @@ use std::time::{Duration, Instant};
 use serde_json::{Value, json};
 use tauri::{AppHandle, LogicalPosition, LogicalSize, Manager, WebviewBuilder, WebviewUrl};
 
-use crate::content::{EventLog, ShellTitle, active_ready, with_content};
+use crate::content::{AppConfig, EventLog, ShellTitle, active_ready, with_content};
 use crate::{BridgeStats, TOOLBAR_H};
 
 fn base() -> String {
@@ -141,8 +141,16 @@ pub fn start_ipc(app: AppHandle, width: f64, height: f64) {
             Ok(u) => u,
             Err(e) => return finish(&app, json!({"error": format!("bad url: {e}")})),
         };
+        // The probe uses the shell's data folder (the self-test's own, never the user's real one: without it the probe
+        // fell back to the default folder, found in p4.11) and so the shell's browser arguments too (COM-7, p4.18).
+        let Some(data_dir) = app.state::<AppConfig>().get().storage.data_dir else {
+            return finish(
+                &app,
+                json!({"error": "no data folder of its own: probe not created"}),
+            );
+        };
         let probe = WebviewBuilder::new("probe", WebviewUrl::External(parsed))
-            // Same folder as the shell, so the same browser arguments (COM-7, p4.18).
+            .data_directory(data_dir)
             .additional_browser_args(ferrum_webview_manager::webview2::SHELL_BROWSER_ARGUMENTS)
             .on_document_title_changed(move |_wv, t| {
                 if t.starts_with("IPC-PROBE:") {

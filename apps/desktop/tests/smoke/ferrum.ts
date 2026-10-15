@@ -200,3 +200,26 @@ export function auditRecords(f: Ferrum): AuditRecord[] {
 /** How many audit records match all the given fields. */
 export const audited = (f: Ferrum, want: Partial<AuditRecord>) =>
   auditRecords(f).filter((r) => Object.entries(want).every(([k, v]) => (r as Record<string, unknown>)[k] === v)).length;
+
+/** Command lines of the given processes (Windows), by pid. */
+export function commandLines(pids: number[]): Map<number, string> {
+  const script = `Get-CimInstance Win32_Process -Filter "ProcessId=${pids.join(" OR ProcessId=")}" | ` +
+    `ForEach-Object { "$($_.ProcessId)\`t$($_.CommandLine)" }`;
+  const out = execFileSync("powershell.exe", ["-NoProfile", "-Command", script], { encoding: "utf8" });
+  const m = new Map<number, string>();
+  for (const line of out.split(/\r?\n/).filter(Boolean)) {
+    const [pid, ...rest] = line.split("\t");
+    m.set(Number(pid), rest.join("\t"));
+  }
+  return m;
+}
+
+/** Ferrum's own log of the run (logs/ferrum.jsonl). */
+export const appLog = (f: Ferrum) => {
+  const p = path.join(f.data, "logs", "ferrum.jsonl");
+  return fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "";
+};
+
+/** The values of one switch (`--name=value`), all occurrences, in order. */
+export const switchValues = (cmd: string, name: string) =>
+  [...cmd.matchAll(new RegExp(`--${name}=("[^"]*"|\\S+)`, "g"))].map((x) => x[1]!.replace(/^"|"$/g, ""));
