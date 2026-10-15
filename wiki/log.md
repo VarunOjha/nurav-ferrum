@@ -2703,3 +2703,27 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 17:23
 - pages: [comp-app-shell, comp-webview-manager]
 - result: Both are in the P4 dependency set; p4.11 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-15] approval | two component pages re-approved after p4.18; Q-226 answered
+
+- session: s07
+- time: 11:08
+- pages: [comp-app-shell, comp-webview-manager, ov-open-questions]
+- sources: [raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md]
+- result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py for comp-app-shell and comp-webview-manager. Q-226 answered "Ferrum's own clear message (Recommended)": Ferrum recognises a SmartScreen block and shows its own panel without "Try again", before the P4 review.
+
+## [2026-10-15] plan | p4.19 added: Ferrum's own SmartScreen block message
+
+- session: s07
+- time: 11:08
+- pages: [phase-p4-security, ov-open-questions]
+- sources: [raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md, raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md]
+- result: Task p4.19 added to the P4 page (deliverable, task with verify field, step-order diagram: p4.18 then p4.19 then p4.11). The owner's one-time "Keep" check of a program download (fix A) added to the P4 manual test-gate items. The p4.16 wording is left for the exit review, as the owner asked. Stales approval of phase-p4-security.
+- stales: [phase-p4-security]
+
+## [2026-10-15] gate | phase-p4-security approval stale after adding p4.19
+
+- session: s07
+- time: 11:08
+- pages: [phase-p4-security]
+- result: P4's own page is in its dependency set; P4 work waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.

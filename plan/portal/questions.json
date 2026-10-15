@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:6e56ce28ddeb498aa5e8807eb1084f94d919f7c62a05cba546163f985ac06b90"
+    "content_hash": "sha256:afdcc6f2eb1b1e59a3675b9aed2596276357c5e7dda049ffb92b96d1f1623723"
   },
   "items": [
     {
@@ -971,9 +971,9 @@
       "time": "16:29",
       "question": "Ferrum's \"could not be loaded\" panel covers SmartScreen's warning: what should you see when SmartScreen blocks a site?",
       "why_it_matters": "SmartScreen now blocks a known phishing page, but Ferrum draws its own generic \"could not be loaded\" panel on top, so you don't see why. Claude recommends a clear Ferrum message saying Microsoft Defender SmartScreen reported the site as unsafe. It should be settled before the Phase 4 review.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Ferrum's own clear message: Ferrum recognises a SmartScreen block and shows its own panel, with no \"Try again\", before the Phase 4 review (task p4.19).",
+      "answered_on": "2026-10-15",
       "blocks": [],
       "category": "Security & privacy",
       "tags": [

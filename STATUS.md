@@ -3,7 +3,7 @@ id: status-live
 type: status
 title: "Ferrum live status and next action"
 status: active
-updated: 2026-10-14
+updated: 2026-10-15
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -40,9 +40,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s07
 current_phase: phase-p4-security
-current_task: p4.11
-next_action: "After the owner re-approves comp-app-shell and comp-webview-manager (stale after p4.18): p4.11 consolidated security suite per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first. Then p4.12, p4.13 and the exit gate p4.14 (align the p4.16 wording on the phase page; add the owner's one-time \"Keep\" check of a program download to the manual checklist; Q-226 answered before the review); stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [comp-app-shell, comp-webview-manager]
+current_task: p4.19
+next_action: "After the owner re-approves phase-p4-security (stale after adding p4.19): p4.19 Ferrum's own SmartScreen block message (owner answer Q-226), then p4.11 consolidated security suite per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first. Then p4.12, p4.13 and the exit gate p4.14 (align the p4.16 wording on the phase page; add the owner's one-time \"Keep\" check of a program download to the manual checklist; Q-226 answered before the review); stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [phase-p4-security]
 last_handoff: handoff-2026-10-14-s06
 ---
 
@@ -364,7 +364,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.18 committed in 768fe9d; comp-app-shell and comp-webview-manager wait for re-approval; p4.11 next)
+(empty: p4.18 committed in 768fe9d; components re-approved; p4.19 added, the phase page waits for re-approval)
 
 ## Blockers
 
@@ -401,7 +401,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 14 of 18 tasks done; p4.11 (security suite) next, after your re-approval |
+| Phase 4 (security) | 14 of 19 tasks done; p4.19 (SmartScreen message) next, after your re-approval |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.

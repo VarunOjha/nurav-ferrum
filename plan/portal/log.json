@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:88b86e4fbffa877c2fc97f6306777ddbedf80ac97402a657870e449919ab7441"
+    "content_hash": "sha256:b9f7c37f93a9a7ab9242fe9c35b5eca2c12bcd5bca31f175bab11e4e217d0483"
   },
   "entries": [
     {
@@ -4841,6 +4841,46 @@
       "tags": [
         "privacy",
         "WebView2"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-18-reapproved",
+      "date": "2026-10-15",
+      "time": "11:08",
+      "title": "You re-approved two part pages and chose Ferrum's own SmartScreen message",
+      "done": "You re-approved the browser controls and tab manager pages. You chose that Ferrum shows its own clear message when SmartScreen blocks a site. Claude added that as a new Phase 4 task, plus your one-time check of keeping a downloaded program.",
+      "next": "You re-approve the Phase 4 page; then Claude builds the SmartScreen message.",
+      "decisions": [
+        {
+          "what": "Ferrum shows its own message when SmartScreen blocks a site",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        },
+        {
+          "what": "Tab and view manager page",
+          "status": "Approved"
+        },
+        {
+          "what": "Phase 4 page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] approval | two component pages re-approved after p4.18; Q-226 answered",
+        "## [2026-10-15] plan | p4.19 added: Ferrum's own SmartScreen block message",
+        "## [2026-10-15] gate | phase-p4-security approval stale after adding p4.19"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]

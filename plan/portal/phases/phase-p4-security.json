@@ -7,7 +7,7 @@
   "status": "In progress",
   "progress": {
     "done": 14,
-    "total": 18
+    "total": 19
   },
   "step_order": [
     "Threat model",
@@ -186,6 +186,17 @@
       "script": "scripts/verify/p4.18-smartscreen-on.ps1"
     },
     {
+      "id": "p4.19",
+      "title": "Ferrum's own SmartScreen message",
+      "what": "When SmartScreen blocks a site, Ferrum shows its own clear message instead of the generic \"could not be loaded\" panel.",
+      "why": "Today Ferrum's generic panel covers Microsoft's warning, so you see an error but not that the site was reported as unsafe.",
+      "how": "Ferrum recognises a SmartScreen block and shows \"Microsoft Defender SmartScreen reported this site as unsafe\", with no \"Try again\".",
+      "status": "Not started",
+      "chain": "SmartScreen blocks a reported site but Ferrum's generic panel hides why → Ferrum shows its own SmartScreen message → you know the site was reported as unsafe and are not invited to retry it.",
+      "check": "Microsoft's demo phishing page shows the SmartScreen message with no \"Try again\"; other load errors still show the usual panel.",
+      "script": null
+    },
+    {
       "id": "p4.12",
       "title": "Design the cost experiments",
       "what": "Small timing tests for the rules engine and permission checks, plus finished designs for the two security-cost experiments.",
@@ -268,7 +279,7 @@
       },
       {
         "check": "Your checks",
-        "proves": "You read the threat model, blocked a site, and saw a camera or location request denied."
+        "proves": "You read the threat model, blocked a site, saw a camera or location request denied, and kept a downloaded program through Microsoft's pop-up."
       }
     ],
     "script": "scripts/gates/p4-gate.ps1"
@@ -281,6 +292,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p4-security.md",
-    "content_hash": "sha256:883571aacab08708e36bfe01d39ee837aa66cb6c2dc6368e1e1b1bb3c06e1c2c"
+    "content_hash": "sha256:f0c8406ecd7992e035a0b3f2adf2ad3aae1fb34788f331f8be2582257ad9db16"
   }
 }

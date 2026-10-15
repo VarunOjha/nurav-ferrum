@@ -5305,8 +5305,8 @@
       "id": "Q-226",
       "kind": "question",
       "title": "Question Q-226: Ferrum's panel covers SmartScreen's warning",
-      "summary": "Ferrum's \"could not be loaded\" panel covers SmartScreen's warning: what should you see when SmartScreen blocks a site? Claude recommends a clear Ferrum message naming SmartScreen.",
-      "status": "Open",
+      "summary": "Ferrum's \"could not be loaded\" panel covers SmartScreen's warning: what should you see when SmartScreen blocks a site? Answer: Ferrum's own clear message (task p4.19).",
+      "status": "Answered",
       "related": [
         "phase-p4-security",
         "Q-225"
@@ -5320,6 +5320,17 @@
       "status": "Committed",
       "related": [
         "phase-p4-security"
+      ]
+    },
+    {
+      "id": "p4.19",
+      "kind": "task",
+      "title": "P4 task: Ferrum's own SmartScreen message",
+      "summary": "SmartScreen blocks a reported site but Ferrum's generic panel hides why → Ferrum shows its own SmartScreen message → you know the site was reported as unsafe and are not invited to retry it.",
+      "status": "Not started",
+      "related": [
+        "phase-p4-security",
+        "Q-226"
       ]
     }
   ]
