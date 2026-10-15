@@ -5362,6 +5362,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "cf85d60",
+      "kind": "commit",
+      "title": "Commit cf85d60",
+      "summary": "Literature note on site isolation and WebView security, added to the related-work list (task p4.13).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

@@ -2850,3 +2850,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [status-live]
 - result: In-flight record written for p4.13 (literature batch 4). Sources were gathered by a research helper during the p4.11 suite run and every one was re-read by Claude in this session (12 sources; two of the helper's details were not on the pages Claude read and are not used).
 - next: p4.13
+
+## [2026-10-15] ingest | p4.13 literature batch 4
+
+- session: s07
+- time: 12:59
+- pages: [ov-research-related-work-seed]
+- sources: [raw/research/literature-batch-4.md, raw/evidence/phase-p4-security/check-p4.13.txt]
+- result: Twelve sources on site isolation, embedded-browser and WebView security and WebView/hybrid-app flaw studies, all read by Claude on 2026-10-15 (landing pages and abstracts); section H added to the related-work seed. The check scripts of p4.11 and p4.12 were moved into their planned files (0c223ee). p4.13 check PASS 4/4. No approval staled (the seed page has none).
+- commit: cf85d60
+
+## [2026-10-15] handoff | s07 partial handoff before the P4 exit gate
+
+- session: s07
+- time: 12:59
+- pages: [handoff-2026-10-15-s07, status-live]
+- result: Partial handoff written early because the session is long: P4 at 18 of 19 tasks (p4.18, p4.19, p4.11, p4.12, p4.13 done this session); nothing in flight; all approvals current; quick lint 0 errors.
+- next: p4.14

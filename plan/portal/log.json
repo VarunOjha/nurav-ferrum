@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:305aee873fe1ee761426d4fb71c46c9a7b43379e109b7ec1d000e3e5b96c4159"
+    "content_hash": "sha256:b424b0f12b4f5bcc3625bf8ee9c12942a42fa751b73978e72d128ffdcc3cbb61"
   },
   "entries": [
     {
@@ -5082,6 +5082,27 @@
       "tags": [
         "approvals",
         "paper"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-13",
+      "date": "2026-10-15",
+      "time": "12:59",
+      "title": "Literature note on site isolation and WebView security; checkpoint note",
+      "done": "Claude wrote the literature note: 12 sources on keeping websites apart in browsers and on the security of apps that embed a browser, every one read in this session. They are added to the related-work list for the paper. Claude also wrote a checkpoint note before the Phase 4 review.",
+      "next": "Claude prepares the Phase 4 review: the end-of-phase checks, the evidence files and your checklist.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "cf85d60",
+      "covers": [
+        "## [2026-10-15] ingest | p4.13 literature batch 4",
+        "## [2026-10-15] handoff | s07 partial handoff before the P4 exit gate"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "paper",
+        "privacy"
       ]
     }
   ]
