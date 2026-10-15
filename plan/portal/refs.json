@@ -5352,6 +5352,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "4777605",
+      "kind": "commit",
+      "title": "Commit 4777605",
+      "summary": "A timing tool for Ferrum's security decisions and the finished designs of the two cost experiments (task p4.12).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

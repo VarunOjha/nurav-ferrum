@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 16 of 19 tasks done. Claude is finishing the designs of the two security cost experiments.",
+  "summary": "Phase 4 (security) is in progress: 17 of 19 tasks done. The two security cost experiments are designed. Waiting for you to approve them; then Claude writes the literature note.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:d2650a5e5b7a3423f3357fa8de7279bba71409def8c2c35e3c83c5861c426caa"
+    "content_hash": "sha256:026bbf87929386848ec5ed0fbb90873455f73b2576134af5220e21ec7d1ae3b7"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
+      "state": "Two experiment designs wait for your approval",
       "ref": "comp-app-shell"
     },
     {
@@ -39,14 +39,14 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "16 of 19 tasks done"
+        "state": "17 of 19 tasks done"
       },
       {
         "item": "Approvals",
-        "state": "All up to date"
+        "state": "Two experiment designs wait for you"
       }
     ],
-    "why": "Nothing to run; Claude finishes the overhead experiment designs, then continues with Phase 4 and stops for your review.",
+    "why": "Nothing to run; Claude continues with the literature note once you have approved the two experiment designs.",
     "script": null,
     "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },

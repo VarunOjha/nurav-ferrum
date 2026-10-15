@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:eec03cd2a8e4e639b50a3b7d9f079e6e4b75fc7822992c3d8f2aa3479b2fde98"
+    "content_hash": "sha256:7ef664e9e709bb6c92271fb1a7ed13b8636f3fc14b2ca1c51dad3957ebafa09a"
   },
   "entries": [
     {
@@ -5022,6 +5022,36 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-12",
+      "date": "2026-10-15",
+      "time": "12:48",
+      "title": "The two security cost experiments are designed; a timing tool exists",
+      "done": "Claude built a small tool that times Ferrum's security decisions and ran it once, only to show it works (not a result). The designs of the two cost experiments (security checks, keeping sites apart) now say what Phase 4 built for them and how Phase 6 will measure.",
+      "next": "You approve the two experiment designs; then Claude writes the literature note.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Cost of the security checks",
+          "status": "Outdated"
+        },
+        {
+          "what": "Cost of keeping sites apart",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "4777605",
+      "covers": [
+        "## [2026-10-15] code | p4.12 security microbenchmark harness and overhead designs",
+        "## [2026-10-15] gate | experiment approvals stale after p4.12"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "benchmarks",
+        "testing"
       ]
     }
   ]

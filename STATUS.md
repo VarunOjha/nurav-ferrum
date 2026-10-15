@@ -40,9 +40,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s07
 current_phase: phase-p4-security
-current_task: p4.12
-next_action: "After the owner re-approves comp-app-shell (stale after p4.11): p4.12 overhead experiment designs and microbenchmark harness per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first. Then p4.12, p4.13 and the exit gate p4.14 (align the p4.16 wording on the phase page; add the owner's one-time \"Keep\" check of a program download to the manual checklist; Q-226 answered before the review); stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+current_task: p4.13
+next_action: "After the owner approves exp-security-overhead and exp-isolation-overhead (stale after p4.12): p4.13 literature batch 4 (findings saved in the session scratchpad lit4-findings.md; re-verify before writing the note) per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first. Then p4.12, p4.13 and the exit gate p4.14 (align the p4.16 wording on the phase page; add the owner's one-time \"Keep\" check of a program download to the manual checklist; Q-226 answered before the review); stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [exp-security-overhead, exp-isolation-overhead]
 last_handoff: handoff-2026-10-14-s06
 ---
 
@@ -364,12 +364,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p4.12 (overhead experiment designs: microbenchmark harness for policy evaluation and permission checks; exp-security-overhead and exp-isolation-overhead finalised for P6)
-- session: s07
-- intent: run the harness crates/security/examples/microbench.rs (drafted early during p4.11) in its own target folder, save its raw output as evidence of harness operation only (no claims); update both experiment pages (harness, workloads, metrics, analysis plan); check script; then the owner approves the experiment pages
-- planned paths: crates/security/examples/microbench.rs, scripts/verify/p4.12-overhead-designs.ps1, wiki/raw/evidence/phase-p4-security/microbench-harness-run.txt and check-p4.12.txt (+ MANIFEST), wiki/research/experiments/exp-security-overhead.md, wiki/research/experiments/exp-isolation-overhead.md, wiki/research/metrics/metric-policy-eval-latency.md, wiki/index.md, plan/portal/*.json
-- builds: target/bench only (never target/release, where the owner's Ferrum runs)
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
+(empty: p4.12 committed in 4777605; exp-security-overhead and exp-isolation-overhead wait for the owner's approval; p4.13 next)
 
 ## Blockers
 
@@ -406,7 +401,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 16 of 19 tasks done; p4.12 (overhead designs) next, after your re-approval |
+| Phase 4 (security) | 17 of 19 tasks done; p4.13 (literature) next, after your approval of the two experiments |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.

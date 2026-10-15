@@ -2817,3 +2817,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [status-live]
 - result: In-flight record written for p4.12. The microbenchmark harness file crates/security/examples/microbench.rs was drafted early, during the p4.11 suite run and before this record (a slip in the write-ahead order); it was never committed with p4.11 and is part of p4.12.
 - next: p4.12
+
+## [2026-10-15] code | p4.12 security microbenchmark harness and overhead designs
+
+- session: s07
+- time: 12:48
+- pages: [exp-security-overhead, exp-isolation-overhead, metric-policy-eval-latency]
+- sources: [raw/evidence/phase-p4-security/microbench-harness-run.txt, raw/evidence/phase-p4-security/check-p4.12.20261015-1246.txt, raw/evidence/phase-p4-security/check-p4.12.txt]
+- result: crates/security/examples/microbench.rs times one navigation decision and one permission decision (21 cases, CSV per batch, target/bench only). One run saved as evidence of harness operation only (630 batch lines, uncontrolled machine; no claims). exp-security-overhead gained the harness section; exp-isolation-overhead says what P4 built for it (three modes, process inventory, shared-resource observations; shared-resources.md still owed for the exit gate). p4.12 check: first run FAIL from a bug in the check itself (list fields read as empty), fixed, PASS 3/3. Stales approval of exp-security-overhead and exp-isolation-overhead; the owner approves them (p4.12 verify field).
+- stales: [exp-security-overhead, exp-isolation-overhead]
+- commit: 4777605
+
+## [2026-10-15] gate | experiment approvals stale after p4.12
+
+- session: s07
+- time: 12:48
+- pages: [exp-security-overhead, exp-isolation-overhead]
+- result: Both are in the P4 dependency set (P4 experiments); p4.13 and the exit gate wait for the owner's approval. blocked_on set.
