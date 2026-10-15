@@ -838,13 +838,13 @@
     "comp-app-shell": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-15T11:08:27-05:00",
+      "timestamp": "2026-10-15T12:04:09-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:b3dd3efcc0c2e1c59cdddb15d65df82ceb128b27720d409d281b030bdd9518b4",
-      "scope_hash": "sha256:5290a93ceeffbbc8f0983d0245c1249b34646401d8066aa6141b3286e87d9c8b",
+      "content_hash": "sha256:410b421d493b40aeb0dd717f2717a197bbc29f74d3315baa06dd8ffbc2bc2219",
+      "scope_hash": "sha256:5137babdbca382e453a05046532d7b55149f089edef921e0380a81be90c61725",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md",
+      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-19-components-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1142,6 +1142,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-14-s07-selftest-fix-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-15T11:08:27-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:b3dd3efcc0c2e1c59cdddb15d65df82ceb128b27720d409d281b030bdd9518b4",
+          "scope_hash": "sha256:5290a93ceeffbbc8f0983d0245c1249b34646401d8066aa6141b3286e87d9c8b",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md"
         }
       ]
     },

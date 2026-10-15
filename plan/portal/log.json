@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b4d77939a1c6025784a59f78d954b548caf1de9346d4ed641fd705342b82a53a"
+    "content_hash": "sha256:92e43d6531074624237ddc0dcfa2dadb3fbbca46d9fd5d1ec7c50c7863dea7c3"
   },
   "entries": [
     {
@@ -4938,6 +4938,32 @@
       "tags": [
         "privacy",
         "WebView2"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-11-start",
+      "date": "2026-10-15",
+      "time": "12:04",
+      "title": "You re-approved the browser controls page; the combined security suite started",
+      "done": "You re-approved the browser controls page. Claude checked which of the ten security test areas already have tests: all except \"cross-origin access\", which gets one now.",
+      "next": "Claude builds one command that runs every security test, and the table linking each area to its tests.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] approval | comp-app-shell re-approved after p4.19",
+        "## [2026-10-15] plan | p4.11 in flight"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Planned",
+      "tags": [
+        "approvals",
+        "testing"
       ]
     }
   ]

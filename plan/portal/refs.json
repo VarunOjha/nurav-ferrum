@@ -820,7 +820,7 @@
       "kind": "task",
       "title": "P4 task: One security test suite",
       "summary": "Your brief lists ten security tests → one suite mapping each to a test, kept apart from speed tests → coverage is visible.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p4-security"
       ]

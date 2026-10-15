@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 15 of 19 tasks done. Ferrum now shows its own clear message when SmartScreen blocks a site. Waiting for you to re-approve the browser controls page; then Claude builds the combined security test suite.",
+  "summary": "Phase 4 (security) is in progress: 15 of 19 tasks done. Claude is building one command that runs every security test.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:f88eac0605d9fbac2c99acdda859df0979dd2a27a591cdc6961c9196efc32d25"
+    "content_hash": "sha256:e429a5eecc481d0159a1e747fa87ff5fc2d8ebc0c8eb5485713d6c56f38de182"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Browser controls page waits for your re-approval",
+      "state": "All up to date",
       "ref": "comp-app-shell"
     },
     {
@@ -43,10 +43,10 @@
       },
       {
         "item": "Approvals",
-        "state": "Browser controls page waits for you"
+        "state": "All up to date"
       }
     ],
-    "why": "Nothing to run; Claude continues with the combined security test suite once you have re-approved the browser controls page.",
+    "why": "Nothing to run; Claude builds the combined security test suite, then continues with Phase 4 task by task and stops for your review.",
     "script": null,
     "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },

@@ -2760,3 +2760,19 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 11:41
 - pages: [comp-app-shell]
 - result: In the P4 dependency set; p4.11 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-15] approval | comp-app-shell re-approved after p4.19
+
+- session: s07
+- time: 12:04
+- pages: [comp-app-shell]
+- sources: [raw/owner/2026-10-15-s07-p4-19-components-reapproval.md]
+- result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared.
+
+## [2026-10-15] plan | p4.11 in flight
+
+- session: s07
+- time: 12:05
+- pages: [status-live]
+- result: In-flight record written for p4.11 (consolidated security suite) before any task file is touched. Inventory: master prompt section 11 items 1 to 3 and 5 to 10 already have tests (Rust policy tests including the allowlist cases, live specs, IPC self-test); item 4 (cross-origin access, SEC-04) has none yet.
+- next: p4.11

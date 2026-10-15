@@ -42,7 +42,7 @@ session: s07
 current_phase: phase-p4-security
 current_task: p4.11
 next_action: "After the owner re-approves comp-app-shell (stale after p4.19): p4.11 consolidated security suite per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first. Then p4.12, p4.13 and the exit gate p4.14 (align the p4.16 wording on the phase page; add the owner's one-time \"Keep\" check of a program download to the manual checklist; Q-226 answered before the review); stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [comp-app-shell]
+blocked_on: []
 last_handoff: handoff-2026-10-14-s06
 ---
 
@@ -364,7 +364,12 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.19 committed in d9bd2ff; comp-app-shell waits for re-approval; p4.11 next)
+- task: p4.11 (consolidated security suite: master prompt section 11 items 1 to 10 mapped to test ids)
+- session: s07
+- intent: new live spec for item 4 (cross-origin reads blocked; no browser switch that weakens web security or site isolation); one command scripts/security-suite.ps1 that runs the security engine tests (allowlist cases included), the shell and engine unit tests, the IPC self-test, the live security specs and the release static check, kept apart from performance tests; mapping table item -> test ids on the security testing page; check script
+- planned paths: apps/desktop/tests/smoke/cross-origin.spec.ts, tests/fixtures/server/src/lib.rs (if a route is needed), scripts/security-suite.ps1, scripts/verify/p4.11-security-suite.ps1, wiki/raw/evidence/phase-p4-security/security-suite.txt and check-p4.11.txt (+ MANIFEST), wiki/quality/qual-security-testing-plan.md, SECURITY.md, wiki/index.md, plan/portal/*.json
+- builds: never into target/release (the owner's Ferrum runs from there, pid 384); the release static check uses its own target folder; tests use their own data folders
+- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 ## Blockers
 

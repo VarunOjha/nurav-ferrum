@@ -136,7 +136,7 @@
       "what": "One security test suite covering all ten security tests your brief asks for.",
       "why": "Scattered tests make it hard to see whether all ten security items are covered. Mixing them with speed tests could hide a security failure.",
       "how": "One command runs the suite, including the allowlist cases. A table on the security page maps each of the ten items to its test.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "Your brief lists ten security tests → one suite mapping each to a test, kept apart from speed tests → coverage is visible.",
       "check": "The suite passes, including allowlist cases; the mapping table is published.",
       "script": "scripts/verify/p4.11-security-test-suite.ps1"
