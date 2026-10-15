@@ -364,7 +364,12 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.13 committed in cf85d60; p4.14 exit gate next)
+- task: p4.14 (P4 exit gate and owner M3 review)
+- session: s07
+- intent: write raw/evidence/phase-p4-security/shared-resources.md from the p4.7 and p4.15 observations; fill scripts/gates/p4-gate.ps1 (approvals, every task check, test-gate rows with one evidence file each, release build in its own folder target/gate-release, wiki check that reports the known ff7292e error as waiting on Q-221, the owner's part) and scripts/verify/p4.14-gate-review.ps1; align the p4.16 wording on the phase page with the narrower ablation the owner accepted (stales the phase approval: asked at the review); docs/testing/manual-checklist-p4.md for the owner; run the gate when the PC can be left alone; set the phase to gate-review; stop for the owner's review
+- planned paths: wiki/raw/evidence/phase-p4-security/ (shared-resources.md, p4-gate outputs, manual-checklist.md after the owner's answers), scripts/gates/p4-gate.ps1, scripts/verify/p4.14-gate-review.ps1, docs/testing/manual-checklist-p4.md, wiki/phases/phase-p4-security.md, wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
+- builds: target/debug, target/gate-release, target/security-static, target/bench (never target/release, where the owner's Ferrum runs)
+- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 ## Blockers
 

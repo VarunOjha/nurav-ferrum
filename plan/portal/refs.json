@@ -850,7 +850,7 @@
       "kind": "task",
       "title": "P4 task: Gate and your review",
       "summary": "Controls are tested → run the gate → you review the threat model and the 'not enforced' list, and approve.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p4-security"
       ]

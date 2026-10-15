@@ -224,7 +224,7 @@
       "what": "The phase gate and your review, including the threat model.",
       "why": "Some risks are left open on purpose. You should know which ones before calling P4 done, because they affect how safely you can use Ferrum.",
       "how": "Run the gate and save all evidence. You review the threat model and the 'not enforced' list, do the hand checks and approve.",
-      "status": "Not started",
+      "status": "In progress",
       "chain": "Controls are tested → run the gate → you review the threat model and the 'not enforced' list, and approve.",
       "check": "All evidence saved; wiki clean; you approved the P4 exit.",
       "script": "scripts/verify/p4.14-gate-review.ps1"

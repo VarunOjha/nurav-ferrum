@@ -2867,3 +2867,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [handoff-2026-10-15-s07, status-live]
 - result: Partial handoff written early because the session is long: P4 at 18 of 19 tasks (p4.18, p4.19, p4.11, p4.12, p4.13 done this session); nothing in flight; all approvals current; quick lint 0 errors.
 - next: p4.14
+
+## [2026-10-15] plan | p4.14 in flight
+
+- session: s07
+- time: 13:01
+- pages: [status-live]
+- result: In-flight record written for p4.14 (P4 exit gate). The gate script is still the p0.17 placeholder; the P3 gate it is modelled on builds the release program into target/release, which the P4 gate must not do while the owner's Ferrum runs there; lint:wiki still reports the one known RAW-IMMUTABLE error (ff7292e, Q-221).
+- next: p4.14

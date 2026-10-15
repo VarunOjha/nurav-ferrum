@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b424b0f12b4f5bcc3625bf8ee9c12942a42fa751b73978e72d128ffdcc3cbb61"
+    "content_hash": "sha256:eaef3be33a085a83a3a494253f342dfda1c6adae6a6b3a8b2e5e04b8f2444ba9"
   },
   "entries": [
     {
@@ -5103,6 +5103,26 @@
       "tags": [
         "paper",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-14-start",
+      "date": "2026-10-15",
+      "time": "13:01",
+      "title": "The Phase 4 review preparation started",
+      "done": "Claude wrote the \"task in progress\" note for the end-of-phase gate: the gate script, the missing evidence, the wording fix you asked for, and your checklist.",
+      "next": "Claude writes the gate script and the evidence, then asks you to leave the PC alone while the gate runs.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] plan | p4.14 in flight"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Planned",
+      "tags": [
+        "phases",
+        "testing"
       ]
     }
   ]
