@@ -11,7 +11,7 @@ publish.workspace = true
 axum = "=0.8.9"
 axum-server = { version = "=0.8.0", features = ["tls-rustls-no-provider"] }
 tokio = { version = "=1.53.2", features = ["rt-multi-thread", "macros", "net", "time"] }
-rustls = { version = "=0.23.45", default-features = false, features = ["ring", "std", "tls12", "logging"] }
+rustls = { version = "=0.23.46", default-features = false, features = ["ring", "std", "tls12", "logging"] }
 rcgen = "=0.14.10"
 time = "=0.3.55"
 serde = { version = "=1.0.229", features = ["derive"] }
