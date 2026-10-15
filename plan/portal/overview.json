@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 18 of 20 tasks done. You asked for a Chrome-style permission question; it is new task p4.20 and waits for your approval, then the end-of-phase gate reruns.",
+  "summary": "Phase 4 (security) is in progress: 18 of 20 tasks done. You approved the Chrome-style permission question; Claude is building it (task p4.20), then the end-of-phase gate reruns.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:68d82c1a732504ee52fc3845f0ef71d45dca39a4f4c3c0fe3fd0a4947cebf283"
+    "content_hash": "sha256:b8d8573c77dab2b2fd81c167161ca5992857d8466faf803ab51ca47b33837484"
   },
   "updated": "2026-10-15",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Decision 34 and the Phase 4 page wait for your approval",
+      "state": "All up to date",
       "ref": "adr-0034"
     },
     {
@@ -35,24 +35,24 @@
     }
   ],
   "next_action": {
-    "who": "owner",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 4",
         "state": "18 of 20 tasks done"
       },
       {
-        "item": "New task p4.20",
-        "state": "Sites ask before using your camera and more, like Chrome"
+        "item": "Task p4.20",
+        "state": "Being built: sites ask before using your camera and more"
       },
       {
-        "item": "Your approval",
-        "state": "Decision 34 and the changed Phase 4 page"
+        "item": "End-of-phase gate",
+        "state": "Reruns after p4.20, when the PC is quiet"
       }
     ],
-    "why": "Nothing to run. You approve the two pages in Claude Code; then Claude builds p4.20 and, when the PC is quiet, reruns the end-of-phase gate.",
+    "why": "Nothing to run; Claude continues with p4.20 and asks you to re-approve the pages it changes.",
     "script": null,
-    "tell_claude": "Approve both"
+    "tell_claude": "Nothing for now"
   },
   "questions_for_you": {
     "open": 19,

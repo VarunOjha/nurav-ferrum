@@ -5412,7 +5412,7 @@
       "kind": "task",
       "title": "P4 task: Sites ask before using your camera and more",
       "summary": "Sites are refused silently and video calls fail → Ferrum asks you like Chrome and remembers only Always and Never → you decide per site, and Settings shows every remembered answer.",
-      "status": "Waiting for you",
+      "status": "In progress",
       "related": [
         "phase-p4-security",
         "adr-0034",

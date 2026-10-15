@@ -1662,13 +1662,13 @@
     "phase-p4-security": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-15T13:10:50-05:00",
+      "timestamp": "2026-10-15T16:38:23-05:00",
       "path": "wiki/phases/phase-p4-security.md",
-      "content_hash": "sha256:598274cdc2d8124534208287c5a3b28220a34289310a3827188f5af77be4e96f",
-      "scope_hash": "sha256:5f4ce9da3f8f7da20492edcc38172a12492025240285b90ab4025b3283964ac3",
+      "content_hash": "sha256:f81393ab72ecbfb6c562bc12648eebc823e552fd4bccecd6fc876f41487b6c7b",
+      "scope_hash": "sha256:2e788701ab1490b90185210b9b7d102dfc80e8d474b07240e8c65135bc887fc8",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-14-phase-reapproval-and-gate-go.md",
+      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-20-approvals.md",
       "history": [
         {
           "status": "approved",
@@ -1702,6 +1702,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-19-phase-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-15T13:10:50-05:00",
+          "path": "wiki/phases/phase-p4-security.md",
+          "content_hash": "sha256:598274cdc2d8124534208287c5a3b28220a34289310a3827188f5af77be4e96f",
+          "scope_hash": "sha256:5f4ce9da3f8f7da20492edcc38172a12492025240285b90ab4025b3283964ac3",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-14-phase-reapproval-and-gate-go.md"
         }
       ]
     },
@@ -1775,6 +1786,18 @@
           "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md"
         }
       ]
+    },
+    "adr-0034": {
+      "status": "approved",
+      "comment": "",
+      "timestamp": "2026-10-15T16:38:22-05:00",
+      "path": "wiki/decisions/adr-0034-permission-question-chrome-style.md",
+      "content_hash": "sha256:015963b05885a8b232d06874c4f499baa17a371d4f670fc30d871eee15a18f67",
+      "scope_hash": "sha256:6adff4e234ec08bb7fbe1f4eb42c63bf3707417500332f7ead91730fd8cc75b9",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-20-approvals.md",
+      "history": []
     }
   }
 }

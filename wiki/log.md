@@ -2934,3 +2934,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 16:35
 - pages: [phase-p4-security, adr-0034]
 - result: Both are in P4's dependency set; p4.20 waits for the owner's approval of adr-0034 and re-approval of phase-p4-security (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-15] approval | adr-0034 and phase-p4-security approved; p4.20 starts
+
+- session: s07
+- time: 16:38
+- pages: [adr-0034, phase-p4-security]
+- sources: [raw/owner/2026-10-15-s07-p4-20-approvals.md]
+- result: The owner answered "Approve both (Recommended)"; recorded with tools/approvals_record.py for adr-0034 and phase-p4-security; approvals_check shows nothing STALE or PENDING; blocked_on cleared. adr-0034's elaboration is now binding. p4.20 In-flight written before any task file is touched.

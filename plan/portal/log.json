@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:025947853f36889479cbaf9293732893b514b895074504d1b04f1450c2659051"
+    "content_hash": "sha256:5ff57d33f63918a848629dfa1918b8073c0ff497429e46dd636a230719386bcd"
   },
   "entries": [
     {
@@ -5263,6 +5263,35 @@
       "tags": [
         "privacy",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-20-approved",
+      "date": "2026-10-15",
+      "time": "16:38",
+      "title": "You approved the permission question; Claude starts building it",
+      "done": "You approved decision 34 and the Phase 4 page with task p4.20. Claude recorded both and wrote down what it is about to change before touching any code.",
+      "next": "Claude builds p4.20 (research note, code, tests, check script) and then asks you to re-approve the pages it changes.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Decision 34 (permission question)",
+          "status": "Approved"
+        },
+        {
+          "what": "Phase 4 page (task p4.20 added)",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] approval | adr-0034 and phase-p4-security approved; p4.20 starts"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]
