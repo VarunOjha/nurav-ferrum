@@ -54,11 +54,11 @@ Invoke-Step 'Code: private views, per-profile clearing, private tabs kept out of
 
 $script:Inventory = ''
 Invoke-Step 'Live test: storage kept per profile, clearing one site, private tabs, process inventory' {
-    $r = Invoke-FerrumSmoke -Spec 'isolation'
+    $r = Invoke-FerrumSmoke -Spec 'isolation.spec'
     $line = ($r.Output -split "`r?`n" | Where-Object { $_ -match 'PROCESS-INVENTORY ' } | Select-Object -First 1)
     if ($line) { $script:Inventory = $line.Substring($line.IndexOf('PROCESS-INVENTORY ')) }
     Add-LogText (Get-Tail $r.Output 12)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '4 passed') { Stop-Fail "The live test failed:`n$(Get-Tail $r.Output 30)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '(?m)^\s+4 passed') { Stop-Fail "The live test failed:`n$(Get-Tail $r.Output 30)" }
     if (-not $script:Inventory) { Stop-Fail 'The live test printed no process inventory.' }
     Add-LogText $script:Inventory
     'isolation: 4 passed; process inventory recorded'
