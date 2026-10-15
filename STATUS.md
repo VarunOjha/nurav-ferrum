@@ -40,9 +40,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s07
 current_phase: phase-p4-security
-current_task: p4.19
-next_action: "After the owner re-approves phase-p4-security (stale after adding p4.19): p4.19 Ferrum's own SmartScreen block message (owner answer Q-226), then p4.11 consolidated security suite per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first. Then p4.12, p4.13 and the exit gate p4.14 (align the p4.16 wording on the phase page; add the owner's one-time \"Keep\" check of a program download to the manual checklist; Q-226 answered before the review); stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+current_task: p4.11
+next_action: "After the owner re-approves comp-app-shell (stale after p4.19): p4.11 consolidated security suite per wiki/phases/phase-p4-security.md; write the STATUS In-flight record first. Then p4.12, p4.13 and the exit gate p4.14 (align the p4.16 wording on the phase page; add the owner's one-time \"Keep\" check of a program download to the manual checklist; Q-226 answered before the review); stop after the exit gate (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [comp-app-shell]
 last_handoff: handoff-2026-10-14-s06
 ---
 
@@ -364,12 +364,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p4.19 (Ferrum's own SmartScreen block message; owner answer Q-226)
-- session: s07
-- intent: the host recognises a SmartScreen block from WebView2's signals (observed 2026-10-15: main-document load failed with HTTP 200 and web error 9 ConnectionAborted, then a second failed completion; ordinary failures have HTTP 0) and tells the shell, which shows "Microsoft Defender SmartScreen reported this site as unsafe" without "Try again"; the block is logged and audited; a test-server page that answers 200 and then breaks off checks that an ordinary abort is not mistaken for SmartScreen; live spec and check script
-- planned paths: crates/webview-manager/src/tab.rs, crates/webview-manager/src/webview2.rs, apps/desktop/src-tauri/src/content.rs, apps/desktop/src/main.ts, apps/desktop/src/logic.ts, apps/desktop/src/logic.test.ts, apps/desktop/index.html, tests/fixtures/server/src/lib.rs, apps/desktop/tests/smoke/smartscreen.spec.ts, scripts/verify/p4.19-smartscreen-message.ps1, wiki/raw/evidence/phase-p4-security/check-p4.19.txt (+ MANIFEST), wiki/architecture/components/comp-app-shell.md, wiki/architecture/components/comp-webview-manager.md, wiki/quality/qual-security-testing-plan.md, SECURITY.md, wiki/index.md, plan/portal/*.json
-- builds: never into target/release (the owner's Ferrum runs from there, pid 384); tests use their own data folders
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
+(empty: p4.19 committed in d9bd2ff; comp-app-shell waits for re-approval; p4.11 next)
 
 ## Blockers
 
@@ -406,7 +401,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 14 of 19 tasks done; p4.19 (SmartScreen message) next, after your re-approval |
+| Phase 4 (security) | 15 of 19 tasks done; p4.11 (security suite) next, after your re-approval |
 | Your Ferrum notes | Whenever you are ready |
 
 **2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.

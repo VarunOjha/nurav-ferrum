@@ -2743,3 +2743,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [status-live]
 - result: In-flight record written for p4.19 before any task file is touched. A temporary diagnostic test (deleted after use) recorded what Ferrum receives: the SmartScreen block is a failed main-document load with HTTP 200 and web error 9 (ConnectionAborted), followed by a second failed completion; an unreachable address and an unknown host fail with HTTP 0. WebView2 has no SmartScreen event or error code (webview2-com-sys 0.39.1 bindings searched), so the block must be inferred.
 - next: p4.19
+
+## [2026-10-15] code | p4.19 Ferrum's own SmartScreen block message
+
+- session: s07
+- time: 11:41
+- pages: [comp-app-shell, qual-security-testing-plan]
+- sources: [raw/evidence/phase-p4-security/check-p4.19.txt, raw/owner/2026-10-15-s07-p4-19-blank-page-fix.md]
+- result: A SmartScreen block (inferred: page failed although the server answered 200, web error 9, then the warning page's failed completion) shows Ferrum's "Unsafe site blocked" panel with the blocked address and no "Try again", logged and audited (page / smartscreen). Found while building and reported to the owner: the warning page is about:blank and the profile gate asked to move the tab for it; owner answer "fix it in p4.19": a blank page stays in the tab's profile. Test-server route /page/broken shows an ordinary broken page keeps the usual panel. p4.19 check PASS 3/3; shell tests 26 passed; cargo test --workspace 143 passed; clippy and fmt clean; full smoke 115 passed, 7 failed (6 NOT-FRONT key tests, 1 restore timing), rerun: restore and sidebar passed, 5 shortcut tests NOT-FRONT again (another window in front; needs a quiet PC). Stales approval of comp-app-shell.
+- stales: [comp-app-shell]
+- commit: d9bd2ff
+
+## [2026-10-15] gate | comp-app-shell approval stale after p4.19
+
+- session: s07
+- time: 11:41
+- pages: [comp-app-shell]
+- result: In the P4 dependency set; p4.11 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.

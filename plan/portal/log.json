@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:691e8698afa5d4fdaea61e00a6560ef59f58e0d5fc3062cd515ae5ffa0e12634"
+    "content_hash": "sha256:b4d77939a1c6025784a59f78d954b548caf1de9346d4ed641fd705342b82a53a"
   },
   "entries": [
     {
@@ -4907,6 +4907,37 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-19",
+      "date": "2026-10-15",
+      "time": "11:41",
+      "title": "Ferrum now says clearly when SmartScreen blocks a site",
+      "done": "When SmartScreen blocks a site, Ferrum shows \"Unsafe site blocked: Microsoft Defender SmartScreen reported this site as unsafe\", names the site, offers no \"Try again\" and writes it to the security log. As you asked, Claude also fixed a question Ferrum wrongly asked about SmartScreen's blank warning page.",
+      "next": "You re-approve the browser controls page; then Claude builds the combined security test suite.",
+      "decisions": [
+        {
+          "what": "Fix the wrong profile question on SmartScreen's warning page within this task",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "d9bd2ff",
+      "covers": [
+        "## [2026-10-15] code | p4.19 Ferrum's own SmartScreen block message",
+        "## [2026-10-15] gate | comp-app-shell approval stale after p4.19"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "privacy",
+        "WebView2"
       ]
     }
   ]

@@ -5332,6 +5332,16 @@
         "phase-p4-security",
         "Q-226"
       ]
+    },
+    {
+      "id": "d9bd2ff",
+      "kind": "commit",
+      "title": "Commit d9bd2ff",
+      "summary": "Ferrum's own message when SmartScreen blocks a site; a blank page stays in the tab's profile (task p4.19).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }
