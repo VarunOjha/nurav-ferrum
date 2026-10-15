@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:f141db26e283dc9cea5ce02f24625230e5e4b01ad212ee531d56a7e9f3ed60e7"
+    "content_hash": "sha256:2230c8ee0df7009afb409664f1f5475494f6fa0bb52a19457b551c7bedb50f1f"
   },
   "items": [
     {
@@ -989,6 +989,22 @@
       "why_it_matters": "Since task p4.5, camera, microphone, location, notifications and clipboard requests are refused with no message unless the site is ticked in Settings, so sites like video calls fail without saying why.",
       "status": "answered",
       "answer": "Chrome-style: a bar with Allow this time, Always allow on this site and Never allow; remembered answers in Settings; no question for plain http pages or another site's frames; closing it 3 times makes a site quiet for a week (task p4.20).",
+      "answered_on": "2026-10-15",
+      "blocks": [],
+      "category": "Security & privacy",
+      "tags": [
+        "privacy",
+        "WebView2"
+      ]
+    },
+    {
+      "id": "Q-228",
+      "asked": "2026-10-15",
+      "time": "17:04",
+      "question": "A frame of another site asks on behalf of its page: what should Ferrum do?",
+      "why_it_matters": "Found while building the permission question: when a page lets an embedded frame of another site ask, WebView2 reports the request as the page's own, so the planned rule \"no question for other-site frames\" could not work as written.",
+      "status": "answered",
+      "answer": "Like Chrome: a frame the page allowed is asked about under the page's site; frames the page did not allow stay refused. Decision 34 corrected.",
       "answered_on": "2026-10-15",
       "blocks": [],
       "category": "Security & privacy",

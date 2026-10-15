@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 18 of 20 tasks done. You approved the Chrome-style permission question; Claude is building it (task p4.20), then the end-of-phase gate reruns.",
+  "summary": "Phase 4 (security) is in progress: 18 of 20 tasks done. Claude is finishing the Chrome-style permission question (task p4.20); you chose Chrome's rule for embedded frames of other sites. Then the end-of-phase gate reruns.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b8d8573c77dab2b2fd81c167161ca5992857d8466faf803ab51ca47b33837484"
+    "content_hash": "sha256:095cb2ce91c15b17959be1c10fee0523541cf2446a3ebbe095b1bcc9f3c0e4ad"
   },
   "updated": "2026-10-15",
   "where_we_are": [
@@ -50,7 +50,7 @@
         "state": "Reruns after p4.20, when the PC is quiet"
       }
     ],
-    "why": "Nothing to run; Claude continues with p4.20 and asks you to re-approve the pages it changes.",
+    "why": "Nothing to run; Claude finishes p4.20 and asks you to re-approve the pages it changes.",
     "script": null,
     "tell_claude": "Nothing for now"
   },

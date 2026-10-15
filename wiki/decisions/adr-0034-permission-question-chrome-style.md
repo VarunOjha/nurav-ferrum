@@ -6,6 +6,8 @@ status: accepted
 updated: 2026-10-15
 sources:
   - raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md
+  - raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md
+  - raw/research/webview2-permission-question.md
 related: [adr-0015, phase-p4-security, comp-security-engine, comp-webview-manager, comp-app-shell, qual-security-testing-plan]
 approvable: true
 date: 2026-10-15
@@ -19,11 +21,6 @@ options:
   - "C3. Question every time, nothing remembered by the question"
 phase: phase-p4-security
 tags: [security, permissions, privacy, ui]
-unverified:
-  - claim: "A WebView2 PermissionRequested event can be held open (deferral) while the shell asks the user, and answered later with Allow or Deny"
-    verify_in: phase-p4-security
-  - claim: "WebView2 reports the asking frame's origin in the PermissionRequested arguments, so a request from another site's frame can be told apart from the page's own"
-    verify_in: phase-p4-security
 ---
 
 # ADR-0034: Sites ask before using the camera, microphone, location, notifications or clipboard
@@ -65,7 +62,17 @@ Always allow on this site, Never allow. Choices are saved in Ferrum Settings and
 pages and frames from another site inside a page are still refused without asking. Closing the question 3 times on a
 site stops it asking for a week."
 
-The quoted choice is what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
+During p4.20 the frame rule below could not be built as first written (WebView2 reports a delegated frame's request as
+the page's own). The owner chose, answering Q-228
+([raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md](../raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md)):
+
+> Like Chrome (Recommended)
+
+The quoted choices are what `decided_by: owner` and `status: accepted` cover (SCHEMA §10.4 rule 3(b)).
+
+**What WebView2 does** ([research note](../raw/research/webview2-permission-question.md), checked in p4.20): a request
+can be held with a deferral and answered later (1.1 to 1.4); the page keeps running while it waits (observed). Its
+`Uri` is the page's origin even when a frame of another site asks on the page's behalf (observed, Q-228).
 
 ### Claude elaboration (binding only once the owner APPROVES this ADR)
 
@@ -76,12 +83,17 @@ placement) and every kind it does not know stays as today: refused unless ticked
 **When there is no question (refused at once, logged as today).**
 
 - The page is not an `https:` page with a site (plain `http:` including `localhost`, `data:`, `file:`, ...).
-- The asking frame belongs to a different site than the tab's page (compared by registrable domain, the same key the
-  per-site profiles use).
+- A frame of another site that the page did **not** allow to ask (no `allow` attribute naming the kind): Chromium
+  refuses it itself before Ferrum hears of it (observed). If WebView2 ever reports a site other than the page's,
+  Ferrum refuses that too (compared by registrable domain, the same key the per-site profiles use).
 - The site has "Never allow" for that kind in Settings.
 - The site closed the question 3 times in a row for that kind; it is quiet for 7 days from the third close.
 
 A site with "Always allow" for that kind gets it without a question (as p4.5 does today).
+
+**Frames the page allowed (owner answer Q-228, like Chrome).** A page can let a frame of another site ask, with the
+frame's `allow` attribute. WebView2 then reports the request as the page's own, so the question names the page's site,
+which chose to vouch for its frame, and an "Always" or "Never" answer is saved for the page's site.
 
 **The question.** A bar between the toolbar and the page of the asking tab, in the Graphite look: the site's name (the
 registrable domain, never text from the page) and what it wants ("wants to use your camera"). Camera and microphone
@@ -112,7 +124,8 @@ false), so a change in Settings counts at the next request. Every request and it
 
 **Tests.** The live tests may click every button, but only with kinds that do not switch on hardware: notifications and
 the clipboard for the "allow" paths. The camera and microphone are tested only on the refusal paths (Never allow, close,
-http page, other-site frame), so a test never switches on the real camera or microphone (the owner's standing rule).
+http page), so a test never switches on the real camera or microphone (the owner's standing rule). Frames of another
+site are tested both ways (not allowed by the page: refused, no question; allowed: the question names the page).
 
 ## Consequences
 

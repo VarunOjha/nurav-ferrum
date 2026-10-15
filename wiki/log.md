@@ -2942,3 +2942,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [adr-0034, phase-p4-security]
 - sources: [raw/owner/2026-10-15-s07-p4-20-approvals.md]
 - result: The owner answered "Approve both (Recommended)"; recorded with tools/approvals_record.py for adr-0034 and phase-p4-security; approvals_check shows nothing STALE or PENDING; blocked_on cleared. adr-0034's elaboration is now binding. p4.20 In-flight written before any task file is touched.
+
+## [2026-10-15] decide | Q-228 answered: frames of another site ask like in Chrome; adr-0034 corrected
+
+- session: s07
+- time: 17:07
+- pages: [adr-0034, phase-p4-security, ov-open-questions]
+- sources: [raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md, raw/research/webview2-permission-question.md]
+- result: While building p4.20 the live test of adr-0034's "other-site frame: no question" rule failed (9 of 10 passed). Two temporary probe runs (debug build, throwaway folders; probe file deleted): a frame of another site not allowed by its page is refused by Chromium itself (no event); allowed with the page's allow attribute, WebView2 reports the request with the page's origin, so Ferrum asked under the page's site. Claude stopped and asked (owner's rule). Owner: "Like Chrome (Recommended)". adr-0034 corrected (frame rule, what WebView2 does; its two unverified claims closed by the research note and the observation); p4.20 verify wording on the P4 page corrected. Stales approval of adr-0034 and phase-p4-security.
+- stales: [adr-0034, phase-p4-security]
+
+## [2026-10-15] approval | adr-0034 and phase-p4-security re-approved after Q-228
+
+- session: s07
+- time: 17:15
+- pages: [adr-0034, phase-p4-security]
+- sources: [raw/owner/2026-10-15-s07-q228-reapproval.md]
+- result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING. p4.20 continues: the frame test is changed to test both cases.

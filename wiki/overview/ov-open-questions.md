@@ -966,3 +966,18 @@ message unless the site is ticked in Settings (p4.17).
 **Question:** (a) keep the silent refusal; (b) refuse, but show a notice bar pointing to Settings; (c) a real question
 like Chrome, in one of three forms: Chrome-style (Allow this time, Always allow, Never allow; Claude recommended this),
 Allow or Block remembered, or a question every time with nothing remembered.
+
+## Q-228 A frame of another site asks on behalf of its page: what should Ferrum do?
+
+- asked: 2026-10-15 17:04
+- blocking: []
+- status: answered
+- answer: [raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md](../raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md), owner answer (2026-10-15): "Like Chrome (Recommended)": a frame the page allowed to ask is asked about under the page's site; frames the page did not allow stay refused. adr-0034 corrected.
+
+**Where we are:** found while building p4.20. adr-0034 said a frame of another site gets no question. Observed: if the
+page did not allow it, Chromium refuses the request itself; if the page allowed it (its `allow` attribute), WebView2
+reports the request with the page's address, so Ferrum cannot tell it from the page's own request.
+
+**Question:** (a) like Chrome: the question names the page, which chose to let its frame ask (Claude recommended this);
+(b) stricter: Ferrum tracks every frame's address and refuses such requests (more engine code; embedded widgets would
+not work).

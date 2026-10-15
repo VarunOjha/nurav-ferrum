@@ -1000,7 +1000,7 @@
       "title": "Sites ask before using your camera and more, like Chrome",
       "summary": "Sites now ask before using the camera, microphone, location, notifications or clipboard. A bar under the toolbar offers Allow this time, Always allow on this site or Never allow; remembered answers show in Settings.",
       "why": "Today these requests are refused without any message, so sites like video calls just fail. You asked for a question like Chrome's.",
-      "catch": "More ways to say yes means more to test, and \"Always allow\" can be clicked by mistake (Settings shows and undoes it). The details bind once you approve this page.",
+      "catch": "More ways to say yes means more to test, and \"Always allow\" can be clicked by mistake (Settings shows and undoes it). As in Chrome, a page can let an embedded frame of another site ask; the question then names the page.",
       "status": "Accepted",
       "decided_by": "you",
       "date": "2026-10-15",
@@ -1015,11 +1015,12 @@
         "phase-p4-security",
         "adr-0015",
         "Q-227",
+        "Q-228",
         "p4.20"
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0034-permission-question-chrome-style.md",
-        "content_hash": "sha256:015963b05885a8b232d06874c4f499baa17a371d4f670fc30d871eee15a18f67"
+        "content_hash": "sha256:867980f5da7053cb9358e8673d3b85a23839edfa4e2c908d45d2f3dd367e5919"
       }
     }
   ]

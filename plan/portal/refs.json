@@ -5393,6 +5393,7 @@
         "phase-p4-security",
         "adr-0015",
         "Q-227",
+        "Q-228",
         "p4.20"
       ]
     },
@@ -5417,6 +5418,17 @@
         "phase-p4-security",
         "adr-0034",
         "Q-227"
+      ]
+    },
+    {
+      "id": "Q-228",
+      "kind": "question",
+      "title": "Question Q-228: Frames of another site asking for permissions",
+      "summary": "A frame of another site asks on behalf of its page: what should Ferrum do? Answer: like Chrome, the question names the page.",
+      "status": "Answered",
+      "related": [
+        "phase-p4-security",
+        "adr-0034"
       ]
     }
   ]

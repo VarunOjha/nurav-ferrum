@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5ff57d33f63918a848629dfa1918b8073c0ff497429e46dd636a230719386bcd"
+    "content_hash": "sha256:d389f1660ed977a09e8f716a3f2ed8fd2a8178759254f6ee040919518b296c98"
   },
   "entries": [
     {
@@ -5292,6 +5292,41 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-q228-frames",
+      "date": "2026-10-15",
+      "time": "17:07",
+      "title": "Claude stopped on one test; you chose Chrome's rule for site frames",
+      "done": "While building the permission question, one test showed that WebView2 reports a request from another site's frame as the page's own when the page allows it. Frames the page did not allow are refused anyway. Claude stopped and asked; you chose to work like Chrome. Decision 34 and the Phase 4 page were corrected.",
+      "next": "Claude finishes p4.20: the frame test checks both cases, then the full check and the commit.",
+      "decisions": [
+        {
+          "what": "Frames of another site ask like in Chrome: the question names the page",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Decision 34 (permission question)",
+          "status": "Approved"
+        },
+        {
+          "what": "Phase 4 page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] decide | Q-228 answered: frames of another site ask like in Chrome; adr-0034 corrected",
+        "## [2026-10-15] approval | adr-0034 and phase-p4-security re-approved after Q-228"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "privacy",
+        "WebView2"
       ]
     }
   ]

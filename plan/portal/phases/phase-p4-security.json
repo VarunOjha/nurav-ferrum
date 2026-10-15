@@ -204,7 +204,7 @@
       "how": "Ferrum holds the site's request, shows its own bar with the site's name, and saves Always and Never answers in Settings.",
       "status": "In progress",
       "chain": "Sites are refused silently and video calls fail → Ferrum asks you like Chrome and remembers only Always and Never → you decide per site, and Settings shows every remembered answer.",
-      "check": "Tests with harmless test pages click every button; the camera and microphone are only tested being refused, so they never switch on.",
+      "check": "Tests with harmless test pages click every button; the camera and microphone are only tested being refused, so they never switch on; frames of another site are tested both ways.",
       "script": null
     },
     {
@@ -303,6 +303,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p4-security.md",
-    "content_hash": "sha256:f81393ab72ecbfb6c562bc12648eebc823e552fd4bccecd6fc876f41487b6c7b"
+    "content_hash": "sha256:b0a11c1b74985a178afcf3bba8247b1357ef13f9b8e4bcd0291797069e0f7b5f"
   }
 }

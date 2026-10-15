@@ -38,6 +38,8 @@ sources:
   - raw/owner/2026-10-14-s06-p4-17-components-reapproval.md
   - raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md
   - raw/owner/2026-10-15-s07-p4-20-approvals.md
+  - raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md
+  - raw/owner/2026-10-15-s07-q228-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s07
@@ -371,6 +373,7 @@ manual checklist items 1 to 20 are still owed).
 - intent: research note on WebView2 permission deferral and the asking frame's origin (official docs, access dates); permission decision gains "ask" (five kinds, https, same-site frame, no never answer, no quiet time) in crates/security; settings gain a per-site never list and quiet times (versioned, validated); WebView2 permission handler holds the request (deferral) and answers it later; shell bar with Allow this time, Always allow, Never allow, close (private tabs: Allow this time, Block); waiting requests refused on navigation, reload or close; Settings shows never answers; security log for every case; unit tests; live tests with harmless pages (notifications and clipboard for allow paths; camera only refused); check script; component pages, SECURITY.md, security testing plan, manual checklist item 3, gate script and portal JSON updated
 - planned paths: wiki/raw/research/webview2-permission-question.md, wiki/raw/MANIFEST.sha256, crates/core/src/config.rs, crates/security/src/permissions.rs, crates/webview-manager/src/{webview2.rs,tab.rs}, apps/desktop/src-tauri/src/ (content.rs, policy.rs, settings.rs, main.rs, new permission_question.rs), apps/desktop/src/ (main.ts, logic.ts, logic.test.ts, styles), tests/fixtures/server/src/lib.rs, apps/desktop/tests/smoke/ (new permission-question.spec.ts, permissions spec), scripts/verify/p4.20-permission-question.ps1, scripts/security-suite.ps1, scripts/gates/p4-gate.ps1, docs/testing/manual-checklist-p4.md, SECURITY.md, wiki/architecture/components/ (comp-security-engine, comp-webview-manager, comp-app-shell), wiki/quality/qual-security-testing-plan.md, wiki/raw/evidence/phase-p4-security/check-p4.20.txt, wiki/index.md, plan/portal/*.json
 - builds: target/debug only (never target/release, where the owner's Ferrum runs); the owner's real data folder is never used; the camera and microphone are never switched on
+- state (2026-10-15 17:15): code, unit tests and live tests written, uncommitted; live permissions spec 9 of 10 passed. Q-228 answered (frames of another site ask like in Chrome); adr-0034 and phase-p4-security corrected and re-approved. Next: change the frame test to test both cases, write the check script, update the pages, run the check, commit.
 - rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 - task: p4.14 (P4 exit gate and owner M3 review) — paused until p4.20 is committed
