@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7a97b85be54b56f3160e30bbfaa2bff4f7ca6f005669ceffd96532ba0d765e9f"
+    "content_hash": "sha256:eec03cd2a8e4e639b50a3b7d9f079e6e4b75fc7822992c3d8f2aa3479b2fde98"
   },
   "entries": [
     {
@@ -4996,6 +4996,32 @@
       "tags": [
         "testing",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-12-start",
+      "date": "2026-10-15",
+      "time": "12:43",
+      "title": "You re-approved the browser controls page; overhead designs started",
+      "done": "You re-approved the browser controls page. Claude wrote the \"task in progress\" note for the overhead experiment designs. (Claude had drafted the timing tool a little early, while the security suite ran; it was kept out of the previous commit.)",
+      "next": "Claude runs the timing tool once to show it works, then finishes the two experiment designs for your approval.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] approval | comp-app-shell re-approved after p4.11",
+        "## [2026-10-15] plan | p4.12 in flight"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Planned",
+      "tags": [
+        "approvals",
+        "benchmarks"
       ]
     }
   ]

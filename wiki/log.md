@@ -2801,3 +2801,19 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 12:36
 - pages: [comp-app-shell]
 - result: In the P4 dependency set; p4.12 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-15] approval | comp-app-shell re-approved after p4.11
+
+- session: s07
+- time: 12:43
+- pages: [comp-app-shell]
+- sources: [raw/owner/2026-10-15-s07-p4-11-components-reapproval.md]
+- result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared.
+
+## [2026-10-15] plan | p4.12 in flight
+
+- session: s07
+- time: 12:43
+- pages: [status-live]
+- result: In-flight record written for p4.12. The microbenchmark harness file crates/security/examples/microbench.rs was drafted early, during the p4.11 suite run and before this record (a slip in the write-ahead order); it was never committed with p4.11 and is part of p4.12.
+- next: p4.12
