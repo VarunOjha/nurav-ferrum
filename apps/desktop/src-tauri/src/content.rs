@@ -176,6 +176,13 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
     v
 }
 
+/// Whether a finished navigation is a SmartScreen block (p4.19): WebView2 has no event or error code for it; observed
+/// for Microsoft's demo phishing page, the main document failed although the server answered 200, with web error 9
+/// (connection aborted). The shell decides the same way (`isSmartScreenBlock` in logic.ts).
+fn smartscreen_block(success: bool, http_status: i32, web_error_status: i32) -> bool {
+    !success && http_status == 200 && web_error_status == 9
+}
+
 /// `data:image/png;base64,...` for an icon's PNG bytes; empty for no icon.
 fn icon_data_url(png: &[u8]) -> String {
     use base64::Engine;
@@ -188,6 +195,11 @@ fn icon_data_url(png: &[u8]) -> String {
     )
 }
 
+/// The last web address (http or https) each tab started to load, by tab id (p4.19): SmartScreen's warning page loads
+/// as `about:blank`, so the block is recorded under the address that was blocked.
+static LAST_WEB: std::sync::LazyLock<Mutex<std::collections::HashMap<u64, String>>> =
+    std::sync::LazyLock::new(|| Mutex::new(std::collections::HashMap::new()));
+
 /// Writes the log line for a tab event (navigation outcomes and decisions; addresses as scheme and host only).
 fn log_event(tab: u64, e: &TabEvent) {
     match e {
@@ -198,6 +210,11 @@ fn log_event(tab: u64, e: &TabEvent) {
         } => {
             tracing::info!(target: "ferrum::nav", tab, site = %site(uri), "navigation cancelled by the gate")
         }
+        TabEvent::NavigationStarting {
+            uri, allowed: true, ..
+        } if uri.starts_with("http://") || uri.starts_with("https://") => {
+            LAST_WEB.lock().unwrap().insert(tab, uri.clone());
+        }
         TabEvent::NavigationCompleted {
             uri,
             success,
@@ -207,6 +224,16 @@ fn log_event(tab: u64, e: &TabEvent) {
         } => {
             if *success && *http_status < 400 {
                 tracing::info!(target: "ferrum::nav", tab, site = %site(uri), http_status, "page loaded");
+            } else if smartscreen_block(*success, *http_status, *web_error_status) {
+                // p4.19: SmartScreen stopped the page (the shell shows its SmartScreen panel; same rule as logic.ts).
+                let blocked = LAST_WEB
+                    .lock()
+                    .unwrap()
+                    .get(&tab)
+                    .cloned()
+                    .unwrap_or_else(|| uri.clone());
+                tracing::warn!(target: "ferrum::nav", tab, site = %site(&blocked), "page blocked by SmartScreen");
+                crate::audit::record(tab, "page", &blocked, "smartscreen");
             } else {
                 tracing::warn!(target: "ferrum::nav", tab, site = %site(uri), success, http_status, web_error_status, "page not loaded normally");
             }
@@ -665,8 +692,10 @@ fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
             external::offer_sign_in(&h, &r.uri);
             return NavDecision::Cancel;
         }
-        // A private tab stays in the private profile whatever site it shows (p4.7).
-        let target = if current == PRIVATE_PROFILE {
+        // A private tab stays in the private profile whatever site it shows (p4.7). A blank page has no site, so it
+        // stays in the tab's profile too (p4.19: SmartScreen's warning page loads as about:blank; asking to move the tab
+        // for it showed a question about a blank page and cancelled the warning page).
+        let target = if current == PRIVATE_PROFILE || r.uri == BLANK {
             current.clone()
         } else {
             profile_for(&h, &r.uri)

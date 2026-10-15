@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, and Microsoft's Keep/Delete pop-up for downloaded programs. Self-tests use their own throwaway folder.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, a clear SmartScreen message, and Microsoft's Keep/Delete pop-up for downloaded programs.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:b3dd3efcc0c2e1c59cdddb15d65df82ceb128b27720d409d281b030bdd9518b4"
+        "content_hash": "sha256:410b421d493b40aeb0dd717f2717a197bbc29f74d3315baa06dd8ffbc2bc2219"
       }
     },
     {

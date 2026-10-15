@@ -25,6 +25,27 @@ const WEB_ERRORS: Record<number, string> = {
   18: "The proxy asks for a sign-in.",
 };
 
+/** WebView2 web error status 9: the connection was aborted. */
+export const WEB_ERROR_ABORTED = 9;
+
+/**
+ * Whether a finished navigation is a SmartScreen block (p4.19, owner answer Q-226). WebView2 has no event or error code
+ * for it; observed for Microsoft's demo phishing page: the main document failed although the server answered 200, with
+ * web error 9 (connection aborted), then a second failed completion with no status. An ordinary page that breaks off
+ * after 200 reported error 0, and unreachable or unknown hosts have no HTTP status, so they are not taken for a block.
+ */
+export function isSmartScreenBlock(success: boolean, httpStatus: number, webErrorStatus: number): boolean {
+  return !success && httpStatus === 200 && webErrorStatus === WEB_ERROR_ABORTED;
+}
+
+/** How long after a SmartScreen block the next failed completion of the same tab still belongs to it (its warning
+ * page), in ms. */
+export const SMARTSCREEN_FOLLOW_MS = 5000;
+
+/** The SmartScreen panel's sentence. */
+export const SMARTSCREEN_TEXT =
+  "Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it.";
+
 /** The error panel's sentence for a WebView2 web error status. */
 export function webErrorText(code: number): string {
   return WEB_ERRORS[code] ?? "The page could not be loaded.";

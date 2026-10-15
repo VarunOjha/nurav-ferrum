@@ -158,8 +158,11 @@ for all WebView2 apps ("SmartScreen for Microsoft Edge" in Windows Security); Fe
 
 Checked: the browser engines of all three isolation modes run without the SmartScreen-off switch, and Microsoft's
 demo phishing page is blocked (its tab is titled "Reported Unsafe Site: Navigation Blocked")
-([check-p4.18](wiki/raw/evidence/phase-p4-security/check-p4.18.txt)). Known gap: Ferrum's own "This page could not be
-loaded" panel is shown on top of Microsoft's warning page, so you see Ferrum's panel, not Microsoft's explanation.
+([check-p4.18](wiki/raw/evidence/phase-p4-security/check-p4.18.txt)). When SmartScreen blocks a page, Ferrum shows its own
+message, "Unsafe site blocked: Microsoft Defender SmartScreen reported this site as unsafe", with no "Try again", and
+writes the block to the security log (p4.19, [check-p4.19](wiki/raw/evidence/phase-p4-security/check-p4.19.txt)).
+WebView2 does not say directly that SmartScreen blocked a page; Ferrum infers it from how the load failed, so another
+program that cuts a page off after the server answered could, in principle, be shown as a SmartScreen block.
 
 For a downloaded program (for example a `.exe`), Ferrum lets WebView2's own download pop-up show, because SmartScreen
 asks there whether to keep an unknown or dangerous program; until you answer, the download waits (Ferrum's download

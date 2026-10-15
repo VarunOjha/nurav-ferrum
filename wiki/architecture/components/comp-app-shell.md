@@ -4,8 +4,11 @@ type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-14
+updated: 2026-10-15
 sources:
+  - raw/owner/2026-10-15-s07-p4-19-blank-page-fix.md
+  - raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md
+  - raw/evidence/phase-p4-security/check-p4.19.txt
   - raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt
   - raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md
   - raw/research/smartscreen-webview2.md
@@ -393,7 +396,7 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   ([check-p4.18](../../raw/evidence/phase-p4-security/check-p4.18.txt)): Microsoft's demo phishing page is blocked
   (tab title "Reported Unsafe Site: Navigation Blocked"), but Ferrum's own error panel ("This page could not be
   loaded", WebView2 error status 0) is drawn over Microsoft's warning page, so the user sees Ferrum's panel, not
-  Microsoft's explanation (owner question Q-226). Program downloads (owner answer,
+  Microsoft's explanation (owner question Q-226; changed in p4.19, below). Program downloads (owner answer,
   [raw](../../raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md)): the download chooser sets `own_dialog` for a file
   the security engine calls a program (`is_program`), so WebView2's own download pop-up shows for it and SmartScreen can
   ask "Keep or delete?"; Ferrum's own download line still shows it with the program warning, as "running" until the
@@ -401,3 +404,17 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   program-file tests expect the download held and the pop-up opened (the test cannot click inside the pop-up); a file
   type SmartScreen holds that Ferrum does not call a program would still wait unseen (not observed, not tested)
   ([check-p4.18 second run](../../raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt)).
+- p4.19, Ferrum's own SmartScreen message (owner answer Q-226,
+  [raw](../../raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md)): WebView2 has no event or error code for a
+  SmartScreen block, so the shell infers it (`isSmartScreenBlock` in `logic.ts`, same rule in the host): the page failed
+  although the server answered 200, with web error 9 (connection aborted); a failed completion within 5 s after it
+  belongs to the warning page. The panel then reads "Unsafe site blocked" / "Microsoft Defender SmartScreen reported
+  this site as unsafe..." with the blocked address and no "Try again" (`data-kind="smartscreen"`). The host logs "page
+  blocked by SmartScreen" and writes an audit record (`page`, rule `smartscreen`) under the last web address the tab
+  started (`LAST_WEB`), because the warning page itself is `about:blank`. Found while building it (owner answer,
+  [raw](../../raw/owner/2026-10-15-s07-p4-19-blank-page-fix.md)): the navigation gate took that `about:blank` for
+  another site and asked to move the tab (and cancelled the warning page); a blank page now stays in the tab's profile.
+  Observed: an ordinary page that breaks off after 200 reports error 0 and keeps the usual panel; unreachable and
+  unknown hosts have no HTTP status. Something else that aborts a page after a 200 answer (for example a proxy or
+  security program) would also be shown as a SmartScreen block: not observed, not tested. Test-server route
+  `/page/broken`. Live spec `smartscreen` ([check-p4.19](../../raw/evidence/phase-p4-security/check-p4.19.txt)).

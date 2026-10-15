@@ -159,6 +159,11 @@ pub const ROUTES: &[Route] = &[
         purpose: "a download that breaks off: announces 1 MB, sends 4 KB, then the connection ends (p3.8)",
     },
     Route {
+        path: "/page/broken",
+        status: 200,
+        purpose: "an HTML page that breaks off: answers 200, announces 1 MB, sends 4 KB, then the connection ends (p4.19)",
+    },
+    Route {
         path: "/busy",
         status: 200,
         purpose: "a page whose script runs a never-ending loop 200 ms after load (p3.9)",
@@ -333,8 +338,10 @@ async fn download_file(Query(q): Query<Bytes>) -> Response {
     r
 }
 
-/// The body of `/download/fail`: 4 KB, a pause, then an error, so the connection ends in the middle of the download.
+/// The body of `/download/fail` and `/page/broken`: the first part (4 KB), a pause, then an error, so the connection
+/// ends in the middle of the transfer.
 struct BrokenBody {
+    first: Option<bytes::Bytes>,
     step: u8,
     sleep: Option<std::pin::Pin<Box<tokio::time::Sleep>>>,
 }
@@ -350,7 +357,8 @@ impl futures_core::Stream for BrokenBody {
         match self.step {
             0 => {
                 self.step = 1;
-                Poll::Ready(Some(Ok(bytes::Bytes::from(download_bytes(4096)))))
+                let first = self.first.take().unwrap_or_default();
+                Poll::Ready(Some(Ok(first)))
             }
             1 => {
                 let sleep = self.sleep.get_or_insert_with(|| {
@@ -374,6 +382,7 @@ impl futures_core::Stream for BrokenBody {
 async fn download_fail() -> Response {
     // Headers announce 1 MB; the body sends 4 KB, then fails: the server ends the connection mid-download.
     let mut r = axum::body::Body::from_stream(BrokenBody {
+        first: Some(bytes::Bytes::from(download_bytes(4096))),
         step: 0,
         sleep: None,
     })
@@ -386,6 +395,28 @@ async fn download_fail() -> Response {
     h.insert(
         header::CONTENT_DISPOSITION,
         HeaderValue::from_static("attachment; filename=\"fixture-fail.bin\""),
+    );
+    h.insert(header::CONTENT_LENGTH, HeaderValue::from_static("1048576"));
+    r
+}
+
+async fn page_broken() -> Response {
+    // An HTML page whose server answers 200, announces 1 MB, sends the start of the page, then ends the connection
+    // (p4.19: an ordinary broken page, which Ferrum must not report as a SmartScreen block).
+    let start = format!(
+        "<!doctype html><html><head><title>Broken page</title></head><body><p>The start of a page.</p>{}",
+        " ".repeat(4000)
+    );
+    let mut r = axum::body::Body::from_stream(BrokenBody {
+        first: Some(bytes::Bytes::from(start)),
+        step: 0,
+        sleep: None,
+    })
+    .into_response();
+    let h = r.headers_mut();
+    h.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("text/html; charset=utf-8"),
     );
     h.insert(header::CONTENT_LENGTH, HeaderValue::from_static("1048576"));
     r
@@ -767,6 +798,7 @@ pub fn router() -> Router {
         .route("/links/to", get(links_to))
         .route("/download/file", get(download_file))
         .route("/download/fail", get(download_fail))
+        .route("/page/broken", get(page_broken))
         .route("/busy", get(busy))
         .route("/links/download", get(links_download))
         .route("/icon", get(icon_page))

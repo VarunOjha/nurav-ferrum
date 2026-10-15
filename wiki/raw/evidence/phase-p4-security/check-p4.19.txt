@@ -1,0 +1,26 @@
+Ferrum check p4.19: Ferrum's own SmartScreen message
+Why: you know the site was reported as unsafe and are not invited to retry it.
+Run at 2026-10-15 11:36 on commit fb1e7db (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Shell unit test: the SmartScreen rule and its message
+         shell tests passed, including the SmartScreen rule
+  PASS   Source: a blank page stays in the tab's profile; the block is logged and audited
+         gate keeps about:blank in the tab's profile; block audited as page / smartscreen
+SMARTSCREEN-DEMO {"mode":"per-site","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"about:blank","ferrum_error_panel":"Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen","warning_seen":true,"panel_kind":"smartscreen","try_again_shown":false,"audited":1,"profile_question":false}
+SMARTSCREEN-DEMO {"mode":"per-site-udf","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"about:blank","ferrum_error_panel":"Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen","warning_seen":true,"panel_kind":"smartscreen","try_again_shown":false,"audited":1,"profile_question":false}
+SMARTSCREEN-ARGS {"mode":"per-site-udf","environments":["shell","site-site-b.localhost","site-site-a.localhost"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-b.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-a.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+  ✓  13 smartscreen.spec.ts:53:3 › mode per-site-udf: no browser process has SmartScreen switched off (4.6s)
+SMARTSCREEN-DEMO {"mode":"per-site","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"about:blank","ferrum_error_panel":"Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen","warning_seen":true,"panel_kind":"smartscreen","try_again_shown":false,"audited":1,"profile_question":false}
+  ✓  14 smartscreen.spec.ts:86:3 › mode per-site: Microsoft's SmartScreen demo phishing page, as observed (5.4s)
+SMARTSCREEN-DEMO {"mode":"per-site-udf","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"about:blank","ferrum_error_panel":"Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen","warning_seen":true,"panel_kind":"smartscreen","try_again_shown":false,"audited":1,"profile_question":false}
+  ✓  15 smartscreen.spec.ts:86:3 › mode per-site-udf: Microsoft's SmartScreen demo phishing page, as observed (5.8s)
+  ✓  16 smartscreen.spec.ts:129:1 › an ordinary page that breaks off after the server's 200 gets the usual panel, not the SmartScreen one (4.7s)
+  16 passed (1.8m)
+  PASS   Live: the SmartScreen message (per-site, per-site-udf) and an ordinary broken page; earlier profile and error-page tests (118 s)
+         per-site: 'Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen'; no Try again; audited; no profile question
+                  per-site-udf: 'Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen'; no Try again; audited; no profile question
+                  16 passed (1.8m) (smartscreen, profiles, loading-errors)
+------------------------------------------------------------------------
+RESULT: PASS - p4.19 (3 PASS; 119 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.19 check passed".

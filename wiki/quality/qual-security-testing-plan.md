@@ -3,8 +3,9 @@ id: qual-security-testing-plan
 type: quality
 title: "Security testing plan: master prompt section 11 mapped to harmless fixtures"
 status: draft
-updated: 2026-10-14
+updated: 2026-10-15
 sources:
+  - raw/evidence/phase-p4-security/check-p4.19.txt
   - raw/evidence/phase-p4-security/check-p4.18.txt
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -142,7 +143,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 
 - **Threat:** a page writes outside the download folder, auto-downloads many files, or gets a file executed.
 - **Fixture:** a server route that returns plain text with: a normal name; a name containing `..\` path traversal; an executable-looking extension; and a page that triggers several downloads at once.
-- **Pass:** files land only inside the configured download folder with sanitised names; risky types prompt or are blocked per policy; multiple automatic downloads require permission; nothing is opened or executed automatically; each decision is logged. Whether WebView2 applies Mark-of-the-Web is recorded, not assumed (UNVERIFIED[phase-p4-security]). With SmartScreen on (p4.18), a program file gets WebView2's own download pop-up, where SmartScreen asks about an unknown program; the test expects the download held and the pop-up opened; answering "Keep" is a manual check at the P4 review.
+- **Pass:** files land only inside the configured download folder with sanitised names; risky types prompt or are blocked per policy; multiple automatic downloads require permission; nothing is opened or executed automatically; each decision is logged. Whether WebView2 applies Mark-of-the-Web is recorded, not assumed (UNVERIFIED[phase-p4-security]). With SmartScreen on (p4.18), a program file gets WebView2's own download pop-up, where SmartScreen asks about an unknown program; the test expects the download held and the pop-up opened; answering "Keep" is a manual check at the P4 review. A SmartScreen page block shows Ferrum's own SmartScreen panel and is audited (`page`, rule `smartscreen`; p4.19, live spec `smartscreen`, [check-p4.19](../raw/evidence/phase-p4-security/check-p4.19.txt)).
 - **Phase:** basic download management in P3; security behaviour in P4.
 
 ### SEC-08 Redirect-based policy bypass (item 8)

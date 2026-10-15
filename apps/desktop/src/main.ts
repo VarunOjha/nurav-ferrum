@@ -11,7 +11,7 @@ import "@fontsource/ibm-plex-mono/latin-500.css";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { ACCENTS, DENSITIES, THEMES, applyLook } from "./themes.ts";
-import { PERMISSION_CHOICES, PROGRAM_WARNING, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, insecureBarText, linesOf, lockFor, mergePermissions, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
+import { PERMISSION_CHOICES, PROGRAM_WARNING, SMARTSCREEN_FOLLOW_MS, SMARTSCREEN_TEXT, isSmartScreenBlock, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, insecureBarText, linesOf, lockFor, mergePermissions, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -47,7 +47,7 @@ type TabUi = {
   canBack: boolean;
   canForward: boolean;
   /** The shell's panel over the tab: a page that could not load, or (`crash` set, p4.10) a page whose process failed. */
-  panel: { uri: string; webError: number; crash?: string } | null;
+  panel: { uri: string; webError: number; crash?: string; smartScreen?: boolean } | null;
   /** The site's icon (a PNG data address from the app), or "". */
   icon: string;
   /** A web page loaded in this tab at some point (p3.16). */
@@ -62,10 +62,17 @@ type TabUi = {
   /** Page events seen so far (navigation starting or completed), so a late reply to the address bar does not wipe a
    * note those events already set (found in p4.9: an HTTP 404 or "Blocked" note was cleared by the reply). */
   navEvents: number;
+  /** When SmartScreen last blocked a page in this tab (ms; 0 = never), so the failed completion of its warning page
+   * that follows does not replace the SmartScreen panel with the generic one (p4.19). */
+  smartScreenAt: number;
+  /** The address SmartScreen blocked (shown on the panel). */
+  smartScreenUri: string;
+  /** The last web address (http or https) this tab started to load: SmartScreen's warning page is about:blank. */
+  lastWebUri: string;
 };
 const newUi = (): TabUi => ({
   uri: "", lastUri: "", loading: false, state: "idle", status: "", pageLoaded: false, canBack: false, canForward: false, panel: null,
-  icon: "", hadPage: false, downloadAt: 0, blockedNote: "", blockedUri: "", navEvents: 0,
+  icon: "", hadPage: false, downloadAt: 0, blockedNote: "", blockedUri: "", navEvents: 0, smartScreenAt: 0, smartScreenUri: "", lastWebUri: "",
 });
 /** How long after a download started a failed navigation of its tab counts as "became the download". */
 const DOWNLOAD_GRACE_MS = 3000;
@@ -167,12 +174,15 @@ function render(): void {
   renderNewTab();
   if (u?.panel) {
     const crash = u.panel.crash;
-    panel.dataset.kind = crash ? "crashed" : "load-error";
-    errorTitle.textContent = crash ? "This page stopped working" : "This page could not be loaded";
-    errorText.textContent = crash ? crashText(crash) : webErrorText(u.panel.webError);
+    const smartScreen = u.panel.smartScreen === true;
+    panel.dataset.kind = crash ? "crashed" : smartScreen ? "smartscreen" : "load-error";
+    errorTitle.textContent = crash ? "This page stopped working" : smartScreen ? "Unsafe site blocked" : "This page could not be loaded";
+    errorText.textContent = crash ? crashText(crash) : smartScreen ? SMARTSCREEN_TEXT : webErrorText(u.panel.webError);
     errorAddress.textContent = u.panel.uri;
-    errorCode.textContent = crash ? `Page process: ${crash}` : `WebView2 error status ${u.panel.webError}`;
+    errorCode.textContent = crash ? `Page process: ${crash}` : smartScreen ? "Blocked by Microsoft Defender SmartScreen" : `WebView2 error status ${u.panel.webError}`;
     retry.textContent = crash ? "Reload" : "Try again";
+    // A site SmartScreen reported is not offered again (owner answer Q-226).
+    retry.hidden = smartScreen;
     panel.hidden = false;
   } else {
     panel.hidden = true;
@@ -271,8 +281,8 @@ function applyList(next: TabList): void {
 // window title is set by the app, not by this page).
 const received: [string, string][] = [];
 
-async function showPanelFor(id: number, uri: string, webError: number, crash?: string): Promise<void> {
-  uiOf(id).panel = crash ? { uri, webError, crash } : { uri, webError };
+async function showPanelFor(id: number, uri: string, webError: number, crash?: string, smartScreen = false): Promise<void> {
+  uiOf(id).panel = crash ? { uri, webError, crash } : smartScreen ? { uri, webError, smartScreen } : { uri, webError };
   if (id === list.active) render();
   await invoke("shell_cover", { cover: true, tab: id });
 }
@@ -295,6 +305,11 @@ await listen<TabEvent>("tab", async (e) => {
   switch (ev.kind) {
     case "navigation-starting":
       if (ev.allowed) {
+        // Another web address ends a SmartScreen block's follow-up time (its warning page is not a web address).
+        if (/^https?:/i.test(ev.uri)) {
+          if (ev.uri !== u.smartScreenUri) u.smartScreenAt = 0;
+          u.lastWebUri = ev.uri;
+        }
         u.lastUri = ev.uri;
         u.pageLoaded = false;
         u.loading = true;
@@ -320,6 +335,21 @@ await listen<TabEvent>("tab", async (e) => {
       if (u.panel?.crash && !ev.success) break;
       // The final address (after redirects): a redirect back to the current address raises no source-changed.
       if (ev.uri) u.uri = ev.uri;
+      // SmartScreen blocked the page (p4.19): Ferrum's own SmartScreen panel, also over the failed completion of the
+      // warning page that follows.
+      const block = isSmartScreenBlock(ev.success, ev.http_status, ev.web_error_status);
+      if (block) {
+        u.smartScreenAt = Date.now();
+        u.smartScreenUri = [ev.uri, u.lastWebUri, u.lastUri].find((x) => /^https?:/i.test(x)) ?? ev.uri;
+      }
+      if (block || (!ev.success && u.smartScreenAt !== 0 && Date.now() - u.smartScreenAt < SMARTSCREEN_FOLLOW_MS)) {
+        u.state = "failed";
+        u.status = "Blocked by SmartScreen";
+        u.pageLoaded = false;
+        u.uri = u.smartScreenUri;
+        await showPanelFor(ev.tab, u.smartScreenUri, ev.web_error_status, undefined, true);
+        break;
+      }
       // A site's own error page stays with a toolbar note; no page at all gets the shell's panel (logic.ts).
       const f = finished(ev.success, ev.http_status, ev.web_error_status);
       u.state = f.state;

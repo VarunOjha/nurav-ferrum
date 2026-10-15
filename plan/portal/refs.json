@@ -3162,7 +3162,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, and Microsoft's Keep/Delete pop-up for downloaded programs. Self-tests use their own throwaway folder.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, a clear SmartScreen message, and Microsoft's Keep/Delete pop-up for downloaded programs.",
       "status": "Built (first working app)",
       "related": [
         "layer-controls"
@@ -5327,7 +5327,7 @@
       "kind": "task",
       "title": "P4 task: Ferrum's own SmartScreen message",
       "summary": "SmartScreen blocks a reported site but Ferrum's generic panel hides why → Ferrum shows its own SmartScreen message → you know the site was reported as unsafe and are not invited to retry it.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p4-security",
         "Q-226"

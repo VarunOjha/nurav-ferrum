@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { insecureBarText, mergePermissions, PERMISSION_CHOICES, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { isSmartScreenBlock, SMARTSCREEN_TEXT, insecureBarText, mergePermissions, PERMISSION_CHOICES, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -203,4 +203,16 @@ test("site permissions: shown kinds follow the boxes, other kinds are kept", () 
   assert.deepEqual(mergePermissions([], ["notifications", "camera"]), ["camera", "notifications"]);
   assert.deepEqual(mergePermissions(["camera", "midi-system-exclusive-messages"], []), ["midi-system-exclusive-messages"]);
   assert.deepEqual(mergePermissions(["autoplay"], ["geolocation"]), ["autoplay", "geolocation"]);
+});
+
+test("a SmartScreen block: failed although the server answered 200, connection aborted (p4.19)", () => {
+  assert.equal(isSmartScreenBlock(false, 200, 9), true);
+  // An ordinary page that breaks off after 200 (error 0), an unreachable or unknown host (no HTTP status), a
+  // cancelled navigation and a loaded page are not blocks.
+  assert.equal(isSmartScreenBlock(false, 200, 0), false);
+  assert.equal(isSmartScreenBlock(false, 0, 9), false);
+  assert.equal(isSmartScreenBlock(false, 0, 13), false);
+  assert.equal(isSmartScreenBlock(false, 0, WEB_ERROR_CANCELLED), false);
+  assert.equal(isSmartScreenBlock(true, 200, 0), false);
+  assert.match(SMARTSCREEN_TEXT, /^Microsoft Defender SmartScreen reported this site as unsafe\./);
 });

@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 14,
+    "done": 15,
     "total": 19
   },
   "step_order": [
@@ -191,10 +191,10 @@
       "what": "When SmartScreen blocks a site, Ferrum shows its own clear message instead of the generic \"could not be loaded\" panel.",
       "why": "Today Ferrum's generic panel covers Microsoft's warning, so you see an error but not that the site was reported as unsafe.",
       "how": "Ferrum recognises a SmartScreen block and shows \"Microsoft Defender SmartScreen reported this site as unsafe\", with no \"Try again\".",
-      "status": "In progress",
+      "status": "Done",
       "chain": "SmartScreen blocks a reported site but Ferrum's generic panel hides why → Ferrum shows its own SmartScreen message → you know the site was reported as unsafe and are not invited to retry it.",
       "check": "Microsoft's demo phishing page shows the SmartScreen message with no \"Try again\"; other load errors still show the usual panel.",
-      "script": null
+      "script": "scripts/verify/p4.19-smartscreen-message.ps1"
     },
     {
       "id": "p4.12",

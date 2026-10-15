@@ -4,9 +4,14 @@
 // line (it holds the data folder's path). (2) Microsoft's SmartScreen demo phishing page
 // (raw/research/smartscreen-webview2.md, 4.2) is opened and what the tab shows is recorded as observed: a missing
 // warning is printed, not hidden, and does not fail the test (the Windows setting can switch SmartScreen off, note 3.2).
+// p4.19 (owner answer Q-226): when the block is seen, Ferrum's own SmartScreen panel shows (no "Try again") and the block
+// is in the audit log; an ordinary page that breaks off after the server's 200 still gets the usual panel.
 import { execFileSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
 import { test, expect } from "@playwright/test";
-import { launch, call, tabList, type Ferrum } from "./ferrum.ts";
+import { launch, call, tabList, audited, type Ferrum } from "./ferrum.ts";
+import { base } from "./paths.ts";
 
 const A = "https://site-a.localhost:8443";
 const B = "https://site-b.localhost:8443";
@@ -33,6 +38,12 @@ function commandLines(pids: number[]): Map<number, string> {
   }
   return m;
 }
+
+/** Ferrum's own log of the run (logs/ferrum.jsonl). */
+const appLog = (f: Ferrum) => {
+  const p = path.join(f.data, "logs", "ferrum.jsonl");
+  return fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "";
+};
 
 /** The values of one switch (`--name=value`), all occurrences, in order. */
 const switchValues = (cmd: string, name: string) =>
@@ -73,9 +84,7 @@ for (const mode of ["shared", "per-site", "per-site-udf"] as const) {
 
 for (const mode of ["per-site", "per-site-udf"] as const) {
   test(`mode ${mode}: Microsoft's SmartScreen demo phishing page, as observed`, async () => {
-    const f = await launch(`smartscreen-demo-${mode}`, { perSite: true, extraSettings: `[isolation]
-mode = "${mode}"
-` });
+    const f = await launch(`smartscreen-demo-${mode}`, { perSite: true, extraSettings: `[isolation]\nmode = "${mode}"\n` });
     try {
       const id = await call<number>(f, "tab_new", { url: DEMO });
       // Wait until the tab has a title and has stopped loading, then a little longer for a warning page to settle.
@@ -86,7 +95,7 @@ mode = "${mode}"
         .toBe(true);
       await new Promise((r) => setTimeout(r, 3000));
       const t = await tab();
-      // Ferrum's own "could not be loaded" panel, if it covers the tab (shown for a failed load of the active tab).
+      // Ferrum's own panel, if it covers the tab (shown for a failed load of the active tab).
       const panel = f.shell.locator("#error-panel");
       const panelShown = await panel.waitFor({ state: "visible", timeout: 10_000 }).then(() => true, () => false);
       const observed = {
@@ -95,10 +104,39 @@ mode = "${mode}"
         tab_url: t?.url ?? null,
         ferrum_error_panel: panelShown ? (await panel.innerText({ timeout: 5000 }).catch(() => "")).replace(/\s+/g, " ").trim() : null,
         warning_seen: /Reported Unsafe Site|Navigation Blocked/i.test(t?.title ?? ""),
+        panel_kind: panelShown ? await panel.getAttribute("data-kind") : null,
+        try_again_shown: await f.shell.locator("#error-retry").isVisible().catch(() => false),
+        audited: audited(f, { action: "page", rule: "smartscreen", origin: "https://demo.smartscreen.msft.net" }),
+        // p4.19: the warning page (about:blank) must not raise Ferrum's "move this tab to another site's profile" question.
+        profile_question: appLog(f).includes("asking before moving a tab to another site's profile"),
       };
       console.log("SMARTSCREEN-DEMO " + JSON.stringify(observed));
+      if (observed.warning_seen) {
+        // p4.19: Ferrum's own SmartScreen panel, without "Try again", and an audit record.
+        expect(observed.panel_kind).toBe("smartscreen");
+        expect(observed.ferrum_error_panel).toContain("Microsoft Defender SmartScreen reported this site as unsafe");
+        expect(observed.try_again_shown).toBe(false);
+        expect(observed.ferrum_error_panel).toContain(DEMO);
+        expect(observed.audited).toBeGreaterThan(0);
+        expect(observed.profile_question).toBe(false);
+      }
     } finally {
       await f.quit();
     }
   });
 }
+
+test("an ordinary page that breaks off after the server's 200 gets the usual panel, not the SmartScreen one", async () => {
+  const f = await launch("smartscreen-broken", { perSite: true });
+  try {
+    await call<number>(f, "tab_new", { url: `${base}/page/broken` });
+    const panel = f.shell.locator("#error-panel");
+    await panel.waitFor({ state: "visible", timeout: 30_000 });
+    await new Promise((r) => setTimeout(r, 2000));
+    expect(await panel.getAttribute("data-kind")).toBe("load-error");
+    await expect(f.shell.locator("#error-retry")).toBeVisible();
+    expect(audited(f, { rule: "smartscreen" })).toBe(0);
+  } finally {
+    await f.quit();
+  }
+});
