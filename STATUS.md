@@ -42,7 +42,7 @@ session: s07
 current_phase: phase-p4-security
 current_task: p4.14
 next_action: "p4.14 P4 exit gate per wiki/phases/phase-p4-security.md and wiki/operations/handoffs/handoff-2026-10-15-s07.md: write the STATUS In-flight record first; fill scripts/gates/p4-gate.ps1 (model scripts/gates/p3-gate.ps1; release build in its own target folder, never target/release; quiet PC for the real-key shortcut tests); write shared-resources.md; produce the test_gate evidence; align the p4.16 wording on the phase page; prepare manual-checklist.md for the owner; then stop for the owner's review (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), fixed in the history rewrite before the first push (Q-221). p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [phase-p4-security]
+blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
 

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8cd2327b0bbf03bf186bce833fb7be1406ac7eb58a6c35933c8f069dc26ff98b"
+    "content_hash": "sha256:9c98b26e85939cc2770ea5c70c17e055b9f46ff6dff27228372ce96a9258ae2a"
   },
   "entries": [
     {
@@ -5148,6 +5148,36 @@
       "tags": [
         "phases",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-14-gate-go",
+      "date": "2026-10-15",
+      "time": "13:10",
+      "title": "You re-approved the Phase 4 page; the gate is running",
+      "done": "You re-approved the Phase 4 page and left the PC to Claude. Claude started the end-of-phase gate.",
+      "next": "Claude reports the gate's result; then you review Phase 4 with your checklist.",
+      "decisions": [
+        {
+          "what": "Run the Phase 4 gate now, with the PC left alone",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Phase 4 page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] approval | phase-p4-security re-approved; gate run started"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]
