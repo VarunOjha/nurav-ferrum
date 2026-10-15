@@ -2959,3 +2959,21 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [adr-0034, phase-p4-security]
 - sources: [raw/owner/2026-10-15-s07-q228-reapproval.md]
 - result: The owner answered "Re-approve both (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING. p4.20 continues: the frame test is changed to test both cases.
+
+## [2026-10-15] code | p4.20 done: sites ask before using the camera and more, like Chrome
+
+- session: s07
+- time: 17:39
+- pages: [comp-security-engine, comp-webview-manager, comp-app-shell, qual-security-testing-plan, phase-p4-security]
+- sources: [raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md, raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md, raw/research/webview2-permission-question.md, raw/evidence/phase-p4-security/check-p4.20.txt]
+- result: Engine decides allow, deny or ask; settings version 4 (never, closed); WebView2 deferral holds a request until the shell's answer (permission_answer, shell only); bar with Allow this time, Always allow, Never allow, close (private: Allow this time, Block); waiting requests refused when the tab loads a page or closes; Settings shows never answers. p4.20 check PASS 5/5 (16 live tests; camera only refused; page responsive while waiting; a delegated frame is reported with the page's origin; a website cannot answer). p4.5, p4.9 (source count moved), p4.17 checks PASS; fmt, clippy, workspace tests, shell checks pass. Deviation: index.html, build.rs, capabilities/shell.json, its generated permission file, selftest.rs, the microbench example and the p4.5/p4.9 checks were touched but not listed in the In-flight planned paths. Settings version 4 is one-way: an older Ferrum refuses the file once this build saved it (noted in the owner checklist). Stales approval of comp-app-shell, comp-security-engine and comp-webview-manager.
+- commit: d7114ef
+- stales: [comp-app-shell, comp-security-engine, comp-webview-manager]
+- next: owner re-approves the three part pages; then the P4 gate rerun when the PC is quiet
+
+## [2026-10-15] gate | three part pages stale after p4.20
+
+- session: s07
+- time: 17:39
+- pages: [comp-app-shell, comp-security-engine, comp-webview-manager]
+- result: All three are in the P4 dependency set; the gate rerun waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.

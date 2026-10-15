@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:d389f1660ed977a09e8f716a3f2ed8fd2a8178759254f6ee040919518b296c98"
+    "content_hash": "sha256:08d940a35e821425f18bd4e4cfbd716d2da0cb43fe9b625e638ea0e9774c9aaf"
   },
   "entries": [
     {
@@ -5324,6 +5324,32 @@
       ],
       "phase": "phase-p4-security",
       "category": "Decided",
+      "tags": [
+        "privacy",
+        "WebView2"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-20-done",
+      "date": "2026-10-15",
+      "time": "17:39",
+      "title": "Sites now ask before using your camera and more, like Chrome",
+      "done": "Ferrum holds a site's request and shows a bar: Allow this time, Always allow on this site, Never allow, or close. Always and Never are saved in Settings; three closes make a site quiet for a week; private tabs save nothing; a website cannot answer for you. All checks pass; your camera was never switched on by a test.",
+      "next": "You re-approve the three part pages p4.20 changed; then the end-of-phase gate reruns when the PC is quiet.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls, Tab & view manager, Security policy pages",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "d7114ef",
+      "covers": [
+        "## [2026-10-15] code | p4.20 done: sites ask before using the camera and more, like Chrome",
+        "## [2026-10-15] gate | three part pages stale after p4.20"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
       "tags": [
         "privacy",
         "WebView2"

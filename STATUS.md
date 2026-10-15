@@ -44,9 +44,9 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s07
 current_phase: phase-p4-security
-current_task: p4.20
-next_action: "Build p4.20 (Chrome-style permission question, adr-0034) per the In-flight record: research note first, then code, tests, check script scripts/verify/p4.20-permission-question.ps1; commit; ask the owner to re-approve the pages it changed. Then the full P4 gate rerun when the owner says the PC is quiet: pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence on a clean commit; gate log entry; phase gate-review; stop for the owner's review (no P5). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+current_task: p4.14
+next_action: "Ask the owner to re-approve comp-app-shell, comp-security-engine and comp-webview-manager (changed by p4.20, d7114ef); record with tools/approvals_record.py. Then, when the owner says the PC is quiet: pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence on a clean commit; gate log entry; phase gate-review; stop for the owner's review with docs/testing/manual-checklist-p4.md (no P5). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [comp-app-shell, comp-security-engine, comp-webview-manager]
 last_handoff: handoff-2026-10-15-s07
 ---
 
@@ -368,20 +368,11 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p4.20 (Chrome-style permission question, adr-0034; owner approved 2026-10-15, raw/owner/2026-10-15-s07-p4-20-approvals.md)
-- session: s07
-- intent: research note on WebView2 permission deferral and the asking frame's origin (official docs, access dates); permission decision gains "ask" (five kinds, https, same-site frame, no never answer, no quiet time) in crates/security; settings gain a per-site never list and quiet times (versioned, validated); WebView2 permission handler holds the request (deferral) and answers it later; shell bar with Allow this time, Always allow, Never allow, close (private tabs: Allow this time, Block); waiting requests refused on navigation, reload or close; Settings shows never answers; security log for every case; unit tests; live tests with harmless pages (notifications and clipboard for allow paths; camera only refused); check script; component pages, SECURITY.md, security testing plan, manual checklist item 3, gate script and portal JSON updated
-- planned paths: wiki/raw/research/webview2-permission-question.md, wiki/raw/MANIFEST.sha256, crates/core/src/config.rs, crates/security/src/permissions.rs, crates/webview-manager/src/{webview2.rs,tab.rs}, apps/desktop/src-tauri/src/ (content.rs, policy.rs, settings.rs, main.rs, new permission_question.rs), apps/desktop/src/ (main.ts, logic.ts, logic.test.ts, styles), tests/fixtures/server/src/lib.rs, apps/desktop/tests/smoke/ (new permission-question.spec.ts, permissions spec), scripts/verify/p4.20-permission-question.ps1, scripts/security-suite.ps1, scripts/gates/p4-gate.ps1, docs/testing/manual-checklist-p4.md, SECURITY.md, wiki/architecture/components/ (comp-security-engine, comp-webview-manager, comp-app-shell), wiki/quality/qual-security-testing-plan.md, wiki/raw/evidence/phase-p4-security/check-p4.20.txt, wiki/index.md, plan/portal/*.json
-- builds: target/debug only (never target/release, where the owner's Ferrum runs); the owner's real data folder is never used; the camera and microphone are never switched on
-- state (2026-10-15 17:15): code, unit tests and live tests written, uncommitted; live permissions spec 9 of 10 passed. Q-228 answered (frames of another site ask like in Chrome); adr-0034 and phase-p4-security corrected and re-approved. Next: change the frame test to test both cases, write the check script, update the pages, run the check, commit.
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
-
-- task: p4.14 (P4 exit gate and owner M3 review) — paused until p4.20 is committed
+- task: p4.14 (P4 exit gate and owner M3 review) — resumed after p4.20 (d7114ef)
 - session: s07
 - intent: write raw/evidence/phase-p4-security/shared-resources.md from the p4.7 and p4.15 observations; fill scripts/gates/p4-gate.ps1 (approvals, every task check, test-gate rows with one evidence file each, release build in its own folder target/gate-release, wiki check that reports the known ff7292e error as waiting on Q-221, the owner's part) and scripts/verify/p4.14-gate-review.ps1; align the p4.16 wording on the phase page with the narrower ablation the owner accepted (stales the phase approval: asked at the review); docs/testing/manual-checklist-p4.md for the owner; run the gate when the PC can be left alone; set the phase to gate-review; stop for the owner's review
 - planned paths: wiki/raw/evidence/phase-p4-security/ (shared-resources.md, p4-gate outputs, manual-checklist.md after the owner's answers), scripts/gates/p4-gate.ps1, scripts/verify/p4.14-gate-review.ps1, docs/testing/manual-checklist-p4.md, wiki/phases/phase-p4-security.md, wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
 - added (owner answer 2026-10-15, raw/owner/2026-10-15-s07-p4-14-rustls-and-gate-later.md): rustls 0.23.45 -> 0.23.46 in the test server (tests/fixtures/server/Cargo.toml, Cargo.lock), separate commit; p4.7 recheck; then the full gate rerun on one commit when the owner says the PC is quiet
-- paused (owner answer Q-227, 2026-10-15): the gate rerun waits for the new task p4.20 (Chrome-style permission question, adr-0034), which waits for the owner's approval of adr-0034 and phase-p4-security
 - builds: target/debug, target/gate-release, target/security-static, target/bench (never target/release, where the owner's Ferrum runs)
 - rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
@@ -419,15 +410,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 4 (security) | 18 of 20 tasks done; new task p4.20 (sites ask before using the camera and more, like Chrome) |
-| Your approval | The new decision page and the changed Phase 4 page |
-| End-of-phase check | Rerun after p4.20, when the PC is quiet |
+| Phase 4 (security) | 19 of 20 tasks done; p4.20 (sites ask before using your camera and more) done |
+| Your approval | Three part pages changed by p4.20 |
+| End-of-phase check | Reruns when the PC is quiet |
 
-**2. Why, and what it does.** Nothing to run; you approve the two pages in Claude Code, then Claude builds p4.20.
+**2. Why, and what it does.** Nothing to run; you re-approve the three pages in Claude Code, then the gate reruns.
 
 **3. The script:** none now.
 
-**4. What to tell Claude:** "Approve both", or what to change.
+**4. What to tell Claude:** "Re-approve", then "PC is quiet" when you can leave the PC for about an hour.
 
 ## Pending owner approvals
 

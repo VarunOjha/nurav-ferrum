@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 18 of 20 tasks done. Claude is finishing the Chrome-style permission question (task p4.20); you chose Chrome's rule for embedded frames of other sites. Then the end-of-phase gate reruns.",
+  "summary": "Phase 4 (security) is in progress: 19 of 20 tasks done. Sites now ask before using your camera and more, like Chrome. You re-approve three part pages; then the end-of-phase gate reruns when the PC is quiet.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:095cb2ce91c15b17959be1c10fee0523541cf2446a3ebbe095b1bcc9f3c0e4ad"
+    "content_hash": "sha256:31625b54a836f69522fec4b65320b65f9643dff1af83940ce5dc97d768f44066"
   },
   "updated": "2026-10-15",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "adr-0034"
+      "state": "Three part pages changed by p4.20 wait for your re-approval",
+      "ref": "comp-app-shell"
     },
     {
       "item": "Your rule",
@@ -35,24 +35,24 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "owner",
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "18 of 20 tasks done"
+        "state": "19 of 20 tasks done"
       },
       {
-        "item": "Task p4.20",
-        "state": "Being built: sites ask before using your camera and more"
+        "item": "Your approval",
+        "state": "Three part pages changed by p4.20"
       },
       {
         "item": "End-of-phase gate",
-        "state": "Reruns after p4.20, when the PC is quiet"
+        "state": "Reruns when the PC is quiet"
       }
     ],
-    "why": "Nothing to run; Claude finishes p4.20 and asks you to re-approve the pages it changes.",
+    "why": "Nothing to run yet. You re-approve the three pages in Claude Code; then the gate reruns every Phase 4 check on one commit and builds the release program, which needs a quiet PC for about an hour.",
     "script": null,
-    "tell_claude": "Nothing for now"
+    "tell_claude": "Re-approve, then PC is quiet"
   },
   "questions_for_you": {
     "open": 19,

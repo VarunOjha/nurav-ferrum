@@ -5430,6 +5430,17 @@
         "phase-p4-security",
         "adr-0034"
       ]
+    },
+    {
+      "id": "d7114ef",
+      "kind": "commit",
+      "title": "Commit d7114ef",
+      "summary": "Task p4.20: sites ask before using the camera, microphone, location, notifications or clipboard, like Chrome.",
+      "status": "Done",
+      "related": [
+        "p4.20",
+        "adr-0034"
+      ]
     }
   ]
 }
