@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 18 of 19 tasks done. The first gate run stopped for low memory; Claude fixes two small things, then the gate runs again when you can leave the PC alone.",
+  "summary": "Phase 4 (security) is in progress: 18 of 19 tasks done. Two small fixes are in; the end-of-phase gate is ready to run again when you can leave the PC alone for about an hour.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:1e0efe1ec8d197fbf252a6f47348059c9302af0f8c6e116ba7c881afbf63ea12"
+    "content_hash": "sha256:0f9e65e0ad298423437defa521c874a5f2e0d88406441c4e8f8c77b0497d4b9b"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "owner",
     "where_we_are": [
       {
         "item": "Phase 4",
@@ -43,12 +43,16 @@
       },
       {
         "item": "Gate",
-        "state": "First run stopped (low memory); rerun later"
+        "state": "Ready to rerun (first run stopped for low memory)"
+      },
+      {
+        "item": "Fixes since",
+        "state": "Test server library updated; one check corrected"
       }
     ],
-    "why": "Nothing to run now; Claude fixes the test server's library and rechecks one test, then asks you for a quiet hour for the full gate.",
+    "why": "The gate reruns every Phase 4 check and earlier test on one commit and builds the release program. Some tests press real keys, so the PC must be left alone; closing other big programs gives it enough memory.",
     "script": null,
-    "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
+    "tell_claude": "PC is quiet"
   },
   "questions_for_you": {
     "open": 19,

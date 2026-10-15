@@ -2900,3 +2900,13 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [phase-p4-security]
 - sources: [raw/owner/2026-10-15-s07-p4-14-rustls-and-gate-later.md, raw/evidence/phase-p4-security/regression.txt, raw/evidence/phase-p4-security/security-suite.20261015-1341.txt]
 - result: scripts/gates/p4-gate.ps1 -SaveEvidence on 89a3e66 (13:10) was stopped by Claude Code for low system memory during the release build; p4-gate.txt was not written. Up to then: approvals PASS; task checks PASS except p4.7 (one FAIL in its live test; details not kept; the same isolation spec passed later in the security suite); fmt and clippy, cargo test, rules coverage, security suite, P3 and P2 suites with p2.3, shell checks PASS; cargo deny FAIL: RUSTSEC-2026-0346 to -0349 in rustls 0.23.45, used only by the test server. Not run: release build, p4.16, p4.15, wiki check. The partial evidence files are kept. Owner: update rustls, rerun the whole gate later on one commit. target/release untouched.
+
+## [2026-10-15] code | rustls updated in the test server; p4.7 check filter fixed
+
+- session: s07
+- time: 14:25
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-15-s07-p4-14-rustls-and-gate-later.md]
+- result: rustls 0.23.45 -> 0.23.46 in tests/fixtures/server (owner answer); cargo deny check all ok; fixture-server tests 9 passed. The p4.7 gate failure was a bug in its check: the filter 'isolation' also ran isolation-modes.spec (since p4.15), so 8 tests passed where the check expected '4 passed'; filter now isolation.spec; p4.7 check PASS 3/3. No product code changed. Ready for the full gate rerun when the owner says the PC is quiet.
+- commit: f455e36, b1d6856
+- next: full P4 gate rerun (pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence) when the owner says the PC is quiet

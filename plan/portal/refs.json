@@ -5372,6 +5372,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "f455e36",
+      "kind": "commit",
+      "title": "Commit f455e36",
+      "summary": "The test server's TLS library updated to the fixed version (four security alerts); Ferrum itself does not use it.",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

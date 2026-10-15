@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:c182691f4ec9a1ab38811ee2859f50c372d363d38dbc7b8e9fc90da4534d4465"
+    "content_hash": "sha256:f082598298556236fd2d7a635fa42ae3902c23140c449949f630c1322f154b89"
   },
   "entries": [
     {
@@ -5207,6 +5207,26 @@
       "tags": [
         "testing",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-gate-fixes",
+      "date": "2026-10-15",
+      "time": "14:25",
+      "title": "Test server library updated; one check fixed; gate ready to rerun",
+      "done": "Claude updated the test server's TLS library to the fixed version; the licence and alert check is clean again. The failing isolation check was a mistake in the check itself (it counted tests from a second file); fixed, and it passes. Ferrum's own code did not change.",
+      "next": "When you can leave the PC alone for about an hour, say so and Claude reruns the whole gate.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "f455e36",
+      "covers": [
+        "## [2026-10-15] code | rustls updated in the test server; p4.7 check filter fixed"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Fixed",
+      "tags": [
+        "testing",
+        "toolchain"
       ]
     }
   ]
