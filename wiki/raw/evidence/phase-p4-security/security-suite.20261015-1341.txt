@@ -1,0 +1,56 @@
+Ferrum check security-suite: Security test suite (master prompt section 11, items 1 to 10)
+Why: you can rerun every security test after any change and see each area's result.
+Run at 2026-10-15 13:33 on commit 89a3e66 (with uncommitted changes)
+------------------------------------------------------------------------
+Item -> tests:
+  1 Blocked-domain navigation (SEC-01) : security-navigation.spec, security-settings.spec, allowlist_more_specific_than_block_wins, allowlist_only_mode_denies_everything_not_listed
+  2 External protocol handling (SEC-02) : external-schemes.spec, new-windows-links.spec
+  3 Unauthorized native command invocation (SEC-03) : app-origin.spec, IPC self-test
+  4 Cross-origin access attempts (SEC-04) : cross-origin.spec
+  5 Permission denial (SEC-05) : permissions.spec, security-settings.spec
+  6 Session data isolation (SEC-06) : isolation.spec, isolation-modes.spec, profiles.spec
+  7 Download handling (SEC-07) : safe-downloads.spec, downloads.spec
+  8 Redirect-based policy bypass (SEC-08) : security-navigation.spec, redirects.spec
+  9 Malformed URL handling (SEC-09) : security-navigation.spec
+  10 Recovery after renderer crashes (SEC-10) : crash-recovery.spec
+  Additions: audit log (SEC-14), SmartScreen : audit-log.spec, smartscreen.spec
+  PASS   Security engine tests (rules, allowlist and blocklist, malformed addresses; 100 percent branch coverage in p4.2) (3 s)
+         test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s; test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s; test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.28s; test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  PASS   Other unit tests: app, tab and view manager, core; shell (23 s)
+         99 Rust tests passed; shell: ℹ pass 26
+  PASS   Item 3: IPC self-test, a website tries every way into the app (59 s)
+         every probed call refused; tab views have no bridge (own throwaway settings and data folder)
+SMARTSCREEN-ARGS {"mode":"shared","environments":["shell"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+  ✓  64 smartscreen.spec.ts:27:3 › mode shared: no browser process has SmartScreen switched off (2.9s)
+SMARTSCREEN-ARGS {"mode":"per-site","environments":["shell"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+  ✓  65 smartscreen.spec.ts:27:3 › mode per-site: no browser process has SmartScreen switched off (3.5s)
+SMARTSCREEN-ARGS {"mode":"per-site-udf","environments":["shell","site-site-a.localhost","site-site-b.localhost"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-a.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-b.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+  ✓  66 smartscreen.spec.ts:27:3 › mode per-site-udf: no browser process has SmartScreen switched off (8.9s)
+SMARTSCREEN-DEMO {"mode":"per-site","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"https://demo.smartscreen.msft.net/phishingdemo.html","ferrum_error_panel":"Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen","warning_seen":true,"panel_kind":"smartscreen","try_again_shown":false,"audited":1,"profile_question":false}
+  ✓  67 smartscreen.spec.ts:60:3 › mode per-site: Microsoft's SmartScreen demo phishing page, as observed (11.3s)
+SMARTSCREEN-DEMO {"mode":"per-site-udf","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"about:blank","ferrum_error_panel":"Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen","warning_seen":true,"panel_kind":"smartscreen","try_again_shown":false,"audited":1,"profile_question":false}
+  ✓  68 smartscreen.spec.ts:60:3 › mode per-site-udf: Microsoft's SmartScreen demo phishing page, as observed (5.2s)
+  ✓  69 smartscreen.spec.ts:103:1 › an ordinary page that breaks off after the server's 200 gets the usual panel, not the SmartScreen one (4.3s)
+  69 passed (3.7m)
+  PASS   Live security tests (items 1 to 10, audit log, SmartScreen) (229 s)
+         69 passed (3.7m) (16 spec files)
+PASS feature bench-nosecurity is not enabled in the normal build
+== marker texts (count in the normal release program / in the benchmark program)
+  bench-nosecurity-ablation-rule         normal=0 benchmark=2
+  benchmark-nosecurity-build             normal=0 benchmark=2
+  --benchmark-mode                       normal=0 benchmark=2
+  benchmark build without site rules     normal=0 benchmark=2
+PASS no marker in the normal release program; every marker found in the benchmark program
+  sizes: normal 14,018,560 bytes, benchmark 13,968,384 bytes
+== benchmark program started without --benchmark-mode: exit 2
+  [ferrum] benchmark-nosecurity-build: this build has no site rules and starts only with --benchmark-mode
+PASS the benchmark program refuses to start without --benchmark-mode
+RESULT: PASS
+  PASS   Release build scan: no "no security" benchmark switch (SEC-12; own build folder) (148 s)
+         release build has no bench-nosecurity feature or marker texts; positive control found them in the benchmark build
+  PASS   The app never sets a debugging port itself (SEC-11)
+         no remote-debugging-port in the app's code (tests and benchmarks set it for their own runs only)
+------------------------------------------------------------------------
+RESULT: PASS - security-suite (6 PASS; 463 s)
+Everything this script can check is fine.
+What to tell Claude: "security suite passed".

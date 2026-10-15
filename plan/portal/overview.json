@@ -2,7 +2,7 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 18 of 19 tasks done. The end-of-phase gate is running (about an hour, PC left alone).",
+  "summary": "Phase 4 (security) is in progress: 18 of 19 tasks done. The first gate run stopped for low memory; Claude fixes two small things, then the gate runs again when you can leave the PC alone.",
   "source": {
     "wiki_path": "STATUS.md",
     "content_hash": "sha256:1e0efe1ec8d197fbf252a6f47348059c9302af0f8c6e116ba7c881afbf63ea12"
@@ -39,14 +39,14 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "Gate running"
+        "state": "18 of 19 tasks done"
       },
       {
-        "item": "Approvals",
-        "state": "All up to date"
+        "item": "Gate",
+        "state": "First run stopped (low memory); rerun later"
       }
     ],
-    "why": "Nothing to run; the gate is running. Please leave the PC alone until Claude reports.",
+    "why": "Nothing to run now; Claude fixes the test server's library and rechecks one test, then asks you for a quiet hour for the full gate.",
     "script": null,
     "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:9c98b26e85939cc2770ea5c70c17e055b9f46ff6dff27228372ce96a9258ae2a"
+    "content_hash": "sha256:c182691f4ec9a1ab38811ee2859f50c372d363d38dbc7b8e9fc90da4534d4465"
   },
   "entries": [
     {
@@ -5177,6 +5177,35 @@
       "category": "Decided",
       "tags": [
         "approvals",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-gate-run-1",
+      "date": "2026-10-15",
+      "time": "14:17",
+      "title": "First Phase 4 gate run stopped for low memory",
+      "done": "The gate ran for about an hour. Most checks passed, including the full security suite and all earlier tests. Two problems: one isolation check failed once, and new security alerts appeared for a library only the local test server uses. The PC then ran low on memory during the release build, so Claude Code stopped the run. Your Ferrum was not touched.",
+      "next": "Claude updates the test server's library and rechecks the isolation test; later you leave the PC alone for a full rerun.",
+      "decisions": [
+        {
+          "what": "Update the test server's TLS library",
+          "by": "you"
+        },
+        {
+          "what": "Rerun the whole gate later on one commit",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] gate | phase-p4-security first gate run stopped for low memory"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
+      "tags": [
+        "testing",
         "phases"
       ]
     }

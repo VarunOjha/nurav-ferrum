@@ -316,3 +316,12 @@ a2cd394f30618daf949f9371b89a7bfea218c3c4bd6571a06e7429e4bb3a2a64  research/liter
 ec377caec6aee5e5f4cb6a41112f907bb70c998baca42573f08c198c55e77ea8  evidence/phase-p4-security/check-p4.13.txt
 9b3dafffdbba9c178090f5195da824286f0daccd6ab0b06293ee5c0fcf508dfb  evidence/phase-p4-security/shared-resources.md
 aba5ca6251e84392d7ab3d2dc7a1bd2d9f575cb8c340cdb9fd797c380aee707f  owner/2026-10-15-s07-p4-14-phase-reapproval-and-gate-go.md
+e7b128793d48bdbc361cde5f73d02cd0675061d419e4f3d233c2d846fcc67a77  owner/2026-10-15-s07-p4-14-rustls-and-gate-later.md
+5d7edcae8c7d00cf3940b41b83303fa0d7e1b08e78c99de8e79ea9faa345141f  evidence/phase-p4-security/cargo-clippy.txt
+b06ec5357bb29af7aecda5f3a5992f033484506b20bede02905c0ecbe5268fdb  evidence/phase-p4-security/cargo-fmt.txt
+d2d318943e8c8ddcb648c2080a9764173cb6ce299bf79936ef3595d9311c642e  evidence/phase-p4-security/cargo-test.txt
+1ca2c9bb3761f541c960087983388701d842d95a14cb238f646c901af03ad9c7  evidence/phase-p4-security/check-p4.2.20261015-1333.txt
+3a7604726f96ab672744a5c926f1b37b984d34eae2b1142e6958024826484782  evidence/phase-p4-security/policy-coverage.20261015-1333.txt
+05fb55db4d3374fa50859446f7c4ab84eb0b88098d355ff1cec04278f5b8d90b  evidence/phase-p4-security/regression.txt
+23e13d1a9ce5fc53283ac980d6b2b817cddebff633c055691640007409350d24  evidence/phase-p4-security/security-suite.20261015-1341.txt
+3efe50daa6e5e7709de29feb2eaea1bd69d04f9f078eb2a6d9e9ca43f41871df  evidence/phase-p4-security/shell-tests.txt

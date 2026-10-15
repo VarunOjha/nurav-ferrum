@@ -2892,3 +2892,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [phase-p4-security]
 - sources: [raw/owner/2026-10-15-s07-p4-14-phase-reapproval-and-gate-go.md]
 - result: The owner answered "Re-approve (Recommended)" and "Now, I'll leave the PC (Recommended)"; phase-p4-security recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. Claude starts scripts/gates/p4-gate.ps1 -SaveEvidence.
+
+## [2026-10-15] gate | phase-p4-security first gate run stopped for low memory
+
+- session: s07
+- time: 14:17
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-15-s07-p4-14-rustls-and-gate-later.md, raw/evidence/phase-p4-security/regression.txt, raw/evidence/phase-p4-security/security-suite.20261015-1341.txt]
+- result: scripts/gates/p4-gate.ps1 -SaveEvidence on 89a3e66 (13:10) was stopped by Claude Code for low system memory during the release build; p4-gate.txt was not written. Up to then: approvals PASS; task checks PASS except p4.7 (one FAIL in its live test; details not kept; the same isolation spec passed later in the security suite); fmt and clippy, cargo test, rules coverage, security suite, P3 and P2 suites with p2.3, shell checks PASS; cargo deny FAIL: RUSTSEC-2026-0346 to -0349 in rustls 0.23.45, used only by the test server. Not run: release build, p4.16, p4.15, wiki check. The partial evidence files are kept. Owner: update rustls, rerun the whole gate later on one commit. target/release untouched.
