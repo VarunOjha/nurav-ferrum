@@ -13,6 +13,7 @@ sources:
   - raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md
   - raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md
   - raw/research/smartscreen-webview2.md
+  - raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md
 related: [phase-p3-tabs-sessions, phase-p5-telemetry, phase-p6-benchmark-harness, comp-security-engine, comp-webview-manager, comp-app-shell, risk-r01, risk-r03, adr-0010, adr-0015, exp-security-overhead, exp-isolation-overhead]
 approvable: true
 phase: phase-p4-security
@@ -79,8 +80,8 @@ tasks:
     title: "Isolation modes selectable by configuration: shared-profile (every tab in the default profile), profile-per-site (adr-0010, route from p1.9) and udf-per-site (one user data folder per site via Tauri data_directory, so one WebView2 environment and browser process group per site); feasibility of per-site user data folders investigated (master prompt section 5 Phase 3) and the resources each mode shares or separates documented from observation"
     verify: "Integration test runs the same two-site fixture in each mode and asserts the expected storage separation (cookies, localStorage, IndexedDB); process inspection (ProcessInfosChanged / process-tree snapshot) records browser-process count per mode to raw/evidence/phase-p4-security/isolation-modes.md; mode switch takes effect after restart and is rejected for invalid values; any mode found infeasible is recorded as such with the observed error, not silently dropped. Modes provide cfg-ferrum-shared-profile, cfg-ferrum-profile-per-site and cfg-ferrum-udf-per-site for exp-isolation-overhead."
   - id: p4.16
-    title: "Benchmark-only security ablation flag cfg-ferrum-nosecurity-bench: a compile-time Cargo feature under which every policy decision returns allow; never enabled in release builds, local fixtures only"
-    verify: "Unit test under the feature asserts allow-all; a CI security-static check builds the release profile and proves the feature and its symbols are absent (feature list of the release build plus a string/symbol scan of the binary), output saved to raw/evidence/phase-p4-security/nosecurity-absent.txt; the build refuses to start the ablation binary without an explicit benchmark-mode argument."
+    title: "Benchmark-only security ablation flag cfg-ferrum-nosecurity-bench: a compile-time Cargo feature under which the site rules (blocklist, allowlist, plain-HTTP handling) let every web address load, while Ferrum's own origin, forbidden schemes, links to other apps and permission refusals keep their rules (narrower build accepted by the owner, raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md); never enabled in release builds, local fixtures only"
+    verify: "Unit tests under the feature assert that every web address is allowed and that Ferrum's own origin, local files and links to other apps are still kept out; a CI security-static check builds the release profile and proves the feature and its symbols are absent (feature list of the release build plus a string/symbol scan of the binary), output saved to raw/evidence/phase-p4-security/nosecurity-absent.txt; the build refuses to start the ablation binary without an explicit benchmark-mode argument."
   - id: p4.17
     title: "Settings UI for security: blocklist editing and per-site permission grants (view, grant, revoke) in the trusted shell settings interface from p3.14, writing config only through host commands"
     verify: "Integration test adds a blocklist domain and a camera grant through the settings UI host commands, restarts, and asserts both persisted and enforced (blocked navigation logged; grant honoured, then revoked); the p2.3 IPC denial test shows remote tabs cannot call these commands."

@@ -155,12 +155,12 @@
     {
       "id": "p4.16",
       "title": "Benchmark-only 'no security' switch",
-      "what": "A build-time switch that turns all security rules off, for benchmarks on local test pages only.",
+      "what": "A build-time switch that turns the site rules off (blocked sites, allowed sites, plain-HTTP handling), for benchmarks on local test pages only.",
       "why": "Without a version that has no security, its cost cannot be measured. If that version were ever shipped, every protection would be gone.",
-      "how": "Add a compile-time option that makes every rule answer 'allow', keep it out of release builds, and require a benchmark-only start argument to run it.",
+      "how": "A compile-time option lets every web address load, while Ferrum's own pages, local files, links to other apps and permission refusals stay protected; it is kept out of release builds and needs a benchmark-only start argument.",
       "status": "Done",
       "chain": "Measuring security's cost needs a version without it → a build-time switch for local test pages only, proven absent from release builds → no risk of shipping it.",
-      "check": "With the switch everything is allowed; the release build is scanned and the switch is absent.",
+      "check": "With the switch every web address is allowed and the kept protections still refuse; the release build is scanned and the switch is absent.",
       "script": "scripts/verify/p4.16-no-security-switch.ps1"
     },
     {
@@ -292,6 +292,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p4-security.md",
-    "content_hash": "sha256:f0c8406ecd7992e035a0b3f2adf2ad3aae1fb34788f331f8be2582257ad9db16"
+    "content_hash": "sha256:598274cdc2d8124534208287c5a3b28220a34289310a3827188f5af77be4e96f"
   }
 }

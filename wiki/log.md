@@ -2875,3 +2875,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [status-live]
 - result: In-flight record written for p4.14 (P4 exit gate). The gate script is still the p0.17 placeholder; the P3 gate it is modelled on builds the release program into target/release, which the P4 gate must not do while the owner's Ferrum runs there; lint:wiki still reports the one known RAW-IMMUTABLE error (ff7292e, Q-221).
 - next: p4.14
+
+## [2026-10-15] plan | p4.14 gate prepared; p4.16 wording aligned
+
+- session: s07
+- time: 13:05
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md, raw/evidence/phase-p4-security/shared-resources.md]
+- result: scripts/gates/p4-gate.ps1 written (approvals; every task check; test-gate rows each saved as evidence; release build in target/gate-release with a check that target/release is unchanged; the known ff7292e wiki error gives WAIT naming Q-221, any other error FAIL; the owner's part). scripts/verify/p4.14-gate-review.ps1 written. shared-resources.md compiled from the p4.7, p4.15 and p4.18 evidence (tested, observed and derived rows marked; nothing claims complete isolation). docs/testing/manual-checklist-p4.md for the owner. Phase page: p4.16 title and verify now describe the narrower ablation the owner accepted (as the owner asked, at the review). Stales approval of phase-p4-security.
+- stales: [phase-p4-security]
