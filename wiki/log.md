@@ -2727,3 +2727,19 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 11:08
 - pages: [phase-p4-security]
 - result: P4's own page is in its dependency set; P4 work waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-15] approval | phase-p4-security re-approved after adding p4.19
+
+- session: s07
+- time: 11:10
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-15-s07-p4-19-phase-reapproval.md]
+- result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared.
+
+## [2026-10-15] plan | p4.19 in flight
+
+- session: s07
+- time: 11:16
+- pages: [status-live]
+- result: In-flight record written for p4.19 before any task file is touched. A temporary diagnostic test (deleted after use) recorded what Ferrum receives: the SmartScreen block is a failed main-document load with HTTP 200 and web error 9 (ConnectionAborted), followed by a second failed completion; an unreachable address and an unknown host fail with HTTP 0. WebView2 has no SmartScreen event or error code (webview2-com-sys 0.39.1 bindings searched), so the block must be inferred.
+- next: p4.19

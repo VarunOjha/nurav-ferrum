@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b9f7c37f93a9a7ab9242fe9c35b5eca2c12bcd5bca31f175bab11e4e217d0483"
+    "content_hash": "sha256:691e8698afa5d4fdaea61e00a6560ef59f58e0d5fc3062cd515ae5ffa0e12634"
   },
   "entries": [
     {
@@ -4878,6 +4878,32 @@
       ],
       "phase": "phase-p4-security",
       "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-19-start",
+      "date": "2026-10-15",
+      "time": "11:10",
+      "title": "You re-approved the Phase 4 page; the SmartScreen message task started",
+      "done": "You re-approved the Phase 4 page with the new task. Claude checked what Ferrum receives when SmartScreen blocks a page: Microsoft gives no direct signal, but the block looks different from ordinary load errors. Claude wrote the \"task in progress\" note.",
+      "next": "Claude builds Ferrum's own SmartScreen message and its check.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Phase 4 page",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] approval | phase-p4-security re-approved after adding p4.19",
+        "## [2026-10-15] plan | p4.19 in flight"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Planned",
       "tags": [
         "approvals",
         "privacy"

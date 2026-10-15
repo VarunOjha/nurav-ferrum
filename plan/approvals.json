@@ -1640,13 +1640,13 @@
     "phase-p4-security": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-14T13:56:36-05:00",
+      "timestamp": "2026-10-15T11:10:40-05:00",
       "path": "wiki/phases/phase-p4-security.md",
-      "content_hash": "sha256:883571aacab08708e36bfe01d39ee837aa66cb6c2dc6368e1e1b1bb3c06e1c2c",
-      "scope_hash": "sha256:f6d4ee1ec6c028c5833d680785b31cdbe9a2c6c672514e28c09ed458f0eb4512",
+      "content_hash": "sha256:f0c8406ecd7992e035a0b3f2adf2ad3aae1fb34788f331f8be2582257ad9db16",
+      "scope_hash": "sha256:4aa0c1b4157b1bd4a7f7f2448f0c3392826d6e29ecbfd354363806f1c9074cae",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-18-phase-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-19-phase-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1658,6 +1658,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-14T13:56:36-05:00",
+          "path": "wiki/phases/phase-p4-security.md",
+          "content_hash": "sha256:883571aacab08708e36bfe01d39ee837aa66cb6c2dc6368e1e1b1bb3c06e1c2c",
+          "scope_hash": "sha256:f6d4ee1ec6c028c5833d680785b31cdbe9a2c6c672514e28c09ed458f0eb4512",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-14-s06-p4-18-phase-reapproval.md"
         }
       ]
     },

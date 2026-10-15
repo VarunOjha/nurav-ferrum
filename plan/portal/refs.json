@@ -5327,7 +5327,7 @@
       "kind": "task",
       "title": "P4 task: Ferrum's own SmartScreen message",
       "summary": "SmartScreen blocks a reported site but Ferrum's generic panel hides why → Ferrum shows its own SmartScreen message → you know the site was reported as unsafe and are not invited to retry it.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p4-security",
         "Q-226"
