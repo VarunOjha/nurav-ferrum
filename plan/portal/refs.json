@@ -5342,6 +5342,16 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "d18c8e1",
+      "kind": "commit",
+      "title": "Commit d18c8e1",
+      "summary": "One command runs every security test; a cross-site test for area 4; the self-test's stand-in website now uses its own folder (task p4.11).",
+      "status": "Committed",
+      "related": [
+        "phase-p4-security"
+      ]
     }
   ]
 }

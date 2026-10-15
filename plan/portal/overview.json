@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 15 of 19 tasks done. Claude is building one command that runs every security test.",
+  "summary": "Phase 4 (security) is in progress: 16 of 19 tasks done. One command now runs every security test, and it passes. Waiting for you to re-approve the browser controls page; then Claude finishes the overhead experiment designs.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:e429a5eecc481d0159a1e747fa87ff5fc2d8ebc0c8eb5485713d6c56f38de182"
+    "content_hash": "sha256:d739a40d2cfc1c40d7c252132138da7326d7edc9363378b2f1dd014eebe5f895"
   },
   "updated": "2026-10-14",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
+      "state": "Browser controls page waits for your re-approval",
       "ref": "comp-app-shell"
     },
     {
@@ -39,14 +39,14 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "15 of 19 tasks done"
+        "state": "16 of 19 tasks done"
       },
       {
         "item": "Approvals",
-        "state": "All up to date"
+        "state": "Browser controls page waits for you"
       }
     ],
-    "why": "Nothing to run; Claude builds the combined security test suite, then continues with Phase 4 task by task and stops for your review.",
+    "why": "Nothing to run; Claude continues with the overhead experiment designs once you have re-approved the browser controls page.",
     "script": null,
     "tell_claude": "Nothing for now. Claude stops after Phase 4 for your review."
   },

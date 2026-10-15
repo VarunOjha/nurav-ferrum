@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:92e43d6531074624237ddc0dcfa2dadb3fbbca46d9fd5d1ec7c50c7863dea7c3"
+    "content_hash": "sha256:7a97b85be54b56f3160e30bbfaa2bff4f7ca6f005669ceffd96532ba0d765e9f"
   },
   "entries": [
     {
@@ -4964,6 +4964,38 @@
       "tags": [
         "approvals",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-11",
+      "date": "2026-10-15",
+      "time": "12:36",
+      "title": "One command now runs every security test",
+      "done": "Claude built one command that runs all of Ferrum's security tests, added the missing cross-site test, and put a table on the security page showing which test covers each of the ten areas. The first run caught a mistake: the self-test's stand-in website still used your real Ferrum data folder. Claude told you, fixed it, and the full suite then passed.",
+      "next": "You re-approve the browser controls page; then Claude finishes the overhead experiment designs.",
+      "decisions": [
+        {
+          "what": "Fix the self-test's stand-in website folder, then rerun",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Browser controls page",
+          "status": "Outdated"
+        }
+      ],
+      "commit": "d18c8e1",
+      "covers": [
+        "## [2026-10-15] correct | self-test probe view still used the real data folder",
+        "## [2026-10-15] code | p4.11 one-command security suite for items 1 to 10",
+        "## [2026-10-15] gate | comp-app-shell approval stale after p4.11"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "testing",
+        "privacy"
       ]
     }
   ]

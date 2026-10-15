@@ -2776,3 +2776,28 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [status-live]
 - result: In-flight record written for p4.11 (consolidated security suite) before any task file is touched. Inventory: master prompt section 11 items 1 to 3 and 5 to 10 already have tests (Rust policy tests including the allowlist cases, live specs, IPC self-test); item 4 (cross-origin access, SEC-04) has none yet.
 - next: p4.11
+
+## [2026-10-15] correct | self-test probe view still used the real data folder
+
+- session: s07
+- time: 12:36
+- pages: [comp-app-shell]
+- sources: [raw/owner/2026-10-15-s07-p4-11-probe-folder-fix.md]
+- result: Corrects the 2026-10-14 entry "code | self-tests run only in their own settings and data folder" (commit 3014814) and its evidence selftest-own-folder.txt: that fix covered the shell view only. The IPC self-test's probe view had no data folder and fell back to the user's real one; in the p4.8 check of 2026-10-14 about 16:03 it most likely ran there next to the owner's open Ferrum, and on 2026-10-15 12:10 WebView2 refused to create it there (browser switches differed after p4.18), which is how the first p4.11 suite run found it. The real folder was not inspected (owner chose "fix, then rerun"). Fixed in p4.11 (d18c8e1).
+
+## [2026-10-15] code | p4.11 one-command security suite for items 1 to 10
+
+- session: s07
+- time: 12:36
+- pages: [qual-security-testing-plan, comp-app-shell]
+- sources: [raw/evidence/phase-p4-security/security-suite.20261015-1234.txt, raw/evidence/phase-p4-security/check-p4.11.20261015-1234.txt, raw/evidence/phase-p4-security/security-suite.txt]
+- result: scripts/security-suite.ps1 runs every security test apart from performance tests (engine tests with the allowlist cases, unit tests, IPC self-test, live specs for items 1 to 10 plus audit log and SmartScreen, release build scan, debugging-port source scan); item -> test table on qual-security-testing-plan §5. New cross-origin.spec for item 4 (every cross-site read refused; no weakening browser switch). First suite run FAIL at the self-test (probe not created), cause and fix in the correct entry above; rerun: suite PASS 6/6, p4.11 check PASS 2/2; p4.8 check PASS 3/3; cargo test --workspace 143 passed. Not in the suite: SEC-13 (no certificate-error live test yet). Stales approval of comp-app-shell.
+- stales: [comp-app-shell]
+- commit: d18c8e1
+
+## [2026-10-15] gate | comp-app-shell approval stale after p4.11
+
+- session: s07
+- time: 12:36
+- pages: [comp-app-shell]
+- result: In the P4 dependency set; p4.12 waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
