@@ -2977,3 +2977,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 17:39
 - pages: [comp-app-shell, comp-security-engine, comp-webview-manager]
 - result: All three are in the P4 dependency set; the gate rerun waits for the owner's re-approval (SCHEMA §10.4). blocked_on set.
+
+## [2026-10-15] approval | three part pages re-approved after p4.20
+
+- session: s07
+- time: 17:44
+- pages: [comp-app-shell, comp-security-engine, comp-webview-manager]
+- sources: [raw/owner/2026-10-15-s07-p4-20-components-reapproval.md]
+- result: The owner answered "Re-approve all three (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. The P4 gate rerun waits for "PC is quiet".

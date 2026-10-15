@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 19 of 20 tasks done. Sites now ask before using your camera and more, like Chrome. You re-approve three part pages; then the end-of-phase gate reruns when the PC is quiet.",
+  "summary": "Phase 4 (security) is in progress: 19 of 20 tasks done. Sites now ask before using your camera and more, like Chrome. All approvals are up to date; the end-of-phase gate reruns when you can leave the PC alone.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:31625b54a836f69522fec4b65320b65f9643dff1af83940ce5dc97d768f44066"
+    "content_hash": "sha256:dc26c30c7372649a259838da8d6338bea9cc49d9c3c5594067dd613bf71a994c"
   },
   "updated": "2026-10-15",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Three part pages changed by p4.20 wait for your re-approval",
+      "state": "All up to date",
       "ref": "comp-app-shell"
     },
     {
@@ -42,17 +42,17 @@
         "state": "19 of 20 tasks done"
       },
       {
-        "item": "Your approval",
-        "state": "Three part pages changed by p4.20"
+        "item": "Approvals",
+        "state": "All up to date"
       },
       {
         "item": "End-of-phase gate",
-        "state": "Reruns when the PC is quiet"
+        "state": "Ready to run when the PC is quiet"
       }
     ],
-    "why": "Nothing to run yet. You re-approve the three pages in Claude Code; then the gate reruns every Phase 4 check on one commit and builds the release program, which needs a quiet PC for about an hour.",
+    "why": "The gate reruns every Phase 4 check and earlier test on one commit and builds the release program. Some tests press real keys, so the PC must be left alone for about an hour; closing other big programs gives it enough memory.",
     "script": null,
-    "tell_claude": "Re-approve, then PC is quiet"
+    "tell_claude": "PC is quiet"
   },
   "questions_for_you": {
     "open": 19,

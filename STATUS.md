@@ -40,13 +40,14 @@ sources:
   - raw/owner/2026-10-15-s07-p4-20-approvals.md
   - raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md
   - raw/owner/2026-10-15-s07-q228-reapproval.md
+  - raw/owner/2026-10-15-s07-p4-20-components-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s07
 current_phase: phase-p4-security
 current_task: p4.14
-next_action: "Ask the owner to re-approve comp-app-shell, comp-security-engine and comp-webview-manager (changed by p4.20, d7114ef); record with tools/approvals_record.py. Then, when the owner says the PC is quiet: pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence on a clean commit; gate log entry; phase gate-review; stop for the owner's review with docs/testing/manual-checklist-p4.md (no P5). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: [comp-app-shell, comp-security-engine, comp-webview-manager]
+next_action: "When the owner says the PC is quiet (other big programs closed, about an hour, internet on): pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence on a clean commit; then the gate log entry, phase-p4-security to gate-review, and stop for the owner's review with docs/testing/manual-checklist-p4.md (no P5). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
 
@@ -410,15 +411,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 4 (security) | 19 of 20 tasks done; p4.20 (sites ask before using your camera and more) done |
-| Your approval | Three part pages changed by p4.20 |
-| End-of-phase check | Reruns when the PC is quiet |
+| Phase 4 (security) | 19 of 20 tasks done; only the end-of-phase gate is left |
+| Approvals | All up to date |
+| End-of-phase gate | Ready to run when the PC is quiet |
 
-**2. Why, and what it does.** Nothing to run; you re-approve the three pages in Claude Code, then the gate reruns.
+**2. Why, and what it does.** The gate reruns every Phase 4 check and the earlier tests on one commit and builds the
+release program in its own folder. Some tests press real keys, so the PC must be left alone for about an hour.
 
-**3. The script:** none now.
+**3. The script:** Claude runs `scripts/gates/p4-gate.ps1 -SaveEvidence`.
 
-**4. What to tell Claude:** "Re-approve", then "PC is quiet" when you can leave the PC for about an hour.
+**4. What to tell Claude:** "PC is quiet".
 
 ## Pending owner approvals
 

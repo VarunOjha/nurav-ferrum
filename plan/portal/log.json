@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:08d940a35e821425f18bd4e4cfbd716d2da0cb43fe9b625e638ea0e9774c9aaf"
+    "content_hash": "sha256:7660982278df30af3a5111e93d6bea15add61756afe3149e826eaf073be8c79c"
   },
   "entries": [
     {
@@ -5353,6 +5353,31 @@
       "tags": [
         "privacy",
         "WebView2"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-p4-20-reapproval",
+      "date": "2026-10-15",
+      "time": "17:44",
+      "title": "You re-approved the three part pages; the gate is ready",
+      "done": "You re-approved Browser controls, Tab & view manager and Security policy after the permission question. All approvals are up to date again.",
+      "next": "When you can leave the PC alone for about an hour, say \"PC is quiet\" and Claude reruns the end-of-phase gate.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Browser controls, Tab & view manager, Security policy pages",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] approval | three part pages re-approved after p4.20"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]
