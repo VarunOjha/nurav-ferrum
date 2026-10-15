@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:afdcc6f2eb1b1e59a3675b9aed2596276357c5e7dda049ffb92b96d1f1623723"
+    "content_hash": "sha256:f141db26e283dc9cea5ce02f24625230e5e4b01ad212ee531d56a7e9f3ed60e7"
   },
   "items": [
     {
@@ -973,6 +973,22 @@
       "why_it_matters": "SmartScreen now blocks a known phishing page, but Ferrum draws its own generic \"could not be loaded\" panel on top, so you don't see why. Claude recommends a clear Ferrum message saying Microsoft Defender SmartScreen reported the site as unsafe. It should be settled before the Phase 4 review.",
       "status": "answered",
       "answer": "Ferrum's own clear message: Ferrum recognises a SmartScreen block and shows its own panel, with no \"Try again\", before the Phase 4 review (task p4.19).",
+      "answered_on": "2026-10-15",
+      "blocks": [],
+      "category": "Security & privacy",
+      "tags": [
+        "privacy",
+        "WebView2"
+      ]
+    },
+    {
+      "id": "Q-227",
+      "asked": "2026-10-15",
+      "time": "16:33",
+      "question": "Sites can't ask for your camera or microphone: should Ferrum ask you, like Chrome does?",
+      "why_it_matters": "Since task p4.5, camera, microphone, location, notifications and clipboard requests are refused with no message unless the site is ticked in Settings, so sites like video calls fail without saying why.",
+      "status": "answered",
+      "answer": "Chrome-style: a bar with Allow this time, Always allow on this site and Never allow; remembered answers in Settings; no question for plain http pages or another site's frames; closing it 3 times makes a site quiet for a week (task p4.20).",
       "answered_on": "2026-10-15",
       "blocks": [],
       "category": "Security & privacy",

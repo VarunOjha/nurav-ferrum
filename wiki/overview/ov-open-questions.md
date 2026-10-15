@@ -951,3 +951,18 @@ failed load as an error and draws its own panel on top ("This page could not be 
 SmartScreen reported this site as unsafe"), with no "Try again" (Claude recommends this: one consistent Ferrum style,
 and the cause is clear); (b) Ferrum hides its panel for a SmartScreen block, so Microsoft's own warning page shows;
 (c) leave it as it is for now. Not blocking any task; it should be settled before the P4 exit review.
+
+## Q-227 Sites can't ask for the camera or microphone: should Ferrum ask you, like Chrome?
+
+- asked: 2026-10-15 16:33
+- blocking: []
+- status: answered
+- answer: [raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md](../raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md), owner answer (2026-10-15): "Chrome-style (Recommended)": a bar with Allow this time, Always allow on this site and Never allow; remembered answers in Settings; no question for http pages or other-site frames; 3 closes make a site quiet for a week. Decided in adr-0034, planned as task p4.20 before the P4 exit gate.
+
+**Where we are:** found after p4.19, from the owner's question "I will not get prompted for audio, camera
+permissions?". Task p4.5 refuses camera, microphone, location, notifications and clipboard requests without any
+message unless the site is ticked in Settings (p4.17).
+
+**Question:** (a) keep the silent refusal; (b) refuse, but show a notice bar pointing to Settings; (c) a real question
+like Chrome, in one of three forms: Chrome-style (Allow this time, Always allow, Never allow; Claude recommended this),
+Allow or Block remembered, or a question every time with nothing remembered.

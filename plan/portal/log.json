@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f082598298556236fd2d7a635fa42ae3902c23140c449949f630c1322f154b89"
+    "content_hash": "sha256:025947853f36889479cbaf9293732893b514b895074504d1b04f1450c2659051"
   },
   "entries": [
     {
@@ -5227,6 +5227,42 @@
       "tags": [
         "testing",
         "toolchain"
+      ]
+    },
+    {
+      "id": "log-2026-10-15-s07-q227-permission-question",
+      "date": "2026-10-15",
+      "time": "16:35",
+      "title": "You asked for a Chrome-style permission question — new task p4.20",
+      "done": "You noticed sites can't ask for your camera or microphone (they are refused silently). You chose a Chrome-style question: Allow this time, Always allow, Never allow. Claude wrote it down as decision 34 and added task p4.20 to Phase 4, before the end-of-phase gate.",
+      "next": "You approve decision 34 and the changed Phase 4 page; then Claude builds p4.20 and reruns the gate.",
+      "decisions": [
+        {
+          "what": "Sites ask before using the camera, microphone, location, notifications or clipboard, like Chrome",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Decision 34 (permission question)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "Phase 4 page (task p4.20 added)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-15] decide | Q-227 answered: Chrome-style permission question (adr-0034)",
+        "## [2026-10-15] plan | p4.20 added: Chrome-style permission question",
+        "## [2026-10-15] gate | phase-p4-security approval stale after adding p4.20; adr-0034 pending"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "privacy",
+        "approvals"
       ]
     }
   ]

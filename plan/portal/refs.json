@@ -5382,6 +5382,42 @@
       "related": [
         "phase-p4-security"
       ]
+    },
+    {
+      "id": "adr-0034",
+      "kind": "decision",
+      "title": "Decision 34: Sites ask before using your camera and more, like Chrome",
+      "summary": "Sites now ask before using the camera, microphone, location, notifications or clipboard. A bar under the toolbar offers Allow this time, Always allow on this site or Never allow; remembered answers show in Settings.",
+      "status": "Accepted",
+      "related": [
+        "phase-p4-security",
+        "adr-0015",
+        "Q-227",
+        "p4.20"
+      ]
+    },
+    {
+      "id": "Q-227",
+      "kind": "question",
+      "title": "Question Q-227: Should sites ask for your camera, like Chrome?",
+      "summary": "Sites can't ask for your camera or microphone: should Ferrum ask you, like Chrome does? Answer: Chrome-style question (task p4.20).",
+      "status": "Answered",
+      "related": [
+        "phase-p4-security",
+        "adr-0034"
+      ]
+    },
+    {
+      "id": "p4.20",
+      "kind": "task",
+      "title": "P4 task: Sites ask before using your camera and more",
+      "summary": "Sites are refused silently and video calls fail → Ferrum asks you like Chrome and remembers only Always and Never → you decide per site, and Settings shows every remembered answer.",
+      "status": "Waiting for you",
+      "related": [
+        "phase-p4-security",
+        "adr-0034",
+        "Q-227"
+      ]
     }
   ]
 }

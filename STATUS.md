@@ -36,13 +36,14 @@ sources:
   - raw/owner/2026-10-14-s06-p4-18-phase-reapproval.md
   - raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md
   - raw/owner/2026-10-14-s06-p4-17-components-reapproval.md
+  - raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s07
 current_phase: phase-p4-security
-current_task: p4.14
-next_action: "When the owner says the PC is quiet (other big programs closed, about an hour, internet on): pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence on a clean commit (the first run, 2026-10-15 13:10, was stopped by Claude Code for low memory during the release build; rustls and the p4.7 check are fixed since). Then record the gate log entry, set phase-p4-security to gate-review, and stop for the owner's review with docs/testing/manual-checklist-p4.md (no P5 work). Known: lint:wiki reports one RAW-IMMUTABLE error (commit ff7292e MANIFEST order), the gate reports it as WAIT on Q-221. p2.12's check builds into target/release: do not run it while the owner's Ferrum runs from there. Owed from P3: end-check rerun (pwsh -NoProfile -File scripts/gates/p3-gate.ps1 -SaveEvidence, about 35 minutes, PC quiet; note that it builds into target/release), checklist items 1 to 20 with the owner's Ferrum notes, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+current_task: p4.20
+next_action: "Ask the owner to approve adr-0034 (Chrome-style permission question, owner answer Q-227) and re-approve phase-p4-security (task p4.20 added); record with tools/approvals_record.py. Then build p4.20 (write-ahead In-flight first; research note on WebView2 permission deferral; tests switch on no camera or microphone; never build into target/release). Then the full P4 gate rerun when the owner says the PC is quiet: pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence on a clean commit; gate log entry; phase gate-review; stop for the owner's review (no P5). Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
+blocked_on: [adr-0034, phase-p4-security]
 last_handoff: handoff-2026-10-15-s07
 ---
 
@@ -369,6 +370,7 @@ manual checklist items 1 to 20 are still owed).
 - intent: write raw/evidence/phase-p4-security/shared-resources.md from the p4.7 and p4.15 observations; fill scripts/gates/p4-gate.ps1 (approvals, every task check, test-gate rows with one evidence file each, release build in its own folder target/gate-release, wiki check that reports the known ff7292e error as waiting on Q-221, the owner's part) and scripts/verify/p4.14-gate-review.ps1; align the p4.16 wording on the phase page with the narrower ablation the owner accepted (stales the phase approval: asked at the review); docs/testing/manual-checklist-p4.md for the owner; run the gate when the PC can be left alone; set the phase to gate-review; stop for the owner's review
 - planned paths: wiki/raw/evidence/phase-p4-security/ (shared-resources.md, p4-gate outputs, manual-checklist.md after the owner's answers), scripts/gates/p4-gate.ps1, scripts/verify/p4.14-gate-review.ps1, docs/testing/manual-checklist-p4.md, wiki/phases/phase-p4-security.md, wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
 - added (owner answer 2026-10-15, raw/owner/2026-10-15-s07-p4-14-rustls-and-gate-later.md): rustls 0.23.45 -> 0.23.46 in the test server (tests/fixtures/server/Cargo.toml, Cargo.lock), separate commit; p4.7 recheck; then the full gate rerun on one commit when the owner says the PC is quiet
+- paused (owner answer Q-227, 2026-10-15): the gate rerun waits for the new task p4.20 (Chrome-style permission question, adr-0034), which waits for the owner's approval of adr-0034 and phase-p4-security
 - builds: target/debug, target/gate-release, target/security-static, target/bench (never target/release, where the owner's Ferrum runs)
 - rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
@@ -406,15 +408,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 3 | Done and signed off; end check rerun still owed |
-| Phase 4 (security) | 18 of 19 tasks done; the exit gate (p4.14) next |
-| Your Ferrum notes | Whenever you are ready |
+| Phase 4 (security) | 18 of 20 tasks done; new task p4.20 (sites ask before using the camera and more, like Chrome) |
+| Your approval | The new decision page and the changed Phase 4 page |
+| End-of-phase check | Rerun after p4.20, when the PC is quiet |
 
-**2. Why, and what it does.** Nothing to run; Claude continues with P4, task by task, and stops for your review when P4 is done.
+**2. Why, and what it does.** Nothing to run; you approve the two pages in Claude Code, then Claude builds p4.20.
 
 **3. The script:** none now.
 
-**4. What to tell Claude:** your Ferrum notes at any time, and "Quiet now" when you can leave the PC for about 35 minutes.
+**4. What to tell Claude:** "Approve both", or what to change.
 
 ## Pending owner approvals
 
@@ -425,4 +427,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-14, session s06 (P4 continues after the PC shut down overnight; session s05 ended without a handoff, nothing lost). Last handoff: [handoff-2026-10-14-s06](wiki/operations/handoffs/handoff-2026-10-14-s06.md) (partial).
+2026-10-15, session s07 (Q-227 answered: Chrome-style permission question, task p4.20 added before the P4 exit gate). Last handoff: [handoff-2026-10-15-s07](wiki/operations/handoffs/handoff-2026-10-15-s07.md) (partial).

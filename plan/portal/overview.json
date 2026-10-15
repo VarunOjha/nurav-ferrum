@@ -2,12 +2,12 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 18 of 19 tasks done. Two small fixes are in; the end-of-phase gate is ready to run again when you can leave the PC alone for about an hour.",
+  "summary": "Phase 4 (security) is in progress: 18 of 20 tasks done. You asked for a Chrome-style permission question; it is new task p4.20 and waits for your approval, then the end-of-phase gate reruns.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:0f9e65e0ad298423437defa521c874a5f2e0d88406441c4e8f8c77b0497d4b9b"
+    "content_hash": "sha256:68d82c1a732504ee52fc3845f0ef71d45dca39a4f4c3c0fe3fd0a4947cebf283"
   },
-  "updated": "2026-10-14",
+  "updated": "2026-10-15",
   "where_we_are": [
     {
       "item": "Current phase",
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "comp-app-shell"
+      "state": "Decision 34 and the Phase 4 page wait for your approval",
+      "ref": "adr-0034"
     },
     {
       "item": "Your rule",
@@ -39,20 +39,20 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "18 of 19 tasks done"
+        "state": "18 of 20 tasks done"
       },
       {
-        "item": "Gate",
-        "state": "Ready to rerun (first run stopped for low memory)"
+        "item": "New task p4.20",
+        "state": "Sites ask before using your camera and more, like Chrome"
       },
       {
-        "item": "Fixes since",
-        "state": "Test server library updated; one check corrected"
+        "item": "Your approval",
+        "state": "Decision 34 and the changed Phase 4 page"
       }
     ],
-    "why": "The gate reruns every Phase 4 check and earlier test on one commit and builds the release program. Some tests press real keys, so the PC must be left alone; closing other big programs gives it enough memory.",
+    "why": "Nothing to run. You approve the two pages in Claude Code; then Claude builds p4.20 and, when the PC is quiet, reruns the end-of-phase gate.",
     "script": null,
-    "tell_claude": "PC is quiet"
+    "tell_claude": "Approve both"
   },
   "questions_for_you": {
     "open": 19,

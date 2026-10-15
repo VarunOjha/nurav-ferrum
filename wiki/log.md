@@ -2910,3 +2910,27 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: rustls 0.23.45 -> 0.23.46 in tests/fixtures/server (owner answer); cargo deny check all ok; fixture-server tests 9 passed. The p4.7 gate failure was a bug in its check: the filter 'isolation' also ran isolation-modes.spec (since p4.15), so 8 tests passed where the check expected '4 passed'; filter now isolation.spec; p4.7 check PASS 3/3. No product code changed. Ready for the full gate rerun when the owner says the PC is quiet.
 - commit: f455e36, b1d6856
 - next: full P4 gate rerun (pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence) when the owner says the PC is quiet
+
+## [2026-10-15] decide | Q-227 answered: Chrome-style permission question (adr-0034)
+
+- session: s07
+- time: 16:35
+- pages: [adr-0034, ov-open-questions]
+- sources: [raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md]
+- result: The owner asked whether sites can ask for the camera or microphone (they are refused silently since p4.5) and then "Can we change and make it like Chrome please". Q-227 asked and answered: "Chrome-style (Recommended)". adr-0034 records the quoted choice (accepted under SCHEMA §10.4 rule 3(b)) and Claude's elaboration (five kinds asked; no question for http pages, other-site frames, never sites, quiet sites; Allow this time, Always allow, Never allow, close; private tabs save nothing; tests switch on no camera or microphone), binding once the owner approves adr-0034. adr-0015 rule 7 unchanged.
+
+## [2026-10-15] plan | p4.20 added: Chrome-style permission question
+
+- session: s07
+- time: 16:35
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md]
+- result: Task p4.20 added to the P4 page (deliverable, task with verify field, step order after p4.17 and before p4.11; the security suite is rerun by the gate). Manual gate item 3 now checks the question instead of the silent refusal. The gate rerun waits for p4.20. Stales approval of phase-p4-security.
+- stales: [phase-p4-security]
+
+## [2026-10-15] gate | phase-p4-security approval stale after adding p4.20; adr-0034 pending
+
+- session: s07
+- time: 16:35
+- pages: [phase-p4-security, adr-0034]
+- result: Both are in P4's dependency set; p4.20 waits for the owner's approval of adr-0034 and re-approval of phase-p4-security (SCHEMA §10.4). blocked_on set.

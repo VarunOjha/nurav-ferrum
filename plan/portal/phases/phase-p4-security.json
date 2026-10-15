@@ -7,7 +7,7 @@
   "status": "In progress",
   "progress": {
     "done": 18,
-    "total": 19
+    "total": 20
   },
   "step_order": [
     "Threat model",
@@ -197,6 +197,17 @@
       "script": "scripts/verify/p4.19-smartscreen-message.ps1"
     },
     {
+      "id": "p4.20",
+      "title": "Sites ask before using your camera and more",
+      "what": "A bar under the toolbar asks before a site uses the camera, microphone, location, notifications or clipboard: Allow this time, Always allow, Never allow.",
+      "why": "Today these requests are refused with no message, so sites like video calls just fail and you can't tell why.",
+      "how": "Ferrum holds the site's request, shows its own bar with the site's name, and saves Always and Never answers in Settings.",
+      "status": "Waiting for you",
+      "chain": "Sites are refused silently and video calls fail → Ferrum asks you like Chrome and remembers only Always and Never → you decide per site, and Settings shows every remembered answer.",
+      "check": "Tests with harmless test pages click every button; the camera and microphone are only tested being refused, so they never switch on.",
+      "script": null
+    },
+    {
       "id": "p4.12",
       "title": "Design the cost experiments",
       "what": "Small timing tests for the rules engine and permission checks, plus finished designs for the two security-cost experiments.",
@@ -279,7 +290,7 @@
       },
       {
         "check": "Your checks",
-        "proves": "You read the threat model, blocked a site, saw a camera or location request denied, and kept a downloaded program through Microsoft's pop-up."
+        "proves": "You read the threat model, blocked a site, saw Ferrum's question for a camera or location request (Never refuses, Allow this time works), and kept a downloaded program through Microsoft's pop-up."
       }
     ],
     "script": "scripts/gates/p4-gate.ps1"
@@ -292,6 +303,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p4-security.md",
-    "content_hash": "sha256:598274cdc2d8124534208287c5a3b28220a34289310a3827188f5af77be4e96f"
+    "content_hash": "sha256:f81393ab72ecbfb6c562bc12648eebc823e552fd4bccecd6fc876f41487b6c7b"
   }
 }

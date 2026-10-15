@@ -14,7 +14,8 @@ sources:
   - raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md
   - raw/research/smartscreen-webview2.md
   - raw/owner/2026-10-14-s06-p4-16-reapproval-and-mishap.md
-related: [phase-p3-tabs-sessions, phase-p5-telemetry, phase-p6-benchmark-harness, comp-security-engine, comp-webview-manager, comp-app-shell, risk-r01, risk-r03, adr-0010, adr-0015, exp-security-overhead, exp-isolation-overhead]
+  - raw/owner/2026-10-15-s07-q227-permission-question-chrome-style.md
+related: [phase-p3-tabs-sessions, phase-p5-telemetry, phase-p6-benchmark-harness, comp-security-engine, comp-webview-manager, comp-app-shell, risk-r01, risk-r03, adr-0010, adr-0015, adr-0034, exp-security-overhead, exp-isolation-overhead]
 approvable: true
 phase: phase-p4-security
 tags: [milestone-m3, security, threat-model, policy, permissions, isolation]
@@ -41,6 +42,7 @@ deliverables:
   - "Settings UI for blocklist and per-site permission grants (p4.17)."
   - "SmartScreen switched back on in every WebView2 environment, with a research note on what it checks and sends (p4.18, owner answer Q-225)."
   - "Ferrum's own message when SmartScreen blocks a site, instead of the generic load-error panel (p4.19, owner answer Q-226)."
+  - "A Chrome-style question before a site may use the camera, microphone, location, notifications or clipboard, with remembered answers in Settings (p4.20, owner answer Q-227, adr-0034)."
   - "Designs (not results) for exp-security-overhead and exp-isolation-overhead, with microbenchmark harnesses."
 tasks:
   - id: p4.1
@@ -91,6 +93,9 @@ tasks:
   - id: p4.19
     title: "Ferrum's own SmartScreen block message (owner answer Q-226): when SmartScreen blocks a page, the shell shows 'Microsoft Defender SmartScreen reported this site as unsafe' instead of the generic 'could not be loaded' panel, with no 'Try again'"
     verify: "Live test opens Microsoft's demo phishing page (raw/research/smartscreen-webview2.md, 4.2) in the per-site and per-site-udf modes and asserts the SmartScreen panel text and no 'Try again' button; a page that fails for another reason (unreachable test address) still shows the generic panel with 'Try again'; the block is logged; shell unit test for the panel text."
+  - id: p4.20
+    title: "Chrome-style permission question (owner answer Q-227, adr-0034): camera, microphone, location, notifications and clipboard requests wait for Allow this time, Always allow on this site or Never allow in a bar under the toolbar; remembered answers in Settings; no question for http pages, other-site frames, 'never' sites or a site quiet after 3 closes"
+    verify: "A research note in raw/research (access dates) confirms that WebView2 can hold a permission request until it is answered and reports the asking frame's origin; unit tests for the decision (question, allow once, always, never, quiet time, http page, other-site frame, private tab); live tests with harmless test pages: the bar appears with the site's name, Allow this time and Always allow grant notifications and the clipboard (Always allow then shows in Settings and needs no new question), Never allow and close refuse (also for the camera, which is never switched on), an http page and another site's frame get no bar, navigating away refuses the waiting request, a private tab saves nothing; every case is in the security log."
   - id: p4.12
     title: "Overhead experiment design: microbenchmark harness for policy evaluation latency and permission-check overhead; designs for exp-security-overhead and exp-isolation-overhead finalised for P6 campaigns"
     verify: "Microbenchmarks run and save raw output as evidence of harness operation only (no claims); experiment pages updated with workloads, metrics and analysis plan; owner approves them."
@@ -117,7 +122,7 @@ test_gate:
   manual:
     - "Owner reads the threat model and SECURITY.md and confirms the 'not enforced' list is acceptable."
     - "Owner adds a domain to the blocklist through settings and confirms it is blocked, including via a link from another site."
-    - "Owner triggers a camera or location prompt on a real site and confirms the default deny."
+    - "Owner triggers a camera or location request on a real site, sees Ferrum's question, and checks that Never allow refuses and Allow this time works (p4.20, owner answer Q-227)."
     - "Owner downloads a program file in Ferrum, answers Keep in Microsoft's download pop-up and confirms the download finishes (p4.18, owner answer: fix A)."
   evidence:
     - raw/evidence/phase-p4-security/cargo-clippy.txt
@@ -204,6 +209,8 @@ flowchart LR
   p4_15 --> p4_18["p4.18 SmartScreen back on"]
   p4_18 --> p4_19["p4.19 SmartScreen message"]
   p4_19 --> p4_11
+  p4_17 --> p4_20["p4.20 permission question"]
+  p4_20 --> p4_11
   p4_7 --> p4_11["p4.11 security suite"]
   p4_8 --> p4_11
   p4_9 --> p4_11
@@ -213,7 +220,7 @@ flowchart LR
   p4_13["p4.13 literature batch 4"] --> p4_14
 ```
 
-The threat model comes first so that every later task can be traced to a threat it mitigates. Task ids are stable identifiers, not an ordering: p4.15 to p4.17 were added after review and slot in before p4.11 as the diagram shows; p4.18 was added during P4 (owner answer Q-225, [raw](../raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md)), and p4.19 after it (owner answer Q-226, [raw](../raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md)).
+The threat model comes first so that every later task can be traced to a threat it mitigates. Task ids are stable identifiers, not an ordering: p4.15 to p4.17 were added after review and slot in before p4.11 as the diagram shows; p4.18 was added during P4 (owner answer Q-225, [raw](../raw/owner/2026-10-14-s06-p4-15-reapproval-and-q225.md)), and p4.19 after it (owner answer Q-226, [raw](../raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md)). p4.20 was added after p4.13, before the exit gate (owner answer Q-227, [adr-0034](../decisions/adr-0034-permission-question-chrome-style.md)); it changes p4.5's silent refusal into a question, so the security suite (p4.11) is rerun by the gate.
 
 ## Checkpoints and interruption recovery
 
