@@ -406,11 +406,95 @@ fn site_permission_grants_are_read_checked_and_saved() {
         assert_eq!(PermissionKind::from_name(k.name()), Some(k));
         let text = toml::to_string(&ferrum_core::config::SiteSettings {
             site: "example.com".into(),
-            profile: None,
             permissions: vec![k],
+            ..Default::default()
         })
         .unwrap();
         assert!(text.contains(&format!("\"{}\"", k.name())), "{text}");
     }
     assert_eq!(PermissionKind::from_name("everything"), None);
+}
+
+// --- p4.20: "never" answers and closed questions (adr-0034) ---
+
+#[test]
+fn never_answers_and_closed_questions_are_read_checked_and_saved() {
+    use ferrum_core::config::{ClosedQuestion, PermissionKind};
+    let p = tmp(
+        "answers.toml",
+        "version = 4
+[[sites]]
+site = \"example.com\"
+permissions = [\"camera\"]
+never = [\"geolocation\"]
+         [[sites.closed]]
+kind = \"notifications\"
+count = 3
+quiet_until = 1800000000
+",
+    );
+    let l = config::load(Some(&p), None).unwrap();
+    let s = &l.config.sites[0];
+    assert_eq!(s.never, vec![PermissionKind::Geolocation]);
+    assert_eq!(
+        s.closed,
+        vec![ClosedQuestion {
+            kind: PermissionKind::Notifications,
+            count: 3,
+            quiet_until: 1_800_000_000
+        }]
+    );
+    let out = tmp("answers-saved.toml", "");
+    config::save(&out, &l.config).unwrap();
+    assert_eq!(config::load(Some(&out), None).unwrap().config, l.config);
+    // A kind cannot be both allowed and never allowed; one closed-question record per kind.
+    let both = tmp(
+        "answers-both.toml",
+        "version = 4
+[[sites]]
+site = \"example.com\"
+permissions = [\"camera\"]
+never = [\"camera\"]
+",
+    );
+    let e = config::load(Some(&both), None).unwrap_err().to_string();
+    assert!(e.contains("both allowed and never allowed"), "{e}");
+    let twice = tmp(
+        "answers-twice.toml",
+        "version = 4
+[[sites]]
+site = \"example.com\"
+         [[sites.closed]]
+kind = \"camera\"
+count = 1
+[[sites.closed]]
+kind = \"camera\"
+count = 2
+",
+    );
+    let e = config::load(Some(&twice), None).unwrap_err().to_string();
+    assert!(e.contains("listed twice"), "{e}");
+    // A version-3 file (no answers yet) is read as before and saved as version 4.
+    let v3 = tmp(
+        "answers-v3.toml",
+        "version = 3
+[[sites]]
+site = \"example.com\"
+",
+    );
+    let l = config::load(Some(&v3), None).unwrap();
+    assert_eq!(l.config.version, config::VERSION);
+    assert!(l.config.sites[0].never.is_empty() && l.config.sites[0].closed.is_empty());
+    assert_eq!(config::VERSION, 4);
+    // The five kinds Ferrum asks about.
+    assert_eq!(
+        PermissionKind::ASKED.map(PermissionKind::name),
+        [
+            "camera",
+            "microphone",
+            "geolocation",
+            "notifications",
+            "clipboard-read"
+        ]
+    );
 }

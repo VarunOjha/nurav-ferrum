@@ -74,15 +74,17 @@ pub enum TabEvent {
         /// Caused by a user gesture.
         user_initiated: bool,
     },
-    /// A page asked for a permission (camera, location, ...; p4.5) and the app decided. WebView2 does not keep the
-    /// answer in the profile.
+    /// A page asked for a permission (camera, location, ...; p4.5) and the app decided, or (p4.20) the request waits
+    /// for the user's answer. WebView2 does not keep the answer in the profile.
     PermissionRequested {
         /// The address of the page (or frame) that asked.
         uri: String,
         /// The kind's settings name (`camera`, ...), or `unknown`.
         kind: String,
-        /// Whether it was allowed.
+        /// Whether it was allowed (false while it waits).
         allowed: bool,
+        /// The request waits for the user's answer (p4.20).
+        waiting: bool,
     },
     /// A WebView2 process this view depends on failed (p4.10). For a renderer failure the view stays usable: a reload
     /// (or any navigation) starts a new renderer. For [`ProcessFailure::BrowserExited`] every view of the environment is
@@ -196,6 +198,8 @@ pub struct NavRequest {
 /// A permission request as the app sees it (p4.5).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PermissionAsk {
+    /// The request's number (p4.20): answer a waiting request with `webview2::answer_permission(id, ..)`.
+    pub id: u64,
     /// The address of the page (or frame) that asked.
     pub uri: String,
     /// The kind's settings name (`camera`, `clipboard-read`, ...; the names of `ferrum_core::config::PermissionKind`),
@@ -203,6 +207,17 @@ pub struct PermissionAsk {
     pub kind: Option<&'static str>,
     /// Caused by a user gesture.
     pub user_initiated: bool,
+}
+
+/// The app's reply to a permission request (p4.20).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PermissionReply {
+    /// The page gets it now.
+    Allow,
+    /// The page is refused now.
+    Deny,
+    /// The request waits (WebView2 deferral) until the app answers it or the view closes.
+    Wait,
 }
 
 /// A key pressed while a tab view had focus, as WebView2 reports it before the page sees it (accelerator keys:

@@ -13,6 +13,8 @@ pub mod permissions;
 pub mod policy;
 pub mod rules;
 
-pub use permissions::{Grants, PermissionDecision, PermissionRule};
+pub use permissions::{
+    Grants, PermissionContext, PermissionDecision, PermissionRule, PermissionVerdict,
+};
 pub use policy::{Context, Decision, Policy, Request, RuleId, Verdict, evaluate};
 pub use rules::{HostRule, RuleError, RuleList};

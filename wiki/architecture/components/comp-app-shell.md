@@ -310,6 +310,19 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   (security engine), logs it and notes a refusal on the toolbar ("Blocked: camera for example.com (allow it in
   Settings)"). The settings screen's site rows carry the grants (`SiteRow.permissions`; left out, the site keeps its
   grants), so saving the screen never drops them.
+- p4.20, the permission question (adr-0034, owner answers Q-227 and Q-228): `permission_question::filter` replaces
+  `policy::permission_filter`. A request the engine decides "ask" waits, and the shell gets link events
+  `permission-ask` (tab, site, kinds, private) and `permission-done`. The bar `#perm-bar` in the top band shows the
+  active tab's question (`questionText`: "example.com wants to use your camera and microphone"; the site name is
+  Ferrum's), with Allow this time, Always allow on this site, Never allow and × (private tab: Allow this time and
+  Block). The shell answers with the command `permission_answer(tab, answer)` (capability `shell.json` only; the IPC
+  probe's `permission_command` checks a website is refused): every waiting request of the tab gets the answer;
+  `always`/`never`/`close` change the site's settings entry through `settings::update_site` (checked, saved
+  atomically, applied); this-time answers stay with the tab until it leaves the site, loads the same address again or
+  closes. The navigation gate refuses waiting requests when the tab starts loading a page
+  (`permission_question::on_page_load`, audited `permission-question` / `permission-page-left`). Settings rows gained a
+  "never" box per kind (`SiteRow.never`; ticking allow or never unticks the other); changing a site's permissions
+  ends its quiet times. Refusals go into the audit log; asked and allowed requests into the app log.
 - p4.6, downloads: the host saves under the security engine's cleaned name and sends `program: true` for program
   types; the download line then shows "⚠ Program file: open it only if you trust the site". Nothing in Ferrum opens a
   downloaded file.

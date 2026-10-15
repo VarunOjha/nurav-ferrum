@@ -122,6 +122,18 @@ reached Ferrum on this PC. Tests: three engine tests (coverage still 100 percent
 spec `permissions` (4 passed), check script `scripts/verify/p4.5-permission-prompts.ps1`. The settings screen edits
 the grants since p4.17 (below).
 
+**p4.20, the permission question** ([adr-0034](../../decisions/adr-0034-permission-question-chrome-style.md), owner
+answers Q-227 and Q-228). `Grants::decide(origin, kind, &PermissionContext { page, now, once })` returns a
+`PermissionDecision { verdict, rule }` with verdict `Allow`, `Deny` or `Ask`. Order: unknown kind; not an `https:` site
+(`permission-not-secure-site`); a reported site other than the tab page's (`permission-other-site-frame`); "never"
+(`[[sites]] never`, `permission-never`); granted (`permission-granted`); the tab's this-time answers
+(`permission-allowed-once`, `permission-blocked-once`); a kind outside the five asked kinds
+(`PermissionKind::ASKED`: camera, microphone, geolocation, notifications, clipboard-read) is `permission-not-granted`;
+a quiet site (`[[sites]] closed`, `permission-quiet`); otherwise `Ask` (`permission-ask`). Settings version 4 adds
+`never` and `closed` (`ClosedQuestion { kind, count, quiet_until }`; 3 closes in a row give 7 quiet days); a kind cannot
+be both allowed and never. Tests: six engine tests, one settings test, check script
+`scripts/verify/p4.20-permission-question.ps1` ([check-p4.20](../../raw/evidence/phase-p4-security/check-p4.20.txt)).
+
 **p4.6, downloads** ([crates/security/src/downloads.rs](../../../crates/security/src/downloads.rs)).
 `clean_file_name` keeps only the last part of a site's file name and removes control, invisible and
 direction-changing characters, replaces the characters Windows forbids with `_`, drops trailing dots and spaces, puts

@@ -1,7 +1,7 @@
 // Unit tests of the shell's pure decisions (node --test; Node runs TypeScript files directly).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { isSmartScreenBlock, SMARTSCREEN_TEXT, insecureBarText, mergePermissions, PERMISSION_CHOICES, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
+import { isSmartScreenBlock, SMARTSCREEN_TEXT, insecureBarText, mergePermissions, PERMISSION_CHOICES, questionText, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, linesOf, lockFor, matchesWords, shortcutFor, showedPage, sizeText, suggestionGroups, tabLabel, webErrorText, wordsOf, WEB_ERROR_CANCELLED } from "./logic.ts";
 
 test("a loaded page: state loaded, no panel, lock allowed", () => {
   assert.deepEqual(finished(true, 200, 0), { state: "loaded", status: "", pageLoaded: true, panel: false });
@@ -215,4 +215,16 @@ test("a SmartScreen block: failed although the server answered 200, connection a
   assert.equal(isSmartScreenBlock(false, 0, WEB_ERROR_CANCELLED), false);
   assert.equal(isSmartScreenBlock(true, 200, 0), false);
   assert.match(SMARTSCREEN_TEXT, /^Microsoft Defender SmartScreen reported this site as unsafe\./);
+});
+
+test("the permission question names the site and what it wants (p4.20)", () => {
+  assert.equal(questionText("example.com", ["camera"]), "example.com wants to use your camera");
+  assert.equal(questionText("example.com", ["microphone", "camera"]), "example.com wants to use your camera and microphone");
+  assert.equal(questionText("maps.example", ["geolocation"]), "maps.example wants to know your location");
+  assert.equal(
+    questionText("example.com", ["notifications", "camera", "clipboard-read"]),
+    "example.com wants to use your camera, show notifications and read your clipboard",
+  );
+  assert.equal(questionText("", ["notifications"]), "This page wants to show notifications");
+  assert.equal(questionText("example.com", []), "example.com wants to use a permission");
 });

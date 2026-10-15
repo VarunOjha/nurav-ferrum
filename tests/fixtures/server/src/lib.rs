@@ -242,14 +242,25 @@ struct Target {
     src: Option<String>,
     href: Option<String>,
     url: Option<String>,
+    /// p4.20: the frame's `allow` attribute (permissions the page delegates to it), letters, `-`, `;` and spaces only.
+    allow: Option<String>,
 }
 
 async fn frame(Query(q): Query<Target>) -> Response {
+    let allow = q
+        .allow
+        .as_deref()
+        .filter(|a| {
+            a.chars()
+                .all(|c| c.is_ascii_lowercase() || "-; ".contains(c))
+        })
+        .map(|a| format!(" allow=\"{a}\""))
+        .unwrap_or_default();
     match q.src.as_deref().and_then(safe_target) {
         Some(src) => page(
             "Frame",
             &format!(
-                "<iframe id=\"frame\" src=\"{src}\" style=\"width:90%;height:300px\"></iframe>"
+                "<iframe id=\"frame\" src=\"{src}\"{allow} style=\"width:90%;height:300px\"></iframe>"
             ),
         )
         .into_response(),
@@ -698,6 +709,8 @@ const IPC_PROBE: &str = r#"<p id="r">probing</p><script>
     r.private_tab_command = await tryCall("tab_new_private", { url: null });
     r.site_clear_command = await tryCall("site_data_clear", { site: "localhost" });
     r.processes_command = await tryCall("test_processes");
+    // p4.20: a page must not answer its own permission question.
+    r.permission_command = await tryCall("permission_answer", { tab: 1, answer: "always" });
     r.plugin_app = await tryCall("plugin:app|version");
     r.plugin_path = await tryCall("plugin:path|resolve_directory", { directory: 1 });
     r.plugin_webview = await tryCall("plugin:webview|get_all_webviews");

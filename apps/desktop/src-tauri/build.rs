@@ -58,6 +58,7 @@ fn main() {
             "external_cancel",
             "cross_site_confirm",
             "cross_site_cancel",
+            "permission_answer",
         ]),
     ))
     .expect("Tauri build step failed");

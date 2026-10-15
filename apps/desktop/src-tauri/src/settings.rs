@@ -25,6 +25,9 @@ pub struct SiteRow {
     /// Permissions granted to the site (p4.5), by settings name (`camera`, ...). Missing: keep what the site has.
     #[serde(default)]
     pub permissions: Option<Vec<String>>,
+    /// Permissions the site may never use (p4.20, "Never allow"), by settings name. Missing: keep what the site has.
+    #[serde(default)]
+    pub never: Option<Vec<String>>,
 }
 
 /// What the settings screen shows and edits.
@@ -64,6 +67,7 @@ fn view_of(app: &AppHandle, c: &Config) -> SettingsView {
                 site: s.site.clone(),
                 profile: s.profile.clone().unwrap_or_default(),
                 permissions: Some(s.permissions.iter().map(|k| k.name().to_string()).collect()),
+                never: Some(s.never.iter().map(|k| k.name().to_string()).collect()),
             })
             .collect(),
         download_folder: c
@@ -122,14 +126,10 @@ pub fn apply(current: &Config, input: &SettingsView) -> Result<Config, Vec<Strin
         .filter(|r| !r.site.trim().is_empty())
         .map(|r| {
             let site = r.site.trim().to_ascii_lowercase();
-            let permissions = match &r.permissions {
-                // The screen did not send them: the site keeps its grants.
-                None => current
-                    .sites
-                    .iter()
-                    .find(|c| c.site == site)
-                    .map(|c| c.permissions.clone())
-                    .unwrap_or_default(),
+            let before = current.sites.iter().find(|c| c.site == site);
+            let mut kinds = |sent: &Option<Vec<String>>, kept: Vec<PermissionKind>| match sent {
+                // The screen did not send them: the site keeps what it has.
+                None => kept,
                 Some(names) => names
                     .iter()
                     .filter_map(|n| {
@@ -143,10 +143,25 @@ pub fn apply(current: &Config, input: &SettingsView) -> Result<Config, Vec<Strin
                     })
                     .collect(),
             };
+            let permissions = kinds(
+                &r.permissions,
+                before.map(|c| c.permissions.clone()).unwrap_or_default(),
+            );
+            let never = kinds(
+                &r.never,
+                before.map(|c| c.never.clone()).unwrap_or_default(),
+            );
+            // p4.20 (adr-0034): changing a site's permissions ends its quiet times.
+            let closed = match before {
+                Some(c) if c.permissions == permissions && c.never == never => c.closed.clone(),
+                _ => Vec::new(),
+            };
             SiteSettings {
                 site,
                 profile: Some(r.profile.trim().to_string()).filter(|p| !p.is_empty()),
                 permissions,
+                never,
+                closed,
             }
         })
         .collect();
@@ -221,6 +236,47 @@ pub fn app_notes(app: AppHandle) -> Vec<String> {
     notes
 }
 
+/// Changes `site`'s entry in the settings (p4.20: an answer to the permission question), creating the entry when the
+/// site has none, then checks, saves and applies the settings like the settings screen does. An entry this creates and
+/// leaves empty is not kept.
+pub fn update_site(
+    app: &AppHandle,
+    site: &str,
+    change: impl FnOnce(&mut SiteSettings),
+) -> Result<(), String> {
+    let current = app.state::<AppConfig>().get();
+    let mut next = current.clone();
+    let i = match next.sites.iter().position(|s| s.site == site) {
+        Some(i) => i,
+        None => {
+            next.sites.push(SiteSettings {
+                site: site.to_string(),
+                ..SiteSettings::default()
+            });
+            next.sites.len() - 1
+        }
+    };
+    change(&mut next.sites[i]);
+    if next.sites[i]
+        == (SiteSettings {
+            site: site.to_string(),
+            ..SiteSettings::default()
+        })
+        && !current.sites.iter().any(|s| s.site == site)
+    {
+        next.sites.remove(i);
+    }
+    if next == current {
+        return Ok(());
+    }
+    let path = user_file(app)?;
+    let loaded = config::validate(next).map_err(|e| e.to_string())?;
+    config::save(&path, &loaded.config).map_err(|e| e.to_string())?;
+    tracing::info!(target: "ferrum::config", config_hash = %config::hash(&loaded.config), "settings saved from a permission answer");
+    *app.state::<AppConfig>().0.write().unwrap() = loaded;
+    Ok(())
+}
+
 /// Saves the settings from the settings screen: everything is checked first; then the user settings file is written
 /// in one step and the new settings apply. On any problem nothing changes and the problems are returned.
 #[tauri::command]
@@ -285,6 +341,60 @@ mod tests {
         // An empty list clears it.
         let next = apply(&current, &input(&current, Some(vec![]))).unwrap();
         assert!(next.security.blocklist.is_empty());
+    }
+
+    #[test]
+    fn never_answers_travel_with_the_row_and_quiet_times_end_when_permissions_change() {
+        use ferrum_core::config::ClosedQuestion;
+        let mut current = Config::default();
+        current.sites.push(SiteSettings {
+            site: "example.com".into(),
+            permissions: vec![PermissionKind::Notifications],
+            never: vec![PermissionKind::Camera],
+            closed: vec![ClosedQuestion {
+                kind: PermissionKind::Geolocation,
+                count: 0,
+                quiet_until: 4_000_000_000,
+            }],
+            ..SiteSettings::default()
+        });
+        let row = |permissions: Option<Vec<&str>>, never: Option<Vec<&str>>| SiteRow {
+            site: "example.com".into(),
+            profile: String::new(),
+            permissions: permissions.map(|p| p.into_iter().map(String::from).collect()),
+            never: never.map(|p| p.into_iter().map(String::from).collect()),
+        };
+        let with = |r: SiteRow| SettingsView {
+            sites: vec![r],
+            ..input(&current, None)
+        };
+        // Not sent, or sent unchanged: everything is kept, quiet times too.
+        for r in [
+            row(None, None),
+            row(Some(vec!["notifications"]), Some(vec!["camera"])),
+        ] {
+            let next = apply(&current, &with(r)).unwrap();
+            assert_eq!(next.sites, current.sites);
+        }
+        // "never" undone in the screen: the answers change, and the quiet times end.
+        let next = apply(&current, &with(row(None, Some(vec![])))).unwrap();
+        assert!(next.sites[0].never.is_empty());
+        assert!(next.sites[0].closed.is_empty());
+        assert_eq!(
+            next.sites[0].permissions,
+            vec![PermissionKind::Notifications]
+        );
+        // A kind both allowed and never allowed is refused.
+        let e = apply(
+            &current,
+            &with(row(Some(vec!["camera"]), Some(vec!["camera"]))),
+        )
+        .unwrap_err();
+        assert!(
+            e.iter()
+                .any(|p| p.contains("both allowed and never allowed")),
+            "{e:?}"
+        );
     }
 
     #[test]

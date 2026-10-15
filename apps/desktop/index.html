@@ -47,6 +47,16 @@
         <button id="bm-remove" type="button">Remove</button>
         <span id="bm-error" role="alert"></span>
       </div>
+      <!-- The permission question (p4.20, adr-0034): a site asks for the camera, microphone, location, notifications or
+           the clipboard. Shown for the active tab only; the site's name is Ferrum's own text. -->
+      <div id="perm-bar" role="alertdialog" aria-labelledby="perm-text" hidden>
+        <span id="perm-text"></span>
+        <button id="perm-once" type="button">Allow this time</button>
+        <button id="perm-always" type="button">Always allow on this site</button>
+        <button id="perm-never" type="button">Never allow</button>
+        <button id="perm-block" type="button" hidden>Block</button>
+        <button id="perm-close" type="button" title="Close (ask again next time)" aria-label="Close">&#x2715;</button>
+      </div>
       <div id="external-bar" role="alertdialog" aria-labelledby="external-text" hidden>
         <span id="external-text">Open this link outside Ferrum?</span>
         <code id="external-uri"></code>

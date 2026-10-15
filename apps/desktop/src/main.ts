@@ -11,7 +11,7 @@ import "@fontsource/ibm-plex-mono/latin-500.css";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { ACCENTS, DENSITIES, THEMES, applyLook } from "./themes.ts";
-import { PERMISSION_CHOICES, PROGRAM_WARNING, SMARTSCREEN_FOLLOW_MS, SMARTSCREEN_TEXT, isSmartScreenBlock, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, insecureBarText, linesOf, lockFor, mergePermissions, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
+import { PERMISSION_CHOICES, questionText, PROGRAM_WARNING, SMARTSCREEN_FOLLOW_MS, SMARTSCREEN_TEXT, isSmartScreenBlock, addressText, agoText, blockedText, bookmarkFolders, canBookmark, crashText, downloadText, finished, highlight, historyLines, iconSrc, insecureBarText, linesOf, lockFor, mergePermissions, shortcutFor, showedPage, suggestionGroups, tabLabel, webErrorText, wordsOf, type Bookmark, type Suggestion, type SuggestionGroup, type ToolbarState } from "./logic.ts";
 
 type TabEvent = { tab: number } & (
   | { kind: "navigation-starting"; id: number; uri: string; user_initiated: boolean; redirected: boolean; allowed: boolean }
@@ -30,7 +30,9 @@ type LinkEvent =
   | { kind: "external-request"; uri: string; scheme: string }
   | { kind: "sign-in-offer"; uri: string }
   | { kind: "blocked"; tab: number; uri: string; why: string; frame?: boolean }
-  | { kind: "cross-site"; tab: number; uri: string; to: string; from: string };
+  | { kind: "cross-site"; tab: number; uri: string; to: string; from: string }
+  | { kind: "permission-ask"; tab: number; uri?: undefined; site: string; kinds: string[]; private: boolean }
+  | { kind: "permission-done"; tab: number; uri?: undefined };
 
 type TabSummary = { id: number; url: string; title: string; loading: boolean; profile: string; can_go_back: boolean; can_go_forward: boolean; private?: boolean };
 type TabList = { active: number | null; tabs: TabSummary[] };
@@ -69,10 +71,13 @@ type TabUi = {
   smartScreenUri: string;
   /** The last web address (http or https) this tab started to load: SmartScreen's warning page is about:blank. */
   lastWebUri: string;
+  /** The permission question waiting in this tab (p4.20), or null. */
+  question: { site: string; kinds: string[]; private: boolean } | null;
 };
 const newUi = (): TabUi => ({
   uri: "", lastUri: "", loading: false, state: "idle", status: "", pageLoaded: false, canBack: false, canForward: false, panel: null,
   icon: "", hadPage: false, downloadAt: 0, blockedNote: "", blockedUri: "", navEvents: 0, smartScreenAt: 0, smartScreenUri: "", lastWebUri: "",
+  question: null,
 });
 /** How long after a download started a failed navigation of its tab counts as "became the download". */
 const DOWNLOAD_GRACE_MS = 3000;
@@ -97,6 +102,8 @@ const extText = $<HTMLSpanElement>("external-text");
 const extUri = $<HTMLElement>("external-uri");
 const extOpen = $<HTMLButtonElement>("external-open");
 const extCancel = $<HTMLButtonElement>("external-cancel");
+const permBar = $<HTMLDivElement>("perm-bar");
+const permText = $<HTMLSpanElement>("perm-text");
 const address = $<HTMLInputElement>("address");
 const form = $<HTMLFormElement>("address-form");
 const back = $<HTMLButtonElement>("back");
@@ -169,6 +176,16 @@ function render(): void {
   insecureBar.textContent = insecure ?? "";
   insecureBar.hidden = insecure === null;
   statusEl.textContent = u?.status ?? "";
+  // The permission question of the active tab (p4.20); another tab's question waits until that tab is shown.
+  const q = u?.question ?? null;
+  if (q) {
+    permText.textContent = questionText(q.site, q.kinds);
+    $<HTMLButtonElement>("perm-always").hidden = q.private;
+    $<HTMLButtonElement>("perm-never").hidden = q.private;
+    $<HTMLButtonElement>("perm-close").hidden = q.private;
+    $<HTMLButtonElement>("perm-block").hidden = !q.private;
+  }
+  permBar.hidden = q === null;
   // The star follows the active tab's page (an event: render can run before the bookmark code below has started).
   document.getElementById("star")?.dispatchEvent(new Event("ferrum-render"));
   renderNewTab();
@@ -390,7 +407,7 @@ await listen<TabEvent>("tab", async (e) => {
 
 await listen<LinkEvent>("link", async (e) => {
   const ev = e.payload;
-  received.push([ev.kind, ev.uri]);
+  received.push([ev.kind, ev.uri ?? ""]);
   document.title = "EVENTS:" + JSON.stringify(received.slice(-200));
   const u = activeUi();
   switch (ev.kind) {
@@ -404,6 +421,13 @@ await listen<LinkEvent>("link", async (e) => {
       break;
     case "cross-site":
       await showCrossSite(ev.uri, ev.to);
+      break;
+    case "permission-ask":
+      // The question belongs to the tab that asked; it shows while that tab is the active one.
+      uiOf(ev.tab).question = { site: ev.site, kinds: ev.kinds, private: ev.private };
+      break;
+    case "permission-done":
+      uiOf(ev.tab).question = null;
       break;
     case "blocked": {
       // The note belongs to the tab that asked (which may no longer be the active one).
@@ -1141,7 +1165,7 @@ setTheme.addEventListener("change", () => void saveAppearance({ theme: setTheme.
 setDensity.addEventListener("change", () => void saveAppearance({ density: setDensity.value }));
 
 // --- Settings (p3.14): shown in the content area; the app checks and saves (settings.rs). ---
-type SiteRow = { site: string; profile: string; permissions?: string[] };
+type SiteRow = { site: string; profile: string; permissions?: string[]; never?: string[] };
 type SettingsView = {
   startup_urls: string[]; restore_on_startup: boolean; sites: SiteRow[]; download_folder: string;
   blocklist?: string[]; default_download_folder: string; isolation: string; file: string;
@@ -1190,12 +1214,15 @@ function siteRow(r: SiteRow): HTMLTableRowElement {
     }
   });
   del.append(clear, b);
-  // p4.17: the site's permissions as check boxes; kinds not shown here are kept (data-previous).
+  // p4.17: the site's permissions as check boxes; kinds not shown here are kept (data-previous). p4.20: a "never" box
+  // per kind shows (and undoes) a "Never allow" answer; ticking one of the two unticks the other.
   const granted = r.permissions ?? [];
+  const never = r.never ?? [];
   const perms = document.createElement("td");
   const box = document.createElement("div");
   box.className = "set-perms";
   box.dataset.previous = JSON.stringify(granted);
+  box.dataset.previousNever = JSON.stringify(never);
   for (const c of PERMISSION_CHOICES) {
     const label = document.createElement("label");
     const i = document.createElement("input");
@@ -1204,7 +1231,18 @@ function siteRow(r: SiteRow): HTMLTableRowElement {
     i.value = c.name;
     i.checked = granted.includes(c.name);
     label.append(i, c.label);
-    box.append(label);
+    const nlabel = document.createElement("label");
+    nlabel.className = "set-never-label";
+    const n = document.createElement("input");
+    n.type = "checkbox";
+    n.className = "set-never";
+    n.value = c.name;
+    n.checked = never.includes(c.name);
+    n.setAttribute("aria-label", `${c.label}: never allow`);
+    nlabel.append(n, "never");
+    i.addEventListener("change", () => { if (i.checked) n.checked = false; });
+    n.addEventListener("change", () => { if (n.checked) i.checked = false; });
+    box.append(label, nlabel);
   }
   perms.append(box);
   tr.append(cell(r.site, "set-site", "Site"), cell(r.profile, "set-profile", "Named profile"), perms, del);
@@ -1262,6 +1300,10 @@ settingsForm.addEventListener("submit", async (e) => {
         JSON.parse((tr.querySelector(".set-perms") as HTMLElement).dataset.previous ?? "[]") as string[],
         [...tr.querySelectorAll<HTMLInputElement>(".set-perm")].filter((i) => i.checked).map((i) => i.value),
       ),
+      never: mergePermissions(
+        JSON.parse((tr.querySelector(".set-perms") as HTMLElement).dataset.previousNever ?? "[]") as string[],
+        [...tr.querySelectorAll<HTMLInputElement>(".set-never")].filter((i) => i.checked).map((i) => i.value),
+      ),
     })),
     download_folder: setFolder.value,
     blocklist: linesOf(setBlocklist.value),
@@ -1288,6 +1330,24 @@ document.addEventListener("keydown", (e) => {
   void runShortcut(name);
 });
 await listen<{ action: string }>("shell-command", (e) => shellCommand(e.payload.action));
+
+// --- The permission question (p4.20, adr-0034): every answer goes to the app, which answers the page. ---
+async function answerQuestion(answer: string): Promise<void> {
+  const tab = list.active;
+  if (tab === null || !uiOf(tab).question) return;
+  uiOf(tab).question = null;
+  render();
+  try {
+    const note = await invoke<string | null>("permission_answer", { tab, answer });
+    if (note) uiOf(tab).status = note;
+  } catch (err) {
+    uiOf(tab).status = "Permission: " + String(err);
+  }
+  render();
+}
+for (const [id, answer] of [["perm-once", "once"], ["perm-always", "always"], ["perm-never", "never"], ["perm-block", "block"], ["perm-close", "close"]] as const) {
+  $<HTMLButtonElement>(id).addEventListener("click", () => void answerQuestion(answer));
+}
 
 // --- The confirmation bar for links to other apps (p2.10): part of the top band, so it never covers a page. ---
 async function showExternal(uri: string, signIn = false): Promise<void> {

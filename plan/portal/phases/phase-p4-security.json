@@ -6,7 +6,7 @@
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
   "status": "In progress",
   "progress": {
-    "done": 18,
+    "done": 19,
     "total": 20
   },
   "step_order": [
@@ -202,10 +202,10 @@
       "what": "A bar under the toolbar asks before a site uses the camera, microphone, location, notifications or clipboard: Allow this time, Always allow, Never allow.",
       "why": "Today these requests are refused with no message, so sites like video calls just fail and you can't tell why.",
       "how": "Ferrum holds the site's request, shows its own bar with the site's name, and saves Always and Never answers in Settings.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "Sites are refused silently and video calls fail → Ferrum asks you like Chrome and remembers only Always and Never → you decide per site, and Settings shows every remembered answer.",
       "check": "Tests with harmless test pages click every button; the camera and microphone are only tested being refused, so they never switch on; frames of another site are tested both ways.",
-      "script": null
+      "script": "scripts/verify/p4.20-permission-question.ps1"
     },
     {
       "id": "p4.12",

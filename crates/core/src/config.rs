@@ -143,7 +143,7 @@ pub struct Isolation {
 }
 
 /// `[[sites]]`: settings for one site (p3.6).
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(deny_unknown_fields)]
 pub struct SiteSettings {
     /// The site: a registrable domain such as `example.com` (lower case, no scheme).
@@ -156,6 +156,32 @@ pub struct SiteSettings {
     /// sensitive (camera, microphone, location, notifications, clipboard reading, ...) unless the user grants it here.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub permissions: Vec<PermissionKind>,
+    /// Permissions this site may never use (p4.20, adr-0034): the user answered "Never allow". Refused without a
+    /// question. A kind cannot be in both lists.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub never: Vec<PermissionKind>,
+    /// Questions the user closed without answering (p4.20, adr-0034): after [`QUIET_AFTER_CLOSES`] in a row the site
+    /// asks no more for that kind until `quiet_until`.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub closed: Vec<ClosedQuestion>,
+}
+
+/// After this many closed questions in a row for one kind, a site is quiet for [`QUIET_SECONDS`] (adr-0034).
+pub const QUIET_AFTER_CLOSES: u32 = 3;
+/// How long a site stays quiet: 7 days (adr-0034).
+pub const QUIET_SECONDS: u64 = 7 * 24 * 60 * 60;
+
+/// `[[sites.closed]]`: a site's closed questions for one kind (p4.20).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ClosedQuestion {
+    /// The kind asked for.
+    pub kind: PermissionKind,
+    /// Questions closed in a row (an answer starts again from 0).
+    pub count: u32,
+    /// No question before this time (seconds since 1970, UTC); 0 = not quiet.
+    #[serde(default)]
+    pub quiet_until: u64,
 }
 
 /// A permission a web page can ask for (the kinds WebView2 reports, p4.5).
@@ -204,6 +230,20 @@ impl PermissionKind {
         PermissionKind::MidiSystemExclusiveMessages,
         PermissionKind::WindowManagement,
     ];
+
+    /// The kinds Ferrum asks the user about (p4.20, adr-0034); every other kind is refused unless granted in settings.
+    pub const ASKED: [PermissionKind; 5] = [
+        PermissionKind::Camera,
+        PermissionKind::Microphone,
+        PermissionKind::Geolocation,
+        PermissionKind::Notifications,
+        PermissionKind::ClipboardRead,
+    ];
+
+    /// Whether Ferrum asks the user about this kind ([`PermissionKind::ASKED`]).
+    pub fn asked(self) -> bool {
+        PermissionKind::ASKED.contains(&self)
+    }
 
     /// The settings name (`camera`, `clipboard-read`, ...).
     pub fn name(self) -> &'static str {
@@ -308,7 +348,7 @@ pub struct Storage {
 }
 
 /// The settings file format this Ferrum writes.
-pub const VERSION: u32 = 3;
+pub const VERSION: u32 = 4;
 
 fn version_one() -> u32 {
     1
@@ -453,7 +493,7 @@ pub struct Loaded {
 }
 
 /// Parses one TOML layer. Each layer is a complete configuration; missing keys take their defaults. A version-1 file
-/// is migrated ([`migrate_v1`], then [`migrate_v2`]); a file newer than [`VERSION`] is refused.
+/// is migrated ([`migrate_v1`], then [`migrate_v2`], then [`migrate_v3`]); a file newer than [`VERSION`] is refused.
 pub fn parse(text: &str, origin: &Path) -> Result<Config, ConfigError> {
     let bad = |message: String| ConfigError::Parse {
         path: origin.to_path_buf(),
@@ -476,6 +516,9 @@ pub fn parse(text: &str, origin: &Path) -> Result<Config, ConfigError> {
     }
     if version <= 2 {
         migrate_v2(&mut table);
+    }
+    if version <= 3 {
+        migrate_v3(&mut table);
     }
     table
         .try_into::<Config>()
@@ -521,6 +564,13 @@ pub fn migrate_v2(table: &mut toml::Table) {
         sec.entry("http_policy")
             .or_insert_with(|| toml::Value::String("upgrade".into()));
     }
+    table.insert("version".into(), toml::Value::Integer(i64::from(VERSION)));
+}
+
+/// Version 3 (P4) to version 4 (p4.20, adr-0034). Two per-site lists are new (`never`, `closed`); they start empty, so
+/// nothing changes. Only the version number moves on, so an older Ferrum refuses the file clearly instead of failing on
+/// a key it does not know.
+pub fn migrate_v3(table: &mut toml::Table) {
     table.insert("version".into(), toml::Value::Integer(i64::from(VERSION)));
 }
 
@@ -635,6 +685,20 @@ pub fn validate(mut config: Config) -> Result<Loaded, ConfigError> {
             return Err(bad(
                 "profile must be 1 to 40 lower-case letters, digits, - or _",
             ));
+        }
+        // p4.20: an answer is either "allow" or "never", and one closed-question record per kind.
+        if let Some(k) = s.permissions.iter().find(|k| s.never.contains(k)) {
+            return Err(bad(&format!(
+                "permission {} is both allowed and never allowed",
+                k.name()
+            )));
+        }
+        let mut kinds = std::collections::HashSet::new();
+        if let Some(c) = s.closed.iter().find(|c| !kinds.insert(c.kind)) {
+            return Err(bad(&format!(
+                "closed questions for {} are listed twice",
+                c.kind.name()
+            )));
         }
     }
     Ok(Loaded { config, warnings })

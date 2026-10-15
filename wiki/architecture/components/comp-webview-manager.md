@@ -186,6 +186,14 @@ of it:
   cast fails, COM-3), so no answer is remembered in the profile; reported as tab event `PermissionRequested`. Observed
   in the p4.5 live test: a grant removed in settings took effect at the next request; a frame's request arrived at
   this page-level event.
+- p4.20, the permission question (adr-0034): `Handlers::permissions` returns `PermissionReply::{Allow, Deny, Wait}`;
+  `PermissionAsk` carries a request number `id`. For `Wait` the handler takes the request's deferral (`GetDeferral`)
+  and keeps it in a UI-thread table; `webview2::answer_permission(id, allow)` sets the state and completes it later;
+  `close` refuses every request of that view that still waits. A request without a deferral is refused. The tab event
+  `PermissionRequested` gained `waiting`. Observed in the p4.20 live test
+  ([check-p4.20](../../raw/evidence/phase-p4-security/check-p4.20.txt)): the page keeps running while its request
+  waits; a frame of another site that its page allowed (`allow` attribute) is reported with the page's origin; one its
+  page did not allow never reaches this event (Chromium refuses it).
 
 - p4.7, isolation: `ContentView::create` takes `private` (InPrivate view, `SetIsInPrivateModeEnabled`);
   `clear_profile` deletes one profile's data (`ICoreWebView2Profile2::ClearBrowsingDataAll` through a hidden helper view

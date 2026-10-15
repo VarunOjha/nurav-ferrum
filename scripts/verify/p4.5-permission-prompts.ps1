@@ -46,16 +46,17 @@ function Assert-Passed {
 
 Invoke-Step 'Rules: every kind refused by default; a grant covers its site and kind only' {
     $r = Assert-Cargo @('test', '--locked', '-p', 'ferrum-security', '--lib', 'permissions::')
-    Assert-Passed $r.Output @('every_kind_is_refused_by_default', 'a_grant_covers_its_site_and_kind_only',
-        'insecure_unreadable_and_unknown_requests_are_refused')
+    # p4.20 (adr-0034) renamed them: the five sensitive kinds are now asked about instead of refused silently.
+    Assert-Passed $r.Output @('the_five_kinds_are_asked_and_every_other_kind_is_refused_by_default',
+        'always_and_never_cover_their_site_and_kind_only', 'frames_of_another_site_and_insecure_pages_get_no_question')
     'three engine tests passed'
 }
 
 Invoke-Step 'Settings: per-site grants read, saved and checked; the app follows them' {
     $c = Assert-Cargo @('test', '--locked', '-p', 'ferrum-core', '--test', 'config')
     Assert-Passed $c.Output @('site_permission_grants_are_read_checked_and_saved')
-    $a = Assert-Cargo @('test', '--locked', '-p', 'ferrum-desktop', 'policy::')
-    Assert-Passed $a.Output @('permissions_follow_the_site_grants')
+    $a = Assert-Cargo @('test', '--locked', '-p', 'ferrum-desktop', 'settings::')
+    Assert-Passed $a.Output @('never_answers_travel_with_the_row_and_quiet_times_end_when_permissions_change')
     'settings and app tests passed'
 }
 
@@ -65,15 +66,15 @@ Invoke-Step 'Ferrum answers every permission request and WebView2 keeps no answe
         if (-not $wv.Contains($need)) { Stop-Fail "webview2.rs no longer has '$need'." }
     }
     $content = Read-RepoText 'apps/desktop/src-tauri/src/content.rs'
-    if ($content -notmatch 'permissions:\s*crate::policy::permission_filter') { Stop-Fail 'Tab views are created without the permission filter.' }
+    if ($content -notmatch 'permissions:\s*crate::permission_question::filter') { Stop-Fail 'Tab views are created without the permission filter.' }
     'handler registered, state set, not saved in the profile'
 }
 
 Invoke-Step 'Live test: page script sees refusals (also in a frame); grant honoured and revocable; all logged' {
     $r = Invoke-FerrumSmoke -Spec 'permissions'
     Add-LogText (Get-Tail $r.Output 10)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '4 passed') { Stop-Fail "The live test failed:`n$(Get-Tail $r.Output 30)" }
-    'permissions: 4 passed'
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '10 passed') { Stop-Fail "The live test failed:`n$(Get-Tail $r.Output 30)" }
+    'permissions: 10 passed (p4.20 added the question)'
 }
 
 Complete-Check -SaveEvidence:$SaveEvidence

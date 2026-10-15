@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, a clear SmartScreen message, and Microsoft's Keep/Delete pop-up for downloaded programs.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, a SmartScreen message, a Keep/Delete pop-up for programs, and a question before a site uses your camera and more.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:a79a7089e10c4912008a1e99e398b812663337bd6b2985c8e6ea0c86cb6c121b"
+        "content_hash": "sha256:ab0fb48b6808d77c91aa8dff6baa969e48be2b9531690c8b51f7367ef2c25113"
       }
     },
     {
@@ -260,7 +260,7 @@
     {
       "id": "comp-webview-manager",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, notices crashes, can start a separate browser engine for a site, and gives every engine the same switches with SmartScreen on.",
+      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, can give a site its own browser engine, keeps SmartScreen on in every engine, and holds a site's permission request until you answer.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (first working app)",
@@ -297,13 +297,13 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:d3a43149c80f06b60a0160a994ccb04669918155f548efe1aedcd4f1adcb11da"
+        "content_hash": "sha256:16faeb8a7d92b728070210ea9e254562e2991c85649e16ed7522268ed2275a2f"
       }
     },
     {
       "id": "comp-security-engine",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and gives no permission unless you allow the site in the settings screen. A separate benchmark-only build can skip the site rules; the normal app is checked never to contain it.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions, links to other apps. Trusted; refuses when unsure. Since P4 it decides every page load, redirect, frame and pop-up, and when to ask you before a site uses your camera, microphone, location, notifications or clipboard. A benchmark-only build can skip site rules; the app never has it.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Being built",
@@ -326,7 +326,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-security-engine.md",
-        "content_hash": "sha256:9a7ad055eeae1c964d8e3b170773b758c07fa3d9edc23b02a99937868685787c"
+        "content_hash": "sha256:17b2d34bb2efb08e1f3dbd47694a01aa6a274302ab8e5b10b9572aaf85ae555d"
       }
     },
     {

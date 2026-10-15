@@ -10,7 +10,7 @@ use std::hint::black_box;
 use std::time::Instant;
 
 use ferrum_core::config::{PermissionKind, SiteSettings};
-use ferrum_security::{Context, Grants, Policy, Request, RuleList, evaluate};
+use ferrum_security::{Context, Grants, PermissionContext, Policy, Request, RuleList, evaluate};
 
 /// The navigations decided on: label and address (all local or reserved names; nothing is loaded).
 const NAVIGATIONS: &[(&str, &str)] = &[
@@ -48,8 +48,8 @@ fn grants(sites: usize) -> Grants {
     let list: Vec<SiteSettings> = (0..sites)
         .map(|i| SiteSettings {
             site: format!("granted-{i}.test"),
-            profile: None,
             permissions: vec![PermissionKind::Notifications, PermissionKind::Geolocation],
+            ..SiteSettings::default()
         })
         .collect();
     Grants::from_sites(&list)
@@ -98,8 +98,19 @@ fn main() {
             ("granted", "https://granted-0.test"),
             ("not-granted", "https://other.test"),
         ] {
+            // The request comes from the tab's own page; nothing answered in the tab yet (p4.20: a not-granted
+            // site's request is decided "ask").
+            let cx = PermissionContext {
+                page: origin,
+                now: 0,
+                once: &[],
+            };
             measure("permission", case, sites, batches, iters, || {
-                black_box(g.decide(black_box(origin), Some(PermissionKind::Notifications)));
+                black_box(g.decide(
+                    black_box(origin),
+                    Some(PermissionKind::Notifications),
+                    black_box(&cx),
+                ));
             });
         }
     }

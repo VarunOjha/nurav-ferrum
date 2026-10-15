@@ -9,11 +9,8 @@
 use std::sync::{Arc, RwLock};
 
 use ferrum_core::address::site;
-use ferrum_core::config::{Config, PermissionKind};
-use ferrum_security::{
-    Context, Decision, Grants, PermissionDecision, Policy, Request, RuleList, Verdict, evaluate,
-};
-use ferrum_webview_manager::tab::PermissionAsk;
+use ferrum_core::config::Config;
+use ferrum_security::{Context, Decision, Policy, Request, RuleList, Verdict, evaluate};
 use tauri::{AppHandle, Manager};
 
 /// The policy in effect.
@@ -58,35 +55,6 @@ pub fn current(app: &AppHandle) -> Arc<Policy> {
 /// Puts a new policy in effect (after the settings changed).
 pub fn replace(app: &AppHandle, policy: Policy) {
     *app.state::<PolicyState>().0.write().unwrap() = Arc::new(policy);
-}
-
-/// Decides a permission request of tab `tab` from the grants in the settings in effect now (p4.5): every kind is
-/// refused unless the page's site has a grant for it. Logged either way (kind, scheme and host, rule).
-pub fn decide_permission(config: &Config, tab: u64, ask: &PermissionAsk) -> PermissionDecision {
-    let kind = ask.kind.and_then(PermissionKind::from_name);
-    let d = Grants::from_sites(&config.sites).decide(&ask.uri, kind);
-    let k = ask.kind.unwrap_or("unknown");
-    if d.allow {
-        tracing::info!(target: "ferrum::policy", tab, kind = k, site = %site(&ask.uri), rule = d.rule.as_str(), "permission granted");
-    } else {
-        tracing::info!(target: "ferrum::policy", tab, kind = k, site = %site(&ask.uri), rule = d.rule.as_str(), "permission denied");
-        crate::audit::record(tab, &format!("permission-{k}"), &ask.uri, d.rule.as_str());
-    }
-    d
-}
-
-/// The permission filter of tab `id`'s view: decides each request and notes a refusal on the tab's toolbar.
-pub fn permission_filter(app: &AppHandle, id: u64) -> std::rc::Rc<dyn Fn(&PermissionAsk) -> bool> {
-    let h = app.clone();
-    std::rc::Rc::new(move |ask: &PermissionAsk| {
-        let config = h.state::<crate::content::AppConfig>().get();
-        let d = decide_permission(&config, id, ask);
-        if !d.allow {
-            let why = format!("permission:{}", ask.kind.unwrap_or("unknown"));
-            crate::external::blocked(&h, id, &ask.uri, &why, false);
-        }
-        d.allow
-    })
 }
 
 /// Stable name of a navigation context, for the log.
@@ -212,45 +180,6 @@ mod tests {
             c.security.external_allowlist = vec![bad.into()];
             assert!(build(&c).is_err(), "{bad:?}");
         }
-    }
-
-    #[test]
-    fn permissions_follow_the_site_grants() {
-        use ferrum_core::config::SiteSettings;
-        let ask = |uri: &str, kind| PermissionAsk {
-            uri: uri.into(),
-            kind,
-            user_initiated: false,
-        };
-        let mut c = Config::default();
-        assert!(
-            !decide_permission(&c, 1, &ask("https://localhost:8443/perm", Some("camera"))).allow
-        );
-        c.sites.push(SiteSettings {
-            site: "localhost".into(),
-            profile: None,
-            permissions: vec![PermissionKind::Notifications],
-        });
-        assert!(
-            decide_permission(
-                &c,
-                1,
-                &ask("https://localhost:8443/perm", Some("notifications"))
-            )
-            .allow
-        );
-        assert!(
-            !decide_permission(&c, 1, &ask("https://localhost:8443/perm", Some("camera"))).allow
-        );
-        assert!(!decide_permission(&c, 1, &ask("https://localhost:8443/perm", None)).allow);
-        assert!(
-            !decide_permission(
-                &c,
-                1,
-                &ask("https://localhost:8443/perm", Some("no-such-kind"))
-            )
-            .allow
-        );
     }
 
     #[test]

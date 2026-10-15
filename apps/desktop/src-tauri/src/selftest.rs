@@ -93,6 +93,7 @@ fn all_refused(report: &Option<Value>) -> bool {
         "private_tab_command",
         "site_clear_command",
         "processes_command",
+        "permission_command",
         "plugin_app",
         "plugin_path",
         "plugin_webview",

@@ -3162,7 +3162,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, a clear SmartScreen message, and Microsoft's Keep/Delete pop-up for downloaded programs.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, a SmartScreen message, a Keep/Delete pop-up for programs, and a question before a site uses your camera and more.",
       "status": "Built (first working app)",
       "related": [
         "layer-controls"
@@ -3242,7 +3242,7 @@
       "id": "comp-security-engine",
       "kind": "component",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions and links to other apps. Trusted. Refuses when unsure; each rule tested on its own. Since P4 it decides every page load, redirect, frame and pop-up, and gives no permission unless you allow the site in the settings screen. A separate benchmark-only build can skip the site rules; the normal app is checked never to contain it.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions, links to other apps. Trusted; refuses when unsure. Since P4 it decides every page load, redirect, frame and pop-up, and when to ask you before a site uses your camera, microphone, location, notifications or clipboard. A benchmark-only build can skip site rules; the app never has it.",
       "status": "Being built",
       "related": [
         "layer-engine"
@@ -3272,7 +3272,7 @@
       "id": "comp-webview-manager",
       "kind": "component",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view; handles navigation. Trusted. The only part that talks to WebView2 directly, using low-level code Rust cannot fully safety-check. Since P4 it also stops frames inside a page, notices crashes, can start a separate browser engine for a site, and gives every engine the same switches with SmartScreen on.",
+      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, can give a site its own browser engine, keeps SmartScreen on in every engine, and holds a site's permission request until you answer.",
       "status": "Built (first working app)",
       "related": [
         "layer-engine"
@@ -5413,7 +5413,7 @@
       "kind": "task",
       "title": "P4 task: Sites ask before using your camera and more",
       "summary": "Sites are refused silently and video calls fail → Ferrum asks you like Chrome and remembers only Always and Never → you decide per site, and Settings shows every remembered answer.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p4-security",
         "adr-0034",

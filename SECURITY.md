@@ -138,6 +138,28 @@ Checked by the P3 task scripts (evidence: [wiki/raw/evidence/phase-p3-tabs-sessi
   for a script-only pop-up). A real pop-up policy is P4.
 - **Debug-only test commands** (`test_stats`, `test_focus`, `test_crash`) refuse in release builds.
 
+## Camera, microphone and more: Ferrum asks first
+
+A website gets the camera, the microphone, your location, notifications or the clipboard only after you choose (P4 task
+p4.20, owner answers Q-227 and Q-228, [adr-0034](wiki/decisions/adr-0034-permission-question-chrome-style.md)). Ferrum
+holds the site's request and shows a bar under the toolbar, like Chrome: "example.com wants to use your camera" with
+**Allow this time**, **Always allow on this site**, **Never allow** and **×**.
+
+- **Allow this time** lasts while the tab stays on that site; it ends when the tab goes to another site, loads the same
+  address again, or closes. **Always** and **Never** are saved in Ferrum's settings, where Settings shows and undoes
+  them. Closing the bar three times in a row makes that site quiet for that kind for 7 days.
+- No question, refused at once: plain `http` pages, a site with "Never", a quiet site, and a frame of another site
+  that its page did not allow to ask (Chromium refuses that itself). A page can let a frame of another site ask (its
+  `allow` attribute); WebView2 then reports the request as the page's own, so the question names the page's site, as in
+  Chrome (owner answer Q-228).
+- A private tab offers **Allow this time** and **Block** only, and saves nothing.
+- Every other kind (sensors, MIDI, fonts, window placement and others) is refused unless allowed in the settings file.
+- Ferrum's settings stay the authority: WebView2 keeps no answer of its own. The bar's site name is Ferrum's own text.
+  Only Ferrum's shell can answer; a website cannot (tested). Refusals go into the security log.
+
+Checked with harmless test pages; the camera and microphone were only ever refused, so they were never switched on
+([check-p4.20](wiki/raw/evidence/phase-p4-security/check-p4.20.txt)).
+
 ## SmartScreen (Microsoft Defender SmartScreen) is on
 
 Ferrum leaves Microsoft Defender SmartScreen on in every browser engine it starts (P4 task p4.18, owner answer Q-225).

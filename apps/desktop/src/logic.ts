@@ -115,6 +115,29 @@ export const PERMISSION_CHOICES: readonly { name: string; label: string }[] = [
   { name: "clipboard-read", label: "Clipboard reading" },
 ];
 
+/** What a site asks for, in the permission question (p4.20, adr-0034), by settings name. */
+const QUESTION_WORDS: Record<string, string> = {
+  geolocation: "know your location",
+  notifications: "show notifications",
+  "clipboard-read": "read your clipboard",
+};
+
+/**
+ * The permission question's text (p4.20): the site's name, which Ferrum computed (never text from the page), and what it
+ * wants, for example "example.com wants to use your camera and microphone".
+ */
+export function questionText(site: string, kinds: readonly string[]): string {
+  const devices = ["camera", "microphone"].filter((k) => kinds.includes(k));
+  const parts: string[] = [];
+  if (devices.length) parts.push(`use your ${devices.join(" and ")}`);
+  for (const k of PERMISSION_CHOICES.map((c) => c.name)) {
+    if (kinds.includes(k) && QUESTION_WORDS[k]) parts.push(QUESTION_WORDS[k]);
+  }
+  if (!parts.length) parts.push("use a permission");
+  const what = parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+  return `${site || "This page"} wants to ${what}`;
+}
+
 /**
  * A site's grants after the screen is saved: the kinds the screen does not show are kept as they were (they can be
  * set in the settings file), the shown kinds are exactly the ticked ones, in the screen's order.

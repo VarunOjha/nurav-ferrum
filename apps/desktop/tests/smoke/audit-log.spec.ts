@@ -39,9 +39,13 @@ test("each kind of refusal is one schema-valid audit line without page content",
   await f.content.click("#msdt", { noWaitAfter: true });
   await has((r) => r.origin === "ms-msdt:" && r.rule === "external-risky").toBe(true);
 
+  // p4.20: the request waits for Ferrum's question; "Never allow" refuses it.
   await open("/perm", "#perm");
-  await f.content.evaluate(() => (window as any).ask.notifications());
-  await has((r) => r.action === "permission-notifications" && r.rule === "permission-not-granted").toBe(true);
+  const asked = f.content.evaluate(() => (window as any).ask.notifications());
+  await expect(f.shell.locator("#perm-bar")).toBeVisible();
+  await f.shell.click("#perm-never");
+  expect(await asked).toBe("denied");
+  await has((r) => r.action === "permission-notifications" && r.rule === "permission-never").toBe(true);
 
   await call(f, "tab_navigate", { input: `https://exa mple.org/${SECRET}` });
   await has((r) => r.action === "address-bar" && r.origin === "(typed)").toBe(true);

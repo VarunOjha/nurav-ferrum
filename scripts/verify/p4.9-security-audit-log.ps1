@@ -45,7 +45,8 @@ Invoke-Step 'Unit tests: six fields, origin only, UTC times, rotation' {
 
 Invoke-Step 'Every place that refuses something writes an audit line' {
     $need = @{
-        'apps/desktop/src-tauri/src/policy.rs'    = 3   # navigation, permission, shell
+        'apps/desktop/src-tauri/src/policy.rs'    = 2   # navigation, shell
+        'apps/desktop/src-tauri/src/permission_question.rs' = 2   # permission refusal, waiting request refused (p4.20 moved it here)
         'apps/desktop/src-tauri/src/content.rs'   = 1   # typed address
         'apps/desktop/src-tauri/src/external.rs'  = 2   # pop-up limit, forged confirmation
         'apps/desktop/src-tauri/src/downloads.rs' = 2   # no folder, folder not usable
@@ -63,9 +64,9 @@ Invoke-Step 'Live tests: each security test finds its audit line; all lines pass
     $line = ($r.Output -split "`r?`n" | Where-Object { $_ -match 'AUDIT-SAMPLE ' } | Select-Object -First 1)
     if ($line) { $script:Sample = $line.Substring($line.IndexOf('AUDIT-SAMPLE ')) }
     Add-LogText (Get-Tail $r.Output 12)
-    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '18 passed') { Stop-Fail "The live tests failed:`n$(Get-Tail $r.Output 30)" }
+    if ($r.ExitCode -ne 0 -or $r.Output -notmatch '24 passed') { Stop-Fail "The live tests failed:`n$(Get-Tail $r.Output 30)" }
     if ($script:Sample) { Add-LogText $script:Sample }
-    'audit-log 1, security-navigation 5, external-schemes 3, permissions 4, app-origin 5: 18 passed'
+    'audit-log 1, security-navigation 5, external-schemes 3, permissions 10 (p4.20), app-origin 5: 24 passed'
 }
 
 Complete-Check -SaveEvidence:$SaveEvidence

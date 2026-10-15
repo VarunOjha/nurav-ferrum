@@ -39,7 +39,9 @@ use windows::Win32::System::Com::IStream;
 use windows_core::{BOOL, HSTRING, Interface, PCWSTR, PWSTR};
 
 use crate::Error;
-use crate::tab::{KeyDown, NavDecision, NavRequest, PermissionAsk, ProcessFailure, TabEvent};
+use crate::tab::{
+    KeyDown, NavDecision, NavRequest, PermissionAsk, PermissionReply, ProcessFailure, TabEvent,
+};
 
 /// Receives tab events (UI thread).
 pub type EventSink = Rc<dyn Fn(TabEvent)>;
@@ -48,8 +50,45 @@ pub type NavGate = Rc<dyn Fn(&NavRequest) -> NavDecision>;
 /// Decides whether a key pressed in the view is Ferrum's (true: handled, the page never sees it) (UI thread).
 pub type KeyFilter = Rc<dyn Fn(KeyDown) -> bool>;
 
-/// Decides a permission request (true: allow) (UI thread).
-pub type PermissionFilter = Rc<dyn Fn(&PermissionAsk) -> bool>;
+/// Decides a permission request: allow, deny, or wait for the user (UI thread).
+pub type PermissionFilter = Rc<dyn Fn(&PermissionAsk) -> PermissionReply>;
+
+/// A permission request that waits for the user's answer (p4.20): its event arguments, the deferral that holds it, and
+/// the view it belongs to (the raw pointer of its `ICoreWebView2`, compared only, never used).
+struct WaitingPermission {
+    args: ICoreWebView2PermissionRequestedEventArgs,
+    deferral: ICoreWebView2Deferral,
+    view: usize,
+}
+
+thread_local! {
+    /// The permission requests that wait for an answer, by number (UI thread only, COM-1).
+    static WAITING: RefCell<HashMap<u64, WaitingPermission>> = RefCell::new(HashMap::new());
+    /// The next permission request's number.
+    static NEXT_PERMISSION: Cell<u64> = const { Cell::new(1) };
+}
+
+/// Answers a waiting permission request (p4.20): `allow` gives the page the permission, otherwise it is refused. False
+/// when no request with that number waits (already answered, or its view closed).
+pub fn answer_permission(id: u64, allow: bool) -> bool {
+    let Some(w) = WAITING.with(|m| m.borrow_mut().remove(&id)) else {
+        return false;
+    };
+    complete_permission(&w, allow);
+    true
+}
+
+fn complete_permission(w: &WaitingPermission, allow: bool) {
+    // SAFETY: COM-1: UI thread; the deferral is completed once (the entry was removed from WAITING first).
+    unsafe {
+        let _ = w.args.SetState(if allow {
+            COREWEBVIEW2_PERMISSION_STATE_ALLOW
+        } else {
+            COREWEBVIEW2_PERMISSION_STATE_DENY
+        });
+        let _ = w.deferral.Complete();
+    }
+}
 
 /// Chooses where a download is saved: given its address and WebView2's suggested path, the file to save to, or `None`
 /// to refuse the download (UI thread).
@@ -378,8 +417,10 @@ impl ContentView {
 
         // Permissions (p4.5): every request (camera, location, notifications, ...) is decided by the app; WebView2 shows
         // no prompt of its own and, where the runtime supports it (Args3), keeps no answer in the profile, so a grant
-        // removed in settings takes effect at the next request.
+        // removed in settings takes effect at the next request. p4.20: a request the user is asked about is held with a
+        // deferral until `answer_permission` (or the view closes, which refuses it).
         let s = sink.clone();
+        let view_key = core.as_raw() as usize;
         let h = PermissionRequestedEventHandler::create(Box::new(move |_sender, args| {
             if let Some(args) = args {
                 let (mut uri, mut kind, mut user) = (
@@ -395,7 +436,13 @@ impl ContentView {
                     take_pwstr(uri)
                 };
                 let name = permission_name(kind);
-                let allow = permissions(&PermissionAsk {
+                let id = NEXT_PERMISSION.with(|n| {
+                    let id = n.get();
+                    n.set(id + 1);
+                    id
+                });
+                let reply = permissions(&PermissionAsk {
+                    id,
                     uri: uri.clone(),
                     kind: name,
                     user_initiated: user.as_bool(),
@@ -406,16 +453,47 @@ impl ContentView {
                     if let Ok(a3) = args.cast::<ICoreWebView2PermissionRequestedEventArgs3>() {
                         let _ = a3.SetSavesInProfile(false);
                     }
-                    let _ = args.SetState(if allow {
-                        COREWEBVIEW2_PERMISSION_STATE_ALLOW
-                    } else {
-                        COREWEBVIEW2_PERMISSION_STATE_DENY
-                    });
                 }
+                let waiting = match reply {
+                    // SAFETY: COM-1: the deferral is taken inside the callback (the documented use); it is completed
+                    // later on the UI thread by answer_permission or close.
+                    PermissionReply::Wait => match unsafe { args.GetDeferral() } {
+                        Ok(deferral) => {
+                            WAITING.with(|m| {
+                                m.borrow_mut().insert(
+                                    id,
+                                    WaitingPermission {
+                                        args: args.clone(),
+                                        deferral,
+                                        view: view_key,
+                                    },
+                                )
+                            });
+                            true
+                        }
+                        // No deferral: the request cannot wait, so it is refused (never allowed by default).
+                        Err(_) => {
+                            // SAFETY: COM-1.
+                            let _ = unsafe { args.SetState(COREWEBVIEW2_PERMISSION_STATE_DENY) };
+                            false
+                        }
+                    },
+                    PermissionReply::Allow | PermissionReply::Deny => {
+                        let state = if reply == PermissionReply::Allow {
+                            COREWEBVIEW2_PERMISSION_STATE_ALLOW
+                        } else {
+                            COREWEBVIEW2_PERMISSION_STATE_DENY
+                        };
+                        // SAFETY: COM-1.
+                        let _ = unsafe { args.SetState(state) };
+                        false
+                    }
+                };
                 s(TabEvent::PermissionRequested {
                     uri,
                     kind: name.unwrap_or("unknown").to_string(),
-                    allowed: allow,
+                    allowed: reply == PermissionReply::Allow,
+                    waiting,
                 });
             }
             Ok(())
@@ -670,8 +748,22 @@ impl ContentView {
         }
     }
 
-    /// Removes every event handler and closes the controller (COM-4). The view is unusable afterwards.
+    /// Removes every event handler and closes the controller (COM-4). The view is unusable afterwards. Permission
+    /// requests of this view that still wait are refused first (p4.20).
     pub fn close(self) {
+        let key = self.core.as_raw() as usize;
+        let waiting: Vec<WaitingPermission> = WAITING.with(|m| {
+            let mut m = m.borrow_mut();
+            let ids: Vec<u64> = m
+                .iter()
+                .filter(|(_, w)| w.view == key)
+                .map(|(id, _)| *id)
+                .collect();
+            ids.into_iter().filter_map(|id| m.remove(&id)).collect()
+        });
+        for w in &waiting {
+            complete_permission(w, false);
+        }
         for (ev, t) in &self.tokens {
             // SAFETY: COM-1, COM-4: each token came from the matching add_* call on this view.
             unsafe {

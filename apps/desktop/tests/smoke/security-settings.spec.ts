@@ -82,10 +82,14 @@ test("blocked sites and site permissions: set in the screen, kept after a restar
     await expect(f.shell.locator("#status")).toHaveText("Blocked: 127.0.0.1 is on your blocked sites list");
     await expect.poll(() => audited(f, { origin: "https://127.0.0.1:8443", rule: "blocklist" })).toBeGreaterThan(0);
 
-    // Enforced: the grant is honoured; a kind not granted is still refused.
+    // Enforced: the grant is honoured; a kind not granted is asked (p4.20) and refused when the question is closed.
     await openPerm(f);
     expect(await ask(f, "notifications")).toBe("granted");
-    expect(await ask(f, "geolocation")).toBe("denied");
+    await expect(f.shell.locator("#perm-bar")).toBeHidden();
+    const geo = ask(f, "geolocation");
+    await expect(f.shell.locator("#perm-bar")).toBeVisible();
+    await f.shell.click("#perm-close");
+    expect(await geo).toBe("denied");
     // The camera grant is kept and shown (above) but not used here: with a grant, asking would switch on the PC's real
     // camera. Its effect is the same code path as notifications (p4.5 tests every kind's refusal).
 
@@ -94,7 +98,10 @@ test("blocked sites and site permissions: set in the screen, kept after a restar
     await (await siteRow(f, "localhost")).locator('.set-perm[value="notifications"]').uncheck();
     await saveSettings(f);
     await openPerm(f);
-    expect(await ask(f, "notifications")).toBe("denied");
+    const again = ask(f, "notifications");
+    await expect(f.shell.locator("#perm-bar")).toBeVisible();
+    await f.shell.click("#perm-close");
+    expect(await again).toBe("denied");
     expect((await call<View>(f, "settings_get")).sites.find((s) => s.site === "localhost")?.permissions).toEqual(["camera"]);
   } finally {
     await f.quit();

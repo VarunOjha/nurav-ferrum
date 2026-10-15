@@ -109,6 +109,14 @@ body { display: flex; flex-direction: column; }
 #external-uri { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px "IBM Plex Mono", Consolas, monospace; color: var(--muted); }
 #external-bar button { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
 #external-open { background: var(--accent) !important; color: var(--on-accent) !important; }
+/* The permission question (p4.20): like the confirmation bar, part of the top band. */
+#perm-bar { display: flex; align-items: center; gap: 10px; height: 44px; box-sizing: border-box; padding: 0 16px 0 13px; border-bottom: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface); color: var(--text); }
+#perm-bar[hidden] { display: none; }
+#perm-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+#perm-bar button { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--accent); font: inherit; cursor: pointer; background: transparent; color: var(--text); }
+#perm-bar button[hidden] { display: none; }
+#perm-close { border-color: transparent !important; color: var(--muted) !important; }
+.set-perms .set-never-label { color: var(--muted); }
 
 /* Bookmarks (p3.19): star in the address bar, the bookmarks bar, the editor bar and the sidebar's folders. */
 #star { flex: none; width: 26px; height: 26px; border: 0; border-radius: 13px; background: transparent; color: var(--muted); font-size: 16px; line-height: 1; cursor: pointer; }

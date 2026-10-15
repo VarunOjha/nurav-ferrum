@@ -1,0 +1,35 @@
+Ferrum check p4.20: Sites ask before using your camera and more
+Why: you decide per site, and Settings shows every remembered answer.
+Run at 2026-10-15 17:22 on commit f281ca8 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Research note: holding a request (deferral) and which site asked, with access dates
+         present, cited by adr-0034
+  PASS   Rules, settings and shell tests (18 s)
+         six rules tests, one settings-file test, one settings-screen test and the shell tests passed
+  PASS   Source: requests wait with a deferral; a closed view refuses them; only the shell may answer
+         deferral, refusal on close and on a new page, shell-only answer
+PAGE-WHILE-WAITING responsive
+FRAME-ORIGIN-REPORTED ["https://localhost:8443"]
+CLIPBOARD-AFTER-ALWAYS granted
+CLIPBOARD-SECOND granted
+
+  ✓  10 permissions.spec.ts:211:3 › no question › a private tab offers Allow this time and Block, and saves nothing (461ms)
+  ✓  11 permissions.spec.ts:241:3 › a per-site grant in Settings › is honoured without a question; removed in Settings, the site is asked again (566ms)
+  ✓  12 security-settings.spec.ts:43:1 › blocked sites and site permissions: set in the screen, kept after a restart, enforced, revoked (4.8s)
+  ✓  13 security-settings.spec.ts:111:1 › the not-secure bar shows for a plain-HTTP page and not for HTTPS (1.8s)
+  ✓  14 security-settings.spec.ts:129:1 › Clear data in the screen deletes one site's stored data (3.1s)
+  ✓  15 settings.spec.ts:18:1 › change settings, see them take effect, restart, still there (4.8s)
+  ✓  16 settings.spec.ts:65:1 › invalid input is refused with plain messages; the file is unchanged (2.0s)
+  16 passed (1.6m)
+  PASS   Live: the question, every answer, quiet time, no-question cases, frames, private tabs; settings and audit tests (106 s)
+         16 passed (permissions 10, security-settings 3, settings 2, audit-log 1); FRAME-ORIGIN-REPORTED ["https://localhost:8443"]
+  PASS   A website cannot answer its own question (IPC self-test) (60 s)
+         refused: permission_answer not allowed on window "main", webview "probe", URL: https://localhost:8443/
+         
+         allowed on: [webviews: "shell", URL: local]
+         
+         referenced by: capability: shell, permission: allow-permission-answer
+------------------------------------------------------------------------
+RESULT: PASS - p4.20 (5 PASS; 184 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.20 check passed".

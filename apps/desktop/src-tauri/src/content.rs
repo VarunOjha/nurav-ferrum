@@ -151,8 +151,13 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
             uri,
             user_initiated,
         } => json!({"kind": "external-scheme", "uri": uri, "user_initiated": user_initiated}),
-        TabEvent::PermissionRequested { uri, kind, allowed } => {
-            json!({"kind": "permission", "uri": uri, "permission": kind, "allowed": allowed})
+        TabEvent::PermissionRequested {
+            uri,
+            kind,
+            allowed,
+            waiting,
+        } => {
+            json!({"kind": "permission", "uri": uri, "permission": kind, "allowed": allowed, "waiting": waiting})
         }
         // The site icon as a data address the shell's image may show (its CSP allows `data:` images only).
         TabEvent::FaviconChanged { png } => json!({"kind": "favicon", "icon": icon_data_url(png)}),
@@ -463,7 +468,7 @@ fn create_view_in(
                 gate: gate(h, id),
                 keys: crate::shortcuts::filter(h),
                 downloads: crate::downloads::chooser(h),
-                permissions: crate::policy::permission_filter(h, id),
+                permissions: crate::permission_question::filter(h, id),
             },
             Box::new({
                 let h = h.clone();
@@ -686,6 +691,8 @@ fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
         if r.frame {
             return NavDecision::Allow;
         }
+        // p4.20: the tab starts loading a page, so its waiting permission questions are refused.
+        crate::permission_question::on_page_load(&h, id, &r.uri);
         // The setting has one value today (offer-system-browser, owner answer Q-109).
         let GoogleOauth::OfferSystemBrowser = h.state::<AppConfig>().get().security.google_oauth;
         if external::is_sign_in(&r.uri) {
@@ -819,6 +826,7 @@ pub fn close_tab(app: &AppHandle, id: u64) -> bool {
         return false;
     }
     tracing::info!(target: "ferrum::tabs", tab = id, "tab closed");
+    crate::permission_question::on_tab_closed(app, id);
     let h = app.clone();
     let _ = app.run_on_main_thread(move || {
         let view = VIEWS.with(|m| m.borrow_mut().remove(&id));

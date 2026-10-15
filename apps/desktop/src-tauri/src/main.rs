@@ -15,6 +15,7 @@ mod external;
 mod history;
 mod library;
 mod logging;
+mod permission_question;
 mod policy;
 mod recovery;
 mod selftest;
@@ -211,6 +212,7 @@ fn main() {
         .manage(downloads::Reserved::default())
         .manage(downloads::Running::default())
         .manage(external::PendingCrossSite::default())
+        .manage(permission_question::Questions::default())
         .manage(FocusState::default())
         .manage(EventLog::default())
         .manage(ShellTitle::default())
@@ -223,6 +225,7 @@ fn main() {
             external::external_cancel,
             external::cross_site_confirm,
             external::cross_site_cancel,
+            permission_question::permission_answer,
             content::tab_navigate,
             content::tab_back,
             content::tab_forward,
