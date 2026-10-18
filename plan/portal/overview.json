@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is in progress: 19 of 20 tasks done. Sites now ask before using your camera and more, like Chrome. All approvals are up to date; the end-of-phase gate reruns when you can leave the PC alone.",
+  "summary": "Phase 4 (security) is built and its end-of-phase gate passed everything Claude checks. It now waits for your hand checks and sign-off; Phase 5 does not start without your go.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:dc26c30c7372649a259838da8d6338bea9cc49d9c3c5594067dd613bf71a994c"
+    "content_hash": "sha256:d14a8cc09a4e572613cbce3747bef8e0f44fb165ad0b9f8410d8a5bcd3bc3ee2"
   },
   "updated": "2026-10-15",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P4 Security: in progress",
+      "state": "P4 Security: waiting for your review",
       "ref": "phase-p4-security"
     },
     {
@@ -39,20 +39,20 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "19 of 20 tasks done"
+        "state": "Built; gate passed all 26 automatic checks"
       },
       {
-        "item": "Approvals",
-        "state": "All up to date"
+        "item": "Known wait",
+        "state": "Old wiki error, removed by the history cleanup"
       },
       {
-        "item": "End-of-phase gate",
-        "state": "Ready to run when the PC is quiet"
+        "item": "Your part",
+        "state": "Hand checklist and sign-off"
       }
     ],
-    "why": "The gate reruns every Phase 4 check and earlier test on one commit and builds the release program. Some tests press real keys, so the PC must be left alone for about an hour; closing other big programs gives it enough memory.",
+    "why": "Nothing to run. Automatic checks cannot see everything: you try the checklist in docs/testing/manual-checklist-p4.md (block a site, answer a camera question, keep a download) and tell Claude the results; then you decide whether Phase 4 is signed off.",
     "script": null,
-    "tell_claude": "PC is quiet"
+    "tell_claude": "Your checklist answers, then \"Sign off P4\" or what to change"
   },
   "questions_for_you": {
     "open": 19,

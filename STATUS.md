@@ -3,7 +3,7 @@ id: status-live
 type: status
 title: "Ferrum live status and next action"
 status: active
-updated: 2026-10-15
+updated: 2026-10-17
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -46,7 +46,7 @@ approvable: false
 session: s07
 current_phase: phase-p4-security
 current_task: p4.14
-next_action: "When the owner says the PC is quiet (other big programs closed, about an hour, internet on): pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence on a clean commit; then the gate log entry, phase-p4-security to gate-review, and stop for the owner's review with docs/testing/manual-checklist-p4.md (no P5). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
+next_action: "P4 waits for the owner's review (gate run of 2026-10-17 22:43 on c59d019: Claude's part PASS, evidence 8d34e32). Owner works through docs/testing/manual-checklist-p4.md and says whether P4 is signed off; Claude transcribes the answers to wiki/raw/owner/, records phase-p4-security#exit with tools/approvals_record.py, runs pwsh -NoProfile -File scripts/verify/p4.14-gate-review.ps1, sets the phase to done and PAUSES (no P5 without an explicit go). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -59,7 +59,7 @@ last_handoff: handoff-2026-10-15-s07
 
 ## Current phase
 
-**phase-p4-security — IN PROGRESS (session s03, entry passed 2026-10-13).** Owner's words of 2026-10-13
+**phase-p4-security — WAITING FOR THE OWNER'S REVIEW (gate run 2026-10-17, Claude's part PASS; entry passed 2026-10-13).** Owner's words of 2026-10-13
 ([raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md](wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md)):
 "Sign off now, check later" and "P4 only, then pause". **Stop after P4's exit gate:** P5 waits for the owner.
 Standing rule: no kill commands and no deleting of things Claude did not create without asking.

@@ -2998,3 +2998,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - time: 20:22
 - pages: []
 - result: The entry "[2026-10-17] P4 gate script could not be read; fixed" was written (commit 3e5854a) with the op "fix", which SCHEMA §12 does not allow, so the wiki check failed. Claude changed only that op word to "code" (minutes after writing it, before anything read it); a deviation from the append-only rule, logged here and reported to the owner.
+
+## [2026-10-17] gate | phase-p4-security exit ready for your review
+- session: s07
+- time: 23:32
+- pages: [phase-p4-security]
+- sources: [raw/evidence/phase-p4-security/p4-gate.txt]
+- result: scripts/gates/p4-gate.ps1 -SaveEvidence on c59d019 (run at 22:43): NOT READY with Claude's part complete (26 PASS, 1 WAIT, 2 YOURS; 2787 s). Approvals current; every task check p4.1 to p4.20 PASS; test gate all PASS (fmt and clippy, cargo test, cargo deny, p4.2 coverage, security suite, npm run p3, npm run p2 and p2.3, shell checks, release build in target/gate-release, p4.16 no-security switch absent, p4.15 isolation modes). WAIT only for the known lint:wiki error (ff7292e, removed by the Q-221 history cleanup). Two earlier runs that day (owner's "Run the gate" and "So neither, I have closed chrome, confirm it and now run") were stopped by Claude Code for low memory; their partial files were deleted uncommitted. At the third start Chrome still had one window open (about 1.3 GB); 8.4 GB was free. Evidence committed in 8d34e32 (that commit message says 22:44; the run started at 22:43). Status set to gate-review. PAUSE: no P5 work.
+- next: owner works through docs/testing/manual-checklist-p4.md and reviews; Claude records the answers and the phase-p4-security#exit decision, runs scripts/verify/p4.14-gate-review.ps1, sets P4 to done and pauses.
+- commit: 8d34e32

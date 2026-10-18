@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8c17ede0fd478534c7825d3d4d0510f010a02f86dab4422c954369536f2ab877"
+    "content_hash": "sha256:0908b0c19302128efa4c5aa68e78efaf6cd6f4e0c32efeff5eb20a039b28963f"
   },
   "entries": [
     {
@@ -5396,6 +5396,31 @@
       ],
       "phase": "phase-p4-security",
       "category": "Fixed",
+      "tags": [
+        "testing",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-17-s07-p4-gate",
+      "date": "2026-10-17",
+      "time": "23:32",
+      "title": "Phase 4 gate: everything Claude checks passed; your review is next",
+      "done": "The end-of-phase gate ran on one commit (third try; two earlier tries were stopped for low memory). All 26 automatic checks passed: every Phase 4 task, the attack-style tests, earlier phases' tests, the release build and its scan. Only the known old wiki error waits, for the history cleanup.",
+      "next": "You work through the Phase 4 hand checklist and say whether Phase 4 is signed off. Phase 5 does not start without your go.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "End of Phase 4",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "8d34e32",
+      "covers": [
+        "## [2026-10-17] gate | phase-p4-security exit ready for your review"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Checked",
       "tags": [
         "testing",
         "phases"

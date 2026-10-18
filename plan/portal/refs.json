@@ -53,7 +53,7 @@
       "kind": "phase",
       "title": "P4 Security",
       "summary": "Goal: Blocking, permissions and isolation proven by tests; threat model written. Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
-      "status": "In progress",
+      "status": "Waiting for your review",
       "related": [],
       "aliases": [
         "P4"
@@ -5447,6 +5447,26 @@
       "kind": "commit",
       "title": "Commit e77ef79",
       "summary": "Fixes a typo that stopped the end-of-phase gate script from opening.",
+      "status": "Done",
+      "related": [
+        "p4.14"
+      ]
+    },
+    {
+      "id": "8d34e32",
+      "kind": "commit",
+      "title": "Commit 8d34e32",
+      "summary": "The saved results of the Phase 4 end-of-phase gate run of 17 Oct: everything Claude checks passed.",
+      "status": "Done",
+      "related": [
+        "p4.14"
+      ]
+    },
+    {
+      "id": "c59d019",
+      "kind": "commit",
+      "title": "Commit c59d019",
+      "summary": "The commit the Phase 4 end-of-phase gate was run on (a small log fix).",
       "status": "Done",
       "related": [
         "p4.14"
