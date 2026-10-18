@@ -5511,6 +5511,16 @@
       "related": [
         "p5.2"
       ]
+    },
+    {
+      "id": "3ff53ca",
+      "kind": "commit",
+      "title": "Commit 3ff53ca",
+      "summary": "Task p5.3: the memory and CPU meter reads Windows counters for each of Ferrum's processes, adds them up per moment, and saves a gap when a moment cannot be read fully.",
+      "status": "Done",
+      "related": [
+        "p5.3"
+      ]
     }
   ]
 }

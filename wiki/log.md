@@ -3128,3 +3128,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-18-s08-p5-2-telemetry-reapproval.md]
 - result: Owner asked what to re-approve; Claude explained the four additions of p5.2. Owner: "Re-approve". Recorded approved with tools/approvals_record.py. All approvals current.
 - next: p5.3 process metrics sampler (In-flight written).
+
+## [2026-10-18] code | p5.3 memory and CPU meter built and checked
+- session: s08
+- time: 18:40
+- pages: [comp-telemetry]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.3.txt]
+- result: telemetry::win (the crate's only unsafe code) reads PROCESS_MEMORY_COUNTERS_EX2, GetProcessTimes and QueryProcessCycleTime with least access; the pure sampler sums each moment over Ferrum's set, keeps CPU of ended processes, pairs pid with creation time, and writes a new sample_gap record (export v1 gains the type) when the set is refused or a running member is unreadable, never a smaller number; peak from the summed series. EX2 is filled on this PC (claim removed from comp-telemetry; the same UNVERIFIED tags on metric-tree-private-commit, metric-tree-private-working-set and risk-r05 are left for p5.13 or the exit review, to batch re-approvals). p5.3 check PASS (5 PASS): live, 6 readings 500 ms apart, 17 processes each, 1 set retry that succeeded. Two FAIL runs before: readings 2 ms and 4 ms apart after a slow first listing (fixed: the next reading is timed from the last reading); one passing run had a gap after a refused retry. Workspace fmt, clippy and tests clean; p5.1 check rerun PASS. Stales approval of comp-telemetry.
+- commit: 3ff53ca
+- next: owner re-approves comp-telemetry; then p5.4 (sampler validation against ground truth).

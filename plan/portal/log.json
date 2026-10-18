@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:ea211d09cef94b95d654df2c5c621e34f94c073cfa84b5d692a866697a61765d"
+    "content_hash": "sha256:df20c3a067716c121a02fcf697735b3efb6c6380fe98eeebe1784f8dd32311ed"
   },
   "entries": [
     {
@@ -5755,6 +5755,31 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-3",
+      "date": "2026-10-18",
+      "time": "18:40",
+      "title": "The memory and CPU meter works",
+      "done": "Ferrum now reads memory and CPU of each of its processes straight from Windows and adds them up per moment; peaks come from those totals. A moment it cannot read fully is saved as a gap, never as a smaller number. Live check: six readings half a second apart, 17 processes each. Two early runs failed on reading timing; fixed.",
+      "next": "You re-approve the measurement part's page; then the accuracy test with helper programs (p5.4).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "3ff53ca",
+      "covers": [
+        "## [2026-10-18] code | p5.3 memory and CPU meter built and checked"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "memory",
+        "testing"
       ]
     }
   ]
