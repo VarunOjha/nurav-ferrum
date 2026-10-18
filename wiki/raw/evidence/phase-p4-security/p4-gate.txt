@@ -1,0 +1,498 @@
+Ferrum check P4-gate: Security: end-of-phase gate
+Why: only a passing gate and your approval let the next phase start.
+Run at 2026-10-17 22:43 on commit c59d019
+------------------------------------------------------------------------
+
+Part 1 - Your approvals for P4 are current
+approvals.json entries: 52
+  APPROVED                 adr-0001
+  APPROVED                 adr-0002
+  APPROVED                 adr-0003
+  APPROVED                 adr-0004
+  APPROVED                 adr-0006
+  APPROVED                 adr-0007
+  APPROVED                 adr-0008
+  APPROVED                 adr-0010
+  APPROVED                 adr-0011
+  APPROVED                 adr-0012
+  APPROVED                 adr-0014
+  APPROVED                 adr-0015
+  APPROVED                 adr-0018
+  APPROVED                 adr-0019
+  APPROVED                 adr-0021
+  APPROVED                 adr-0023
+  APPROVED                 adr-0024
+  APPROVED                 adr-0025
+  APPROVED                 adr-0026
+  APPROVED                 adr-0027
+  APPROVED                 adr-0029
+  APPROVED_VOLATILE_DRIFT  adr-0030
+  APPROVED_VOLATILE_DRIFT  adr-0031
+  APPROVED                 adr-0032
+  APPROVED                 adr-0033
+  APPROVED                 adr-0034
+  APPROVED                 comp-app-shell
+  APPROVED                 comp-core
+  APPROVED                 comp-interactive-plan
+  APPROVED                 comp-security-engine
+  APPROVED                 comp-tab-content
+  APPROVED                 comp-webview-manager
+  APPROVED                 comp-webview2-runtime
+  APPROVED                 comp-windows-os
+  APPROVED                 exp-isolation-overhead
+  APPROVED                 exp-security-overhead
+  APPROVED                 ip-data-contract
+  APPROVED                 ip-routes-and-views
+  APPROVED                 ip-spec
+  APPROVED                 ip-testing
+  APPROVED                 ip-wiki-lint
+  APPROVED                 ov-project
+  APPROVED                 phase-p0-planning
+  APPROVED                 phase-p0-planning#exit
+  APPROVED_VOLATILE_DRIFT  phase-p1-foundation
+  APPROVED_VOLATILE_DRIFT  phase-p1-foundation#exit
+  APPROVED                 phase-p2-minimal-container
+  APPROVED                 phase-p2-minimal-container#exit
+  APPROVED                 phase-p3-tabs-sessions
+  APPROVED                 phase-p3-tabs-sessions#exit
+  APPROVED                 phase-p4-security
+  APPROVED                 schema
+  depends_on phase-p3-tabs-sessions: status=done exit=APPROVED
+  APPROVED                 adr-0008
+  APPROVED                 adr-0010
+  APPROVED                 adr-0014
+  APPROVED                 adr-0015
+  APPROVED                 comp-app-shell
+  APPROVED                 comp-security-engine
+  APPROVED                 comp-webview-manager
+  APPROVED                 exp-isolation-overhead
+  APPROVED                 exp-security-overhead
+  APPROVED                 phase-p4-security
+  APPROVED                 schema
+  registered CONTRADICTION wiki/decisions/adr-0010-isolation-webview2-profiles.md:44 -> Q-107
+ENTRY GATE: PASS
+  PASS   Approvals for P4 recorded and current; no question blocks it (1 s)
+         all P4 approvals current
+
+Part 2 - Every P4 task, checked
+    --- output of scripts/verify/p4.1-threat-model.ps1 (exit 0) ---
+Ferrum check p4.1: Threat model
+Why: every later task traces to a threat.
+Run at 2026-10-17 22:44 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Boundary edges read from the component pages
+         15 edges; test catalogue SEC ids: 14
+  PASS   Security testing plan: every edge listed with a control and a test (section 7.2)
+         15 edge rows match the component pages
+  PASS   SECURITY.md: every edge listed with a control and a test
+         15 edge rows match the component pages
+  PASS   Every threat has a control and a test or "not enforced" (section 7.3)
+         26 threats; 8 marked not enforced
+  PASS   The ten test areas of the brief (SEC-01 to SEC-10) each cover a threat
+         SEC-01 to SEC-10 all used
+  PASS   Both documents list what is not enforced
+         plan page 7 items, SECURITY.md 7 items
+------------------------------------------------------------------------
+RESULT: PASS - p4.1 (6 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.1 check passed".
+    --- end of scripts/verify/p4.1-threat-model.ps1 ---
+  PASS   Task p4.1: Threat model (1 s)
+         scripts/verify/p4.1-threat-model.ps1: RESULT: PASS - p4.1 (6 PASS; 1 s)
+    --- output of scripts/verify/p4.3-check-every-navigation.ps1 (exit 0) ---
+Ferrum check p4.3: Check every navigation path
+Why: no way around the rules by redirect, frame or pop-up.
+Run at 2026-10-17 22:44 on commit c59d019
+------------------------------------------------------------------------
+  PASS   App rule tests: settings become the rules, bad rules refused, malformed addresses refused (10 s)
+         three app rule tests passed
+  PASS   Settings tests: site lists read and saved; HTTP warning by default (2 s)
+         settings tests passed
+  PASS   The code asks the rules for the page, each redirect step, each frame and each new window
+         page, redirect, frame and new-window paths all call the rules
+  PASS   Live test: blocked host refused when typed, after a redirect, in a frame, in a pop-up; malformed refused; all logged (83 s)
+         security-navigation: 5 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.3 (4 PASS; 95 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.3 check passed".
+    --- end of scripts/verify/p4.3-check-every-navigation.ps1 ---
+  PASS   Task p4.3: Check every navigation path (96 s)
+         scripts/verify/p4.3-check-every-navigation.ps1: RESULT: PASS - p4.3 (4 PASS; 95 s)
+    --- output of scripts/verify/p4.4-ask-before-opening.ps1 (exit 0) ---
+Ferrum check p4.4: Ask before opening other apps
+Why: no program starts silently.
+Run at 2026-10-17 22:45 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Rules: risky link types always refused; unlisted types refused when a list is set (2 s)
+         engine tests passed; four always-refused types listed
+  PASS   Settings: the list of allowed types is read, saved and checked; empty by default (5 s)
+         settings and app tests passed
+  PASS   Every request to open another app, and its confirmation, passes the rules
+         request and confirmation both call the rules
+  PASS   Live test: confirmation bar, nothing launched without the click, risky and unlisted types refused (78 s)
+         external-schemes: 3 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.4 (4 PASS; 85 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.4 check passed".
+    --- end of scripts/verify/p4.4-ask-before-opening.ps1 ---
+  PASS   Task p4.4: Ask before opening other apps (86 s)
+         scripts/verify/p4.4-ask-before-opening.ps1: RESULT: PASS - p4.4 (4 PASS; 85 s)
+    --- output of scripts/verify/p4.5-permission-prompts.ps1 (exit 0) ---
+Ferrum check p4.5: Permission prompts
+Why: nothing sensitive is handed out by default.
+Run at 2026-10-17 22:47 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Rules: every kind refused by default; a grant covers its site and kind only
+         three engine tests passed
+  PASS   Settings: per-site grants read, saved and checked; the app follows them (5 s)
+         settings and app tests passed
+  PASS   Ferrum answers every permission request and WebView2 keeps no answer
+         handler registered, state set, not saved in the profile
+  PASS   Live test: page script sees refusals (also in a frame); grant honoured and revocable; all logged (87 s)
+         permissions: 10 passed (p4.20 added the question)
+------------------------------------------------------------------------
+RESULT: PASS - p4.5 (4 PASS; 94 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.5 check passed".
+    --- end of scripts/verify/p4.5-permission-prompts.ps1 ---
+  PASS   Task p4.5: Permission prompts (94 s)
+         scripts/verify/p4.5-permission-prompts.ps1: RESULT: PASS - p4.5 (4 PASS; 94 s)
+    --- output of scripts/verify/p4.6-safe-downloads.ps1 (exit 0) ---
+Ferrum check p4.6: Safe downloads
+Why: nothing lands elsewhere or runs by itself.
+Run at 2026-10-17 22:48 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Rules: file names cleaned; program types recognised
+         three engine tests passed
+  PASS   The app saves under the cleaned name, marks programs, and never opens a download
+         cleaned name, program flag, no open call
+  PASS   Live test: climbing name, program warning, hidden extension, device name (74 s)
+         safe-downloads: 4 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.6 (3 PASS; 75 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.6 check passed".
+    --- end of scripts/verify/p4.6-safe-downloads.ps1 ---
+  PASS   Task p4.6: Safe downloads (75 s)
+         scripts/verify/p4.6-safe-downloads.ps1: RESULT: PASS - p4.6 (3 PASS; 75 s)
+    --- output of scripts/verify/p4.7-prove-isolated.ps1 (exit 0) ---
+Ferrum check p4.7: Prove what is isolated
+Why: no claim of full isolation without evidence.
+Run at 2026-10-17 22:49 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Code: private views, per-profile clearing, private tabs kept out of history and session
+         present; shortcut tests passed
+  PASS   Live test: storage kept per profile, clearing one site, private tabs, process inventory (81 s)
+         isolation: 4 passed; process inventory recorded
+  PASS   The shared-resources list on the tab and view manager page cites the evidence
+         cited
+------------------------------------------------------------------------
+RESULT: PASS - p4.7 (3 PASS; 82 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.7 check passed".
+    --- end of scripts/verify/p4.7-prove-isolated.ps1 ---
+  PASS   Task p4.7: Prove what is really isolated (83 s)
+         scripts/verify/p4.7-prove-isolated.ps1: RESULT: PASS - p4.7 (3 PASS; 82 s)
+    --- output of scripts/verify/p4.8-no-app-access.ps1 (exit 0) ---
+Ferrum check p4.8: No app access for websites
+Why: a website cannot act as Ferrum.
+Run at 2026-10-17 22:51 on commit c59d019
+------------------------------------------------------------------------
+serving https://localhost:8443/ (exit after: Some(50s))
+  PASS   Self-test: every way into the app refused from a website; no bridge in tabs; shell still works (59 s)
+         16 ways in refused by the permission check; channel fetch reached but empty (Ferrum has no channels: missing channel id header); no bridge in tabs; shell call works
+  PASS   Live test: links, pop-up and typed address to Ferrum own pages refused and logged; shell stays on its own page (74 s)
+         app-origin: 5 passed (including: the shell cannot be led to a website)
+  PASS   Commands allowed for the shell only; nothing relies on the invoke key
+         one capability, shell only, no remote section, no invoke key
+------------------------------------------------------------------------
+RESULT: PASS - p4.8 (3 PASS; 132 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.8 check passed".
+[ferrum selftest] {"all_probe_calls_refused":true,"content_view":{"events":8,"no_bridge":true,"ready":true,"report":{"bridge":false,"ipc":false}},"pass":true,"probe_url":"https://localhost:8443/ipc-probe","selftest":"ipc","shell_positive_control_pings":1,"tauri_view":{"all_calls_refused":true,"created":true,"report":{"app_command":{"error":"app_ping not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-app-ping","ok":false},"appearance_command":{"error":"appearance_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-appearance-set","ok":false},"backup_command":{"error":"backup_export not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-backup-export","ok":false},"bookmark_command":{"error":"bookmark_add not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-bookmark-add","ok":false},"bridge":true,"channel_fetch":{"error":"missing channel id header","ok":false},"event_emit":{"error":"event.emit not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-emit","ok":false},"event_listen":{"error":"event.listen not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-listen","ok":false},"history_command":{"error":"history_list not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-history-list","ok":false},"ipc":true,"permission_command":{"error":"permission_answer not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-permission-answer","ok":false},"plugin_app":{"error":"app.version not allowed. Permissions associated with this command: core:app:allow-version, core:app:default","ok":false},"plugin_path":{"error":"path.resolve_directory not allowed. Permissions associated with this command: core:path:allow-resolve-directory, core:path:default","ok":false},"plugin_webview":{"error":"webview.get_all_webviews not allowed. Permissions associated with this command: core:webview:allow-get-all-webviews, core:webview:default","ok":false},"plugin_window":{"error":"window.title not allowed. Permissions associated with this command: core:window:allow-title, core:window:default","ok":false},"private_tab_command":{"error":"tab_new_private not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-tab-new-private","ok":false},"processes_command":{"error":"test_processes not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-test-processes","ok":false},"settings_command":{"error":"settings_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-settings-set","ok":false},"site_clear_command":{"error":"site_data_clear not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-site-data-clear","ok":false},"suggest_command":{"error":"library_suggest not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-library-suggest","ok":false}}}}
+[1017/225130.494:ERROR:ui\gfx\win\window_impl.cc:172] Failed to unregister class Chrome_WidgetWin_0. Error = 1412
+    --- end of scripts/verify/p4.8-no-app-access.ps1 ---
+  PASS   Task p4.8: No app access for websites (133 s)
+         scripts/verify/p4.8-no-app-access.ps1: RESULT: PASS - p4.8 (3 PASS; 132 s)
+    --- output of scripts/verify/p4.9-security-audit-log.ps1 (exit 0) ---
+Ferrum check p4.9: Security audit log
+Why: you can see what Ferrum blocked, and nothing private leaks.
+Run at 2026-10-17 22:53 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Unit tests: six fields, origin only, UTC times, rotation (5 s)
+         three unit tests passed
+  PASS   Every place that refuses something writes an audit line
+         audit calls present at every refusal point
+  PASS   Live tests: each security test finds its audit line; all lines pass the schema; no page content (102 s)
+         audit-log 1, security-navigation 5, external-schemes 3, permissions 10 (p4.20), app-origin 5: 24 passed
+------------------------------------------------------------------------
+RESULT: PASS - p4.9 (3 PASS; 107 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.9 check passed".
+    --- end of scripts/verify/p4.9-security-audit-log.ps1 ---
+  PASS   Task p4.9: Security audit log (107 s)
+         scripts/verify/p4.9-security-audit-log.ps1: RESULT: PASS - p4.9 (3 PASS; 107 s)
+    --- output of scripts/verify/p4.10-recover-crashes.ps1 (exit 0) ---
+Ferrum check p4.10: Recovery from crashed pages
+Why: one bad page never takes down the window or the other tabs, and an engine crash costs no tabs.
+Run at 2026-10-17 22:55 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Unit tests: crash page allowed once for one tab; no restart loop (5 s)
+         two unit tests passed
+  PASS   The code listens for failed processes and the engine exit; the crash hook is debug-only
+         ProcessFailed added and removed per tab view; engine exit watched; crash hook debug-only
+  PASS   Live tests: a crashed tab is marked, covered and reloaded; the engine crash restarts Ferrum with its tabs (81 s)
+         crash-recovery: 3 passed (tab crash and reload, crash pages refused outside the hook, engine crash and restart)
+------------------------------------------------------------------------
+RESULT: PASS - p4.10 (3 PASS; 86 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.10 check passed".
+    --- end of scripts/verify/p4.10-recover-crashes.ps1 ---
+  PASS   Task p4.10: Recover from crashes (87 s)
+         scripts/verify/p4.10-recover-crashes.ps1: RESULT: PASS - p4.10 (3 PASS; 86 s)
+    --- output of scripts/verify/p4.17-security-settings-screen.ps1 (exit 0) ---
+Ferrum check p4.17: Security settings screen
+Why: websites still cannot touch them.
+Run at 2026-10-17 22:56 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Unit tests: blocked sites checked and kept; permissions merged; the not-secure bar text (6 s)
+         two host tests and the shell tests passed
+  PASS   Live tests: set in the screen, kept after a restart, enforced, revoked; the not-secure bar; earlier settings and permission tests (98 s)
+         15 passed (1.5m) (security-settings, settings, permissions)
+serving https://localhost:8443/ (exit after: Some(50s))
+  PASS   IPC self-test: a website cannot call the settings command; tab views have no bridge (58 s)
+         settings_set from a website refused; every other probed call refused; tab views have no bridge
+------------------------------------------------------------------------
+RESULT: PASS - p4.17 (3 PASS; 162 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.17 check passed".
+[ferrum selftest] {"all_probe_calls_refused":true,"content_view":{"events":8,"no_bridge":true,"ready":true,"report":{"bridge":false,"ipc":false}},"pass":true,"probe_url":"https://localhost:8443/ipc-probe","selftest":"ipc","shell_positive_control_pings":1,"tauri_view":{"all_calls_refused":true,"created":true,"report":{"app_command":{"error":"app_ping not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-app-ping","ok":false},"appearance_command":{"error":"appearance_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-appearance-set","ok":false},"backup_command":{"error":"backup_export not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-backup-export","ok":false},"bookmark_command":{"error":"bookmark_add not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-bookmark-add","ok":false},"bridge":true,"channel_fetch":{"error":"missing channel id header","ok":false},"event_emit":{"error":"event.emit not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-emit","ok":false},"event_listen":{"error":"event.listen not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-listen","ok":false},"history_command":{"error":"history_list not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-history-list","ok":false},"ipc":true,"permission_command":{"error":"permission_answer not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-permission-answer","ok":false},"plugin_app":{"error":"app.version not allowed. Permissions associated with this command: core:app:allow-version, core:app:default","ok":false},"plugin_path":{"error":"path.resolve_directory not allowed. Permissions associated with this command: core:path:allow-resolve-directory, core:path:default","ok":false},"plugin_webview":{"error":"webview.get_all_webviews not allowed. Permissions associated with this command: core:webview:allow-get-all-webviews, core:webview:default","ok":false},"plugin_window":{"error":"window.title not allowed. Permissions associated with this command: core:window:allow-title, core:window:default","ok":false},"private_tab_command":{"error":"tab_new_private not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-tab-new-private","ok":false},"processes_command":{"error":"test_processes not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-test-processes","ok":false},"settings_command":{"error":"settings_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-settings-set","ok":false},"site_clear_command":{"error":"site_data_clear not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-site-data-clear","ok":false},"suggest_command":{"error":"library_suggest not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-library-suggest","ok":false}}}}
+[1017/225840.583:ERROR:ui\gfx\win\window_impl.cc:172] Failed to unregister class Chrome_WidgetWin_0. Error = 1412
+    --- end of scripts/verify/p4.17-security-settings-screen.ps1 ---
+  PASS   Task p4.17: Security settings screen (163 s)
+         scripts/verify/p4.17-security-settings-screen.ps1: RESULT: PASS - p4.17 (3 PASS; 162 s)
+    --- output of scripts/verify/p4.18-smartscreen-on.ps1 (exit 0) ---
+Ferrum check p4.18: SmartScreen back on
+Why: you get the same protection Edge gives, and the documents say what it sends.
+Run at 2026-10-17 22:59 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Research note with access dates, cited by SECURITY.md and the data-flows page
+         8 dated sources; cited by SECURITY.md and the data-flows page
+  PASS   Unit test: the switches keep SmartScreen on and keep the menu and autoplay switches
+         browser_arguments_keep_smartscreen_on passed
+  PASS   Source: one set of switches for every engine; nothing else switches SmartScreen off
+         shell, self-test view and site engines use SHELL_BROWSER_ARGUMENTS; no other line switches SmartScreen off
+  PASS   Live: no browser engine runs with SmartScreen switched off (shared, per-site, per-site-udf) (110 s)
+         5 browser engines in 3 modes, none with SmartScreen switched off (shell's engine, and each site's under per-site-udf)
+  PASS   Live: Microsoft's demo phishing page, as observed
+         per-site: tab title 'Reported Unsafe Site: Navigation Blocked'; Ferrum's panel shown on top: 'Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen'
+                  per-site-udf: tab title 'Reported Unsafe Site: Navigation Blocked'; Ferrum's panel shown on top: 'Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen'
+  PASS   Live: a downloaded program waits in WebView2's own pop-up for SmartScreen's question
+         safe-downloads passed: program downloads held with the pop-up opened and the warning shown; nothing opened
+------------------------------------------------------------------------
+RESULT: PASS - p4.18 (6 PASS; 111 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.18 check passed".
+    --- end of scripts/verify/p4.18-smartscreen-on.ps1 ---
+  PASS   Task p4.18: SmartScreen back on (111 s)
+         scripts/verify/p4.18-smartscreen-on.ps1: RESULT: PASS - p4.18 (6 PASS; 111 s)
+    --- output of scripts/verify/p4.19-smartscreen-message.ps1 (exit 0) ---
+Ferrum check p4.19: Ferrum's own SmartScreen message
+Why: you know the site was reported as unsafe and are not invited to retry it.
+Run at 2026-10-17 23:01 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Shell unit test: the SmartScreen rule and its message
+         shell tests passed, including the SmartScreen rule
+  PASS   Source: a blank page stays in the tab's profile; the block is logged and audited
+         gate keeps about:blank in the tab's profile; block audited as page / smartscreen
+  PASS   Live: the SmartScreen message (per-site, per-site-udf) and an ordinary broken page; earlier profile and error-page tests (135 s)
+         per-site: 'Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen'; no Try again; audited; no profile question
+                  per-site-udf: 'Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen'; no Try again; audited; no profile question
+                  16 passed (2.1m) (smartscreen, profiles, loading-errors)
+------------------------------------------------------------------------
+RESULT: PASS - p4.19 (3 PASS; 136 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.19 check passed".
+    --- end of scripts/verify/p4.19-smartscreen-message.ps1 ---
+  PASS   Task p4.19: Ferrum's own SmartScreen message (136 s)
+         scripts/verify/p4.19-smartscreen-message.ps1: RESULT: PASS - p4.19 (3 PASS; 136 s)
+    --- output of scripts/verify/p4.20-permission-question.ps1 (exit 0) ---
+Ferrum check p4.20: Sites ask before using your camera and more
+Why: you decide per site, and Settings shows every remembered answer.
+Run at 2026-10-17 23:03 on commit c59d019
+------------------------------------------------------------------------
+  PASS   Research note: holding a request (deferral) and which site asked, with access dates
+         present, cited by adr-0034
+  PASS   Rules, settings and shell tests (7 s)
+         six rules tests, one settings-file test, one settings-screen test and the shell tests passed
+  PASS   Source: requests wait with a deferral; a closed view refuses them; only the shell may answer
+         deferral, refusal on close and on a new page, shell-only answer
+  PASS   Live: the question, every answer, quiet time, no-question cases, frames, private tabs; settings and audit tests (102 s)
+         16 passed (permissions 10, security-settings 3, settings 2, audit-log 1); FRAME-ORIGIN-REPORTED ["https://localhost:8443"]
+serving https://localhost:8443/ (exit after: Some(50s))
+  PASS   A website cannot answer its own question (IPC self-test) (59 s)
+         refused: permission_answer not allowed on window "main", webview "probe", URL: https://localhost:8443/
+         
+         allowed on: [webviews: "shell", URL: local]
+         
+         referenced by: capability: shell, permission: allow-permission-answer
+------------------------------------------------------------------------
+RESULT: PASS - p4.20 (5 PASS; 168 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.20 check passed".
+[ferrum selftest] {"all_probe_calls_refused":true,"content_view":{"events":6,"no_bridge":true,"ready":true,"report":{"bridge":false,"ipc":false}},"pass":true,"probe_url":"https://localhost:8443/ipc-probe","selftest":"ipc","shell_positive_control_pings":1,"tauri_view":{"all_calls_refused":true,"created":true,"report":{"app_command":{"error":"app_ping not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-app-ping","ok":false},"appearance_command":{"error":"appearance_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-appearance-set","ok":false},"backup_command":{"error":"backup_export not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-backup-export","ok":false},"bookmark_command":{"error":"bookmark_add not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-bookmark-add","ok":false},"bridge":true,"channel_fetch":{"error":"missing channel id header","ok":false},"event_emit":{"error":"event.emit not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-emit","ok":false},"event_listen":{"error":"event.listen not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-listen","ok":false},"history_command":{"error":"history_list not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-history-list","ok":false},"ipc":true,"permission_command":{"error":"permission_answer not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-permission-answer","ok":false},"plugin_app":{"error":"app.version not allowed. Permissions associated with this command: core:app:allow-version, core:app:default","ok":false},"plugin_path":{"error":"path.resolve_directory not allowed. Permissions associated with this command: core:path:allow-resolve-directory, core:path:default","ok":false},"plugin_webview":{"error":"webview.get_all_webviews not allowed. Permissions associated with this command: core:webview:allow-get-all-webviews, core:webview:default","ok":false},"plugin_window":{"error":"window.title not allowed. Permissions associated with this command: core:window:allow-title, core:window:default","ok":false},"private_tab_command":{"error":"tab_new_private not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-tab-new-private","ok":false},"processes_command":{"error":"test_processes not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-test-processes","ok":false},"settings_command":{"error":"settings_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-settings-set","ok":false},"site_clear_command":{"error":"site_data_clear not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-site-data-clear","ok":false},"suggest_command":{"error":"library_suggest not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-library-suggest","ok":false}}}}
+[1017/230537.153:ERROR:ui\gfx\win\window_impl.cc:172] Failed to unregister class Chrome_WidgetWin_0. Error = 1412
+    --- end of scripts/verify/p4.20-permission-question.ps1 ---
+  PASS   Task p4.20: Sites ask before using your camera and more (169 s)
+         scripts/verify/p4.20-permission-question.ps1: RESULT: PASS - p4.20 (5 PASS; 168 s)
+    --- output of scripts/verify/p4.12-design-cost-experiments.ps1 (exit 0) ---
+Ferrum check p4.12: Overhead experiment designs and the microbenchmark harness
+Why: the measurements later follow a plan written before any data exists.
+Run at 2026-10-17 23:06 on commit c59d019
+------------------------------------------------------------------------
+  PASS   The harness builds and runs (short run, own build folder) (3 s)
+         21 cases x 2 batches printed as CSV
+  PASS   The saved harness run exists and is marked "not a result"
+         630 batch lines; marked as evidence of harness operation only
+  PASS   Both experiment pages: workloads, metrics, analysis plan, what P4 built; no results
+         exp-security-overhead and exp-isolation-overhead: designed, no results, P4 parts described
+------------------------------------------------------------------------
+RESULT: PASS - p4.12 (3 PASS; 3 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.12 check passed".
+    --- end of scripts/verify/p4.12-design-cost-experiments.ps1 ---
+  PASS   Task p4.12: Design the cost experiments (3 s)
+         scripts/verify/p4.12-design-cost-experiments.ps1: RESULT: PASS - p4.12 (3 PASS; 3 s)
+    --- output of scripts/verify/p4.13-literature-batch-4.ps1 (exit 0) ---
+Ferrum check p4.13: Literature batch 4
+Why: nothing is cited that nobody opened.
+Run at 2026-10-17 23:06 on commit c59d019
+------------------------------------------------------------------------
+  PASS   The note exists, gives the access date, and labels every source
+         12 sources, each labelled; access date stated
+  PASS   Every source names a page that is listed in the note's header
+         14 web addresses listed
+  PASS   The related-work page cites the note (section H)
+         section H cites literature-batch-4
+  PASS   The note has its fingerprint line and matches it
+         fingerprint matches
+------------------------------------------------------------------------
+RESULT: PASS - p4.13 (4 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.13 check passed".
+    --- end of scripts/verify/p4.13-literature-batch-4.ps1 ---
+  PASS   Task p4.13: Literature batch 4 (1 s)
+         scripts/verify/p4.13-literature-batch-4.ps1: RESULT: PASS - p4.13 (4 PASS; 1 s)
+
+Part 3 - Test gate on one commit
+         saved wiki/raw/evidence/phase-p4-security/cargo-fmt.20261017-2306.txt
+         saved wiki/raw/evidence/phase-p4-security/cargo-clippy.20261017-2306.txt
+  PASS   Formatting and code warnings (11 s)
+         cargo fmt --check and cargo clippy -D warnings: exit 0
+         saved wiki/raw/evidence/phase-p4-security/cargo-test.20261017-2307.txt
+  PASS   Rust tests (29 s)
+         cargo test --workspace: exit 0
+         saved wiki/raw/evidence/phase-p4-security/cargo-deny.txt
+  PASS   Licences and alerts (15 s)
+         cargo deny check: exit 0
+    --- output of scripts/verify/p4.2-rules-engine.ps1 (exit 0) ---
+Ferrum check p4.2: Rules engine
+Why: safe by default, every decision explained.
+Run at 2026-10-17 23:07 on commit c59d019 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Rule tests pass, including the three named cases (8 s)
+         35 tests passed
+  PASS   Randomised inputs: no crash, unreadable denied, blocked stays blocked
+         4 random properties x 4096 cases plus the seed corpus
+  PASS   Tests reach 100 percent of the engine code (coverage report) (11 s)
+         regions 1397/1397, functions 99/99, lines 1012/1012
+  PASS   The engine is pure: no files, network, unsafe code or Tauri
+         5 source files; build dependencies: ferrum-core, url
+         Coverage report saved: wiki/raw/evidence/phase-p4-security/policy-coverage.20261017-2307.txt
+------------------------------------------------------------------------
+RESULT: PASS - p4.2 (4 PASS; 20 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.2 check passed".
+Evidence saved (masked): wiki/raw/evidence/phase-p4-security/check-p4.2.20261017-2307.txt
+Claude adds its fingerprint line to wiki/raw/MANIFEST.sha256 when it commits it.
+    --- end of scripts/verify/p4.2-rules-engine.ps1 ---
+  PASS   Rules coverage (task p4.2 check, coverage report saved) (21 s)
+         RESULT: PASS - p4.2 (4 PASS; 20 s)
+  PASS   Security engine tests (rules, allowlist and blocklist, malformed addresses; 100 percent branch coverage in p4.2) (3 s)
+  PASS   Other unit tests: app, tab and view manager, core; shell (22 s)
+  PASS   Item 3: IPC self-test, a website tries every way into the app (61 s)
+  PASS   Live security tests (items 1 to 10, audit log, SmartScreen) (239 s)
+  PASS   Release build scan: no "no security" benchmark switch (SEC-12; own build folder) (136 s)
+  PASS   The app never sets a debugging port itself (SEC-11)
+RESULT: PASS - security-suite (6 PASS; 461 s)
+Evidence saved (masked): wiki/raw/evidence/phase-p4-security/security-suite.20261017-2315.txt
+  PASS   Security suite (items 1 to 10; result saved) (462 s)
+         RESULT: PASS - security-suite (6 PASS; 461 s)
+         saved wiki/raw/evidence/phase-p4-security/regression.20261017-2322.txt
+  PASS   Earlier tests again: P3 suite (npm run p3), P2 app tests (npm run p2), bridge lockdown (p2.3) (407 s)
+         npm run p3: 61 passed; npm run p2: 26 passed; p2.3: PASS
+         saved wiki/raw/evidence/phase-p4-security/shell-tests.20261017-2322.txt
+  PASS   Shell checks (lint, types, unit tests) (2 s)
+         npm run lint, typecheck, test: exit 0
+         saved wiki/raw/evidence/phase-p4-security/release-build.txt
+  PASS   Release build (own folder target/gate-release; target/release is not touched) (139 s)
+         npm run tauri -- build --no-bundle: exit 0 (target/gate-release/release/ferrum-desktop.exe; target/release unchanged)
+    --- output of scripts/verify/p4.16-no-security-switch.ps1 (exit 0) ---
+Ferrum check p4.16: Benchmark-only no-security build
+Why: no risk of shipping it.
+Run at 2026-10-17 23:24 on commit c59d019 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: the switch allows web addresses only; without it the rules decide (4 s)
+         three unit tests passed (one normal, two with the switch)
+  PASS   Release check: the normal release build has no switch; the benchmark build refuses to start without --benchmark-mode (158 s)
+         no switch in the normal release program; markers found in the benchmark program; start refused without the argument
+  PASS   Without its own data folder the benchmark build refuses to start; with one it starts, logs what it is, and closes (8 s)
+         refused without its own data folder (exit 2); with one it started, logged 'benchmark build without site rules' in the run folder, closed with exit 0
+  PASS   CI and the local CI script run the release check
+         both run it after the release build
+Evidence saved (masked): wiki/raw/evidence/phase-p4-security/nosecurity-absent.20261017-2327.txt
+------------------------------------------------------------------------
+RESULT: PASS - p4.16 (4 PASS; 172 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.16 check passed".
+Evidence saved (masked): wiki/raw/evidence/phase-p4-security/check-p4.16.20261017-2327.txt
+Claude adds its fingerprint line to wiki/raw/MANIFEST.sha256 when it commits it.
+    --- end of scripts/verify/p4.16-no-security-switch.ps1 ---
+  PASS   No-security switch absent from the release build (task p4.16 check, result saved) (173 s)
+         RESULT: PASS - p4.16 (4 PASS; 172 s)
+    --- output of scripts/verify/p4.15-selectable-isolation-modes.ps1 (exit 0) ---
+Ferrum check p4.15: Selectable isolation modes
+Why: P6 can compare them.
+Run at 2026-10-17 23:27 on commit c59d019 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: three modes accepted, own folders only in per-site-udf, unknown mode refused (14 s)
+         three unit tests passed
+  PASS   The code makes a site environment with the shell's options and closes every view before exit
+         site environment made with the shell's browser arguments; views closed on exit
+  PASS   Live tests: the two-site fixture in each mode; restart and unknown-mode cases (140 s)
+         isolation-modes: 4 passed (shared, per-site, per-site-udf; restart and unknown mode)
+Evidence saved (masked): wiki/raw/evidence/phase-p4-security/isolation-modes.20261017-2330.md
+------------------------------------------------------------------------
+RESULT: PASS - p4.15 (3 PASS; 155 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.15 check passed".
+Evidence saved (masked): wiki/raw/evidence/phase-p4-security/check-p4.15.20261017-2330.txt
+Claude adds its fingerprint line to wiki/raw/MANIFEST.sha256 when it commits it.
+    --- end of scripts/verify/p4.15-selectable-isolation-modes.ps1 ---
+  PASS   Isolation modes (task p4.15 check, result saved) (157 s)
+         RESULT: PASS - p4.15 (3 PASS; 155 s)
+         saved wiki/raw/evidence/phase-p4-security/wiki-lint.txt
+  WAIT   Wiki check (24 s)
+         Only the known wiki error remains (commit ff7292e changed MANIFEST.sha256; removed by the history cleanup you approve before the first upload, question Q-221).
+
+Part 4 - Your part (your review)
+  YOURS  Your checks
+         You read the threat model and the "not enforced" list in SECURITY.md, blocked a site in Settings (also through a link from another site), saw Ferrum's question for a camera or location request on a real site (Never allow refuses, Allow this time works), and kept a downloaded program through Microsoft's pop-up (docs/testing/manual-checklist-p4.md).
+  YOURS  Your review
+         You looked at the changed pages and the evidence, and said whether P4 is signed off.
+------------------------------------------------------------------------
+RESULT: NOT READY - P4-gate (26 PASS, 1 WAIT, 2 YOURS; 2787 s)
+Not finished yet, and nothing is broken. Waiting on: Wiki check.
+What to tell Claude: nothing, unless you expected this to be finished.

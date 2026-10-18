@@ -1,0 +1,39 @@
+Ferrum check p4.16: Benchmark-only no-security build
+Why: no risk of shipping it.
+Run at 2026-10-17 23:24 on commit c59d019 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: the switch allows web addresses only; without it the rules decide (4 s)
+         three unit tests passed (one normal, two with the switch)
+security-static-check at 2026-10-17 23:24 on commit c59d019 (with uncommitted changes)
+target folder: target/p4.16
+
+== cargo tree -p ferrum-desktop -e features -i ferrum-security (normal build)
+ferrum-security v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\security)
+└── ferrum-security feature "default"
+    └── ferrum-desktop v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\src-tauri)
+        └── ferrum-desktop feature "default" (command-line)
+PASS feature bench-nosecurity is not enabled in the normal build
+
+== marker texts (count in the normal release program / in the benchmark program)
+  bench-nosecurity-ablation-rule         normal=0 benchmark=2
+  benchmark-nosecurity-build             normal=0 benchmark=2
+  --benchmark-mode                       normal=0 benchmark=2
+  benchmark build without site rules     normal=0 benchmark=2
+PASS no marker in the normal release program; every marker found in the benchmark program
+  sizes: normal 14,071,296 bytes, benchmark 14,077,440 bytes
+
+== benchmark program started without --benchmark-mode: exit 2
+  [ferrum] benchmark-nosecurity-build: this build has no site rules and starts only with --benchmark-mode
+PASS the benchmark program refuses to start without --benchmark-mode
+
+RESULT: PASS
+  PASS   Release check: the normal release build has no switch; the benchmark build refuses to start without --benchmark-mode (158 s)
+         no switch in the normal release program; markers found in the benchmark program; start refused without the argument
+  PASS   Without its own data folder the benchmark build refuses to start; with one it starts, logs what it is, and closes (8 s)
+         refused without its own data folder (exit 2); with one it started, logged 'benchmark build without site rules' in the run folder, closed with exit 0
+  PASS   CI and the local CI script run the release check
+         both run it after the release build
+------------------------------------------------------------------------
+RESULT: PASS - p4.16 (4 PASS; 172 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.16 check passed".

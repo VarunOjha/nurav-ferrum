@@ -1,0 +1,23 @@
+security-static-check at 2026-10-17 23:24 on commit c59d019 (with uncommitted changes)
+target folder: target/p4.16
+
+== cargo tree -p ferrum-desktop -e features -i ferrum-security (normal build)
+ferrum-security v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\security)
+└── ferrum-security feature "default"
+    └── ferrum-desktop v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\src-tauri)
+        └── ferrum-desktop feature "default" (command-line)
+PASS feature bench-nosecurity is not enabled in the normal build
+
+== marker texts (count in the normal release program / in the benchmark program)
+  bench-nosecurity-ablation-rule         normal=0 benchmark=2
+  benchmark-nosecurity-build             normal=0 benchmark=2
+  --benchmark-mode                       normal=0 benchmark=2
+  benchmark build without site rules     normal=0 benchmark=2
+PASS no marker in the normal release program; every marker found in the benchmark program
+  sizes: normal 14,071,296 bytes, benchmark 14,077,440 bytes
+
+== benchmark program started without --benchmark-mode: exit 2
+  [ferrum] benchmark-nosecurity-build: this build has no site rules and starts only with --benchmark-mode
+PASS the benchmark program refuses to start without --benchmark-mode
+
+RESULT: PASS

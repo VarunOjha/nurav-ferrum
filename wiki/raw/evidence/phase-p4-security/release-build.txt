@@ -1,0 +1,56 @@
+Command output saved by scripts/gates/p4-gate.ps1 on 2026-10-17 23:24 at commit c59d019 (with uncommitted changes)
+Exit code: 0
+
+
+> ferrum-desktop-shell@0.0.0 tauri
+> tauri build --no-bundle
+
+
+> ferrum-desktop-shell@0.0.0 build
+> tsc --noEmit && vite build
+
+[36mvite v8.3.4 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 16 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                            11.85 kB │ gzip:  3.39 kB
+dist/assets/ibm-plex-mono-latin-400-normal-CvHOgSBP.woff   13.14 kB
+dist/assets/ibm-plex-mono-latin-500-normal-CB9ihrfo.woff   13.15 kB
+dist/assets/ibm-plex-mono-latin-400-normal-DMJ8VG8y.woff2  14.70 kB
+dist/assets/ibm-plex-mono-latin-500-normal-DSY6xOcd.woff2  14.88 kB
+dist/assets/ibm-plex-sans-latin-400-normal-CYLoc0-x.woff   22.10 kB
+dist/assets/ibm-plex-sans-latin-700-normal-Bth3BMcD.woff   22.28 kB
+dist/assets/ibm-plex-sans-latin-400-normal-CDDApCn2.woff2  22.58 kB
+dist/assets/ibm-plex-sans-latin-700-normal-Bxkt5Cjx.woff2  22.83 kB
+dist/assets/ibm-plex-sans-latin-600-normal-Cu4Hd6ag.woff   23.87 kB
+dist/assets/ibm-plex-sans-latin-500-normal-BgVn5rGT.woff   23.91 kB
+dist/assets/ibm-plex-sans-latin-500-normal-6ng42L7E.woff2  24.18 kB
+dist/assets/ibm-plex-sans-latin-600-normal-CuJfVYMP.woff2  24.25 kB
+dist/assets/index-BYpxAlU2.css                             17.52 kB │ gzip:  3.65 kB
+dist/assets/index-DvTZPVbv.js                              40.38 kB │ gzip: 13.83 kB
+
+[32m✓ built in 149ms[39m
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `npm run build`
+   Compiling windows v0.62.2
+   Compiling tauri-utils v2.10.1
+   Compiling libsqlite3-sys v0.38.2
+   Compiling tokio v1.53.2
+   Compiling tauri-build v2.7.2
+   Compiling tauri-codegen v2.7.2
+   Compiling tauri v2.12.3
+   Compiling tauri-macros v2.7.2
+   Compiling ferrum-desktop v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\src-tauri)
+   Compiling rusqlite v0.40.2
+   Compiling ferrum-core v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\core)
+   Compiling ferrum-security v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\security)
+   Compiling webview2-com-sys v0.39.1
+   Compiling tao v0.37.1
+   Compiling webview2-com v0.39.1
+   Compiling wry v0.57.0
+   Compiling tauri-runtime v2.12.1
+   Compiling ferrum-webview-manager v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\webview-manager)
+   Compiling tauri-runtime-wry v2.12.1
+    Finished `release` profile [optimized] target(s) in 2m 13s
+       Built application at: <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\target\gate-release\release\ferrum-desktop.exe

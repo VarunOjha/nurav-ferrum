@@ -1,0 +1,53 @@
+Command output saved by scripts/gates/p4-gate.ps1 on 2026-10-17 23:22 at commit c59d019 (with uncommitted changes)
+Exit code: 0
+
+### npm run lint (exit 0)
+
+> ferrum-desktop-shell@0.0.0 lint
+> tsc --noEmit -p tsconfig.lint.json
+
+### npm run typecheck (exit 0)
+
+> ferrum-desktop-shell@0.0.0 typecheck
+> tsc --noEmit
+
+### npm run test (exit 0)
+
+> ferrum-desktop-shell@0.0.0 test
+> node --test "src/**/*.test.ts"
+
+✔ a loaded page: state loaded, no panel, lock allowed (1.8362ms)
+✔ a site's own error page (404, 500) stays visible with a toolbar note (0.2656ms)
+✔ a failure without a page gets the shell's panel (0.2067ms)
+✔ a cancelled navigation is not an error (0.124ms)
+✔ the lock describes only pages that loaded (0.1904ms)
+✔ error texts: known codes in plain words, unknown codes get a general sentence (0.2311ms)
+✔ crash texts: each failure in plain words, with what to do (0.154ms)
+✔ address text and blocked note (0.3927ms)
+✔ tab labels: title first, then the address without its scheme, else New tab (0.2614ms)
+✔ shell shortcuts follow the same table as the app (0.5058ms)
+✔ download lines: sizes in plain units, percent while running, done or failed (0.2321ms)
+✔ the start-up box takes one address per line (0.2908ms)
+✔ tab icons are the app's PNG data addresses only (0.1378ms)
+✔ a tab showed a page only after a web page loaded (0.1542ms)
+✔ sidebar history lists each address once, newest first, with its title (0.3598ms)
+✔ bookmarks: only web pages; grouped by folder, the bar first, in saved order (9.3168ms)
+✔ suggestions: words start words, any case; highlighted word starts (1.1212ms)
+✔ suggestions: grouped tabs, bookmarks, history; a page once; the active tab left out; limits (0.6928ms)
+✔ history rows say how long ago (1.3279ms)
+✔ the not-secure bar: only for a plain-HTTP page that loaded (0.2359ms)
+✔ site permissions: shown kinds follow the boxes, other kinds are kept (0.2173ms)
+✔ a SmartScreen block: failed although the server answered 200, connection aborted (p4.19) (0.1479ms)
+✔ the permission question names the site and what it wants (p4.20) (0.227ms)
+✔ every theme defines every colour token for light and dark (0.9341ms)
+✔ the look's tokens: theme colours, the accent for light or dark, the density's sizes (0.8319ms)
+✔ style.css writes no colour of its own (0.3351ms)
+✔ every token style.css uses is one a look sets (0.2628ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 159.3801

@@ -1,0 +1,321 @@
+Command output saved by scripts/gates/p4-gate.ps1 on 2026-10-17 23:07 at commit c59d019 (with uncommitted changes)
+Exit code: 0
+
+
+running 25 tests
+test backup::tests::short_passphrase_is_refused ... ok
+test store::tests::addresses_with_spaces_or_hidden_characters_are_refused ... ok
+test backup::tests::two_backups_of_the_same_contents_differ ... ok
+test backup::tests::not_a_backup_newer_and_unreasonable_files_are_refused ... ok
+test backup::tests::round_trip ... ok
+test store::tests::bookmarks_only_web_addresses ... ok
+test store::tests::other_schemes_are_not_history ... ok
+test store::tests::a_damaged_file_is_an_error_not_a_crash ... ok
+test fsutil::tests::write_new_never_replaces_a_file ... ok
+test store::tests::imports_old_history_json_in_order ... ok
+test store::tests::word_query_quotes_every_word ... ok
+test store::tests::bookmarks_add_rename_move_delete_and_search ... ok
+test store::tests::suggestions_list_each_page_once_and_one_page_can_be_forgotten ... ok
+test store::tests::word_index_is_compiled_in ... ok
+test store::tests::search_finds_words_of_titles_and_addresses_any_case ... ok
+test store::tests::visits_newest_first_with_titles_and_no_duplicate_on_reload ... ok
+test backup::tests::wrong_passphrase_changed_byte_and_cut_file_are_refused ... ok
+test store::tests::backup_export_and_import_merge_or_replace ... ok
+test store::tests::copy_to_writes_a_usable_copy_and_never_overwrites ... ok
+test store::tests::survives_reopening_and_refuses_a_newer_file ... ok
+test store::tests::removing_one_entry_or_bookmark_leaves_its_words_nowhere_in_the_file ... ok
+test fsutil::tests::saves_at_the_same_moment_each_leave_a_whole_file ... ok
+test store::tests::clear_history_leaves_nothing_in_tables_index_or_file ... ok
+test store::tests::oldest_entries_go_past_the_limit ... ok
+test backup::tests::ferrum_cost_is_the_documented_one ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.17s
+
+
+running 3 tests
+test site_keeps_only_scheme_and_host ... ok
+test malformed_never_navigates ... ok
+test every_input_class ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 19 tests
+test missing_file_gives_defaults ... ok
+test appearance_theme_accent_density ... ok
+test hash_is_stable_and_sensitive ... ok
+test http_start_url_is_kept_with_a_warning_when_policy_is_warn ... ok
+test http_start_url_is_upgraded_by_default ... ok
+test invalid_start_url_is_refused ... ok
+test valid_file_is_read ... ok
+test corrupted_file_is_backed_up ... ok
+test newer_version_is_refused_with_a_clear_error ... ok
+test appearance_defaults_and_round_trip ... ok
+test override_layer_wins ... ok
+test unknown_keys_and_bad_values_fail_loudly ... ok
+test save_replaces_an_existing_file ... ok
+test version_one_file_is_migrated_and_keeps_its_behaviour ... ok
+test save_then_load_round_trips ... ok
+test never_answers_and_closed_questions_are_read_checked_and_saved ... ok
+test site_lists_are_read_and_saved ... ok
+test non_web_start_urls_are_refused ... ok
+test site_permission_grants_are_read_checked_and_saved ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+
+running 5 tests
+test search_matches_address_or_title_any_case ... ok
+test titles_attach_to_the_newest_entry ... ok
+test visits_are_newest_first_and_repeats_merge ... ok
+test the_history_is_bounded ... ok
+test save_load_and_clear ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+running 3 tests
+test test_pattern_only_when_given ... ok
+test other_addresses_do_not_match ... ok
+test google_authorization_requests_match ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 9 tests
+test subdomains_share_and_other_sites_differ ... ok
+test user_labels_are_restricted ... ok
+test profile_names_follow_microsofts_rules ... ok
+test a_site_is_its_registrable_domain ... ok
+test version_one_files_keep_one_shared_profile ... ok
+test settings_choose_the_profile ... ok
+test an_unknown_isolation_mode_is_refused ... ok
+test per_site_udf_mode_gives_each_site_profile_its_own_folder ... ok
+test bad_site_settings_are_refused ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 5 tests
+test missing_file_is_no_session ... ok
+test an_active_index_outside_the_list_is_dropped ... ok
+test save_then_load_round_trips ... ok
+test newer_or_broken_files_are_refused ... ok
+test saving_never_leaves_half_a_file ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.14s
+
+
+running 4 tests
+test every_browser_shortcut_maps ... ok
+test names_are_stable ... ok
+test only_tab_switching_repeats ... ok
+test page_keys_stay_with_the_page ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 10 tests
+test closed_stack_is_bounded ... ok
+test ids_are_never_reused_even_after_reopen ... ok
+test new_tab_after_active ... ok
+test closing_the_active_tab_activates_a_neighbour ... ok
+test closing_another_tab_keeps_the_active_one ... ok
+test move_keeps_the_active_tab_and_clamps ... ok
+test first_tab_is_active_and_ids_count_up ... ok
+test next_and_previous_wrap_around ... ok
+test unknown_ids_change_nothing ... ok
+test random_operation_sequences_keep_every_rule ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.56s
+
+
+running 15 tests
+test audit::tests::times_are_utc_rfc3339 ... ok
+test backup::tests::dates ... ok
+test backup::tests::backup_paths_are_full_and_end_in_ferrum_backup ... ok
+test policy::tests::malformed_addresses_are_denied_in_every_context ... ok
+test policy::tests::link_type_list_is_read_and_checked ... ok
+test policy::tests::a_bad_rule_refuses_the_settings ... ok
+test policy::tests::the_shell_loads_only_ferrums_own_pages ... ok
+test recovery::tests::a_second_browser_failure_right_after_a_restart_does_not_restart_again ... ok
+test recovery::tests::crash_pages_pass_the_gate_once_and_only_for_the_armed_tab ... ok
+test audit::tests::a_line_has_exactly_the_six_fields_and_no_path_or_query ... ok
+test policy::tests::settings_become_the_policy ... ok
+test settings::tests::a_bad_blocked_site_is_refused_with_its_line ... ok
+test settings::tests::blocked_sites_are_checked_cleaned_and_kept_when_not_sent ... ok
+test settings::tests::never_answers_travel_with_the_row_and_quiet_times_end_when_permissions_change ... ok
+test audit::tests::the_file_rotates_and_keeps_three_old_files ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+
+running 1 test
+test tests::crate_name_matches_package ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test tests::crate_name_matches_package ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 29 tests
+test downloads::tests::names_are_cleaned ... ok
+test permissions::tests::rule_names_are_distinct ... ok
+test downloads::tests::long_names_keep_their_extension ... ok
+test policy::tests::blob_only_from_the_page_that_made_it ... ok
+test downloads::tests::program_types_are_recognised ... ok
+test permissions::tests::a_site_is_quiet_until_its_time_has_passed ... ok
+test permissions::tests::frames_of_another_site_and_insecure_pages_get_no_question ... ok
+test policy::tests::allowlist_more_specific_than_block_wins ... ok
+test policy::tests::allowlist_only_mode_denies_everything_not_listed ... ok
+test policy::tests::allowlist_without_block_rule_still_allows ... ok
+test permissions::tests::the_five_kinds_are_asked_and_every_other_kind_is_refused_by_default ... ok
+test permissions::tests::always_and_never_cover_their_site_and_kind_only ... ok
+test policy::tests::external_schemes_follow_settings ... ok
+test policy::tests::blocklist_matches_every_spelling_of_a_host ... ok
+test policy::tests::http_policy_warn_or_upgrade ... ok
+test permissions::tests::this_time_answers_hold_in_the_tab_only ... ok
+test policy::tests::equal_specificity_blocks ... ok
+test policy::tests::international_hosts_match_in_both_forms ... ok
+test policy::tests::risky_and_unlisted_link_types_are_refused ... ok
+test policy::tests::rule_names_are_stable_and_distinct ... ok
+test rules::tests::bad_entries_are_refused ... ok
+test policy::tests::table_of_rules_with_default_settings ... ok
+test rules::tests::exact_rule_matches_one_host ... ok
+test rules::tests::ip_rules_are_exact ... ok
+test rules::tests::list_keeps_most_specific_match_and_refuses_bad_entries ... ok
+test rules::tests::rules_are_normalised_like_urls ... ok
+test rules::tests::specificity_orders_labels_then_exactness ... ok
+test rules::tests::suffix_rule_matches_host_and_subdomains_only ... ok
+test policy::tests::too_long_addresses_are_denied ... ok
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 1 test
+test this_build_is_not_the_ablation ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 5 tests
+test seed_corpus_never_panics_and_unparseable_is_denied ... ok
+test parsed_web_urls_always_have_a_host ... ok
+test any_string_is_decided_without_panic ... ok
+test blocked_host_is_denied_regardless_of_rest ... ok
+test address_like_strings_are_decided_without_panic ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.02s
+
+
+running 1 test
+test tests::crate_name_matches_package ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 2 tests
+test error::tests::errors_print_as_one_line ... ok
+test webview2::tests::browser_arguments_keep_smartscreen_on ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test cookie_is_set_secure_and_read_back ... ok
+test link_pages_contain_their_links ... ok
+test downloads_are_deterministic_and_named ... ok
+test frames_and_links_only_point_to_https_or_this_site ... ok
+test redirects_point_where_documented ... ok
+test every_route_returns_its_documented_status ... ok
+test slow_page_waits_and_is_capped ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+
+
+running 2 tests
+test the_dev_ca_cannot_vouch_for_other_hosts ... ok
+test https_on_localhost_works_with_the_dev_ca ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+   Compiling ferrum-security v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\security)
+   Compiling fixture-server v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\tests\fixtures\server)
+   Compiling ferrum-desktop v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\src-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.61s
+     Running unittests src\lib.rs (target\debug\deps\ferrum_core-51179612ef4300b4.exe)
+     Running tests\address.rs (target\debug\deps\address-eacbb70b17f0f49f.exe)
+     Running tests\config.rs (target\debug\deps\config-ce6a916c07f4a72b.exe)
+     Running tests\history.rs (target\debug\deps\history-7b089619bdef064a.exe)
+     Running tests\oauth.rs (target\debug\deps\oauth-7bf5fc050882ec99.exe)
+     Running tests\profiles.rs (target\debug\deps\profiles-5683818a3d484226.exe)
+     Running tests\session.rs (target\debug\deps\session-a33a9e0f1672d0ab.exe)
+     Running tests\shortcuts.rs (target\debug\deps\shortcuts-255120ed20c9dbf6.exe)
+     Running tests\tabs.rs (target\debug\deps\tabs-60540efdab29b02c.exe)
+     Running unittests src\main.rs (target\debug\deps\ferrum_desktop-28d5bc75a791323c.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_network_logger-72ec03427278632c.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_resource_manager-6919822dd7625b27.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_security-b97887a142cb4b6d.exe)
+     Running tests\bench_nosecurity.rs (target\debug\deps\bench_nosecurity-6e8339bb29e8cbe3.exe)
+     Running tests\random_inputs.rs (target\debug\deps\random_inputs-75f48f02c23640dc.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_telemetry-f870915fed86f145.exe)
+     Running unittests src\lib.rs (target\debug\deps\ferrum_webview_manager-dd0e811731d98b5f.exe)
+     Running unittests src\lib.rs (target\debug\deps\fixture_server-7e881123acdf161e.exe)
+     Running unittests src\main.rs (target\debug\deps\fixture_server-ce12ac88ee734e7c.exe)
+     Running tests\routes.rs (target\debug\deps\routes-bb967e9928653e7a.exe)
+     Running tests\tls.rs (target\debug\deps\tls-297895e20657e012.exe)
+   Doc-tests ferrum_core
+   Doc-tests ferrum_network_logger
+   Doc-tests ferrum_resource_manager
+   Doc-tests ferrum_security
+   Doc-tests ferrum_telemetry
+   Doc-tests ferrum_webview_manager
+   Doc-tests fixture_server

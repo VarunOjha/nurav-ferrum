@@ -1,0 +1,26 @@
+Ferrum check p4.15: Selectable isolation modes
+Why: P6 can compare them.
+Run at 2026-10-17 23:27 on commit c59d019 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: three modes accepted, own folders only in per-site-udf, unknown mode refused (14 s)
+         three unit tests passed
+  PASS   The code makes a site environment with the shell's options and closes every view before exit
+         site environment made with the shell's browser arguments; views closed on exit
+Running 4 tests using 1 worker
+ISOLATION-MODE {"mode":"shared","cfg":"cfg-ferrum-shared-profile","environments":["shell"],"browsers":1,"kinds":{"renderer":4,"utility":2,"gpu":1,"browser":1},"processes":8,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+  ✓  1 isolation-modes.spec.ts:57:3 › mode shared: the two-site fixture shows the expected separation (3.9s)
+ISOLATION-MODE {"mode":"per-site","cfg":"cfg-ferrum-profile-per-site","environments":["shell"],"browsers":1,"kinds":{"renderer":4,"gpu":1,"utility":2,"browser":1},"processes":8,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+  ✓  2 isolation-modes.spec.ts:57:3 › mode per-site: the two-site fixture shows the expected separation (3.5s)
+ISOLATION-MODE {"mode":"per-site-udf","cfg":"cfg-ferrum-udf-per-site","environments":["shell","site-site-a.localhost","site-site-b.localhost"],"browsers":3,"kinds":{"renderer":4,"browser":3,"gpu":3,"utility":6},"processes":16,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+  ✓  3 isolation-modes.spec.ts:57:3 › mode per-site-udf: the two-site fixture shows the expected separation (10.3s)
+  ✓  4 isolation-modes.spec.ts:120:1 › a mode change applies after a restart; an unknown mode is refused (5.0s)
+  4 passed (1.3m)
+ISOLATION-MODE {"mode":"shared","cfg":"cfg-ferrum-shared-profile","environments":["shell"],"browsers":1,"kinds":{"renderer":4,"utility":2,"gpu":1,"browser":1},"processes":8,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+ISOLATION-MODE {"mode":"per-site","cfg":"cfg-ferrum-profile-per-site","environments":["shell"],"browsers":1,"kinds":{"renderer":4,"gpu":1,"utility":2,"browser":1},"processes":8,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+ISOLATION-MODE {"mode":"per-site-udf","cfg":"cfg-ferrum-udf-per-site","environments":["shell","site-site-a.localhost","site-site-b.localhost"],"browsers":3,"kinds":{"renderer":4,"browser":3,"gpu":3,"utility":6},"processes":16,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+  PASS   Live tests: the two-site fixture in each mode; restart and unknown-mode cases (140 s)
+         isolation-modes: 4 passed (shared, per-site, per-site-udf; restart and unknown mode)
+------------------------------------------------------------------------
+RESULT: PASS - p4.15 (3 PASS; 155 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.15 check passed".
