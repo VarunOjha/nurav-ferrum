@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:df20c3a067716c121a02fcf697735b3efb6c6380fe98eeebe1784f8dd32311ed"
+    "content_hash": "sha256:5d1803fe8b31aa38ed0f64945b3a42e0158bf0514c54df7c00e3a5f6c7ff59b9"
   },
   "entries": [
     {
@@ -5773,7 +5773,8 @@
       ],
       "commit": "3ff53ca",
       "covers": [
-        "## [2026-10-18] code | p5.3 memory and CPU meter built and checked"
+        "## [2026-10-18] code | p5.3 memory and CPU meter built and checked",
+        "## [2026-10-18] correct | p5.3 code entry: tag keyword put in backticks (lint UNV-NOPHASE)"
       ],
       "phase": "phase-p5-telemetry",
       "category": "Built",
