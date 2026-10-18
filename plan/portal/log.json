@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:92735cec820fbbd809c65f9a0a1905c4cdd6e52f6f06be71ea69f8b32f180017"
+    "content_hash": "sha256:b49af60ec33d5b66e53841a46e1ec81e927068c12ef864b0e403048f4760f031"
   },
   "entries": [
     {
@@ -5680,6 +5680,31 @@
       "tags": [
         "benchmarks",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-telemetry-reapproval",
+      "date": "2026-10-18",
+      "time": "16:08",
+      "title": "You re-approved the measurement part's page",
+      "done": "You re-approved the measurement part's page after the data-format task added its details.",
+      "next": "Claude counts exactly Ferrum's own processes (p5.2).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] approval | comp-telemetry re-approved after p5.1"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "benchmarks"
       ]
     }
   ]

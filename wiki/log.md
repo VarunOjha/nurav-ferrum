@@ -3103,3 +3103,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Export schema v1 in crates/telemetry/src/export: run line first in every file (version, run id, file number, start time, Ferrum version, git commit and dirty flag, Windows build, WebView2 runtime, settings fingerprint, machine id), process, tree, startup and navigation records, strict reading, a writer that rotates by size and renames .part files only after a sync, CSV tables, a checker, JSON Schema compared with the types. cargo test 10 passed; clippy and fmt clean; p5.1 check PASS (4 PASS). Lifecycle transition records come with p5.8. Stales approval of comp-telemetry (interfaces and export section added).
 - commit: 4d14fe2
 - next: owner re-approves comp-telemetry; then p5.2 (count exactly Ferrum's processes).
+
+## [2026-10-18] approval | comp-telemetry re-approved after p5.1
+- session: s08
+- time: 16:08
+- pages: [comp-telemetry]
+- sources: [raw/owner/2026-10-18-s08-p5-1-telemetry-reapproval.md]
+- result: Owner: "Re-approve". Recorded approved with tools/approvals_record.py. All approvals current.
+- next: p5.2 process-set attribution.
