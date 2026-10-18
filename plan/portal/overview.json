@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. You said go for Phase 5. Before it starts, you re-approve 14 pages changed by the Phase 4 clean-up, answer three questions and approve six plan pages.",
+  "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. You said go for Phase 5. Before it starts, you answer three questions and approve six plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:12c11c4b3c52bc4722c5392d54cc588c132dada6e2b7b517b7ef76e781df643b"
+    "content_hash": "sha256:6a8939fb4a8ceb7095ef0faa9956cf89bc8306473dd15a5c2ff6646658e3a8e3"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "14 pages to re-approve after the Phase 4 clean-up; 6 Phase 5 pages to approve",
+      "state": "Six Phase 5 plan pages wait for you",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -47,10 +47,10 @@
       },
       {
         "item": "What blocks it",
-        "state": "14 re-approvals, 3 questions, 6 plan pages"
+        "state": "3 questions and 6 plan pages"
       }
     ],
-    "why": "Nothing to run. Claude asks you to re-approve the 14 pages the Phase 4 clean-up changed, then asks the three questions one at a time in Claude Code, then shows the six Phase 5 pages for approval. When all are recorded, the start check reruns and the first Phase 5 task begins.",
+    "why": "Nothing to run. Claude asks you the three questions one at a time in Claude Code, then shows the six Phase 5 pages for approval. When all are recorded, the start check reruns and the first Phase 5 task begins.",
     "script": null,
     "tell_claude": "Your answer to each question as Claude asks it"
   },

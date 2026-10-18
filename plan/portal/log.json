@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b15af4d63357a3567189dc7c83e905fb3c3ab53c8dcabc7b598d19ef423d460a"
+    "content_hash": "sha256:7a9e068e52df29f331d5770c3c533847b0fbb9348c60625c75026225b79fe70d"
   },
   "entries": [
     {
@@ -5562,6 +5562,31 @@
       "tags": [
         "wiki",
         "approvals"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-reapproval",
+      "date": "2026-10-18",
+      "time": "15:31",
+      "title": "You re-approved the 14 pages changed by the Phase 4 clean-up",
+      "done": "You re-approved five decisions, three parts, and the Phase 2, 3 and 4 plans with their sign-offs. Only their notes on what was checked had changed.",
+      "next": "Claude asks you the three Phase 5 questions, one at a time.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "14 pages changed by the clean-up",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] approval | 14 keys re-approved after the P4 claim closure"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "wiki"
       ]
     }
   ]

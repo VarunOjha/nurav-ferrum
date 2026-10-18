@@ -328,14 +328,14 @@
     },
     "adr-0007": {
       "status": "approved",
-      "comment": "Re-approve all 9 (Recommended)",
-      "timestamp": "2026-10-11T14:25:14-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:36-05:00",
       "path": "wiki/decisions/adr-0007-child-webviews.md",
-      "content_hash": "sha256:5ac34335db2b64d1563c79e9f578c32a11144d19b4e6f028785d9bf7ebe8ef42",
-      "scope_hash": "sha256:89043e102759017cbf05e9f3ebc80aaec690f1ed98dda4c8f77b0ccb63e41aa0",
+      "content_hash": "sha256:5c9a60fa4bc268ad74db0835b7ec84aeefa53cba7a17b4e9fabb92897ffb8a1f",
+      "scope_hash": "sha256:f7705c1b538b17cdf1ca18bba47240a8c0d2ecf492450c43cbbda053f4003adb",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -347,19 +347,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-11-s01-wave2-pages-approval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Re-approve all 9 (Recommended)",
+          "timestamp": "2026-10-11T14:25:14-05:00",
+          "path": "wiki/decisions/adr-0007-child-webviews.md",
+          "content_hash": "sha256:5ac34335db2b64d1563c79e9f578c32a11144d19b4e6f028785d9bf7ebe8ef42",
+          "scope_hash": "sha256:89043e102759017cbf05e9f3ebc80aaec690f1ed98dda4c8f77b0ccb63e41aa0",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-reapproval.md"
         }
       ]
     },
     "adr-0010": {
       "status": "approved",
-      "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T02:19:15-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:36-05:00",
       "path": "wiki/decisions/adr-0010-isolation-webview2-profiles.md",
-      "content_hash": "sha256:7610e28111ce8a5817b068289f1cea71d6191f581c13cb6f2af3c3de4dab3b78",
-      "scope_hash": "sha256:fc656b5cdba6460dbaa0c68dfa39c18bc027b3de4fca4c6c45c1c98a47578b3d",
+      "content_hash": "sha256:a5844a7b1bca5c77278d818c306e14a7403c0694bc74d81ed13ea66026044790",
+      "scope_hash": "sha256:4d9e1688a85cb3c466f377f2c7fde214c9ed41d81d673783b406f2db81e850fb",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -382,19 +393,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-11-s02-p1-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T02:19:15-05:00",
+          "path": "wiki/decisions/adr-0010-isolation-webview2-profiles.md",
+          "content_hash": "sha256:7610e28111ce8a5817b068289f1cea71d6191f581c13cb6f2af3c3de4dab3b78",
+          "scope_hash": "sha256:fc656b5cdba6460dbaa0c68dfa39c18bc027b3de4fca4c6c45c1c98a47578b3d",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p3-autoapproval-keys.md"
         }
       ]
     },
     "adr-0011": {
       "status": "approved",
-      "comment": "Sign off now, check later",
-      "timestamp": "2026-10-13T07:35:03-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:37-05:00",
       "path": "wiki/decisions/adr-0011-git-ci-license.md",
-      "content_hash": "sha256:8297149127e9c41621291a30450294aa28e7f40417506721d0be7e522a429463",
-      "scope_hash": "sha256:f3dfffb757be9fd054dbc0d199c93a0557f500aa29b88c30d2822815f1f6bc0a",
+      "content_hash": "sha256:6f91426ecd3f24ddc7a792cb3885c3bd3fac1c9772226308e02341851d0f6c0a",
+      "scope_hash": "sha256:0d10416cf6f47110cf68d8d556a74c041f3a337dd12487415f31c7fd2dfe6e98",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -428,6 +450,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Sign off now, check later",
+          "timestamp": "2026-10-13T07:35:03-05:00",
+          "path": "wiki/decisions/adr-0011-git-ci-license.md",
+          "content_hash": "sha256:8297149127e9c41621291a30450294aa28e7f40417506721d0be7e522a429463",
+          "scope_hash": "sha256:f3dfffb757be9fd054dbc0d199c93a0557f500aa29b88c30d2822815f1f6bc0a",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md"
         }
       ]
     },
@@ -480,14 +513,14 @@
     },
     "adr-0019": {
       "status": "approved",
-      "comment": "consider auto approved for next phase and do that",
-      "timestamp": "2026-10-12T00:29:02-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:38-05:00",
       "path": "wiki/decisions/adr-0019-raw-webview2-com-boundary.md",
-      "content_hash": "sha256:63e8a5916a02ceb3416eb49df67379041694ed4fc4389377ae0fc6fb82f20c40",
-      "scope_hash": "sha256:ad13de275eeaa1d16eb8b881d0851f316d3759c8a8601ab39f3cdc90ceadfd73",
+      "content_hash": "sha256:1d10f3679e238a9156bd75168bed1511e78486e1127041047b47ed62ea31fdb3",
+      "scope_hash": "sha256:998fb4b4b9d6770f1695ffc1f7c2be779f52ec05d58b951e86c4d4000f7dbf41",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -499,6 +532,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-11-s01-wave2-pages-approval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "consider auto approved for next phase and do that",
+          "timestamp": "2026-10-12T00:29:02-05:00",
+          "path": "wiki/decisions/adr-0019-raw-webview2-com-boundary.md",
+          "content_hash": "sha256:63e8a5916a02ceb3416eb49df67379041694ed4fc4389377ae0fc6fb82f20c40",
+          "scope_hash": "sha256:ad13de275eeaa1d16eb8b881d0851f316d3759c8a8601ab39f3cdc90ceadfd73",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
         }
       ]
     },
@@ -706,15 +750,27 @@
     },
     "comp-webview2-runtime": {
       "status": "approved",
-      "comment": "Approved all, mark it, don't start phase 1",
-      "timestamp": "2026-10-11T01:48:20-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:39-05:00",
       "path": "wiki/architecture/components/comp-webview2-runtime.md",
-      "content_hash": "sha256:9bf02a6c3c06d40772a8e6adfb22161a5014271895c7d4e0c19cbe4f983af73b",
-      "scope_hash": "sha256:a10492c481749131b27f4b54e0eb90334003d67f2517ba1ff4e7f61c151f297c",
+      "content_hash": "sha256:633bc3cd09bbe7e1670a4df97ddc50d53d02764f27dfe4d4a1ab36d597bfa09e",
+      "scope_hash": "sha256:6ebe563b3449b45d689dd1d9d6931812b2ff53fc3fe869cb7f4bd7d4e03abdb3",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-11-s01-wave2-pages-approval.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "Approved all, mark it, don't start phase 1",
+          "timestamp": "2026-10-11T01:48:20-05:00",
+          "path": "wiki/architecture/components/comp-webview2-runtime.md",
+          "content_hash": "sha256:9bf02a6c3c06d40772a8e6adfb22161a5014271895c7d4e0c19cbe4f983af73b",
+          "scope_hash": "sha256:a10492c481749131b27f4b54e0eb90334003d67f2517ba1ff4e7f61c151f297c",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-11-s01-wave2-pages-approval.md"
+        }
+      ]
     },
     "comp-windows-os": {
       "status": "approved",
@@ -814,14 +870,14 @@
     },
     "adr-0015": {
       "status": "approved",
-      "comment": "Approve all five (Recommended)",
-      "timestamp": "2026-10-13T07:47:03-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:37-05:00",
       "path": "wiki/decisions/adr-0015-navigation-posture-open-blocklist.md",
-      "content_hash": "sha256:d42dc571ea696b13c2b2b8f3af023cb990fee5a2df0d813bc083eb7ffa8bbf83",
-      "scope_hash": "sha256:78b46c813c54ab67e20644a3ae38452a0b15c9f45a0b0cbada1e99200266b5e3",
+      "content_hash": "sha256:048f217a6a42365b7c8172ba70fbbad1670f0da13760a2a9ef72c326b4e6738d",
+      "scope_hash": "sha256:b152da87fb4cf8d4d20a32b63539c730490d42973cd27f1ae6645b671600551b",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -844,19 +900,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Approve all five (Recommended)",
+          "timestamp": "2026-10-13T07:47:03-05:00",
+          "path": "wiki/decisions/adr-0015-navigation-posture-open-blocklist.md",
+          "content_hash": "sha256:d42dc571ea696b13c2b2b8f3af023cb990fee5a2df0d813bc083eb7ffa8bbf83",
+          "scope_hash": "sha256:78b46c813c54ab67e20644a3ae38452a0b15c9f45a0b0cbada1e99200266b5e3",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-p4-pages-approval.md"
         }
       ]
     },
     "comp-app-shell": {
       "status": "approved",
-      "comment": "",
-      "timestamp": "2026-10-15T17:44:52-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:38-05:00",
       "path": "wiki/architecture/components/comp-app-shell.md",
-      "content_hash": "sha256:ab0fb48b6808d77c91aa8dff6baa969e48be2b9531690c8b51f7367ef2c25113",
-      "scope_hash": "sha256:847c713bea656b2413c78e5bba20a36bd661b30aadfd35b6b3a9ca21c474919e",
+      "content_hash": "sha256:8599899f2d7c2252c594db516ba7ea1d03f9ca1308dc3d40990ad79daab078ac",
+      "scope_hash": "sha256:8befdc25b09f70f77fcf49064add2e45ba41a1154ef609a7c4e535ea24601c08",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-20-components-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1187,6 +1254,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-11-components-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-15T17:44:52-05:00",
+          "path": "wiki/architecture/components/comp-app-shell.md",
+          "content_hash": "sha256:ab0fb48b6808d77c91aa8dff6baa969e48be2b9531690c8b51f7367ef2c25113",
+          "scope_hash": "sha256:847c713bea656b2413c78e5bba20a36bd661b30aadfd35b6b3a9ca21c474919e",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-20-components-reapproval.md"
         }
       ]
     },
@@ -1328,14 +1406,14 @@
     },
     "comp-webview-manager": {
       "status": "approved",
-      "comment": "",
-      "timestamp": "2026-10-15T17:44:53-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:38-05:00",
       "path": "wiki/architecture/components/comp-webview-manager.md",
-      "content_hash": "sha256:16faeb8a7d92b728070210ea9e254562e2991c85649e16ed7522268ed2275a2f",
-      "scope_hash": "sha256:3161873b820bd60f17022ddac8582ca7945342c6e72dec6b37a6ee83df5c7e3b",
+      "content_hash": "sha256:224d71472048cb42216f2d77bf947e49e123ab557f8af03222de917e2b940f3c",
+      "scope_hash": "sha256:74025c04767f9834b57cf1c064790668207e8103e0b7b35053e5d4a7836dd83f",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-20-components-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1479,19 +1557,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-15T17:44:53-05:00",
+          "path": "wiki/architecture/components/comp-webview-manager.md",
+          "content_hash": "sha256:16faeb8a7d92b728070210ea9e254562e2991c85649e16ed7522268ed2275a2f",
+          "scope_hash": "sha256:3161873b820bd60f17022ddac8582ca7945342c6e72dec6b37a6ee83df5c7e3b",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-20-components-reapproval.md"
         }
       ]
     },
     "phase-p2-minimal-container": {
       "status": "approved",
-      "comment": "Re-approve all five (Recommended)",
-      "timestamp": "2026-10-13T07:57:24-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:39-05:00",
       "path": "wiki/phases/phase-p2-minimal-container.md",
-      "content_hash": "sha256:2357156633a8fa240077121b493f631ec3de436ecb56d8717e034a9cd54d3a5f",
-      "scope_hash": "sha256:b3eac8e398bf35d27e5acd8cefa5c05e17c2bb5753842871dd56b5cfcab1e737",
+      "content_hash": "sha256:8265793eca415c608e8edea99e088e87e0baa3983391437dd82d87dff415e3f6",
+      "scope_hash": "sha256:e158d1d706461d5e795becc806ad1977c7d63d135b4d628a28471d1b20f484c7",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1514,19 +1603,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Re-approve all five (Recommended)",
+          "timestamp": "2026-10-13T07:57:24-05:00",
+          "path": "wiki/phases/phase-p2-minimal-container.md",
+          "content_hash": "sha256:2357156633a8fa240077121b493f631ec3de436ecb56d8717e034a9cd54d3a5f",
+          "scope_hash": "sha256:b3eac8e398bf35d27e5acd8cefa5c05e17c2bb5753842871dd56b5cfcab1e737",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md"
         }
       ]
     },
     "phase-p3-tabs-sessions": {
       "status": "approved",
-      "comment": "Re-approve all five (Recommended)",
-      "timestamp": "2026-10-13T07:57:24-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:40-05:00",
       "path": "wiki/phases/phase-p3-tabs-sessions.md",
-      "content_hash": "sha256:3a1682d14820fc13c907b781242264d5d6a5724f9ff75551e1584fd3229f4961",
-      "scope_hash": "sha256:d44dda0e8a270b477e7f39c582d81e88665622bdd44b2d05699b7a011a6fa168",
+      "content_hash": "sha256:237c23913b1cf56ac25bc30cf6cb241ca343f123ce9d5410c7849e69292eb263",
+      "scope_hash": "sha256:32559f2e3096d3163bdca098c5775f6b75274bc3c3da6792ac723a3ab5427879",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1593,19 +1693,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Re-approve all five (Recommended)",
+          "timestamp": "2026-10-13T07:57:24-05:00",
+          "path": "wiki/phases/phase-p3-tabs-sessions.md",
+          "content_hash": "sha256:3a1682d14820fc13c907b781242264d5d6a5724f9ff75551e1584fd3229f4961",
+          "scope_hash": "sha256:d44dda0e8a270b477e7f39c582d81e88665622bdd44b2d05699b7a011a6fa168",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md"
         }
       ]
     },
     "phase-p2-minimal-container#exit": {
       "status": "approved",
-      "comment": "Re-approve all five (Recommended)",
-      "timestamp": "2026-10-13T07:57:24-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:39-05:00",
       "path": "wiki/phases/phase-p2-minimal-container.md",
-      "content_hash": "sha256:2357156633a8fa240077121b493f631ec3de436ecb56d8717e034a9cd54d3a5f",
-      "scope_hash": "sha256:b3eac8e398bf35d27e5acd8cefa5c05e17c2bb5753842871dd56b5cfcab1e737",
+      "content_hash": "sha256:8265793eca415c608e8edea99e088e87e0baa3983391437dd82d87dff415e3f6",
+      "scope_hash": "sha256:e158d1d706461d5e795becc806ad1977c7d63d135b4d628a28471d1b20f484c7",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1617,6 +1728,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-12-s02-p2-checklist-and-p3-autoapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Re-approve all five (Recommended)",
+          "timestamp": "2026-10-13T07:57:24-05:00",
+          "path": "wiki/phases/phase-p2-minimal-container.md",
+          "content_hash": "sha256:2357156633a8fa240077121b493f631ec3de436ecb56d8717e034a9cd54d3a5f",
+          "scope_hash": "sha256:b3eac8e398bf35d27e5acd8cefa5c05e17c2bb5753842871dd56b5cfcab1e737",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md"
         }
       ]
     },
@@ -1682,14 +1804,14 @@
     },
     "phase-p3-tabs-sessions#exit": {
       "status": "approved",
-      "comment": "Re-approve all five (Recommended)",
-      "timestamp": "2026-10-13T07:57:25-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:40-05:00",
       "path": "wiki/phases/phase-p3-tabs-sessions.md",
-      "content_hash": "sha256:3a1682d14820fc13c907b781242264d5d6a5724f9ff75551e1584fd3229f4961",
-      "scope_hash": "sha256:d44dda0e8a270b477e7f39c582d81e88665622bdd44b2d05699b7a011a6fa168",
+      "content_hash": "sha256:237c23913b1cf56ac25bc30cf6cb241ca343f123ce9d5410c7849e69292eb263",
+      "scope_hash": "sha256:32559f2e3096d3163bdca098c5775f6b75274bc3c3da6792ac723a3ab5427879",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1701,19 +1823,30 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md"
+        },
+        {
+          "status": "approved",
+          "comment": "Re-approve all five (Recommended)",
+          "timestamp": "2026-10-13T07:57:25-05:00",
+          "path": "wiki/phases/phase-p3-tabs-sessions.md",
+          "content_hash": "sha256:3a1682d14820fc13c907b781242264d5d6a5724f9ff75551e1584fd3229f4961",
+          "scope_hash": "sha256:d44dda0e8a270b477e7f39c582d81e88665622bdd44b2d05699b7a011a6fa168",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-13-s03-alt-tab-claim-reapproval.md"
         }
       ]
     },
     "phase-p4-security": {
       "status": "approved",
-      "comment": "",
-      "timestamp": "2026-10-15T17:15:00-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:41-05:00",
       "path": "wiki/phases/phase-p4-security.md",
-      "content_hash": "sha256:b0a11c1b74985a178afcf3bba8247b1357ef13f9b8e4bcd0291797069e0f7b5f",
-      "scope_hash": "sha256:cde75bb98db43920823d9324f8a4bf8f5d76d228c0e2bd0169bc9808e728f6d5",
+      "content_hash": "sha256:ce304b35fdad51beb8fc0fb53f58770406e855510551adac2085d8923bc31175",
+      "scope_hash": "sha256:eb57aa7bbc9630666c9e27fe5c0c043177fa5d3a935584e8e848bc1c941fd7f3",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-15-s07-q228-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -1769,6 +1902,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-20-approvals.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-15T17:15:00-05:00",
+          "path": "wiki/phases/phase-p4-security.md",
+          "content_hash": "sha256:b0a11c1b74985a178afcf3bba8247b1357ef13f9b8e4bcd0291797069e0f7b5f",
+          "scope_hash": "sha256:cde75bb98db43920823d9324f8a4bf8f5d76d228c0e2bd0169bc9808e728f6d5",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-15-s07-q228-reapproval.md"
         }
       ]
     },
@@ -1869,15 +2013,27 @@
     },
     "phase-p4-security#exit": {
       "status": "approved",
-      "comment": "Signed off, go ahead",
-      "timestamp": "2026-10-18T14:35:14-05:00",
+      "comment": "Re-approve",
+      "timestamp": "2026-10-18T15:30:41-05:00",
       "path": "wiki/phases/phase-p4-security.md",
-      "content_hash": "sha256:7a1dfa79f46a24f7d1c7c16cdec7d96968ddd1e4c669d63e3c7de32a0c1b1f56",
-      "scope_hash": "sha256:cde75bb98db43920823d9324f8a4bf8f5d76d228c0e2bd0169bc9808e728f6d5",
+      "content_hash": "sha256:ce304b35fdad51beb8fc0fb53f58770406e855510551adac2085d8923bc31175",
+      "scope_hash": "sha256:eb57aa7bbc9630666c9e27fe5c0c043177fa5d3a935584e8e848bc1c941fd7f3",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-claims-reapproval.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "Signed off, go ahead",
+          "timestamp": "2026-10-18T14:35:14-05:00",
+          "path": "wiki/phases/phase-p4-security.md",
+          "content_hash": "sha256:7a1dfa79f46a24f7d1c7c16cdec7d96968ddd1e4c669d63e3c7de32a0c1b1f56",
+          "scope_hash": "sha256:cde75bb98db43920823d9324f8a4bf8f5d76d228c0e2bd0169bc9808e728f6d5",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md"
+        }
+      ]
     }
   }
 }
