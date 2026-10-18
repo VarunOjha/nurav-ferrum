@@ -1,0 +1,16 @@
+Ferrum check p4.14: Exit gate and your M3 review
+Why: you approve the exit on saved evidence, not on a claim.
+Run at 2026-10-18 14:35 on commit 8a72797 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Every evidence file of the P4 gate exists
+         14 evidence files
+  PASS   Your checklist for the review exists
+         docs/testing/manual-checklist-p4.md
+  PASS   The log has a gate entry for P4
+         gate entry found
+  PASS   Your approval of the P4 exit is recorded
+         Approved: the end of P4
+------------------------------------------------------------------------
+RESULT: PASS - p4.14 (4 PASS; 1 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.14 check passed".

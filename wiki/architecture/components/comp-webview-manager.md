@@ -4,7 +4,7 @@ type: component
 title: "WebView manager (tab WebViews, navigation, sessions, raw COM layer)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-14
+updated: 2026-10-18
 sources:
   - raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt
   - raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md
@@ -67,9 +67,7 @@ connects:
     label: "shared types, ids, event definitions"
     kind: rust-api
     crosses_trust_boundary: false
-unverified:
-  - claim: "Raw-COM PermissionRequested covers for tabs what Tauri's permission hooks would have done"
-    verify_in: phase-p4-security
+unverified: []
 ---
 
 # comp-webview-manager
@@ -88,7 +86,7 @@ This crate owns every tab WebView. **It is the only place in Ferrum where WebVie
 
 Raw-COM events instead of Tauri's hooks: `NavigationStarting`, `NewWindowRequested` and `NavigationCompleted` were
 verified in P2 for the content view (checks [p2.6](../../raw/evidence/phase-p2-minimal-container/check-p2.6.txt), [p2.8](../../raw/evidence/phase-p2-minimal-container/check-p2.8.txt),
-[p2.10](../../raw/evidence/phase-p2-minimal-container/check-p2.10.txt)); `DownloadStarting` was verified in P3 (p3.8: the file, its size and contents, completion and failure; [check-p3.8](../../raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt)); `PermissionRequested` belongs to the permission work of P4 and is UNVERIFIED[phase-p4-security].
+[p2.10](../../raw/evidence/phase-p2-minimal-container/check-p2.10.txt)); `DownloadStarting` was verified in P3 (p3.8: the file, its size and contents, completion and failure; [check-p3.8](../../raw/evidence/phase-p3-tabs-sessions/check-p3.8.txt)); `PermissionRequested` was verified in P4 (p4.5: Ferrum answers every request, also from a frame, with SavesInProfile false, so WebView2 keeps no answer; p4.20: the request waits for the user's answer; [check-p4.5](../../raw/evidence/phase-p4-security/check-p4.5.txt), [check-p4.20](../../raw/evidence/phase-p4-security/check-p4.20.txt)).
 
 ## Unsafe invariants
 

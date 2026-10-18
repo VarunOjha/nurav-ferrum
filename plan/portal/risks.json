@@ -38,7 +38,7 @@
       "summary": "Many web views in one window needs a Tauri feature marked experimental. Known bugs: hangs, blank views, lost keyboard focus.",
       "likelihood": 4,
       "impact": 4,
-      "mitigation": "Tested in P1: create views only from background code and keep the shell above the tabs. Copy and paste work; after Alt+Tab the keyboard needed a click. P2 built a fix; your check of it moved to the P4 hand checks.",
+      "mitigation": "Tested in P1: create views only from background code and keep the shell above the tabs. Copy and paste work; after Alt+Tab the keyboard needed a click. P2 built a fix; your check of it is still owed (P4 was signed off before its hand checks; now P5).",
       "phase": "phase-p1-foundation",
       "status": "Being reduced",
       "category": "The app",
@@ -57,7 +57,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r02-tauri-multiwebview-unstable.md",
-        "content_hash": "sha256:82c5edfbccaa5e842ae903d9d0a48650d3d6ef654774b8c3d6e6ddfcd25bff60"
+        "content_hash": "sha256:34ec266a4eb999b1da10a07dac58bb161ec6ab7dd5a19b0313b2abc2ed518cc9"
       }
     },
     {
@@ -187,7 +187,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r07-navigation-filter-fail-open.md",
-        "content_hash": "sha256:2e1de638bc4a1259ee4ce89dccd05b8c16f591dd1830ad30efee6fb9591f5a05"
+        "content_hash": "sha256:62dfc0150929ecdfe8f6b2e68c9f5567b6170bc83d6a1c8cc111f3d9618ac90d"
       }
     },
     {
@@ -265,7 +265,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r10-google-oauth-embedded.md",
-        "content_hash": "sha256:0d57c9f349fc8b6b1ce26130e257b824806c4891182b0f2dc865a46cddbd1311"
+        "content_hash": "sha256:ab69b2550c5f0bdfbc02d494ce88ceba2b8f0bd4bddecaf6d8c814297a7453f5"
       }
     },
     {
@@ -512,7 +512,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r19-security-regression-ipc.md",
-        "content_hash": "sha256:61b3e52c2ba0cc51b8ca927ea1acebea588a430b84332698a6851e652e55a22d"
+        "content_hash": "sha256:5405c005712b7e0b417e918d6b3e74a1a4214697fbbfffe39f942090efdbd12e"
       }
     },
     {
@@ -541,7 +541,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r20-dependency-toolchain-churn.md",
-        "content_hash": "sha256:68545e897eb62f8b397b139d9cd6ce579049ca42618bd50c3e5179cdfe5d360b"
+        "content_hash": "sha256:381d867216ca819110582bbd98ebe7bc0e7acabd35f3fe936e9a71b3110ef862"
       }
     },
     {

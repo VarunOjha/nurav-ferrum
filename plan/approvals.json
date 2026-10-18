@@ -1866,6 +1866,18 @@
           "owner_words": "wiki/raw/owner/2026-10-15-s07-p4-20-approvals.md"
         }
       ]
+    },
+    "phase-p4-security#exit": {
+      "status": "approved",
+      "comment": "Signed off, go ahead",
+      "timestamp": "2026-10-18T14:35:14-05:00",
+      "path": "wiki/phases/phase-p4-security.md",
+      "content_hash": "sha256:7a1dfa79f46a24f7d1c7c16cdec7d96968ddd1e4c669d63e3c7de32a0c1b1f56",
+      "scope_hash": "sha256:cde75bb98db43920823d9324f8a4bf8f5d76d228c0e2bd0169bc9808e728f6d5",
+      "approved_by": "owner",
+      "recorded_by": "claude",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md",
+      "history": []
     }
   }
 }

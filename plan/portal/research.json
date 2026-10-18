@@ -443,7 +443,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/hypotheses/hyp-12-security-overhead-small.md",
-        "content_hash": "sha256:fbd47cbd1d36c0c5dc0b4652cc11e602e1905016a18f58614dcc9cd4367cba0e"
+        "content_hash": "sha256:48a55f307d0d7140739e874b72c3b1fbc557f62fd486ee1f2d82e3a7f2ca008a"
       },
       "prediction": "We expect each security decision to take under 1 ms (95% of the time), and page loads and memory to be at most 5% above a checks-off build; we would be wrong if any limit is broken."
     },

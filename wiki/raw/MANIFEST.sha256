@@ -349,3 +349,6 @@ b1a0ae784a64d636786f0815691c2fbc83364de7238b62f3ea32d197bd7d4f05  evidence/phase
 a0f30be4a5c69ecf6790d7c24bf5d9ebd10fd4b40869b1c4fbd81d8621bd93db  evidence/phase-p4-security/shell-tests.20261017-2322.txt
 537e8f47e56a7330355a19aed66243dc3bef102315edd35fc5553c8dc46a6f92  evidence/phase-p4-security/wiki-lint.txt
 3b7aec930b6bb20a4498df9ea176068980113be834464dcb8e3fb8fca9460e18  owner/2026-10-18-s07-ip-routes-reapproval.md
+730ce61a9ced47b780d4f8936a7a47cb47005b702dea8d7341841a28964f5b90  owner/2026-10-18-s08-p4-signoff-and-p5-go.md
+2679f26741f88b4a7842c7f558ba24988bbda9ff49ea6907ccaa1acd4550ff7b  evidence/phase-p4-security/manual-checklist.md
+3558757447444ede30b3b8192cfa4e063b906fae89997d1c2890cfb4adc2e8ca  evidence/phase-p4-security/check-p4.14.txt

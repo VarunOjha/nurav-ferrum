@@ -3,7 +3,7 @@ id: hyp-12
 type: hypothesis
 title: "The security engine adds negligible navigation latency and memory"
 status: draft
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/research/measurement-methodology.md
@@ -29,7 +29,7 @@ tags:
   - preregistration-candidate
 unverified:
   - claim: "Evaluating a policy (URL parsing plus list lookups) should be cheap compared with a navigation. That expectation"
-    verify_in: phase-p4-security
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # HYP-12: The security engine adds negligible navigation latency and memory
@@ -46,7 +46,7 @@ Research question: [rq-05](../questions/rq-05-security-overhead.md). Status `dra
 
 ## Rationale
 
-Evaluating a policy (URL parsing plus list lookups) should be cheap compared with a navigation. That expectation is UNVERIFIED[phase-p4-security]. cfg-ferrum-nosecurity-bench is a benchmark-only build that never loads public sites.
+Evaluating a policy (URL parsing plus list lookups) should be cheap compared with a navigation. That expectation is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P4: p4.12 ran the microbenchmark harness only to show that it works, not as a measurement, [harness run](../../raw/evidence/phase-p4-security/microbench-harness-run.txt); P6 measures it). cfg-ferrum-nosecurity-bench is a benchmark-only build that never loads public sites.
 
 ## Decision rule
 

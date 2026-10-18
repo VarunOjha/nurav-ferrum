@@ -3,7 +3,7 @@ id: ov-arch-data-flows
 type: overview
 title: "Architecture: runtime data flows"
 status: review
-updated: 2026-10-14
+updated: 2026-10-18
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
@@ -23,8 +23,6 @@ unverified:
     verify_in: phase-p5-telemetry
   - claim: "FCP/LCP can be read from a tab via host-initiated script or CDP without adding IPC to the page"
     verify_in: phase-p5-telemetry
-  - claim: "The IPC rejection of untrusted tab content holds end to end"
-    verify_in: phase-p4-security
 ---
 
 # Runtime data flows
@@ -83,7 +81,7 @@ sequenceDiagram
   H-->>TC: rejected (ACL), logged
 ```
 
-The facts behind this flow are VERIFIED in the [Tauri note §3](../raw/research/tauri-webview2-capabilities.md). That the rejection holds end to end will be proven by the P4 tests (UNVERIFIED[phase-p4-security] until then) ([trust boundaries §4](ov-arch-trust-boundaries.md)).
+The facts behind this flow are VERIFIED in the [Tauri note §3](../raw/research/tauri-webview2-capabilities.md). That the rejection holds end to end was verified in P4: from a website, 16 ways into the app were refused, the exempt channel-fetch command returned nothing, and tab views have no bridge at all ([check-p4.8](../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt), [self-test record](../raw/evidence/phase-p4-security/p4.8-ipc-selftest.20261013-2009.json)); the gate's rerun of the security suite passed ([security suite](../raw/evidence/phase-p4-security/security-suite.20261017-2315.txt)) ([trust boundaries §4](ov-arch-trust-boundaries.md)).
 
 **Proposed shell command surface** (names are PROPOSALs, finalised in phase-p2-minimal-container / phase-p3-tabs-sessions): `tab_create`, `tab_close`, `tab_activate`, `tab_navigate`, `tab_back`, `tab_forward`, `tab_reload`, `tab_stop`, `settings_get`, `settings_set`, `session_list`, `download_list`, `external_open_confirm`, `netlog_open_folder`. Events (Rust → shell): `tab-updated`, `tab-blocked`, `tab-lifecycle`, `download-updated`, `permission-request`, `external-scheme-request`.
 

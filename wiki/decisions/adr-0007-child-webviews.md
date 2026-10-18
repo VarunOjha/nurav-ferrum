@@ -3,7 +3,7 @@ id: adr-0007
 type: decision
 title: "Child WebViews in one window (trusted shell + one untrusted child WebView per tab, Tauri multi-webview unstable feature)"
 status: accepted
-updated: 2026-10-11
+updated: 2026-10-18
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -19,9 +19,7 @@ options:
   - "Shell in Tauri; tab WebView2 controllers created directly via raw COM in child HWNDs"
 phase: phase-p0-planning
 tags: [architecture, webview, tauri, unstable]
-unverified:
-  - claim: "Whether WebView2 lets a remote page navigate a tab top-level to the app's local origin (http://tauri.localhost or tauri://)"
-    verify_in: phase-p4-security
+unverified: []
 ---
 
 # ADR-0007: Child WebViews in one window
@@ -74,7 +72,7 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
 1. **Labels and capabilities.** The shell webview's label is `shell` and each tab is labelled `tab-<id>`. The shell capability targets **webview label `shell`**. **No capability ever declares a `remote` section.** An app ACL manifest is shipped so that local commands are ACL-checked too.
 2. **Threading.** Tabs are created and destroyed **only from async commands or a dedicated thread**, never from synchronous commands or event handlers. A P1 spike test covers this.
 3. **Layout.** Each tab webview uses explicit `set_bounds` on window resize, or `auto_resize` where that does not conflict with fixed positioning (#9611). Exactly one tab is visible at a time. Hidden tabs use `hide()`, which maps to WebView2 `IsVisible=false` (VERIFIED §2). That is also a precondition for `TrySuspend` in P7.
-4. **No local origin in tabs.** Tabs are never navigated to the app's local origin. `on_navigation` blocks it. Whether a remote page can force such a navigation is UNVERIFIED[phase-p4-security] and must be a negative security test.
+4. **No local origin in tabs.** Tabs are never navigated to the app's local origin. `on_navigation` blocks it. That a remote page cannot force such a navigation was verified in P4 by negative security tests: links, a pop-up and a typed address to Ferrum's own pages are refused and logged ([check-p4.8](../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt)).
 5. **Back and forward** use `eval("history.back()")` / `eval("history.forward()")` in P2 unless the raw-COM route is approved ([ADR-0019](adr-0019-raw-webview2-com-boundary.md)).
 6. **Pinning.** Stay on Tauri 2.x, with exact versions pinned in P1. Re-evaluate on each Tauri 2.x minor release.
 

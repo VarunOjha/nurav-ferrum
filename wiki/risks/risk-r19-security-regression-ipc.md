@@ -3,7 +3,7 @@ id: risk-r19
 type: risk
 title: "Security regressions that expose native commands or weaken isolation for remote content"
 status: open
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/00-master-prompt.md
@@ -18,13 +18,7 @@ spike: null
 owner_phase: phase-p4-security
 trigger: "Any security test fails or is skipped; a new capability file or permission appears in a diff; a Tauri release note mentions ACL, IPC or the fetch-channel command; the debug port is enabled in a non-benchmark build."
 fallback: "Block the release or phase exit until fixed; if a hole cannot be closed, remove the affected feature and document the limitation in the threat model."
-unverified:
-  - claim: "The WebMessageReceived Source origin cannot be spoofed by page script"
-    verify_in: phase-p4-security
-  - claim: "FETCH_CHANNEL_DATA_COMMAND leaks no data to a remote page"
-    verify_in: phase-p4-security
-  - claim: "A remote page cannot navigate a tab top-level to the app's local origin (http://tauri.localhost)"
-    verify_in: phase-p4-security
+unverified: []
 ---
 
 # risk-r19: Security regressions that expose native commands or weaken isolation for remote content
@@ -70,9 +64,9 @@ Block the release or phase exit until fixed; if a hole cannot be closed, remove 
 
 ## Unverified claims
 
-- The WebMessageReceived Source origin cannot be spoofed by page script. UNVERIFIED[phase-p4-security]
-- FETCH_CHANNEL_DATA_COMMAND leaks no data to a remote page. UNVERIFIED[phase-p4-security]
-- A remote page cannot navigate a tab top-level to the app's local origin (http://tauri.localhost). UNVERIFIED[phase-p4-security]
+- Whether the WebMessageReceived Source origin can be spoofed by page script was not tested and no longer matters (removed in P4): websites load only in tab views, which have no bridge, so they cannot send Ferrum a message at all ([check-p4.8](../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt)).
+- FETCH_CHANNEL_DATA_COMMAND leaks no data to a remote page: verified in P4. Called from a website it is reached but returns nothing, because Ferrum creates no channels ([check-p4.8](../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt), [self-test record](../raw/evidence/phase-p4-security/p4.8-ipc-selftest.20261013-2009.json)).
+- A remote page cannot navigate a tab top-level to the app's local origin (http://tauri.localhost): verified in P4. Links, a pop-up and a typed address to Ferrum's own pages are refused and logged ([check-p4.8](../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt)).
 
 ## Affects
 

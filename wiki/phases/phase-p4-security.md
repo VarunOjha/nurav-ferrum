@@ -2,8 +2,8 @@
 id: phase-p4-security
 type: phase
 title: "P4 Security (Milestone M3): policy engine, permissions, isolation tests, threat model"
-status: gate-review
-updated: 2026-10-15
+status: done
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -151,14 +151,8 @@ decisions: [adr-0008, adr-0010, adr-0014, adr-0015]
 experiments: [exp-security-overhead, exp-isolation-overhead]
 components: [comp-security-engine, comp-webview-manager, comp-app-shell]
 unverified:
-  - claim: "The browser-reported Source in WebMessageReceived cannot be spoofed by page script"
-    verify_in: phase-p4-security
-  - claim: "A remote page can or cannot navigate a tab top-level to the app's local origin"
-    verify_in: phase-p4-security
-  - claim: "The exempt internal fetch-channel command leaks nothing to remote content"
-    verify_in: phase-p4-security
   - claim: "WebView2 applies Mark-of-the-Web or equivalent protections to downloaded files"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
 ---
 
 # P4 Security (Milestone M3)
@@ -174,7 +168,7 @@ Research findings this phase must act on (all from the Tauri/WebView2 note, sect
 - **The IPC channel exists in every WebView.** Protection is Rust-side authorisation. P2 already locked capabilities down; P4 extends the tests to every path, including the internal fetch-channel command that is exempt from the ACL check.
 - **`on_navigation` fails open** for URLs that do not parse and never sees iframe navigations. The engine therefore also hooks raw COM `NavigationStarting` and `FrameNavigationStarting`, and its own parser denies on failure.
 - **External schemes, certificate errors and some permission settings** are only reachable through raw COM. Each raw COM use needs a documented unsafe invariant (master prompt section 15).
-- **Profiles share the browser process.** Isolation is about storage, not processes. Master prompt Phase 3 asks to "document precisely which resources remain shared" and forbids claiming complete isolation without validation; p4.7 does both. The same Phase 3 text asks to "investigate the feasibility of independent WebView2 user-data directories": p4.15 does this. The capabilities note records that Tauri's `data_directory` gives one WebView2 environment, user data folder and browser process per distinct directory (VERIFIED in its section 4), and that all WebViews sharing one user data folder must use identical environment options (section 6). Whether per-site folders are practical at Ferrum's tab counts is UNVERIFIED[phase-p4-security].
+- **Profiles share the browser process.** Isolation is about storage, not processes. Master prompt Phase 3 asks to "document precisely which resources remain shared" and forbids claiming complete isolation without validation; p4.7 does both. The same Phase 3 text asks to "investigate the feasibility of independent WebView2 user-data directories": p4.15 does this. The capabilities note records that Tauri's `data_directory` gives one WebView2 environment, user data folder and browser process per distinct directory (VERIFIED in its section 4), and that all WebViews sharing one user data folder must use identical environment options (section 6). Whether per-site folders are practical at Ferrum's tab counts is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P4: p4.15 found the mode feasible with two sites, one browser process per environment, [isolation modes](../raw/evidence/phase-p4-security/isolation-modes.md); its cost at real tab counts is measured in P6, exp-isolation-overhead).
 - **Navigation posture** is open browsing plus blocklist (Q12, adr-0015).
 
 Security correctness tests are kept separate from performance measurement (master prompt section 7). P4 only designs the overhead experiments and checks their microbenchmark harness runs; the measurements happen in [P6](phase-p6-benchmark-harness.md).

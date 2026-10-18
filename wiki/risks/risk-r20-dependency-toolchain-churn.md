@@ -3,7 +3,7 @@ id: risk-r20
 type: risk
 title: "Dependency and toolchain churn (Tauri 3, Node LTS switch, TypeScript and ESLint majors, Mermaid 12)"
 status: open
-updated: 2026-10-12
+updated: 2026-10-18
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/nextjs-stack.md
@@ -20,7 +20,7 @@ trigger: "A fresh install resolves different versions from the lockfile; npm ins
 fallback: "Roll back to the last recorded working versions and treat the upgrade as its own planned task."
 unverified:
   - claim: "winget install with an explicit --version pins Node 24.x after Node 26 becomes LTS"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
 ---
 
 # risk-r20: Dependency and toolchain churn (Tauri 3, Node LTS switch, TypeScript and ESLint majors, Mermaid 12)
@@ -66,7 +66,7 @@ Roll back to the last recorded working versions and treat the upgrade as its own
 
 ## Unverified claims
 
-- winget install with an explicit --version pins Node 24.x after Node 26 becomes LTS. UNVERIFIED[phase-p4-security] (re-targeted in P3: P3 ended before 2026-10-28; re-targeted in P2: Node 26 is not LTS before 2026-10-28; re-targeted in P1: 24.20.0 is listed as installable today, but the claim can only be checked after Node 26 becomes LTS on 2026-10-28).
+- winget install with an explicit --version pins Node 24.x after Node 26 becomes LTS. UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: P4 ended on 2026-10-18, before 2026-10-28; re-targeted in P3: P3 ended before 2026-10-28; re-targeted in P2: Node 26 is not LTS before 2026-10-28; re-targeted in P1: 24.20.0 is listed as installable today, but the claim can only be checked after Node 26 becomes LTS on 2026-10-28).
 
 ## Affects
 

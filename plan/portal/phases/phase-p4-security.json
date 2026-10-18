@@ -4,9 +4,9 @@
   "title": "Security",
   "one_line_goal": "Blocking, permissions and isolation proven by tests; threat model written",
   "summary": "Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
-  "status": "Waiting for your review",
+  "status": "Done",
   "progress": {
-    "done": 19,
+    "done": 20,
     "total": 20
   },
   "step_order": [
@@ -80,7 +80,7 @@
       "title": "Safe downloads",
       "what": "Safer downloads: only into the set folder, never opened automatically, a warning for program files, cleaned file names.",
       "why": "A download named to look harmless could be saved outside the folder or start a program by itself. That is a common way to infect a computer.",
-      "how": "Save files only into the set folder, strip unsafe parts from each file name, never open a file by itself, and warn on program types. Whether Windows marks downloads as unsafe is not checked yet.",
+      "how": "Save files only into the set folder, strip unsafe parts from each file name, never open a file by itself, and warn on program types. A local test download was not marked unsafe; real downloads are checked in P5.",
       "status": "Done",
       "chain": "Downloads can hide tricks → configured folder only, no auto-open, a warning for programs, cleaned file names → no folder-escape tricks.",
       "check": "Trick names and program files land cleaned in the folder, with a warning.",
@@ -235,7 +235,7 @@
       "what": "The phase gate and your review, including the threat model.",
       "why": "Some risks are left open on purpose. You should know which ones before calling P4 done, because they affect how safely you can use Ferrum.",
       "how": "Run the gate and save all evidence. You review the threat model and the 'not enforced' list, do the hand checks and approve.",
-      "status": "In progress",
+      "status": "Done",
       "chain": "Controls are tested → run the gate → you review the threat model and the 'not enforced' list, and approve.",
       "check": "All evidence saved; wiki clean; you approved the P4 exit.",
       "script": "scripts/verify/p4.14-gate-review.ps1"
@@ -303,6 +303,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p4-security.md",
-    "content_hash": "sha256:7a1dfa79f46a24f7d1c7c16cdec7d96968ddd1e4c669d63e3c7de32a0c1b1f56"
+    "content_hash": "sha256:ce304b35fdad51beb8fc0fb53f58770406e855510551adac2085d8923bc31175"
   }
 }

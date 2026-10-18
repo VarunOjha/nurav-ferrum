@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:6571662b95ebbd4d9dc8868b69428cdb9b0c6ec258a5c6a17f1615e8650b95c6"
+    "content_hash": "sha256:b15af4d63357a3567189dc7c83e905fb3c3ab53c8dcabc7b598d19ef423d460a"
   },
   "entries": [
     {
@@ -5474,6 +5474,94 @@
       "tags": [
         "approvals",
         "portal"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p4-signoff",
+      "date": "2026-10-18",
+      "time": "14:37",
+      "title": "You signed off Phase 4; the hand checklist comes later",
+      "done": "You asked to start Phase 5, then signed off Phase 4 without the hand checklist. Claude recorded the sign-off, saved a note that the checklist is not done yet, and ran the end-of-phase check: it passed. Phase 4 is done.",
+      "next": "The Phase 4 hand checklist stays owed, like the Phase 3 one.",
+      "decisions": [
+        {
+          "what": "Sign off Phase 4 now, hand checklist later",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "End of Phase 4 (security)",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] resume | session s08 starts; owner asks to start P5",
+        "## [2026-10-18] approval | P4 signed off without the hand checklist",
+        "## [2026-10-18] gate | phase-p4-security exit approved"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-blocked",
+      "date": "2026-10-18",
+      "time": "14:37",
+      "title": "Phase 5 go given; its start waits for 3 answers and 6 approvals",
+      "done": "You said go for Phase 5. The start check found six Phase 5 plan pages you have not approved yet and three open questions: the network log's privacy, how startup speed is measured, and where raw run data is stored.",
+      "next": "Claude asks you the three questions one at a time, then shows the six pages for approval.",
+      "decisions": [
+        {
+          "what": "Go ahead with Phase 5",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Six Phase 5 plan pages",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] gate | phase-p5-telemetry go-ahead given",
+        "## [2026-10-18] gate | phase-p5-telemetry entry BLOCKED: approvals and three questions"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "approvals",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p4-claims",
+      "date": "2026-10-18",
+      "time": "14:55",
+      "title": "Phase 4's leftover \"check this in P4\" notes closed",
+      "done": "Once Phase 4 was done, the wiki check found about 30 statements still marked \"to be checked in P4\". Each one was confirmed from the saved Phase 4 test results, moved to a later phase with a reason, or removed because it no longer applies. 14 approved pages changed.",
+      "next": "You re-approve the 14 changed pages; then the Phase 5 questions.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "14 pages changed by the clean-up",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] lint | P4-targeted claims closed or re-targeted after the sign-off"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Fixed",
+      "tags": [
+        "wiki",
+        "approvals"
       ]
     }
   ]

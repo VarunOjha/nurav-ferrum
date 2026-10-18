@@ -3022,3 +3022,45 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ip-routes-and-views]
 - sources: [raw/owner/2026-10-18-s07-ip-routes-reapproval.md]
 - result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py. P4 still waits for his reading of the Security tab, the checklist and the sign-off.
+
+## [2026-10-18] resume | session s08 starts; owner asks to start P5
+- session: s08
+- time: 14:37
+- result: Session start per SCHEMA §9.6: STATUS (P4 in gate-review, In-flight p4.14), last log entries, approvals (all APPROVED or APPROVED_VOLATILE_DRIFT), handoff-2026-10-15-s07, git clean, no stash. In-flight p4.14 matches the state: only the owner's review was left. Owner: "Let's start phase 5". Claude explained that P4 must be signed off first and listed what P5 needs.
+- next: record the owner's P4 decision.
+
+## [2026-10-18] approval | P4 signed off without the hand checklist
+- session: s08
+- time: 14:37
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md]
+- result: Owner: "Signed off, go ahead" (no checklist results, so the offered "Sign off P4, checklist later"). Recorded phase-p4-security#exit approved with tools/approvals_record.py. Owed: every item of docs/testing/manual-checklist-p4.md (recorded as not done in raw/evidence/phase-p4-security/manual-checklist.md), the known wiki-check error (ff7292e, Q-221 history cleanup), and from P3 the end-check rerun and checklist items 1 to 20.
+
+## [2026-10-18] gate | phase-p4-security exit approved
+- session: s08
+- time: 14:37
+- pages: [phase-p4-security]
+- sources: [raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md, raw/evidence/phase-p4-security/check-p4.14.txt]
+- result: scripts/verify/p4.14-gate-review.ps1 -SaveEvidence: PASS (4 PASS). A first run failed only because the evidence file manual-checklist.md (listed on the phase page) did not exist; Claude wrote it as an honest "not done, owed" record and reran. phase-p4-security set to done (status only). p4.14 done; In-flight cleared.
+
+## [2026-10-18] gate | phase-p5-telemetry go-ahead given
+- session: s08
+- time: 14:37
+- pages: [phase-p5-telemetry]
+- sources: [raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md]
+- result: Owner: "Let's start phase 5" and "Signed off, go ahead". The go covers starting P5; it does not approve P5's pages or answer its questions.
+
+## [2026-10-18] gate | phase-p5-telemetry entry BLOCKED: approvals and three questions
+- session: s08
+- time: 14:37
+- pages: [phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation]
+- result: (1) P4 done, phase-p4-security#exit APPROVED, go given: PASS. (2) Dependency set: schema, adr-0008, adr-0012, adr-0014, comp-webview-manager APPROVED; PENDING (never approved): phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation. (3) Open questions that block the set: Q-114 (network log addresses, on or opt-in, retention), Q-115 (replace time to interactive), Q-203 (where raw run data lives). (4) No CONTRADICTION blockquote in the set. No P5 work until these clear; Claude asks the owner one question at a time.
+- next: ask the owner Q-114, Q-115, Q-203, then the six page approvals.
+
+## [2026-10-18] lint | P4-targeted claims closed or re-targeted after the sign-off
+- session: s08
+- time: 14:55
+- pages: [comp-app-shell, comp-webview-manager, comp-webview2-runtime, ov-arch-data-flows, ov-arch-trust-boundaries, adr-0007, adr-0010, adr-0011, adr-0015, adr-0019, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, qual-ci-plan, qual-security-testing-plan, qual-testing-strategy, hyp-12-security-overhead-small, risk-r02, risk-r07, risk-r10, risk-r19, risk-r20]
+- sources: [raw/evidence/phase-p4-security/]
+- result: Setting P4 to done raised 66 UNV-PASTDUE errors: claims tagged for P4 that the P4 exit gate never closed (exit-gate step 4 slipped: the rule only fires once the phase is done, so the gate run in gate-review did not see them). A subagent (file ownership: the 22 pages) closed each one; Claude spot-checked check-p4.6, check-p4.8, the p4.8 self-test JSON and the security-suite runs. Verified with P4 evidence: tab permission events, IPC refusal end to end, tabs cannot reach the app origin, the exempt fetch channel leaks nothing, shared resources between profiles, frame blocking, external-scheme event, same-origin storage apart. Deleted as no longer applying: WebMessageReceived source spoofing (tabs have no bridge), raw-COM and on_navigation coexistence, raw-COM and wry handler coexistence. Re-targeted to P5: Alt+Tab fix and custom title bar (owner's hand check owed), Mark-of-the-Web on internet downloads, certificate-error default, navigator.permissions.query, GitHub runner and reproducible-build claims (first push deferred, Q-221), a resource filter, the Node 26 pin; to P6: site isolation and sandbox compared with Chrome, non-Google and Google OAuth behaviour, per-site folders at real tab counts, policy-evaluation cost. Portal records re-translated (four texts changed). lint:wiki: no UNV-PASTDUE; ADR-CHAIN on adr-0019 until it is re-approved; known RAW-IMMUTABLE ff7292e. Stales approval of adr-0007, adr-0010, adr-0011, adr-0015, adr-0019, comp-app-shell, comp-webview-manager, comp-webview2-runtime, phase-p2-minimal-container (and #exit), phase-p3-tabs-sessions (and #exit), phase-p4-security (and #exit).
+- next: owner re-approves the 14 keys; then the P5 questions and pages.

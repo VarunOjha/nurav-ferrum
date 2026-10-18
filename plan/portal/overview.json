@@ -2,27 +2,27 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is built and its end-of-phase gate passed everything Claude checks. It now waits for your hand checks and sign-off; Phase 5 does not start without your go.",
+  "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. You said go for Phase 5. Before it starts, you re-approve 14 pages changed by the Phase 4 clean-up, answer three questions and approve six plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:76e43b0ea6d66b9b56eb66fb3e2e2228f2ede7b2b55aafb034d52f092e140212"
+    "content_hash": "sha256:12c11c4b3c52bc4722c5392d54cc588c132dada6e2b7b517b7ef76e781df643b"
   },
-  "updated": "2026-10-15",
+  "updated": "2026-10-18",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P4 Security: waiting for your review",
+      "state": "P5 Measurement: you said go; start blocked",
+      "ref": "phase-p5-telemetry"
+    },
+    {
+      "item": "Phase 4",
+      "state": "Done, signed off by you on 18 Oct; hand checklist still owed",
       "ref": "phase-p4-security"
     },
     {
-      "item": "Phase 3",
-      "state": "Done, signed off by you on 13 Oct; end check rerun still owed",
-      "ref": "phase-p3-tabs-sessions"
-    },
-    {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "comp-app-shell"
+      "state": "14 pages to re-approve after the Phase 4 clean-up; 6 Phase 5 pages to approve",
+      "ref": "phase-p5-telemetry"
     },
     {
       "item": "Your rule",
@@ -39,23 +39,36 @@
     "where_we_are": [
       {
         "item": "Phase 4",
-        "state": "Built; gate passed all 26 automatic checks"
+        "state": "Done, signed off by you"
       },
       {
-        "item": "Threat model",
-        "state": "To read on the new Security tab"
+        "item": "Phase 5",
+        "state": "Go given; start blocked"
       },
       {
-        "item": "Your part",
-        "state": "Hand checklist and sign-off"
+        "item": "What blocks it",
+        "state": "14 re-approvals, 3 questions, 6 plan pages"
       }
     ],
-    "why": "Nothing to run. Read the Security tab, then try the checklist in docs/testing/manual-checklist-p4.md (block a site, answer a camera question, keep a download) and tell Claude the results; then you decide whether Phase 4 is signed off.",
+    "why": "Nothing to run. Claude asks you to re-approve the 14 pages the Phase 4 clean-up changed, then asks the three questions one at a time in Claude Code, then shows the six Phase 5 pages for approval. When all are recorded, the start check reruns and the first Phase 5 task begins.",
     "script": null,
-    "tell_claude": "Your checklist answers, then \"Sign off P4\" or what to change"
+    "tell_claude": "Your answer to each question as Claude asks it"
   },
   "questions_for_you": {
     "open": 19,
-    "items": []
+    "items": [
+      {
+        "id": "Q-114",
+        "question": "Where should the network log live, how long is it kept, and should the query part of web addresses (which can hold tokens) be removed by default?"
+      },
+      {
+        "id": "Q-115",
+        "question": "May 'time to interactive' be replaced by first-paint and largest-paint timings plus long-frame data, since that measure is retired?"
+      },
+      {
+        "id": "Q-203",
+        "question": "Where should raw benchmark data be stored, and how should very large files be handled?"
+      }
+    ]
   }
 }

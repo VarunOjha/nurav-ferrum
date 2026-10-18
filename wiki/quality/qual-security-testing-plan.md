@@ -28,16 +28,12 @@ tooling:
   - "@playwright/test over CDP (E2E, test builds only)"
   - "raw-COM WebView2 handlers via with_webview (navigation, frame navigation, external schemes, process failure)"
 unverified:
-  - claim: "WebView2 raises LaunchingExternalUriScheme for an unregistered custom scheme navigated from a tab"
-    verify_in: phase-p4-security
   - claim: "WebView2 marks downloaded files with Mark-of-the-Web"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
   - claim: "navigator.permissions.query in the page reflects a host-side PermissionRequested denial (with SavesInProfile false) in WebView2"
-    verify_in: phase-p4-security
-  - claim: "Separate WebView2 profiles keep cookies, localStorage and IndexedDB of the same origin apart"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
   - claim: "WebView2 refuses to load a page with an untrusted certificate unless the app handles ServerCertificateErrorDetected"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
 ---
 
 # Security testing plan
@@ -103,7 +99,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 - **Fixture:** `ext-proto.html` with links and scripted navigations to `ferrum-test-proto:x`, `mailto:`, and `file:` URLs, plus one inside an iframe.
 - **Steps:** click each; answer the confirmation prompt with *deny* in automated runs.
 - **Pass:** a confirmation is required for every non-web scheme; with *deny*, nothing launches (no new process in the session's process snapshot) and the denial is logged. `file:` from a remote page is always denied.
-- **Phase:** P4. Depends on raw-COM `LaunchingExternalUriScheme` (UNVERIFIED[phase-p4-security]).
+- **Phase:** P4. Depends on raw-COM `LaunchingExternalUriScheme`, verified in P4: WebView2 raises it for the custom test scheme `ferrum-test:`, and Ferrum's confirmation bar appears only through it ([check-p4.4](../raw/evidence/phase-p4-security/check-p4.4.txt)).
 
 ### SEC-03 Unauthorized native command invocation (item 3)
 
@@ -126,7 +122,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 - **Threat:** a page gains camera, microphone, location, notifications or clipboard access without policy approval.
 - **Fixture:** `perm.html` requests geolocation, camera, microphone, notifications and clipboard-read, each on a button.
 - **Pass (primary, observable outcome):** under the default policy each request is denied or prompted per the policy table and the decision is logged; for a denial, the page-side API call fails (the geolocation error callback fires, `getUserMedia` rejects and no capture stream or track is granted, `Notification.requestPermission` does not resolve to `granted`, the clipboard read rejects).
-- **Secondary (recorded, not a pass criterion):** the `navigator.permissions.query` state for each permission is recorded. Whether it reflects a host-side denial is UNVERIFIED[phase-p4-security]; a mismatch is logged as a finding about WebView2 behaviour, not a Ferrum failure. A persisted earlier choice does not bypass the policy (TW §4 notes that persisted choices skip the permission event unless `SavesInProfile` is controlled via raw COM).
+- **Secondary (recorded, not a pass criterion):** the `navigator.permissions.query` state for each permission is recorded. Whether it reflects a host-side denial is UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: the P4 permission tests check the page-side results only and did not record the query state, [check-p4.5](../raw/evidence/phase-p4-security/check-p4.5.txt)); a mismatch is logged as a finding about WebView2 behaviour, not a Ferrum failure. A persisted earlier choice does not bypass the policy (TW §4 notes that persisted choices skip the permission event unless `SavesInProfile` is controlled via raw COM).
 - **Phase:** P4.
 
 ### SEC-06 Session data isolation (item 6)
@@ -135,7 +131,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 - **Fixture:** `store.html` writes a cookie, `localStorage` and an IndexedDB record; `read.html` reads them.
 - **Steps:** load `store.html` in a tab assigned profile P1; load `read.html` at the **same origin** in a tab assigned P2; then clear P1's data and check P2 and the shell.
 - **Pass:** P2 sees none of P1's data; clearing P1 leaves P2 and the shell intact. The test also records both tabs' browser process id, to document what remains shared (master prompt §5 Phase 3: document which resources remain shared).
-- **Depends on** the profile route chosen for risk-r01. Isolation by profile itself is UNVERIFIED[phase-p4-security].
+- **Depends on** the profile route chosen for risk-r01. Isolation by profile itself was verified in P4: the same site in another profile sees none of its cookie, localStorage or IndexedDB, and clearing one site leaves another intact ([check-p4.7](../raw/evidence/phase-p4-security/check-p4.7.txt)).
 - **Phase:** P4 (a first version runs inside the risk-r01 spike in P1).
 - **Per isolation mode (p4.15, live spec `isolation-modes`):** the same two test sites run under `shared`, `per-site`
   and `per-site-udf`; each site's data stays with it in every mode, a site moved to another named profile sees an
@@ -147,7 +143,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 
 - **Threat:** a page writes outside the download folder, auto-downloads many files, or gets a file executed.
 - **Fixture:** a server route that returns plain text with: a normal name; a name containing `..\` path traversal; an executable-looking extension; and a page that triggers several downloads at once.
-- **Pass:** files land only inside the configured download folder with sanitised names; risky types prompt or are blocked per policy; multiple automatic downloads require permission; nothing is opened or executed automatically; each decision is logged. Whether WebView2 applies Mark-of-the-Web is recorded, not assumed (UNVERIFIED[phase-p4-security]). With SmartScreen on (p4.18), a program file gets WebView2's own download pop-up, where SmartScreen asks about an unknown program; the test expects the download held and the pop-up opened; answering "Keep" is a manual check at the P4 review. A SmartScreen page block shows Ferrum's own SmartScreen panel and is audited (`page`, rule `smartscreen`; p4.19, live spec `smartscreen`, [check-p4.19](../raw/evidence/phase-p4-security/check-p4.19.txt)).
+- **Pass:** files land only inside the configured download folder with sanitised names; risky types prompt or are blocked per policy; multiple automatic downloads require permission; nothing is opened or executed automatically; each decision is logged. Whether WebView2 applies Mark-of-the-Web is recorded, not assumed (UNVERIFIED[phase-p5-telemetry]; re-targeted in P4: a program file from the local test server had no Zone.Identifier mark, [check-p4.6](../raw/evidence/phase-p4-security/check-p4.6.txt), which does not settle downloads from the internet). With SmartScreen on (p4.18), a program file gets WebView2's own download pop-up, where SmartScreen asks about an unknown program; the test expects the download held and the pop-up opened; answering "Keep" is a manual check at the P4 review. A SmartScreen page block shows Ferrum's own SmartScreen panel and is audited (`page`, rule `smartscreen`; p4.19, live spec `smartscreen`, [check-p4.19](../raw/evidence/phase-p4-security/check-p4.19.txt)).
 - **Phase:** basic download management in P3; security behaviour in P4.
 
 ### SEC-08 Redirect-based policy bypass (item 8)
@@ -187,7 +183,7 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 ### SEC-13 Certificate errors are not bypassed (addition)
 
 - **Fixture:** a local HTTPS server with a self-signed, untrusted certificate.
-- **Pass:** navigation fails with an error state; Ferrum offers no "proceed anyway" path (master prompt §5: do not bypass certificate validation). Expected default WebView2 behaviour: UNVERIFIED[phase-p4-security].
+- **Pass:** navigation fails with an error state; Ferrum offers no "proceed anyway" path (master prompt §5: do not bypass certificate validation). Expected default WebView2 behaviour: UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: no live certificate-error test exists yet; SEC-13 is not in the P4 suite, §5).
 - **Phase:** P2 (error state) and P4.
 
 ### SEC-14 Logs carry no page content (addition, p4.9)
@@ -223,7 +219,7 @@ tests and every performance measurement stay outside it.
 
 ## 6. Unverified items on this page
 
-All are listed in the frontmatter `unverified:` block and tagged inline in SEC-02, SEC-05, SEC-06, SEC-07 and SEC-13 (the SEC-10 item was observed in p4.10 and is closed). One more applied to the whole E2E level, driving Ferrum tab webviews with Playwright over CDP in a test build: verified in P2 for the shell and the content view ([check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)).
+All are listed in the frontmatter `unverified:` block and tagged inline in SEC-05, SEC-07 and SEC-13 (the SEC-10 item was observed in p4.10 and is closed; the SEC-02 and SEC-06 items were verified in P4). One more applied to the whole E2E level, driving Ferrum tab webviews with Playwright over CDP in a test build: verified in P2 for the shell and the content view ([check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)).
 
 ## 7. Threat model (p4.1)
 

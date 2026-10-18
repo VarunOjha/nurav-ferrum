@@ -3,7 +3,7 @@ id: adr-0019
 type: decision
 title: "Raw WebView2 COM access confined to one audited module behind a safe Rust API"
 status: accepted
-updated: 2026-10-11
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/research/tauri-webview2-capabilities.md
@@ -21,9 +21,7 @@ options:
   - "No raw COM at all; drop features Tauri does not expose"
 phase: phase-p0-planning
 tags: [unsafe, com, webview2, architecture]
-unverified:
-  - claim: "COM event handlers registered via with_webview on Tauri-created webviews coexist with wry's own handlers without interference"
-    verify_in: phase-p4-security
+unverified: []
 ---
 
 # ADR-0019: Raw WebView2 COM access is confined to one audited module behind a safe Rust API
@@ -99,7 +97,7 @@ Facts that constrain any design:
 ### Negative
 
 - More design work in P2 before the first COM feature lands.
-- Whether raw-COM handlers on Tauri-created webviews coexist with wry's own handlers (`NavigationStarting`, `NewWindowRequested`, …) is UNVERIFIED[phase-p4-security]. P2 did not need it: tab views are Ferrum-created (adr-0029), and on the Tauri-created shell P2 only reads a setting and moves focus ([check-p2.12](../raw/evidence/phase-p2-minimal-container/check-p2.12.txt)).
+- Whether raw-COM handlers on Tauri-created webviews coexist with wry's own handlers (`NavigationStarting`, `NewWindowRequested`, …) was not tested and is not needed (removed in P4: P4 added no web view event handler to the shell either; its one new handler through the shell, the browser-exit watch on the shared environment, passed the engine-crash test, [check-p4.10](../raw/evidence/phase-p4-security/check-p4.10.txt)). P2 did not need it: tab views are Ferrum-created (adr-0029), and on the Tauri-created shell P2 only reads a setting and moves focus ([check-p2.12](../raw/evidence/phase-p2-minimal-container/check-p2.12.txt)).
 
 ### Follow-ups
 

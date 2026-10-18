@@ -53,7 +53,7 @@
       "kind": "phase",
       "title": "P4 Security",
       "summary": "Goal: Blocking, permissions and isolation proven by tests; threat model written. Build the security rules engine and prove with attack-style tests what Ferrum protects and what it does not. The cost of security is only designed here; it is measured in P6.",
-      "status": "Waiting for your review",
+      "status": "Done",
       "related": [],
       "aliases": [
         "P4"
@@ -850,7 +850,7 @@
       "kind": "task",
       "title": "P4 task: Gate and your review",
       "summary": "Controls are tested → run the gate → you review the threat model and the 'not enforced' list, and approve.",
-      "status": "In progress",
+      "status": "Done",
       "related": [
         "phase-p4-security"
       ]
@@ -3282,7 +3282,7 @@
       "id": "comp-webview2-runtime",
       "kind": "component",
       "title": "Microsoft WebView2",
-      "summary": "Microsoft's Chromium engine (the same one inside Edge), already installed on Windows. It draws every website and the browser controls. Not ours. Ferrum relies on its sandbox; that it protects as well as Chrome's is assumed, not checked yet (checked in P4).",
+      "summary": "Microsoft's Chromium engine (the same one inside Edge), already installed on Windows. It draws every website and the browser controls. Not ours. Ferrum relies on its sandbox; P4 tests saw no page process shared between two sites; that it protects as well as Chrome's is not checked yet (P6).",
       "status": "Provided by Microsoft",
       "related": [
         "layer-webview2"

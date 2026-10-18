@@ -71,7 +71,7 @@
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
-        "content_hash": "sha256:2357156633a8fa240077121b493f631ec3de436ecb56d8717e034a9cd54d3a5f"
+        "content_hash": "sha256:8265793eca415c608e8edea99e088e87e0baa3983391437dd82d87dff415e3f6"
       }
     },
     {
@@ -84,7 +84,7 @@
       "tasks_total": 23,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-        "content_hash": "sha256:3a1682d14820fc13c907b781242264d5d6a5724f9ff75551e1584fd3229f4961"
+        "content_hash": "sha256:237c23913b1cf56ac25bc30cf6cb241ca343f123ce9d5410c7849e69292eb263"
       }
     },
     {
@@ -92,12 +92,12 @@
       "short": "P4",
       "name": "Security",
       "one_line_goal": "Blocking, permissions and isolation proven by tests; threat model written",
-      "status": "Waiting for your review",
-      "tasks_done": 19,
+      "status": "Done",
+      "tasks_done": 20,
       "tasks_total": 20,
       "source": {
         "wiki_path": "wiki/phases/phase-p4-security.md",
-        "content_hash": "sha256:7a1dfa79f46a24f7d1c7c16cdec7d96968ddd1e4c669d63e3c7de32a0c1b1f56"
+        "content_hash": "sha256:ce304b35fdad51beb8fc0fb53f58770406e855510551adac2085d8923bc31175"
       }
     },
     {

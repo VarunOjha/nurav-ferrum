@@ -218,7 +218,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0007-child-webviews.md",
-        "content_hash": "sha256:5ac34335db2b64d1563c79e9f578c32a11144d19b4e6f028785d9bf7ebe8ef42"
+        "content_hash": "sha256:5c9a60fa4bc268ad74db0835b7ec84aeefa53cba7a17b4e9fabb92897ffb8a1f"
       }
     },
     {
@@ -316,7 +316,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0010-isolation-webview2-profiles.md",
-        "content_hash": "sha256:7610e28111ce8a5817b068289f1cea71d6191f581c13cb6f2af3c3de4dab3b78"
+        "content_hash": "sha256:a5844a7b1bca5c77278d818c306e14a7403c0694bc74d81ed13ea66026044790"
       }
     },
     {
@@ -345,7 +345,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0011-git-ci-license.md",
-        "content_hash": "sha256:8297149127e9c41621291a30450294aa28e7f40417506721d0be7e522a429463"
+        "content_hash": "sha256:6f91426ecd3f24ddc7a792cb3885c3bd3fac1c9772226308e02341851d0f6c0a"
       }
     },
     {
@@ -471,7 +471,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0015-navigation-posture-open-blocklist.md",
-        "content_hash": "sha256:d42dc571ea696b13c2b2b8f3af023cb990fee5a2df0d813bc083eb7ffa8bbf83"
+        "content_hash": "sha256:048f217a6a42365b7c8172ba70fbbad1670f0da13760a2a9ef72c326b4e6738d"
       }
     },
     {
@@ -570,7 +570,7 @@
       "title": "Unsafe WebView2 code lives in one audited module",
       "summary": "Features Tauri lacks (sleep, memory target, network events, crash detection) use raw WebView2 calls, all in one module behind a safe Rust interface. Two small Windows modules for measuring memory and CPU may also use unsafe code, each with its own safety notes. You approved it on 11 Oct.",
       "why": "Unsafe code must be documented and contained, and Tauri does not offer these features.",
-      "catch": "More design work in P2; whether it coexists with Tauri's own handlers is not checked yet.",
+      "catch": "More design work in P2. Sharing a view with Tauri's own handlers turned out not to be needed: Ferrum adds no handler to the shell's view.",
       "status": "Accepted",
       "decided_by": "claude",
       "date": "2026-10-08",
@@ -596,7 +596,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0019-raw-webview2-com-boundary.md",
-        "content_hash": "sha256:63e8a5916a02ceb3416eb49df67379041694ed4fc4389377ae0fc6fb82f20c40"
+        "content_hash": "sha256:1d10f3679e238a9156bd75168bed1511e78486e1127041047b47ed62ea31fdb3"
       }
     },
     {

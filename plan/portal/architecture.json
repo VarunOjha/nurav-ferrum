@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:ab0fb48b6808d77c91aa8dff6baa969e48be2b9531690c8b51f7367ef2c25113"
+        "content_hash": "sha256:8599899f2d7c2252c594db516ba7ea1d03f9ca1308dc3d40990ad79daab078ac"
       }
     },
     {
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:16faeb8a7d92b728070210ea9e254562e2991c85649e16ed7522268ed2275a2f"
+        "content_hash": "sha256:224d71472048cb42216f2d77bf947e49e123ab557f8af03222de917e2b940f3c"
       }
     },
     {
@@ -442,7 +442,7 @@
     {
       "id": "comp-webview2-runtime",
       "title": "Microsoft WebView2",
-      "summary": "Microsoft's Chromium engine (the same one inside Edge), already installed on Windows. It draws every website and the browser controls. Not ours. Ferrum relies on its sandbox; that it protects as well as Chrome's is assumed, not checked yet (checked in P4).",
+      "summary": "Microsoft's Chromium engine (the same one inside Edge), already installed on Windows. It draws every website and the browser controls. Not ours. Ferrum relies on its sandbox; P4 tests saw no page process shared between two sites; that it protects as well as Chrome's is not checked yet (P6).",
       "group": "application",
       "layer": "layer-webview2",
       "status": "Provided by Microsoft",
@@ -466,7 +466,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview2-runtime.md",
-        "content_hash": "sha256:9bf02a6c3c06d40772a8e6adfb22161a5014271895c7d4e0c19cbe4f983af73b"
+        "content_hash": "sha256:633bc3cd09bbe7e1670a4df97ddc50d53d02764f27dfe4d4a1ab36d597bfa09e"
       }
     },
     {

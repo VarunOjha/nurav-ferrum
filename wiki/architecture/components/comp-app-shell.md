@@ -4,7 +4,7 @@ type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-15
+updated: 2026-10-18
 sources:
   - raw/owner/2026-10-15-s07-p4-11-probe-folder-fix.md
   - raw/owner/2026-10-15-s07-p4-19-blank-page-fix.md
@@ -79,9 +79,9 @@ connects:
     crosses_trust_boundary: true
 unverified:
   - claim: "Moving keyboard focus into the content web view when the window becomes active fixes the Alt+Tab focus issue (13466)"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
   - claim: "A custom (frameless) title bar has a window-resize problem in Tauri (issue #12207); P3 kept the normal Windows title bar"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
 ---
 
 # comp-app-shell: application shell
@@ -108,13 +108,13 @@ installed, else Segoe UI and Consolas); P3 bundles them (p3.22: `@fontsource` IB
 `apps/desktop/src/main.ts`).
 
 **Title bar.** Option A as drawn puts the tabs in the window's top bar, which needs a custom title bar; the design
-notes below advise against one at first (resize problem, Tauri issue #12207, UNVERIFIED[phase-p4-security]; not tested in P1 because spike S1 used the normal title bar, and P3 built no custom title bar). The owner answered
+notes below advise against one at first (resize problem, Tauri issue #12207, UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: P4 built no custom title bar either); not tested in P1 because spike S1 used the normal title bar, and P3 built no custom title bar). The owner answered
 [Q-125](../../overview/ov-open-questions.md#q-125-tabs-in-the-windows-top-bar-custom-title-bar-or-the-normal-windows-title-bar-first)
 on 2026-10-12: the normal Windows title bar first, with the tab strip just under it. That is what P3 built.
 
 ## Design notes
 
-- **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) was seen in P1 ([S1 report](../../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md); owner: fix later). P2 built the fix (`restore_focus`); the owner has not checked it yet (first checklist round, 2026-10-12), so it is UNVERIFIED[phase-p4-security] and goes on the P4 hand checks (deferred at the P3 sign-off on 2026-10-13). Resize and z-order behaved as designed in S1 and P2. Resize with a custom title bar (#12207) is UNVERIFIED[phase-p4-security]; P3 kept the normal title bar (Q-125).
+- **Layout under the child-WebView model (adr-0007).** Shell chrome occupies fixed bands, and the active tab's child WebView fills the remaining rectangle. Child WebViews render above the shell (Tauri issue #15682, [Tauri note §2](../../raw/research/tauri-webview2-capabilities.md)). So menus, dropdowns, settings and dialogs **never overlap the tab rectangle**. Either the shell temporarily hides the active tab WebView, or the overlay is drawn inside the shell bands. Focus after Alt+Tab (#13466) was seen in P1 ([S1 report](../../raw/evidence/phase-p1-foundation/spike-s1-multiwebview.md); owner: fix later). P2 built the fix (`restore_focus`); the owner has not checked it yet (first checklist round, 2026-10-12), so it is UNVERIFIED[phase-p5-telemetry] and goes on the P4 hand checks (deferred at the P3 sign-off on 2026-10-13; re-targeted in P4: the owner signed off P4 on 2026-10-18 with his hand checks still owed, [P4 manual checklist](../../raw/evidence/phase-p4-security/manual-checklist.md); the check is item 5 of `docs/testing/manual-checklist-p3.md`). Resize and z-order behaved as designed in S1 and P2. Resize with a custom title bar (#12207) is UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: no custom title bar was built); P3 and P4 kept the normal title bar (Q-125).
 - **Capabilities.** Exactly one capability file, `shell.json`, targets `"webviews": ["shell"]`. **No capability declares `remote`.** A CI check enforces this ([trust boundaries R1–R3](../ov-arch-trust-boundaries.md)).
 - **Commands are async.** Tab creation runs from async commands: creating web views from a synchronous handler deadlocks on Windows (VERIFIED, Tauri note §2; reproduced in spike S1). Under adr-0029 the shell asks `webview-manager`, which creates the tab controller on the UI thread through `with_webview` and reports completion asynchronously.
 - **No web storage in the shell** (trust rule R9). Settings go through `settings_get`/`settings_set` to Rust-side `config.toml`.

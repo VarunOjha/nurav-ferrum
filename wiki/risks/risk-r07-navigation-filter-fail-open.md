@@ -3,7 +3,7 @@ id: risk-r07
 type: risk
 title: "Tauri's navigation hook fails open on unparseable URLs and never sees iframe navigations"
 status: open
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/00-master-prompt.md
@@ -18,10 +18,8 @@ owner_phase: phase-p4-security
 trigger: "Any test in which an unparseable or blocklisted URL completes a navigation; an iframe from a blocklisted host loads; a popup or download proceeds without a policy decision being logged."
 fallback: "Add request-level blocking via a web resource request filter covering all request source kinds, and document any navigation class that still cannot be intercepted."
 unverified:
-  - claim: "A raw-COM FrameNavigationStarting handler can cancel cross-origin iframe navigations in a Tauri child webview"
-    verify_in: phase-p4-security
   - claim: "A web resource request filter with all request source kinds can block navigations that the navigation hooks miss"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
 ---
 
 # risk-r07: Tauri's navigation hook fails open on unparseable URLs and never sees iframe navigations
@@ -69,8 +67,8 @@ Add request-level blocking via a web resource request filter covering all reques
 
 ## Unverified claims
 
-- A raw-COM FrameNavigationStarting handler can cancel cross-origin iframe navigations in a Tauri child webview. UNVERIFIED[phase-p4-security]
-- A web resource request filter with all request source kinds can block navigations that the navigation hooks miss. UNVERIFIED[phase-p4-security]
+- A raw-COM FrameNavigationStarting handler cancels cross-origin iframe navigations: verified in P4 on Ferrum's tab views, which since adr-0029 are controllers Ferrum creates rather than Tauri child webviews; a frame showing a blocked host is refused and logged while an allowed frame loads ([check-p4.3](../raw/evidence/phase-p4-security/check-p4.3.txt)).
+- A web resource request filter with all request source kinds can block navigations that the navigation hooks miss. UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: no resource request filter was built, because the navigation hooks caught every path tested: typed, redirect, frame, pop-up and malformed, [check-p4.3](../raw/evidence/phase-p4-security/check-p4.3.txt); P5 adds per-tab resource events for the network log)
 
 ## Affects
 

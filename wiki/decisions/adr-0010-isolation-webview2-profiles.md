@@ -3,7 +3,7 @@ id: adr-0010
 type: decision
 title: "Default site isolation via WebView2 profiles in a shared browser process"
 status: accepted
-updated: 2026-10-12
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -25,9 +25,7 @@ phase: phase-p0-planning
 tags: [isolation, security, webview2, profiles]
 unverified:
   - claim: "Chromium site isolation applies to WebView2 renderers in the shared process group as it does in Chrome"
-    verify_in: phase-p4-security
-  - claim: "Exactly which resources remain shared between WebView2 profiles in one user data folder (beyond cookies, preferences, cache being per-profile)"
-    verify_in: phase-p4-security
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # ADR-0010: Default site isolation via WebView2 profiles in a shared browser process
@@ -99,8 +97,8 @@ Binding constraints, whichever route is chosen:
 
 - **The shell never shares a profile with tabs.** Tabs never use the default profile. This keeps tab data clearing from wiping shell state.
 - **Granularity.** The profile key is the registrable domain: owner answer Q-111 of 2026-10-12 ([raw/owner/2026-10-12-s02-p3-questions.md](../raw/owner/2026-10-12-s02-p3-questions.md)), built in P3 (p3.6, [ov-arch-isolation-model](../architecture/ov-arch-isolation-model.md) §2). Sites can share a named profile through the settings (`[[sites]] profile`, for SSO across related domains). Cleaning up profiles of sites no longer used is not built yet (later work).
-- **Claims follow evidence.** Ferrum claims **storage partitioning** (cookies, cache, preferences per profile) only after P4 tests show it. It **never claims process isolation** beyond what Chromium site isolation provides inside the shared process group. Whether that site isolation behaves as in Chrome is UNVERIFIED[phase-p4-security].
-- **What stays shared** is documented as a P4 deliverable. At minimum: the browser process, the GPU process, possibly renderers, the network service and environment options. The full list is UNVERIFIED[phase-p4-security].
+- **Claims follow evidence.** Ferrum claims **storage partitioning** (cookies, cache, preferences per profile) only after P4 tests show it. It **never claims process isolation** beyond what Chromium site isolation provides inside the shared process group. Whether that site isolation behaves as in Chrome is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P4: P4 saw no renderer shared between two sites' pages, [shared resources](../raw/evidence/phase-p4-security/shared-resources.md), but compared nothing with Chrome).
+- **What stays shared** is documented as a P4 deliverable. At minimum: the browser process, the GPU process, possibly renderers, the network service and environment options. P4 established the list per isolation mode from tests and process inventories, marking each row tested, observed, derived or not tested ([shared resources](../raw/evidence/phase-p4-security/shared-resources.md)).
 
 ## Consequences
 

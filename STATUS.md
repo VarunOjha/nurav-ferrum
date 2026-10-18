@@ -42,13 +42,14 @@ sources:
   - raw/owner/2026-10-15-s07-q228-reapproval.md
   - raw/owner/2026-10-15-s07-p4-20-components-reapproval.md
   - raw/owner/2026-10-18-s07-ip-routes-reapproval.md
+  - raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
-session: s07
-current_phase: phase-p4-security
-current_task: p4.14
-next_action: "P4 waits for the owner's review; he reads the new Security tab (http://127.0.0.1:3417/security) (gate run of 2026-10-17 22:43 on c59d019: Claude's part PASS, evidence 8d34e32). Owner works through docs/testing/manual-checklist-p4.md and says whether P4 is signed off; Claude transcribes the answers to wiki/raw/owner/, records phase-p4-security#exit with tools/approvals_record.py, runs pwsh -NoProfile -File scripts/verify/p4.14-gate-review.ps1, sets the phase to done and PAUSES (no P5 without an explicit go). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
-blocked_on: []
+session: s08
+current_phase: phase-p5-telemetry
+current_task: p5.1
+next_action: "P5 entry is BLOCKED (log 2026-10-18 gate entry). First ask the owner to re-approve the 14 keys staled by the P4 claim closure (log 2026-10-18 lint entry). Then ask the owner one question at a time in chat: Q-114 (network log: full addresses or cut after ?, on or opt-in, how many days), Q-115 (replace time to interactive with process start, window visible, FCP, LCP), Q-203 (where raw run data lives); then the six pending P5 pages (phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation). Transcribe each answer to wiki/raw/owner/, record with tools/approvals_record.py, rerun the entry gate (SCHEMA 9.7). Only then start p5.1. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+blocked_on: [adr-0007, adr-0010, adr-0011, adr-0015, adr-0019, comp-app-shell, comp-webview-manager, comp-webview2-runtime, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation, Q-114, Q-115, Q-203]
 last_handoff: handoff-2026-10-15-s07
 ---
 
@@ -60,13 +61,18 @@ last_handoff: handoff-2026-10-15-s07
 
 ## Current phase
 
-**phase-p4-security — WAITING FOR THE OWNER'S REVIEW (gate run 2026-10-17, Claude's part PASS; entry passed 2026-10-13).** Owner's words of 2026-10-13
-([raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md](wiki/raw/owner/2026-10-13-s03-p3-signoff-and-p4-go.md)):
-"Sign off now, check later" and "P4 only, then pause". **Stop after P4's exit gate:** P5 waits for the owner.
+**phase-p5-telemetry — entry BLOCKED (2026-10-18), go-ahead given.** The owner signed off P4 on 2026-10-18 ("Signed off,
+go ahead", [raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md](wiki/raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md))
+without the hand checklist, and said go for P5. P5 waits for three answers (Q-114, Q-115, Q-203) and six page approvals.
 Standing rule: no kill commands and no deleting of things Claude did not create without asking.
 
-P0 to P3 are done and signed off (P3 on 2026-10-13, before the end-check rerun on the self-scan fixes; that rerun and
-manual checklist items 1 to 20 are still owed).
+P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check rerun and checklist items 1 to 20.
+
+## Done this session (s08)
+
+- Session start; owner: "Let's start phase 5". P4 signed off without the checklist (`phase-p4-security#exit`); p4.14 check PASS; P4 done.
+- P5 go-ahead recorded; P5 entry BLOCKED on Q-114, Q-115, Q-203 and six pending pages.
+- P4-targeted claims closed or re-targeted on 22 pages (lint had 66 UNV-PASTDUE errors once P4 was done); 14 approvals now STALE, owner re-approves.
 
 ## Done this session (s03)
 
@@ -370,13 +376,7 @@ manual checklist items 1 to 20 are still owed).
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p4.14 (P4 exit gate and owner M3 review) — resumed after p4.20 (d7114ef)
-- session: s07
-- intent: write raw/evidence/phase-p4-security/shared-resources.md from the p4.7 and p4.15 observations; fill scripts/gates/p4-gate.ps1 (approvals, every task check, test-gate rows with one evidence file each, release build in its own folder target/gate-release, wiki check that reports the known ff7292e error as waiting on Q-221, the owner's part) and scripts/verify/p4.14-gate-review.ps1; align the p4.16 wording on the phase page with the narrower ablation the owner accepted (stales the phase approval: asked at the review); docs/testing/manual-checklist-p4.md for the owner; run the gate when the PC can be left alone; set the phase to gate-review; stop for the owner's review
-- planned paths: wiki/raw/evidence/phase-p4-security/ (shared-resources.md, p4-gate outputs, manual-checklist.md after the owner's answers), scripts/gates/p4-gate.ps1, scripts/verify/p4.14-gate-review.ps1, docs/testing/manual-checklist-p4.md, wiki/phases/phase-p4-security.md, wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
-- added (owner answer 2026-10-15, raw/owner/2026-10-15-s07-p4-14-rustls-and-gate-later.md): rustls 0.23.45 -> 0.23.46 in the test server (tests/fixtures/server/Cargo.toml, Cargo.lock), separate commit; p4.7 recheck; then the full gate rerun on one commit when the owner says the PC is quiet
-- builds: target/debug, target/gate-release, target/security-static, target/bench (never target/release, where the owner's Ferrum runs)
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
+(empty: p4.14 finished on 2026-10-18 with the owner's sign-off; no P5 task has started)
 
 ## Blockers
 
@@ -412,16 +412,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 
 | Item | State |
 |---|---|
-| Phase 4 (security) | 19 of 20 tasks done; only the end-of-phase gate is left |
-| Approvals | All up to date |
-| End-of-phase gate | Ready to run when the PC is quiet |
+| Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
+| Phase 5 (measurement) | You said go; start is blocked |
+| What blocks it | 14 pages to re-approve after the P4 clean-up; 3 questions and 6 plan pages |
 
-**2. Why, and what it does.** The gate reruns every Phase 4 check and the earlier tests on one commit and builds the
-release program in its own folder. Some tests press real keys, so the PC must be left alone for about an hour.
+**2. Why, and what it does.** Nothing to run. Claude asks you the three questions one at a time in chat, then shows the six
+pages for approval. When all are recorded, the start check reruns and task p5.1 begins.
 
-**3. The script:** Claude runs `scripts/gates/p4-gate.ps1 -SaveEvidence`.
+**3. The script:** none.
 
-**4. What to tell Claude:** "PC is quiet".
+**4. What to tell Claude:** your answer to each question as it comes.
 
 ## Pending owner approvals
 
@@ -432,4 +432,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-15, session s07 (Q-227 answered: Chrome-style permission question, task p4.20 added before the P4 exit gate). Last handoff: [handoff-2026-10-15-s07](wiki/operations/handoffs/handoff-2026-10-15-s07.md) (partial).
+2026-10-18, session s08 (P4 signed off; P5 go given; P5 entry blocked on three questions and six approvals). Last handoff: [handoff-2026-10-15-s07](wiki/operations/handoffs/handoff-2026-10-15-s07.md) (partial).

@@ -3,7 +3,7 @@ id: adr-0011
 type: decision
 title: "git + GitHub Actions (windows-latest), dual MIT OR Apache-2.0 license; Claude never pushes"
 status: accepted
-updated: 2026-10-12
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -21,9 +21,9 @@ phase: phase-p0-planning
 tags: [git, ci, license, repository]
 unverified:
   - claim: "GitHub-hosted windows-latest runners provide an MSVC toolchain and a WebView2 runtime suitable for building and smoke-testing a Tauri 2 app"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
   - claim: "cargo-deny / cargo-audit (dependency auditing) run on windows-latest and can check MIT OR Apache-2.0 compatibility of dependencies"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
 ---
 
 # ADR-0011: git + GitHub Actions, dual MIT OR Apache-2.0; Claude never pushes
@@ -70,7 +70,7 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
    - the plan app's lint, unit tests and E2E;
    - frontend lint and tests.
 
-   Whether runners can build and smoke-test the Tauri/WebView2 app is UNVERIFIED[phase-p4-security]. Whether the audit tools run there is also UNVERIFIED[phase-p4-security]. (Re-targeted in P3 and again in P2: the first push is still deferred, Q-221; re-targeted in P1: the owner deferred the first push; locally cargo-deny checks the licence allow list, [cargo-deny run](../raw/evidence/phase-p1-foundation/cargo-deny-p1.12.txt).)
+   Whether runners can build and smoke-test the Tauri/WebView2 app is UNVERIFIED[phase-p5-telemetry]. Whether the audit tools run there is also UNVERIFIED[phase-p5-telemetry]. (Re-targeted in P4, in P3 and in P2: the first push is still deferred, Q-221; re-targeted in P1: the owner deferred the first push; locally cargo-deny checks the licence allow list, [cargo-deny run](../raw/evidence/phase-p1-foundation/cargo-deny-p1.12.txt).)
 3. **CI never runs benchmarks.** Shared runners are not a controlled environment ([ADR-0009](adr-0009-benchmark-hardware-energy.md)). CI may run benchmark-harness *unit* tests and fixture validation only.
 4. **License.** Dual `MIT OR Apache-2.0`, with `LICENSE-MIT` and `LICENSE-APACHE` at the repo root plus `license = "MIT OR Apache-2.0"` in every crate's `Cargo.toml`. The master prompt's single `LICENSE` file name is replaced by the two files. This is a minor deviation the owner can see.
 5. **Commits.** The owner answered Q-104 on 2026-10-08 ([raw/owner/2026-10-08-s01-wave0.md](../raw/owner/2026-10-08-s01-wave0.md)): "**Yes, starting now in P0** — one local commit per verified task; never push". Claude makes one local commit per verified task, ending with the session's attribution trailer, and never pushes ([ops-git-conventions](../operations/ops-git-conventions.md)).

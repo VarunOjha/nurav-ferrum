@@ -3,7 +3,7 @@ id: ov-arch-trust-boundaries
 type: overview
 title: "Architecture: trust boundaries and preliminary threat model"
 status: review
-updated: 2026-10-13
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -15,24 +15,16 @@ audience: both
 phase: phase-p0-planning
 tags: [security, threat-model, trust-boundary]
 unverified:
-  - claim: "The WebMessageReceived Source reported by WebView2 cannot be spoofed by page script"
-    verify_in: phase-p4-security
-  - claim: "A remote page cannot navigate a tab top-level to the app's local origin (tauri.localhost) once blocked in the navigation handlers"
-    verify_in: phase-p4-security
-  - claim: "FETCH_CHANNEL_DATA_COMMAND exemption leaks nothing to remote origins"
-    verify_in: phase-p4-security
-  - claim: "A raw-COM NavigationStarting handler can coexist with Tauri's on_navigation handler and enforce fail-closed parsing"
-    verify_in: phase-p4-security
   - claim: "WebView2 applies Mark-of-the-Web to downloaded files"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
   - claim: "Routing window.open popups into new tabs keeps non-Google OAuth popup flows working"
-    verify_in: phase-p4-security
+    verify_in: phase-p6-benchmark-harness
   - claim: "WebView2 blocks a page with a certificate error by default when the app does not handle ServerCertificateErrorDetected"
-    verify_in: phase-p4-security
+    verify_in: phase-p5-telemetry
   - claim: "The benchmark remote debugging port exposes the shell WebView as a CDP target"
     verify_in: phase-p5-telemetry
   - claim: "Chromium site isolation applies to WebView2 renderers"
-    verify_in: phase-p4-security
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # Trust boundaries and preliminary threat model
@@ -108,10 +100,10 @@ Facts, all VERIFIED from the tauri-2.12.1 source per [Tauri note §3](../raw/res
 | R1 | No capability file in `apps/desktop/src-tauri/capabilities/` declares `remote`. Enforced by a CI grep / unit test over the capability JSON | Static check in CI from phase-p2-minimal-container |
 | R2 | The shell capability targets `"webviews": ["shell"]`, not the window label. A window-label match would also cover the child tab WebViews in that window (VERIFIED matching logic) | Invoke each app command from a fixture page in a tab → expect rejection |
 | R3 | Ship an app ACL manifest (tauri-build app manifest) so local custom commands are also ACL-checked | Same fixture: core plugin commands, app commands, event emit/listen all rejected |
-| R4 | A tab may never navigate to the app's own origin (`tauri://localhost` / `http(s)://tauri.localhost`), because a tab there would become `Origin::Local`. Blocked in navigation handling. Whether WebView2 even permits that navigation is UNVERIFIED[phase-p4-security] (same phase as adr-0007 rule 4 and risk-r19; the handler is not built yet: P3 added no check for the app's own origin, so it moves to phase-p4-security too) | Fixture tries `location = "http://tauri.localhost/"`, link, redirect, `window.open` → all blocked and audit-logged |
-| R5 | The internal `FETCH_CHANNEL_DATA_COMMAND` is exempt from the ACL check (VERIFIED, `// TODO: Remove ... in v3`). What it can leak to a remote caller is UNVERIFIED[phase-p4-security] | Dedicated negative test calling it from a tab |
+| R4 | A tab may never navigate to the app's own origin (`tauri://localhost` / `http(s)://tauri.localhost`), because a tab there would become `Origin::Local`. Blocked in navigation handling. Verified in P4: links (to `http://tauri.localhost`, `tauri:` and `ipc.localhost`), a pop-up and a typed address are refused and logged, and the tab stays on its page ([check-p4.8](../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt)); a redirect to the app's origin was not tested on its own, but every redirect hop passes the same check (p4.3) | Fixture tries `location = "http://tauri.localhost/"`, link, redirect, `window.open` → all blocked and audit-logged |
+| R5 | The internal `FETCH_CHANNEL_DATA_COMMAND` is exempt from the ACL check (VERIFIED, `// TODO: Remove ... in v3`). Verified in P4: called from a website it is reached but returns nothing, because Ferrum creates no channels (the p4.8 check fails if channels are added), and tab views have no bridge to call it from ([check-p4.8](../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt)) | Dedicated negative test calling it from a tab |
 | R6 | The `__TAURI_INVOKE_KEY__` is injected into page context and is **not** a security boundary | Documented. No control relies on it |
-| R7 | Whether WebView2's `Source` can be spoofed by page script is UNVERIFIED[phase-p4-security]. The design assumes it is browser-reported | Fixture with iframes / `postMessage` tricks |
+| R7 | Whether WebView2's `Source` can be spoofed by page script was not tested and no longer matters (removed in P4): websites load only in tab views, which have no bridge, so they cannot send Ferrum a message at all ([check-p4.8](../raw/evidence/phase-p4-security/check-p4.8.20261013-2009.txt)); the bridge is in the shell, which loads only Ferrum's own pages, and in the IPC self-test's probe view | Fixture with iframes / `postMessage` tricks |
 | R8 | The shell WebView may only ever show the local origin. Its navigation handler denies every non-local URL. The shell has a strict CSP and no remote scripts | Unit test of the shell navigation handler; manual check of CSP |
 | R9 | The shell stores **no state in web storage** (settings live in Rust-side files). Clearing browsing data, which is profile-wide (VERIFIED, Tauri note §6), therefore cannot corrupt shell state, and tab content sharing a profile with the shell (fallback isolation mode) can read nothing useful | Code review + test |
 
@@ -119,18 +111,18 @@ Facts, all VERIFIED from the tauri-2.12.1 source per [Tauri note §3](../raw/res
 
 The order of evaluation and the default posture follow adr-0015 (open browsing + blocklist; [scoping Q12](../raw/01-scoping-decisions.md)):
 
-1. **Parse.** URLs that fail to parse are **denied** (fail-closed). Tauri's `on_navigation` *allows* URLs that fail `url::Url` parsing before Ferrum's callback ever runs (VERIFIED, Tauri note §4 `lib.rs:4821-4826`). Ferrum therefore also registers a raw-COM `NavigationStarting` handler that sees the raw URI string. Whether both handlers can coexist is UNVERIFIED[phase-p4-security]. Fallback: raw-COM only.
+1. **Parse.** URLs that fail to parse are **denied** (fail-closed). Tauri's `on_navigation` *allows* URLs that fail `url::Url` parsing before Ferrum's callback ever runs (VERIFIED, Tauri note §4 `lib.rs:4821-4826`). Ferrum therefore also registers a raw-COM `NavigationStarting` handler that sees the raw URI string. They never had to coexist (removed in P4): tab views are made by Ferrum (adr-0029) and use only the raw-COM handler, and the shell uses only `on_navigation`, for Ferrum's own pages. A malformed address in a tab is refused and logged (verified in P4, [check-p4.3](../raw/evidence/phase-p4-security/check-p4.3.txt)).
 2. **Scheme.** `https` is allowed. `http` is upgraded or warned (configurable). `ferrum`-internal and `tauri` origins are denied for tabs (R4). `javascript:`, `file:` and `data:` top-level navigations are denied (PROPOSAL). Other schemes (`mailto:`, `ms-*` and similar) need **user confirmation** in the shell, and are then handed to the OS (TB3) through `LaunchingExternalUriScheme` (raw COM only, VERIFIED binding exists, Tauri note §6).
 3. **Blocklist.** Domain-suffix match against the configured blocklist. Applies to top-level navigations, including **every redirect hop**, because NavigationStarting fires for redirects (VERIFIED). It applies to iframes through raw-COM `FrameNavigationStarting`, since Tauri has no iframe hook (VERIFIED).
 4. **Per-site settings.** Permissions, downloads and the profile assignment.
 5. **New windows.** `on_new_window` returns Deny, or routes the popup to a new tab after re-evaluating it. Built in P3 (p3.2): the pop-up's address opens in a new tab with its own view, so the new page has **no
 `window.opener` link** to the page that opened it; sign-in pop-ups that report back through `window.opener` therefore
 cannot work as built. Keeping the link (WebView2 can hand the request a view of the app's choosing) and testing real
-OAuth pop-ups are P4 work: UNVERIFIED[phase-p4-security].
+OAuth pop-ups are still open: UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P4: P4's tests use local test pages only and P4 did not change pop-up handling; P6 chooses the real-world workloads, where a sign-in would next matter, risk-r10).
 6. **Google OAuth.** Google forbids OAuth from embedded user agents (VERIFIED, Tauri note §8). Ferrum detects `accounts.google.com` OAuth flows and offers "open in system browser". **It never spoofs the user agent or uses any other workaround** (master prompt §5).
 7. **Permissions.** Default **deny** for camera, microphone, geolocation, notifications, clipboard-read, sensors, MIDI, file-system access and window management, with per-site overrides (PROPOSAL; kinds VERIFIED in Tauri note §4). Ferrum, not the profile, stays authoritative: `SavesInProfile(FALSE)` needs raw COM (VERIFIED).
-8. **Downloads.** Every download fires `on_download`. The engine decides allow/deny and the destination, and the shell shows it. The filename is sanitised. Whether WebView2 applies Mark-of-the-Web to the file is UNVERIFIED[phase-p4-security].
-9. **Certificates.** Ferrum never handles `ServerCertificateErrorDetected` by bypassing. The default WebView2 behaviour is expected to block the page, and Ferrum leaves it in place (master prompt §5). That default is UNVERIFIED[phase-p4-security] (no research note covers it; tested by SEC-13 in [qual-security-testing-plan](../quality/qual-security-testing-plan.md)).
+8. **Downloads.** Every download fires `on_download`. The engine decides allow/deny and the destination, and the shell shows it. The filename is sanitised. Whether WebView2 applies Mark-of-the-Web to the file is UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: a program file saved from the local test server had no Zone.Identifier mark, [check-p4.6](../raw/evidence/phase-p4-security/check-p4.6.txt), which does not settle downloads from the internet; the owner's hand check with a real program download is still owed, [P4 manual checklist](../raw/evidence/phase-p4-security/manual-checklist.md)).
+9. **Certificates.** Ferrum never handles `ServerCertificateErrorDetected` by bypassing. The default WebView2 behaviour is expected to block the page, and Ferrum leaves it in place (master prompt §5). That default is UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: the P4 security suite has no live certificate-error test; no research note covers it; tested by SEC-13 in [qual-security-testing-plan](../quality/qual-security-testing-plan.md)).
 10. **Audit.** Every **denied** action is appended to `audit.jsonl` (timestamp, tab id, origin, action kind, rule id, decision). There are no page contents.
 
 ## 6. Preliminary STRIDE table
@@ -144,7 +136,7 @@ Since p4.1 (2026-10-13) threats are tracked in the full threat model, [qual-secu
 | Tampering: redirect chain reaches a blocked domain | TB1 | Evaluate every NavigationStarting (incl. redirects) | Redirect-based policy bypass |
 | Spoofing: malformed URL slips past the filter | TB1 | Fail-closed parse (§5.1) | Malformed URL handling |
 | Information disclosure: site A reads site B's cookies | TB2 | Per-site profiles (or documented fallback) | Session data isolation |
-| Information disclosure: cross-origin access attempts | TB2 | Chromium same-origin policy + site isolation, not weakened by Ferrum (site isolation in WebView2 UNVERIFIED[phase-p4-security], adr-0010) | Cross-origin access attempts |
+| Information disclosure: cross-origin access attempts | TB2 | Chromium same-origin policy + site isolation, not weakened by Ferrum (site isolation in WebView2 UNVERIFIED[phase-p6-benchmark-harness], re-targeted in P4: a separate renderer per site was observed but not compared with Chrome; adr-0010) | Cross-origin access attempts |
 | Elevation of privilege: drive-by download executes | TB3 | Download policy, no auto-open | Download handling |
 | Elevation of privilege: external protocol launches an app silently | TB3 | Confirmation dialog | External protocol handling |
 | Elevation of privilege: permission granted silently | TB1/TB2 | Default deny + `SavesInProfile(FALSE)` | Permission denial |
