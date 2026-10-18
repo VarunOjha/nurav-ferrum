@@ -2985,3 +2985,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [comp-app-shell, comp-security-engine, comp-webview-manager]
 - sources: [raw/owner/2026-10-15-s07-p4-20-components-reapproval.md]
 - result: The owner answered "Re-approve all three (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. The P4 gate rerun waits for "PC is quiet".
+
+## [2026-10-17] fix | P4 gate script could not be read; fixed
+- session: s07
+- time: 13:29
+- pages: []
+- commit: e77ef79
+- result: The owner said (13:28) "There are other claude sessions going, but I am not at desk, can you continue queitly with that ?", so Claude started the P4 gate. It stopped at once with a PowerShell parse error: commit d7114ef (p4.20) wrote "Ferrum's" unescaped in a single-quoted string. Nothing ran. Per the owner's rule Claude stopped and told him; he answered "Fix it and run the gate." Fixed to "Ferrum''s"; every gate and verify script now parses. Process slip: the p4.20 checks never parsed the gate script. The gate reruns now; about 3 GB of memory was free because of other sessions.

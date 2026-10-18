@@ -5441,6 +5441,16 @@
         "p4.20",
         "adr-0034"
       ]
+    },
+    {
+      "id": "e77ef79",
+      "kind": "commit",
+      "title": "Commit e77ef79",
+      "summary": "Fixes a typo that stopped the end-of-phase gate script from opening.",
+      "status": "Done",
+      "related": [
+        "p4.14"
+      ]
     }
   ]
 }

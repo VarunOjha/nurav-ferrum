@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7660982278df30af3a5111e93d6bea15add61756afe3149e826eaf073be8c79c"
+    "content_hash": "sha256:752f8c86589cf61bcb65c70e155b66185a42172fff63a6b15d840af30eddca57"
   },
   "entries": [
     {
@@ -5377,6 +5377,26 @@
       "category": "Decided",
       "tags": [
         "approvals",
+        "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-17-s07-gate-script-fix",
+      "date": "2026-10-17",
+      "time": "13:29",
+      "title": "The gate script had a typo; fixed, gate rerunning",
+      "done": "The end-of-phase gate stopped at once: Claude's last change put a bare apostrophe in one sentence of the gate script, so PowerShell could not read it. Nothing ran. You said to fix it; every check script now opens cleanly.",
+      "next": "The end-of-phase gate runs now (about an hour); Claude reports the result.",
+      "decisions": [],
+      "approvals": [],
+      "commit": "e77ef79",
+      "covers": [
+        "## [2026-10-17] fix | P4 gate script could not be read; fixed"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Fixed",
+      "tags": [
+        "testing",
         "phases"
       ]
     }
