@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:5ac696d0c3d1d53bff49606806c8b3ed671cb82beb14b923a975421cc8a49adb"
+    "content_hash": "sha256:4b992aa7cbe64dea6fe45f705661f7efca9a584ebb6f773a8fd0b03811e13054"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "Measurement part's page waits for your re-approval",
-      "ref": "comp-telemetry"
+      "state": "All up to date",
+      "ref": "phase-p5-telemetry"
     },
     {
       "item": "Your rule",
@@ -35,26 +35,21 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 5",
         "state": "In progress: 3 of 14 tasks done"
       },
       {
-        "item": "Last task",
-        "state": "Memory and CPU meter built and checked",
-        "ref": "p5.3"
-      },
-      {
-        "item": "Your part",
-        "state": "Re-approve the measurement part's page",
-        "ref": "comp-telemetry"
+        "item": "Next task",
+        "state": "Prove the meter accurate",
+        "ref": "p5.4"
       }
     ],
-    "why": "Nothing to run. The meter task added its details to the measurement part's page, which cancels your earlier approval of that page. Claude needs your OK before the next task uses it.",
+    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
     "script": null,
-    "tell_claude": "\"Re-approve\", or what to change"
+    "tell_claude": "Nothing needed; Claude reports after each task"
   },
   "questions_for_you": {
     "open": 16,

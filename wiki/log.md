@@ -3144,3 +3144,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [log]
 - result: The "[2026-10-18] code | p5.3 memory and CPU meter built and checked" entry, committed in 1dce4dd, contained the SCHEMA §7.1 tag keyword without backticks, which tools/quick_lint.py reports as 1 UNV-NOPHASE error. The keyword was put in backticks; no other character changed. This edits an existing entry, against SCHEMA §12 (append-only), following the 2026-10-08 and 2026-10-11 precedents, so the wiki stays at 0 lint errors; it is reported to the owner. Slip: I ran the lint in the same command as the commit and did not stop on its error.
 - commit: 1dce4dd
+
+## [2026-10-18] approval | comp-telemetry re-approved after p5.3
+- session: s08
+- time: 18:56
+- pages: [comp-telemetry]
+- sources: [raw/owner/2026-10-18-s08-p5-3-telemetry-reapproval.md]
+- result: Owner: "Reapprove". Recorded approved with tools/approvals_record.py. All approvals current. psutil 7.2.2 installed with pip --user for p5.4 (toolchain install, adr-0021).
+- next: p5.4 sampler validation against ground truth (In-flight written).
