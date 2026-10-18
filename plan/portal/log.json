@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b541c08a668efd0888217560cadce3fe2ffef98918d6af5b12f1adadfddd33e6"
+    "content_hash": "sha256:92735cec820fbbd809c65f9a0a1905c4cdd6e52f6f06be71ea69f8b32f180017"
   },
   "entries": [
     {
@@ -5655,6 +5655,31 @@
       "tags": [
         "approvals",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-1",
+      "date": "2026-10-18",
+      "time": "15:56",
+      "title": "Saved-data format for measurements built and checked",
+      "done": "Every measurement file now starts with a label of the exact setup (code version, Windows build, browser engine version, settings, machine). Files are written so a crash never leaves a half file that looks finished. A checker refuses each of eleven damaged test files. Tables for spreadsheets too. All 10 tests pass.",
+      "next": "You re-approve the measurement part's page; then Claude counts exactly Ferrum's own processes (p5.2).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "4d14fe2",
+      "covers": [
+        "## [2026-10-18] code | p5.1 export schema v1 built and checked"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "benchmarks",
+        "testing"
       ]
     }
   ]

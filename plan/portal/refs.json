@@ -970,7 +970,7 @@
       "kind": "task",
       "title": "P5 task: Export file format and run labels",
       "summary": "Every later result is read from files → define one versioned format (plain data files) that labels each run with code version, Windows build, WebView2 version and settings → any number can be traced to the exact setup that made it.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3262,7 +3262,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and every tab sleep or wake, then exports data files. Built so far: the file format, where every file starts with a label of the exact setup and is checked when read. Trusted. A cross-check only: the official cross-browser numbers come from the benchmark harness.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format; each file starts with a label of the exact setup and is checked when read. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted. Risk: counting the right processes.",
       "status": "Planned",
       "related": [
         "layer-engine"
@@ -5490,6 +5490,16 @@
       "status": "Done",
       "related": [
         "p4.14"
+      ]
+    },
+    {
+      "id": "4d14fe2",
+      "kind": "commit",
+      "title": "Commit 4d14fe2",
+      "summary": "Task p5.1: the saved-data format for measurements, with its writer, tables and checker.",
+      "status": "Done",
+      "related": [
+        "p5.1"
       ]
     }
   ]

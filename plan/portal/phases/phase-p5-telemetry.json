@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 0,
+    "done": 1,
     "total": 14
   },
   "step_order": [
@@ -26,7 +26,7 @@
       "what": "One versioned format for all result files, with a label on every run: code version, Windows build, WebView2 version, settings and machine.",
       "why": "A number that cannot be traced back to its setup is worthless for research: nobody could repeat it, and a quiet change in versions could explain any difference.",
       "how": "Write the format as files in the repo (one record per line, plus a table form) and a writer that never leaves a half-written file and starts new files in turn.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Every later result is read from files → define one versioned format (plain data files) that labels each run with code version, Windows build, WebView2 version and settings → any number can be traced to the exact setup that made it.",
       "check": "Each record type saves and reloads unchanged; a checker accepts good files and rejects a damaged one.",
       "script": "scripts/verify/p5.1-export-file-format.ps1"

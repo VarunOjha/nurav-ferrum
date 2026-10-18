@@ -47,8 +47,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s08
 current_phase: phase-p5-telemetry
-current_task: p5.1
-next_action: "P5 in progress (entry passed 2026-10-18). Start p5.1 (export schema v1, JSONL and CSV, run metadata record, writer with atomic rotation; verify: every record type round-trips and a validator accepts generated files and rejects a corrupted fixture) with a write-ahead In-flight record first. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+current_task: p5.2
+next_action: "Ask the owner to re-approve comp-telemetry (staled by p5.1, 4d14fe2: interfaces and the export format section). Then p5.2: process-set attribution from WebView2 GetProcessExtendedInfos on Ferrum's environment, never by executable name (verify: integration test runs Ferrum beside the S1 spike app and asserts its PIDs are excluded and every Ferrum WebView2 PID included). Write the In-flight record first. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -75,6 +75,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - P4-targeted claims closed or re-targeted on 22 pages (lint had 66 UNV-PASTDUE errors once P4 was done); 14 approvals now STALE, re-approved by the owner ("Re-approve").
 - Q-114 (full addresses kept, log off by default, 14 days), Q-115 (startup chain replaces time to interactive) and Q-203 (all run data in git) answered; adr-0008 updated (approval stale).
 - Seven P5 pages approved ("Approved"); P5 entry gate passed; phase-p5-telemetry in progress.
+- p5.1 done (`4d14fe2`): export schema v1 (run label, records, safe rotating writer, CSV, checker, JSON Schema); check PASS. comp-telemetry approval stale.
 
 ## Done this session (s03)
 
@@ -378,12 +379,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p5.1 (export schema v1: JSONL and CSV, run metadata record, writer with atomic rotation)
-- session: s08
-- intent: in crates/telemetry add module `export` (record types with serde, deny_unknown_fields, tagged by `type`: run header, process sample, tree sample, startup mark, navigation timing, lifecycle transition; schema_version 1); JSONL writer that writes `<run_id>.<seq>.jsonl.part`, starts each file with the run header, rotates by size and renames to `.jsonl` only after flush and sync; CSV export with fixed columns per record type; validator (header first, version, strict parse, time order, no second header); JSON Schema files in crates/telemetry/schema/v1/ with a test that they match the types; corrupted fixtures; unit tests; scripts/verify/p5.1-export-file-format.ps1 made real; comp-telemetry page interfaces updated (stales its approval)
-- planned paths: crates/telemetry/ (Cargo.toml, src/lib.rs, src/export/*, schema/v1/*, tests/fixtures/*), Cargo.lock, scripts/verify/p5.1-export-file-format.ps1, wiki/architecture/components/comp-telemetry.md, wiki/raw/evidence/phase-p5-telemetry/check-p5.1.txt, wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
-- builds: target/debug only (never target/release, where the owner's Ferrum runs)
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
+(empty: p5.1 finished on 2026-10-18 in 4d14fe2)
 
 ## Blockers
 
@@ -421,13 +417,14 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
-| Next task | p5.1: the saved-data format for measurements |
+| Last task | p5.1 done: the saved-data format for measurements |
+| Your part | Re-approve the measurement part's page (changed by p5.1) |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** nothing needed; Claude reports after each task.
+**4. What to tell Claude:** "Re-approve" for the measurement part's page.
 
 ## Pending owner approvals
 

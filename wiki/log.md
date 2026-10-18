@@ -3094,3 +3094,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [phase-p5-telemetry]
 - result: (1) P4 done, phase-p4-security#exit APPROVED, go-ahead given. (2) Dependency set APPROVED: phase-p5-telemetry, adr-0008, adr-0012, adr-0014, comp-telemetry, comp-network-logger, comp-webview-manager, exp-baseline-footprint, exp-startup, exp-navigation, schema. (3) No open question blocks it (Q-114, Q-115, Q-203 answered). (4) No CONTRADICTION blockquote in the set. Page criterion: the headline metric pages (tree private commit, tree CPU time, startup window visible, FCP, LCP) exist with status proposed. phase-p5-telemetry set to in-progress.
 - next: p5.1 export schema v1 and run metadata record.
+
+## [2026-10-18] code | p5.1 export schema v1 built and checked
+- session: s08
+- time: 15:56
+- pages: [comp-telemetry, phase-p5-telemetry]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.1.txt]
+- result: Export schema v1 in crates/telemetry/src/export: run line first in every file (version, run id, file number, start time, Ferrum version, git commit and dirty flag, Windows build, WebView2 runtime, settings fingerprint, machine id), process, tree, startup and navigation records, strict reading, a writer that rotates by size and renames .part files only after a sync, CSV tables, a checker, JSON Schema compared with the types. cargo test 10 passed; clippy and fmt clean; p5.1 check PASS (4 PASS). Lifecycle transition records come with p5.8. Stales approval of comp-telemetry (interfaces and export section added).
+- commit: 4d14fe2
+- next: owner re-approves comp-telemetry; then p5.2 (count exactly Ferrum's processes).
