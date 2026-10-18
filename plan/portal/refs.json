@@ -1040,7 +1040,7 @@
       "kind": "task",
       "title": "P5 task: Memory and CPU meter",
       "summary": "We need trustworthy memory and CPU numbers → read them straight from Windows (private memory as the headline, working set as secondary, CPU time) and add them up over Ferrum's processes → one fair total per moment; peaks come from the total, never from adding per-process peaks.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3262,7 +3262,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, and counting exactly Ferrum's processes (tested beside another app using the same engine). A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, and the memory and CPU meter (a moment it cannot read fully is marked as a gap). A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
       "status": "Planned",
       "related": [
         "layer-engine"

@@ -1,4 +1,4 @@
-//! p5.1 tests: every record type round-trips through JSONL and CSV; the writer rotates and finishes files safely;
+//! p5.1 tests (p5.3 added the sample_gap record): every record type round-trips through JSONL and CSV; the writer rotates and finishes files safely;
 //! the checker accepts what the writer makes and refuses each corrupted fixture; the JSON Schema matches the types.
 
 use std::path::{Path, PathBuf};
@@ -72,6 +72,16 @@ fn samples(t: u64) -> Vec<Record> {
             cpu_100ns: 0,
             cycles: None,
         }),
+        Record::SampleGap(SampleGap {
+            t_ms: t,
+            reason: GapReason::CountersUnreadable,
+            missing: Some(2),
+        }),
+        Record::SampleGap(SampleGap {
+            t_ms: t,
+            reason: GapReason::SetRefused,
+            missing: None,
+        }),
         Record::StartupMark(StartupMark {
             t_ms: t,
             mark: StartupMarkKind::TabLargestContentfulPaint,
@@ -143,7 +153,7 @@ fn every_record_type_round_trips_through_json() {
         assert_eq!(&parse_line(&line).unwrap(), r, "{line}");
     }
     let kinds: std::collections::BTreeSet<_> = all.iter().map(Record::kind).collect();
-    assert_eq!(kinds.len(), 5, "a sample of every record type");
+    assert_eq!(kinds.len(), 6, "a sample of every record type");
 }
 
 #[test]
@@ -294,7 +304,10 @@ fn writer_refuses_bad_input_and_reused_run_ids() {
     );
     w.write(&samples(50)[0]).unwrap();
     assert!(w.write(&samples(49)[0]).is_err(), "clock going backwards");
-    let mut nan = samples(60)[6].clone();
+    let mut nan = samples(60)
+        .into_iter()
+        .find(|r| r.kind() == "nav_timing")
+        .unwrap();
     if let Record::NavTiming(n) = &mut nan {
         n.load_ms = Some(f64::NAN);
     }
@@ -315,7 +328,7 @@ fn writer_refuses_bad_input_and_reused_run_ids() {
 fn the_good_fixture_is_accepted() {
     let s = validate_file(&fixture("fixture-good.0000.jsonl")).unwrap();
     assert_eq!(s.run.run_id, "fixture-good");
-    assert_eq!(s.records.len(), 4);
+    assert_eq!(s.records.len(), 5);
 }
 
 #[test]
@@ -339,6 +352,7 @@ fn every_corrupted_fixture_is_refused() {
         ("corrupt-wrong-type.jsonl", "invalid type"),
         ("corrupt-empty-line.jsonl", "empty line"),
         ("corrupt-not-json.jsonl", "line 3"),
+        ("corrupt-gap-missing.jsonl", "missing must be null"),
     ];
     let mut seen = 0;
     for entry in std::fs::read_dir(fixture("")).unwrap() {
@@ -493,6 +507,16 @@ fn json_schema_matches_the_types() {
         enum_of("origin"),
         names(
             origins
+                .iter()
+                .map(|k| serde_json::to_value(k).unwrap())
+                .collect()
+        )
+    );
+    let reasons = [GapReason::SetRefused, GapReason::CountersUnreadable];
+    assert_eq!(
+        enum_of("reason"),
+        names(
+            reasons
                 .iter()
                 .map(|k| serde_json::to_value(k).unwrap())
                 .collect()

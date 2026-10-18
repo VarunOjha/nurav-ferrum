@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 2,
+    "done": 3,
     "total": 14
   },
   "step_order": [
@@ -48,7 +48,7 @@
       "what": "A meter that reads the memory and CPU use of Ferrum's processes at a chosen interval.",
       "why": "Adding up memory the wrong way counts shared memory twice and makes every app look bigger. Fair totals are needed before any comparison.",
       "how": "Call Windows directly, add up across Ferrum's processes, and take peaks from that total, never by adding per-process peaks. Tests check the sums.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "We need trustworthy memory and CPU numbers → read them straight from Windows (private memory as the headline, working set as secondary, CPU time) and add them up over Ferrum's processes → one fair total per moment; peaks come from the total, never from adding per-process peaks.",
       "check": "Tests confirm totals and peaks are computed correctly.",
       "script": "scripts/verify/p5.3-memory-cpu-meter.ps1"

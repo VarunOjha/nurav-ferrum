@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-test-sample"
+description = "Enables the test_sample command without any pre-configured scope."
+commands.allow = ["test_sample"]
+
+[[permission]]
+identifier = "deny-test-sample"
+description = "Denies the test_sample command without any pre-configured scope."
+commands.deny = ["test_sample"]

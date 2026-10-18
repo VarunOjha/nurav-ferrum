@@ -6,7 +6,7 @@
 .DESCRIPTION
   What it checks : (1) every record type saves and reloads unchanged, as a data file and as a table; (2) the file
                    writer starts a new file when one gets big and never leaves a half-written file under a finished
-                   name; (3) the checker accepts good files and refuses each of the eleven damaged test files; (4)
+                   name; (3) the checker accepts good files and refuses each of the damaged test files; (4)
                    the published format description (JSON Schema) matches the code.
   Why            : Every later result is read from files → define one versioned format (plain data files) that
                    labels each run with code version, Windows build, WebView2 version and settings → any number can
@@ -44,7 +44,7 @@ function Assert-Tests([string[]] $Names) {
 Invoke-Step 'Each record type saves and reloads unchanged (data file and table)' {
     Assert-Tests @('every_record_type_round_trips_through_json', 'every_table_round_trips_through_csv',
         'csv_columns_match_the_record_fields', 'csv_refuses_bad_tables')
-    'five record types as JSON lines, four tables as CSV'
+    'six record types as JSON lines, five tables as CSV (sample_gap added by p5.3)'
 }
 
 Invoke-Step 'The writer rotates files and leaves no half file under a finished name' {

@@ -4,8 +4,8 @@
 //! (code version, Windows build, WebView2 runtime, settings fingerprint, machine). Unknown fields are refused, so a
 //! typo or a newer writer is caught instead of being read silently.
 //!
-//! Version rule: v1 may gain record types while P5 is in progress (p5.8 adds lifecycle transitions); it is frozen at
-//! the P5 exit gate. After that any change bumps [`SCHEMA_VERSION`].
+//! Version rule: v1 may gain record types while P5 is in progress (p5.3 added `sample_gap`, p5.8 adds lifecycle
+//! transitions); it is frozen at the P5 exit gate. After that any change bumps [`SCHEMA_VERSION`].
 
 use serde::{Deserialize, Serialize};
 
@@ -22,6 +22,8 @@ pub enum Record {
     ProcessSample(ProcessSample),
     /// The sum over the whole attributed process set at one moment (the headline series).
     TreeSample(TreeSample),
+    /// A sampling moment with no sum, because the set or a member's counters could not be read completely (p5.3).
+    SampleGap(SampleGap),
     /// One startup boundary.
     StartupMark(StartupMark),
     /// The timing of one finished navigation.
@@ -35,6 +37,7 @@ impl Record {
             Record::Run(_) => "run",
             Record::ProcessSample(_) => "process_sample",
             Record::TreeSample(_) => "tree_sample",
+            Record::SampleGap(_) => "sample_gap",
             Record::StartupMark(_) => "startup_mark",
             Record::NavTiming(_) => "nav_timing",
         }
@@ -46,6 +49,7 @@ impl Record {
             Record::Run(_) => None,
             Record::ProcessSample(r) => Some(r.t_ms),
             Record::TreeSample(r) => Some(r.t_ms),
+            Record::SampleGap(r) => Some(r.t_ms),
             Record::StartupMark(r) => Some(r.t_ms),
             Record::NavTiming(r) => Some(r.t_ms),
         }
@@ -142,10 +146,33 @@ pub struct TreeSample {
     pub private_commit_bytes: u64,
     /// Sum of working set (over-counts shared pages).
     pub working_set_bytes: u64,
-    /// Sum of user and kernel CPU time (100 ns units).
+    /// Sum of user and kernel CPU time (100 ns units) of every process of the set seen during the run, the ones that
+    /// have since exited included (at their last reading), so the series never drops when a process ends.
     pub cpu_100ns: u64,
-    /// Sum of CPU cycles, when available for every process.
+    /// Sum of CPU cycles on the same rule, when available for every process.
     pub cycles: Option<u64>,
+}
+
+/// Why a sampling moment has no sum.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GapReason {
+    /// The process set was refused (for example an environment listed no browser process for a moment, p5.2).
+    SetRefused,
+    /// Some members are still running but their counters could not be read.
+    CountersUnreadable,
+}
+
+/// A sampling moment with no sum: a smaller number is never written in place of the real one.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SampleGap {
+    /// Milliseconds since the run started.
+    pub t_ms: u64,
+    /// Why.
+    pub reason: GapReason,
+    /// For `counters_unreadable`: how many members could not be read (at least 1). `null` for `set_refused`.
+    pub missing: Option<u32>,
 }
 
 /// The startup boundaries, in the order they happen (owner's Q-115 answer: no "time to interactive").

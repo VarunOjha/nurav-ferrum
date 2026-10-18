@@ -1,5 +1,6 @@
 {"type":"run","schema_version":1,"run_id":"fixture-good","file_seq":0,"started_unix_ms":1792000000000,"ferrum_version":"0.0.0","git_sha":"089a43f","git_dirty":false,"os_build":"10.0.26200.1","webview2_runtime":"154.0.4258.62","config_sha256":"sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd","machine_id":"p1.2-environment","sample_interval_ms":1000}
 {"type":"process_sample","t_ms":0,"pid":100,"pid_created_100ns":5,"kind":"browser","private_commit_bytes":1000,"working_set_bytes":2000,"private_working_set_bytes":null,"page_faults":1,"cpu_user_100ns":2,"cpu_kernel_100ns":3,"cycles":null}
 {"type":"tree_sample","t_ms":0,"process_count":1,"private_commit_bytes":1000,"working_set_bytes":2000,"cpu_100ns":5,"cycles":null}
+{"type":"sample_gap","t_ms":5,"reason":"set_refused","missing":null}
 {"type":"startup_mark","t_ms":10,"mark":"window_visible","tab":null}
 {"type":"nav_timing","t_ms":20,"tab":1,"nav_id":1,"start_ms":12.5,"response_ms":3.0,"dom_content_loaded_ms":5.5,"load_ms":7.0,"complete_ms":7.25,"origin":"same_origin","redirect_count":0,"outcome":"completed"}

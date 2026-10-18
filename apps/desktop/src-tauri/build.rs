@@ -29,6 +29,7 @@ fn main() {
             "tab_list",
             "test_stats",
             "test_processes",
+            "test_sample",
             "tab_new_private",
             "site_data_clear",
             "test_focus",

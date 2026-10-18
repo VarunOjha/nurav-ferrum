@@ -1173,6 +1173,69 @@ pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
     }))
 }
 
+/// Waits without holding a runtime thread.
+async fn pause(ms: u64) {
+    let _ = tauri::async_runtime::spawn_blocking(move || {
+        std::thread::sleep(std::time::Duration::from_millis(ms))
+    })
+    .await;
+}
+
+/// Test hook (debug builds only): runs the process sampler (p5.3) for `ticks` moments (1 to 20) at `interval_ms`
+/// (sampler limits, default 1 s; each reading one interval after the one before) over Ferrum's real process
+/// set, and returns the records it wrote. A refused set is
+/// asked again once after 200 ms; if it is still refused the moment is a `sample_gap` (the p5.2 finding).
+#[tauri::command]
+pub async fn test_sample(
+    app: AppHandle,
+    ticks: u32,
+    interval_ms: Option<u32>,
+) -> Result<Value, String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    if !(1..=20).contains(&ticks) {
+        return Err(format!("ticks {ticks} is outside 1 to 20"));
+    }
+    let config = match interval_ms {
+        Some(ms) => ferrum_telemetry::sampler::SamplerConfig::new(ms)?,
+        None => ferrum_telemetry::sampler::SamplerConfig::default(),
+    };
+    let mut sampler = ferrum_telemetry::sampler::Sampler::new();
+    let start = std::time::Instant::now();
+    let mut records = Vec::new();
+    let mut retries = 0u32;
+    let interval = std::time::Duration::from_millis(u64::from(config.interval_ms()));
+    let mut next = start;
+    for _ in 0..ticks {
+        // Each reading comes one interval after the one before (plus the time to list the set); a late reading is not
+        // caught up with a burst.
+        pause(
+            next.saturating_duration_since(std::time::Instant::now())
+                .as_millis() as u64,
+        )
+        .await;
+        let mut set = process_inventories(&app).await.and_then(|l| set_of(&l));
+        if set.is_err() {
+            retries += 1;
+            pause(200).await;
+            set = process_inventories(&app).await.and_then(|l| set_of(&l));
+        }
+        next = std::time::Instant::now() + interval;
+        let t_ms = start.elapsed().as_millis() as u64;
+        records.extend(sampler.tick(
+            t_ms,
+            set.as_ref().map_err(String::as_str),
+            ferrum_telemetry::win::read,
+        ));
+    }
+    Ok(json!({
+        "interval_ms": config.interval_ms(),
+        "retries": retries,
+        "records": records,
+    }))
+}
+
 /// Closes a tab (the active one when `id` is missing).
 #[tauri::command]
 pub fn tab_close(app: AppHandle, id: Option<u64>) -> bool {

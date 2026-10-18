@@ -5,7 +5,7 @@ use std::fmt;
 use std::io::BufRead;
 use std::path::Path;
 
-use super::records::{NavTiming, Record, RunMeta, SCHEMA_VERSION};
+use super::records::{GapReason, NavTiming, Record, RunMeta, SCHEMA_VERSION};
 
 /// Why a file or record was refused. `line` is 1-based; 0 means the file as a whole.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -137,6 +137,14 @@ pub fn validate_record(record: &Record) -> Result<(), String> {
                 Ok(())
             }
         }
+        Record::SampleGap(g) => match (g.reason, g.missing) {
+            (GapReason::SetRefused, None) => Ok(()),
+            (GapReason::SetRefused, Some(_)) => Err("missing must be null for set_refused".into()),
+            (GapReason::CountersUnreadable, Some(n)) if n > 0 => Ok(()),
+            (GapReason::CountersUnreadable, _) => {
+                Err("missing must be at least 1 for counters_unreadable".into())
+            }
+        },
         Record::StartupMark(_) => Ok(()),
         Record::NavTiming(n) => validate_nav(n),
     }

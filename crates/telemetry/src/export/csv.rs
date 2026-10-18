@@ -33,6 +33,7 @@ pub fn columns(kind: &str) -> Option<&'static [&'static str]> {
             "cpu_100ns",
             "cycles",
         ],
+        "sample_gap" => &["t_ms", "reason", "missing"],
         "startup_mark" => &["t_ms", "mark", "tab"],
         "nav_timing" => &[
             "t_ms",
@@ -52,9 +53,10 @@ pub fn columns(kind: &str) -> Option<&'static [&'static str]> {
 }
 
 /// The record types that have a table.
-pub const TABLE_KINDS: [&str; 4] = [
+pub const TABLE_KINDS: [&str; 5] = [
     "process_sample",
     "tree_sample",
+    "sample_gap",
     "startup_mark",
     "nav_timing",
 ];

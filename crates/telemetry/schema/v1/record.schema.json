@@ -13,6 +13,9 @@
       "$ref": "#/$defs/tree_sample"
     },
     {
+      "$ref": "#/$defs/sample_gap"
+    },
+    {
       "$ref": "#/$defs/startup_mark"
     },
     {
@@ -214,7 +217,8 @@
         },
         "cpu_100ns": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "description": "Sum of user and kernel CPU time of every process of the set seen during the run, exited ones included at their last reading."
         },
         "cycles": {
           "type": [
@@ -222,6 +226,41 @@
             "null"
           ],
           "minimum": 0
+        }
+      }
+    },
+    "sample_gap": {
+      "description": "A sampling moment with no sum, because the set or a member's counters could not be read completely; a smaller number is never written instead (p5.3).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "t_ms",
+        "reason",
+        "missing"
+      ],
+      "properties": {
+        "type": {
+          "const": "sample_gap"
+        },
+        "t_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "set_refused",
+            "counters_unreadable"
+          ]
+        },
+        "missing": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "description": "For counters_unreadable: how many members could not be read; null for set_refused."
         }
       }
     },

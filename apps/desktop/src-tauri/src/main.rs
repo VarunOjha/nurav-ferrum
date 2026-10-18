@@ -241,6 +241,7 @@ fn main() {
             content::tab_list,
             content::test_stats,
             content::test_processes,
+            content::test_sample,
             recovery::test_crash_tab,
             content::tab_new_private,
             content::site_data_clear,

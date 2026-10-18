@@ -1,0 +1,23 @@
+Ferrum check p5.3: Memory and CPU meter
+Why: one fair total per moment; peaks come from the total, never from adding per-process peaks.
+Run at 2026-10-18 18:34 on commit efc6cb0 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The adding-up rules: sums, peaks from the total, ended and reused processes, gaps, interval (1 s)
+         eight unit tests passed
+  PASS   The saved-data format with the new gap record
+         six record types; the damaged test files, one new, are all refused
+own process: Counters { created_100ns: 134368400925788540, private_commit_bytes: 991232, working_set_bytes: 6021120, private_working_set_bytes: Some(638976), page_faults: 1531, cpu_user_100ns: 1875000, cpu_kernel_100ns: 156250, cycles: Some(625876759) }
+  PASS   Windows fills every counter on this PC
+         memory, private working set, page faults, CPU time and cycles all read; an ended process reads as gone
+  PASS   Unsafe code only in the Windows module of the measurement part
+         win.rs only: 5 unsafe blocks, each with its SAFETY comment
+Running 1 test using 1 worker
+SAMPLER: 6 moments summed, 0 gaps, 1 set retries; processes 17/17/17/17/17/17; private commit MiB 515.4/614.2/606.4/606.3/610.4/615.7; peak 615.7 MiB; CPU s 9.98; interval 500 ms, spacing 501,501,502,501,501 ms
+  ✓  1 sampler.spec.ts:33:1 › the sampler sums Ferrum's processes at the chosen interval and never writes a smaller number (3.3s)
+  1 passed (1.3m)
+  PASS   Live: six readings over Ferrum's processes, each a correct total (90 s)
+         6 moments summed, 0 gaps, 1 set retries; processes 17/17/17/17/17/17; private commit MiB 515.4/614.2/606.4/606.3/610.4/615.7; peak 615.7 MiB; CPU s 9.98; interval 500 ms, spacing 501,501,502,501,501 ms
+------------------------------------------------------------------------
+RESULT: PASS - p5.3 (5 PASS; 92 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.3 check passed".
