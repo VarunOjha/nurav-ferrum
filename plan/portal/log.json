@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:0908b0c19302128efa4c5aa68e78efaf6cd6f4e0c32efeff5eb20a039b28963f"
+    "content_hash": "sha256:8ab15d4e5197ff01f0301f0fef08af7254997793d3e048c7f84177120654c735"
   },
   "entries": [
     {
@@ -5424,6 +5424,31 @@
       "tags": [
         "testing",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s07-security-tab",
+      "date": "2026-10-18",
+      "time": "13:40",
+      "title": "New Security tab: the threat model in plain words",
+      "done": "The portal has a Security tab: who might attack, 26 threats with their protection and whether a test proves it, what Ferrum does not protect against. Three rows were corrected from the gate's evidence; one shows a missing certificate-error test. Some old portal text and tests that broke the portal's own rules were fixed.",
+      "next": "You read the Security tab, do the hand checklist, re-approve the portal's list of tabs, and decide on the Phase 4 sign-off.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Portal tabs and pages (design page)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "e575b73",
+      "covers": [
+        "## [2026-10-18] plan | Security tab in the portal: the threat model in plain words"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Built",
+      "tags": [
+        "portal",
+        "testing"
       ]
     }
   ]

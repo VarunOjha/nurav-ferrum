@@ -5471,6 +5471,26 @@
       "related": [
         "p4.14"
       ]
+    },
+    {
+      "id": "e575b73",
+      "kind": "commit",
+      "title": "Commit e575b73",
+      "summary": "Adds the Security tab to the plan portal: the threat model in plain words.",
+      "status": "Done",
+      "related": [
+        "p4.14"
+      ]
+    },
+    {
+      "id": "ed927c1",
+      "kind": "commit",
+      "title": "Commit ed927c1",
+      "summary": "Fixes portal text and tests that broke the portal's own rules.",
+      "status": "Done",
+      "related": [
+        "p4.14"
+      ]
     }
   ]
 }

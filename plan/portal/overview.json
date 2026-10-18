@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is built and its end-of-phase gate passed everything Claude checks. It now waits for your hand checks and sign-off; Phase 5 does not start without your go.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:d14a8cc09a4e572613cbce3747bef8e0f44fb165ad0b9f8410d8a5bcd3bc3ee2"
+    "content_hash": "sha256:0a62ae0d98996c29ffbb9ff932fcaa0208b221082527694a4c86efd6d420da08"
   },
   "updated": "2026-10-15",
   "where_we_are": [
@@ -42,15 +42,19 @@
         "state": "Built; gate passed all 26 automatic checks"
       },
       {
-        "item": "Known wait",
-        "state": "Old wiki error, removed by the history cleanup"
+        "item": "Threat model",
+        "state": "To read on the new Security tab"
+      },
+      {
+        "item": "Portal tabs page",
+        "state": "Changed by the new tab; needs your re-approval"
       },
       {
         "item": "Your part",
         "state": "Hand checklist and sign-off"
       }
     ],
-    "why": "Nothing to run. Automatic checks cannot see everything: you try the checklist in docs/testing/manual-checklist-p4.md (block a site, answer a camera question, keep a download) and tell Claude the results; then you decide whether Phase 4 is signed off.",
+    "why": "Nothing to run. Read the Security tab, then try the checklist in docs/testing/manual-checklist-p4.md (block a site, answer a camera question, keep a download) and tell Claude the results; then you decide whether Phase 4 is signed off.",
     "script": null,
     "tell_claude": "Your checklist answers, then \"Sign off P4\" or what to change"
   },
