@@ -147,7 +147,7 @@ try {
 
     # --- Part 4: your part -------------------------------------------------------------------------------
     Write-Section 'Part 4 - Your part (your review)'
-    Add-YourStep 'Your checks' 'You read the threat model and the "not enforced" list in SECURITY.md, blocked a site in Settings (also through a link from another site), saw Ferrum's question for a camera or location request on a real site (Never allow refuses, Allow this time works), and kept a downloaded program through Microsoft''s pop-up (docs/testing/manual-checklist-p4.md).'
+    Add-YourStep 'Your checks' 'You read the threat model and the "not enforced" list in SECURITY.md, blocked a site in Settings (also through a link from another site), saw Ferrum''s question for a camera or location request on a real site (Never allow refuses, Allow this time works), and kept a downloaded program through Microsoft''s pop-up (docs/testing/manual-checklist-p4.md).'
     Add-YourStep 'Your review' 'You looked at the changed pages and the evidence, and said whether P4 is signed off.'
 }
 finally { Clear-SharedWikiLint }
