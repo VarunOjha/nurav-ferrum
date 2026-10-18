@@ -32,9 +32,10 @@ test("open questions first, newest first, 20 per page", async ({ page }) => {
 });
 
 test("an opened question shows why it matters and what it holds up; the id opens its explainer", async ({ page }) => {
-  await page.goto("/questions");
-  // A question that holds up a phase when one is on the first page, else the newest open one.
-  const q = openNewest.slice(0, 20).find((x) => x.blocks.length > 0) ?? openNewest[0];
+  // A question that holds up a phase when one is on the first page, else the newest open one; when no
+  // question is open, the newest question of all (shown with "Any status").
+  const q = openNewest.slice(0, 20).find((x) => x.blocks.length > 0) ?? openNewest[0] ?? questions.items[questions.items.length - 1];
+  await page.goto(openNewest.length > 0 ? "/questions" : "/questions?status=any");
   const card = page.locator(`[data-question="${q.id}"]`);
   await card.locator("summary").click();
   await expect(card.locator(".acc-body")).toContainText("Why it matters");
@@ -42,7 +43,8 @@ test("an opened question shows why it matters and what it holds up; the id opens
   await card.locator(`.acc-body [data-ref-id="${q.id}"]`).click();
   await expect(page.getByTestId("ref-dialog")).toBeVisible();
   await page.keyboard.press("Escape");
-  const answered = questions.items.find((x) => x.status === "answered" && x.answer);
+  // The newest answered question, so it is on the first page of the answered list.
+  const answered = questions.items.findLast((x) => x.status === "answered" && x.answer);
   if (answered) {
     await page.goto("/questions?status=answered");
     const a = page.locator(`[data-question="${answered.id}"]`);

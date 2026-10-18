@@ -358,13 +358,13 @@ for (const tab of TABS) {
       if (start.length > PAGE) {
         const nav = pagesNav(page);
         await expect(nav.getByRole("button", { name: "Previous" })).toHaveAttribute("aria-disabled", "true");
-        await expect(nav.getByRole("button", { name: "Page 1" })).toHaveAttribute("aria-current", "page");
+        await expect(nav.getByRole("button", { name: "Page 1", exact: true })).toHaveAttribute("aria-current", "page");
         await nav.getByRole("button", { name: "Next" }).click();
         await expect(count(page)).toHaveText(range(PAGE + 1, Math.min(2 * PAGE, start.length), start.length, startAll));
         await expect(page).toHaveURL(new RegExp(`\\?${k("page")}=2$`));
         expect(await shownIds(page)).toEqual(start.slice(PAGE, 2 * PAGE).map((x) => x.id));
         const pages = Math.ceil(start.length / PAGE);
-        await nav.getByRole("button", { name: `Page ${pages}` }).click();
+        await nav.getByRole("button", { name: `Page ${pages}`, exact: true }).click();
         await expect(nav.getByRole("button", { name: "Next" })).toHaveAttribute("aria-disabled", "true");
         // At the end, Next keeps the focus and does nothing.
         await nav.getByRole("button", { name: "Next" }).focus();

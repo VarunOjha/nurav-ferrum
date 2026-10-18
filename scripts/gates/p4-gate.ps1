@@ -16,7 +16,7 @@
                    -SaveEvidence each test-gate row is saved as its own masked evidence file.
   How long       : about an hour. Leave the PC alone: some tests press real keys and need Ferrum in front.
                    Needs internet for Microsoft's SmartScreen demo page.
-  How to run     : pwsh -NoProfile -File scripts/gates/p4-gate.ps1 -SaveEvidence
+  How to run     : pwsh -NoProfile -File scripts/gates/p4-gate.ps1
   Result         : PASS, FAIL (the line says what) or NOT READY (waiting on something, the line says what).
   Tell Claude    : "P4 gate passed", or paste the FAIL or WAIT lines.
 

@@ -4555,7 +4555,7 @@
       "id": "log-2026-10-14-s06-p4-16",
       "date": "2026-10-14",
       "time": "14:30",
-      "title": "A benchmark-only build without the site rules, proven missing from the normal app",
+      "title": "A benchmark-only build without site rules, proven missing from the normal app",
       "done": "A separate build skips the site rules so P6 can measure what they cost. It keeps Ferrum's own pages, local files and links to other apps protected, and starts only for a benchmark in its own test folder. A check proves the normal app does not contain it. A first test run wrongly ran for 8 seconds in your own Ferrum data; fixed so it cannot happen again.",
       "next": "You re-approve three pages; then Claude builds the security settings screen.",
       "decisions": [],
