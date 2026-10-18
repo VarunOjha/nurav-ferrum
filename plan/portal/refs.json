@@ -64,7 +64,7 @@
       "kind": "phase",
       "title": "P5 Measurement",
       "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
-      "status": "Not started",
+      "status": "In progress",
       "related": [
         "phase-p4-security",
         "phase-p6-benchmark-harness"

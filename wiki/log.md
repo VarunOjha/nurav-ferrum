@@ -3080,3 +3080,17 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-18-s08-p5-questions.md]
 - result: Q-114: full URLs kept in the local network log (owner chose this over the recommended cut after "?"), log off by default and switched on in settings, files older than 14 days deleted; location stays the adr-0008 default. Q-115: time to interactive replaced by process start, window visible, FCP, LCP plus LoAF. Q-203: all raw run data in git under raw/bench/<run-id>/ (owner chose this over the recommended split by size); Claude noted GitHub's 100 MB per-file limit for P6. adr-0008 storage rules, comp-network-logger and the P5 privacy section updated. Stales approval of adr-0008 (comp-network-logger and phase-p5-telemetry were never approved). 16 questions open.
 - next: show the owner the P5 pages for approval: phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation, and adr-0008 again.
+
+## [2026-10-18] approval | seven P5 dependency pages approved
+- session: s08
+- time: 15:44
+- pages: [phase-p5-telemetry, comp-telemetry, comp-network-logger, adr-0008, exp-baseline-footprint, exp-startup, exp-navigation]
+- sources: [raw/owner/2026-10-18-s08-p5-pages-approval.md]
+- result: Owner: "Approved". Recorded approved with tools/approvals_record.py, as the pages stand at 1407489.
+
+## [2026-10-18] gate | phase-p5-telemetry entry passed
+- session: s08
+- time: 15:44
+- pages: [phase-p5-telemetry]
+- result: (1) P4 done, phase-p4-security#exit APPROVED, go-ahead given. (2) Dependency set APPROVED: phase-p5-telemetry, adr-0008, adr-0012, adr-0014, comp-telemetry, comp-network-logger, comp-webview-manager, exp-baseline-footprint, exp-startup, exp-navigation, schema. (3) No open question blocks it (Q-114, Q-115, Q-203 answered). (4) No CONTRADICTION blockquote in the set. Page criterion: the headline metric pages (tree private commit, tree CPU time, startup window visible, FCP, LCP) exist with status proposed. phase-p5-telemetry set to in-progress.
+- next: p5.1 export schema v1 and run metadata record.

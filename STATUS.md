@@ -48,8 +48,8 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.1
-next_action: "P5 entry is BLOCKED only on approvals: show the owner the seven pages (phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation, and adr-0008 after the Q-114 update) in plain words and ask for approval in chat; transcribe to wiki/raw/owner/, record with tools/approvals_record.py, rerun the entry gate (SCHEMA 9.7), set phase-p5-telemetry to in-progress, then start p5.1 with a write-ahead In-flight record. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
-blocked_on: [phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation, adr-0008]
+next_action: "P5 in progress (entry passed 2026-10-18). Start p5.1 (export schema v1, JSONL and CSV, run metadata record, writer with atomic rotation; verify: every record type round-trips and a validator accepts generated files and rejects a corrupted fixture) with a write-ahead In-flight record first. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
 
@@ -61,10 +61,10 @@ last_handoff: handoff-2026-10-15-s07
 
 ## Current phase
 
-**phase-p5-telemetry — entry BLOCKED (2026-10-18), go-ahead given.** The owner signed off P4 on 2026-10-18 ("Signed off,
+**phase-p5-telemetry — IN PROGRESS (entry passed 2026-10-18).** The owner signed off P4 on 2026-10-18 ("Signed off,
 go ahead", [raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md](wiki/raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md))
-without the hand checklist, and said go for P5. P5 waits for three answers (Q-114, Q-115, Q-203) and six page approvals.
-Standing rule: no kill commands and no deleting of things Claude did not create without asking.
+without the hand checklist, answered Q-114, Q-115 and Q-203 and approved the seven P5 pages. Stop after P5's exit gate
+for the owner's review. Standing rule: no kill commands and no deleting of things Claude did not create without asking.
 
 P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check rerun and checklist items 1 to 20.
 
@@ -74,6 +74,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - P5 go-ahead recorded; P5 entry BLOCKED on Q-114, Q-115, Q-203 and six pending pages.
 - P4-targeted claims closed or re-targeted on 22 pages (lint had 66 UNV-PASTDUE errors once P4 was done); 14 approvals now STALE, re-approved by the owner ("Re-approve").
 - Q-114 (full addresses kept, log off by default, 14 days), Q-115 (startup chain replaces time to interactive) and Q-203 (all run data in git) answered; adr-0008 updated (approval stale).
+- Seven P5 pages approved ("Approved"); P5 entry gate passed; phase-p5-telemetry in progress.
 
 ## Done this session (s03)
 
@@ -414,15 +415,14 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Item | State |
 |---|---|
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
-| Phase 5 (measurement) | You said go; start is blocked |
-| What blocks it | 7 plan pages for you to approve (questions answered) |
+| Phase 5 (measurement) | In progress; start check passed on 18 Oct |
+| Next task | p5.1: the saved-data format for measurements |
 
-**2. Why, and what it does.** Nothing to run. Claude shows you the seven Phase 5 pages
-for approval. When all are recorded, the start check reruns and task p5.1 begins.
+**2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** your answer to each question as it comes.
+**4. What to tell Claude:** nothing needed; Claude reports after each task.
 
 ## Pending owner approvals
 
@@ -433,4 +433,4 @@ metrics, workloads, hypotheses, research questions, narrative pages) never gate 
 
 ## Last updated
 
-2026-10-18, session s08 (P4 signed off; P5 go given; P5 entry blocked on three questions and six approvals). Last handoff: [handoff-2026-10-15-s07](wiki/operations/handoffs/handoff-2026-10-15-s07.md) (partial).
+2026-10-18, session s08 (P4 signed off; P5 questions answered, pages approved, entry passed). Last handoff: [handoff-2026-10-15-s07](wiki/operations/handoffs/handoff-2026-10-15-s07.md) (partial).

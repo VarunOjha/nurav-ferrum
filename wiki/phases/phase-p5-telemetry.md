@@ -2,7 +2,7 @@
 id: phase-p5-telemetry
 type: phase
 title: "P5 Telemetry and network logger (Milestone M4): validated process metrics, timing, metadata-only network log"
-status: planned
+status: in-progress
 updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
