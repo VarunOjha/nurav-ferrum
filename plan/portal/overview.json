@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is built and its end-of-phase gate passed everything Claude checks. It now waits for your hand checks and sign-off; Phase 5 does not start without your go.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:0a62ae0d98996c29ffbb9ff932fcaa0208b221082527694a4c86efd6d420da08"
+    "content_hash": "sha256:76e43b0ea6d66b9b56eb66fb3e2e2228f2ede7b2b55aafb034d52f092e140212"
   },
   "updated": "2026-10-15",
   "where_we_are": [
@@ -44,10 +44,6 @@
       {
         "item": "Threat model",
         "state": "To read on the new Security tab"
-      },
-      {
-        "item": "Portal tabs page",
-        "state": "Changed by the new tab; needs your re-approval"
       },
       {
         "item": "Your part",

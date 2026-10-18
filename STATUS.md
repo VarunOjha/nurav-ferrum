@@ -41,12 +41,13 @@ sources:
   - raw/owner/2026-10-15-s07-q228-other-site-frames-like-chrome.md
   - raw/owner/2026-10-15-s07-q228-reapproval.md
   - raw/owner/2026-10-15-s07-p4-20-components-reapproval.md
+  - raw/owner/2026-10-18-s07-ip-routes-reapproval.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
 session: s07
 current_phase: phase-p4-security
 current_task: p4.14
-next_action: "P4 waits for the owner's review; he reads the new Security tab (http://127.0.0.1:3417/security) and re-approves ip-routes-and-views (stale after the tab was added, e575b73) (gate run of 2026-10-17 22:43 on c59d019: Claude's part PASS, evidence 8d34e32). Owner works through docs/testing/manual-checklist-p4.md and says whether P4 is signed off; Claude transcribes the answers to wiki/raw/owner/, records phase-p4-security#exit with tools/approvals_record.py, runs pwsh -NoProfile -File scripts/verify/p4.14-gate-review.ps1, sets the phase to done and PAUSES (no P5 without an explicit go). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
+next_action: "P4 waits for the owner's review; he reads the new Security tab (http://127.0.0.1:3417/security) (gate run of 2026-10-17 22:43 on c59d019: Claude's part PASS, evidence 8d34e32). Owner works through docs/testing/manual-checklist-p4.md and says whether P4 is signed off; Claude transcribes the answers to wiki/raw/owner/, records phase-p4-security#exit with tools/approvals_record.py, runs pwsh -NoProfile -File scripts/verify/p4.14-gate-review.ps1, sets the phase to done and PAUSES (no P5 without an explicit go). Never build into target/release. Owed from P3: end-check rerun, checklist items 1 to 20, history cleanup (Q-221) and the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---

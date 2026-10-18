@@ -41,15 +41,27 @@
     },
     "ip-routes-and-views": {
       "status": "approved",
-      "comment": "Yes, approve them all (with the P0 sign-off)",
-      "timestamp": "2026-10-11T01:48:13-05:00",
+      "comment": "",
+      "timestamp": "2026-10-18T14:11:10-05:00",
       "path": "wiki/interactive-plan/ip-routes-and-views.md",
-      "content_hash": "sha256:bfc099a67ece3ef6a12592a8dca441fa42f96658a06046fe211bfb40dedbe582",
-      "scope_hash": "sha256:8af445f83aa75d80af703c0d56dd6b464f0713d6193b916b951d56a42918f81a",
+      "content_hash": "sha256:eabc624fc8477dabef68875b5043d1aabe33e47a296d033e134998357b8179e8",
+      "scope_hash": "sha256:044dfc54aaf5f60294caf2887ef6fa1c39c439aa944040b9f08a22278539aab7",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-11-s01-wave1-pages-approval.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-18-s07-ip-routes-reapproval.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "Yes, approve them all (with the P0 sign-off)",
+          "timestamp": "2026-10-11T01:48:13-05:00",
+          "path": "wiki/interactive-plan/ip-routes-and-views.md",
+          "content_hash": "sha256:bfc099a67ece3ef6a12592a8dca441fa42f96658a06046fe211bfb40dedbe582",
+          "scope_hash": "sha256:8af445f83aa75d80af703c0d56dd6b464f0713d6193b916b951d56a42918f81a",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-11-s01-wave1-pages-approval.md"
+        }
+      ]
     },
     "ip-data-contract": {
       "status": "approved",

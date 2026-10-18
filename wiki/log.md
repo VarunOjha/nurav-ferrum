@@ -3015,3 +3015,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - commit: e575b73
 - result: The owner asked: "Update the docs in the interactive plan, put the threat model there and share the link, I will read it." New portal tab /security from plan/portal/security.json (translated from section 7 of qual-security-testing-plan). Section 7.3 corrected from the gate evidence: T07 and T21 tested; T13 now says no live certificate-error test exists (the P4 suite never had SEC-13). Stales approval of ip-routes-and-views (new route row). Before it, ed927c1 fixed portal data the portal's own check rejected but tools/portal-sync-check.ps1 passed (overview next_action.who "owner", one log title over 80 characters, two question texts over 240), the p4 gate header's extra -SaveEvidence and two browser tests gone stale as the plan grew. Process gap: the portal unit and browser tests were not run since at least 9d5d6c9, and portal-sync-check does not catch every schema rule. Portal served on 127.0.0.1:3417 for the owner.
 - next: owner reads the Security tab, does the P4 checklist, re-approves ip-routes-and-views, and decides on the P4 sign-off.
+
+## [2026-10-18] approval | ip-routes-and-views re-approved after the Security tab
+- session: s07
+- time: 14:11
+- pages: [ip-routes-and-views]
+- sources: [raw/owner/2026-10-18-s07-ip-routes-reapproval.md]
+- result: The owner answered "Re-approve (Recommended)"; recorded with tools/approvals_record.py. P4 still waits for his reading of the Security tab, the checklist and the sign-off.

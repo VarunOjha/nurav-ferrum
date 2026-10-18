@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:8ab15d4e5197ff01f0301f0fef08af7254997793d3e048c7f84177120654c735"
+    "content_hash": "sha256:6571662b95ebbd4d9dc8868b69428cdb9b0c6ec258a5c6a17f1615e8650b95c6"
   },
   "entries": [
     {
@@ -5449,6 +5449,31 @@
       "tags": [
         "portal",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s07-ip-routes-reapproval",
+      "date": "2026-10-18",
+      "time": "14:11",
+      "title": "You re-approved the portal's tabs page",
+      "done": "You re-approved the portal design page that lists every tab, after the Security tab was added.",
+      "next": "You read the Security tab, do the hand checklist and decide on the Phase 4 sign-off.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Portal tabs and pages (design page)",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] approval | ip-routes-and-views re-approved after the Security tab"
+      ],
+      "phase": "phase-p4-security",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "portal"
       ]
     }
   ]
