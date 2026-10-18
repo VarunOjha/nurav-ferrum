@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:b49af60ec33d5b66e53841a46e1ec81e927068c12ef864b0e403048f4760f031"
+    "content_hash": "sha256:867f489f494d418a7c4b1135eb906c8fdf89b4412e87d20004bc6b84027fd3df"
   },
   "entries": [
     {
@@ -5705,6 +5705,31 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-2",
+      "date": "2026-10-18",
+      "time": "16:31",
+      "title": "Ferrum now counts exactly its own processes",
+      "done": "Ferrum's process list comes from the browser engine's own lists, never from program names. Tested with another app using the same engine beside it: Ferrum counted its 17 processes and none of the other app's 9. Found: right after a tab loads, an engine's list can be empty for a moment; Ferrum refuses it instead of counting too few.",
+      "next": "You re-approve the measurement part's page; then the memory and CPU meter (p5.3).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "e014204",
+      "covers": [
+        "## [2026-10-18] code | p5.2 Ferrum's process set built and checked beside another WebView2 app"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "memory",
+        "testing"
       ]
     }
   ]

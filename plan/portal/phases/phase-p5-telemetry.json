@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 1,
+    "done": 2,
     "total": 14
   },
   "step_order": [
@@ -37,7 +37,7 @@
       "what": "Finding exactly which processes belong to Ferrum.",
       "why": "Counting another app's processes would make Ferrum look heavier than it is, or hide its real use. Every later memory number depends on this.",
       "how": "Ask Ferrum's own WebView2 setup for the processes it started, add Ferrum's main process, and never pick processes by program name.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Other apps on the PC also use WebView2 → find Ferrum's processes through Ferrum's own WebView2 setup, never by program name → other apps' memory never leaks into Ferrum's numbers.",
       "check": "A test runs Ferrum next to another WebView2 app: every Ferrum process is counted, none of the other app's.",
       "script": "scripts/verify/p5.2-count-ferrum-processes.ps1"

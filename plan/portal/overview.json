@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:4c8fc061b6df6d66d67df624575abe4fc18fc00d700a8f1f4cf754cccd7db00d"
+    "content_hash": "sha256:aa6f271117551c9ecf6b255f9678d87e512dc93103db04e5016705094f5f0d00"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "phase-p5-telemetry"
+      "state": "Measurement part's page waits for your re-approval",
+      "ref": "comp-telemetry"
     },
     {
       "item": "Your rule",
@@ -35,21 +35,26 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 1 of 14 tasks done"
+        "state": "In progress: 2 of 14 tasks done"
       },
       {
-        "item": "Next task",
-        "state": "Count exactly Ferrum's own processes",
+        "item": "Last task",
+        "state": "Counting exactly Ferrum's processes",
         "ref": "p5.2"
+      },
+      {
+        "item": "Your part",
+        "state": "Re-approve the measurement part's page",
+        "ref": "comp-telemetry"
       }
     ],
-    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
+    "why": "Nothing to run. The counting task added its results to the measurement part's page, which cancels your earlier approval of that page. Claude needs your OK before the next task uses it.",
     "script": null,
-    "tell_claude": "Nothing needed; Claude reports after each task"
+    "tell_claude": "\"Re-approve\", or what to change"
   },
   "questions_for_you": {
     "open": 16,

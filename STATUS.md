@@ -47,8 +47,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s08
 current_phase: phase-p5-telemetry
-current_task: p5.2
-next_action: "p5.2 in flight (see In-flight). Then p5.3 process metrics sampler. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+current_task: p5.3
+next_action: "Ask the owner to re-approve comp-telemetry (staled by p5.2, e014204: process-set section). Then p5.3: process metrics sampler with direct windows crate calls (PrivateUsage headline, working sets, page faults, GetProcessTimes, QueryProcessCycleTime), summed over the p5.2 set, configurable interval; an empty environment list must give a retried or incomplete sample, never a smaller number (p5.2 finding). Write the In-flight record first. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -76,6 +76,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - Q-114 (full addresses kept, log off by default, 14 days), Q-115 (startup chain replaces time to interactive) and Q-203 (all run data in git) answered; adr-0008 updated (approval stale).
 - Seven P5 pages approved ("Approved"); P5 entry gate passed; phase-p5-telemetry in progress.
 - p5.1 done (`4d14fe2`): export schema v1 (run label, records, safe rotating writer, CSV, checker, JSON Schema); check PASS. comp-telemetry re-approved by the owner.
+- p5.2 done (`e014204`): Ferrum's process set from WebView2's own lists, checked beside the S1 app (set 17, none of the other app's 9); empty-list finding recorded; check PASS. comp-telemetry approval stale.
 
 ## Done this session (s03)
 
@@ -379,12 +380,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p5.2 (process-set attribution: Ferrum's own process plus the WebView2 processes of its environments, never by executable name)
-- session: s08
-- intent: crates/telemetry `attribution` module (pure: host pid plus each environment's GetProcessExtendedInfos list -> one de-duplicated process set with kinds; refuses pid 0 and conflicting kinds; unit tests); apps/desktop: shared helper that gathers the inventories (refactored out of test_processes), `ferrum_process_set`, debug-only command `test_process_set`; smoke spec process-set.spec.ts that starts the S1 spike app (manual mode, FERRUM_SPIKE_EXIT_AFTER, never killed) beside Ferrum, takes a Win32_Process snapshot, and asserts the set holds Ferrum and every WebView2 process under it (crashpad handlers excepted, named in the output) and none of S1's; scripts/verify/p5.2-count-ferrum-processes.ps1 made real; comp-telemetry interfaces updated (stales its approval)
-- planned paths: crates/telemetry/src/{lib.rs,attribution.rs}, apps/desktop/src-tauri/{Cargo.toml,src/content.rs,src/lib.rs or main.rs, capabilities if needed}, Cargo.lock, apps/desktop/tests/smoke/process-set.spec.ts, scripts/verify/p5.2-count-ferrum-processes.ps1, wiki/architecture/components/comp-telemetry.md, wiki/raw/evidence/phase-p5-telemetry/check-p5.2.txt, wiki/raw/MANIFEST.sha256, plan/portal/*.json
-- builds: target/debug only; spikes/s1-multiwebview/src-tauri/target/debug (existing S1 build); never target/release
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
+(empty: p5.2 finished on 2026-10-18 in e014204)
 
 ## Blockers
 
@@ -422,14 +418,14 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
-| Last task | p5.1 done: the saved-data format for measurements |
-| Next task | p5.2: count exactly Ferrum's own processes |
+| Last task | p5.2 done: counting exactly Ferrum's processes |
+| Your part | Re-approve the measurement part's page (changed by p5.2) |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** nothing needed; Claude reports after each task.
+**4. What to tell Claude:** "Re-approve" for the measurement part's page.
 
 ## Pending owner approvals
 

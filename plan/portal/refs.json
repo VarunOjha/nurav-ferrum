@@ -1030,7 +1030,7 @@
       "kind": "task",
       "title": "P5 task: Count only Ferrum's own processes",
       "summary": "Other apps on the PC also use WebView2 → find Ferrum's processes through Ferrum's own WebView2 setup, never by program name → other apps' memory never leaks into Ferrum's numbers.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -5500,6 +5500,16 @@
       "status": "Done",
       "related": [
         "p5.1"
+      ]
+    },
+    {
+      "id": "e014204",
+      "kind": "commit",
+      "title": "Commit e014204",
+      "summary": "Task p5.2: Ferrum counts exactly its own processes, tested beside another app that uses the same browser engine.",
+      "status": "Done",
+      "related": [
+        "p5.2"
       ]
     }
   ]
