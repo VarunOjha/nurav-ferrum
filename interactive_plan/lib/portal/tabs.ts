@@ -10,6 +10,7 @@ export const TABS: readonly Tab[] = [
   { href: "/architecture", label: "Architecture" },
   { href: "/decisions", label: "Decisions" },
   { href: "/research", label: "Research" },
+  { href: "/security", label: "Security" },
   { href: "/questions", label: "Questions" },
   { href: "/log", label: "Log" },
 ];

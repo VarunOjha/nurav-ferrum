@@ -3,7 +3,7 @@ id: ops-portal-pipeline
 type: operations
 title: "Portal pipeline: how wiki changes become plain-language JSON for the plan portal"
 status: active
-updated: 2026-10-11
+updated: 2026-10-18
 sources:
   - raw/owner/2026-10-09-s01-plan-app-feedback.md
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
@@ -54,6 +54,7 @@ flowchart LR
 | `plan/portal/decisions.json`, `risks.json`, `research.json` | One plain record per ADR, risk, research question, hypothesis, experiment, metric, workload |
 | `plan/portal/architecture.json` | Layers of the Rust app, the four groups ([ADR-0026](../decisions/adr-0026-architecture-four-groups.md)), every component, and the optional `browser_design` block (how the browser will look, [ADR-0028](../decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md); its `decision` must be an item in `decisions.json`) |
 | `plan/portal/questions.json` | The questions log (one item per `Q-NNN` in [ov-open-questions](../overview/ov-open-questions.md)) |
+| `plan/portal/security.json` | The threat model in plain words for the Security tab (owner request 2026-10-18), translated from §7 of [qual-security-testing-plan](../quality/qual-security-testing-plan.md): who might attack, the threats with their protection and state, what is not protected, where trust changes |
 | `plan/portal/log.json` | The plain-language log; each entry lists the wiki log headings it covers and carries a category and two tags |
 | `plan/portal/taxonomy.json` | The single source of the label lists (owner's plan of 2026-10-10): `decision_categories` (by topic, also used by questions and risks), `log_categories` (by kind of work), `research_categories` (the five kinds of research item: Research question, Prediction, Experiment, Measure, Test site) and the 26 `tags`, each `{name, explains}` with a plain one-line explanation |
 | `plan/portal/refs.json` | An explainer (kind, title, 1-3 sentences, status, related ids) for every id the portal can show, so any id opens a popup |

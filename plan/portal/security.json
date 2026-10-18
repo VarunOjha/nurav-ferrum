@@ -1,0 +1,357 @@
+{
+  "$schema": "schema/security.schema.json",
+  "id": "security",
+  "title": "Security: what Ferrum protects against",
+  "summary": "Ferrum's threat model in plain words: who might attack, where trust changes inside Ferrum, each threat with its protection and whether a test proves it, and what Ferrum does not protect against.",
+  "source": {
+    "wiki_path": "wiki/quality/qual-security-testing-plan.md",
+    "content_hash": "sha256:b6a95812890276ca287b150d6c7634410c1aee8dcf28bd3ff6bdadaad749d282"
+  },
+  "words": "Tested = a protection exists and a passing test is saved as evidence. Partly = part of it exists and is tested. Not enforced = Ferrum makes no claim. Nothing is called tested without saved evidence.",
+  "adversaries": [
+    {
+      "code": "ADV1",
+      "who": "A harmful or hacked website in a tab: its scripts, ads, redirects, pop-ups and downloads",
+      "in_scope": "Yes, the main one",
+      "relies_on": "Ferrum's own controls, plus the browser engine's sandbox and site separation, never weakened"
+    },
+    {
+      "code": "ADV1b",
+      "who": "A harmful frame inside an honest site",
+      "in_scope": "Yes",
+      "relies_on": "The same controls; every frame's address is checked too"
+    },
+    {
+      "code": "ADV2",
+      "who": "Someone on the network between Ferrum and a site",
+      "in_scope": "Yes for https; not for plain http pages (your choice)",
+      "relies_on": "The browser engine's certificate checks, never bypassed"
+    },
+    {
+      "code": "ADV3",
+      "who": "Another program on your PC running under your Windows account",
+      "in_scope": "Partly: the debugging port only",
+      "relies_on": "Ferrum never opens the debugging port itself. Anything else such a program does (like reading Ferrum's data folder) is not protected"
+    },
+    {
+      "code": "ADV4",
+      "who": "A hacked library that Ferrum is built from",
+      "in_scope": "Partly: known problems only",
+      "relies_on": "Automatic checks for published security alerts and locked versions; no test can prove a library is honest"
+    },
+    {
+      "code": "ADV5",
+      "who": "An administrator, malware with admin rights, or a hacked browser engine",
+      "in_scope": "No",
+      "relies_on": "Out of scope"
+    }
+  ],
+  "boundaries": [
+    {
+      "code": "E01",
+      "between": "Ferrum's own window → the browser engine",
+      "guard": "The window shows only Ferrum's own built-in pages; everything else is refused",
+      "tested": true
+    },
+    {
+      "code": "E02",
+      "between": "Ferrum → other apps on Windows",
+      "guard": "Nothing is handed to another app until you click; only that one address is opened; risky link types always refused",
+      "tested": true
+    },
+    {
+      "code": "E03",
+      "between": "The comparison test app → the browser engine",
+      "guard": "A benchmark tool only, never shipped to users",
+      "tested": false
+    },
+    {
+      "code": "E04",
+      "between": "The benchmark tools → Chrome and Edge (starting them)",
+      "guard": "Fresh throwaway profiles; no setting that weakens their security",
+      "tested": false
+    },
+    {
+      "code": "E05",
+      "between": "The benchmark tools → Chrome and Edge (remote control)",
+      "guard": "Debugging port on this PC only, during benchmark runs only",
+      "tested": false
+    },
+    {
+      "code": "E06",
+      "between": "The benchmark tools → Ferrum's browser engine (remote control)",
+      "guard": "Ferrum never opens the debugging port itself; only test and benchmark runs do, for their own copy",
+      "tested": true
+    },
+    {
+      "code": "E07",
+      "between": "The benchmark tools → Windows",
+      "guard": "Ferrum never runs with admin rights; any admin-rights energy meter is a separate program (still an open question)",
+      "tested": false
+    },
+    {
+      "code": "E08",
+      "between": "Websites in tabs → Ferrum's commands",
+      "guard": "Tabs have no bridge to Ferrum at all; Ferrum's commands work only from its own window",
+      "tested": true
+    },
+    {
+      "code": "E09",
+      "between": "Websites in tabs → the browser engine",
+      "guard": "Every page load, redirect, frame, pop-up, link to an app, permission and download goes through Ferrum's rules",
+      "tested": true
+    },
+    {
+      "code": "E10",
+      "between": "Ferrum's measuring part → Windows",
+      "guard": "Only reads counters about Ferrum's own programs; no admin rights",
+      "tested": false
+    },
+    {
+      "code": "E11",
+      "between": "Ferrum's tab manager → the browser engine",
+      "guard": "The risky low-level code sits in one checked place; each site gets its own storage",
+      "tested": true
+    },
+    {
+      "code": "E12",
+      "between": "Ferrum's tab manager → the browser engine (measuring channel)",
+      "guard": "Used only for measuring; no secrets passed and nothing added to pages in normal use",
+      "tested": false
+    },
+    {
+      "code": "E13",
+      "between": "The browser engine → Ferrum's tab manager (events)",
+      "guard": "A handler for every kind of event; addresses Ferrum cannot read are refused",
+      "tested": true
+    },
+    {
+      "code": "E14",
+      "between": "The browser engine → Ferrum's own window (messages)",
+      "guard": "Only Ferrum's own window has a bridge; each message's sender is checked",
+      "tested": true
+    },
+    {
+      "code": "E15",
+      "between": "The internet → websites in tabs",
+      "guard": "No way to click past certificate errors; browser protections and SmartScreen left as shipped",
+      "tested": true
+    }
+  ],
+  "threats": [
+    {
+      "code": "T01",
+      "threat": "A website calls Ferrum's own commands",
+      "by": "ADV1",
+      "protection": "Tabs have no bridge; commands only work from Ferrum's own window",
+      "state": "Tested",
+      "note": "A website tried 16 ways in; all refused"
+    },
+    {
+      "code": "T02",
+      "threat": "A tab pretends to be Ferrum's own page to gain trust",
+      "by": "ADV1",
+      "protection": "Tabs are never allowed to open Ferrum's own address",
+      "state": "Tested",
+      "note": "Link, pop-up and typed address all refused and logged"
+    },
+    {
+      "code": "T03",
+      "threat": "Ferrum's own window is led to a website",
+      "by": "ADV1",
+      "protection": "Ferrum's window allows only its own built-in pages",
+      "state": "Tested",
+      "note": "Sent to a website, it stayed on its own page"
+    },
+    {
+      "code": "T04",
+      "threat": "A page sends the tab to a blocked site",
+      "by": "ADV1",
+      "protection": "Your blocked-sites list is checked on every page load",
+      "state": "Tested",
+      "note": "Typed, redirect, frame and pop-up all refused"
+    },
+    {
+      "code": "T05",
+      "threat": "A chain of redirects reaches a blocked site",
+      "by": "ADV1",
+      "protection": "Every redirect step is checked again",
+      "state": "Tested",
+      "note": "Refused and logged"
+    },
+    {
+      "code": "T06",
+      "threat": "A frame inside a page loads a blocked site",
+      "by": "ADV1b",
+      "protection": "Every frame's address is checked",
+      "state": "Tested",
+      "note": "Refused and logged"
+    },
+    {
+      "code": "T07",
+      "threat": "A broken address slips past the rules or crashes them",
+      "by": "ADV1",
+      "protection": "Addresses Ferrum cannot read are refused",
+      "state": "Tested",
+      "note": "A broken typed address refused and logged (corrected after the gate)"
+    },
+    {
+      "code": "T08",
+      "threat": "A link quietly starts another app",
+      "by": "ADV1",
+      "protection": "A bar asks you first; four risky link types always refused",
+      "state": "Tested",
+      "note": "Nothing starts without your click"
+    },
+    {
+      "code": "T09",
+      "threat": "A site uses your camera, microphone, location, notifications or clipboard without asking",
+      "by": "ADV1",
+      "protection": "Ferrum's question bar; every other kind refused; a website cannot answer for you",
+      "state": "Tested",
+      "note": "All answers, quiet time, private tabs and refusals tested"
+    },
+    {
+      "code": "T10",
+      "threat": "A download lands in the wrong place, replaces a file or runs",
+      "by": "ADV1",
+      "protection": "Download folder only, names cleaned, programs flagged, nothing opened by itself",
+      "state": "Tested",
+      "note": "Name cleaned, folder kept, warning shown, nothing opened"
+    },
+    {
+      "code": "T11",
+      "threat": "Site A reads site B's cookies, or clearing A wipes B",
+      "by": "ADV1",
+      "protection": "Each site has its own storage; clearing one leaves the others",
+      "state": "Tested",
+      "note": "Kept apart in all three isolation modes"
+    },
+    {
+      "code": "T12",
+      "threat": "One site reads another site's data because a browser protection was switched off",
+      "by": "ADV1",
+      "protection": "No protection is ever switched off",
+      "state": "Tested",
+      "note": "Every cross-site read refused; no weakening switch found"
+    },
+    {
+      "code": "T13",
+      "threat": "Someone on the network fakes a secure site by getting a certificate error ignored",
+      "by": "ADV2",
+      "protection": "There is no 'continue anyway' button for certificate errors",
+      "state": "Partly",
+      "note": "No bypass exists in the code, but no live test of a certificate error has been written yet"
+    },
+    {
+      "code": "T14",
+      "threat": "Someone on the network reads or changes a plain http page",
+      "by": "ADV2",
+      "protection": "Only a visible 'not secure' bar (http pages allowed, your choice)",
+      "state": "Not enforced",
+      "note": "The bar itself is built and tested"
+    },
+    {
+      "code": "T15",
+      "threat": "A crashing page takes down the whole app",
+      "by": "ADV1",
+      "protection": "Crashed tabs are marked and can be reloaded; an engine failure restarts Ferrum with its tabs",
+      "state": "Tested",
+      "note": "Other tabs and the window keep working"
+    },
+    {
+      "code": "T16",
+      "threat": "Pop-ups flood the screen or keep a link back to their page",
+      "by": "ADV1",
+      "protection": "At most one pop-up per tab per second, no link back, each pop-up's address checked",
+      "state": "Partly",
+      "note": "Speed limit (Phase 3) and address checks (Phase 4) built"
+    },
+    {
+      "code": "T17",
+      "threat": "Another program on the PC remote-controls Ferrum through a debugging port",
+      "by": "ADV3",
+      "protection": "Ferrum never opens the port; normal builds have no debug options",
+      "state": "Partly",
+      "note": "Never opened by Ferrum; benchmark runs open it on purpose"
+    },
+    {
+      "code": "T18",
+      "threat": "Another program reads Ferrum's data folder (history, sessions, logs)",
+      "by": "ADV3",
+      "protection": "Only Windows' own account protection; backups are encrypted",
+      "state": "Not enforced"
+    },
+    {
+      "code": "T19",
+      "threat": "A library Ferrum is built from is hacked",
+      "by": "ADV4",
+      "protection": "Checks for published security alerts and locked versions",
+      "state": "Not enforced",
+      "note": "Known alerts only"
+    },
+    {
+      "code": "T20",
+      "threat": "A log stores page content or secrets",
+      "by": "ADV1",
+      "protection": "Logs keep only the site and the rule, never page content",
+      "state": "Tested",
+      "note": "A secret in an address and typed text were never written"
+    },
+    {
+      "code": "T21",
+      "threat": "The benchmark-only build without site rules reaches users",
+      "by": "ADV4",
+      "protection": "The release build is scanned for that switch; test-only commands refuse to work in releases",
+      "state": "Tested",
+      "note": "Release build scanned clean; the benchmark build refuses to start without its flag (corrected after the gate)"
+    },
+    {
+      "code": "T22",
+      "threat": "The comparison test app is used for normal browsing without Ferrum's rules",
+      "by": "ADV1",
+      "protection": "Never shipped; benchmarks only",
+      "state": "Not enforced"
+    },
+    {
+      "code": "T23",
+      "threat": "A benchmark run touches your real Chrome or Edge profile, or weakens them",
+      "by": "ADV4",
+      "protection": "Fresh throwaway profiles and recorded settings (checked in P6)",
+      "state": "Not enforced",
+      "note": "Not in Phase 4"
+    },
+    {
+      "code": "T24",
+      "threat": "An energy meter with admin rights is misused",
+      "by": "ADV3",
+      "protection": "A separate program with read-only output; Ferrum never gets admin rights",
+      "state": "Not enforced",
+      "note": "Not in Phase 4"
+    },
+    {
+      "code": "T25",
+      "threat": "A page tampers with a measuring script",
+      "by": "ADV1",
+      "protection": "Measuring only, no secrets; results cross-checked from outside",
+      "state": "Not enforced"
+    },
+    {
+      "code": "T26",
+      "threat": "A browser-engine exploit escapes its sandbox",
+      "by": "ADV1",
+      "protection": "The engine's sandbox as shipped; Windows keeps the engine updated",
+      "state": "Not enforced",
+      "note": "Out of scope"
+    }
+  ],
+  "not_enforced": [
+    "Plain http pages are not protected from people on the network; Ferrum only shows a warning bar.",
+    "Sites are kept apart by storage, not by separate programs; what stays shared was measured in Phase 4.",
+    "Other programs running under your Windows account can read Ferrum's data folder and, during benchmark runs, remote-control web views through the debugging port.",
+    "Libraries Ferrum is built from are checked for published alerts only.",
+    "A browser-engine exploit that escapes the sandbox, and an attacker with admin rights.",
+    "The benchmark tools (comparison app, test runner, energy meter, measuring scripts) are not hardened against the sites they load.",
+    "Google sign-in does not work inside Ferrum tabs, by design; Ferrum offers your normal browser instead and never works around Google's block."
+  ]
+}

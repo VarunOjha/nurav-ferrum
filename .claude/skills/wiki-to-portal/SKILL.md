@@ -77,6 +77,7 @@ non-specialist who does not remember internal ids. Write for him, not for Claude
 | `wiki/architecture/components/comp-*.md` | `architecture.json` | one item in `components` (+ its layer/group lists) |
 | `wiki/overview/ov-open-questions.md` | `questions.json` | the whole file; one item per `## Q-NNN` section |
 | `wiki/log.md` | `log.json` | the whole file; every `## [date] op \| title` heading listed in some entry's `covers` |
+| `wiki/quality/qual-security-testing-plan.md` | `security.json` | the whole file, from its §7 threat model only: `adversaries`, `boundaries` (`tested` true or false), `threats` (`state` Tested, Partly, Planned or Not enforced, as the page's State column says, plus an optional short `note`) and `not_enforced`; codes such as T09 are display labels, not ids |
 | anything else (ov-*, qual-*, ops-*, ip-*, glossary, handoffs, SCHEMA, index) | — | no record; give it a `refs.json` entry (kind `page` or `term`) only if portal text mentions it |
 
 The machine-readable version of this table is `plan/portal/pipeline.json`. If you add a page type that

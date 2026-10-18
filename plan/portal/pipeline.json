@@ -14,6 +14,7 @@
     { "path": "architecture.json", "schema": "architecture.schema.json" },
     { "path": "questions.json", "schema": "questions.schema.json" },
     { "path": "log.json", "schema": "log.schema.json" },
+    { "path": "security.json", "schema": "security.schema.json" },
     { "path": "refs.json", "schema": "refs.schema.json" },
     { "path": "taxonomy.json", "schema": "taxonomy.schema.json" }
   ],
@@ -30,7 +31,8 @@
     { "pages": "wiki/research/workloads/wl-*.md", "into": "research.json" },
     { "pages": "wiki/architecture/components/comp-*.md", "into": "architecture.json" },
     { "pages": "wiki/overview/ov-open-questions.md", "into": "questions.json" },
-    { "pages": "wiki/log.md", "into": "log.json" }
+    { "pages": "wiki/log.md", "into": "log.json" },
+    { "pages": "wiki/quality/qual-security-testing-plan.md", "into": "security.json" }
   ],
   "sections": [
     { "page": "wiki/overview/ov-open-questions.md", "heading": "^## (Q-[0-9]{3})\\b", "into": "questions.json", "field": "id" },

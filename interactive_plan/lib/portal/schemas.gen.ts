@@ -67,6 +67,10 @@ export type Risks = z.infer<typeof RisksFile>;
 export const RoadmapFile = z.strictObject({ "$schema": def_schema_ref.optional(), "id": def_id, "title": def_title, "summary": def_summary, "source": def_source.optional(), "stages": z.array(z.strictObject({ "id": def_id, "name": def_title, "summary": def_summary, "phases": def_id_list })).min(1).max(5), "phases": z.array(z.strictObject({ "id": def_phase_id, "short": z.string().regex(new RegExp("^P[0-8]$")), "name": def_title, "one_line_goal": z.string().regex(new RegExp("^[^\\n]+$")).refine((v) => cpLen(v) >= 1, "at least 1 characters").refine((v) => cpLen(v) <= 90, "at most 90 characters"), "status": def_phase_status, "tasks_done": z.number().int().min(0), "tasks_total": z.number().int().min(0).nullable(), "source": def_source })).min(1).max(9), "same_in_every_phase": z.array(z.strictObject({ "id": def_id, "title": def_title, "summary": def_summary, "source": def_source.optional() })).min(1) });
 export type Roadmap = z.infer<typeof RoadmapFile>;
 
+/** security.schema.json: security.json - the threat model in plain words (the Security tab) */
+export const SecurityFile = z.strictObject({ "$schema": def_schema_ref.optional(), "id": def_id, "title": def_title, "summary": def_summary, "source": def_source, "words": def_text, "adversaries": z.array(z.strictObject({ "code": z.string().regex(new RegExp("^ADV[0-9]+[a-z]?$")), "who": def_text, "in_scope": def_text, "relies_on": def_text })).min(1), "boundaries": z.array(z.strictObject({ "code": z.string().regex(new RegExp("^E[0-9]{2}$")), "between": def_text, "guard": def_text, "tested": z.boolean() })).min(1), "threats": z.array(z.strictObject({ "code": z.string().regex(new RegExp("^T[0-9]{2}$")), "threat": def_text, "by": z.string().regex(new RegExp("^ADV[0-9]+[a-z]?$")), "protection": def_text, "state": z.union([z.literal("Tested"), z.literal("Partly"), z.literal("Planned"), z.literal("Not enforced")]), "note": def_text.optional() })).min(1), "not_enforced": z.array(def_text).min(1) });
+export type Security = z.infer<typeof SecurityFile>;
+
 /** taxonomy.schema.json: taxonomy.json - the fixed lists of categories and tags */
 export const TaxonomyFile = z.strictObject({ "$schema": def_schema_ref.optional(), "id": def_id, "title": def_title, "summary": def_summary, "decision_categories": z.array(def_taxonomy_entry).min(1), "log_categories": z.array(def_taxonomy_entry).min(1), "research_categories": z.array(def_taxonomy_entry).min(1), "tags": z.array(def_taxonomy_entry).min(2) });
 export type Taxonomy = z.infer<typeof TaxonomyFile>;
@@ -83,5 +87,6 @@ export const SCHEMAS_BY_FILE = {
   "research.schema.json": ResearchFile,
   "risks.schema.json": RisksFile,
   "roadmap.schema.json": RoadmapFile,
+  "security.schema.json": SecurityFile,
   "taxonomy.schema.json": TaxonomyFile,
 } as const;

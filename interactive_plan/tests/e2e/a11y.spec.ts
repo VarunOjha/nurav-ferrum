@@ -3,7 +3,7 @@
 import { expect, test } from "@playwright/test";
 import { expectAccessible } from "./axe";
 
-const ROUTES = ["/", "/roadmap", "/architecture", "/decisions", "/research", "/questions", "/log"];
+const ROUTES = ["/", "/roadmap", "/architecture", "/decisions", "/research", "/security", "/questions", "/log"];
 
 for (const scheme of ["light", "dark"] as const) {
   for (const route of ROUTES) {

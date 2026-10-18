@@ -34,7 +34,7 @@ function sources(dir: string): string[] {
   return out;
 }
 const files = [...sources(path.join(APP, "app")), ...sources(path.join(APP, "components")), ...sources(path.join(APP, "lib"))];
-const ID_LITERAL = /["']((?:HD|OV|RM|AR|DE|RE|QU|LO|PH|IT|RF|SC)-[0-9]+)["']/g;
+const ID_LITERAL = /["']((?:HD|OV|RM|AR|DE|RE|SE|QU|LO|PH|IT|RF|SC)-[0-9]+)["']/g;
 
 /** Every quoted id-shaped literal in the portal code, with the file it is in. */
 function usedIds(): Map<string, string[]> {

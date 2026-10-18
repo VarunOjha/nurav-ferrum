@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "security.schema.json",
+  "title": "security.json - the threat model in plain words (the Security tab)",
+  "description": "Translated from section 7 (Threat model) of wiki/quality/qual-security-testing-plan.md. Owner request 2026-10-18: read the threat model in the portal.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "source",
+    "words",
+    "adversaries",
+    "boundaries",
+    "threats",
+    "not_enforced"
+  ],
+  "properties": {
+    "$schema": {
+      "$ref": "#/$defs/schema_ref"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "$ref": "#/$defs/title"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "words": {
+      "$ref": "#/$defs/text",
+      "description": "What the state words mean."
+    },
+    "adversaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "who",
+          "in_scope",
+          "relies_on"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^ADV[0-9]+[a-z]?$"
+          },
+          "who": {
+            "$ref": "#/$defs/text"
+          },
+          "in_scope": {
+            "$ref": "#/$defs/text"
+          },
+          "relies_on": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "between",
+          "guard",
+          "tested"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^E[0-9]{2}$"
+          },
+          "between": {
+            "$ref": "#/$defs/text"
+          },
+          "guard": {
+            "$ref": "#/$defs/text"
+          },
+          "tested": {
+            "type": "boolean",
+            "description": "true when a test covers this edge; false = not enforced."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "threats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "threat",
+          "by",
+          "protection",
+          "state"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^T[0-9]{2}$"
+          },
+          "threat": {
+            "$ref": "#/$defs/text"
+          },
+          "by": {
+            "type": "string",
+            "pattern": "^ADV[0-9]+[a-z]?$",
+            "description": "The adversary code."
+          },
+          "protection": {
+            "$ref": "#/$defs/text"
+          },
+          "state": {
+            "enum": [
+              "Tested",
+              "Partly",
+              "Planned",
+              "Not enforced"
+            ]
+          },
+          "note": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "not_enforced": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/text"
+      }
+    }
+  },
+  "additionalProperties": false
+}

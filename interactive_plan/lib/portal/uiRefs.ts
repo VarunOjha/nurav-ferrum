@@ -29,6 +29,7 @@ export const UI_SCOPES = {
   AR: { scope: "tab", label: "Architecture" },
   DE: { scope: "tab", label: "Decisions" },
   RE: { scope: "tab", label: "Research" },
+  SE: { scope: "tab", label: "Security" },
   QU: { scope: "tab", label: "Questions" },
   LO: { scope: "tab", label: "Log" },
   PH: { scope: "popup", label: "Phase popup" },
@@ -156,6 +157,14 @@ export const UI_REFS = {
   "RE-14": { name: "Research item card (all look the same)" },
   "RE-15": { name: "Filter by tag chips" },
 
+  // Security (the threat model, owner request 2026-10-18)
+  "SE-1": { name: "Page heading" },
+  "SE-2": { name: "What the states mean" },
+  "SE-3": { name: "Who might attack" },
+  "SE-4": { name: "Threats table" },
+  "SE-5": { name: "Not protected" },
+  "SE-6": { name: "Where trust changes" },
+
   // Questions
   "QU-1": { name: "Page heading" },
   // QU-2 to QU-5 (group links and the Open, Answered, Withdrawn groups) are retired: one list with a
@@ -215,7 +224,7 @@ export const UI_REFS = {
 export type UiRefId = keyof typeof UI_REFS;
 
 /** The shape every id must have: a known prefix, a dash, a number from 1 without leading zeros. */
-export const UI_REF_ID = /^(HD|OV|RM|AR|DE|RE|QU|LO|PH|IT|RF|SC)-[1-9][0-9]*$/;
+export const UI_REF_ID = /^(HD|OV|RM|AR|DE|RE|SE|QU|LO|PH|IT|RF|SC)-[1-9][0-9]*$/;
 
 export function isUiRefId(id: string): id is UiRefId {
   return Object.prototype.hasOwnProperty.call(UI_REFS, id);

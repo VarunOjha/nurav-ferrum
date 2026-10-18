@@ -3,8 +3,10 @@ id: qual-security-testing-plan
 type: quality
 title: "Security testing plan: master prompt section 11 mapped to harmless fixtures"
 status: draft
-updated: 2026-10-15
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p4-security/security-suite.20261017-2315.txt
+  - raw/evidence/phase-p4-security/check-p4.16.20261017-2327.txt
   - raw/evidence/phase-p4-security/security-suite.20261015-1234.txt
   - raw/evidence/phase-p4-security/check-p4.19.txt
   - raw/evidence/phase-p4-security/check-p4.18.txt
@@ -274,13 +276,13 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | T04 A page sends the tab to a blocked site (link, script, form, meta refresh, pop-up) | ADV1 | E09 | Blocklist in the policy engine (p4.2, p4.3) | SEC-01 | Built; typed, redirect, frame and `window.open` tested live (p4.3) |
 | T05 A redirect chain reaches a blocked site | ADV1 | E09, E13 | Every redirect hop re-evaluated (p4.3) | SEC-08 | Built and tested live (p4.3, `security-navigation`) |
 | T06 An iframe loads a blocked site | ADV1b | E09, E13 | Raw-COM `FrameNavigationStarting` (p4.3) | SEC-08 | Built and tested live (p4.3, `security-navigation`) |
-| T07 A malformed address slips past the filter or crashes it | ADV1 | E09, E13 | Fail-closed parsing (p2.5 address bar; p4.2 engine) | SEC-09 | Partly (P2: address bar) |
+| T07 A malformed address slips past the filter or crashes it | ADV1 | E09, E13 | Fail-closed parsing (p2.5 address bar; p4.2 engine) | SEC-09 | Built and tested live (p4.11, `security-navigation`: a malformed typed address refused and logged; engine tests cover unparsable addresses, p4.2) |
 | T08 A link silently starts another app | ADV1 | E02, E09 | Confirmation bar (p2.10); per-scheme allowlist; no silent launch (p4.4) | SEC-02 | Built and tested live (p4.4, `external-schemes`: no launch without the click; four abused types always refused; optional list of allowed types) |
 | T09 A page gets camera, microphone, location, notifications or clipboard without consent | ADV1 | E09 | Nothing allowed until the user chooses: Ferrum's question for five kinds, every other kind refused; answers saved in Ferrum's settings, `SavesInProfile(FALSE)`; only the shell can answer (p4.5, p4.17, p4.20, adr-0034) | SEC-05 | Built and tested live (p4.20, `permissions`: the question, Allow this time, Always, Never, close, quiet after 3 closes, no question for http pages and for frames their page did not allow, private tabs save nothing, a waiting request refused when the page changes; a website cannot answer, IPC self-test); grants set, kept after a restart, honoured and revoked through the settings screen (p4.17, `security-settings`) |
 | T10 A download lands outside the download folder, replaces a file or runs | ADV1 | E09 | Download folder only, no replacing (p3.8); name sanitising, executable warning, no auto-open (p4.6) | SEC-07 | Built and tested live (p4.6, `safe-downloads`: name cleaned, folder kept, program warning, nothing opened; no "downloaded from the internet" mark seen on a local test download) |
 | T11 Site A reads site B's cookies or storage, or clearing A wipes B | ADV1 | E11 | One profile per site (p3.6); per-profile clearing and isolation modes (p4.7, p4.15) | SEC-06 | Built and tested live (p4.7, `isolation`: cookie, localStorage and IndexedDB kept per profile; clearing site A leaves B; private tabs); the three isolation modes tested live in p4.15 (`isolation-modes`) |
 | T12 Cross-origin reads, because a browser protection was weakened | ADV1 | E15 | No weakening flags; same-origin policy and site isolation as shipped | SEC-04 | Built and tested live (p4.11, `cross-origin`: every cross-site read refused; no weakening switch on any browser process) |
-| T13 A man in the middle on HTTPS, through a certificate-error bypass | ADV2 | E15 | No "proceed anyway" path for certificate errors (p2.8) | SEC-13 | Partly (P2: no bypass code; the failure itself is tested in P4) |
+| T13 A man in the middle on HTTPS, through a certificate-error bypass | ADV2 | E15 | No "proceed anyway" path for certificate errors (p2.8) | SEC-13 | Partly (P2: no bypass code). No live certificate-error test exists yet: the P4 suite does not include SEC-13 (§5), so this is not claimed as tested |
 | T14 A man in the middle reads or changes a plain HTTP page | ADV2 | E15 | Visible "not secure" bar only (Q-112: HTTP allowed) | not enforced | Not enforced (owner's choice); the bar is built and tested live (p4.17, `security-settings`) |
 | T15 A renderer crash takes down the app | ADV1 | E13 | `ProcessFailed` handling, crashed-tab state and reload; restart with session restore after a browser-process failure (p4.10) | SEC-10 | Built and tested live (p4.10, `crash-recovery`: crashed tab marked and covered, other tab and shell keep working, reload recovers; engine failure restarts Ferrum with its tabs) |
 | T16 Pop-ups flood the screen or keep a link to the opener page | ADV1 | E09 | New tab per pop-up, at most one per tab per second, no opener link (p3.2); pop-up policy (p4.3) | SEC-01 | Partly (P3: rate limit; p4.3: every pop-up address passes the policy) |
@@ -288,7 +290,7 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | T18 Another program reads Ferrum's data folder (history, sessions, logs) | ADV3 | E10 | Windows account protection only; backup files are encrypted (p3.21) | not enforced | Not enforced |
 | T19 A dependency is compromised | ADV4 | none | Known-advisory checks (`cargo deny`, `npm audit`), lockfiles | not enforced | Not enforced (detection of known advisories only) |
 | T20 A security or network log stores page content or secrets | ADV1 | E15 | Metadata-only records (adr-0008); audit log without page content (p4.9) | SEC-14 | Built and tested (p4.9: audit lines schema-checked in every security test; secret in address and typed text never written); network log P5 |
-| T21 The benchmark-only no-security build reaches users, or debug-only test commands run in release | ADV4 | E11 | Release-build static check (p4.16); test commands refuse in release builds (P3) | SEC-12 | Planned |
+| T21 The benchmark-only no-security build reaches users, or debug-only test commands run in release | ADV4 | E11 | Release-build static check (p4.16); test commands refuse in release builds (P3) | SEC-12 | Built and tested (p4.16: the release build is scanned and has no benchmark-only switch or its marker texts; the benchmark build refuses to start without its flag; rerun in the P4 gate of 2026-10-17) |
 | T22 The baseline benchmark app is used for normal browsing without Ferrum's controls | ADV1 | E03 | Not shipped; benchmark use only | not enforced | Not enforced |
 | T23 A benchmark run touches the owner's real browser profile or weakens a competitor browser | ADV4 | E04 | Fresh temporary profiles; recorded policies (P6 harness) | not enforced | Not enforced in P4 (P6 harness check) |
 | T24 An elevated energy sampler is misused | ADV3 | E07 | Separate program, read-only output; Ferrum never elevated (Q-123 open) | not enforced | Not enforced in P4 (P6) |

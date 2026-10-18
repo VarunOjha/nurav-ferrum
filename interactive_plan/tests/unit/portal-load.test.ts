@@ -83,7 +83,7 @@ describe("problems instead of crashes", () => {
     temps.push(root);
     const p = await loadPortalUncached({ portalDir: path.join(root, "nothing"), approvalsFile: path.join(root, "approvals.json") });
     expect(p.files.phases).toEqual([]);
-    expect(p.problems.length).toBe(11); // one per single file; taxonomy.json is the eleventh
+    expect(p.problems.length).toBe(12); // one per single file; security.json is the twelfth
     expect(p.approvals.exists).toBe(false);
   });
 
@@ -156,7 +156,7 @@ describe("view helpers", () => {
   });
 
   it("tabs follow the mockup and mark the current one", () => {
-    expect(TABS.map((t) => t.label)).toEqual(["Overview", "Roadmap", "Architecture", "Decisions", "Research", "Questions", "Log"]);
+    expect(TABS.map((t) => t.label)).toEqual(["Overview", "Roadmap", "Architecture", "Decisions", "Research", "Security", "Questions", "Log"]);
     expect(isActiveTab("/", "/")).toBe(true);
     expect(isActiveTab("/", "/log")).toBe(false);
     expect(isActiveTab("/log", "/log")).toBe(true);

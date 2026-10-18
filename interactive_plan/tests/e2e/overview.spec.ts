@@ -42,7 +42,7 @@ test("the overview shows where we are, questions, the next step, phases and the 
 
   // Top tabs, current tab marked, read-only badge.
   const nav = page.getByRole("navigation", { name: "Sections" });
-  for (const t of ["Overview", "Roadmap", "Architecture", "Decisions", "Research", "Questions", "Log"]) {
+  for (const t of ["Overview", "Roadmap", "Architecture", "Decisions", "Research", "Security", "Questions", "Log"]) {
     await expect(nav.getByRole("link", { name: new RegExp(`^${t}`) })).toBeVisible();
   }
   await expect(nav.getByRole("link", { name: "Overview" })).toHaveAttribute("aria-current", "page");

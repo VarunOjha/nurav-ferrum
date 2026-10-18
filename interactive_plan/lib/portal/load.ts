@@ -23,6 +23,7 @@ import {
   ResearchFile,
   RisksFile,
   RoadmapFile,
+  SecurityFile,
   TaxonomyFile,
   type Architecture,
   type Decisions,
@@ -34,6 +35,7 @@ import {
   type Research,
   type Risks,
   type Roadmap,
+  type Security,
   type Taxonomy,
 } from "./schemas.gen";
 
@@ -55,6 +57,8 @@ export interface PortalFiles {
   architecture: Architecture | null;
   questions: Questions | null;
   log: Log | null;
+  /** The threat model in plain words (the Security tab). */
+  security: Security | null;
   refs: Refs | null;
   pipeline: Pipeline | null;
   /** The category and tag lists of the Decisions and Log tabs (lib/portal/taxonomy.ts). */
@@ -82,6 +86,7 @@ const SINGLE = {
   architecture: ["architecture.json", ArchitectureFile],
   questions: ["questions.json", QuestionsFile],
   log: ["log.json", LogFile],
+  security: ["security.json", SecurityFile],
   refs: ["refs.json", RefsFile],
   pipeline: ["pipeline.json", PipelineFile],
   taxonomy: ["taxonomy.json", TaxonomyFile],
@@ -144,6 +149,7 @@ export async function loadPortalUncached(cfg: Pick<PlanConfig, "portalDir" | "ap
     architecture: one("architecture"),
     questions: one("questions"),
     log: one("log"),
+    security: one("security"),
     refs: one("refs"),
     pipeline: one("pipeline"),
     taxonomy: one("taxonomy"),

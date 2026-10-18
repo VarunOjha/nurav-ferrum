@@ -89,6 +89,7 @@ const TABS: { route: string; ids: string[] }[] = [
     ],
   },
   { route: "/research", ids: ["RE-1", "RE-2", "RE-8", "RE-9", "RE-10", "RE-11", "RE-12", "RE-13", "RE-14"] },
+  { route: "/security", ids: ["SE-1", "SE-2", "SE-3", "SE-4", "SE-5", "SE-6"] },
   { route: "/questions", ids: ["QU-1", "QU-6", "QU-7", "QU-8", ...(openQuestions > 20 ? ["QU-9"] : []), "QU-10", "QU-11"] },
   {
     route: "/log",
@@ -509,7 +510,7 @@ test.describe("Ref mode", () => {
     await expect(map.locator('[data-map-group="DE"]')).toHaveClass(/is-current/);
     await expect(map.locator("#layout-map-DE")).toBeInViewport();
     const jump = map.getByRole("navigation", { name: "Jump to" });
-    await expect(jump.getByRole("link")).toHaveCount(12);
+    await expect(jump.getByRole("link")).toHaveCount(13);
     await expect(jump.getByRole("link", { name: "Decisions" })).toHaveAttribute("aria-current", "true");
     await jump.getByRole("link", { name: "Script popup" }).click();
     await expect(map.locator('[data-map-id="SC-3"]')).toBeInViewport();

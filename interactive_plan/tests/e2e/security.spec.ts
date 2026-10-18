@@ -17,7 +17,7 @@ import { PORT, raw } from "./helpers";
 import { addressLabeler, loadMaskMap } from "./mask-labels";
 
 const ORIGIN = `http://127.0.0.1:${PORT}`;
-const ROUTES = ["/", "/roadmap", "/architecture", "/decisions", "/research", "/questions", "/log", "/no-such-page", "/favicon.ico"];
+const ROUTES = ["/", "/roadmap", "/architecture", "/decisions", "/research", "/security", "/questions", "/log", "/no-such-page", "/favicon.ico"];
 
 test.describe("every route: Host allowlist and security headers", () => {
   test("a spoofed Host (DNS rebinding) gets 403 on every route and leaks no portal text", async () => {
