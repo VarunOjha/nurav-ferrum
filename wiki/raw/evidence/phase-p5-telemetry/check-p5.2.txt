@@ -1,0 +1,19 @@
+Ferrum check p5.2: Count exactly Ferrum's processes
+Why: memory and CPU numbers are not inflated by other apps.
+Run at 2026-10-18 16:23 on commit 1b8e999 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The counting rule: own process plus the engine lists, each once, bad lists refused (2 s)
+         five unit tests passed
+  PASS   No counting code matches processes by program name
+         attribution.rs and the app's process-set code use only the engine's own lists
+Running 1 test using 1 worker
+PROCESS-SET round 1: refused (site-site-a.localhost reported no browser process); WebView2 lists: shell:16808:renderer shell:9468:renderer shell:9572:browser shell:13380:utility shell:40564:gpu shell:44588:utility
+PROCESS-SET round 2: Ferrum set 17 (renderer 4, browser 3, utility 6, gpu 3, host 1) over environments shell, site-site-a.localhost, site-site-b.localhost; WebView2 below Ferrum 19 (crash reporters 3, not listed by WebView2); other app's WebView2 processes 9, in set 0
+  ✓  1 process-set.spec.ts:85:1 › Ferrum's process set holds all of Ferrum's WebView2 processes and none of another WebView2 app (5.3s)
+  1 passed (2.9m)
+  PASS   Live: another engine app beside Ferrum; Ferrum's set matches the Windows process list (196 s)
+         round 2: Ferrum set 17 (renderer 4, browser 3, utility 6, gpu 3, host 1) over environments shell, site-site-a.localhost, site-site-b.localhost; WebView2 below Ferrum 19 (crash reporters 3, not listed by WebView2); other app's WebView2 processes 9, in set 0
+------------------------------------------------------------------------
+RESULT: PASS - p5.2 (3 PASS; 198 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.2 check passed".

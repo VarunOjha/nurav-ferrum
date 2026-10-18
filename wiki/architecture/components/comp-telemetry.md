@@ -32,6 +32,7 @@ interfaces:
   - "Aggregation: tree_private_commit(samples), never sum per-process peaks"
   - "export (p5.1): Record (run, process_sample, tree_sample, startup_mark, nav_timing), ExportWriter::create(dir, RunMeta, max_bytes) / write(&Record) / rotate() / finish(), csv::to_csv / from_csv, validate_file / validate_bytes"
   - "Export schema v1 file: crates/telemetry/schema/v1/record.schema.json (JSON Schema 2020-12)"
+  - "attribution (p5.2): attribute(host_pid, &[Inventory]) -> ProcessSet {host_pid, members: [Member {pid, kind, source}]}; kind_of(webview2 kind name); the app joins every environment's GetProcessExtendedInfos list (shell first, then site environments) and exposes the set through the debug-only test_processes hook"
 connects:
   - to: comp-windows-os
     label: "per-process counters (GetProcessMemoryInfo EX2, GetProcessTimes, QueryProcessCycleTime) and system memory status"
@@ -83,6 +84,14 @@ Built in p5.1 (`crates/telemetry/src/export/`). One JSON object per line (JSONL)
 - **CSV.** One table per record type with `run_id` first; the run line has no table (it is read from the JSONL). Values are numbers, `true`/`false` and snake_case enum names, so no quoting is needed.
 - **Version rule.** v1 may gain record types while P5 is in progress; it is frozen at the P5 exit gate, and any later change bumps the version.
 - **Checks.** `cargo test -p ferrum-telemetry export::` (10 tests: round trips, rotation, crash file, eleven damaged fixtures in `crates/telemetry/tests/fixtures/export-v1/`, the JSON Schema compared with the types); `scripts/verify/p5.1-export-file-format.ps1`.
+
+## Process set (p5.2)
+
+Built in p5.2 (`crates/telemetry/src/attribution.rs`; the app's `process_inventories` and `set_of` in `apps/desktop/src-tauri/src/content.rs`). Ferrum's set is its own process plus every process that WebView2's `GetProcessExtendedInfos` lists for each of Ferrum's environments (Tauri's `shell` environment and, in the per-site-udf mode, one per site). No code matches a process by its program name. Each process is counted once; a list with a pid of 0 or below, a process reported with two kinds, or an environment that lists no browser process is refused, never guessed.
+
+- **Checked live** ([check-p5.2](../../raw/evidence/phase-p5-telemetry/check-p5.2.txt)): with the S1 spike app (another WebView2 host) running beside Ferrum in the per-site-udf mode with two sites open, the set held 17 processes (Ferrum, 3 browser, 4 renderer, 3 GPU, 6 utility). The Windows process list showed 19 WebView2 processes below Ferrum: those 16 plus 3 crash reporters, which WebView2 does not list. None of the other app's 9 WebView2 processes was in the set.
+- **Empty list for a moment.** In the same run, right after a site's tab finished loading, that site's environment returned an empty list, so the set was refused; 2 s later the list was complete. The sampler (p5.3) must therefore retry or mark such a sample incomplete, and never record the smaller number.
+- **Crash reporters** (crashpad) are not in WebView2's lists. They stay out of Ferrum's set; the harness treats them the same way for every product.
 
 ## Unsafe invariants
 

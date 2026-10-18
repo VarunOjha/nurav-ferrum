@@ -1139,6 +1139,7 @@ dependencies = [
  "base64 0.22.1",
  "ferrum-core",
  "ferrum-security",
+ "ferrum-telemetry",
  "ferrum-webview-manager",
  "serde",
  "serde_json",

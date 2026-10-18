@@ -1066,21 +1066,11 @@ pub async fn site_data_clear(app: AppHandle, site: String) -> Result<(), String>
     r
 }
 
-/// Test hook (debug builds only): every WebView2 process with its kind and, for renderers, the addresses of the frames
-/// it hosts, plus each tab's profile, so a test can see which processes the profiles share (p4.7). Each process names
-/// its environment (p4.15): `shell` for Tauri's, else the site profile whose own environment it belongs to.
-#[tauri::command]
-pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
-    if !cfg!(debug_assertions) {
-        return Err("not available in release builds".into());
-    }
-    let tabs: Vec<Value> = {
-        let t = app.state::<TabsState>();
-        let t = t.0.lock().unwrap();
-        t.iter()
-            .map(|(id, i)| json!({"id": id.0, "url": i.url, "profile": i.profile, "private": i.private}))
-            .collect()
-    };
+/// Every WebView2 environment's process list, gathered on the UI thread: `shell` (Tauri's environment) first, then each
+/// site profile that has its own environment (p4.15). Waits at most 10 s for each answer.
+async fn process_inventories(
+    app: &AppHandle,
+) -> Result<Vec<(String, Vec<ferrum_webview_manager::webview2::ProcessEntry>)>, String> {
     let (tx, rx) = std::sync::mpsc::channel();
     let (ntx, nrx) = std::sync::mpsc::channel();
     app.run_on_main_thread(move || {
@@ -1104,7 +1094,7 @@ pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
         }
     })
     .map_err(|e| e.to_string())?;
-    let lists = tauri::async_runtime::spawn_blocking(move || {
+    tauri::async_runtime::spawn_blocking(move || {
         let n = nrx
             .recv_timeout(std::time::Duration::from_secs(10))
             .map_err(|_| "WebView2 did not answer in time".to_string())?;
@@ -1121,7 +1111,46 @@ pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
         Ok(out)
     })
     .await
-    .map_err(|e| e.to_string())??;
+    .map_err(|e| e.to_string())?
+}
+
+/// Ferrum's process set (p5.2, risk-r05): its own process plus every process its WebView2 environments report, from
+/// [`process_inventories`]. Never matched by executable name, so another app that uses WebView2 is never counted.
+fn set_of(
+    lists: &[(String, Vec<ferrum_webview_manager::webview2::ProcessEntry>)],
+) -> Result<ferrum_telemetry::attribution::ProcessSet, String> {
+    let inventories: Vec<ferrum_telemetry::attribution::Inventory> = lists
+        .iter()
+        .map(|(label, list)| {
+            let items = list
+                .iter()
+                .map(|p| (i64::from(p.pid), p.kind.to_string()))
+                .collect();
+            (label.clone(), items)
+        })
+        .collect();
+    ferrum_telemetry::attribution::attribute(std::process::id(), &inventories)
+        .map_err(|e| e.to_string())
+}
+
+/// Test hook (debug builds only): every WebView2 process with its kind and, for renderers, the addresses of the frames
+/// it hosts, plus each tab's profile, so a test can see which processes the profiles share (p4.7). Each process names
+/// its environment (p4.15): `shell` for Tauri's, else the site profile whose own environment it belongs to. `set` is
+/// Ferrum's process set built from the same lists (p5.2), so a test can compare it with a Windows process snapshot.
+#[tauri::command]
+pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    let tabs: Vec<Value> = {
+        let t = app.state::<TabsState>();
+        let t = t.0.lock().unwrap();
+        t.iter()
+            .map(|(id, i)| json!({"id": id.0, "url": i.url, "profile": i.profile, "private": i.private}))
+            .collect()
+    };
+    let lists = process_inventories(&app).await?;
+    let set = set_of(&lists);
     let mut processes = Vec::new();
     for (label, list) in &lists {
         for p in list {
@@ -1135,6 +1164,12 @@ pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
         "mode": app.state::<AppConfig>().get().isolation.mode.name(),
         "environments": lists.iter().map(|(l, _)| l.clone()).collect::<Vec<_>>(),
         "processes": processes,
+        // A list the set refuses is reported next to the raw lists, so a test can show what WebView2 returned.
+        "set": set.as_ref().ok().map(|set| json!({
+            "host_pid": set.host_pid,
+            "members": set.members.iter().map(|m| json!({"pid": m.pid, "kind": m.kind, "source": m.source})).collect::<Vec<_>>(),
+        })),
+        "set_error": set.as_ref().err(),
     }))
 }
 
