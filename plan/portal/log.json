@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:752f8c86589cf61bcb65c70e155b66185a42172fff63a6b15d840af30eddca57"
+    "content_hash": "sha256:8c17ede0fd478534c7825d3d4d0510f010a02f86dab4422c954369536f2ab877"
   },
   "entries": [
     {
@@ -5391,7 +5391,8 @@
       "approvals": [],
       "commit": "e77ef79",
       "covers": [
-        "## [2026-10-17] fix | P4 gate script could not be read; fixed"
+        "## [2026-10-17] code | P4 gate script could not be read; fixed",
+        "## [2026-10-17] correct | log heading of the gate-script fix"
       ],
       "phase": "phase-p4-security",
       "category": "Fixed",

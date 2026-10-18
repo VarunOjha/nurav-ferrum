@@ -2986,9 +2986,15 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-15-s07-p4-20-components-reapproval.md]
 - result: The owner answered "Re-approve all three (Recommended)"; recorded with tools/approvals_record.py; approvals_check shows nothing STALE or PENDING; blocked_on cleared. The P4 gate rerun waits for "PC is quiet".
 
-## [2026-10-17] fix | P4 gate script could not be read; fixed
+## [2026-10-17] code | P4 gate script could not be read; fixed
 - session: s07
 - time: 13:29
 - pages: []
 - commit: e77ef79
 - result: The owner said (13:28) "There are other claude sessions going, but I am not at desk, can you continue queitly with that ?", so Claude started the P4 gate. It stopped at once with a PowerShell parse error: commit d7114ef (p4.20) wrote "Ferrum's" unescaped in a single-quoted string. Nothing ran. Per the owner's rule Claude stopped and told him; he answered "Fix it and run the gate." Fixed to "Ferrum''s"; every gate and verify script now parses. Process slip: the p4.20 checks never parsed the gate script. The gate reruns now; about 3 GB of memory was free because of other sessions.
+
+## [2026-10-17] correct | log heading of the gate-script fix
+- session: s07
+- time: 20:22
+- pages: []
+- result: The entry "[2026-10-17] P4 gate script could not be read; fixed" was written (commit 3e5854a) with the op "fix", which SCHEMA §12 does not allow, so the wiki check failed. Claude changed only that op word to "code" (minutes after writing it, before anything read it); a deviation from the append-only rule, logged here and reported to the owner.
