@@ -1,0 +1,2 @@
+{"type":"process_sample","t_ms":0,"pid":100,"pid_created_100ns":5,"kind":"browser","private_commit_bytes":1000,"working_set_bytes":2000,"private_working_set_bytes":null,"page_faults":1,"cpu_user_100ns":2,"cpu_kernel_100ns":3,"cycles":null}
+{"type":"tree_sample","t_ms":0,"process_count":1,"private_commit_bytes":1000,"working_set_bytes":2000,"cpu_100ns":5,"cycles":null}

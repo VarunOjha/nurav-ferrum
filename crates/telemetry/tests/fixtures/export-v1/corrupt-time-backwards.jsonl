@@ -1,0 +1,3 @@
+{"type":"run","schema_version":1,"run_id":"fixture-good","file_seq":0,"started_unix_ms":1792000000000,"ferrum_version":"0.0.0","git_sha":"089a43f","git_dirty":false,"os_build":"10.0.26200.1","webview2_runtime":"154.0.4258.62","config_sha256":"sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd","machine_id":"p1.2-environment","sample_interval_ms":1000}
+{"type":"process_sample","t_ms":50,"pid":100,"pid_created_100ns":5,"kind":"browser","private_commit_bytes":1000,"working_set_bytes":2000,"private_working_set_bytes":null,"page_faults":1,"cpu_user_100ns":2,"cpu_kernel_100ns":3,"cycles":null}
+{"type":"tree_sample","t_ms":0,"process_count":1,"private_commit_bytes":1000,"working_set_bytes":2000,"cpu_100ns":5,"cycles":null}

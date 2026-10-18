@@ -3262,7 +3262,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and every tab sleep or wake, then exports data files. Trusted. A cross-check only: the official cross-browser numbers come from the benchmark harness. Risk: counting exactly the right processes.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and every tab sleep or wake, then exports data files. Built so far: the file format, where every file starts with a label of the exact setup and is checked when read. Trusted. A cross-check only: the official cross-browser numbers come from the benchmark harness.",
       "status": "Planned",
       "related": [
         "layer-engine"

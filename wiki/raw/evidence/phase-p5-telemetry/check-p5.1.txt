@@ -1,0 +1,20 @@
+Ferrum check p5.1: Export file format and run labels
+Why: any number can be traced to the exact setup that made it.
+Run at 2026-10-18 15:54 on commit 9c636e3 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Each record type saves and reloads unchanged (data file and table) (3 s)
+         five record types as JSON lines, four tables as CSV
+  PASS   The writer rotates files and leaves no half file under a finished name
+         rotation by size; a crash leaves a .part file that the checker refuses
+  PASS   The checker accepts good files and refuses each damaged one
+         good test file accepted; 11 damaged test files refused, each for its own reason
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+   Compiling ferrum-telemetry v0.0.0 (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\crates\telemetry)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.96s
+     Running unittests src\lib.rs (target\debug\deps\ferrum_telemetry-cc91aa948e243bd9.exe)
+  PASS   The published format description matches the code
+         crates/telemetry/schema/v1/record.schema.json
+------------------------------------------------------------------------
+RESULT: PASS - p5.1 (4 PASS; 3 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.1 check passed".
