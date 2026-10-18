@@ -3,7 +3,7 @@ id: comp-network-logger
 type: component
 title: "Network logger (metadata-only JSONL)"
 status: planned
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -20,7 +20,7 @@ responsibilities:
   - "Dump network call metadata of every tab to a folder for review (master prompt 2, item 11)"
   - "Enforce the metadata-only record schema: ts, tab, site, url, method, status, resource_type, timing, sizes, policy_decision (scoping Q5, adr-0008)"
   - "Never record headers, cookies, request or response bodies"
-  - "Append JSONL per session with size-based rotation; optional url_mode strip-query"
+  - "Append JSONL per session with size-based rotation; full URLs kept (Q-114); off by default, switched on in settings; files older than 14 days deleted (Q-114); query values redacted only when a log is copied into wiki/raw/bench/ (adr-0008)"
   - "Provide per-trial request logs for benchmark workload-equivalence checks"
 interfaces:
   - "NetLogger::record(NetRecord)"

@@ -3,7 +3,7 @@ id: phase-p5-telemetry
 type: phase
 title: "P5 Telemetry and network logger (Milestone M4): validated process metrics, timing, metadata-only network log"
 status: planned
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -141,9 +141,13 @@ Rigorous testing here means ground truth: p5.4 builds helper programs whose memo
 
 ## Network-log privacy questions (owner, before P5)
 
-1. Full URLs can carry tokens in query strings. Keep full URLs (Q5 says URL), or strip query strings by default with an opt-in?
-2. Network log on by default, or opt-in?
-3. Retention: delete logs older than N days?
+Answered by the owner on 2026-10-18 (Q-114, [raw/owner/2026-10-18-s08-p5-questions.md](../raw/owner/2026-10-18-s08-p5-questions.md)):
+
+1. Full URLs are kept in the local log, query strings included.
+2. The network log is off by default and switched on in settings; benchmark runs switch it on themselves.
+3. Log files older than 14 days are deleted (changeable in settings).
+
+Q-115 (startup chain without time to interactive) and Q-203 (all raw run data in git under `raw/bench/<run-id>/`) were answered the same day.
 
 ## Out of scope
 

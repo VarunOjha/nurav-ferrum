@@ -63,7 +63,7 @@
       "id": "phase-p5-telemetry",
       "kind": "phase",
       "title": "P5 Measurement",
-      "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. Before it starts you answer three privacy questions about the network log.",
+      "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
       "status": "Not started",
       "related": [
         "phase-p4-security",
@@ -3214,7 +3214,7 @@
       "id": "comp-network-logger",
       "kind": "component",
       "title": "Measurement: network log",
-      "summary": "Writes every tab's network calls to a folder you can review: address, status, timing and size. Never headers, cookies or page content. Trusted. Its cost in speed and memory is not measured yet (measured in P5).",
+      "summary": "Writes every tab's network calls to a folder you can review: full address, status, timing and size. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Trusted. Its cost in speed and memory is not measured yet (measured in P5).",
       "status": "Planned",
       "related": [
         "layer-engine"
@@ -3617,7 +3617,7 @@
       "kind": "question",
       "title": "Network log storage and privacy",
       "summary": "Where should the network log live, how long is it kept, and should the query part of web addresses (which can hold tokens) be removed by default? Privacy of the local network log. P5 builds it. Recommended: remove query strings by default.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3627,7 +3627,7 @@
       "kind": "question",
       "title": "Replace 'time to interactive'?",
       "summary": "May 'time to interactive' be replaced by first-paint and largest-paint timings plus long-frame data, since that measure is retired? Your brief asks for it, but it is now considered unreliable. P5 builds the startup timing.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3749,7 +3749,7 @@
       "kind": "question",
       "title": "Where benchmark data lives",
       "summary": "Where should raw benchmark data be stored, and how should very large files be handled? P5 is the first phase that can produce run data. Large files may need to live outside git, with only their fingerprints kept.",
-      "status": "Open",
+      "status": "Answered",
       "related": [
         "phase-p5-telemetry"
       ]

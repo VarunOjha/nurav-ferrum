@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7a9e068e52df29f331d5770c3c533847b0fbb9348c60625c75026225b79fe70d"
+    "content_hash": "sha256:431197a78684909db41f77285d432042521ae5c3966b30e8238831628edbae27"
   },
   "entries": [
     {
@@ -5587,6 +5587,48 @@
       "tags": [
         "approvals",
         "wiki"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-questions",
+      "date": "2026-10-18",
+      "time": "15:37",
+      "title": "You answered the three Phase 5 questions",
+      "done": "Network log: full addresses kept, off unless you switch it on, files deleted after 14 days. Startup: four clear moments replace 'time to interactive'. Run data: everything in git. The network-log decision and two Phase 5 pages were updated.",
+      "next": "You approve the seven Phase 5 plan pages, including the updated network-log decision.",
+      "decisions": [
+        {
+          "what": "Keep full addresses in the network log",
+          "by": "you"
+        },
+        {
+          "what": "Network log off unless switched on; delete after 14 days",
+          "by": "you"
+        },
+        {
+          "what": "Replace 'time to interactive' with four startup moments",
+          "by": "you"
+        },
+        {
+          "what": "Keep all raw run data in git",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Network-log decision (changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] ingest | owner answers Q-114, Q-115 and Q-203"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "network log",
+        "privacy"
       ]
     }
   ]

@@ -3,7 +3,7 @@ id: ov-open-questions
 type: overview
 title: "Open questions for the owner (canonical register)"
 status: draft
-updated: 2026-10-15
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -18,6 +18,7 @@ sources:
   - raw/owner/2026-10-09-s01-portal-v2-decisions.md
   - raw/owner/2026-10-10-s01-q008-and-pause.md
   - raw/owner/2026-10-11-s01-wave1-answers-and-p0-signoff.md
+  - raw/owner/2026-10-18-s08-p5-questions.md
   - raw/owner/2026-10-11-s01-wave2-answers.md
   - raw/owner/2026-10-12-s02-p3-questions.md
   - raw/owner/2026-10-13-s03-p4-questions.md
@@ -85,7 +86,7 @@ hold. Approval waves, which tell you which questions to answer first, are in
 | P2 entry | none (Q-109, Q-202, Q-214 answered 2026-10-11) |
 | P3 entry | none (Q-111, Q-125, Q-209 answered 2026-10-12) |
 | P4 entry | none (Q-112, Q-113, Q-212 answered 2026-10-13) |
-| P5 entry | Q-114, Q-115, Q-203 |
+| P5 entry | none (Q-114, Q-115, Q-203 answered 2026-10-18) |
 | P6 entry (incl. exp-energy, exp-reliability) | Q-117, Q-118, Q-119, Q-120, Q-121, Q-123, Q-201, Q-204, Q-205, Q-213 |
 | P7 entry | Q-201, Q-208 |
 | P8 entry | Q-124, Q-206 |
@@ -375,8 +376,8 @@ Raised in adr-0015.
 
 - asked: 2026-10-08
 - blocking: [phase-p5-telemetry]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-18-s08-p5-questions.md](../raw/owner/2026-10-18-s08-p5-questions.md), owner answers (2026-10-18): "Keep full addresses", "Only when switched on (Recommended)", "14 days (Recommended)": full URLs kept in the local log, the log is off by default (switched on in Settings; benchmark runs switch it on), files older than 14 days are deleted. Location: the adr-0008 default (adr-0008 storage rules updated).
 
 Raised in adr-0008 (and risk-r08). Sub-questions:
 
@@ -392,8 +393,8 @@ Raised in adr-0008 (and risk-r08). Sub-questions:
 
 - asked: 2026-10-08
 - blocking: [phase-p5-telemetry, exp-startup]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-18-s08-p5-questions.md](../raw/owner/2026-10-18-s08-p5-questions.md), owner answer (2026-10-18): "Replace it (Recommended)": the startup chain is process start → window visible → FCP → LCP, plus LoAF for responsiveness; the paper states that TTI was not measured, and why.
 
 Raised from [raw/research/measurement-methodology.md](../raw/research/measurement-methodology.md) §4.2
 and §9.6. Master prompt §7 asks for "time to interactive state". The research note records that TTI was
@@ -592,8 +593,8 @@ the navigation posture into which any exemption would have to be designed.
 
 - asked: 2026-10-08
 - blocking: [phase-p5-telemetry]
-- status: open
-- answer: none yet
+- status: answered
+- answer: [raw/owner/2026-10-18-s08-p5-questions.md](../raw/owner/2026-10-18-s08-p5-questions.md), owner answer (2026-10-18): "Everything in git": all raw run data under `wiki/raw/bench/<run-id>/`. Note: GitHub refuses single files over 100 MB, so the largest traces may need its large-file add-on at upload time (P6).
 
 Research label R-Q10 ([ov-research-traceability](../research/ov-research-traceability.md)). Should runs
 be stored in `wiki/raw/bench/<run-id>/` (SCHEMA §3.1) or in `benchmarks/results/` (master prompt §12)?

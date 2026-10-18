@@ -3072,3 +3072,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-18-s08-p4-claims-reapproval.md]
 - result: Owner: "Re-approve". Recorded approved with tools/approvals_record.py: the eleven pages above plus phase-p2-minimal-container#exit, phase-p3-tabs-sessions#exit and phase-p4-security#exit, as they stand at d6a6514. approvals_check: every key APPROVED or APPROVED_VOLATILE_DRIFT.
 - next: ask the owner Q-114 (network log), then Q-115, Q-203 and the six P5 pages.
+
+## [2026-10-18] ingest | owner answers Q-114, Q-115 and Q-203
+- session: s08
+- time: 15:37
+- pages: [ov-open-questions, adr-0008, comp-network-logger, phase-p5-telemetry]
+- sources: [raw/owner/2026-10-18-s08-p5-questions.md]
+- result: Q-114: full URLs kept in the local network log (owner chose this over the recommended cut after "?"), log off by default and switched on in settings, files older than 14 days deleted; location stays the adr-0008 default. Q-115: time to interactive replaced by process start, window visible, FCP, LCP plus LoAF. Q-203: all raw run data in git under raw/bench/<run-id>/ (owner chose this over the recommended split by size); Claude noted GitHub's 100 MB per-file limit for P6. adr-0008 storage rules, comp-network-logger and the P5 privacy section updated. Stales approval of adr-0008 (comp-network-logger and phase-p5-telemetry were never approved). 16 questions open.
+- next: show the owner the P5 pages for approval: phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation, and adr-0008 again.

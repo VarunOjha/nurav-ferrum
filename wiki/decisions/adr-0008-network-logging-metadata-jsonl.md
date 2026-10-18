@@ -3,7 +3,7 @@ id: adr-0008
 type: decision
 title: "Network call logging is metadata-only JSONL written to a folder"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -87,7 +87,7 @@ Policy decisions are joined from `comp-security-engine`'s audit events, by tab a
 
 Storage rules:
 
-- The log folder is **outside the git repo** by default, under the user's local app-data folder. The exact location and retention are open question Q-114 ([ov-open-questions](../overview/ov-open-questions.md)). Recommended default: `%LOCALAPPDATA%\Ferrum\netlogs\<run-timestamp>.jsonl`, size-based rotation with a total cap set in settings, full URLs kept locally, and a "redact query values" mode that is mandatory for any log copied into `wiki/raw/bench/`.
+- The log folder is **outside the git repo** by default, under the user's local app-data folder. Owner's answer to Q-114 ([raw/owner/2026-10-18-s08-p5-questions.md](../raw/owner/2026-10-18-s08-p5-questions.md)): full URLs are kept in the local log; the log is **off by default** and switched on in settings (benchmark runs switch it on themselves); files older than **14 days** are deleted (changeable in settings). Location: `%LOCALAPPDATA%\Ferrum\netlogs\<run-timestamp>.jsonl`, size-based rotation with a total cap set in settings. A "redact query values" mode stays mandatory for any log copied into `wiki/raw/bench/`.
 - Logs from benchmark runs that are archived into `wiki/raw/bench/` must contain only synthetic-local or approved public workload URLs.
 
 ## Consequences
@@ -102,7 +102,7 @@ Storage rules:
 - **Raw COM required.** This depends on `unsafe` WebView2 COM code. Handlers must be unregistered on tab close, or reference cycles keep webviews alive (research §5).
 - **No ordering guarantee.** Records may arrive out of order, so consumers must sort by timestamp.
 - **Benchmark perturbation.** Logging adds work during measured runs. The logger must be switchable per configuration, and its overhead measured. Whether it is negligible is UNVERIFIED[phase-p6-benchmark-harness].
-- **URL sensitivity.** Full URLs may include session tokens in query strings. Q-114 asks the owner whether to redact by default.
+- **URL sensitivity.** Full URLs may include session tokens in query strings. The owner chose to keep them in the local log (Q-114); the off-by-default switch and the 14-day deletion limit how long they sit on disk.
 
 ### Follow-ups
 

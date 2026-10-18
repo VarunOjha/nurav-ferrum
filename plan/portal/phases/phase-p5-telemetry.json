@@ -3,7 +3,7 @@
   "short": "P5",
   "title": "Measurement",
   "one_line_goal": "Memory, CPU, timing and network logged, and the numbers proven accurate",
-  "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. Before it starts you answer three privacy questions about the network log.",
+  "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "Not started",
   "progress": {
     "done": 0,
@@ -228,6 +228,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p5-telemetry.md",
-    "content_hash": "sha256:aed00b9ffd0cd55f52692f53144181b0b88ec2430e56a1952fab403d6ff08eda"
+    "content_hash": "sha256:cbde94ff2818189158bfe0a80904dfbfed8cf1db958ef95859ec04388528d507"
   }
 }

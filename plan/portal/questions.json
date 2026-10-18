@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:2230c8ee0df7009afb409664f1f5475494f6fa0bb52a19457b551c7bedb50f1f"
+    "content_hash": "sha256:92708d21050a473c84654fcbab78caa4c51eb8ce5f81f97753cd9a83f33e9ff5"
   },
   "items": [
     {
@@ -351,9 +351,9 @@
       "asked": "2026-10-08",
       "question": "Where should the network log live, how long is it kept, and should the query part of web addresses (which can hold tokens) be removed by default?",
       "why_it_matters": "Privacy of the local network log. P5 builds it. Recommended: remove query strings by default.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "You chose: full addresses are kept in the log, the log is off unless you switch it on, and files older than 14 days are deleted.",
+      "answered_on": "2026-10-18",
       "blocks": [
         "phase-p5-telemetry"
       ],
@@ -368,9 +368,9 @@
       "asked": "2026-10-08",
       "question": "May 'time to interactive' be replaced by first-paint and largest-paint timings plus long-frame data, since that measure is retired?",
       "why_it_matters": "Your brief asks for it, but it is now considered unreliable. P5 builds the startup timing.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Yes, replace it: startup is measured as program started, window shown, first content drawn, main content drawn, plus long freezes.",
+      "answered_on": "2026-10-18",
       "blocks": [
         "phase-p5-telemetry"
       ],
@@ -591,9 +591,9 @@
       "asked": "2026-10-08",
       "question": "Where should raw benchmark data be stored, and how should very large files be handled?",
       "why_it_matters": "P5 is the first phase that can produce run data. Large files may need to live outside git, with only their fingerprints kept.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Everything in git. Note: GitHub refuses single files over 100 MB, so the biggest traces may need its large-file add-on later.",
+      "answered_on": "2026-10-18",
       "blocks": [
         "phase-p5-telemetry"
       ],

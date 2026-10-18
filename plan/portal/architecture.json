@@ -399,7 +399,7 @@
     {
       "id": "comp-network-logger",
       "title": "Measurement: network log",
-      "summary": "Writes every tab's network calls to a folder you can review: address, status, timing and size. Never headers, cookies or page content. Trusted. Its cost in speed and memory is not measured yet (measured in P5).",
+      "summary": "Writes every tab's network calls to a folder you can review: full address, status, timing and size. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Trusted. Its cost in speed and memory is not measured yet (measured in P5).",
       "group": "application",
       "layer": "layer-engine",
       "status": "Planned",
@@ -420,7 +420,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-network-logger.md",
-        "content_hash": "sha256:a7f692ed189f0e13018a27215dfaad0475e26c6e52f0deb21efbbade242ae152"
+        "content_hash": "sha256:cf6c62c63b04e02e2c6dcd9a678195db66eaf938406b8fea1a30289e69b6deff"
       }
     },
     {

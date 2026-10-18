@@ -48,8 +48,8 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.1
-next_action: "P5 entry is BLOCKED (log 2026-10-18 gate entry). The 14 keys staled by the P4 claim closure are re-approved. Ask the owner one question at a time in chat: Q-114 (network log: full addresses or cut after ?, on or opt-in, how many days), Q-115 (replace time to interactive with process start, window visible, FCP, LCP), Q-203 (where raw run data lives); then the six pending P5 pages (phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation). Transcribe each answer to wiki/raw/owner/, record with tools/approvals_record.py, rerun the entry gate (SCHEMA 9.7). Only then start p5.1. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
-blocked_on: [phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation, Q-114, Q-115, Q-203]
+next_action: "P5 entry is BLOCKED only on approvals: show the owner the seven pages (phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation, and adr-0008 after the Q-114 update) in plain words and ask for approval in chat; transcribe to wiki/raw/owner/, record with tools/approvals_record.py, rerun the entry gate (SCHEMA 9.7), set phase-p5-telemetry to in-progress, then start p5.1 with a write-ahead In-flight record. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+blocked_on: [phase-p5-telemetry, comp-telemetry, comp-network-logger, exp-baseline-footprint, exp-startup, exp-navigation, adr-0008]
 last_handoff: handoff-2026-10-15-s07
 ---
 
@@ -73,6 +73,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - Session start; owner: "Let's start phase 5". P4 signed off without the checklist (`phase-p4-security#exit`); p4.14 check PASS; P4 done.
 - P5 go-ahead recorded; P5 entry BLOCKED on Q-114, Q-115, Q-203 and six pending pages.
 - P4-targeted claims closed or re-targeted on 22 pages (lint had 66 UNV-PASTDUE errors once P4 was done); 14 approvals now STALE, re-approved by the owner ("Re-approve").
+- Q-114 (full addresses kept, log off by default, 14 days), Q-115 (startup chain replaces time to interactive) and Q-203 (all run data in git) answered; adr-0008 updated (approval stale).
 
 ## Done this session (s03)
 
@@ -396,7 +397,7 @@ Exact install and verification commands: [wiki/operations/ops-environment-setup.
 
 ## Open questions
 
-[ov-open-questions](wiki/overview/ov-open-questions.md): **19 open**, answered include (Q-112, Q-113, Q-212 on 2026-10-13; Q-111, Q-125, Q-209 on 2026-10-12; Q-109, Q-202, Q-214 on 2026-10-11; Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
+[ov-open-questions](wiki/overview/ov-open-questions.md): **16 open**, answered include (Q-114, Q-115, Q-203 on 2026-10-18; Q-112, Q-113, Q-212 on 2026-10-13; Q-111, Q-125, Q-209 on 2026-10-12; Q-109, Q-202, Q-214 on 2026-10-11; Q-107, Q-116, Q-122 and Q-222 on 2026-10-11 in session s02; Q-004, Q-005, Q-006, Q-007,
 Q-008, Q-101, Q-102, Q-103, Q-104, Q-106, Q-108, Q-110, Q-207, Q-210, Q-211, Q-216, Q-218, Q-219, Q-220), 3 withdrawn (Q-001–Q-003).
 Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8](wiki/operations/ops-approval-workflow.md#8-approval-waves)):
 
@@ -414,10 +415,10 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
 | Phase 5 (measurement) | You said go; start is blocked |
-| What blocks it | 3 questions and 6 plan pages, for you to answer and approve |
+| What blocks it | 7 plan pages for you to approve (questions answered) |
 
-**2. Why, and what it does.** Nothing to run. Claude asks you the three questions one at a time in chat, then shows the six
-pages for approval. When all are recorded, the start check reruns and task p5.1 begins.
+**2. Why, and what it does.** Nothing to run. Claude shows you the seven Phase 5 pages
+for approval. When all are recorded, the start check reruns and task p5.1 begins.
 
 **3. The script:** none.
 

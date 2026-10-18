@@ -2,10 +2,10 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. You said go for Phase 5. Before it starts, you answer three questions and approve six plan pages.",
+  "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. You said go for Phase 5 and answered its three questions. Before it starts, you approve seven plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:6a8939fb4a8ceb7095ef0faa9956cf89bc8306473dd15a5c2ff6646658e3a8e3"
+    "content_hash": "sha256:7afaf353e2d46bef498b8de20afedca8df0701eb7885fb932ad9927318dd2d5a"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Six Phase 5 plan pages wait for you",
+      "state": "Seven Phase 5 plan pages wait for you",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -47,28 +47,15 @@
       },
       {
         "item": "What blocks it",
-        "state": "3 questions and 6 plan pages"
+        "state": "7 plan pages to approve"
       }
     ],
-    "why": "Nothing to run. Claude asks you the three questions one at a time in Claude Code, then shows the six Phase 5 pages for approval. When all are recorded, the start check reruns and the first Phase 5 task begins.",
+    "why": "Nothing to run. Claude shows you the seven Phase 5 pages in plain words for approval in Claude Code. When they are recorded, the start check reruns and the first Phase 5 task begins.",
     "script": null,
-    "tell_claude": "Your answer to each question as Claude asks it"
+    "tell_claude": "\"Approve\", or what to change"
   },
   "questions_for_you": {
-    "open": 19,
-    "items": [
-      {
-        "id": "Q-114",
-        "question": "Where should the network log live, how long is it kept, and should the query part of web addresses (which can hold tokens) be removed by default?"
-      },
-      {
-        "id": "Q-115",
-        "question": "May 'time to interactive' be replaced by first-paint and largest-paint timings plus long-frame data, since that measure is retired?"
-      },
-      {
-        "id": "Q-203",
-        "question": "Where should raw benchmark data be stored, and how should very large files be handled?"
-      }
-    ]
+    "open": 16,
+    "items": []
   }
 }

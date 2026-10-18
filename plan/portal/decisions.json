@@ -227,7 +227,7 @@
       "title": "Network log records what was fetched, never the content",
       "summary": "For each request Ferrum logs address, method, status, type, timing, size, tab and block decision, one line per request in a file. No headers, no page content.",
       "why": "Your choice: metadata only.",
-      "catch": "Needs unsafe low-level WebView2 code, and full addresses can contain login tokens (whether to hide them is an open question to you).",
+      "catch": "Needs unsafe low-level WebView2 code. Full addresses can contain login tokens: you chose to keep them, so the log is off unless you switch it on and old files are deleted after 14 days.",
       "status": "Accepted",
       "decided_by": "you",
       "date": "2026-10-08",
@@ -249,7 +249,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0008-network-logging-metadata-jsonl.md",
-        "content_hash": "sha256:01e73590843115deab108146c5ad3cfedf8371d6a12912da62c80bc719fe69db"
+        "content_hash": "sha256:b322a89a82c46025532f02581f552be10ca6c3b98c39cedfb28380876d56479b"
       }
     },
     {
