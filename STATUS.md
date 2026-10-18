@@ -378,7 +378,12 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p4.14 finished on 2026-10-18 with the owner's sign-off; no P5 task has started)
+- task: p5.1 (export schema v1: JSONL and CSV, run metadata record, writer with atomic rotation)
+- session: s08
+- intent: in crates/telemetry add module `export` (record types with serde, deny_unknown_fields, tagged by `type`: run header, process sample, tree sample, startup mark, navigation timing, lifecycle transition; schema_version 1); JSONL writer that writes `<run_id>.<seq>.jsonl.part`, starts each file with the run header, rotates by size and renames to `.jsonl` only after flush and sync; CSV export with fixed columns per record type; validator (header first, version, strict parse, time order, no second header); JSON Schema files in crates/telemetry/schema/v1/ with a test that they match the types; corrupted fixtures; unit tests; scripts/verify/p5.1-export-file-format.ps1 made real; comp-telemetry page interfaces updated (stales its approval)
+- planned paths: crates/telemetry/ (Cargo.toml, src/lib.rs, src/export/*, schema/v1/*, tests/fixtures/*), Cargo.lock, scripts/verify/p5.1-export-file-format.ps1, wiki/architecture/components/comp-telemetry.md, wiki/raw/evidence/phase-p5-telemetry/check-p5.1.txt, wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
+- builds: target/debug only (never target/release, where the owner's Ferrum runs)
+- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 ## Blockers
 
