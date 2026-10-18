@@ -3120,3 +3120,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Ferrum's set = its own process plus what GetProcessExtendedInfos lists for each of its environments, never by program name; bad lists refused. Live check with the S1 spike app beside Ferrum (per-site-udf, two sites): set 17; 19 WebView2 processes below Ferrum in the Windows list (16 plus 3 crash reporters WebView2 does not list); none of the other app's 9 in the set. Finding: a site environment returned an empty list once right after its tab loaded (set refused; complete 2 s later); recorded for the sampler. p5.2 check PASS (3 PASS) after a first FAIL (my own comment named the program; no retry for the empty list). Smoke isolation, isolation-modes, cross-origin rerun after the test_processes change: 10 passed. Stales approval of comp-telemetry.
 - commit: e014204
 - next: owner re-approves comp-telemetry; then p5.3 (process metrics sampler).
+
+## [2026-10-18] approval | comp-telemetry re-approved after p5.2
+- session: s08
+- time: 18:14
+- pages: [comp-telemetry]
+- sources: [raw/owner/2026-10-18-s08-p5-2-telemetry-reapproval.md]
+- result: Owner asked what to re-approve; Claude explained the four additions of p5.2. Owner: "Re-approve". Recorded approved with tools/approvals_record.py. All approvals current.
+- next: p5.3 process metrics sampler (In-flight written).
