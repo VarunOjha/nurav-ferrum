@@ -1,0 +1,36 @@
+Finding during p5.9 (network log), session s08, 2026-10-18 (UTC 2026-10-19 04:11 to 04:16)
+Recorded by Claude from the runs below; raw outputs copied from the terminal of this session.
+
+1. The network-log smoke spec (apps/desktop/tests/smoke/network-log.spec.ts, development run, debug build, blocklist
+   ["=127.0.0.1"], log switched on). After typing https://127.0.0.1:8443/landing into the address bar of a tab on
+   https://localhost:8443/netlog, the session's netlog file held, in this order:
+
+{"ts":"2026-10-19T04:11:40.042Z","t_ms":4024,"tab":2,"profile":"","site":"https://127.0.0.1:8443","url":"https://127.0.0.1:8443/landing","method":"","status":null,"resource_type":null,"content_length":null,"policy_decision":"blocked:blocklist"}
+{"ts":"2026-10-19T04:11:40.057Z","t_ms":4039,"tab":2,"profile":"ferrum-default","site":"https://127.0.0.1:8443","url":"https://127.0.0.1:8443/landing","method":"GET","status":200,"resource_type":"document","content_length":240,"policy_decision":"allowed"}
+
+   The app log of the same run (ferrum.jsonl, same tab):
+
+{"timestamp":"2026-10-19T04:11:40.041481Z","level":"INFO","fields":{"message":"navigation denied","tab":2,"context":"page","site":"https://127.0.0.1:8443","rule":"blocklist","matched":"=127.0.0.1"},"target":"ferrum::policy"}
+{"timestamp":"2026-10-19T04:11:40.042608Z","level":"INFO","fields":{"message":"navigation cancelled by the gate","tab":2,"site":"https://127.0.0.1:8443"},"target":"ferrum::nav"}
+{"timestamp":"2026-10-19T04:11:40.049170Z","level":"WARN","fields":{"message":"page not loaded normally","tab":2,"site":"https://localhost:8443","success":false,"http_status":0,"web_error_status":14},"target":"ferrum::nav"}
+
+   So the gate cancelled the navigation in NavigationStarting, NavigationCompleted reported it cancelled (web error
+   14) with the tab still on localhost, and 15 ms after the cancel WebView2 reported a 200 response for the refused
+   address.
+
+2. Diagnostic spec (temporary file apps/desktop/tests/smoke/zz-diag-blocked-request.spec.ts, created by Claude for
+   this check and deleted right after the run). Blocklist ["=127.0.0.1"]; a tab on https://localhost:8443/landing;
+   three times: type https://127.0.0.1:8443/counted/diag<pid> and wait 1.5 s; then type the allowed
+   https://localhost:8443/counted/diag<pid>. The fixture server counts requests per name across both host names (one
+   server process). Output:
+
+DIAG: tab url after 3 blocked tries: https://localhost:8443/landing; then the allowed visit shows count:4 (count:1 = no blocked request reached the server)
+  1 passed (1.4m)
+
+   So all three refused navigations reached the server (count 4 on the first allowed visit), while the tab never left
+   the allowed page.
+
+Meaning (Claude): the blocklist stops a refused page from being shown, but on this WebView2 runtime the request for a
+typed address still reaches the blocked server. Only the typed-address path was checked; links, script navigation,
+redirect hops and frames were not. Not fixed in p5.9: it is a security behaviour of the P4 engine and goes to the
+owner as a question.

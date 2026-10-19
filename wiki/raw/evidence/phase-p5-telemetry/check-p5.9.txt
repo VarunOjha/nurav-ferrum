@@ -1,0 +1,40 @@
+Ferrum check p5.9: Network log: addresses and timings only
+Why: useful for research without storing private data.
+Run at 2026-10-18 23:17 on commit 316e0d7 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The record: only the allowed fields, bad records refused, rotation, old sessions deleted safely (1 s)
+         six unit tests passed (including the negative test: no header, cookie or body field)
+  PASS   The settings: off by default, limits checked (1 s)
+         off by default, 14 days kept; out-of-range values and a folder outside the data folder refused
+Running 2 tests using 1 worker
+NETLOG: 8 records in 8 lines; the /netlog tab's 8:
+  GET /netlog 200 document 391 B allowed
+  GET site-b/landing 200 frame 240 B allowed
+  GET /netlog/style.css 200 stylesheet 23 B allowed
+  GET /icon.png 200 image 82 B allowed
+  GET /netlog/app.js 200 script 105 B allowed
+  GET /netlog/data.json 200 fetch 16 B allowed
+   https://127.0.0.1:8443/landing null null - B blocked:blocklist
+  GET https://127.0.0.1:8443/landing 200 document 240 B allowed
+  blocked: 127.0.0.1:8443/landing blocked:blocklist; responses still reported for it: 1
+  ✓  1 network-log.spec.ts:27:3 › network log › switched on: exactly the expected records, metadata only (7.1s)
+NETLOG-OFF: no log folder with the default settings
+  ✓  2 network-log.spec.ts:74:3 › network log › default settings: the log is off and writes nothing (2.3s)
+  2 passed (1.7m)
+  PASS   Live: exactly the expected entries; a refused address logged as blocked; off by default (122 s)
+         NETLOG: 8 records in 8 lines; the /netlog tab's 8:
+         GET /netlog 200 document 391 B allowed
+         GET site-b/landing 200 frame 240 B allowed
+         GET /netlog/style.css 200 stylesheet 23 B allowed
+         GET /icon.png 200 image 82 B allowed
+         GET /netlog/app.js 200 script 105 B allowed
+         GET /netlog/data.json 200 fetch 16 B allowed
+         https://127.0.0.1:8443/landing null null - B blocked:blocklist
+         GET https://127.0.0.1:8443/landing 200 document 240 B allowed
+         blocked: 127.0.0.1:8443/landing blocked:blocklist; responses still reported for it: 1
+         NETLOG-OFF: no log folder with the default settings
+         NETLOG-OFF: no log folder with the default settings
+------------------------------------------------------------------------
+RESULT: PASS - p5.9 (3 PASS; 124 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.9 check passed".

@@ -1100,7 +1100,7 @@
       "kind": "task",
       "title": "P5 task: Network log: addresses and timings only",
       "summary": "You asked for a log of network calls → per tab, save address, method, result, type, timing, size and the security decision to one folder per session, never headers or page content → useful for research without storing private data.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3196,7 +3196,7 @@
       "id": "comp-core",
       "kind": "component",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart), ids and record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart; since P5 the network log switch), record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
       "status": "Built (first working app)",
       "related": [
         "layer-base"
@@ -3214,8 +3214,8 @@
       "id": "comp-network-logger",
       "kind": "component",
       "title": "Measurement: network log",
-      "summary": "Writes every tab's network calls to a folder you can review: full address, status, timing and size. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Trusted. Its cost in speed and memory is not measured yet (measured in P5).",
-      "status": "Planned",
+      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; its cost in speed and memory is measured next. Trusted.",
+      "status": "Built (measurement)",
       "related": [
         "layer-engine"
       ]
@@ -3272,7 +3272,7 @@
       "id": "comp-webview-manager",
       "kind": "component",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. In P5 it can read timings from a page.",
+      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. In P5 it reads page timings and network calls.",
       "status": "Built (first working app)",
       "related": [
         "layer-engine"
@@ -5429,6 +5429,17 @@
       "related": [
         "phase-p4-security",
         "adr-0034"
+      ]
+    },
+    {
+      "id": "Q-229",
+      "kind": "question",
+      "title": "Question Q-229: A blocked site still receives the request",
+      "summary": "A blocked site still receives the request: should Ferrum stop it reaching the site? Open.",
+      "status": "Open",
+      "related": [
+        "phase-p4-security",
+        "phase-p5-telemetry"
       ]
     },
     {

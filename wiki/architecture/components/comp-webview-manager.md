@@ -6,6 +6,7 @@ status: implemented
 last_verified_commit: ebc79ca
 updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.9.txt
   - raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt
   - raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md
   - raw/research/smartscreen-webview2.md
@@ -38,6 +39,7 @@ interfaces:
   - "TabManager API: open, close, activate, navigate, back, forward, reload, stop, snapshot, restore"
   - "LifecycleActuator impl (trait from ferrum-core)"
   - "Safe COM wrappers: try_suspend, resume, set_memory_level, go_back, go_forward, process_infos, enable_netlog, run_probe"
+  - "Handlers::log_responses (p5.9): when true the view registers WebResourceResponseReceived and reports TabEvent::ResponseReceived {uri, method, status, fetch_dest, content_length}; no header, cookie or body is handed on"
   - "call_devtools(core, method, params JSON, done), ContentView::call_devtools, controller_call_devtools (p5.6: CallDevToolsProtocolMethod from the host; the result arrives as JSON on the UI thread)"
 connects:
   - to: comp-webview2-runtime
@@ -259,3 +261,11 @@ Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).
   or not the developer tools are allowed for the user; nothing in a page can reach it. Observed in the p5.6 live test
   ([check-p5.6](../../raw/evidence/phase-p5-telemetry/check-p5.6.txt)): the isolated world sees the page's paint and
   largest-contentful-paint entries.
+- p5.9, network log capture: with `Handlers::log_responses` the view registers `ICoreWebView2_2::
+  WebResourceResponseReceived` (COM-1, COM-3 cast, COM-4 token removed in `close`, COM-5 strings copied). The handler
+  copies out the request's address and method, the response status, and two values read from single named headers
+  (`Sec-Fetch-Dest` of the request, `Content-Length` of the response); no other header is read and no header value is
+  handed on as such. Reported as `TabEvent::ResponseReceived`, which the app sends to the network log only, never to
+  the shell. Seen live in p5.9 ([check-p5.9](../../raw/evidence/phase-p5-telemetry/check-p5.9.txt)): responses of the
+  page and of a frame of another site are reported to the tab's view. Also seen: a navigation cancelled in
+  `NavigationStarting` can still produce a response (the request reached the server; owner question Q-229).

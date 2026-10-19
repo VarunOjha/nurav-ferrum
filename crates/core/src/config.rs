@@ -277,6 +277,35 @@ pub struct Downloads {
     pub folder: Option<PathBuf>,
 }
 
+/// `[network_log]`: the local log of each tab's requests (p5.9; adr-0008, metadata only; owner's Q-114 answer: full
+/// addresses, off unless switched on, files older than 14 days deleted).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields, default)]
+pub struct NetworkLog {
+    /// Whether the log is written (off by default; benchmark runs switch it on).
+    pub enabled: bool,
+    /// The log folder, relative to the data folder; one subfolder per app session.
+    pub dir: PathBuf,
+    /// A session's file size, in MiB, at which the next file starts (1 to 1024).
+    pub rotate_mb: u32,
+    /// Files kept per session (1 to 1000); beyond that the session's oldest file is deleted.
+    pub max_files: u32,
+    /// Session folders older than this many days are deleted at start (0 = never; at most 3650).
+    pub retention_days: u32,
+}
+
+impl Default for NetworkLog {
+    fn default() -> Self {
+        NetworkLog {
+            enabled: false,
+            dir: PathBuf::from("netlogs"),
+            rotate_mb: 50,
+            max_files: 20,
+            retention_days: 14,
+        }
+    }
+}
+
 /// A theme: a named set of colours for light and dark (adr-0033). The shell holds the colours; a new theme is a new
 /// name here and its colour record in the shell.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
@@ -375,6 +404,8 @@ pub struct Config {
     pub downloads: Downloads,
     /// How the shell looks.
     pub appearance: Appearance,
+    /// The network log (p5.9).
+    pub network_log: NetworkLog,
 }
 
 impl Default for Config {
@@ -388,6 +419,7 @@ impl Default for Config {
             sites: Vec::new(),
             downloads: Downloads::default(),
             appearance: Appearance::default(),
+            network_log: NetworkLog::default(),
         }
     }
 }
@@ -444,6 +476,13 @@ pub enum ConfigError {
         /// Why it was refused.
         reason: String,
     },
+    /// A setting's value is out of range (p5.9: `[network_log]`).
+    InvalidValue {
+        /// The setting, as `section.key`.
+        key: String,
+        /// Why it was refused.
+        reason: String,
+    },
     /// A start page is not a usable address.
     InvalidStartUrl {
         /// The address as written.
@@ -476,6 +515,9 @@ impl std::fmt::Display for ConfigError {
             }
             ConfigError::InvalidStartUrl { url, reason } => {
                 write!(f, "start page {url:?} refused: {reason}")
+            }
+            ConfigError::InvalidValue { key, reason } => {
+                write!(f, "setting {key} refused: {reason}")
             }
         }
     }
@@ -700,6 +742,30 @@ pub fn validate(mut config: Config) -> Result<Loaded, ConfigError> {
                 c.kind.name()
             )));
         }
+    }
+    let n = &config.network_log;
+    let bad = |key: &str, reason: &str| ConfigError::InvalidValue {
+        key: format!("network_log.{key}"),
+        reason: reason.into(),
+    };
+    if !(1..=1024).contains(&n.rotate_mb) {
+        return Err(bad("rotate_mb", "must be 1 to 1024"));
+    }
+    if !(1..=1000).contains(&n.max_files) {
+        return Err(bad("max_files", "must be 1 to 1000"));
+    }
+    if n.retention_days > 3650 {
+        return Err(bad("retention_days", "must be 0 (never delete) to 3650"));
+    }
+    let plain = n.dir.components().count() > 0
+        && n.dir
+            .components()
+            .all(|c| matches!(c, std::path::Component::Normal(_)));
+    if !plain {
+        return Err(bad(
+            "dir",
+            "must be a folder name inside the data folder (no drive, no .., not empty)",
+        ));
     }
     Ok(Loaded { config, warnings })
 }

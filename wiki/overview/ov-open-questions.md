@@ -5,6 +5,7 @@ title: "Open questions for the owner (canonical register)"
 status: draft
 updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/measurement-methodology.md
@@ -982,3 +983,22 @@ reports the request with the page's address, so Ferrum cannot tell it from the p
 **Question:** (a) like Chrome: the question names the page, which chose to let its frame ask (Claude recommended this);
 (b) stricter: Ferrum tracks every frame's address and refuses such requests (more engine code; embedded widgets would
 not work).
+
+## Q-229 A blocked site still receives the request: should Ferrum stop it reaching the site?
+
+- asked: 2026-10-18 23:20
+- blocking: []
+- status: open
+
+**Where we are:** found while building p5.9 (network log), recorded in
+[blocked-request-reaches-server-p5.9](../raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt).
+When the blocklist refuses a typed address, the page is never shown (the P4 tests check exactly that), but WebView2
+still sends the request: three refused tries were all counted by the test server, and the network log saw a 200
+response. So a blocked site can still see that someone asked for it (address, cookies it set before). Only typed
+addresses were checked; links, redirect hops and frames were not.
+
+**Question:** (a) block it at the network level as well: Ferrum also filters the requests themselves
+(`WebResourceRequested`), so nothing reaches a blocked site, for pages, frames and their images or scripts alike (a
+security follow-up task, with a check that the server sees no request and a cost measurement; Claude recommends this);
+(b) keep it as it is and say so plainly in the security pages (the page is hidden, the site may still see one request);
+(c) first check which other ways in (links, redirects, frames) do the same, then decide.

@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 8,
+    "done": 9,
     "total": 14
   },
   "step_order": [
@@ -114,7 +114,7 @@
       "what": "A network log with only address, method, result, type, timing, sizes, tab and security decision, one folder per session.",
       "why": "Headers and page content can hold passwords and personal data. A log that stored them would be a privacy risk on your computer.",
       "how": "Use WebView2's response event per tab, or the debugging channel if an earlier test showed problems. A test proves no headers or content are stored.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "You asked for a log of network calls → per tab, save address, method, result, type, timing, size and the security decision to one folder per session, never headers or page content → useful for research without storing private data.",
       "check": "A test page with known requests gives exactly the expected entries; a test proves no headers or content are stored.",
       "script": "scripts/verify/p5.9-network-log-addresses.ps1"

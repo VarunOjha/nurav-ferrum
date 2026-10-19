@@ -21,6 +21,7 @@ ferrum-core = { path = "../../../crates/core" }
 ferrum-security = { path = "../../../crates/security" }
 ferrum-webview-manager = { path = "../../../crates/webview-manager" }
 ferrum-telemetry = { path = "../../../crates/telemetry" }
+ferrum-network-logger = { path = "../../../crates/network-logger" }
 windows = { version = "=0.62.2", features = ["Win32_Foundation"] }
 tracing = "=0.1.44"
 tracing-subscriber = { version = "=0.3.23", default-features = false, features = ["fmt", "json", "std"] }

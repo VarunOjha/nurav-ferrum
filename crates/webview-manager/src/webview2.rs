@@ -32,7 +32,7 @@ use webview2_com::{
     LaunchingExternalUriSchemeEventHandler, NavigationCompletedEventHandler,
     NavigationStartingEventHandler, NewWindowRequestedEventHandler,
     PermissionRequestedEventHandler, ProcessFailedEventHandler, SourceChangedEventHandler,
-    StateChangedEventHandler, take_pwstr,
+    StateChangedEventHandler, WebResourceResponseReceivedEventHandler, take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows::Win32::System::Com::IStream;
@@ -115,6 +115,9 @@ pub struct Handlers {
     pub keys: KeyFilter,
     /// Decides permission requests (p4.5).
     pub permissions: PermissionFilter,
+    /// Report every response as [`TabEvent::ResponseReceived`] (p5.9, the network log). The handler is registered
+    /// only when this is true, so a view made while the log is off pays nothing.
+    pub log_responses: bool,
 }
 
 fn hr<T>(r: windows_core::Result<T>) -> Result<T, Error> {
@@ -141,6 +144,45 @@ enum Ev {
     DownloadDialog,
     Favicon,
     ProcessFailed,
+    Response,
+}
+
+/// The network log's values of one response (p5.9): the request's address and method, the status, and two values
+/// read from single named headers: `Sec-Fetch-Dest` of the request and `Content-Length` of the response. No other
+/// header is read, and no header value is handed on as such.
+fn response_event(args: &ICoreWebView2WebResourceResponseReceivedEventArgs) -> Option<TabEvent> {
+    // SAFETY: COM-1 (inside WebView2's callback, on the UI thread); COM-5: every PWSTR is copied and freed by
+    // take_pwstr; a header that is absent makes GetHeader fail, which is read as "none".
+    unsafe {
+        let req = args.Request().ok()?;
+        let (mut uri, mut method) = (PWSTR::null(), PWSTR::null());
+        let _ = req.Uri(&mut uri);
+        let uri = take_pwstr(uri);
+        let _ = req.Method(&mut method);
+        let method = take_pwstr(method);
+        let fetch_dest = req.Headers().ok().and_then(|h| {
+            let mut v = PWSTR::null();
+            h.GetHeader(windows_core::w!("Sec-Fetch-Dest"), &mut v)
+                .ok()?;
+            Some(take_pwstr(v))
+        });
+        let resp = args.Response().ok()?;
+        let mut status = 0i32;
+        let _ = resp.StatusCode(&mut status);
+        let content_length = resp.Headers().ok().and_then(|h| {
+            let mut v = PWSTR::null();
+            h.GetHeader(windows_core::w!("Content-Length"), &mut v)
+                .ok()?;
+            take_pwstr(v).trim().parse::<u64>().ok()
+        });
+        Some(TabEvent::ResponseReceived {
+            uri,
+            method,
+            status,
+            fetch_dest,
+            content_length,
+        })
+    }
 }
 
 /// The largest site icon passed on (bytes of PNG); a larger one is dropped (the tab shows no icon).
@@ -216,6 +258,7 @@ impl ContentView {
             keys,
             downloads,
             permissions,
+            log_responses,
         } = handlers;
         let core = self.core.clone();
 
@@ -662,6 +705,22 @@ impl ContentView {
         hr(unsafe { core.add_ProcessFailed(&h, &mut t) })?;
         self.tokens.push((Ev::ProcessFailed, t));
 
+        if log_responses {
+            let core2: ICoreWebView2_2 = hr(core.cast())?;
+            let s = sink.clone();
+            let h =
+                WebResourceResponseReceivedEventHandler::create(Box::new(move |_sender, args| {
+                    if let Some(e) = args.as_ref().and_then(response_event) {
+                        s(e);
+                    }
+                    Ok(())
+                }));
+            let mut t = 0i64;
+            // SAFETY: COM-1, COM-3 (the cast above failed gracefully if the runtime were too old), COM-4.
+            hr(unsafe { core2.add_WebResourceResponseReceived(&h, &mut t) })?;
+            self.tokens.push((Ev::Response, t));
+        }
+
         let s = sink;
         let h = FocusChangedEventHandler::create(Box::new(move |_sender, _args| {
             s(TabEvent::GotFocus);
@@ -800,6 +859,10 @@ impl ContentView {
                     },
                     Ev::NewWindow => self.core.remove_NewWindowRequested(*t),
                     Ev::ProcessFailed => self.core.remove_ProcessFailed(*t),
+                    Ev::Response => match self.core.cast::<ICoreWebView2_2>() {
+                        Ok(c2) => c2.remove_WebResourceResponseReceived(*t),
+                        Err(e) => Err(e),
+                    },
                     Ev::Permission => self.core.remove_PermissionRequested(*t),
                     Ev::LaunchExternal => match self.core.cast::<ICoreWebView2_18>() {
                         Ok(c18) => c18.remove_LaunchingExternalUriScheme(*t),

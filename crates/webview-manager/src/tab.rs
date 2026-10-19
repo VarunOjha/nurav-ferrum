@@ -97,6 +97,21 @@ pub enum TabEvent {
         /// The process's exit code (0 when WebView2 gave none).
         exit_code: i32,
     },
+    /// A response arrived for a request of the page or of one of its frames (p5.9, network log;
+    /// `WebResourceResponseReceived`, only while the log is on). Only these values are handed on: no header, cookie or
+    /// body ever leaves the COM module.
+    ResponseReceived {
+        /// The request's full address.
+        uri: String,
+        /// The request method.
+        method: String,
+        /// The HTTP status.
+        status: i32,
+        /// The request's `Sec-Fetch-Dest` value (what the response is for), if it had one.
+        fetch_dest: Option<String>,
+        /// The response's declared size (`Content-Length`), if it gave one.
+        content_length: Option<u64>,
+    },
     /// The page's icon changed (p3.16): the icon as PNG bytes, as WebView2 already has it (empty: the page has none).
     FaviconChanged {
         /// PNG image bytes.

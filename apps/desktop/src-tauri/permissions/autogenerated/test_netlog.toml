@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-test-netlog"
+description = "Enables the test_netlog command without any pre-configured scope."
+commands.allow = ["test_netlog"]
+
+[[permission]]
+identifier = "deny-test-netlog"
+description = "Denies the test_netlog command without any pre-configured scope."
+commands.deny = ["test_netlog"]

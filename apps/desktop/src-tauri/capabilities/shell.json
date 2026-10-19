@@ -28,6 +28,7 @@
     "allow-test-startup",
     "allow-test-nav-timing",
     "allow-test-lifecycle",
+    "allow-test-netlog",
     "allow-tab-new-private",
     "allow-site-data-clear",
     "allow-test-focus",

@@ -33,6 +33,7 @@ fn main() {
             "test_startup",
             "test_nav_timing",
             "test_lifecycle",
+            "test_netlog",
             "tab_new_private",
             "site_data_clear",
             "test_focus",

@@ -99,7 +99,7 @@ pub struct Lifecycle(
 );
 
 /// Milliseconds on the run clock (since Ferrum's process was created), for in-app records.
-fn run_ms() -> u64 {
+pub(crate) fn run_ms() -> u64 {
     static CREATED: std::sync::OnceLock<f64> = std::sync::OnceLock::new();
     let created =
         *CREATED.get_or_init(|| process_created_unix_ms().unwrap_or_else(|_| unix_now_ms()));
@@ -268,6 +268,8 @@ fn event_json(tab: u64, e: &TabEvent) -> Value {
             json!({"kind": "download", "download": download})
         }
         TabEvent::DownloadDialog { open } => json!({"kind": "download-dialog", "open": open}),
+        // Never sent to the shell (the sink hands responses to the network log only); kept here for completeness.
+        TabEvent::ResponseReceived { status, .. } => json!({"kind": "response", "status": status}),
     };
     v["tab"] = json!(tab);
     v
@@ -561,6 +563,7 @@ fn create_view_in(
                 keys: crate::shortcuts::filter(h),
                 downloads: crate::downloads::chooser(h),
                 permissions: crate::permission_question::filter(h, id),
+                log_responses: crate::netlog::enabled(),
             },
             Box::new({
                 let h = h.clone();
@@ -629,6 +632,34 @@ fn shell_to_back(app: &AppHandle) {
 fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
     let h = app.clone();
     Rc::new(move |e: TabEvent| {
+        // p5.9: responses go to the network log only (never to the shell).
+        if let TabEvent::ResponseReceived {
+            uri,
+            method,
+            status,
+            fetch_dest,
+            content_length,
+        } = &e
+        {
+            let profile = {
+                let t = h.state::<TabsState>();
+                let t = t.0.lock().unwrap();
+                t.get(TabId(id))
+                    .map(|i| i.profile.clone())
+                    .unwrap_or_default()
+            };
+            crate::netlog::response(
+                id,
+                &profile,
+                run_ms(),
+                uri,
+                method,
+                *status,
+                fetch_dest.as_deref(),
+                *content_length,
+            );
+            return;
+        }
         let mut list_changed = false;
         track_navigation(&h, id, &e);
         match &e {
@@ -1414,6 +1445,15 @@ fn process_created_unix_ms() -> Result<f64, String> {
         ),
         other => Err(format!("cannot read Ferrum's own process: {other:?}")),
     }
+}
+
+/// Test hook (debug builds only): the network log's session folder (p5.9), or null when the log is off.
+#[tauri::command]
+pub fn test_netlog() -> Result<Value, String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    Ok(json!(crate::netlog::folder()))
 }
 
 /// Test hook (debug builds only): the `lifecycle_transition` records written so far (p5.8), oldest first, and the

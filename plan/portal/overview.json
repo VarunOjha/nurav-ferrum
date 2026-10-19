@@ -52,7 +52,12 @@
     "tell_claude": "Nothing needed; Claude reports after each task"
   },
   "questions_for_you": {
-    "open": 16,
-    "items": []
+    "open": 17,
+    "items": [
+      {
+        "id": "Q-229",
+        "question": "A blocked site still receives the request: should Ferrum stop it reaching the site?"
+      }
+    ]
   }
 }

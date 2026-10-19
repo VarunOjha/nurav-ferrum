@@ -1138,6 +1138,7 @@ version = "0.0.0"
 dependencies = [
  "base64 0.22.1",
  "ferrum-core",
+ "ferrum-network-logger",
  "ferrum-security",
  "ferrum-telemetry",
  "ferrum-webview-manager",
@@ -1154,6 +1155,10 @@ dependencies = [
 [[package]]
 name = "ferrum-network-logger"
 version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "ferrum-resource-manager"

@@ -218,6 +218,26 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "links and a pop-up to Ferrum's own pages (tauri.localhost, tauri:, ipc.localhost), which tabs must refuse (p4.8)",
     },
+    Route {
+        path: "/netlog",
+        status: 200,
+        purpose: "a page with a known set of resources (p5.9): its stylesheet, its script, the site icon, a frame of site-b's landing page and one fetch of /netlog/data.json; no favicon request; the title becomes 'netlog done' when the fetch is answered",
+    },
+    Route {
+        path: "/netlog/style.css",
+        status: 200,
+        purpose: "the stylesheet of /netlog",
+    },
+    Route {
+        path: "/netlog/app.js",
+        status: 200,
+        purpose: "the script of /netlog (makes the fetch)",
+    },
+    Route {
+        path: "/netlog/data.json",
+        status: 200,
+        purpose: "the data /netlog fetches",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -482,6 +502,46 @@ async fn icon_png() -> Response {
     (
         [(header::CONTENT_TYPE, HeaderValue::from_static("image/png"))],
         &include_bytes!("../assets/icon.png")[..],
+    )
+        .into_response()
+}
+
+/// p5.9: a page whose resources are known exactly. `data:,` as its icon stops the browser asking for /favicon.ico.
+async fn netlog_page() -> Html<String> {
+    Html(
+        "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><title>netlog</title>\
+         <link rel=\"icon\" href=\"data:,\"><link rel=\"stylesheet\" href=\"/netlog/style.css\">\
+         <script src=\"/netlog/app.js\" defer></script></head><body><h1>Network log fixture</h1>\
+         <img id=\"icon\" src=\"/icon.png\" alt=\"icon\">\
+         <iframe id=\"other\" src=\"https://site-b.localhost:8443/landing\" title=\"other site\"></iframe>\
+         </body></html>"
+            .to_string(),
+    )
+}
+
+async fn netlog_css() -> Response {
+    (
+        [(header::CONTENT_TYPE, HeaderValue::from_static("text/css"))],
+        "h1 { color: #b5651d; }\n",
+    )
+        .into_response()
+}
+
+async fn netlog_js() -> Response {
+    (
+        [(header::CONTENT_TYPE, HeaderValue::from_static("text/javascript"))],
+        "fetch('/netlog/data.json').then((r) => r.json()).then((d) => { document.title = 'netlog ' + d.state; });\n",
+    )
+        .into_response()
+}
+
+async fn netlog_data() -> Response {
+    (
+        [(
+            header::CONTENT_TYPE,
+            HeaderValue::from_static("application/json"),
+        )],
+        "{\"state\":\"done\"}",
     )
         .into_response()
 }
@@ -823,6 +883,10 @@ pub fn router() -> Router {
         .route("/storage", get(storage))
         .route("/links/app-origin", get(links_app_origin))
         .route("/download/named", get(download_named))
+        .route("/netlog", get(netlog_page))
+        .route("/netlog/style.css", get(netlog_css))
+        .route("/netlog/app.js", get(netlog_js))
+        .route("/netlog/data.json", get(netlog_data))
 }
 
 /// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`), and, when

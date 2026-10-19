@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:92708d21050a473c84654fcbab78caa4c51eb8ce5f81f97753cd9a83f33e9ff5"
+    "content_hash": "sha256:d79efa83ac5128f993bb1d6060d2cfdb59c8372b556b373ec53f60452796a5f1"
   },
   "items": [
     {
@@ -1006,6 +1006,22 @@
       "status": "answered",
       "answer": "Like Chrome: a frame the page allowed is asked about under the page's site; frames the page did not allow stay refused. Decision 34 corrected.",
       "answered_on": "2026-10-15",
+      "blocks": [],
+      "category": "Security & privacy",
+      "tags": [
+        "privacy",
+        "WebView2"
+      ]
+    },
+    {
+      "id": "Q-229",
+      "asked": "2026-10-18",
+      "time": "23:20",
+      "question": "A blocked site still receives the request: should Ferrum stop it reaching the site?",
+      "why_it_matters": "Found while building the network log: when the blocked sites list refuses a typed address, the page is never shown, but the request still reaches the site (the test server counted all three refused tries). So a blocked site can still see that someone asked for it.",
+      "status": "open",
+      "answer": null,
+      "answered_on": null,
       "blocks": [],
       "category": "Security & privacy",
       "tags": [

@@ -3,7 +3,7 @@ id: ov-arch-configuration
 type: overview
 title: "Architecture: configuration model and lifecycle policy flags"
 status: review
-updated: 2026-10-14
+updated: 2026-10-18
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -108,12 +108,13 @@ enabled = true
 sample_interval_ms = 1000
 export_dir = "telemetry"        # relative to app data dir
 
-[network_log]                   # adr-0008 metadata only
-enabled = true
-dir = "netlog"
-url_mode = "full"               # full | strip-query (PROPOSAL: privacy option)
-rotate_mb = 50
-route = "web-resource-response" # web-resource-response | cdp. Default per adr-0008; P5 spike may change it via a superseding decision
+[network_log]                   # adr-0008 metadata only; built in p5.9
+enabled = false                 # owner answer Q-114: off unless switched on (benchmark runs switch it on)
+dir = "netlogs"                 # inside the data dir; one subfolder per app session
+rotate_mb = 50                  # next file at this size (1 to 1024)
+max_files = 20                  # files kept per session (1 to 1000)
+retention_days = 14             # Q-114; session folders older than this are deleted at start (0 = never)
+# Full addresses are kept (Q-114), so there is no url_mode; the capture route is WebResourceResponseReceived (adr-0008).
 ```
 
 The Rust side defines these as `serde` structs with `#[serde(deny_unknown_fields)]`, so a typo in an experiment config fails loudly instead of silently using defaults. Validation rules: `reclaim_mode` must be one of three values, the weights must be ≥ 0, and `idle_after_s < discard_after_s`.
@@ -169,4 +170,4 @@ pages (a version-1 file keeps it off, the P2 behaviour). The session itself is r
 
 ## 5. Persisted runtime state (not config)
 
-`ferrum.db` (built in P3, p3.18, adr-0032: one SQLite file with the history, newest first, at most 50 000 entries, clearable at once with nothing left inside the file, and the bookmarks; it replaced p3.7's `history.json`, which is imported once and kept as `history.json.imported`), `session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), no `profiles.json` (not built: each site's profile is worked out from its registrable domain, and named profiles live in `[[sites]]` in `config.toml`), `audit.jsonl`, `netlog/*.jsonl`, `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.
+`ferrum.db` (built in P3, p3.18, adr-0032: one SQLite file with the history, newest first, at most 50 000 entries, clearable at once with nothing left inside the file, and the bookmarks; it replaced p3.7's `history.json`, which is imported once and kept as `history.json.imported`), `session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), no `profiles.json` (not built: each site's profile is worked out from its registrable domain, and named profiles live in `[[sites]]` in `config.toml`), `audit.jsonl`, `netlogs/<session>/netlog.NNNN.jsonl` (p5.9), `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.

@@ -15,6 +15,7 @@ mod external;
 mod history;
 mod library;
 mod logging;
+mod netlog;
 mod permission_question;
 mod policy;
 mod recovery;
@@ -248,6 +249,7 @@ fn main() {
             content::test_startup,
             content::test_nav_timing,
             content::test_lifecycle,
+            content::test_netlog,
             recovery::test_crash_tab,
             content::tab_new_private,
             content::site_data_clear,
@@ -320,6 +322,16 @@ fn main() {
                 && let Err(e) = audit::init(dir)
             {
                 eprintln!("[ferrum] audit log not started: {e}");
+            }
+            // The network log (p5.9): off unless switched on; in the data folder when one is configured.
+            let data_dir = match &loaded.config.storage.data_dir {
+                Some(d) => Some(d.clone()),
+                None => app.path().app_local_data_dir().ok(),
+            };
+            if let Some(d) = data_dir.as_deref()
+                && let Err(e) = netlog::init(d, &loaded.config.network_log)
+            {
+                eprintln!("[ferrum] network log not started: {e}");
             }
             tracing::info!(
                 target: "ferrum::app",

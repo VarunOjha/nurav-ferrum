@@ -498,3 +498,46 @@ site = \"example.com\"
         ]
     );
 }
+
+#[test]
+fn network_log_is_off_by_default_and_its_limits_are_checked() {
+    // Owner answer Q-114: off unless switched on; files older than 14 days deleted.
+    let d = Config::default().network_log;
+    assert!(!d.enabled);
+    assert_eq!(d.dir, PathBuf::from("netlogs"));
+    assert_eq!((d.rotate_mb, d.max_files, d.retention_days), (50, 20, 14));
+    let p = tmp(
+        "netlog-on.toml",
+        "version = 4\n[network_log]\nenabled = true\nretention_days = 0\n",
+    );
+    let l = config::load(Some(&p), None).unwrap();
+    assert!(l.config.network_log.enabled);
+    assert_eq!(l.config.network_log.retention_days, 0, "0 = never delete");
+    for (text, key) in [
+        ("rotate_mb = 0", "rotate_mb"),
+        ("max_files = 5000", "max_files"),
+        ("retention_days = 9999", "retention_days"),
+        (r"dir = '..\elsewhere'", "dir"),
+        (r"dir = 'C:\logs'", "dir"),
+        ("dir = \"\"", "dir"),
+    ] {
+        let p = tmp(
+            "netlog-bad.toml",
+            &format!("version = 4\n[network_log]\n{text}\n"),
+        );
+        match config::load(Some(&p), None) {
+            Err(ConfigError::InvalidValue { key: k, .. }) => {
+                assert_eq!(k, format!("network_log.{key}"), "{text}")
+            }
+            other => panic!("{text}: {other:?}"),
+        }
+    }
+    let p = tmp(
+        "netlog-typo.toml",
+        "version = 4\n[network_log]\nenable = true\n",
+    );
+    assert!(matches!(
+        config::load(Some(&p), None),
+        Err(ConfigError::Parse { .. })
+    ));
+}

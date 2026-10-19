@@ -4,8 +4,9 @@ type: component
 title: "Core crate (shared types, config schema, traits)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-14
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.9.txt
   - raw/00-master-prompt.md
   - raw/research/tauri-webview2-capabilities.md
 related: [ov-arch-crate-graph, ov-arch-configuration, comp-app-shell, comp-webview-manager, comp-security-engine, comp-resource-manager, comp-telemetry, comp-network-logger, comp-benchmark-harness, adr-0018, phase-p1-foundation]
@@ -100,6 +101,10 @@ Unit tests: `crates/core/tests/{config,address,oauth}.rs` in P2; P3 adds `{tabs,
   checked); times from an old `history.json` or a backup are capped instead of wrapping to negative values; `seal`
   refuses to write a backup over 100 MB (one `open` would refuse); `argon2` and `chacha20poly1305` are built with
   their `zeroize` features, so their own copies of the key material are wiped too. Two more unit tests.
+- `config` (p5.9): `[network_log]` (`NetworkLog`): `enabled` (false by default, owner answer Q-114), `dir`
+  (`netlogs`, a folder name inside the data folder; a drive, `..` or an empty name is refused), `rotate_mb` (50; 1 to
+  1024), `max_files` (20; 1 to 1000), `retention_days` (14, Q-114; 0 = never; at most 3650). Out-of-range values are
+  refused with the new `ConfigError::InvalidValue`. One more test.
 - `config` and `profiles` (p4.15): `IsolationMode::PerSiteUdf` (settings value `per-site-udf`, configuration
   cfg-ferrum-udf-per-site) and `IsolationMode::name`; profiles are chosen as in `per-site`; `profiles::own_folder` says
   which profiles get their own user data folder (only in that mode, only `site-…` and `user-…` profiles; the folder is

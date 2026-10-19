@@ -260,7 +260,7 @@
     {
       "id": "comp-webview-manager",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. In P5 it can read timings from a page.",
+      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. In P5 it reads page timings and network calls.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (first working app)",
@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:60fcc0319cf0e1a7b0568b2497197ff1b753bb9952705cb2b0505d73a4893cef"
+        "content_hash": "sha256:fdcd0054afe1ae6015e556a3d387c676adb55337c335907c347c6ec511a249e9"
       }
     },
     {
@@ -399,10 +399,10 @@
     {
       "id": "comp-network-logger",
       "title": "Measurement: network log",
-      "summary": "Writes every tab's network calls to a folder you can review: full address, status, timing and size. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Trusted. Its cost in speed and memory is not measured yet (measured in P5).",
+      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; its cost in speed and memory is measured next. Trusted.",
       "group": "application",
       "layer": "layer-engine",
-      "status": "Planned",
+      "status": "Built (measurement)",
       "ours": true,
       "phase": "phase-p5-telemetry",
       "connects": [
@@ -420,13 +420,13 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-network-logger.md",
-        "content_hash": "sha256:cf6c62c63b04e02e2c6dcd9a678195db66eaf938406b8fea1a30289e69b6deff"
+        "content_hash": "sha256:682d5b29bff2735525cdca3aaa51d442a473efbbb24454c32a421eee78268361"
       }
     },
     {
       "id": "comp-core",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart), ids and record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart; since P5 the network log switch), record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
       "group": "application",
       "layer": "layer-base",
       "status": "Built (first working app)",
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:d55cfe80a4381832ec0fd798c76eccc357dc2e53d519a5d3245d9473c44441b2"
+        "content_hash": "sha256:592d99d0cd4cee64d713e5e63fb055b06afd2e1ddb3fe7da0a25a1cc55ef094a"
       }
     },
     {
