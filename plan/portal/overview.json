@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:c1c20fc02da1510fc2c65c34c1edbbb0c169ad37258f0282fbce764640c6145b"
+    "content_hash": "sha256:4054895d7d4a12c6537bd0138134938773caebd5c12e358e8e10b02b8118091e"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "phase-p5-telemetry"
+      "state": "Three part pages wait for your re-approval",
+      "ref": "comp-network-logger"
     },
     {
       "item": "Your rule",
@@ -35,21 +35,31 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 8 of 14 tasks done"
+        "state": "In progress: 9 of 14 tasks done"
       },
       {
-        "item": "Next task",
-        "state": "Network log",
+        "item": "Last task",
+        "state": "Network log built and checked",
         "ref": "p5.9"
+      },
+      {
+        "item": "Found",
+        "state": "A blocked site still receives the request",
+        "ref": "Q-229"
+      },
+      {
+        "item": "Your part",
+        "state": "Answer the question; re-approve three part pages",
+        "ref": "comp-network-logger"
       }
     ],
-    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
+    "why": "Nothing to run. The network log task changed three part pages, which cancels your earlier approval of them, and it found that the blocked sites list hides a page but does not stop its request. How to handle that is your decision.",
     "script": null,
-    "tell_claude": "Nothing needed; Claude reports after each task"
+    "tell_claude": "Your choice for the question, and \"Re-approve\" for the three pages"
   },
   "questions_for_you": {
     "open": 17,

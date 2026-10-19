@@ -5592,6 +5592,17 @@
       "related": [
         "p5.8"
       ]
+    },
+    {
+      "id": "4a6fecf",
+      "kind": "commit",
+      "title": "Commit 4a6fecf",
+      "summary": "Task p5.9: the network log (addresses and metadata only, off unless switched on), and the finding that a blocked site still receives the request.",
+      "status": "Done",
+      "related": [
+        "p5.9",
+        "Q-229"
+      ]
     }
   ]
 }

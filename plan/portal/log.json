@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:bca4fd66900ca609d8474070a34c9ab904816c13a64c736f1718589a9f71c31e"
+    "content_hash": "sha256:1b94a4886bff53cd88cc3337b1aa751600e6928157f78b89fe77933dc1cc3c42"
   },
   "entries": [
     {
@@ -6064,6 +6064,39 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-9",
+      "date": "2026-10-18",
+      "time": "23:26",
+      "title": "Ferrum now has a network log, and it found a gap in site blocking",
+      "done": "Ferrum can write each tab's network calls to a folder: address, method, result, kind, size, and whether Ferrum blocked it; never headers, cookies or page content. It is off unless switched on, and logs older than 14 days are deleted. Checked on a test page with six known requests: exactly those six were logged. The log also showed that a blocked site still receives the request, although its page is never shown.",
+      "next": "You answer the question about blocked sites and re-approve three part pages; then the network log's coverage and cost (p5.10).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Network log part (page changed)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "Browser-engine module (page changed)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "Shared base part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "4a6fecf",
+      "covers": [
+        "## [2026-10-18] code | p5.9 network logger built and checked"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "privacy",
+        "testing"
       ]
     }
   ]
