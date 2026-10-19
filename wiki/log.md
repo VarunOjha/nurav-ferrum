@@ -3161,3 +3161,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Tolerances and validation code committed before any run (d36d27c), unchanged since. Two runs of the p5.4 check, both PASS. Slip: the first run's raw output was not saved, against the phase rule that raw outputs are saved after each run; its summary was 23 helper comparisons within limits and a JS-probe delta of 129.5 MiB. Saved run: helper 256 MiB written gives private commit +256.5, private working set +256.0, working set +256.0 MiB, 1.002 faults per page, +0.0 after free; 2000 ms busy gives 2000 ms CPU time, 3.18 billion cycles per CPU second; psutil 7.2.2 equal at three points; a Ferrum tab's 128 MiB buffer raises the tree private commit by 130.3 MiB. EX2 and JS-probe claims closed on the metric pages; limits and results recorded on five metric pages. These characterise the meter, not Ferrum. Stales approval of comp-telemetry (the metric pages carry no approval).
 - commit: c48de66
 - next: owner re-approves comp-telemetry; then p5.5 (sampler overhead).
+
+## [2026-10-18] approval | comp-telemetry re-approved after p5.4
+- session: s08
+- time: 19:15
+- pages: [comp-telemetry]
+- sources: [raw/owner/2026-10-18-s08-p5-4-telemetry-reapproval.md]
+- result: Owner: "Re-approve". Recorded approved with tools/approvals_record.py. All approvals current.
+- next: p5.5 sampler overhead (In-flight written).

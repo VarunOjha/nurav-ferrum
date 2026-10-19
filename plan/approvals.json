@@ -2062,13 +2062,13 @@
     "comp-telemetry": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-18T18:56:53-05:00",
+      "timestamp": "2026-10-18T19:15:32-05:00",
       "path": "wiki/architecture/components/comp-telemetry.md",
-      "content_hash": "sha256:a07bb09efe1f48d158c66a2a0aed10e337c387b48c682ec6924cbcde68d8947c",
-      "scope_hash": "sha256:b45678aecb7a2d5d5c0a741f9c5d9dc811050c99f1644ff96d029155d0642511",
+      "content_hash": "sha256:bf36d8a6c9a1cbb2db041145896a49453f8092332e1fbecf2f5689f157f74f97",
+      "scope_hash": "sha256:5b2080d431b9f34c8fa59ed6132f2660ba8734d47fb794d88e3171c54ee65aae",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-18-s08-p5-3-telemetry-reapproval.md",
+      "owner_words": "wiki/raw/owner/2026-10-18-s08-p5-4-telemetry-reapproval.md",
       "history": [
         {
           "status": "approved",
@@ -2102,6 +2102,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-18-s08-p5-2-telemetry-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-18T18:56:53-05:00",
+          "path": "wiki/architecture/components/comp-telemetry.md",
+          "content_hash": "sha256:a07bb09efe1f48d158c66a2a0aed10e337c387b48c682ec6924cbcde68d8947c",
+          "scope_hash": "sha256:b45678aecb7a2d5d5c0a741f9c5d9dc811050c99f1644ff96d029155d0642511",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-18-s08-p5-3-telemetry-reapproval.md"
         }
       ]
     },
