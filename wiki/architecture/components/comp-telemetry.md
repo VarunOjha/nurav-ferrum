@@ -5,6 +5,7 @@ title: "Telemetry engine (in-app process sampling, events, exports)"
 status: planned
 updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.7.txt
   - raw/00-master-prompt.md
   - raw/research/measurement-methodology.md
   - raw/research/tauri-webview2-capabilities.md
@@ -22,7 +23,7 @@ shipped: true
 unsafe_code: true
 responsibilities:
   - "Collect resource metrics: per-process private commit, working set (secondary), CPU time, cycle time over the WebView2 environment PID set (master prompt 4)"
-  - "Track navigation performance from webview-manager NavTiming events (master prompt 4)"
+  - "Track navigation performance from webview-manager navigation events and the page's Navigation Timing entry (master prompt 4)"
   - "Measure startup latency marks: process creation, window visible, first navigation completed (master prompt 4)"
   - "Record lifecycle transitions from the resource manager (master prompt 4)"
   - "Export structured datasets as JSONL/CSV with run metadata and config hash (master prompt 4)"
@@ -38,6 +39,7 @@ interfaces:
   - "Export schema v1 file: crates/telemetry/schema/v1/record.schema.json (JSON Schema 2020-12)"
   - "attribution (p5.2): attribute(host_pid, &[Inventory]) -> ProcessSet {host_pid, members: [Member {pid, kind, source}]}; kind_of(webview2 kind name); the app joins every environment's GetProcessExtendedInfos list (shell first, then site environments) and exposes the set through the debug-only test_processes hook"
   - "startup (p5.6): StartupTimes {five wall-clock times}; startup_marks(times, tab) -> startup_mark records counted from process creation, or why the chain was refused; filetime_to_unix_ms; app hook test_startup (debug builds only)"
+  - "navigation (p5.7): NavTracker per tab (started(nav_id, redirected, allowed, at), completed(nav_id, final address, success, web error status, at), last()); nav_record(finished, page entry, tab, run start, now) -> nav_timing record, or why it was refused; origin_of(address); app hook test_nav_timing(tab) (debug builds only)"
   - "test tool (p5.4): bin ferrum-ground-truth (alloc <MiB>, free, burn <ms>, quit on stdin), used by tests/ground_truth.rs; not part of the app"
   - "app hook (p5.3, debug builds only): test_sample(ticks 1 to 20, interval_ms) runs the sampler over the real set and returns its records and, since p5.5, list_ms (how long each first listing of the set took)"
 connects:
@@ -129,6 +131,17 @@ Built in p5.6 (`crates/telemetry/src/startup.rs`; the app's `test_startup` hook 
 - **Rules:** all five must be present; process created comes before window visible and before the shell's paint; window visible before the tab's first contentful paint; that before (or equal to) its largest contentful paint. The shell and the tab draw in parallel, so the shell's paint is not ordered against them. Records are sorted by time for the export file. A chain that breaks a rule is refused.
 - **Checked** ([check-p5.6](../../raw/evidence/phase-p5-telemetry/check-p5.6.txt)): 3 unit tests; live, with a fresh profile and `/landing` as the start page, all five present and in order (process created 0 ms, window visible 107 ms, tab first and largest contentful paint 991 ms, shell first paint 992 ms; debug build, one run, not a result). The definitions are on metric-startup-window-visible, metric-startup-fcp and metric-startup-lcp.
 - **Not yet:** recording the chain on every start into a file (p5.11, when telemetry can be switched on).
+
+## Navigation timing (p5.7)
+
+Built in p5.7 (`crates/telemetry/src/navigation.rs`; the app's `NavTrackers`, `track_navigation` and `test_nav_timing` hook in `apps/desktop/src-tauri/src/content.rs`). One `nav_timing` record per finished top-level navigation of a tab:
+
+- **From the host (WebView2's events, wall clock):** the start is the first `NavigationStarting` of a navigation id, each later hop of the same id with `IsRedirected` adds one redirect, and the end is `NavigationCompleted`. Navigations the gate cancelled are not recorded. Outcome: loaded, cancelled (web error status 14) or failed.
+- **From the page (its own clock):** `responseStart`, `domContentLoadedEventStart` and `loadEventEnd` of the page's Navigation Timing entry, milliseconds after its own start, read by the host through DevTools calls in an isolated world (as for the startup chain; no IPC from page script). The entry is used only if it is the page the navigation ended on and the navigation loaded; a 0 means "not reached yet" and is written as absent.
+- **Two clocks, never mixed in one offset.** `start_ms` (run clock) and `complete_ms` (after the start) come from the host; the three page offsets come from the page. So the completion can read slightly before the load event (seen once in the check run). The redirect count is the host's: the page's own `redirectCount` is 0 after a redirect from another site, so it is only a cross-check.
+- **Origin label:** the origin of the page the navigation ended on against the tab's previous page (the end of its last navigation that loaded). A tab's first page, and a page without a host (`about:blank`, `data:`), counts as another origin.
+- **Checked** ([check-p5.7](../../raw/evidence/phase-p5-telemetry/check-p5.7.txt)): 5 unit tests; live, ten loads (the six P2 redirect pages 301, 302, 303, 307, 308 and the two-hop chain; a redirect to another site; plain loads to another and to the same site) each gave one record with the right redirect count and origin label and the page times in order. The page's own count matched the host's for every same-site redirect and was 0 for the redirect to site-b (host 1). First response 4.7 to 16.3 ms and load 14.0 to 92.4 ms after the page's start; in the chain row the completion (25.7 ms) read before the load event (26.0 ms), the two-clock effect above (debug build, local test server, one run, not a result). The definition is on metric-nav-latency.
+- **Not yet:** recording into a file during normal use (p5.11); back/forward and cached loads (the bfcache question on metric-nav-latency).
 
 ## Unsafe invariants
 

@@ -991,8 +991,8 @@
     {
       "id": "metric-nav-latency",
       "title": "Page-load time",
-      "summary": "From starting a navigation to the new page finishing its load, as the page itself reports it.",
-      "status": "Proposed, not checked",
+      "summary": "From starting a navigation to the new page finishing its load, as the page itself reports it. Ferrum now records each load, with its redirects and whether it changed site; the outside measurement comes in P6.",
+      "status": "Proposed; recorded in Ferrum",
       "category": "Measure",
       "tags": [
         "benchmarks",
@@ -1006,7 +1006,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-nav-latency.md",
-        "content_hash": "sha256:faf52e1819f809faec534e93caf68be733eed0b0cbba0ff1020568e04584c85d"
+        "content_hash": "sha256:22c1ea67c7a22d1293c2989816da52a4ad7830baab3c7f56a0cacf29b8108e4f"
       },
       "unit": "ms"
     },

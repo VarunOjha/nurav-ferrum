@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 6,
+    "done": 7,
     "total": 14
   },
   "step_order": [
@@ -92,7 +92,7 @@
       "what": "Page-load timing: start, response, page ready, fully loaded and done, with same-site or cross-site labels and the redirect count.",
       "why": "Without the cross-site label and redirect count, a slow load could be blamed on Ferrum when the site itself sent the browser through several addresses.",
       "how": "Record these moments for every load. A test reuses the P2 redirect test pages and checks the redirect count and the order of the times.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Page-load speed is another key result → record each load's main moments, whether it crossed to another site, and how many redirects it took → page loads can be compared fairly in P6.",
       "check": "Test pages with known redirects give the right redirect count and timing order.",
       "script": "scripts/verify/p5.7-page-load-timing.ps1"

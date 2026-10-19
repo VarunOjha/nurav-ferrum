@@ -10,6 +10,7 @@
 //! a completion callback. The tab list's lock is never held while a view method runs, because WebView2 may raise
 //! events (which update the list) inside such a call.
 
+use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, AtomicIsize, Ordering};
@@ -70,16 +71,55 @@ pub struct MainHwnd(pub AtomicIsize);
 #[derive(Default)]
 pub struct WindowShown(pub Mutex<Option<f64>>);
 
-/// Records that the main window is visible now (called once, right after it is built).
-pub fn note_window_visible(app: &AppHandle) {
-    let now = std::time::SystemTime::now()
+/// The wall clock now, as milliseconds since 1970.
+fn unix_now_ms() -> f64 {
+    std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| d.as_secs_f64() * 1000.0)
-        .unwrap_or(0.0);
+        .unwrap_or(0.0)
+}
+
+/// Records that the main window is visible now (called once, right after it is built).
+pub fn note_window_visible(app: &AppHandle) {
+    let now = unix_now_ms();
     let shown = app.state::<WindowShown>();
     let mut at = shown.0.lock().unwrap();
     if at.is_none() {
         *at = Some(now);
+    }
+}
+
+/// Each tab's navigations as WebView2 reported them, with wall-clock times (p5.7, navigation timing).
+#[derive(Default)]
+pub struct NavTrackers(pub Mutex<HashMap<u64, ferrum_telemetry::navigation::NavTracker>>);
+
+/// Feeds tab `id`'s navigation tracker (UI thread; top-level navigations only).
+fn track_navigation(app: &AppHandle, id: u64, e: &TabEvent) {
+    let now = unix_now_ms();
+    let trackers = app.state::<NavTrackers>();
+    let mut all = trackers.0.lock().unwrap();
+    match e {
+        TabEvent::NavigationStarting {
+            id: nav,
+            redirected,
+            allowed,
+            ..
+        } => all
+            .entry(id)
+            .or_default()
+            .started(*nav, *redirected, *allowed, now),
+        TabEvent::NavigationCompleted {
+            id: nav,
+            uri,
+            success,
+            web_error_status,
+            ..
+        } => {
+            if let Some(t) = all.get_mut(&id) {
+                t.completed(*nav, uri, *success, *web_error_status, now);
+            }
+        }
+        _ => {}
     }
 }
 
@@ -555,6 +595,7 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
     let h = app.clone();
     Rc::new(move |e: TabEvent| {
         let mut list_changed = false;
+        track_navigation(&h, id, &e);
         match &e {
             TabEvent::GotFocus => h
                 .state::<FocusState>()
@@ -1276,6 +1317,26 @@ const PAINT_TIMES_JS: &str = r#"(async () => {
 
 /// The paint times of a web view's page, read through DevTools calls from the host (p5.6; no IPC from page script).
 async fn paint_times(app: &AppHandle, target: CdpTarget) -> Result<Value, String> {
+    isolated_eval(app, target, PAINT_TIMES_JS, "paint-time").await
+}
+
+/// Read in an isolated world of the page: its Navigation Timing entry (p5.7), offsets from its own start.
+const NAV_ENTRY_JS: &str = r#"(() => {
+  const e = performance.getEntriesByType("navigation")[0];
+  if (!e) return null;
+  return { name: e.name, type: e.type, response_start: e.responseStart,
+    dom_content_loaded_event_start: e.domContentLoadedEventStart, load_event_end: e.loadEventEnd,
+    redirect_count: e.redirectCount };
+})()"#;
+
+/// Evaluates `js` in an isolated world of the web view's main frame, through DevTools calls from the host (page script
+/// can neither see nor change it; no IPC from page script), and returns its value.
+async fn isolated_eval(
+    app: &AppHandle,
+    target: CdpTarget,
+    js: &str,
+    what: &str,
+) -> Result<Value, String> {
     let tree = cdp(app, target, "Page.getFrameTree", json!({})).await?;
     let frame = tree["frameTree"]["frame"]["id"]
         .as_str()
@@ -1295,13 +1356,67 @@ async fn paint_times(app: &AppHandle, target: CdpTarget) -> Result<Value, String
         app,
         target,
         "Runtime.evaluate",
-        json!({"expression": PAINT_TIMES_JS, "contextId": context, "awaitPromise": true, "returnByValue": true}),
+        json!({"expression": js, "contextId": context, "awaitPromise": true, "returnByValue": true}),
     )
     .await?;
     if let Some(e) = r.get("exceptionDetails") {
-        return Err(format!("the paint-time reader failed: {e}"));
+        return Err(format!("the {what} reader failed: {e}"));
     }
     Ok(r["result"]["value"].clone())
+}
+
+/// Ferrum's process creation time (the run clock's zero), as milliseconds since 1970.
+fn process_created_unix_ms() -> Result<f64, String> {
+    match ferrum_telemetry::win::read(std::process::id()) {
+        ferrum_telemetry::sampler::Reading::Read(c) => Ok(
+            ferrum_telemetry::startup::filetime_to_unix_ms(c.created_100ns),
+        ),
+        other => Err(format!("cannot read Ferrum's own process: {other:?}")),
+    }
+}
+
+/// Test hook (debug builds only): the `nav_timing` record of tab `tab`'s last finished navigation (p5.7): start,
+/// redirect count, completion and outcome from WebView2's events seen by the host; first response, DOMContentLoaded
+/// and load from the page's own Navigation Timing entry, read by the host in an isolated world. Returns the host's
+/// view, the page entry, and the record or why it was refused.
+#[tauri::command]
+pub async fn test_nav_timing(app: AppHandle, tab: u64) -> Result<Value, String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    let created = process_created_unix_ms()?;
+    let finished = app
+        .state::<NavTrackers>()
+        .0
+        .lock()
+        .unwrap()
+        .get(&tab)
+        .and_then(|t| t.last().cloned())
+        .ok_or("no finished navigation in this tab")?;
+    let page = isolated_eval(&app, CdpTarget::Tab(tab), NAV_ENTRY_JS, "navigation-entry").await?;
+    let timing = (|| {
+        Some(ferrum_telemetry::navigation::PageTiming {
+            name: page["name"].as_str()?.to_string(),
+            response_start: page["response_start"].as_f64()?,
+            dom_content_loaded_event_start: page["dom_content_loaded_event_start"].as_f64()?,
+            load_event_end: page["load_event_end"].as_f64()?,
+            redirect_count: u32::try_from(page["redirect_count"].as_u64()?).ok()?,
+        })
+    })();
+    let record = ferrum_telemetry::navigation::nav_record(
+        &finished,
+        timing.as_ref(),
+        tab,
+        created,
+        unix_now_ms(),
+    );
+    Ok(json!({
+        "final_uri": finished.final_uri,
+        "host_redirects": finished.redirects,
+        "page": page,
+        "record": record.as_ref().ok(),
+        "error": record.as_ref().err(),
+    }))
 }
 
 /// Test hook (debug builds only): the startup chain of this start (p5.6): process created (GetProcessTimes), main
@@ -1313,12 +1428,7 @@ pub async fn test_startup(app: AppHandle) -> Result<Value, String> {
     if !cfg!(debug_assertions) {
         return Err("not available in release builds".into());
     }
-    let created = match ferrum_telemetry::win::read(std::process::id()) {
-        ferrum_telemetry::sampler::Reading::Read(c) => {
-            ferrum_telemetry::startup::filetime_to_unix_ms(c.created_100ns)
-        }
-        other => return Err(format!("cannot read Ferrum's own process: {other:?}")),
-    };
+    let created = process_created_unix_ms()?;
     let visible = (*app.state::<WindowShown>().0.lock().unwrap())
         .ok_or("the window-visible time was not recorded")?;
     let tab = {

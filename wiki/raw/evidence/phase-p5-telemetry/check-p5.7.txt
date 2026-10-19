@@ -1,0 +1,38 @@
+Ferrum check p5.7: Navigation timing
+Why: page loads can be compared fairly later.
+Run at 2026-10-18 20:47 on commit 2d650d6 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The navigation records: redirects counted, site label, times in order
+         five unit tests passed
+  PASS   The metric page defines the in-app record
+         the navigation latency page describes the in-app record
+Running 1 test using 1 worker
+NAVTIMING:
+/landing -> /landing: cross_origin, redirects 0 (page says 0), start 1910.5, response +5.6, DOMContentLoaded +90.4, load +92.4, completed +107.8 ms
+/redirect/301 -> /landing: same_origin, redirects 1 (page says 1), start 2204.3, response +6.5, DOMContentLoaded +14.9, load +15.1, completed +16.5 ms
+/redirect/302 -> /landing: same_origin, redirects 1 (page says 1), start 2396.8, response +11.4, DOMContentLoaded +23.3, load +23.5, completed +25.1 ms
+/redirect/303 -> /landing: same_origin, redirects 1 (page says 1), start 2588.4, response +5.8, DOMContentLoaded +14.1, load +14.2, completed +15.5 ms
+/redirect/307 -> /landing: same_origin, redirects 1 (page says 1), start 2785.4, response +6.0, DOMContentLoaded +13.7, load +14.0, completed +14.6 ms
+/redirect/308 -> /landing: same_origin, redirects 1 (page says 1), start 2976.5, response +7.9, DOMContentLoaded +17.8, load +18.1, completed +21.1 ms
+/redirect/chain -> /landing: same_origin, redirects 2 (page says 2), start 3198.2, response +16.3, DOMContentLoaded +25.7, load +26.0, completed +25.7 ms
+/goto?url=https%3A%2F%2Fsite-b.localhost%3A8443%2Flanding -> site-b/landing: cross_origin, redirects 1 (page says 0), start 3403.8, response +12.2, DOMContentLoaded +83.6, load +84.6, completed +93.6 ms
+/landing -> /landing: cross_origin, redirects 0 (page says 0), start 3685.7, response +4.7, DOMContentLoaded +69.8, load +70.5, completed +80.0 ms
+/ -> /: same_origin, redirects 0 (page says 0), start 3942.1, response +5.7, DOMContentLoaded +20.4, load +21.7, completed +29.9 ms
+  ✓  1 nav-timing.spec.ts:74:1 › redirect count, origin label and timestamp order of each navigation (2.3s)
+  1 passed (1.3m)
+  PASS   Live: redirect fixtures, another site and plain loads give ordered records with the right counts (92 s)
+         10 navigations recorded:
+         /landing -> /landing: cross_origin, redirects 0 (page says 0), start 1910.5, response +5.6, DOMContentLoaded +90.4, load +92.4, completed +107.8 ms
+         /redirect/301 -> /landing: same_origin, redirects 1 (page says 1), start 2204.3, response +6.5, DOMContentLoaded +14.9, load +15.1, completed +16.5 ms
+         /redirect/302 -> /landing: same_origin, redirects 1 (page says 1), start 2396.8, response +11.4, DOMContentLoaded +23.3, load +23.5, completed +25.1 ms
+         /redirect/303 -> /landing: same_origin, redirects 1 (page says 1), start 2588.4, response +5.8, DOMContentLoaded +14.1, load +14.2, completed +15.5 ms
+         /redirect/307 -> /landing: same_origin, redirects 1 (page says 1), start 2785.4, response +6.0, DOMContentLoaded +13.7, load +14.0, completed +14.6 ms
+         /redirect/308 -> /landing: same_origin, redirects 1 (page says 1), start 2976.5, response +7.9, DOMContentLoaded +17.8, load +18.1, completed +21.1 ms
+         /redirect/chain -> /landing: same_origin, redirects 2 (page says 2), start 3198.2, response +16.3, DOMContentLoaded +25.7, load +26.0, completed +25.7 ms
+         /goto?url=https%3A%2F%2Fsite-b.localhost%3A8443%2Flanding -> site-b/landing: cross_origin, redirects 1 (page says 0), start 3403.8, response +12.2, DOMContentLoaded +83.6, load +84.6, completed +93.6 ms
+         /landing -> /landing: cross_origin, redirects 0 (page says 0), start 3685.7, response +4.7, DOMContentLoaded +69.8, load +70.5, completed +80.0 ms
+         / -> /: same_origin, redirects 0 (page says 0), start 3942.1, response +5.7, DOMContentLoaded +20.4, load +21.7, completed +29.9 ms
+------------------------------------------------------------------------
+RESULT: PASS - p5.7 (3 PASS; 92 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.7 check passed".

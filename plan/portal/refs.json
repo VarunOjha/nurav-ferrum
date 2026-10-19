@@ -1080,7 +1080,7 @@
       "kind": "task",
       "title": "P5 task: Page-load timing",
       "summary": "Page-load speed is another key result → record each load's main moments, whether it crossed to another site, and how many redirects it took → page loads can be compared fairly in P6.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -2827,8 +2827,8 @@
       "id": "metric-nav-latency",
       "kind": "metric",
       "title": "Page-load time",
-      "summary": "From starting a navigation to the new page finishing its load, as the page itself reports it. Unit: ms.",
-      "status": "Proposed, not checked",
+      "summary": "From starting a navigation to the new page finishing its load, as the page itself reports it. Ferrum now records each load, with its redirects and whether it changed site; the outside measurement comes in P6. Unit: ms.",
+      "status": "Proposed; recorded in Ferrum",
       "related": [
         "exp-navigation",
         "exp-security-overhead",
@@ -3262,7 +3262,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter (accurate, cheap), and the startup timing. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter (accurate, cheap), startup and page-load timing. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
       "status": "Planned",
       "related": [
         "layer-engine"
