@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:66b78e31b72401ed770133c449692e0b14e5aeb61dcb804be45516a8f4f5e0ee"
+    "content_hash": "sha256:96d103fc86b240a66c3c8d67d550e219d79c5db2986ad0c854516555758e722b"
   },
   "entries": [
     {
@@ -6517,6 +6517,35 @@
       "tags": [
         "privacy",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-q231-reapprovals",
+      "date": "2026-10-19",
+      "time": "14:35",
+      "title": "You re-approved the two network log pages and asked Claude to run the gate",
+      "done": "You re-approved the network log part and the web view part after the fix. All approvals are current.",
+      "next": "Claude runs the Phase 5 gate; leave the PC alone.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Network log part",
+          "status": "Approved"
+        },
+        {
+          "what": "Web view part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] approval | comp-network-logger and comp-webview-manager re-approved after the Q-231 fix"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]

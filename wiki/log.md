@@ -3395,3 +3395,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: netlog::blocked pairs the navigation check's and the request filter's record of the same address in the same tab within 2 s (unit test one_line_per_refused_request); webview2 response_event skips the filter's own 403 answer (reason BLOCKED_REASON); network-log.spec.ts asserts one blocked record and no response; the p5.9 script names its spec exactly. fmt, clippy -D warnings, cargo test --workspace, npm lint and typecheck clean; verify p5.9 PASS (one blocked line, responses for it 0), p5.10, p5.11 and p5.15 PASS. Stales approval of comp-network-logger and comp-webview-manager. The 8 untracked outputs of the stopped gate run stay until the next run replaces them.
 - commit: 2754168
 - next: owner re-approves comp-network-logger and comp-webview-manager; then the gate runs again.
+
+## [2026-10-19] approval | comp-network-logger and comp-webview-manager re-approved after the Q-231 fix
+- session: s08
+- time: 14:35
+- pages: [comp-network-logger, comp-webview-manager]
+- sources: [raw/owner/2026-10-19-s08-q231-reapprovals.md]
+- result: Owner: "Re approve, and run". Recorded approved for both keys with tools/approvals_record.py. All approvals current. The owner asks Claude to run the P5 gate; the 8 untracked outputs of the stopped run (made by Claude's run) are removed first so the run is on a clean commit.
+- next: Claude runs scripts/gates/p5-gate.ps1 -SaveEvidence with the PC left alone.

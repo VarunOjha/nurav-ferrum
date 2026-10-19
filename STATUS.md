@@ -48,7 +48,7 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.14
-next_action: "p5.14 in flight; the 11 keys staled by the exit sweep were re-approved (2026-10-19 13:13). The first gate run (13:36) was stopped by Claude Code for low memory and had failed the p5.9 check; fixed in 2754168 (owner answer Q-231), which stales comp-network-logger and comp-webview-manager. Owner, in this order: (0) re-approve comp-network-logger and comp-webview-manager; (1) run pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence from the repo folder, PC left alone (about 1.5 h; real-keystroke tests; needs internet; close other big programs first, memory ran short; or ask Claude to run it, as the owner did once); (3) do docs/testing/manual-checklist-p5.md with the gate's release build and report the results; (3) review and approve phase-p5-telemetry#exit. Claude then commits the gate evidence, writes the manual-checklist evidence in his words, logs gate | phase-p5-telemetry exit, runs scripts/verify/p5.14-gate-review.ps1, and PAUSES (P6 needs an explicit go). Run quick_lint as its own step before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "p5.14 in flight; the 11 keys staled by the exit sweep were re-approved (2026-10-19 13:13). The first gate run (13:36) was stopped by Claude Code for low memory and had failed the p5.9 check; fixed in 2754168 (owner answer Q-231), which staled comp-network-logger and comp-webview-manager; both re-approved at 14:35. The owner asked Claude to run the gate ("Re approve, and run"). In this order: (1) Claude runs pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence from the repo folder, PC left alone (about 1.5 h; real-keystroke tests; needs internet; close other big programs first, memory ran short; or ask Claude to run it, as the owner did once); (3) do docs/testing/manual-checklist-p5.md with the gate's release build and report the results; (3) review and approve phase-p5-telemetry#exit. Claude then commits the gate evidence, writes the manual-checklist evidence in his words, logs gate | phase-p5-telemetry exit, runs scripts/verify/p5.14-gate-review.ps1, and PAUSES (P6 needs an explicit go). Run quick_lint as its own step before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -437,8 +437,8 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Phase 5 (measurement) | 14 of 15 tasks done; the end-of-phase review is ready |
 | Open points aimed at P5 | All answered or moved, each with its reason |
 | First gate run | Stopped by Claude Code (low memory) after 30 min; it found a network log flaw, now fixed |
-| Approvals | Two part pages changed by the fix wait for your re-approval |
-| Your part | Re-approve the two pages, then the gate, the hand checks, sign off |
+| Approvals | All current (the two pages re-approved) |
+| Your part | Leave the PC alone while Claude runs the gate; then the hand checks, sign off |
 
 **2. Why, and what it does.** The fix gives one network log line per refused request and changed the network log and
 the web view part pages. The gate reruns every P5 check, the earlier suites and a
@@ -447,7 +447,7 @@ release build on one commit; some tests press real keys, so the PC must be left 
 **3. The script:** `pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence` (about 1.5 hours; needs internet).
 Then the checklist `docs/testing/manual-checklist-p5.md` with the gate's release build.
 
-**4. What to tell Claude:** first "Re-approve"; after the gate "P5 gate passed" or the FAIL or WAIT lines; then
+**4. What to tell Claude:** nothing while it runs; after the gate "P5 gate passed" or the FAIL or WAIT lines; then
 the checklist results item by item, and whether P5 is signed off.
 
 ## Pending owner approvals

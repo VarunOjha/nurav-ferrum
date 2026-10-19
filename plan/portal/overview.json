@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:b4085572d5a9d9ebcaf59328994477ecb49a1f967c8a0537a8cf2f4487c37ee7"
+    "content_hash": "sha256:59f89e9d49d0f65a49ac5e222f1ea28c8e05742524eadd687524caf0a469a14c"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "Two part pages changed by the network log fix wait for your re-approval",
+      "state": "All current (you re-approved the two network log pages on 19 Oct)",
       "ref": "Q-231"
     },
     {
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 5",
@@ -48,17 +48,17 @@
       },
       {
         "item": "Your part",
-        "state": "Re-approve two pages, then the gate, the hand checks, sign off",
+        "state": "Leave the PC alone while Claude runs the gate; then the hand checks, sign off",
         "ref": "p5.14"
       }
     ],
-    "why": "The fix makes one refused request one line in the network log, so the network log and web view part pages changed. Then the gate reruns every Phase 5 check, the earlier test suites and a release build on one commit. Some tests press real keys, so leave the PC alone, and close other big programs: memory ran short last time.",
+    "why": "You asked Claude to run the gate. It reruns every Phase 5 check, the earlier test suites and a release build on one commit. Some tests press real keys, so leave the PC alone until Claude reports, and keep other big programs closed: memory ran short last time.",
     "script": {
       "path": "scripts/gates/p5-gate.ps1",
       "parts": [
         {
           "code": "Part 1",
-          "explains": "Checks that your approvals for Phase 5 are current (so re-approve the two pages first)."
+          "explains": "Checks that your approvals for Phase 5 are current (they are)."
         },
         {
           "code": "Part 2",
@@ -78,7 +78,7 @@
         }
       ]
     },
-    "tell_claude": "First \"Re-approve\"; after the gate \"P5 gate passed\" or the FAIL or WAIT lines (or ask Claude to run it); then the checklist results item by item, and whether P5 is signed off"
+    "tell_claude": "Nothing while it runs; Claude reports the result. Then the checklist results item by item, and whether P5 is signed off"
   },
   "questions_for_you": {
     "open": 16,
