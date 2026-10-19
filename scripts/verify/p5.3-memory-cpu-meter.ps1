@@ -87,7 +87,7 @@ Invoke-Step 'Unsafe code only in the Windows module of the measurement part' {
 }
 
 Invoke-Step 'Live: six readings over Ferrum''s processes, each a correct total' {
-    $r = Invoke-FerrumSmoke -Spec @('sampler')
+    $r = Invoke-FerrumSmoke -Spec @('sampler\.spec')  # exactly this file: the p5.4 and p5.5 files start with the same name
     $line = ($r.Output -split "`r?`n" | Where-Object { $_ -match 'SAMPLER: ' } | Select-Object -Last 1)
     Add-LogText (Get-Tail $r.Output 12)
     if ($r.ExitCode -ne 0 -or $r.Output -notmatch '1 passed') { Stop-Fail "The live test failed:`n$(Get-Tail $r.Output 30)" }

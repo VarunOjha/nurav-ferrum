@@ -19,7 +19,7 @@ spike: null
 owner_phase: phase-p4-security
 trigger: "Any test in which an unparseable or blocklisted URL completes a navigation; an iframe from a blocklisted host loads; a popup or download proceeds without a policy decision being logged."
 fallback: "Add request-level blocking via a web resource request filter covering all request source kinds, and document any navigation class that still cannot be intercepted."
-unverified:
+unverified: []
 ---
 
 # risk-r07: Tauri's navigation hook fails open on unparseable URLs and never sees iframe navigations

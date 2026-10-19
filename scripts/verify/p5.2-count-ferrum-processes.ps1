@@ -47,7 +47,7 @@ Invoke-Step 'The counting rule: own process plus the engine lists, each once, ba
 Invoke-Step 'No counting code matches processes by program name' {
     $files = @('crates/telemetry/src/attribution.rs')
     $content = Read-RepoText 'apps/desktop/src-tauri/src/content.rs'
-    $m = [regex]::Match($content, '(?s)async fn process_inventories.*?\nfn set_of.*?\n}\n')
+    $m = [regex]::Match($content, '(?s)async fn process_inventories.*?\n(?:pub(?:\(crate\))? )?fn set_of.*?\n}\n')
     if (-not $m.Success) { Stop-Fail 'The process-set code (process_inventories, set_of) was not found in content.rs.' }
     # Comments may name the program (to explain the rule); only code counts.
     $texts = @(@($files | ForEach-Object { Read-RepoText $_ }) + $m.Value | ForEach-Object {
