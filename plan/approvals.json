@@ -466,15 +466,27 @@
     },
     "adr-0012": {
       "status": "approved",
-      "comment": "Approved all, mark it, don't start phase 1",
-      "timestamp": "2026-10-11T01:48:18-05:00",
+      "comment": "",
+      "timestamp": "2026-10-19T01:06:17-05:00",
       "path": "wiki/decisions/adr-0012-benchmark-harness-rust-playwright.md",
-      "content_hash": "sha256:55cc17c91e977f96a0e8ea52fc6e8253e70b6851fc90409439a16d176f3b1af6",
-      "scope_hash": "sha256:b7bb29db58d1aab26342e509c0a4879d2873b4b61c6ddace1bc9896c883d3853",
+      "content_hash": "sha256:444576c2ba965875e14f52e724cba643afa0aa68ff4b835930b3f1ebdbc9e97b",
+      "scope_hash": "sha256:1bb63a0fe65c1bd94c2bd1521904e6dd9154c422c53e8effa2a39196b224eca7",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-11-s01-wave2-pages-approval.md",
-      "history": []
+      "owner_words": "wiki/raw/owner/2026-10-19-s08-p5-12-reapprovals.md",
+      "history": [
+        {
+          "status": "approved",
+          "comment": "Approved all, mark it, don't start phase 1",
+          "timestamp": "2026-10-11T01:48:18-05:00",
+          "path": "wiki/decisions/adr-0012-benchmark-harness-rust-playwright.md",
+          "content_hash": "sha256:55cc17c91e977f96a0e8ea52fc6e8253e70b6851fc90409439a16d176f3b1af6",
+          "scope_hash": "sha256:b7bb29db58d1aab26342e509c0a4879d2873b4b61c6ddace1bc9896c883d3853",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-11-s01-wave2-pages-approval.md"
+        }
+      ]
     },
     "adr-0018": {
       "status": "approved",
@@ -2129,13 +2141,13 @@
     "comp-telemetry": {
       "status": "approved",
       "comment": "",
-      "timestamp": "2026-10-19T00:45:10-05:00",
+      "timestamp": "2026-10-19T01:06:17-05:00",
       "path": "wiki/architecture/components/comp-telemetry.md",
-      "content_hash": "sha256:e9ee6694012ba08b23f4d19d9eecf88bc3459e692f340e3355bdc44603692dc4",
-      "scope_hash": "sha256:05966997aa5393cec3527a6f2ff08dae1b79d56c8d988ccc97a1cd98f7276b57",
+      "content_hash": "sha256:7507e4f7a7ba774bd708b97f32920365ae6af5c2308202de7fe9812ce41db77a",
+      "scope_hash": "sha256:74e2c03adf2aba0e90a04ee59fbe897ea19d6f60a043d14d5f919bcdb1e4e257",
       "approved_by": "owner",
       "recorded_by": "claude",
-      "owner_words": "wiki/raw/owner/2026-10-19-s08-p5-11-reapprovals.md",
+      "owner_words": "wiki/raw/owner/2026-10-19-s08-p5-12-reapprovals.md",
       "history": [
         {
           "status": "approved",
@@ -2235,6 +2247,17 @@
           "approved_by": "owner",
           "recorded_by": "claude",
           "owner_words": "wiki/raw/owner/2026-10-18-s08-p5-8-telemetry-reapproval.md"
+        },
+        {
+          "status": "approved",
+          "comment": "",
+          "timestamp": "2026-10-19T00:45:10-05:00",
+          "path": "wiki/architecture/components/comp-telemetry.md",
+          "content_hash": "sha256:e9ee6694012ba08b23f4d19d9eecf88bc3459e692f340e3355bdc44603692dc4",
+          "scope_hash": "sha256:05966997aa5393cec3527a6f2ff08dae1b79d56c8d988ccc97a1cd98f7276b57",
+          "approved_by": "owner",
+          "recorded_by": "claude",
+          "owner_words": "wiki/raw/owner/2026-10-19-s08-p5-11-reapprovals.md"
         }
       ]
     },

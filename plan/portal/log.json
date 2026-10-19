@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:064bd98a4bb7184a1dd11921d97dd7888e64352e4e8b031c2589f199ccc258e2"
+    "content_hash": "sha256:44486352eda850af4f047b37da94798d2ac4ee07f96ee95fba5e874d1b8e341f"
   },
   "entries": [
     {
@@ -6319,6 +6319,35 @@
       "category": "Checked",
       "tags": [
         "WebView2",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-12-reapprovals",
+      "date": "2026-10-19",
+      "time": "01:06",
+      "title": "You re-approved two pages after the tabs-to-processes check",
+      "done": "You re-approved the benchmark tool decision and the measuring part's page.",
+      "next": "Claude reads published work on measurement methods (p5.13).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Benchmark tool decision",
+          "status": "Approved"
+        },
+        {
+          "what": "Measuring part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] approval | adr-0012 and comp-telemetry re-approved after p5.12"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
         "benchmarks"
       ]
     }

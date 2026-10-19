@@ -3321,3 +3321,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: No app code; a smoke spec with four tabs in the per-site and per-site-udf modes. Per-site: every tab is a page target on the debugging port, an other-site frame an iframe target, the shell and one unidentified about:blank page listed. Per-site-udf: only the shell's environment is on the port, no tab (P6 needs another way in for that mode). Each tab had its own renderer, the frame its own; no sharing with four tabs. Each browser process is a child of Ferrum, every other WebView2 process a child of its browser process. Check PASS on the first saved run (development run before gave the same picture, not saved). Tags: adr-0012 multi-tab targets, ov-arch-trust-boundaries TB4 and risk-r05 (EX2 from check-p5.3; parents) resolved; adr-0028 per-tab numbers resolved in part and its many-tabs part re-targeted to P7 with the reason. While editing, Claude first removed the P6 site-isolation claim from ov-arch-trust-boundaries by mistake and put it back before the commit. Stales approval of adr-0012 and comp-telemetry.
 - commit: 438ba3e
 - next: owner re-approves adr-0012 and comp-telemetry; then p5.13 (literature batch 5).
+
+## [2026-10-19] approval | adr-0012 and comp-telemetry re-approved after p5.12
+- session: s08
+- time: 01:06
+- pages: [adr-0012, comp-telemetry]
+- sources: [raw/owner/2026-10-19-s08-p5-12-reapprovals.md]
+- result: Owner: "Re approve". Recorded approved for both keys with tools/approvals_record.py. All approvals current.
+- next: p5.13 literature batch 5 (In-flight written).

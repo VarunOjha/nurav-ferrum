@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:fa5b9faf59a241ad1dbb35fe9ec3916e083195bde56dd4ffb1853e79a62dec95"
+    "content_hash": "sha256:5bf44bc80d23c6af3011782a4473091b9030ca3f639da91312038898cf49fbc2"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "Two pages wait for your re-approval",
-      "ref": "adr-0012"
+      "state": "All up to date",
+      "ref": "phase-p5-telemetry"
     },
     {
       "item": "Your rule",
@@ -35,26 +35,21 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 5",
         "state": "In progress: 12 of 15 tasks done"
       },
       {
-        "item": "Last task",
-        "state": "How tabs map to the browser's processes",
-        "ref": "p5.12"
-      },
-      {
-        "item": "Your part",
-        "state": "Re-approve the benchmark tool decision and the measuring part",
-        "ref": "adr-0012"
+        "item": "Next task",
+        "state": "Reading on measurement methods",
+        "ref": "p5.13"
       }
     ],
-    "why": "Nothing to run. The investigation answered open points on the benchmark tool decision and added its findings to the measuring part's page, which cancels your earlier approval of both. Claude needs your OK before going on.",
+    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
     "script": null,
-    "tell_claude": "\"Re-approve\", or what to change"
+    "tell_claude": "Nothing needed; Claude reports after each task"
   },
   "questions_for_you": {
     "open": 16,
