@@ -3263,3 +3263,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-18-s08-p5-9-reapprovals.md]
 - result: Owner: "Re approve" (four pages; the placement of p5.15 included). Recorded approved for all four keys with tools/approvals_record.py. All approvals current.
 - next: p5.10 network logger coverage and overhead pilot (In-flight written).
+
+## [2026-10-18] code | p5.10 network logger coverage and cost pilot
+- session: s08
+- time: 23:47
+- pages: [comp-network-logger]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.10.txt, raw/evidence/phase-p5-telemetry/netlog-coverage-p5.10.json, raw/evidence/phase-p5-telemetry/netlog-cost-p5.10.json]
+- result: Coverage, live with the log on: covered are the page, its sub-resources, a frame of another site, a page fetch, a second visit, every redirect hop (301, 302 and the target) and requests a service worker answers itself or passes on; not covered are a request that gets no response, the service worker's own script and a request it makes itself. Cost pilot (30 loads each way, debug, off first): off 53.7 ms median load and 31.8 ms Ferrum CPU per load, on 52.4 ms and 32.8 ms; the unsaved development run just before had the log-on run slower (72.2 against 62.2 ms), so run-to-run spread exceeds any difference. Check PASS on the first saved run. The overhead claim re-targeted to the P6 A/B check (adr-0008), reason on the page. Stales approval of comp-network-logger.
+- commit: fabfdaf
+- next: owner re-approves comp-network-logger; then p5.11 (settings and shell UI).

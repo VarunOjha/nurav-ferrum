@@ -5615,6 +5615,16 @@
         "p5.9",
         "Q-229"
       ]
+    },
+    {
+      "id": "fabfdaf",
+      "kind": "commit",
+      "title": "Commit fabfdaf",
+      "summary": "Task p5.10: a table of which requests the network log sees and misses, and a rough on/off cost trial.",
+      "status": "Done",
+      "related": [
+        "p5.10"
+      ]
     }
   ]
 }

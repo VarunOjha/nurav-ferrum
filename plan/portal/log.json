@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f544e9b8bc9fd557b867fe1bf2dfbfaf6b9b2826f60d52c76c52b406860d1570"
+    "content_hash": "sha256:3518901eda321ac6e6b9ed7a545b374425564c42c75be50cf4e932543851c0a3"
   },
   "entries": [
     {
@@ -6168,6 +6168,31 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-10",
+      "date": "2026-10-18",
+      "time": "23:47",
+      "title": "Checked what the network log sees, and what it costs",
+      "done": "Tested kind by kind which requests the network log records. It sees pages, their files, frames of other sites, fetches, every redirect step and requests passing through a service worker; it misses requests that get no reply and a service worker's own requests. A rough cost trial showed no difference beyond normal run-to-run variation (test build, not a result).",
+      "next": "You re-approve the network log part's page; then the settings for measuring and the network log (p5.11).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Network log part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "fabfdaf",
+      "covers": [
+        "## [2026-10-18] code | p5.10 network logger coverage and cost pilot"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "privacy",
+        "testing"
       ]
     }
   ]

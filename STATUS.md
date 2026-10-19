@@ -47,8 +47,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s08
 current_phase: phase-p5-telemetry
-current_task: p5.10
-next_action: "p5.10 in flight (see In-flight). Then p5.11 settings and shell UI. p5.15 (block requests to blocked sites, Q-229) before the exit review. Still open on P5-targeted claims: EX2 tag on risk-r05 (verified by check-p5.3; close at the exit review), adr-0008 field-availability tag (answered by p5.9; close at the exit review), GetProcessTimes granularity (metric-tree-cpu-time), short-lived cycle capture (metric-tree-cpu-cycles), LCP definition vs the spec (metric-startup-lcp; p5.13 literature), bfcache behaviour (metric-nav-latency). Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+current_task: p5.11
+next_action: "Ask the owner to re-approve comp-network-logger (staled by p5.10, fabfdaf: coverage and cost section; overhead claim re-targeted to P6). Then p5.11: settings and shell UI (enable or disable telemetry and network log, open log folder, retention limit; smoke test toggles each setting and asserts files are or are not written). Write the In-flight record first; read the P0 draft check script before replacing it. p5.15 (block requests to blocked sites, Q-229) before the exit review. Still open on P5-targeted claims: EX2 tag on risk-r05 (verified by check-p5.3; close at the exit review), adr-0008 field-availability tag (answered by p5.9; close at the exit review), GetProcessTimes granularity (metric-tree-cpu-time), short-lived cycle capture (metric-tree-cpu-cycles), LCP definition vs the spec (metric-startup-lcp; p5.13 literature), bfcache behaviour (metric-nav-latency). Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -84,6 +84,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - p5.7 done (`fac0106`): navigation timing records (host: start, redirect hops, completion, outcome; page: first response, DOMContentLoaded, load, read in an isolated world); origin label against the previous page; check PASS on ten loads with the P2 redirect fixtures. comp-telemetry re-approved by the owner.
 - p5.8 done (`9d9c5f9`): lifecycle transition record in export v1 (all six design states and the P7 triggers defined now), logged for tab hide, show, open and close; check PASS (9 records for two tabs, none refused). comp-telemetry re-approved by the owner.
 - p5.9 done (`4a6fecf`): metadata-only network log (WebResourceResponseReceived, one folder per app session, rotation, 14-day deletion, off by default, blocked navigations logged); check PASS (the test page's six expected records exactly; only the allowed fields; off by default). Finding: a navigation refused by the blocklist still reaches the server; owner answered Q-229 "Block it fully" (task p5.15 added). comp-network-logger, comp-webview-manager, comp-core and phase-p5-telemetry (p5.15 added) re-approved by the owner.
+- p5.10 done (`fabfdaf`): network log coverage table (covered: pages, sub-resources, other-site frames, fetches, every redirect hop, requests answered or passed on by a service worker; not covered: requests with no response, a service worker's own script and requests) and a rough on/off cost pilot (no difference beyond run-to-run spread); check PASS. comp-network-logger approval stale.
 
 ## Done this session (s03)
 
@@ -387,12 +388,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p5.10 (network logger coverage check and overhead pilot)
-- session: s08
-- intent: Fixture server: a service-worker page (/sw/page registers /sw/sw.js, which fetches /sw/from-worker.json itself and answers /sw/via-worker.json for the page) and a page whose fetch goes to a port nobody listens on (a request with no response). Smoke spec network-log-coverage.spec.ts with the log on: per kind (top-level page, other-site frame, redirect chain hops, page fetch, service-worker script, request made by the service worker, request answered by the service worker, request that gets no response, cached reload) it records whether the log has an entry, and saves the table; no pass limits on coverage, the test only checks the kinds known from p5.9 stay covered. Smoke spec network-log-cost.spec.ts: the same page loaded 30 times with the log off and 30 times on (two launches): load time from the nav_timing hook and Ferrum's process CPU time per load; raw JSON saved; rough pilot, no limits. comp-network-logger gets the coverage table and the pilot section citing the evidence; its overhead claim is re-targeted to the P6 A/B check (adr-0008) with the reason. scripts/verify/p5.10-network-log-coverage.ps1 replaces its P0 draft (read first: a placeholder).
-- planned paths: tests/fixtures/server/src/lib.rs, apps/desktop/tests/smoke/{network-log-coverage.spec.ts,network-log-cost.spec.ts}, scripts/verify/p5.10-network-log-coverage.ps1, wiki/architecture/components/comp-network-logger.md, wiki/raw/evidence/phase-p5-telemetry/{check-p5.10.txt,netlog-coverage-p5.10.json,netlog-cost-p5.10.json}, wiki/raw/MANIFEST.sha256, plan/portal/*.json
-- builds: target/debug only; never target/release
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
+(empty: p5.10 finished on 2026-10-18 in fabfdaf)
 
 ## Blockers
 
@@ -430,15 +426,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
-| Last task | p5.9 done: network log |
+| Last task | p5.10 done: what the network log sees, and its cost |
 | Q-229 | Answered: block requests to blocked sites fully (new task p5.15) |
-| Next task | p5.10: what the network log sees, and its cost |
+| Your part | Re-approve the network log part's page (changed by p5.10) |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** nothing needed; Claude reports after each task.
+**4. What to tell Claude:** "Re-approve" for the network log part's page.
 
 ## Pending owner approvals
 

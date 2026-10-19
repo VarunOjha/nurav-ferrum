@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:a362411ed7fd859b7142441625048427a77e80149acb5f4e327c463b7fdd5c39"
+    "content_hash": "sha256:7bdc3e4580d898e17fa2b0b060ecb54dc0d44b2dd2f90d8695af15aa52fab28c"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "phase-p5-telemetry"
+      "state": "The network log part's page waits for your re-approval",
+      "ref": "comp-network-logger"
     },
     {
       "item": "Your rule",
@@ -35,21 +35,26 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 9 of 15 tasks done"
+        "state": "In progress: 10 of 15 tasks done"
       },
       {
-        "item": "Next task",
+        "item": "Last task",
         "state": "What the network log sees, and its cost",
         "ref": "p5.10"
+      },
+      {
+        "item": "Your part",
+        "state": "Re-approve the network log part's page",
+        "ref": "comp-network-logger"
       }
     ],
-    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
+    "why": "Nothing to run. The coverage task added its table and cost trial to the network log part's page, which cancels your earlier approval of that page. Claude needs your OK before the next task uses it.",
     "script": null,
-    "tell_claude": "Nothing needed; Claude reports after each task"
+    "tell_claude": "\"Re-approve\", or what to change"
   },
   "questions_for_you": {
     "open": 16,
