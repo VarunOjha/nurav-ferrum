@@ -3,8 +3,9 @@ id: comp-network-logger
 type: component
 title: "Network logger (metadata-only JSONL)"
 status: planned
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.15.txt
   - raw/evidence/phase-p5-telemetry/check-p5.10.txt
   - raw/evidence/phase-p5-telemetry/netlog-coverage-p5.10.json
   - raw/evidence/phase-p5-telemetry/netlog-cost-p5.10.json
@@ -77,8 +78,10 @@ Built in p5.9 (`crates/network-logger/src/lib.rs`; capture in `comp-webview-mana
   record and, 15 ms later, a 200 response for the same address in the same tab. The page was never shown, but a
   diagnostic run confirmed the request reached the server (three refused tries counted)
   ([finding](../../raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt)). The log records what
-  WebView2 reports, so such a response is written as `allowed` (no rule stopped the response itself). What to do about
-  the blocklist is the owner's question Q-229.
+  WebView2 reports, so such a response is written as `allowed` (no rule stopped the response itself). The owner chose
+  to stop such requests fully (Q-229): since p5.15 the request filter refuses them before they are sent, and each
+  refused request (also images, scripts and fetches of an allowed page) is a `blocked:blocklist` record
+  ([check-p5.15](../../raw/evidence/phase-p5-telemetry/check-p5.15.txt)).
 - **Checked** ([check-p5.9](../../raw/evidence/phase-p5-telemetry/check-p5.9.txt)): 6 unit tests (fields, checks, resource types, time and folder names, rotation with the file cap, safe deletion of old sessions) and the settings test (off by default, limits); live, with the log on, the `/netlog` test page gave exactly its six expected records (the page as `document`, its stylesheet, script and image, the frame of site-b as `frame`, the fetch as `fetch`; all 200, with their sizes), the refused address a `blocked:blocklist` record, and every record exactly the allowed fields; the same run again showed one response for the refused address (Q-229). With the default settings no log folder was made.
 
 ## Coverage and cost (p5.10)

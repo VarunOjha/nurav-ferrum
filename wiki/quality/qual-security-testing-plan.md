@@ -3,8 +3,10 @@ id: qual-security-testing-plan
 type: quality
 title: "Security testing plan: master prompt section 11 mapped to harmless fixtures"
 status: draft
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.15.txt
+  - raw/owner/2026-10-18-s08-q229-block-requests-fully.md
   - raw/evidence/phase-p4-security/security-suite.20261017-2315.txt
   - raw/evidence/phase-p4-security/check-p4.16.20261017-2327.txt
   - raw/evidence/phase-p4-security/security-suite.20261015-1234.txt
@@ -90,8 +92,8 @@ Levels: **U** = Rust unit/property test of the policy engine (no browser); **I**
 - **Threat:** a page navigates the tab to a blocklisted host.
 - **U:** `evaluate(url)` against the blocklist for exact host, subdomains, mixed case, trailing dot, user-info (`user@host`), explicit port, IDN in Unicode and punycode forms, IPv4 and IPv6 literals. Property: any URL whose host matches a block rule is denied regardless of path, query or fragment.
 - **E fixture:** `block-nav.html` on origin A with (a) a link, (b) `location.href =`, (c) a meta refresh, (d) a form submission, (e) `window.open`, all to a host on the test blocklist.
-- **Pass:** every attempt is cancelled; the tab stays on origin A; one denial per attempt appears in the audit log with the rule that matched.
-- **Phase:** U in P4 (policy engine); E in P4. Related: risk-r07.
+- **Pass:** every attempt is cancelled; the tab stays on origin A; one denial per attempt appears in the audit log with the rule that matched. Since p5.15 (owner answer Q-229) also: the blocked server receives no request at all, for the page, a frame or anything a page loads (a request counter on the test server; found in p5.9 that a cancelled page navigation was still sent).
+- **Phase:** U in P4 (policy engine); E in P4; request level in P5 (p5.15, `block-requests`). Related: risk-r07.
 
 ### SEC-02 External protocol handling (item 2)
 
@@ -269,7 +271,7 @@ E09, E13 and E15 carry many threats; their "Test" column names the main test, an
 | T01 A page calls Ferrum's commands, events or the exempt fetch-channel command | ADV1 | E08, E14 | No bridge in tab views; zero `remote` capabilities; shell-only commands (p2.3, p4.8) | SEC-03, SEC-12 | Built and tested (p4.8): 16 ways in refused by the permission check from a website in a Tauri view; the exempt channel-fetch command is reached there but returns nothing (Ferrum creates no channels, checked); Ferrum tab views have no bridge |
 | T02 A tab navigates to the app's own origin to be treated as local | ADV1 | E09 | Navigation handlers deny the app's origin for tabs (rule R4; p4.3, p4.8) | SEC-03, SEC-08 | Built and tested live (p4.8, `app-origin`: link, pop-up and typed address refused and logged) |
 | T03 The shell view is led to remote content | ADV1 | E01 | Shell navigation handler allows only the local origin; strict CSP (rule R8; p4.8) | SEC-12 | Built and tested live (p4.8: the shell sent to a website stays on its own page; logged `shell-app-only`) |
-| T04 A page sends the tab to a blocked site (link, script, form, meta refresh, pop-up) | ADV1 | E09 | Blocklist in the policy engine (p4.2, p4.3) | SEC-01 | Built; typed, redirect, frame and `window.open` tested live (p4.3) |
+| T04 A page sends the tab to a blocked site (link, script, form, meta refresh, pop-up) | ADV1 | E09 | Blocklist in the policy engine (p4.2, p4.3); since p5.15 the request itself is refused before it is sent (owner answer Q-229) | SEC-01 | Built; typed, redirect, frame and `window.open` tested live (p4.3); typed, link, redirect, frame, image and fetch requests reach no blocked server (p5.15, `block-requests`) |
 | T05 A redirect chain reaches a blocked site | ADV1 | E09, E13 | Every redirect hop re-evaluated (p4.3) | SEC-08 | Built and tested live (p4.3, `security-navigation`) |
 | T06 An iframe loads a blocked site | ADV1b | E09, E13 | Raw-COM `FrameNavigationStarting` (p4.3) | SEC-08 | Built and tested live (p4.3, `security-navigation`) |
 | T07 A malformed address slips past the filter or crashes it | ADV1 | E09, E13 | Fail-closed parsing (p2.5 address bar; p4.2 engine) | SEC-09 | Built and tested live (p4.11, `security-navigation`: a malformed typed address refused and logged; engine tests cover unparsable addresses, p4.2) |

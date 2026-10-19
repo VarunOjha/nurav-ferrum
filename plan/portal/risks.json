@@ -171,7 +171,7 @@
       "summary": "Tauri's navigation check allows any address it cannot read, and never sees pages loaded inside frames, so a blocked site could slip in.",
       "likelihood": 4,
       "impact": 4,
-      "mitigation": "Ferrum's own filter refuses unreadable addresses, watches frames through low-level hooks, always handles pop-ups and downloads, and is tested with bad addresses.",
+      "mitigation": "Ferrum's own filter refuses unreadable addresses, watches frames through low-level hooks, always handles pop-ups and downloads, and is tested with bad addresses. Since P5 every request is filtered too, so a blocked site receives nothing, which a test confirms.",
       "phase": "phase-p4-security",
       "status": "Open",
       "category": "Security & privacy",
@@ -187,7 +187,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r07-navigation-filter-fail-open.md",
-        "content_hash": "sha256:62dfc0150929ecdfe8f6b2e68c9f5567b6170bc83d6a1c8cc111f3d9618ac90d"
+        "content_hash": "sha256:fb019e5aa7ce4607e15650f79fa7a178e097840d9ae3fedd768a23353716295f"
       }
     },
     {

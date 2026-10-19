@@ -5,7 +5,7 @@
   "summary": "Ferrum's threat model in plain words: who might attack, where trust changes inside Ferrum, each threat with its protection and whether a test proves it, and what Ferrum does not protect against.",
   "source": {
     "wiki_path": "wiki/quality/qual-security-testing-plan.md",
-    "content_hash": "sha256:5e6c697d27d6fc63f6e087ea8daa04aea82f0e07626ee7dded0665406c79c6de"
+    "content_hash": "sha256:c3035ce995434b0e4aa663d8dca891bfe4ae3476c426078de08ea6a6847f2567"
   },
   "words": "Tested = a protection exists and a passing test is saved as evidence. Partly = part of it exists and is tested. Not enforced = Ferrum makes no claim. Nothing is called tested without saved evidence.",
   "adversaries": [
@@ -167,9 +167,9 @@
       "code": "T04",
       "threat": "A page sends the tab to a blocked site",
       "by": "ADV1",
-      "protection": "Your blocked-sites list is checked on every page load",
+      "protection": "Your blocked-sites list is checked on every page load, and since P5 on every request",
       "state": "Tested",
-      "note": "Typed, redirect, frame and pop-up all refused"
+      "note": "Typed, redirect, frame and pop-up all refused; a blocked site receives no request of any kind"
     },
     {
       "code": "T05",

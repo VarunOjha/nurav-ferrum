@@ -1020,7 +1020,7 @@
       "kind": "task",
       "title": "P5 task: Stop requests to blocked sites",
       "summary": "A blocked site still receives the request → stop it at the network level for every way in → a blocked site really gets nothing.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry",
         "Q-229"
@@ -3253,7 +3253,7 @@
       "id": "comp-security-engine",
       "kind": "component",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions, links to other apps. Trusted; refuses when unsure. Since P4 it decides every page load, redirect, frame and pop-up, and when to ask you before a site uses your camera, microphone, location, notifications or clipboard. A benchmark-only build can skip site rules; the app never has it.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions, links to other apps. Trusted; refuses when unsure. Since P4 it decides every page load, redirect, frame and pop-up, and when to ask before a site uses your camera and more. Since P5 a blocked site gets no request at all. A benchmark-only build can skip site rules.",
       "status": "Being built",
       "related": [
         "layer-engine"
@@ -3283,7 +3283,7 @@
       "id": "comp-webview-manager",
       "kind": "component",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. In P5 it reads page timings and network calls.",
+      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. P4 added: stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. P5 adds page timings, network calls and a filter on every request.",
       "status": "Built (first working app)",
       "related": [
         "layer-engine"

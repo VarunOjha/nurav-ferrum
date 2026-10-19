@@ -3,8 +3,10 @@ id: comp-security-engine
 type: component
 title: "Security policy engine"
 status: in-progress
-updated: 2026-10-14
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.15.txt
+  - raw/owner/2026-10-18-s08-q229-block-requests-fully.md
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -28,6 +30,7 @@ responsibilities:
   - "Google OAuth detection and system-browser hand-off decision (never UA spoofing)"
 interfaces:
   - "evaluate(&Policy, &Request{url, context: TopLevel | Redirect | Frame | NewWindow, initiator}) -> Decision (built in p4.2)"
+  - "evaluate_resource(&Policy, url) -> Option<Decision> (p5.15): Some(deny) for an http(s) request to a blocked host (unless a more specific allow entry overrides) or an unreadable http(s) address; None otherwise"
   - "Decision{verdict: Allow | AllowInsecure | Upgrade(url) | Confirm | Deny, rule: RuleId (stable name for the audit log), matched: the settings entry that matched}"
   - "Policy{blocklist, allowlist: RuleList, allowlist_only, http: HttpPolicy, external: ExternalSchemes}; RuleList::parse refuses any bad entry"
   - "Planned (p4.5, p4.6): permission and download requests; OpenInSystemBrowser stays in comp-core oauth (P2)"
@@ -176,3 +179,19 @@ with the feature (`tests/bench_nosecurity.rs`; the other tests expect the normal
 settings screen; every blocked-site line goes through `HostRule::parse` before it is saved, and the saved settings
 rebuild the policy at once (comp-app-shell; [check-p4.17](../../raw/evidence/phase-p4-security/check-p4.17.txt)). The "not secure" bar for plain
 HTTP (owner answer Q-112) is built there too. The audit log of refusals (p4.9) replaces the plain log lines.
+
+## Implementation status (P5)
+
+**p5.15, requests to blocked sites are never sent** (owner answer Q-229, after the p5.9 finding that a refused typed
+address still reached the server): `evaluate_resource` decides each network request of a tab before it goes out,
+for the page, its frames and everything they load (images, scripts, fetches, workers). Only `https:` and `http:` are
+decided: a blocked host is refused, as for navigations a more specific allowlist entry overrides, and an unreadable
+web address is refused (fail closed); `data:`, `blob:` and Ferrum's own addresses are left to `evaluate`. The
+allowlist-only mode does not apply here (it limits which pages open, not what an allowed page loads). The tab views
+call it from WebView2's request event (comp-webview-manager) with the policy in effect, so a settings change applies
+at once; each refusal is an audit record (action `request`, rule `blocklist`) and, when on, a network-log record.
+Tests: `crates/security/tests/resource_requests.rs` (4: blocked hosts in every spelling, allow override,
+allowlist-only not applied, other schemes passed, unreadable addresses refused, random paths and inputs). Live
+([check-p5.15](../../raw/evidence/phase-p5-telemetry/check-p5.15.txt)): with 127.0.0.1 blocked, a typed address, a link, a redirect, a frame, an image and a fetch
+each left the test server's request counter untouched, and an allowed fetch was counted; with the filter switched
+off in a debug-only test mode, the typed attempt reached the server again (the control). Cost, rough ([block-requests-cost-p5.15.json](../../raw/evidence/phase-p5-telemetry/block-requests-cost-p5.15.json)): the `/netlog` page (six requests) loaded 30 times with the filter on, then 30 times with it off: median load 51.6 against 81.9 ms (an unsaved development run just before: 61.2 against 69.2 ms). The order was fixed (on first) and the spread between runs is larger than any difference, so no cost is claimed. The test switch skips only the decision: the request event stays registered in both runs, so the cost of registering it is not measured here (P6 measures Ferrum with and without its security rules, exp-security-overhead).

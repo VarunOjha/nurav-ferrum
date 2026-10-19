@@ -32,7 +32,8 @@ use webview2_com::{
     LaunchingExternalUriSchemeEventHandler, NavigationCompletedEventHandler,
     NavigationStartingEventHandler, NewWindowRequestedEventHandler,
     PermissionRequestedEventHandler, ProcessFailedEventHandler, SourceChangedEventHandler,
-    StateChangedEventHandler, WebResourceResponseReceivedEventHandler, take_pwstr,
+    StateChangedEventHandler, WebResourceRequestedEventHandler,
+    WebResourceResponseReceivedEventHandler, take_pwstr,
 };
 use windows::Win32::Foundation::{HWND, RECT};
 use windows::Win32::System::Com::IStream;
@@ -49,6 +50,10 @@ pub type EventSink = Rc<dyn Fn(TabEvent)>;
 pub type NavGate = Rc<dyn Fn(&NavRequest) -> NavDecision>;
 /// Decides whether a key pressed in the view is Ferrum's (true: handled, the page never sees it) (UI thread).
 pub type KeyFilter = Rc<dyn Fn(KeyDown) -> bool>;
+
+/// Decides whether a network request of the view must not be sent (true: refused; UI thread). Gets the request's full
+/// address (p5.15).
+pub type RequestFilter = Rc<dyn Fn(&str) -> bool>;
 
 /// Decides a permission request: allow, deny, or wait for the user (UI thread).
 pub type PermissionFilter = Rc<dyn Fn(&PermissionAsk) -> PermissionReply>;
@@ -118,6 +123,10 @@ pub struct Handlers {
     /// Report every response as [`TabEvent::ResponseReceived`] (p5.9, the network log). The handler is registered
     /// only when this is true, so a view made while the log is off pays nothing.
     pub log_responses: bool,
+    /// Refuses network requests before they are sent (p5.15, owner answer Q-229): every request of the view's page,
+    /// its frames and their workers passes this filter; a refused one gets a 403 answer made here, so nothing reaches
+    /// the network. `None`: no filter (not used for tab views).
+    pub requests: Option<RequestFilter>,
 }
 
 fn hr<T>(r: windows_core::Result<T>) -> Result<T, Error> {
@@ -145,6 +154,7 @@ enum Ev {
     Favicon,
     ProcessFailed,
     Response,
+    Request,
 }
 
 /// The network log's values of one response (p5.9): the request's address and method, the status, and two values
@@ -218,6 +228,7 @@ impl ContentView {
         hr(unsafe { opts.SetProfileName(&HSTRING::from(profile)) })?;
         // SAFETY: COM-1; `opts` is live.
         hr(unsafe { opts.SetIsInPrivateModeEnabled(private) })?;
+        let env_for_view = env.clone();
         let handler = CreateCoreWebView2ControllerCompletedHandler::create(Box::new(
             move |res, controller| {
                 let built = (|| -> Result<ContentView, Error> {
@@ -235,7 +246,7 @@ impl ContentView {
                         core,
                         tokens: Vec::new(),
                     };
-                    view.register(handlers)?;
+                    view.register(handlers, &env_for_view)?;
                     view.set_bounds(bounds)?;
                     // SAFETY: COM-1; live controller.
                     hr(unsafe { view.controller.SetIsVisible(true) })?;
@@ -251,7 +262,11 @@ impl ContentView {
         })
     }
 
-    fn register(&mut self, handlers: Handlers) -> Result<(), Error> {
+    fn register(
+        &mut self,
+        handlers: Handlers,
+        env: &ICoreWebView2Environment,
+    ) -> Result<(), Error> {
         let Handlers {
             sink,
             gate,
@@ -259,6 +274,7 @@ impl ContentView {
             downloads,
             permissions,
             log_responses,
+            requests,
         } = handlers;
         let core = self.core.clone();
 
@@ -705,6 +721,56 @@ impl ContentView {
         hr(unsafe { core.add_ProcessFailed(&h, &mut t) })?;
         self.tokens.push((Ev::ProcessFailed, t));
 
+        if let Some(filter) = requests {
+            // p5.15: every request of the page, its frames and their workers (ICoreWebView2_22 source kinds). Without
+            // the newer interface the filter would miss frames, so its absence is an error the app logs; navigations
+            // stay guarded by the gate either way.
+            let core22: ICoreWebView2_22 = hr(core.cast())?;
+            // SAFETY: COM-1; the filter string is a static wide string.
+            hr(unsafe {
+                core22.AddWebResourceRequestedFilterWithRequestSourceKinds(
+                    windows_core::w!("*"),
+                    COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL,
+                    COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL,
+                )
+            })?;
+            let env = env.clone();
+            let h = WebResourceRequestedEventHandler::create(Box::new(move |_sender, args| {
+                let Some(args) = args else { return Ok(()) };
+                // SAFETY: COM-1 (inside WebView2's callback, on the UI thread); COM-5: the address is copied and freed by
+                // take_pwstr.
+                let uri = unsafe {
+                    let mut u = PWSTR::null();
+                    match args.Request() {
+                        Ok(r) => {
+                            let _ = r.Uri(&mut u);
+                            take_pwstr(u)
+                        }
+                        Err(_) => String::new(),
+                    }
+                };
+                if filter(&uri) {
+                    // SAFETY: COM-1; `env` is the view's live environment; the strings are static; SetResponse inside
+                    // the WebResourceRequested callback is the documented way to answer a request without sending it.
+                    unsafe {
+                        if let Ok(resp) = env.CreateWebResourceResponse(
+                            None::<&IStream>,
+                            403,
+                            windows_core::w!("Blocked by Ferrum"),
+                            windows_core::w!(""),
+                        ) {
+                            let _ = args.SetResponse(&resp);
+                        }
+                    }
+                }
+                Ok(())
+            }));
+            let mut t = 0i64;
+            // SAFETY: COM-1, COM-4: token kept for removal in close().
+            hr(unsafe { core.add_WebResourceRequested(&h, &mut t) })?;
+            self.tokens.push((Ev::Request, t));
+        }
+
         if log_responses {
             let core2: ICoreWebView2_2 = hr(core.cast())?;
             let s = sink.clone();
@@ -859,6 +925,7 @@ impl ContentView {
                     },
                     Ev::NewWindow => self.core.remove_NewWindowRequested(*t),
                     Ev::ProcessFailed => self.core.remove_ProcessFailed(*t),
+                    Ev::Request => self.core.remove_WebResourceRequested(*t),
                     Ev::Response => match self.core.cast::<ICoreWebView2_2>() {
                         Ok(c2) => c2.remove_WebResourceResponseReceived(*t),
                         Err(e) => Err(e),

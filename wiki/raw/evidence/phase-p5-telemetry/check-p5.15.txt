@@ -1,0 +1,22 @@
+Ferrum check p5.15: Stop requests to blocked sites
+Why: a blocked site really gets nothing.
+Run at 2026-10-19 01:39 on commit 900999d (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The request check: blocked hosts refused in every spelling, allow override, unreadable addresses refused (4 s)
+         four tests passed (two of them on random input)
+Running 3 tests using 1 worker
+BLOCK-REQUESTS {"counts":{"typed":"count:1","link":"count:1","redirect":"count:1","frame":"count:1","image":"count:1","fetch":"count:1","allowed":"count:2"},"page_saw":{"image":"error","fetch":"status 0 (opaque)","allowed":"status 200"}}
+  ✓  1 block-requests.spec.ts:21:1 › no request reaches a blocked site, whatever the way in; allowed requests still do (12.1s)
+BLOCK-COST {"build":"debug","page":"/netlog (six requests)","order":"on then off","runs":[{"run":"on","loads":30,"load_ms_median":51.60000002384186,"load_ms_min":35.5,"load_ms_max":123.80000001192091,"load_ms":[72.39999997615814,55,49.59999996423721,52.10000002384186,74.39999997615814,45.19999998807907,52.59999996423721,45.60000002384186,51.60000002384186,47.10000002384186,44.59999996423721,52.59999996423721,40.89999997615814,48.90000003576279,35.5,47.20000004768371,55.09999996423721,69.80000001192093,42.29999995231629,41.79999995231629,45.19999998807907,43.59999996423721,45.60000002384186,48.5,78.39999997615814,80.39999997615814,80.79999995231628,98.39999997615814,123.80000001192091,57.79999995231629]},{"run":"off","loads":30,"load_ms_median":81.89999997615814,"load_ms_min":52.39999997615814,"load_ms_max":128.5,"load_ms":[91.39999997615814,128.5,90.30000001192091,89.89999997615814,83.69999998807907,101.69999998807909,88.79999995231628,79.20000004768372,68.20000004768372,81.60000002384186,88.5,64.59999996423721,59.80000001192093,63.60000002384186,52.39999997615814,74.09999996423721,82.69999998807907,70.80000001192093,83.19999998807907,72.30000001192093,100.0999999642372,77.19999998807907,91.9000000357628,75.90000003576279,80.19999998807907,81.89999997615814,82.79999995231628,73,78.80000001192093,98.30000001192091]}]}
+  ✓  2 block-requests.spec.ts:102:1 › the request filter's cost: 30 loads with it on and off (rough) (19.8s)
+BLOCK-CONTROL filter off: after 3 refused typed tries the allowed visit shows count:4
+  ✓  3 block-requests.spec.ts:109:1 › control: with the filter switched off (debug test mode), the typed attempt reaches the server again (6.7s)
+  3 passed (2.1m)
+  PASS   Live: no request of any kind reaches the blocked site; allowed requests do; the control catches a leak (173 s)
+         counts after one allowed visit each (count:1 = the blocked attempt never arrived): typed count:1, link count:1, redirect count:1, frame count:1, image count:1, fetch count:1, allowed count:2
+         filter off: after 3 refused typed tries the allowed visit shows count:4
+         cost (rough, debug, on first): filter on: load 51.6 ms median (35.5 to 123.8); filter off: load 81.9 ms median (52.4 to 128.5)
+------------------------------------------------------------------------
+RESULT: PASS - p5.15 (2 PASS; 179 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.15 check passed".

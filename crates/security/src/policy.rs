@@ -296,6 +296,46 @@ pub fn evaluate(policy: &Policy, request: &Request<'_>) -> Decision {
     }
 }
 
+/// Decides one network request of a tab (p5.15, owner answer Q-229): any request a page or its frames make (the
+/// page itself, frames, images, scripts, fetches), before it is sent. Only `https:` and `http:` addresses are
+/// decided: a request to a blocked host is refused (unless a more specific allowlist entry overrides it, as for
+/// navigations), and one whose address cannot be read is refused (fail closed). Every other address (`data:`, `blob:`,
+/// Ferrum's own) is left to the navigation rules and returns `None`, as do allowed requests. The allowlist-only mode
+/// is not applied here: it limits which pages open, not what an allowed page loads.
+pub fn evaluate_resource(policy: &Policy, url: &str) -> Option<Decision> {
+    #[cfg(feature = "bench-nosecurity")]
+    if bench_nosecurity(&Request {
+        url,
+        context: Context::TopLevel,
+        initiator: None,
+    })
+    .is_some()
+    {
+        return None;
+    }
+    let lower = url.get(..8).unwrap_or(url).to_ascii_lowercase();
+    if !(lower.starts_with("https://") || lower.starts_with("http://")) {
+        return None;
+    }
+    if url.len() > MAX_URL_BYTES {
+        return Some(Decision::deny(RuleId::TooLong));
+    }
+    let Ok(parsed) = Url::parse(url) else {
+        return Some(Decision::deny(RuleId::Unparseable));
+    };
+    let host = parsed.host_str().unwrap_or_default();
+    let host = host.strip_suffix('.').unwrap_or(host);
+    let block = policy.blocklist.best_match(host)?;
+    match policy.allowlist.best_match(host) {
+        Some(a) if a.specificity() > block.specificity() => None,
+        _ => Some(Decision {
+            verdict: Verdict::Deny,
+            rule: RuleId::Blocked,
+            matched: Some(block.text().to_string()),
+        }),
+    }
+}
+
 /// `blob:` addresses carry the origin of the page that made them; only that origin may open them.
 fn blob(url: &Url, initiator: Option<&str>) -> Decision {
     let origin = url.origin();

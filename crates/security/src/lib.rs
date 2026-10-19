@@ -16,5 +16,7 @@ pub mod rules;
 pub use permissions::{
     Grants, PermissionContext, PermissionDecision, PermissionRule, PermissionVerdict,
 };
-pub use policy::{Context, Decision, Policy, Request, RuleId, Verdict, evaluate};
+pub use policy::{
+    Context, Decision, Policy, Request, RuleId, Verdict, evaluate, evaluate_resource,
+};
 pub use rules::{HostRule, RuleError, RuleList};

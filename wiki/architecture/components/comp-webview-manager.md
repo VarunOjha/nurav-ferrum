@@ -4,8 +4,9 @@ type: component
 title: "WebView manager (tab WebViews, navigation, sessions, raw COM layer)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.15.txt
   - raw/evidence/phase-p5-telemetry/check-p5.9.txt
   - raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt
   - raw/owner/2026-10-14-s07-p4-18-exe-download-fix-a.md
@@ -39,6 +40,7 @@ interfaces:
   - "TabManager API: open, close, activate, navigate, back, forward, reload, stop, snapshot, restore"
   - "LifecycleActuator impl (trait from ferrum-core)"
   - "Safe COM wrappers: try_suspend, resume, set_memory_level, go_back, go_forward, process_infos, enable_netlog, run_probe"
+  - "Handlers::requests (p5.15): Option<RequestFilter>; when set the view registers WebResourceRequested for every resource context and request source kind (ICoreWebView2_22) and answers a refused request with a 403 made by its environment, so it is never sent"
   - "Handlers::log_responses (p5.9): when true the view registers WebResourceResponseReceived and reports TabEvent::ResponseReceived {uri, method, status, fetch_dest, content_length}; no header, cookie or body is handed on"
   - "call_devtools(core, method, params JSON, done), ContentView::call_devtools, controller_call_devtools (p5.6: CallDevToolsProtocolMethod from the host; the result arrives as JSON on the UI thread)"
 connects:
@@ -269,3 +271,10 @@ Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).
   the shell. Seen live in p5.9 ([check-p5.9](../../raw/evidence/phase-p5-telemetry/check-p5.9.txt)): responses of the
   page and of a frame of another site are reported to the tab's view. Also seen: a navigation cancelled in
   `NavigationStarting` can still produce a response (the request reached the server; owner question Q-229).
+- p5.15, request filter (owner answer Q-229): with `Handlers::requests` the view calls
+  `ICoreWebView2_22::AddWebResourceRequestedFilterWithRequestSourceKinds("*", ALL, ALL)` (COM-3: the cast fails the view
+  creation with an error if the runtime is too old, rather than leaving frames unfiltered) and registers
+  `WebResourceRequested` (COM-1, COM-4 token removed in `close`, COM-5 the address copied). For a request the filter
+  refuses, `CreateWebResourceResponse(None, 403, "Blocked by Ferrum", "")` from the view's environment is set as its
+  answer, which WebView2 documents as answering the request without sending it. Every tab view gets the filter; the
+  shell does not. Seen live in p5.15 ([check-p5.15](../../raw/evidence/phase-p5-telemetry/check-p5.15.txt)): no refused request of any kind reached the test server.

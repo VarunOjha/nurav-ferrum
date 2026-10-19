@@ -260,7 +260,7 @@
     {
       "id": "comp-webview-manager",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. In P5 it reads page timings and network calls.",
+      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. P4 added: stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. P5 adds page timings, network calls and a filter on every request.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (first working app)",
@@ -297,13 +297,13 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:fdcd0054afe1ae6015e556a3d387c676adb55337c335907c347c6ec511a249e9"
+        "content_hash": "sha256:3d23aaf65ee57527110bcb6b38cd307862d8a048b51d45f7610c1f223893e002"
       }
     },
     {
       "id": "comp-security-engine",
       "title": "Security policy",
-      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions, links to other apps. Trusted; refuses when unsure. Since P4 it decides every page load, redirect, frame and pop-up, and when to ask you before a site uses your camera, microphone, location, notifications or clipboard. A benchmark-only build can skip site rules; the app never has it.",
+      "summary": "Decides what is allowed: sites, pop-ups, downloads, permissions, links to other apps. Trusted; refuses when unsure. Since P4 it decides every page load, redirect, frame and pop-up, and when to ask before a site uses your camera and more. Since P5 a blocked site gets no request at all. A benchmark-only build can skip site rules.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Being built",
@@ -326,7 +326,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-security-engine.md",
-        "content_hash": "sha256:17b2d34bb2efb08e1f3dbd47694a01aa6a274302ab8e5b10b9572aaf85ae555d"
+        "content_hash": "sha256:804c0fde2500309a2cd4a73e1733a92e0a2e4c8b595885f9f3d0dd7bee71d947"
       }
     },
     {
@@ -420,7 +420,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-network-logger.md",
-        "content_hash": "sha256:3a06a2f2ef77c96883d8cb12b418155e4fdada03ae878339c84ac6aa912de0c8"
+        "content_hash": "sha256:e6ff08b748a22af8fb27447634e46e628abea014d776502885dbff256e03b704"
       }
     },
     {

@@ -3,8 +3,10 @@ id: risk-r07
 type: risk
 title: "Tauri's navigation hook fails open on unparseable URLs and never sees iframe navigations"
 status: open
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.15.txt
+  - raw/owner/2026-10-18-s08-q229-block-requests-fully.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/00-master-prompt.md
 related: [phase-p4-security, phase-p2-minimal-container, comp-security-engine, comp-webview-manager, adr-0015, exp-security-overhead, risk-r19, qual-security-testing-plan]
@@ -18,8 +20,6 @@ owner_phase: phase-p4-security
 trigger: "Any test in which an unparseable or blocklisted URL completes a navigation; an iframe from a blocklisted host loads; a popup or download proceeds without a policy decision being logged."
 fallback: "Add request-level blocking via a web resource request filter covering all request source kinds, and document any navigation class that still cannot be intercepted."
 unverified:
-  - claim: "A web resource request filter with all request source kinds can block navigations that the navigation hooks miss"
-    verify_in: phase-p5-telemetry
 ---
 
 # risk-r07: Tauri's navigation hook fails open on unparseable URLs and never sees iframe navigations
@@ -68,7 +68,7 @@ Add request-level blocking via a web resource request filter covering all reques
 ## Unverified claims
 
 - A raw-COM FrameNavigationStarting handler cancels cross-origin iframe navigations: verified in P4 on Ferrum's tab views, which since adr-0029 are controllers Ferrum creates rather than Tauri child webviews; a frame showing a blocked host is refused and logged while an allowed frame loads ([check-p4.3](../raw/evidence/phase-p4-security/check-p4.3.txt)).
-- A web resource request filter with all request source kinds can block navigations that the navigation hooks miss. UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: no resource request filter was built, because the navigation hooks caught every path tested: typed, redirect, frame, pop-up and malformed, [check-p4.3](../raw/evidence/phase-p4-security/check-p4.3.txt); P5 adds per-tab resource events for the network log)
+- A web resource request filter with all request source kinds can block navigations that the navigation hooks miss: verified in p5.15. The p5.9 network log found that a typed address the navigation hook cancelled was still sent to the server ([finding](../raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt)); with the request filter (owner answer Q-229) no request of any kind tested (typed, link, redirect, frame, image, fetch) reached the blocked server, and with the filter switched off in a debug-only test mode the typed one did again ([check-p5.15](../raw/evidence/phase-p5-telemetry/check-p5.15.txt)).
 
 ## Affects
 

@@ -565,6 +565,7 @@ fn create_view_in(
                 downloads: crate::downloads::chooser(h),
                 permissions: crate::permission_question::filter(h, id),
                 log_responses: crate::netlog::enabled(),
+                requests: Some(request_filter(h, id)),
             },
             Box::new({
                 let h = h.clone();
@@ -772,6 +773,36 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
 /// with per-site profiles (p3.6) a page that leads to another site's profile is stopped: an empty tab moves at once;
 /// otherwise the shell asks first (owner answer Q-209) and the tab moves only if the user agrees. A redirect stays in
 /// the tab's profile (the server, not the page, chose it; moving mid-redirect would break sign-in flows).
+/// The request filter of tab `id`'s view (p5.15, owner answer Q-229): a request to a blocked site is never sent (the
+/// view answers it with a 403 itself), whether it is for the page, a frame, an image, a script or a fetch. Uses the
+/// policy in effect, so a settings change applies at once. Each refusal is written to the audit log (action
+/// `request`) and, when it is on, the network log. Debug builds only: `FERRUM_TEST_NO_REQUEST_FILTER` switches it off
+/// for the cost comparison.
+fn request_filter(app: &AppHandle, id: u64) -> Rc<dyn Fn(&str) -> bool> {
+    let h = app.clone();
+    let off = cfg!(debug_assertions) && std::env::var_os("FERRUM_TEST_NO_REQUEST_FILTER").is_some();
+    if off {
+        tracing::warn!(target: "ferrum::policy", tab = id, "request filter off (debug test switch)");
+    }
+    Rc::new(move |uri: &str| {
+        if off {
+            return false;
+        }
+        match ferrum_security::evaluate_resource(&crate::policy::current(&h), uri) {
+            Some(d) => {
+                tracing::info!(
+                    target: "ferrum::policy", tab = id, site = %site(uri), rule = d.rule.as_str(),
+                    matched = d.matched.as_deref().unwrap_or(""), "request refused"
+                );
+                crate::audit::record(id, "request", uri, d.rule.as_str());
+                crate::netlog::blocked(id, "", run_ms(), uri, d.rule.as_str());
+                true
+            }
+            None => false,
+        }
+    })
+}
+
 fn gate(app: &AppHandle, id: u64) -> Rc<dyn Fn(&NavRequest) -> NavDecision> {
     let h = app.clone();
     Rc::new(move |r: &NavRequest| {
