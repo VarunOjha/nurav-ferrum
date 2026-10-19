@@ -5551,6 +5551,16 @@
       "related": [
         "p5.5"
       ]
+    },
+    {
+      "id": "486d60d",
+      "kind": "commit",
+      "title": "Commit 486d60d",
+      "summary": "Task p5.6: Ferrum records its startup moments, with page times read from the page by Ferrum itself so page code cannot fake them.",
+      "status": "Done",
+      "related": [
+        "p5.6"
+      ]
     }
   ]
 }

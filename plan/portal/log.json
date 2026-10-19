@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:ddc2522915d6928665dde1a241a848166d8c31c9078cf67a7ce6847f6ae0b3fb"
+    "content_hash": "sha256:4bfe529795ecdbab35f89d97fb74bd1bc8685507169a3d7af54b64d2f57735c6"
   },
   "entries": [
     {
@@ -5906,6 +5906,35 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-6",
+      "date": "2026-10-18",
+      "time": "19:39",
+      "title": "Ferrum now times its own startup",
+      "done": "Ferrum records five startup moments: process started, window shown, its own toolbar drawn, the first page's first content drawn and its largest content drawn. The page times are read by Ferrum from the page in a way page code cannot fake. Test run: window after 0.1 s, page content after 1.0 s (test build, one run, not a result).",
+      "next": "You re-approve two part pages; then page-load timing (p5.7).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part (page changed)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "Browser-engine module (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "486d60d",
+      "covers": [
+        "## [2026-10-18] code | p5.6 startup timing chain built and checked"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "benchmarks",
+        "testing"
       ]
     }
   ]

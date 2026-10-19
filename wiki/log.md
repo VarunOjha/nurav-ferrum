@@ -3186,3 +3186,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-18-s08-p5-5-telemetry-reapproval.md]
 - result: Owner: "Reapproce", read as "Re-approve" (the only question asked; no change named; noted in the raw file). Recorded approved with tools/approvals_record.py. All approvals current.
 - next: p5.6 startup timing chain (In-flight written).
+
+## [2026-10-18] code | p5.6 startup timing chain built and checked
+- session: s08
+- time: 19:39
+- pages: [comp-telemetry, comp-webview-manager, metric-startup-window-visible, metric-startup-fcp, metric-startup-lcp]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.6.txt]
+- result: webview-manager gained call_devtools (CallDevToolsProtocolMethod); telemetry gained the pure startup module; the app notes the window-visible time and its debug-only test_startup hook reads the paint entries of the shell and the first tab in an isolated world (Page.createIsolatedWorld, Runtime.evaluate), so no page script sends them. Check: first run FAIL at the metric-page step only (sections not yet written; its live step passed but was not saved); evidence run PASS: process created 0, window visible 107, tab FCP 991, tab LCP 991, shell first paint 992 ms (debug build, one run, not a result). Metric pages got in-app chain sections; the harness-side window detection and clock-alignment claims were re-targeted to P6 (the harness exists only then), with the reason on each page. Stales approval of comp-telemetry and comp-webview-manager.
+- commit: 486d60d
+- next: owner re-approves comp-telemetry and comp-webview-manager; then p5.7 (navigation timing records).

@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:96c773f51168dc1368457aaa20aacf44fd728a62c7d7a29f4f5aef0f830c98c5"
+    "content_hash": "sha256:dc146a7c8a30bce01bd9db6202b602d4b770a37933462e3b4f3d211449439bc5"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "phase-p5-telemetry"
+      "state": "Two part pages wait for your re-approval",
+      "ref": "comp-telemetry"
     },
     {
       "item": "Your rule",
@@ -35,21 +35,26 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 5 of 14 tasks done"
+        "state": "In progress: 6 of 14 tasks done"
       },
       {
-        "item": "Next task",
-        "state": "Startup timing",
+        "item": "Last task",
+        "state": "Startup timing built and checked",
         "ref": "p5.6"
+      },
+      {
+        "item": "Your part",
+        "state": "Re-approve the measurement part and the browser-engine module pages",
+        "ref": "comp-webview-manager"
       }
     ],
-    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
+    "why": "Nothing to run. The startup task changed two part pages, which cancels your earlier approval of both. Claude needs your OK before the next task uses them.",
     "script": null,
-    "tell_claude": "Nothing needed; Claude reports after each task"
+    "tell_claude": "\"Re-approve\", or what to change"
   },
   "questions_for_you": {
     "open": 16,
