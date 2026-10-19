@@ -5,6 +5,7 @@ title: "Telemetry engine (in-app process sampling, events, exports)"
 status: planned
 updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md
   - raw/evidence/phase-p5-telemetry/check-p5.11.txt
   - raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md
   - raw/evidence/phase-p5-telemetry/check-p5.8.txt
@@ -158,6 +159,22 @@ Built in p5.8 (`crates/telemetry/src/lifecycle.rs`, the record in `crates/teleme
 - **Differs from the design sketch:** rule 6 of ov-arch-lifecycle-state-machine lists `reason`, `guard_results` and `t_mono`. v1 has `trigger`, the single guard that blocked, and `t_ms` on the run clock. If P7 needs every guard's result per transition, that is a format change (a version bump after the P5 exit).
 - **Checked** ([check-p5.8](../../raw/evidence/phase-p5-telemetry/check-p5.8.txt)): the file-format tests with the new record (seven record types, six tables, thirteen damaged fixtures refused, schema equal to the types); 3 unit tests on the lifecycle rules; live, two tabs switched back and forth and one closed gave 9 records (each tab opened, two switches each way, b closed and a shown again), all accepted by the checker, in time order. The `shell_cover` trigger is checked by a unit test only.
 - **Not yet:** window minimise and restore (the window does not hide its views today), crash transitions.
+
+## DevTools targets and renderers per tab (p5.12)
+
+A spike follow-up for P6 and P7, no code: [note](../../raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md) (Claude's reading of
+[devtools-targets-p5.12.json](../../raw/evidence/phase-p5-telemetry/devtools-targets-p5.12.json),
+[check-p5.12](../../raw/evidence/phase-p5-telemetry/check-p5.12.txt); spec `devtools-targets.spec.ts`). With four tabs
+(two of site-a, one of site-b, one page with a site-b frame), in the per-site and the per-site-udf mode:
+
+- **Debugging port:** per-site lists every tab as a page target, the other-site frame as an iframe target, the shell
+  and one `about:blank` page; per-site-udf lists only the shell's environment (no tab).
+- **Renderers:** each tab had a renderer of its own, also two tabs of one site in one profile; the other-site frame
+  had its own renderer. So per-tab numbers can use a tab's renderer plus its frames' renderers, found by the frame
+  addresses `GetProcessExtendedInfos` reports; browser, GPU and utility processes cannot be split per tab. Sharing with
+  many tabs was not tried (adr-0028, re-targeted to P7).
+- **Parents:** every browser process is a child of Ferrum; every other WebView2 process is a child of its browser
+  process (risk-r05).
 
 ## Recording during normal use (p5.11)
 

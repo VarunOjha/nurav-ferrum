@@ -379,7 +379,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0012-benchmark-harness-rust-playwright.md",
-        "content_hash": "sha256:55cc17c91e977f96a0e8ea52fc6e8253e70b6851fc90409439a16d176f3b1af6"
+        "content_hash": "sha256:444576c2ba965875e14f52e724cba643afa0aa68ff4b835930b3f1ebdbc9e97b"
       }
     },
     {
@@ -851,7 +851,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0028-browser-look-tabs-top-ferrum-panel.md",
-        "content_hash": "sha256:94ab5cdb5946ee1617e2062a2c7df5e4bfac276ba90fd39df34d2ec3a5427876"
+        "content_hash": "sha256:a38c8743592bdc162176549ca7668a65cf9b161b22622c18e3a5928fda8a2420"
       }
     },
     {

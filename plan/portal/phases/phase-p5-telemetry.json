@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 11,
+    "done": 12,
     "total": 15
   },
   "step_order": [
@@ -147,7 +147,7 @@
       "what": "A follow-up check of how several tabs show up in the debugging channel and which browser processes serve which tab.",
       "why": "If several tabs share one process, a number given 'per tab' may really belong to several. Treating it as one tab's use would mislead P6 and P7.",
       "how": "Open several tabs in Ferrum, list how each one appears in the debugging channel, and match the browser processes to the tabs they serve.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Tabs may share browser processes → check how each tab shows up and which processes serve it → P6 and P7 know how far per-tab numbers can be trusted.",
       "check": "Findings saved as evidence; each open assumption confirmed or moved to a later phase.",
       "script": "scripts/verify/p5.12-tabs-to-processes.ps1"

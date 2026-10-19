@@ -1000,7 +1000,7 @@
       "kind": "task",
       "title": "P5 task: Map tabs to browser processes",
       "summary": "Tabs may share browser processes → check how each tab shows up and which processes serve it → P6 and P7 know how far per-tab numbers can be trusted.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]

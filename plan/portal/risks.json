@@ -118,7 +118,7 @@
       "summary": "Browsers run many helper processes, some shared. Counting the wrong ones, or double-counting shared memory, would make the main comparison wrong.",
       "likelihood": 4,
       "impact": 5,
-      "mitigation": "Tested in P1: every web view helper process lands in a Windows job around the app, plus a crash reporter counted separately. Chrome and Edge are checked in P6.",
+      "mitigation": "Tested in P1: every web view helper process lands in a Windows job around the app, plus a crash reporter counted separately. P5 confirmed each browser engine is started by Ferrum and every other helper by its engine. Chrome and Edge are checked in P6.",
       "phase": "phase-p5-telemetry",
       "status": "Being reduced",
       "category": "Research & benchmarks",
@@ -135,7 +135,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r05-process-tree-attribution.md",
-        "content_hash": "sha256:485198f5e43bf7700721586da0235aef03be45db575fe4655998973965c20c55"
+        "content_hash": "sha256:137cc201163584ae140519abcb9c5e43c1806b1599408e5107b3b81d97b520a3"
       }
     },
     {

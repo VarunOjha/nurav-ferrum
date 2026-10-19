@@ -384,3 +384,6 @@ e4598bf34f81108c92fe7388f2d7f2579dcdd45bb5bc40a4950b6ed30d5d2706  evidence/phase
 d956807ab65d0a3a85792ecd702e2a2d7374588818ab6105572c5c9339cdd33d  owner/2026-10-18-s08-q230-measuring-off-by-default.md
 8c5cea8455e3aa524d321b0c06f45c9915cfdc30124f2fb23878875b4944dd9a  evidence/phase-p5-telemetry/check-p5.11.txt
 0c2cda822e27922f2dc32c3243f102a9646c44403807ed1f3f904d3ae5090b89  owner/2026-10-19-s08-p5-11-reapprovals.md
+b91ea229f6c7bb0cb60e8839f7500c068c0071f0f0fa959ca98bb1128200be83  evidence/phase-p5-telemetry/check-p5.12.txt
+46e0938c0f7684ce540a04fc36b0141bc0959c0892c843a8abf4d9028beaea1a  evidence/phase-p5-telemetry/devtools-targets-p5.12.json
+4c5f7d1bc1db6fcf3852590609aaf5f989354b1984a983cc43dec01110694a69  evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md

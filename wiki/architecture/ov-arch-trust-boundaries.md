@@ -3,8 +3,9 @@ id: ov-arch-trust-boundaries
 type: overview
 title: "Architecture: trust boundaries and preliminary threat model"
 status: review
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -20,8 +21,6 @@ unverified:
   - claim: "Routing window.open popups into new tabs keeps non-Google OAuth popup flows working"
     verify_in: phase-p6-benchmark-harness
   - claim: "WebView2 blocks a page with a certificate error by default when the app does not handle ServerCertificateErrorDetected"
-    verify_in: phase-p5-telemetry
-  - claim: "The benchmark remote debugging port exposes the shell WebView as a CDP target"
     verify_in: phase-p5-telemetry
   - claim: "Chromium site isolation applies to WebView2 renderers"
     verify_in: phase-p6-benchmark-harness
@@ -81,7 +80,7 @@ flowchart LR
 | **TB1** | Remote content (tab) to Ferrum host | Tauri IPC (`window.ipc.postMessage`, which becomes `WebMessageReceived`) is injected into **every** WebView, including tabs (VERIFIED, Tauri note §3) | Authorization in Rust: **zero `remote` capabilities**; shell capability targeted by **webview label**; app ACL manifest. See §4 |
 | **TB2** | Tab to tab (site A's state vs site B's) | Shared WebView2 profile / UDF | Per-site WebView2 profiles (adr-0010), subject to risk-r01. See [isolation model](ov-arch-isolation-model.md) |
 | **TB3** | Ferrum to OS | Downloads, external URI schemes, open-in-system-browser | Security engine decision + user confirmation in shell |
-| **TB4** | Benchmark debug port to all WebViews | `--remote-debugging-port` via `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` | Benchmark runs only. The port is **expected to expose the shell WebView too**, because browser args are environment-wide and all WebViews on a UDF share environment options (VERIFIED, Tauri note §6/§7). Actual CDP target exposure is UNVERIFIED[phase-p5-telemetry] (Tauri note §7: UNCERTAIN). The control assumes the worst case: never set in normal use; documented in SECURITY.md |
+| **TB4** | Benchmark debug port to all WebViews | `--remote-debugging-port` via `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` | Benchmark runs only. The port is **expected to expose the shell WebView too**, because browser args are environment-wide and all WebViews on a UDF share environment options (VERIFIED, Tauri note §6/§7). Observed in p5.12 ([note](../raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md)): the shell (`http://tauri.localhost/`) is listed as a page target on the port, next to every tab in the per-site mode; in the per-site-udf mode only the shell's environment is listed. The control assumes the worst case: never set in normal use; documented in SECURITY.md |
 | **TB5** | Elevated energy sampler to harness | Separate elevated process (admin needed for energy counters, risk-r04) | Separate binary; read-only output file; Ferrum itself is never run elevated (Tauri note §7) |
 | **TB6** | Plan app local server to repo files | Next.js route handler writes `plan/approvals.json` | Bind to `127.0.0.1`, zod-validated body, atomic write ([Next.js note §3.4](../raw/research/nextjs-stack.md)). Not shipped |
 

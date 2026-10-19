@@ -3,8 +3,9 @@ id: adr-0012
 type: decision
 title: "Benchmark harness = Rust orchestrator + Node/TypeScript Playwright scripts"
 status: accepted
-updated: 2026-10-09
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/measurement-methodology.md
@@ -21,8 +22,6 @@ options:
 phase: phase-p0-planning
 tags: [benchmark, harness, playwright, rust]
 unverified:
-  - claim: "How multiple child WebViews in one user data folder appear as CDP targets/pages to Playwright connectOverCDP"
-    verify_in: phase-p5-telemetry
   - claim: "Attaching a CDP client / --remote-debugging-port changes resource use measurably (A/A overhead pilot)"
     verify_in: phase-p6-benchmark-harness
   - claim: "Chrome and Edge child processes stay inside a harness-owned Job Object (no breakaway)"
@@ -107,7 +106,7 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
 ### Negative
 
 - **CDP for every product.** Every product runs with a debugging port and a CDP client attached, which may itself change behaviour. Whether the effect is measurable is UNVERIFIED[phase-p6-benchmark-harness]. An A/A pilot quantifies it. Headline results are labelled "measured with CDP attached".
-- **Multi-tab targets.** How Ferrum's multiple child webviews appear as CDP targets is UNVERIFIED[phase-p5-telemetry]. Multi-tab workloads (master prompt §9 items 8–10) may need Ferrum-internal tab control through a test-only command instead. If so, that command must be compiled out of release builds.
+- **Multi-tab targets.** Observed in p5.12 ([note](../raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md)): in the per-site mode every tab web view is its own `page` target on the debugging port (an other-site iframe is a separate `iframe` target; the shell and one `about:blank` page are listed too), so multi-tab workloads (master prompt §9 items 8–10) can be driven over CDP. In the per-site-udf mode the port lists only the shell's environment and none of the tabs, so workloads in that mode need Ferrum-internal tab control through a test-only command, compiled out of release builds, or that mode stays out of CDP-driven workloads.
 - **Job Object containment.** Chrome and Edge may break away from the Job Object (their sandbox uses its own jobs). This is UNVERIFIED[phase-p6-benchmark-harness]. A trial fails if any product-owned PID is found outside the job.
 - **Security.** An open debugging port exposes all webviews, the trusted shell included, to local processes. It is for benchmark and debug builds only, and is documented in `SECURITY.md`.
 

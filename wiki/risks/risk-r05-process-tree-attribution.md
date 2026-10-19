@@ -3,8 +3,10 @@ id: risk-r05
 type: risk
 title: "Fair process-tree attribution between Chrome/Edge and Ferrum plus WebView2"
 status: mitigating
-updated: 2026-10-11
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md
+  - raw/evidence/phase-p5-telemetry/check-p5.3.txt
   - raw/evidence/phase-p1-foundation/spike-s1/job-4.job.json
   - raw/research/measurement-methodology.md
   - raw/research/related-work-seed.md
@@ -23,12 +25,8 @@ fallback: "Report only tree-level metrics with the attribution method stated, dr
 unverified:
   - claim: "Chrome and Edge child processes stay inside a harness-created Job Object (no breakaway)"
     verify_in: phase-p6-benchmark-harness
-  - claim: "PROCESS_MEMORY_COUNTERS_EX2 is available on this machine"
-    verify_in: phase-p5-telemetry
   - claim: "PeakJobMemoryUsed is commit-based and matches the sampled sum of PrivateUsage"
     verify_in: phase-p6-benchmark-harness
-  - claim: "msedgewebview2.exe processes are children of the Ferrum host process"
-    verify_in: phase-p5-telemetry
 ---
 
 # risk-r05: Fair process-tree attribution between Chrome/Edge and Ferrum plus WebView2
@@ -88,9 +86,9 @@ crashpad handler must be counted and reported separately (adr-0031). Chrome and 
 ## Unverified claims
 
 - Chrome and Edge child processes stay inside a harness-created Job Object (no breakaway). UNVERIFIED[phase-p6-benchmark-harness]
-- PROCESS_MEMORY_COUNTERS_EX2 is available on this machine. UNVERIFIED[phase-p5-telemetry]
+- PROCESS_MEMORY_COUNTERS_EX2 is available on this machine: verified in p5.3 (Windows fills `PrivateWorkingSetSize`; [check-p5.3](../raw/evidence/phase-p5-telemetry/check-p5.3.txt)).
 - PeakJobMemoryUsed is commit-based and matches the sampled sum of PrivateUsage. UNVERIFIED[phase-p6-benchmark-harness]
-- msedgewebview2.exe processes are children of the Ferrum host process. UNVERIFIED[phase-p5-telemetry]
+- msedgewebview2.exe processes are children of the Ferrum host process: verified in p5.12 for the browser processes (each one's parent is Ferrum, in both the per-site and per-site-udf modes); every renderer, GPU and utility process is a child of its browser process ([note](../raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md)). Crash reporters were not checked.
 
 ## Affects
 

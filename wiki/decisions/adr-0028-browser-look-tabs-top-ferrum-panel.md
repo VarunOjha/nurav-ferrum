@@ -3,8 +3,9 @@ id: adr-0028
 type: decision
 title: "Browser look: tabs on top, Ferrum panel on the right"
 status: accepted
-updated: 2026-10-12
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md
   - raw/owner/2026-10-10-s01-browser-ui-design-request.md
   - raw/owner/2026-10-10-s01-browser-ui-design-answers-1.md
   - raw/owner/2026-10-10-s01-browser-ui-choice.md
@@ -21,8 +22,8 @@ options:
 phase: phase-p0-planning
 tags: [ui, shell, design, browser-controls]
 unverified:
-  - claim: "Per-tab memory and CPU can be read for the Ferrum panel"
-    verify_in: phase-p5-telemetry
+  - claim: "With many tabs open, each tab still gets a renderer of its own (no shared renderers), so per-tab numbers stay separable"
+    verify_in: phase-p7-lifecycle
 ---
 
 # ADR-0028: Browser look: tabs on top, Ferrum panel on the right
@@ -110,7 +111,11 @@ Claude's proposals for building it (also binding only once the owner approves th
   blocklist (P4, [comp-security-engine](../architecture/components/comp-security-engine.md)); the network log from
   P5 ([comp-network-logger](../architecture/components/comp-network-logger.md)); sleeping tabs and "goes to sleep
   in N min" from tab lifecycle (P7, [comp-resource-manager](../architecture/components/comp-resource-manager.md)).
-  Whether per-tab memory and CPU can be read at all is UNVERIFIED[phase-p5-telemetry].
+  Per-tab memory and CPU can be read in part (p5.12, [note](../raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md)): a tab's own renderer, and the renderers of
+  its other-site frames, are known from the frame addresses WebView2 reports (with four tabs open each had its own
+  renderer); the browser, GPU and utility processes serve all tabs and cannot be split per tab. Whether renderers stay
+  separate with many tabs is UNVERIFIED[phase-p7-lifecycle] (re-targeted from P5: only four tabs were tried; the panel's
+  per-tab numbers are built with tab lifecycle in P7).
 - **Tabs in the title bar need a custom title bar.** Option A as drawn puts the tabs in the window's top bar, next
   to the Windows 11 window buttons. That needs a custom title bar, which the shell's design notes
   ([comp-app-shell](../architecture/components/comp-app-shell.md)) advise against at first, because of a known
