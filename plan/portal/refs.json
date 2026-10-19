@@ -3225,7 +3225,7 @@
       "id": "comp-network-logger",
       "kind": "component",
       "title": "Measurement: network log",
-      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; it misses requests with no reply and a service worker's own requests. Trusted.",
+      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it (one line per blocked request). Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; it misses requests with no reply and a service worker's own requests.",
       "status": "Built (measurement)",
       "related": [
         "layer-engine"
@@ -5463,6 +5463,17 @@
       "related": [
         "phase-p5-telemetry",
         "p5.11"
+      ]
+    },
+    {
+      "id": "Q-231",
+      "kind": "question",
+      "title": "Question Q-231: fix the network log's lines for a refused request now",
+      "summary": "The network log writes three lines for one refused request: fix it now? Answer: fix it now, in Phase 5.",
+      "status": "Answered",
+      "related": [
+        "phase-p5-telemetry",
+        "p5.14"
       ]
     },
     {

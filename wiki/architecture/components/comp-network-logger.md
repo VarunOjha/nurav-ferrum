@@ -82,6 +82,15 @@ Built in p5.9 (`crates/network-logger/src/lib.rs`; capture in `comp-webview-mana
   to stop such requests fully (Q-229): since p5.15 the request filter refuses them before they are sent, and each
   refused request (also images, scripts and fetches of an allowed page) is a `blocked:blocklist` record
   ([check-p5.15](../../raw/evidence/phase-p5-telemetry/check-p5.15.txt)).
+- **One line per refused request (owner answer Q-231,
+  [raw](../../raw/owner/2026-10-19-s08-q231-netlog-one-line-per-refusal.md)):** the first P5 gate run found three lines
+  for one refused navigation: `blocked:blocklist` from the navigation check, `blocked:blocklist` again from the request
+  filter (both see a page or frame) and `403 ... allowed` for the filter's own answer. Now `netlog::blocked` is told
+  which check refused (`Refuser`) and skips the other check's record of the same address in the same tab within 2 s
+  (the pair is then used up; the same check refusing twice gives two lines; at most 32 refusals remembered; unit test
+  `one_line_per_refused_request`), and webview-manager does not report the filter's 403 answer. The live test asserts
+  exactly one `blocked:blocklist` record and no response for the refused address; seen in the rerun of the p5.9 check
+  on 2026-10-19.
 - **Checked** ([check-p5.9](../../raw/evidence/phase-p5-telemetry/check-p5.9.txt)): 6 unit tests (fields, checks, resource types, time and folder names, rotation with the file cap, safe deletion of old sessions) and the settings test (off by default, limits); live, with the log on, the `/netlog` test page gave exactly its six expected records (the page as `document`, its stylesheet, script and image, the frame of site-b as `frame`, the fetch as `fetch`; all 200, with their sizes), the refused address a `blocked:blocklist` record, and every record exactly the allowed fields; the same run again showed one response for the refused address (Q-229). With the default settings no log folder was made.
 
 ## Coverage and cost (p5.10)

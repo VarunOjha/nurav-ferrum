@@ -9,7 +9,7 @@
                    (2) the settings: the log is off by default, its limits are checked (unit test); (3) live, with the
                    log switched on: a test page with a known set of requests (its stylesheet, script, an image, a
                    frame of another site and one fetch) gives exactly the expected entries, a refused address is
-                   logged as blocked, and every record holds only the allowed fields; with the default settings the
+                   logged once, as blocked (no response line, Q-231), and every record holds only the allowed fields; with the default settings the
                    log is off and writes nothing.
   Why            : You asked for a log of network calls → per tab, save address, method, result, type, size and the
                    security decision to one folder per session, never headers or page content → useful for research
@@ -59,7 +59,7 @@ Invoke-Step 'The settings: off by default, limits checked' {
 }
 
 Invoke-Step 'Live: exactly the expected entries; a refused address logged as blocked; off by default' {
-    $r = Invoke-FerrumSmoke -Spec @('network-log')
+    $r = Invoke-FerrumSmoke -Spec @('network-log\.spec')  # exactly this file: the p5.10 files start with the same name
     Add-LogText (Get-Tail $r.Output 20)
     if ($r.ExitCode -ne 0 -or $r.Output -notmatch '2 passed') { Stop-Fail "The live test failed:`n$(Get-Tail $r.Output 30)" }
     $out = $r.Output -split "`r?`n"

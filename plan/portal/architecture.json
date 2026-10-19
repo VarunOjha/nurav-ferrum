@@ -297,7 +297,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-webview-manager.md",
-        "content_hash": "sha256:3d23aaf65ee57527110bcb6b38cd307862d8a048b51d45f7610c1f223893e002"
+        "content_hash": "sha256:f03ca9c4e9ee7c0e5f307e3b5e10cf9a8adba49b63939d4832b7fd7689ed13de"
       }
     },
     {
@@ -399,7 +399,7 @@
     {
       "id": "comp-network-logger",
       "title": "Measurement: network log",
-      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; it misses requests with no reply and a service worker's own requests. Trusted.",
+      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it (one line per blocked request). Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; it misses requests with no reply and a service worker's own requests.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (measurement)",
@@ -420,7 +420,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-network-logger.md",
-        "content_hash": "sha256:e6ff08b748a22af8fb27447634e46e628abea014d776502885dbff256e03b704"
+        "content_hash": "sha256:f622c71a0203b9b8234740cbc91a420ea1b9bdb8812f0a684d46fe3f55fcb782"
       }
     },
     {

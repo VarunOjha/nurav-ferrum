@@ -159,7 +159,8 @@ enum Ev {
 
 /// The network log's values of one response (p5.9): the request's address and method, the status, and two values
 /// read from single named headers: `Sec-Fetch-Dest` of the request and `Content-Length` of the response. No other
-/// header is read, and no header value is handed on as such.
+/// header is read, and no header value is handed on as such. The request filter's own refusal answer (403 with the
+/// reason `BLOCKED_REASON`) is not a response: it is skipped, since the refusal is logged by the filter (Q-231).
 fn response_event(args: &ICoreWebView2WebResourceResponseReceivedEventArgs) -> Option<TabEvent> {
     // SAFETY: COM-1 (inside WebView2's callback, on the UI thread); COM-5: every PWSTR is copied and freed by
     // take_pwstr; a header that is absent makes GetHeader fail, which is read as "none".
@@ -179,6 +180,13 @@ fn response_event(args: &ICoreWebView2WebResourceResponseReceivedEventArgs) -> O
         let resp = args.Response().ok()?;
         let mut status = 0i32;
         let _ = resp.StatusCode(&mut status);
+        if status == 403 {
+            let mut reason = PWSTR::null();
+            let _ = resp.ReasonPhrase(&mut reason);
+            if take_pwstr(reason) == BLOCKED_REASON {
+                return None;
+            }
+        }
         let content_length = resp.Headers().ok().and_then(|h| {
             let mut v = PWSTR::null();
             h.GetHeader(windows_core::w!("Content-Length"), &mut v)
@@ -194,6 +202,9 @@ fn response_event(args: &ICoreWebView2WebResourceResponseReceivedEventArgs) -> O
         })
     }
 }
+
+/// The reason phrase of the request filter's own 403 answer (p5.15), by which its report is told apart (Q-231).
+const BLOCKED_REASON: &str = "Blocked by Ferrum";
 
 /// The largest site icon passed on (bytes of PNG); a larger one is dropped (the tab shows no icon).
 const MAX_ICON: usize = 256 * 1024;
@@ -756,7 +767,7 @@ impl ContentView {
                         if let Ok(resp) = env.CreateWebResourceResponse(
                             None::<&IStream>,
                             403,
-                            windows_core::w!("Blocked by Ferrum"),
+                            &HSTRING::from(BLOCKED_REASON),
                             windows_core::w!(""),
                         ) {
                             let _ = args.SetResponse(&resp);

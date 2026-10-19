@@ -41,7 +41,7 @@ interfaces:
   - "LifecycleActuator impl (trait from ferrum-core)"
   - "Safe COM wrappers: try_suspend, resume, set_memory_level, go_back, go_forward, process_infos, enable_netlog, run_probe"
   - "Handlers::requests (p5.15): Option<RequestFilter>; when set the view registers WebResourceRequested for every resource context and request source kind (ICoreWebView2_22) and answers a refused request with a 403 made by its environment, so it is never sent"
-  - "Handlers::log_responses (p5.9): when true the view registers WebResourceResponseReceived and reports TabEvent::ResponseReceived {uri, method, status, fetch_dest, content_length}; no header, cookie or body is handed on"
+  - "Handlers::log_responses (p5.9): when true the view registers WebResourceResponseReceived and reports TabEvent::ResponseReceived {uri, method, status, fetch_dest, content_length}; no header, cookie or body is handed on; the request filter's own 403 answer (reason BLOCKED_REASON) is not reported (Q-231)"
   - "call_devtools(core, method, params JSON, done), ContentView::call_devtools, controller_call_devtools (p5.6: CallDevToolsProtocolMethod from the host; the result arrives as JSON on the UI thread)"
 connects:
   - to: comp-webview2-runtime
@@ -278,3 +278,8 @@ Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).
   refuses, `CreateWebResourceResponse(None, 403, "Blocked by Ferrum", "")` from the view's environment is set as its
   answer, which WebView2 documents as answering the request without sending it. Every tab view gets the filter; the
   shell does not. Seen live in p5.15 ([check-p5.15](../../raw/evidence/phase-p5-telemetry/check-p5.15.txt)): no refused request of any kind reached the test server.
+  WebView2 then reports that 403 answer through `WebResourceResponseReceived` like a real response; the first P5 gate
+  run found it in the network log as `403 ... allowed`. Since then (owner answer Q-231,
+  [raw](../../raw/owner/2026-10-19-s08-q231-netlog-one-line-per-refusal.md)) the answer carries the reason phrase
+  `BLOCKED_REASON` ("Blocked by Ferrum"), and a 403 response with that reason is not reported: the refusal is logged
+  by the filter. Seen in the rerun of the p5.9 check on 2026-10-19: no response line for the refused address.

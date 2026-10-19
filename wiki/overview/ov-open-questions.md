@@ -3,7 +3,7 @@ id: ov-open-questions
 type: overview
 title: "Open questions for the owner (canonical register)"
 status: draft
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md
   - raw/owner/2026-10-18-s08-q229-block-requests-fully.md
@@ -1019,3 +1019,17 @@ tab-change records (no web addresses) to files.
 
 **Question:** (a) off by default, like the network log (Claude recommended this); (b) on by default, as the design said,
 with old files deleted after a set time.
+
+## Q-231 The network log writes three lines for one refused request: fix it now?
+
+- asked: 2026-10-19 14:11
+- blocking: []
+- status: answered
+- answer: [raw/owner/2026-10-19-s08-q231-netlog-one-line-per-refusal.md](../raw/owner/2026-10-19-s08-q231-netlog-one-line-per-refusal.md), owner answer (2026-10-19): "Fix now (Recommended)": fixed within p5.14 before the gate runs again; a refused request gives one `blocked:<rule>` line, and the request filter's own 403 answer is not logged as a response.
+
+**Where we are:** the first P5 gate run (stopped by Claude Code for low memory) failed the network log check. One
+refused navigation gave three lines: `blocked` from the navigation check, `blocked` again from the request filter
+(p5.15) and `403 allowed` for the filter's own refusal answer. Nothing reached the blocked site. (The time on the
+asked line is when the answer was read; the question was asked a few minutes before.)
+
+**Question:** (a) fix it now in P5 (Claude recommended this); (b) only fix the check script, and fix the log in P6.

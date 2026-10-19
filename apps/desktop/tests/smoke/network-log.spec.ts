@@ -1,7 +1,7 @@
 // p5.9 (adr-0008, owner's Q-114 answer): the network log. With the log switched on, the /netlog fixture page (its
 // stylesheet, script, the site icon, a frame of another site and one fetch) gives exactly the expected records; a
-// navigation Ferrum refuses is logged as blocked; every record has exactly the allowed fields (no header, cookie or
-// body field). With the default settings the log is off and writes nothing.
+// navigation Ferrum refuses is logged once, as blocked (Q-231); every record has exactly the allowed fields (no
+// header, cookie or body field). With the default settings the log is off and writes nothing.
 import fs from "node:fs";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
@@ -54,12 +54,13 @@ test.describe.serial("network log", () => {
     await call(f, "tab_activate", { id: tab });
     await go(f, BLOCKED);
     await expect.poll(() => readLog(folder!).recs.some((r) => r.url === BLOCKED && r.policy_decision === "blocked:blocklist"), { timeout: 15_000 }).toBe(true);
-    const blocked = readLog(folder!).recs.find((r) => r.url === BLOCKED)!;
-    expect([blocked.status, blocked.method, blocked.resource_type]).toEqual([null, "", null]);
-    // Finding of p5.9 (Q-229, not asserted): the refused page is never shown, yet WebView2 may still report a response
-    // for it, because the request reached the server. Printed so the evidence shows what happened in this run.
+    // one line per refused request (owner answer Q-231): the navigation check and the request filter (p5.15) both see
+    // it, and the filter's own 403 answer is not a response; wait two seconds for strays first
     await new Promise((r) => setTimeout(r, 2000));
-    const leaked = readLog(folder!).recs.filter((r) => r.url === BLOCKED && r.status !== null);
+    const forBlocked = readLog(folder!).recs.filter((r) => r.url === BLOCKED);
+    expect(forBlocked.map((r) => `${r.status} ${r.method} ${r.resource_type} ${r.policy_decision}`)).toEqual(["null  null blocked:blocklist"]);
+    const blocked = forBlocked[0];
+    const leaked = forBlocked.filter((r) => r.status !== null);
 
     // metadata only: every record has exactly the allowed fields, and nothing that looks like a header, cookie or body
     const { lines, recs } = readLog(folder!);

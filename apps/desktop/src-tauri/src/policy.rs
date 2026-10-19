@@ -105,7 +105,14 @@ pub fn decide(
                 matched = d.matched.as_deref().unwrap_or(""), "navigation denied"
             );
             crate::audit::record(tab, ctx, uri, d.rule.as_str());
-            crate::netlog::blocked(tab, "", crate::content::run_ms(), uri, d.rule.as_str());
+            crate::netlog::blocked(
+                tab,
+                "",
+                crate::content::run_ms(),
+                uri,
+                d.rule.as_str(),
+                crate::netlog::Refuser::Navigation,
+            );
         }
         Verdict::Upgrade(_) => tracing::info!(
             target: "ferrum::policy", tab, context = ctx, site = %site(uri), rule = d.rule.as_str(),

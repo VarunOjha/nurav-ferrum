@@ -795,7 +795,14 @@ fn request_filter(app: &AppHandle, id: u64) -> Rc<dyn Fn(&str) -> bool> {
                     matched = d.matched.as_deref().unwrap_or(""), "request refused"
                 );
                 crate::audit::record(id, "request", uri, d.rule.as_str());
-                crate::netlog::blocked(id, "", run_ms(), uri, d.rule.as_str());
+                crate::netlog::blocked(
+                    id,
+                    "",
+                    run_ms(),
+                    uri,
+                    d.rule.as_str(),
+                    crate::netlog::Refuser::Request,
+                );
                 true
             }
             None => false,

@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:d0af4a15a94c9174d2c7a767898c162e11368830cf4b2933a28d9d6384a9e27c"
+    "content_hash": "sha256:7936d1c0d72465b26cacd334fd733677cc1e05458ebe367b49ff312642fbab22"
   },
   "items": [
     {
@@ -1040,6 +1040,22 @@
       "answered_on": "2026-10-18",
       "blocks": [],
       "category": "Security & privacy",
+      "tags": [
+        "privacy",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "Q-231",
+      "asked": "2026-10-19",
+      "time": "14:11",
+      "question": "The network log writes three lines for one refused request: fix it now?",
+      "why_it_matters": "One refused request gave two 'blocked' lines and a third line wrongly marked 'allowed'. Anyone using the log for research would count it wrong.",
+      "status": "answered",
+      "answer": "Fix it now, in Phase 5, before the gate runs again: one 'blocked' line per refused request, and Ferrum's own refusal answer is not logged as allowed.",
+      "answered_on": "2026-10-19",
+      "blocks": [],
+      "category": "Research & benchmarks",
       "tags": [
         "privacy",
         "benchmarks"
