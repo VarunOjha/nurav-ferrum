@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:4ac30b56bcf3fe354c5724732990189e7febef80a435995c76a148b47255a28a"
+    "content_hash": "sha256:bca4fd66900ca609d8474070a34c9ab904816c13a64c736f1718589a9f71c31e"
   },
   "entries": [
     {
@@ -6039,6 +6039,31 @@
       "tags": [
         "benchmarks",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-telemetry-reapproval-8",
+      "date": "2026-10-18",
+      "time": "22:58",
+      "title": "You re-approved the measurement part's page after the tab state task",
+      "done": "You re-approved the measurement part's page after tab state change records were added.",
+      "next": "Claude builds the network log (p5.9).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] approval | comp-telemetry re-approved after p5.8"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "benchmarks"
       ]
     }
   ]
