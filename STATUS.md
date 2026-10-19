@@ -48,7 +48,7 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.14
-next_action: "p5.14 in flight. Owner, in this order: (1) re-approve the 11 keys staled by the exit sweep (92cee7a) and the gate commit (b7451d2): adr-0008, adr-0011, adr-0015, comp-app-shell, phase-p2-minimal-container (+#exit), phase-p3-tabs-sessions (+#exit), phase-p4-security (+#exit), phase-p5-telemetry; (2) run pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence from the repo folder, PC left alone (about 1.5 h; real-keystroke tests; needs internet); (3) do docs/testing/manual-checklist-p5.md with the gate's release build and report the results; (4) review and approve phase-p5-telemetry#exit. Claude then commits the gate evidence, writes the manual-checklist evidence in his words, logs gate | phase-p5-telemetry exit, runs scripts/verify/p5.14-gate-review.ps1, and PAUSES (P6 needs an explicit go). Run quick_lint as its own step before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "p5.14 in flight; the 11 keys staled by the exit sweep were re-approved (2026-10-19 13:13). Owner, in this order: (1) run pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence from the repo folder, PC left alone (about 1.5 h; real-keystroke tests; needs internet); (3) do docs/testing/manual-checklist-p5.md with the gate's release build and report the results; (3) review and approve phase-p5-telemetry#exit. Claude then commits the gate evidence, writes the manual-checklist evidence in his words, logs gate | phase-p5-telemetry exit, runs scripts/verify/p5.14-gate-review.ps1, and PAUSES (P6 needs an explicit go). Run quick_lint as its own step before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -435,16 +435,16 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 5 (measurement) | 14 of 15 tasks done; the end-of-phase review is ready |
 | Open points aimed at P5 | All answered or moved, each with its reason |
-| Your part | Re-approve 11 pages, run the gate, do the hand checks, sign off |
+| Approvals | The 11 pages are re-approved; all current |
+| Your part | Run the gate, do the hand checks, sign off |
 
-**2. Why, and what it does.** Settling the open points touched 11 approved pages (four of them plans and sign-offs of
-P2 to P4; only the notes on what was checked changed). The gate then reruns every P5 check, the earlier suites and a
+**2. Why, and what it does.** The gate reruns every P5 check, the earlier suites and a
 release build on one commit; some tests press real keys, so the PC must be left alone.
 
-**3. The script:** `pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence` (about 1.5 hours; needs internet),
-after your re-approval. Then the checklist `docs/testing/manual-checklist-p5.md` with the gate's release build.
+**3. The script:** `pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence` (about 1.5 hours; needs internet).
+Then the checklist `docs/testing/manual-checklist-p5.md` with the gate's release build.
 
-**4. What to tell Claude:** first "Re-approve the 11"; after the gate "P5 gate passed" or the FAIL or WAIT lines; then
+**4. What to tell Claude:** after the gate "P5 gate passed" or the FAIL or WAIT lines; then
 the checklist results item by item, and whether P5 is signed off.
 
 ## Pending owner approvals

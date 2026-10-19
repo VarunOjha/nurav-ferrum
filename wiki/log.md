@@ -3370,3 +3370,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p5-telemetry/check-p5.3.txt, raw/evidence/phase-p5-telemetry/check-p5.6.txt, raw/evidence/phase-p5-telemetry/check-p5.9.txt, raw/evidence/phase-p5-telemetry/netlog-coverage-p5.10.json, raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md]
 - result: Every `UNVERIFIED` tag and `verify_in` claim aimed at P5 (32 tags, 39 claims, 21 pages) answered from P5 evidence or moved with its reason (commit 92cee7a): hand checks still owed and first-push items to P6, harness-side measurements to P6, custom title bar to P7. scripts/gates/p5-gate.ps1 and scripts/verify/p5.14-gate-review.ps1 replace their P0 drafts; docs/testing/manual-checklist-p5.md written (commit b7451d2). The gate has not run. Stales approval of adr-0008, adr-0011, adr-0015, comp-app-shell, phase-p2-minimal-container (+#exit), phase-p3-tabs-sessions (+#exit), phase-p4-security (+#exit), phase-p5-telemetry.
 - next: owner re-approves the 11 keys, runs the gate with the PC left alone, does the hand checks, reviews and approves phase-p5-telemetry#exit; then pause.
+
+## [2026-10-19] approval | eleven pages re-approved after the p5.14 exit sweep
+- session: s08
+- time: 13:13
+- pages: [adr-0008, adr-0011, adr-0015, comp-app-shell, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, phase-p5-telemetry]
+- sources: [raw/owner/2026-10-19-s08-p5-14-reapprovals.md]
+- result: Owner: "Reapprove". Recorded approved for adr-0008, adr-0011, adr-0015, comp-app-shell, phase-p2-minimal-container (+#exit), phase-p3-tabs-sessions (+#exit), phase-p4-security (+#exit) and phase-p5-telemetry with tools/approvals_record.py. All approvals current.
+- next: owner runs scripts/gates/p5-gate.ps1 -SaveEvidence with the PC left alone, then the hand checklist.

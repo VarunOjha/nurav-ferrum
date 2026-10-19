@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:35c589683a1c5a16ac465fb6b22bfe6359b32d4f33f20c5bc9a41e4cc4e2d737"
+    "content_hash": "sha256:c29afdf137becfde5dec8923447eae98fe38ab1731fa2f4d84fc84d3dd8e401b"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "11 pages wait for your re-approval (the end-of-phase sweep)",
+      "state": "All current (you re-approved the 11 pages on 19 Oct)",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -42,22 +42,22 @@
         "state": "14 of 15 tasks done; the end-of-phase review is ready"
       },
       {
-        "item": "Open points aimed at P5",
-        "state": "All answered or moved, each with its reason"
+        "item": "Approvals",
+        "state": "The 11 pages are re-approved; all current"
       },
       {
         "item": "Your part",
-        "state": "Re-approve 11 pages, run the gate, do the hand checks, sign off",
+        "state": "Run the gate, do the hand checks, sign off",
         "ref": "p5.14"
       }
     ],
-    "why": "Settling the open points touched 11 approved pages (four are the plans and sign-offs of P2 to P4; only the notes on what was checked changed). The gate then reruns every Phase 5 check, the earlier test suites and a release build on one commit. Some tests press real keys, so the PC must be left alone while it runs.",
+    "why": "The gate reruns every Phase 5 check, the earlier test suites and a release build on one commit. Some tests press real keys, so the PC must be left alone while it runs. Then you check by hand, with the gate's build, that the measuring and the network log work and keep nothing private.",
     "script": {
       "path": "scripts/gates/p5-gate.ps1",
       "parts": [
         {
           "code": "Part 1",
-          "explains": "Checks that your approvals for Phase 5 are current (so re-approve the 11 pages first)."
+          "explains": "Checks that your approvals for Phase 5 are current (they are, since your re-approval)."
         },
         {
           "code": "Part 2",
@@ -77,7 +77,7 @@
         }
       ]
     },
-    "tell_claude": "First \"Re-approve the 11\"; after the gate \"P5 gate passed\" or the FAIL or WAIT lines; then the checklist results item by item, and whether P5 is signed off"
+    "tell_claude": "After the gate \"P5 gate passed\" or the FAIL or WAIT lines; then the checklist results item by item, and whether P5 is signed off"
   },
   "questions_for_you": {
     "open": 16,

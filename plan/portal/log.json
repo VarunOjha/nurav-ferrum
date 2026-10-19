@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:6f3bb7244216c1e0fdf2b23f038287dce01ba5c981bc021caf6603874119b3e5"
+    "content_hash": "sha256:62c3c01cc2f2c925b13478f41fb1f9cda607d7ce0e477ba64473290a56df4911"
   },
   "entries": [
     {
@@ -6461,6 +6461,31 @@
       "tags": [
         "phases",
         "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-14-reapprovals",
+      "date": "2026-10-19",
+      "time": "13:13",
+      "title": "You re-approved the 11 pages changed by the end-of-phase sweep",
+      "done": "You re-approved three decisions, the app shell part, the plans and sign-offs of Phases 2 to 4, and the Phase 5 plan. All approvals are current.",
+      "next": "You run the Phase 5 gate with the PC left alone, then do the hand checks.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "11 pages changed by the sweep",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] approval | eleven pages re-approved after the p5.14 exit sweep"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "phases"
       ]
     }
   ]
