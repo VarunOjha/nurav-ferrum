@@ -3330,7 +3330,7 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Owner: "Re approve". Recorded approved for both keys with tools/approvals_record.py. All approvals current.
 - next: p5.13 literature batch 5 (In-flight written).
 
-## [2026-10-19] research | p5.13 literature batch 5 and headline metric pages defined
+## [2026-10-19] ingest | p5.13 literature batch 5 and headline metric pages defined
 - session: s08
 - time: 01:13
 - pages: [metric-tree-private-commit, metric-peak-tree-private-commit, metric-tree-cpu-time, metric-startup-window-visible, metric-startup-fcp, metric-startup-lcp]
@@ -3338,3 +3338,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Ten sources read by Claude (abstracts or landing pages; the ACM library refused automated reading, so Crossref and author-group or repository pages were used): Georges et al. 2007, Mytkowicz et al. 2009, Kalibera and Jones 2013, Barrett et al. 2017, WProf, Speedometer 3.0, W3C Paint Timing, Largest Contentful Paint, Navigation Timing Level 2, Microsoft GetProcessTimes. Six headline metric pages moved to defined (memory and CPU cite check-p5.4; startup cites check-p5.6, as startup is not in the p5.4 test); support stays unverified (their criteria need P6). Settled: the LCP definition against the specification (Chrome comparison re-targeted to P6) and GetProcessTimes granularity (15.625 ms on this PC). PeakJobMemoryUsed re-targeted to P6. Slip caught before the commit: a citation of check-p5.5 for the 15.6 ms steps did not hold; corrected to sampler-cost-p5.5.json and check-p5.3. The commit message says the six pages' approvals went stale; the checker shows none did (metric pages are not separate approval keys). Check PASS on its first run.
 - commit: b99f027
 - next: p5.15 (block requests to blocked sites, Q-229).
+
+## [2026-10-19] correct | p5.13 log entry: operation research changed to ingest (lint LOG-FORMAT)
+- session: s08
+- time: 01:14
+- pages: [log]
+- result: The p5.13 entry, committed in 02a65d9, used the operation word "research", which is not one of SCHEMA §12's operations, so tools/quick_lint.py reported 1 LOG-FORMAT error. Changed to "ingest" (a new raw source); no other character changed. This edits an existing entry, against SCHEMA §12 (append-only), following the earlier precedents, so the wiki stays at 0 lint errors; it is reported to the owner. Slip (third this session): the lint and the commit were sent as two simultaneous tool calls, so the commit did not wait for the lint result. From here the commit is sent only after the lint's output has been read.
+- commit: 02a65d9

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:21f640db290a6cb2c7f896e66acb7b88dc06c28bd3a8eb09c6cd33c889062576"
+    "content_hash": "sha256:409a1ed6eb36c4bf84314d208318e4978e847236b23d3727110a5f34751f2646"
   },
   "entries": [
     {
@@ -6362,7 +6362,8 @@
       "approvals": [],
       "commit": "b99f027",
       "covers": [
-        "## [2026-10-19] research | p5.13 literature batch 5 and headline metric pages defined"
+        "## [2026-10-19] ingest | p5.13 literature batch 5 and headline metric pages defined",
+        "## [2026-10-19] correct | p5.13 log entry: operation research changed to ingest (lint LOG-FORMAT)"
       ],
       "phase": "phase-p5-telemetry",
       "category": "Checked",
