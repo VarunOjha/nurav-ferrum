@@ -3345,3 +3345,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [log]
 - result: The p5.13 entry, committed in 02a65d9, used the operation word "research", which is not one of SCHEMA §12's operations, so tools/quick_lint.py reported 1 LOG-FORMAT error. Changed to "ingest" (a new raw source); no other character changed. This edits an existing entry, against SCHEMA §12 (append-only), following the earlier precedents, so the wiki stays at 0 lint errors; it is reported to the owner. Slip (third this session): the lint and the commit were sent as two simultaneous tool calls, so the commit did not wait for the lint result. From here the commit is sent only after the lint's output has been read.
 - commit: 02a65d9
+
+## [2026-10-19] code | p5.15 requests to blocked sites refused before they are sent
+- session: s08
+- time: 01:46
+- pages: [comp-security-engine, comp-webview-manager, comp-network-logger, qual-security-testing-plan, risk-r07]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.15.txt, raw/evidence/phase-p5-telemetry/block-requests-cost-p5.15.json, raw/evidence/phase-p5-telemetry/full-smoke-p5.15.txt, raw/owner/2026-10-18-s08-q229-block-requests-fully.md]
+- result: The security engine gained evaluate_resource; every tab view filters every request (WebResourceRequested for all contexts and source kinds) and answers a refused one with a 403 of its own, so nothing is sent; refusals go to the audit log and the network log. Check PASS on the first saved run: typed, link, redirect, frame, image and fetch attempts to the blocked host left the test server's counter untouched, an allowed fetch was counted, and the control run with the filter's decision switched off (debug-only) leaked the typed attempt again (count 4). Cost rough and inconclusive (on 51.6, off 81.9 ms median, fixed order; the event stays registered in both). Full smoke suite: 146 passed, 1 failed with NOT-FRONT (the real-keystroke shortcut test found another window in front); rerun alone, all four focus-in-the-page shortcut tests failed the same way; not re-run on an idle PC. risk-r07's request-filter claim verified. Stales approval of comp-security-engine, comp-webview-manager and comp-network-logger.
+- commit: e53743c
+- next: owner re-approves the three pages; then p5.14 exit review (with a rerun of the shortcut tests on an idle PC).

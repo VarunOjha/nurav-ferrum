@@ -47,8 +47,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s08
 current_phase: phase-p5-telemetry
-current_task: p5.15
-next_action: "p5.15 in flight (see In-flight). Then p5.14 exit review (every remaining P5-targeted UNVERIFIED tag resolved or re-targeted with a reason; owner approves phase-p5-telemetry#exit; then pause). Run quick_lint as its own step and read it before sending any commit. Hand check owed: the two open-folder buttons. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+current_task: p5.14
+next_action: "Ask the owner to re-approve comp-security-engine, comp-webview-manager and comp-network-logger (staled by p5.15, e53743c), and tell him the shortcut tests need the PC idle (NOT-FRONT; ask him to leave the PC alone for a rerun of shortcuts.spec, or rerun them during the exit review). Then p5.14 exit review: run every P5 check script, resolve or re-target every remaining P5-targeted UNVERIFIED tag with a reason, gate script, owner reviews the evidence and approves phase-p5-telemetry#exit; then PAUSE (P6 needs an explicit go). Run quick_lint as its own step and read it before sending any commit. Hand check owed: the two open-folder buttons. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -88,6 +88,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - p5.11 done (`5a172a7`): settings screen switches for measuring and the network log (both off by default, Q-230 and Q-114), days kept, open-folder buttons; measuring now recorded during normal use (one export run per start, accepted by the checker); check PASS. comp-telemetry, comp-app-shell and comp-core re-approved by the owner.
 - p5.12 done (`438ba3e`): DevTools targets and renderer per tab in two isolation modes (per-site: every tab a page target, shell listed; per-site-udf: no tab on the port; each tab its own renderer; WebView2 processes descend from Ferrum); four tags resolved, one re-targeted to P7; check PASS. adr-0012 and comp-telemetry re-approved by the owner.
 - p5.13 done (`b99f027`): literature batch 5 (ten sources: benchmarking methodology, WProf, Speedometer 3, the W3C timing specifications, GetProcessTimes); six headline metric pages defined; LCP definition and CPU-time granularity settled; check PASS. No approval went stale (metric pages are not separate approval keys).
+- p5.15 done (`e53743c`, full-suite evidence `8743aff`): requests to blocked sites refused before they are sent (owner answer Q-229): typed, link, redirect, frame, image and fetch reach no blocked server; control with the filter off leaks again; check PASS. Full smoke suite 146 passed, 1 failed with NOT-FRONT (real-keystroke shortcut tests need Ferrum in front; rerun alone 4 such failures). comp-security-engine, comp-webview-manager and comp-network-logger approvals stale.
 
 ## Done this session (s03)
 
@@ -391,12 +392,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p5.15 (security follow-up, owner answer Q-229: requests to blocked sites stopped at the network level)
-- session: s08
-- intent: security engine: a pure check for single requests (http and https only: denied when the blocklist matches and no more specific allowlist entry overrides; an http(s) address that cannot be read is denied; other schemes are left to the navigation rules), unit tests. webview-manager webview2: Handlers gets a request filter; every tab view registers WebResourceRequested with the filter "*" for all resource contexts and all request source kinds (ICoreWebView2_22, so frames and workers are included), and answers a refused request itself with a 403 response made by its environment, so nothing is sent (COM-1/3/4/5; logged if the runtime lacks the interface); comp-webview-manager updated. App: the filter uses the current policy (settings changes apply at once), writes the audit record and the network log's blocked record; debug builds can switch the filter off with an environment variable for the cost comparison only. Smoke spec block-requests.spec.ts: with 127.0.0.1 blocked, typed, link, redirect, frame, image and fetch attempts each leave the test server's request counter untouched, allowed requests still count; cost: the /netlog page loaded 30 times with the filter on and off. comp-security-engine, qual-security-testing-plan (threat T04 and the new behaviour) and risk-r07 (its request-filter claim) updated. Pages edited stale their approvals. scripts/verify/p5.15-block-requests.ps1 (no P0 draft exists).
-- planned paths: crates/security/src/{policy.rs,lib.rs}, crates/security/tests/*, crates/webview-manager/src/webview2.rs, apps/desktop/src-tauri/src/{content.rs,policy.rs,netlog.rs}, apps/desktop/tests/smoke/block-requests.spec.ts, scripts/verify/p5.15-block-requests.ps1, wiki/architecture/components/{comp-security-engine.md,comp-webview-manager.md}, wiki/quality/qual-security-testing-plan.md, wiki/risks/risk-r07-navigation-filter-fail-open.md, wiki/raw/evidence/phase-p5-telemetry/{check-p5.15.txt,block-requests-cost-p5.15.json}, wiki/raw/MANIFEST.sha256, plan/portal/*.json
-- builds: target/debug only; never target/release
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
+(empty: p5.15 finished on 2026-10-19 in e53743c)
 
 ## Blockers
 
@@ -434,15 +430,15 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
-| Last task | p5.13 done: reading on measurement methods; main measures defined |
+| Last task | p5.15 done: requests to blocked sites stopped |
 | Q-229 | Answered: block requests to blocked sites fully (new task p5.15) |
-| Next task | p5.15: stop requests to blocked sites |
+| Your part | Re-approve three part pages (security engine, browser-engine module, network log) |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** nothing needed; Claude reports after each task.
+**4. What to tell Claude:** "Re-approve" for the three pages.
 
 ## Pending owner approvals
 

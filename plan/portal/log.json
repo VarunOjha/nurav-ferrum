@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:409a1ed6eb36c4bf84314d208318e4978e847236b23d3727110a5f34751f2646"
+    "content_hash": "sha256:4fd7a7b909d7cb34fd8f82cd9a44e8bc8afd3bdb838fd410b84c79eca6a92a0e"
   },
   "entries": [
     {
@@ -6370,6 +6370,39 @@
       "tags": [
         "benchmarks",
         "paper"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-15",
+      "date": "2026-10-19",
+      "time": "01:46",
+      "title": "A blocked site now receives nothing at all",
+      "done": "Ferrum now checks every request a tab makes and refuses those to blocked sites before they leave the PC: typed addresses, links, redirects, frames, images and fetches. A test with the test server's request counter showed none got through, while allowed requests did; with the filter switched off in a test mode, the request got through again. The full test run passed except keyboard-shortcut tests that need Ferrum's window in front.",
+      "next": "You re-approve three part pages; then the end-of-phase review (p5.14).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security part (page changed)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "Browser-engine module (page changed)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "Network log part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "e53743c",
+      "covers": [
+        "## [2026-10-19] code | p5.15 requests to blocked sites refused before they are sent"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "blocklist",
+        "privacy"
       ]
     }
   ]

@@ -5666,6 +5666,17 @@
       "related": [
         "p5.13"
       ]
+    },
+    {
+      "id": "e53743c",
+      "kind": "commit",
+      "title": "Commit e53743c",
+      "summary": "Task p5.15: requests to blocked sites are refused before they are sent, for every way in (your answer to the question about blocked sites).",
+      "status": "Done",
+      "related": [
+        "p5.15",
+        "Q-229"
+      ]
     }
   ]
 }

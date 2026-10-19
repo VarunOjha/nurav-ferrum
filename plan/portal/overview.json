@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:82029d8a22b339de59613114bb8a3c53fedf4e72fd60314fd57e2fa9c646e025"
+    "content_hash": "sha256:7e887448e6d4a12c055d31be21fdcd5bcfcb2634fba6c34c14fa1e1f7cfc7c11"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "phase-p5-telemetry"
+      "state": "Three part pages wait for your re-approval",
+      "ref": "comp-security-engine"
     },
     {
       "item": "Your rule",
@@ -35,26 +35,31 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 13 of 15 tasks done"
+        "state": "In progress: 14 of 15 tasks done"
       },
       {
         "item": "Last task",
-        "state": "Reading on measurement methods; main measures defined",
-        "ref": "p5.13"
+        "state": "Requests to blocked sites stopped",
+        "ref": "p5.15"
       },
       {
-        "item": "Next task",
-        "state": "Stop requests to blocked sites",
-        "ref": "p5.15"
+        "item": "Your part",
+        "state": "Re-approve three part pages",
+        "ref": "comp-security-engine"
+      },
+      {
+        "item": "Then",
+        "state": "The end-of-phase review",
+        "ref": "p5.14"
       }
     ],
-    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
+    "why": "Nothing to run. The fix changed the security part, the browser-engine module and the network log part, which cancels your earlier approval of those pages. Claude needs your OK before the end-of-phase review.",
     "script": null,
-    "tell_claude": "Nothing needed; Claude reports after each task"
+    "tell_claude": "\"Re-approve\", or what to change"
   },
   "questions_for_you": {
     "open": 16,
