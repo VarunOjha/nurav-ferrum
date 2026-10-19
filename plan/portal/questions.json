@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:d79efa83ac5128f993bb1d6060d2cfdb59c8372b556b373ec53f60452796a5f1"
+    "content_hash": "sha256:c4901439eec126c4c2d1154b8ac01ac0d07984ebd5afa5a620d63d50db25943b"
   },
   "items": [
     {
@@ -1019,9 +1019,9 @@
       "time": "23:20",
       "question": "A blocked site still receives the request: should Ferrum stop it reaching the site?",
       "why_it_matters": "Found while building the network log: when the blocked sites list refuses a typed address, the page is never shown, but the request still reaches the site (the test server counted all three refused tries). So a blocked site can still see that someone asked for it.",
-      "status": "open",
-      "answer": null,
-      "answered_on": null,
+      "status": "answered",
+      "answer": "Block it fully: Ferrum also stops the request itself, so nothing reaches a blocked site (pages, frames and their images or scripts). Added as task p5.15 before the end of Phase 5.",
+      "answered_on": "2026-10-18",
       "blocks": [],
       "category": "Security & privacy",
       "tags": [

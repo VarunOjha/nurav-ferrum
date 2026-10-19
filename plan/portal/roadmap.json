@@ -107,10 +107,10 @@
       "one_line_goal": "Memory, CPU, timing and network logged, and the numbers proven accurate",
       "status": "In progress",
       "tasks_done": 9,
-      "tasks_total": 14,
+      "tasks_total": 15,
       "source": {
         "wiki_path": "wiki/phases/phase-p5-telemetry.md",
-        "content_hash": "sha256:8d39697fb72d1e4a2069d5ebdcdfa411bf52404e30a39d9d1135fd5894f4e8ff"
+        "content_hash": "sha256:e0590b65987484096849de907ca0530376e200bd0f25bcafe16357ef7142e796"
       }
     },
     {

@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:4054895d7d4a12c6537bd0138134938773caebd5c12e358e8e10b02b8118091e"
+    "content_hash": "sha256:1e76a8b92a8d7d724cde397affdc0f5ba200a5fa04798b4b9e85170cfbee5552"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "Three part pages wait for your re-approval",
-      "ref": "comp-network-logger"
+      "state": "The Phase 5 plan and three part pages wait for your re-approval",
+      "ref": "phase-p5-telemetry"
     },
     {
       "item": "Your rule",
@@ -39,35 +39,25 @@
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 9 of 14 tasks done"
+        "state": "In progress: 9 of 15 tasks done"
       },
       {
-        "item": "Last task",
-        "state": "Network log built and checked",
-        "ref": "p5.9"
-      },
-      {
-        "item": "Found",
-        "state": "A blocked site still receives the request",
+        "item": "Your answer",
+        "state": "Block requests to blocked sites fully (new task)",
         "ref": "Q-229"
       },
       {
         "item": "Your part",
-        "state": "Answer the question; re-approve three part pages",
-        "ref": "comp-network-logger"
+        "state": "Re-approve the Phase 5 plan page and three part pages",
+        "ref": "phase-p5-telemetry"
       }
     ],
-    "why": "Nothing to run. The network log task changed three part pages, which cancels your earlier approval of them, and it found that the blocked sites list hides a page but does not stop its request. How to handle that is your decision.",
+    "why": "Nothing to run. Your answer added a task to the Phase 5 plan, and the network log task changed three part pages; both cancel your earlier approval of those pages. Claude needs your OK before going on.",
     "script": null,
-    "tell_claude": "Your choice for the question, and \"Re-approve\" for the three pages"
+    "tell_claude": "\"Re-approve\", or what to change"
   },
   "questions_for_you": {
-    "open": 17,
-    "items": [
-      {
-        "id": "Q-229",
-        "question": "A blocked site still receives the request: should Ferrum stop it reaching the site?"
-      }
-    ]
+    "open": 16,
+    "items": []
   }
 }

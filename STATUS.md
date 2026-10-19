@@ -48,7 +48,7 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.10
-next_action: "Ask the owner Q-229 (a blocked site still receives the request; options in ov-open-questions; Claude recommends blocking at the network level as a security follow-up) and to re-approve comp-network-logger, comp-webview-manager and comp-core (staled by p5.9, 4a6fecf). Then p5.10: network logger overhead pilot and coverage check (iframes, redirects, service-worker fetches documented as covered or not; coverage table on comp-network-logger cites the test outputs; overhead pilot raw output saved). Write the In-flight record first; read any P0 draft check script before replacing it. Still open on P5-targeted claims: EX2 tag on risk-r05 (verified by check-p5.3; close at the exit review), adr-0008 field-availability tag (answered by p5.9: no timing in the event, type and size derived; close at the exit review), GetProcessTimes granularity (metric-tree-cpu-time), short-lived cycle capture (metric-tree-cpu-cycles), LCP definition vs the spec (metric-startup-lcp; p5.13 literature), bfcache behaviour (metric-nav-latency). Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "Ask the owner to re-approve phase-p5-telemetry (task p5.15 added after Q-229: block requests to blocked sites at the network level) and comp-network-logger, comp-webview-manager and comp-core (staled by p5.9, 4a6fecf). Then p5.10: network logger overhead pilot and coverage check (iframes, redirects, service-worker fetches documented as covered or not; coverage table on comp-network-logger cites the test outputs; overhead pilot raw output saved). Write the In-flight record first; read any P0 draft check script before replacing it. Still open on P5-targeted claims: EX2 tag on risk-r05 (verified by check-p5.3; close at the exit review), adr-0008 field-availability tag (answered by p5.9: no timing in the event, type and size derived; close at the exit review), GetProcessTimes granularity (metric-tree-cpu-time), short-lived cycle capture (metric-tree-cpu-cycles), LCP definition vs the spec (metric-startup-lcp; p5.13 literature), bfcache behaviour (metric-nav-latency). Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -83,7 +83,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - p5.6 done (`486d60d`): startup chain (process created, window visible, shell first paint, tab FCP and LCP) read by the host through DevTools calls in an isolated world; check PASS. comp-telemetry and comp-webview-manager re-approved by the owner.
 - p5.7 done (`fac0106`): navigation timing records (host: start, redirect hops, completion, outcome; page: first response, DOMContentLoaded, load, read in an isolated world); origin label against the previous page; check PASS on ten loads with the P2 redirect fixtures. comp-telemetry re-approved by the owner.
 - p5.8 done (`9d9c5f9`): lifecycle transition record in export v1 (all six design states and the P7 triggers defined now), logged for tab hide, show, open and close; check PASS (9 records for two tabs, none refused). comp-telemetry re-approved by the owner.
-- p5.9 done (`4a6fecf`): metadata-only network log (WebResourceResponseReceived, one folder per app session, rotation, 14-day deletion, off by default, blocked navigations logged); check PASS (the test page's six expected records exactly; only the allowed fields; off by default). Finding: a navigation refused by the blocklist still reaches the server (owner question Q-229). comp-network-logger, comp-webview-manager and comp-core approvals stale.
+- p5.9 done (`4a6fecf`): metadata-only network log (WebResourceResponseReceived, one folder per app session, rotation, 14-day deletion, off by default, blocked navigations logged); check PASS (the test page's six expected records exactly; only the allowed fields; off by default). Finding: a navigation refused by the blocklist still reaches the server; owner answered Q-229 "Block it fully" (task p5.15 added). comp-network-logger, comp-webview-manager and comp-core approvals stale.
 
 ## Done this session (s03)
 
@@ -426,13 +426,14 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
 | Last task | p5.9 done: network log |
-| Your part | Answer Q-229 (blocked site still receives the request); re-approve three part pages |
+| Q-229 | Answered: block requests to blocked sites fully (new task p5.15) |
+| Your part | Re-approve the Phase 5 plan page and three part pages |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** your choice for Q-229, and "Re-approve" for the three pages.
+**4. What to tell Claude:** "Re-approve" for the four pages.
 
 ## Pending owner approvals
 

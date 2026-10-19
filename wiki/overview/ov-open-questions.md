@@ -5,6 +5,7 @@ title: "Open questions for the owner (canonical register)"
 status: draft
 updated: 2026-10-18
 sources:
+  - raw/owner/2026-10-18-s08-q229-block-requests-fully.md
   - raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -988,7 +989,8 @@ not work).
 
 - asked: 2026-10-18 23:20
 - blocking: []
-- status: open
+- status: answered
+- answer: [raw/owner/2026-10-18-s08-q229-block-requests-fully.md](../raw/owner/2026-10-18-s08-q229-block-requests-fully.md), owner answer (2026-10-18): "Block it fully (Recommended)": requests to blocked sites are stopped at the network level too, for pages, frames and their sub-resources; planned as task p5.15 before the P5 exit review, with a test that the server sees no request and a cost check.
 
 **Where we are:** found while building p5.9 (network log), recorded in
 [blocked-request-reaches-server-p5.9](../raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt).

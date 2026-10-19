@@ -7,7 +7,7 @@
   "status": "In progress",
   "progress": {
     "done": 9,
-    "total": 14
+    "total": 15
   },
   "step_order": [
     "File format",
@@ -164,6 +164,17 @@
       "script": "scripts/verify/p5.13-reading-measurement-methods.ps1"
     },
     {
+      "id": "p5.15",
+      "title": "Stop requests to blocked sites",
+      "what": "Ferrum stops requests to a blocked site at the network level, not only its page: typed addresses, links, redirects, frames, images and scripts.",
+      "why": "Today a blocked site's page is hidden, but the site still receives the request and can see that someone asked for it.",
+      "how": "Filter the requests themselves with WebView2's request event and refuse those to blocked sites; test every way in against the test server's request counter.",
+      "status": "Not started",
+      "chain": "A blocked site still receives the request → stop it at the network level for every way in → a blocked site really gets nothing.",
+      "check": "The test server counts no request for a blocked site after every kind of attempt; allowed sites still load; the cost is measured.",
+      "script": null
+    },
+    {
       "id": "p5.14",
       "title": "Gate and your review",
       "what": "The phase gate and your review.",
@@ -228,6 +239,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p5-telemetry.md",
-    "content_hash": "sha256:8d39697fb72d1e4a2069d5ebdcdfa411bf52404e30a39d9d1135fd5894f4e8ff"
+    "content_hash": "sha256:e0590b65987484096849de907ca0530376e200bd0f25bcafe16357ef7142e796"
   }
 }

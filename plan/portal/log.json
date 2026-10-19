@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:1b94a4886bff53cd88cc3337b1aa751600e6928157f78b89fe77933dc1cc3c42"
+    "content_hash": "sha256:446e16a49ab67e6c7afb3593d41acb8c2b7c3aedd4fe20a786469386bdb1011c"
   },
   "entries": [
     {
@@ -6097,6 +6097,40 @@
       "tags": [
         "privacy",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-q229",
+      "date": "2026-10-18",
+      "time": "23:32",
+      "title": "You chose to block requests to blocked sites fully",
+      "done": "You decided that Ferrum must also stop the request itself, so nothing reaches a blocked site. Claude added this as a new Phase 5 task (p5.15), before the end-of-phase review.",
+      "next": "You re-approve the Phase 5 plan page and three part pages; then the network log's coverage and cost (p5.10).",
+      "decisions": [
+        {
+          "what": "Requests to blocked sites are stopped at the network level",
+          "by": "you"
+        },
+        {
+          "what": "The fix becomes Phase 5 task p5.15",
+          "by": "claude"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Phase 5 plan (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] decide | Q-229 answered: requests to blocked sites are stopped fully; task p5.15 added"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "privacy",
+        "WebView2"
       ]
     }
   ]

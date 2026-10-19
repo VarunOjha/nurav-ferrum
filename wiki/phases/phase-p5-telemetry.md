@@ -5,6 +5,7 @@ title: "P5 Telemetry and network logger (Milestone M4): validated process metric
 status: in-progress
 updated: 2026-10-18
 sources:
+  - raw/owner/2026-10-18-s08-q229-block-requests-fully.md
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/measurement-methodology.md
@@ -70,6 +71,9 @@ tasks:
   - id: p5.13
     title: "Research track: literature batch 5 (measurement methodology, browser benchmarking practice); metric pages move to status defined"
     verify: "New raw research notes; each headline metric page has status defined and cites p5.4 evidence."
+  - id: p5.15
+    title: "Security follow-up (owner answer Q-229): requests to blocked sites are stopped at the network level, not only the page (typed addresses, links, redirect hops, frames and sub-resources)"
+    verify: "Integration test: the fixture server counts no request for a blocked site after typed, link, redirect, frame and sub-resource attempts; allowed sites still load; the request filter's cost is measured and the raw output saved."
   - id: p5.14
     title: "Exit gate and owner M4 review"
     verify: "All evidence files exist; lint clean; owner approves phase-p5-telemetry#exit."
@@ -177,6 +181,8 @@ flowchart LR
   p5_11 --> p5_14
   p5_12 --> p5_14
   p5_13["p5.13 literature batch 5"] --> p5_14
+  p5_9 --> p5_15["p5.15 block requests to blocked sites (Q-229)"]
+  p5_15 --> p5_14
 ```
 
 ## Checkpoints and interruption recovery

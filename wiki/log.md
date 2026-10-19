@@ -3246,3 +3246,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: network-logger crate built (record with exactly eleven allowed fields, strict reading, writer with one folder per app session, rotation and a per-session file cap, deletion of only Ferrum's own old sessions); webview-manager reports WebResourceResponseReceived only while the log is on, handing on url, method, status and two values derived from single named headers; core gained [network_log] (off by default, Q-114); ov-arch-configuration corrected to Q-114 (it still said enabled = true). Check PASS on the first saved run: the /netlog test page gave exactly its six expected records, a refused address its blocked:blocklist record, every record only the allowed fields, and no folder with the default settings. Finding: in the development run the refused address also produced a 200 response; a diagnostic spec (created and deleted by Claude) confirmed all three refused tries reached the test server; saved as evidence and asked as Q-229 (security behaviour of the P4 engine; not changed in p5.9). Also answered: WebResourceResponseReceived gives no timing (t_ms is when the response was reported); resource type and size are derived from Sec-Fetch-Dest and Content-Length. Stales approval of comp-network-logger, comp-webview-manager and comp-core.
 - commit: 4a6fecf
 - next: owner answers Q-229 and re-approves the three pages; then p5.10 (coverage and overhead pilot).
+
+## [2026-10-18] decide | Q-229 answered: requests to blocked sites are stopped fully; task p5.15 added
+- session: s08
+- time: 23:32
+- pages: [ov-open-questions, phase-p5-telemetry]
+- sources: [raw/owner/2026-10-18-s08-q229-block-requests-fully.md, raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt]
+- result: Owner: "Block it fully (Recommended)". Ferrum will also stop requests to blocked sites at the network level, for pages, frames and their sub-resources. Placement chosen by Claude (not asked; noted in the raw file): new task p5.15 in P5, before the exit review, since P4 is closed. Stales approval of phase-p5-telemetry.
+- stales: [phase-p5-telemetry]
+- next: owner re-approves phase-p5-telemetry, comp-network-logger, comp-webview-manager and comp-core.
