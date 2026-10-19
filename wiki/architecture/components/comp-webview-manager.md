@@ -38,6 +38,7 @@ interfaces:
   - "TabManager API: open, close, activate, navigate, back, forward, reload, stop, snapshot, restore"
   - "LifecycleActuator impl (trait from ferrum-core)"
   - "Safe COM wrappers: try_suspend, resume, set_memory_level, go_back, go_forward, process_infos, enable_netlog, run_probe"
+  - "call_devtools(core, method, params JSON, done), ContentView::call_devtools, controller_call_devtools (p5.6: CallDevToolsProtocolMethod from the host; the result arrives as JSON on the UI thread)"
 connects:
   - to: comp-webview2-runtime
     label: "create, position, show and hide child tab WebViews; navigate; TrySuspend/Resume; Close (controllers Ferrum creates with raw COM from Tauri's environment, adr-0029, or in isolation mode per-site-udf from a site's own environment, p4.15)"
@@ -248,3 +249,13 @@ Not yet built: `procinfo` and `netlog` (P5); the lifecycle actuator (P7).
   0.4 s after a program download starts and the download waits there; whether "Keep" then completes it is a manual
   check ([check-p4.18 second run](../../raw/evidence/phase-p4-security/check-p4.18.20261014-1720.txt)). No WebView2 function was found that lets the app answer
   SmartScreen's question itself.
+
+## Implementation status (P5, measurement)
+
+- p5.6, DevTools calls from the host: `call_devtools` wraps `ICoreWebView2::CallDevToolsProtocolMethod` (COM-1, COM-2:
+  the result arrives in its completion handler on the UI thread); `ContentView::call_devtools` uses a tab's view and
+  `controller_call_devtools` Tauri's shell view. Used by the app's debug-only `test_startup` hook to read paint times
+  (`Page.getFrameTree`, `Page.createIsolatedWorld`, `Runtime.evaluate` in that isolated world). The call works whether
+  or not the developer tools are allowed for the user; nothing in a page can reach it. Observed in the p5.6 live test
+  ([check-p5.6](../../raw/evidence/phase-p5-telemetry/check-p5.6.txt)): the isolated world sees the page's paint and
+  largest-contentful-paint entries.

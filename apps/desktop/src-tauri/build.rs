@@ -30,6 +30,7 @@ fn main() {
             "test_stats",
             "test_processes",
             "test_sample",
+            "test_startup",
             "tab_new_private",
             "site_data_clear",
             "test_focus",

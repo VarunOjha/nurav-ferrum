@@ -25,6 +25,7 @@
     "allow-test-stats",
     "allow-test-processes",
     "allow-test-sample",
+    "allow-test-startup",
     "allow-tab-new-private",
     "allow-site-data-clear",
     "allow-test-focus",

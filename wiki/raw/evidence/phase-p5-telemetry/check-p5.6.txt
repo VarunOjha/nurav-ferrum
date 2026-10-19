@@ -1,0 +1,18 @@
+Ferrum check p5.6: Startup timing
+Why: startup can be compared fairly later.
+Run at 2026-10-18 19:35 on commit e78dfc6 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The startup records: complete, in order, counted from process creation
+         three unit tests passed
+  PASS   The metric pages define the in-app boundaries
+         window visible, first contentful paint and largest contentful paint pages each describe the in-app boundary
+Running 1 test using 1 worker
+STARTUP: process_created 0 ms, window_visible 107 ms, tab_first_contentful_paint 991 ms, tab_largest_contentful_paint 991 ms, shell_first_paint 992 ms (fresh profile, debug build, start page /landing)
+  ✓  1 startup-timing.spec.ts:31:1 › every startup boundary is present and in order (1.5s)
+  1 passed (1.3m)
+  PASS   Live: all five startup moments present and in order (test page as the start page) (91 s)
+         process_created 0 ms, window_visible 107 ms, tab_first_contentful_paint 991 ms, tab_largest_contentful_paint 991 ms, shell_first_paint 992 ms (fresh profile, debug build, start page /landing)
+------------------------------------------------------------------------
+RESULT: PASS - p5.6 (3 PASS; 91 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.6 check passed".

@@ -931,8 +931,8 @@
     {
       "id": "metric-startup-window-visible",
       "title": "Time to first window",
-      "summary": "From launching the program to its first window appearing.",
-      "status": "Proposed, not checked",
+      "summary": "From launching the program to its first window appearing. Ferrum now records its own version of this moment; the outside measurement for all browsers comes in P6.",
+      "status": "Proposed; recorded in Ferrum",
       "category": "Measure",
       "tags": [
         "benchmarks",
@@ -944,15 +944,15 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-startup-window-visible.md",
-        "content_hash": "sha256:2c8bf0357ec384ee169ae916ae396e8d9a56a2e59c91a29b0b731f0a4c14667a"
+        "content_hash": "sha256:4f319c2a6785c0ddc611b4f92b3d5f9b958864932d3047c043404f4202888460"
       },
       "unit": "ms"
     },
     {
       "id": "metric-startup-fcp",
       "title": "Time to first content",
-      "summary": "From launch to the start page showing its first text or image.",
-      "status": "Proposed, not checked",
+      "summary": "From launch to the start page showing its first text or image. Ferrum now reads this from the page itself, in a way page code cannot fake; the outside measurement comes in P6.",
+      "status": "Proposed; recorded in Ferrum",
       "category": "Measure",
       "tags": [
         "benchmarks",
@@ -964,15 +964,15 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-startup-fcp.md",
-        "content_hash": "sha256:e06eb0e3cbce9f089333cb99dbb1de1ab68827f7e6b9101662ddc71f1275f158"
+        "content_hash": "sha256:009d0d95fdc30f5cdd09a0d4d6302f856122018749642e60b182ca3e6f32762d"
       },
       "unit": "ms"
     },
     {
       "id": "metric-startup-lcp",
       "title": "Time to main content",
-      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'.",
-      "status": "Proposed, not checked",
+      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'. Ferrum now reads this from the page itself; whether the definition matches the standard is checked later in P5.",
+      "status": "Proposed; recorded in Ferrum",
       "category": "Measure",
       "tags": [
         "benchmarks",
@@ -984,7 +984,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-startup-lcp.md",
-        "content_hash": "sha256:3747c808bcc9aa3bbccdbf07d122c6f3ac2c114aba0b2c8b1a773a9b6480618b"
+        "content_hash": "sha256:d2e24bb8e8bca0c1d0d85bdc308ca84e89909a1e40544ee29e6326ddd7baccf9"
       },
       "unit": "ms"
     },

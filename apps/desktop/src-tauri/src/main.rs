@@ -205,6 +205,7 @@ fn main() {
         .manage(BridgeStats::default())
         .manage(Insets::default())
         .manage(MainHwnd::default())
+        .manage(content::WindowShown::default())
         .manage(TabsState::default())
         .manage(external::PendingExternal::default())
         .manage(external::PopupTimes::default())
@@ -242,6 +243,7 @@ fn main() {
             content::test_stats,
             content::test_processes,
             content::test_sample,
+            content::test_startup,
             recovery::test_crash_tab,
             content::tab_new_private,
             content::site_data_clear,
@@ -360,6 +362,10 @@ fn main() {
                 .inner_size(1280.0, 800.0)
                 .min_inner_size(480.0, 320.0)
                 .build()?;
+            // The startup chain's "window visible" (p5.6): Tauri shows the window while building it.
+            if window.is_visible().unwrap_or(false) {
+                content::note_window_visible(app.handle());
+            }
             let size = window
                 .inner_size()?
                 .to_logical::<f64>(window.scale_factor()?);

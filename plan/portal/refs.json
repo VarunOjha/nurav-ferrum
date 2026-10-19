@@ -1070,7 +1070,7 @@
       "kind": "task",
       "title": "P5 task: Startup timing",
       "summary": "Startup speed is a key result → record when the process starts, the window appears, and the first and largest content are drawn, read by Ferrum itself through the browser's debugging channel → startup can be compared fairly in P6.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -2925,8 +2925,8 @@
       "id": "metric-startup-fcp",
       "kind": "metric",
       "title": "Time to first content",
-      "summary": "From launch to the start page showing its first text or image. Unit: ms.",
-      "status": "Proposed, not checked",
+      "summary": "From launch to the start page showing its first text or image. Ferrum now reads this from the page itself, in a way page code cannot fake; the outside measurement comes in P6. Unit: ms.",
+      "status": "Proposed; recorded in Ferrum",
       "related": [
         "exp-startup"
       ]
@@ -2935,8 +2935,8 @@
       "id": "metric-startup-lcp",
       "kind": "metric",
       "title": "Time to main content",
-      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'. Unit: ms.",
-      "status": "Proposed, not checked",
+      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'. Ferrum now reads this from the page itself; whether the definition matches the standard is checked later in P5. Unit: ms.",
+      "status": "Proposed; recorded in Ferrum",
       "related": [
         "exp-startup"
       ]
@@ -2945,8 +2945,8 @@
       "id": "metric-startup-window-visible",
       "kind": "metric",
       "title": "Time to first window",
-      "summary": "From launching the program to its first window appearing. Unit: ms.",
-      "status": "Proposed, not checked",
+      "summary": "From launching the program to its first window appearing. Ferrum now records its own version of this moment; the outside measurement for all browsers comes in P6. Unit: ms.",
+      "status": "Proposed; recorded in Ferrum",
       "related": [
         "exp-startup"
       ]
@@ -3262,7 +3262,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, and the memory and CPU meter, which passed its accuracy test and costs little. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter (accurate, cheap), and the startup timing. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
       "status": "Planned",
       "related": [
         "layer-engine"
@@ -3272,7 +3272,7 @@
       "id": "comp-webview-manager",
       "kind": "component",
       "title": "Tab & view manager",
-      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, can give a site its own browser engine, keeps SmartScreen on in every engine, and holds a site's permission request until you answer.",
+      "summary": "Creates, shows, hides and closes each website view. Trusted; the only part that talks to WebView2 directly, with low-level code Rust cannot fully check. Since P4 it also stops frames, notices crashes, gives a site its own engine, keeps SmartScreen on and holds permission requests until you answer. In P5 it can read timings from a page.",
       "status": "Built (first working app)",
       "related": [
         "layer-engine"

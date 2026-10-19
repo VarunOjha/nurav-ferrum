@@ -11,6 +11,7 @@ sources:
   - raw/evidence/phase-p5-telemetry/check-p5.3.txt
   - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/evidence/phase-p5-telemetry/check-p5.5.txt
+  - raw/evidence/phase-p5-telemetry/check-p5.6.txt
 related: [ov-arch-data-flows, ov-arch-crate-graph, ov-arch-webview2-integration, comp-webview-manager, comp-resource-manager, comp-benchmark-harness, comp-research-analysis, comp-core, comp-windows-os, comp-app-shell, risk-r05, phase-p5-telemetry, exp-startup, exp-navigation, exp-baseline-footprint]
 approvable: true
 path: crates/telemetry/
@@ -36,6 +37,7 @@ interfaces:
   - "export (p5.1): Record (run, process_sample, tree_sample, sample_gap from p5.3, startup_mark, nav_timing), ExportWriter::create(dir, RunMeta, max_bytes) / write(&Record) / rotate() / finish(), csv::to_csv / from_csv, validate_file / validate_bytes"
   - "Export schema v1 file: crates/telemetry/schema/v1/record.schema.json (JSON Schema 2020-12)"
   - "attribution (p5.2): attribute(host_pid, &[Inventory]) -> ProcessSet {host_pid, members: [Member {pid, kind, source}]}; kind_of(webview2 kind name); the app joins every environment's GetProcessExtendedInfos list (shell first, then site environments) and exposes the set through the debug-only test_processes hook"
+  - "startup (p5.6): StartupTimes {five wall-clock times}; startup_marks(times, tab) -> startup_mark records counted from process creation, or why the chain was refused; filetime_to_unix_ms; app hook test_startup (debug builds only)"
   - "test tool (p5.4): bin ferrum-ground-truth (alloc <MiB>, free, burn <ms>, quit on stdin), used by tests/ground_truth.rs; not part of the app"
   - "app hook (p5.3, debug builds only): test_sample(ticks 1 to 20, interval_ms) runs the sampler over the real set and returns its records and, since p5.5, list_ms (how long each first listing of the set took)"
 connects:
@@ -116,6 +118,17 @@ What the meter itself costs; this describes the tool, not Ferrum, and has no pas
 - **Inside Ferrum** (`apps/desktop/tests/smoke/sampler-cost.spec.ts`, debug build, per-site-udf mode, two sites, 17 processes; rough): listing the set took about 1 ms (at most 3.1 ms). Ferrum's own process used 32.5 ms CPU per second while reading every 100 ms (20 readings, 2 s), 2.5 ms per second while reading every 1000 ms, and 0 over a 20 s baseline with two readings. Runs this short are coarse against the 15.6 ms counter steps.
 - **Seen in the baseline run:** one listing took 2.5 s and the set was refused, then asked again (the p5.2 empty-list case, here also slow). The 1 ms figure is for the listings after that.
 - **Not covered:** writing records to files (the writer is not wired in until p5.11), and release builds of Ferrum itself.
+
+## Startup chain (p5.6)
+
+Built in p5.6 (`crates/telemetry/src/startup.rs`; the app's `test_startup` hook and `note_window_visible` in `apps/desktop/src-tauri/src/content.rs`). The owner's Q-115 chain, as Ferrum sees it:
+
+- **Process created:** Ferrum's own creation time (`GetProcessTimes` through `win`), the run clock's zero.
+- **Window visible:** the wall-clock time right after Tauri has built the main window (it shows the window while building it; checked with `is_visible`).
+- **Shell first paint, tab first contentful paint, tab largest contentful paint:** `performance.timeOrigin` plus the paint entries of the shell and of the first tab, read by the host through DevTools calls (comp-webview-manager `call_devtools`) in an isolated world of each page, so page script never sends or changes them (no IPC from page script). Largest contentful paint is the last entry a buffered observer sees within 200 ms.
+- **Rules:** all five must be present; process created comes before window visible and before the shell's paint; window visible before the tab's first contentful paint; that before (or equal to) its largest contentful paint. The shell and the tab draw in parallel, so the shell's paint is not ordered against them. Records are sorted by time for the export file. A chain that breaks a rule is refused.
+- **Checked** ([check-p5.6](../../raw/evidence/phase-p5-telemetry/check-p5.6.txt)): 3 unit tests; live, with a fresh profile and `/landing` as the start page, all five present and in order (process created 0 ms, window visible 107 ms, tab first and largest contentful paint 991 ms, shell first paint 992 ms; debug build, one run, not a result). The definitions are on metric-startup-window-visible, metric-startup-fcp and metric-startup-lcp.
+- **Not yet:** recording the chain on every start into a file (p5.11, when telemetry can be switched on).
 
 ## Unsafe invariants
 

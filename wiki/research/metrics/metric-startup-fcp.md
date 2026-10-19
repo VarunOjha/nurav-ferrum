@@ -3,8 +3,9 @@ id: metric-startup-fcp
 type: metric
 title: "Startup: process start to first contentful paint of start page"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.6.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -27,7 +28,7 @@ tags:
   - metric
 unverified:
   - claim: "How accurately the page wall clock and the harness QPC clock line up"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # Startup: process start to first contentful paint of start page
@@ -48,9 +49,13 @@ unverified:
 
 **Normalisation.** none (ms)
 
+## In-app chain (p5.6)
+
+Ferrum's own record (`startup_mark` `tab_first_contentful_paint`, first tab of the strip): `performance.timeOrigin` plus the `first-contentful-paint` entry's `startTime`, read by the host through DevTools calls (`Page.createIsolatedWorld`, then `Runtime.evaluate` in that isolated world, so page script can neither send nor change the value; no IPC from page script). The shell's first paint is read the same way from the `first-paint` entry (`first-contentful-paint` if absent). Both are counted from Ferrum's process creation time on the system wall clock. In the saved run of [check-p5.6](../../raw/evidence/phase-p5-telemetry/check-p5.6.txt) (fresh profile, debug build, start page `/landing`): process created 0 ms, window visible 107 ms, tab first contentful paint 991 ms, tab largest contentful paint 991 ms, shell first paint 992 ms. One run of a check, not a measurement result.
+
 ## Notes
 - Paint Timing caveats apply: background-tab entries are ignored, the bfcache is not reported, and prerendered pages use `activationStart` ([measurement note](../../raw/research/measurement-methodology.md) §4.2, VERIFIED).
-- How accurately the page wall clock and the harness QPC clock line up is UNVERIFIED[phase-p5-telemetry]. Measure the offset error with a loopback timestamp echo.
+- How accurately the page wall clock and the harness QPC clock line up is UNVERIFIED[phase-p6-benchmark-harness]. Measure the offset error with a loopback timestamp echo. Re-targeted from P5 on 2026-10-18: the harness clock exists only from P6; the in-app chain (above) uses the system wall clock on both sides.
 - "Time to interactive" is **not** used. It was removed from Lighthouse 10 (§4.2, VERIFIED). This replaces the master prompt's "time to interactive state" and the change must be stated in the paper.
 
 ## Used by

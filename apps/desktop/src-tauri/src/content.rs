@@ -66,6 +66,23 @@ pub struct ShellTitle(pub Mutex<String>);
 #[derive(Default)]
 pub struct MainHwnd(pub AtomicIsize);
 
+/// When the main window was first visible, as milliseconds since 1970 (p5.6, the startup chain).
+#[derive(Default)]
+pub struct WindowShown(pub Mutex<Option<f64>>);
+
+/// Records that the main window is visible now (called once, right after it is built).
+pub fn note_window_visible(app: &AppHandle) {
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs_f64() * 1000.0)
+        .unwrap_or(0.0);
+    let shown = app.state::<WindowShown>();
+    let mut at = shown.0.lock().unwrap();
+    if at.is_none() {
+        *at = Some(now);
+    }
+}
+
 /// The space the shell keeps for itself, in logical pixels: `top` (tab strip, toolbar, bars) and `left` (sidebar).
 /// The shell reports it with `shell_layout`; tab views fill the rest, so the two never overlap (spike S1).
 pub struct Insets(pub Mutex<(f64, f64)>);
@@ -1170,6 +1187,180 @@ pub async fn test_processes(app: AppHandle) -> Result<Value, String> {
             "members": set.members.iter().map(|m| json!({"pid": m.pid, "kind": m.kind, "source": m.source})).collect::<Vec<_>>(),
         })),
         "set_error": set.as_ref().err(),
+    }))
+}
+
+/// Which web view a DevTools call goes to.
+#[derive(Debug, Clone, Copy)]
+enum CdpTarget {
+    Shell,
+    Tab(u64),
+}
+
+/// Calls one DevTools Protocol method on a web view from the host (p5.6) and waits (10 s at most) for its result.
+async fn cdp(
+    app: &AppHandle,
+    target: CdpTarget,
+    method: &'static str,
+    params: Value,
+) -> Result<Value, String> {
+    let (tx, rx) = std::sync::mpsc::channel::<Result<String, String>>();
+    let params = params.to_string();
+    let fail = tx.clone();
+    match target {
+        CdpTarget::Shell => {
+            let shell = app.get_webview("shell").ok_or("no shell view")?;
+            shell
+                .with_webview(move |pw| {
+                    let done = Box::new(move |r: Result<String, ferrum_webview_manager::Error>| {
+                        let _ = tx.send(r.map_err(|e| e.to_string()));
+                    });
+                    if let Err(e) = ferrum_webview_manager::webview2::controller_call_devtools(
+                        &pw.controller(),
+                        method,
+                        &params,
+                        done,
+                    ) {
+                        let _ = fail.send(Err(e.to_string()));
+                    }
+                })
+                .map_err(|e| e.to_string())?;
+        }
+        CdpTarget::Tab(id) => {
+            app.run_on_main_thread(move || {
+                let done = Box::new(move |r: Result<String, ferrum_webview_manager::Error>| {
+                    let _ = tx.send(r.map_err(|e| e.to_string()));
+                });
+                let started = VIEWS.with(|m| {
+                    m.borrow()
+                        .get(&id)
+                        .map(|v| v.call_devtools(method, &params, done))
+                });
+                match started {
+                    Some(Ok(())) => {}
+                    Some(Err(e)) => {
+                        let _ = fail.send(Err(e.to_string()));
+                    }
+                    None => {
+                        let _ = fail.send(Err(format!("tab {id} has no view")));
+                    }
+                }
+            })
+            .map_err(|e| e.to_string())?;
+        }
+    }
+    let json = tauri::async_runtime::spawn_blocking(move || {
+        rx.recv_timeout(std::time::Duration::from_secs(10))
+            .map_err(|_| format!("{method} did not answer in time"))?
+    })
+    .await
+    .map_err(|e| e.to_string())??;
+    serde_json::from_str(&json).map_err(|e| format!("{method}: {e}"))
+}
+
+/// Read in an isolated world of the page (so page script cannot change what it reports): the time origin, the
+/// first paint and first contentful paint entries, and the last largest-contentful-paint entry (buffered).
+const PAINT_TIMES_JS: &str = r#"(async () => {
+  const paint = performance.getEntriesByType("paint");
+  const at = (name) => { const e = paint.find((p) => p.name === name); return e ? e.startTime : null; };
+  const lcp = await new Promise((done) => {
+    let last = null;
+    try {
+      new PerformanceObserver((list) => { const e = list.getEntries(); last = e[e.length - 1]; })
+        .observe({ type: "largest-contentful-paint", buffered: true });
+    } catch (_) { done(null); return; }
+    setTimeout(() => done(last ? last.startTime : null), 200);
+  });
+  return { origin: performance.timeOrigin, first_paint: at("first-paint"), fcp: at("first-contentful-paint"), lcp };
+})()"#;
+
+/// The paint times of a web view's page, read through DevTools calls from the host (p5.6; no IPC from page script).
+async fn paint_times(app: &AppHandle, target: CdpTarget) -> Result<Value, String> {
+    let tree = cdp(app, target, "Page.getFrameTree", json!({})).await?;
+    let frame = tree["frameTree"]["frame"]["id"]
+        .as_str()
+        .ok_or("no main frame")?
+        .to_string();
+    let world = cdp(
+        app,
+        target,
+        "Page.createIsolatedWorld",
+        json!({"frameId": frame, "worldName": "ferrum-telemetry"}),
+    )
+    .await?;
+    let context = world["executionContextId"]
+        .as_i64()
+        .ok_or("no isolated world")?;
+    let r = cdp(
+        app,
+        target,
+        "Runtime.evaluate",
+        json!({"expression": PAINT_TIMES_JS, "contextId": context, "awaitPromise": true, "returnByValue": true}),
+    )
+    .await?;
+    if let Some(e) = r.get("exceptionDetails") {
+        return Err(format!("the paint-time reader failed: {e}"));
+    }
+    Ok(r["result"]["value"].clone())
+}
+
+/// Test hook (debug builds only): the startup chain of this start (p5.6): process created (GetProcessTimes), main
+/// window visible, the shell's first paint and the first tab's first and largest contentful paints (read from the
+/// pages through DevTools calls by the host). Returns the times as milliseconds since 1970, the raw paint readings,
+/// and the `startup_mark` records, or why the chain was refused.
+#[tauri::command]
+pub async fn test_startup(app: AppHandle) -> Result<Value, String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    let created = match ferrum_telemetry::win::read(std::process::id()) {
+        ferrum_telemetry::sampler::Reading::Read(c) => {
+            ferrum_telemetry::startup::filetime_to_unix_ms(c.created_100ns)
+        }
+        other => return Err(format!("cannot read Ferrum's own process: {other:?}")),
+    };
+    let visible = (*app.state::<WindowShown>().0.lock().unwrap())
+        .ok_or("the window-visible time was not recorded")?;
+    let tab = {
+        let t = app.state::<TabsState>();
+        let t = t.0.lock().unwrap();
+        t.iter()
+            .next()
+            .map(|(id, _)| id.0)
+            .ok_or("no tab is open")?
+    };
+    let shell = paint_times(&app, CdpTarget::Shell).await?;
+    let page = paint_times(&app, CdpTarget::Tab(tab)).await?;
+    let at =
+        |v: &Value, key: &str| -> Option<f64> { Some(v["origin"].as_f64()? + v[key].as_f64()?) };
+    let shell_paint = at(&shell, "first_paint").or_else(|| at(&shell, "fcp"));
+    let (fcp, lcp) = (at(&page, "fcp"), at(&page, "lcp"));
+    let marks = match (shell_paint, fcp, lcp) {
+        (Some(sp), Some(fcp), Some(lcp)) => ferrum_telemetry::startup::startup_marks(
+            &ferrum_telemetry::startup::StartupTimes {
+                process_created: created,
+                window_visible: visible,
+                shell_first_paint: sp,
+                tab_first_contentful_paint: fcp,
+                tab_largest_contentful_paint: lcp,
+            },
+            tab,
+        ),
+        _ => Err("a paint time is missing".to_string()),
+    };
+    Ok(json!({
+        "tab": tab,
+        "unix_ms": {
+            "process_created": created,
+            "window_visible": visible,
+            "shell_first_paint": shell_paint,
+            "tab_first_contentful_paint": fcp,
+            "tab_largest_contentful_paint": lcp,
+        },
+        "shell": shell,
+        "page": page,
+        "marks": marks.as_ref().ok(),
+        "error": marks.as_ref().err(),
     }))
 }
 

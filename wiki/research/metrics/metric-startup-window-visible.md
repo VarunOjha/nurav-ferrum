@@ -3,8 +3,9 @@ id: metric-startup-window-visible
 type: metric
 title: "Startup: process start to first window visible (T0 to T1)"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.6.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -26,8 +27,8 @@ tags:
   - research
   - metric
 unverified:
-  - claim: "The mechanism for detecting T1"
-    verify_in: phase-p5-telemetry
+  - claim: "The mechanism for detecting T1 from the harness (outside the product)"
+    verify_in: phase-p6-benchmark-harness
   - claim: "A method for flushing the standby list to get a true cold start"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -50,8 +51,12 @@ unverified:
 
 **Normalisation.** none (ms)
 
+## In-app chain (p5.6)
+
+Ferrum's own record of this boundary (comp-telemetry, `startup_mark` `window_visible`): the wall-clock time right after Tauri has built the main window, which it shows while building it (checked with `is_visible`). T0 in-app is Ferrum's process creation time (`GetProcessTimes`), not the harness's ResumeThread, so in-app values can be up to the launch overhead shorter than harness values. The window is shown before the shell has drawn anything. In the saved run of [check-p5.6](../../raw/evidence/phase-p5-telemetry/check-p5.6.txt) (fresh profile, debug build, start page `/landing`): process created 0 ms, window visible 107 ms, tab first contentful paint 991 ms, tab largest contentful paint 991 ms, shell first paint 992 ms. One run of a check, not a measurement result.
+
 ## Notes
-- The mechanism for detecting T1 is UNVERIFIED[phase-p5-telemetry] ([measurement note](../../raw/research/measurement-methodology.md) §4.2).
+- The harness's mechanism for detecting T1 is UNVERIFIED[phase-p6-benchmark-harness] ([measurement note](../../raw/research/measurement-methodology.md) §4.2). Re-targeted from P5 on 2026-10-18: P5 built only Ferrum's in-app chain (below); the harness, which must detect T1 the same way for every product, is built in P6.
 - Edge Startup Boost can pre-launch Edge processes, so it is disabled by policy (`StartupBoostEnabled`=0) for this metric and no `msedge.exe` may run before T0 (§4.2, VERIFIED policy text).
 - For Ferrum, "visible" means the shell window. When Ferrum's window is visible, the tab WebView may still be blank. That is why [metric-startup-fcp](metric-startup-fcp.md) is the user-facing companion metric.
 - A method for flushing the standby list to get a true cold start is UNVERIFIED[phase-p6-benchmark-harness]. Without one, results are labelled "fresh-profile start" and are never called cold.

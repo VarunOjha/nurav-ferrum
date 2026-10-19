@@ -23,11 +23,11 @@ use std::rc::Rc;
 use webview2_com::Microsoft::Web::WebView2::Win32::*;
 use webview2_com::{
     AcceleratorKeyPressedEventHandler, BrowserProcessExitedEventHandler,
-    BytesReceivedChangedEventHandler, ClearBrowsingDataCompletedHandler,
-    CoreWebView2EnvironmentOptions, CreateCoreWebView2ControllerCompletedHandler,
-    CreateCoreWebView2EnvironmentCompletedHandler, DocumentTitleChangedEventHandler,
-    DownloadStartingEventHandler, FaviconChangedEventHandler, FocusChangedEventHandler,
-    GetFaviconCompletedHandler, GetProcessExtendedInfosCompletedHandler,
+    BytesReceivedChangedEventHandler, CallDevToolsProtocolMethodCompletedHandler,
+    ClearBrowsingDataCompletedHandler, CoreWebView2EnvironmentOptions,
+    CreateCoreWebView2ControllerCompletedHandler, CreateCoreWebView2EnvironmentCompletedHandler,
+    DocumentTitleChangedEventHandler, DownloadStartingEventHandler, FaviconChangedEventHandler,
+    FocusChangedEventHandler, GetFaviconCompletedHandler, GetProcessExtendedInfosCompletedHandler,
     HistoryChangedEventHandler, IsDefaultDownloadDialogOpenChangedEventHandler,
     LaunchingExternalUriSchemeEventHandler, NavigationCompletedEventHandler,
     NavigationStartingEventHandler, NewWindowRequestedEventHandler,
@@ -680,6 +680,16 @@ impl ContentView {
         hr(unsafe { self.core.Navigate(&HSTRING::from(url)) })
     }
 
+    /// Calls a DevTools Protocol method on this view (p5.6, measurement): see [`call_devtools`].
+    pub fn call_devtools(
+        &self,
+        method: &str,
+        params_json: &str,
+        done: Box<dyn FnOnce(Result<String, Error>)>,
+    ) -> Result<(), Error> {
+        call_devtools(&self.core, method, params_json, done)
+    }
+
     /// Back one entry (adr-0030).
     pub fn go_back(&self) -> Result<(), Error> {
         // SAFETY: COM-1.
@@ -1166,6 +1176,41 @@ pub fn controller_devtools_enabled(controller: &ICoreWebView2Controller) -> Resu
             .and_then(|st| st.AreDevToolsEnabled(&mut on))
     })?;
     Ok(on.as_bool())
+}
+
+/// Calls a DevTools Protocol method (`method`, parameters as a JSON object) on `core`'s page from the host (p5.6:
+/// the startup paint times are read this way, so page script never talks to Ferrum). `done` gets the result as JSON
+/// (UI thread). The call works whether or not the developer tools are allowed for the user.
+pub fn call_devtools(
+    core: &ICoreWebView2,
+    method: &str,
+    params_json: &str,
+    done: Box<dyn FnOnce(Result<String, Error>)>,
+) -> Result<(), Error> {
+    let handler = CallDevToolsProtocolMethodCompletedHandler::create(Box::new(move |res, json| {
+        done(hr(res).map(|()| json));
+        Ok(())
+    }));
+    // SAFETY: COM-1, COM-2: the result arrives in `handler`; the HSTRINGs outlive the call.
+    hr(unsafe {
+        core.CallDevToolsProtocolMethod(
+            &HSTRING::from(method),
+            &HSTRING::from(params_json),
+            &handler,
+        )
+    })
+}
+
+/// [`call_devtools`] on the web view of `controller` (Tauri's shell view).
+pub fn controller_call_devtools(
+    controller: &ICoreWebView2Controller,
+    method: &str,
+    params_json: &str,
+    done: Box<dyn FnOnce(Result<String, Error>)>,
+) -> Result<(), Error> {
+    // SAFETY: COM-1; `controller` is live.
+    let core = hr(unsafe { controller.CoreWebView2() })?;
+    call_devtools(&core, method, params_json, done)
 }
 
 /// Puts the window that hosts `controller`'s web view at the bottom of its siblings' stacking order. Used for Tauri's

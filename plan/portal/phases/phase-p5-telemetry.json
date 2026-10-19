@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 5,
+    "done": 6,
     "total": 14
   },
   "step_order": [
@@ -81,7 +81,7 @@
       "what": "Startup timing: process start, window visible, shell first drawn, first content drawn and largest content drawn.",
       "why": "Fast start is one of the things Ferrum is meant to be good at. Timing read by page scripts can change what is being timed, so Ferrum reads it itself.",
       "how": "Ferrum reads these moments itself through the browser's debugging channel, never through page scripts. Whether the two content moments can be read this way is not checked yet.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Startup speed is a key result → record when the process starts, the window appears, and the first and largest content are drawn, read by Ferrum itself through the browser's debugging channel → startup can be compared fairly in P6.",
       "check": "On a test page every moment is recorded, in the right order.",
       "script": "scripts/verify/p5.6-startup-timing.ps1"

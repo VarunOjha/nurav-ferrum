@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-test-startup"
+description = "Enables the test_startup command without any pre-configured scope."
+commands.allow = ["test_startup"]
+
+[[permission]]
+identifier = "deny-test-startup"
+description = "Denies the test_startup command without any pre-configured scope."
+commands.deny = ["test_startup"]
