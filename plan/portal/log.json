@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:446e16a49ab67e6c7afb3593d41acb8c2b7c3aedd4fe20a786469386bdb1011c"
+    "content_hash": "sha256:f544e9b8bc9fd557b867fe1bf2dfbfaf6b9b2826f60d52c76c52b406860d1570"
   },
   "entries": [
     {
@@ -6131,6 +6131,43 @@
       "tags": [
         "privacy",
         "WebView2"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-9-reapprovals",
+      "date": "2026-10-18",
+      "time": "23:34",
+      "title": "You re-approved the Phase 5 plan and three part pages",
+      "done": "You re-approved the Phase 5 plan page (with the new task to stop requests to blocked sites) and the network log, browser-engine module and shared base pages.",
+      "next": "Claude checks what the network log sees and what it costs (p5.10).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Phase 5 plan",
+          "status": "Approved"
+        },
+        {
+          "what": "Network log part",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser-engine module",
+          "status": "Approved"
+        },
+        {
+          "what": "Shared base part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] approval | phase-p5-telemetry, comp-network-logger, comp-webview-manager and comp-core re-approved"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]

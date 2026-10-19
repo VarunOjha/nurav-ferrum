@@ -3255,3 +3255,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Owner: "Block it fully (Recommended)". Ferrum will also stop requests to blocked sites at the network level, for pages, frames and their sub-resources. Placement chosen by Claude (not asked; noted in the raw file): new task p5.15 in P5, before the exit review, since P4 is closed. Stales approval of phase-p5-telemetry.
 - stales: [phase-p5-telemetry]
 - next: owner re-approves phase-p5-telemetry, comp-network-logger, comp-webview-manager and comp-core.
+
+## [2026-10-18] approval | phase-p5-telemetry, comp-network-logger, comp-webview-manager and comp-core re-approved
+- session: s08
+- time: 23:34
+- pages: [phase-p5-telemetry, comp-network-logger, comp-webview-manager, comp-core]
+- sources: [raw/owner/2026-10-18-s08-p5-9-reapprovals.md]
+- result: Owner: "Re approve" (four pages; the placement of p5.15 included). Recorded approved for all four keys with tools/approvals_record.py. All approvals current.
+- next: p5.10 network logger coverage and overhead pilot (In-flight written).

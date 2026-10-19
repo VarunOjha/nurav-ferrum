@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:1e76a8b92a8d7d724cde397affdc0f5ba200a5fa04798b4b9e85170cfbee5552"
+    "content_hash": "sha256:a362411ed7fd859b7142441625048427a77e80149acb5f4e327c463b7fdd5c39"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "The Phase 5 plan and three part pages wait for your re-approval",
+      "state": "All up to date",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -35,26 +35,21 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 5",
         "state": "In progress: 9 of 15 tasks done"
       },
       {
-        "item": "Your answer",
-        "state": "Block requests to blocked sites fully (new task)",
-        "ref": "Q-229"
-      },
-      {
-        "item": "Your part",
-        "state": "Re-approve the Phase 5 plan page and three part pages",
-        "ref": "phase-p5-telemetry"
+        "item": "Next task",
+        "state": "What the network log sees, and its cost",
+        "ref": "p5.10"
       }
     ],
-    "why": "Nothing to run. Your answer added a task to the Phase 5 plan, and the network log task changed three part pages; both cancel your earlier approval of those pages. Claude needs your OK before going on.",
+    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
     "script": null,
-    "tell_claude": "\"Re-approve\", or what to change"
+    "tell_claude": "Nothing needed; Claude reports after each task"
   },
   "questions_for_you": {
     "open": 16,
