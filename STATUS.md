@@ -47,8 +47,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s08
 current_phase: phase-p5-telemetry
-current_task: p5.4
-next_action: "p5.4 in flight (see In-flight). Tolerances are committed before the first validation run. Then p5.5 sampler overhead. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+current_task: p5.5
+next_action: "Ask the owner to re-approve comp-telemetry (staled by p5.4, c48de66: test tool interface and validation line). Then p5.5: sampler overhead (CPU time and private commit of the sampler itself at each supported interval; raw outputs under raw/evidence/phase-p5-telemetry/; no comparison claim). Write the In-flight record first. Still open on P5-targeted claims: EX2 tag on risk-r05 (verified by check-p5.3; close at the exit review), GetProcessTimes granularity (metric-tree-cpu-time) and short-lived cycle capture (metric-tree-cpu-cycles). Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -78,6 +78,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - p5.1 done (`4d14fe2`): export schema v1 (run label, records, safe rotating writer, CSV, checker, JSON Schema); check PASS. comp-telemetry re-approved by the owner.
 - p5.2 done (`e014204`): Ferrum's process set from WebView2's own lists, checked beside the S1 app (set 17, none of the other app's 9); empty-list finding recorded; check PASS. comp-telemetry re-approved by the owner.
 - p5.3 done (`3ff53ca`): memory and CPU meter (Windows counters, sums over the set, gaps instead of smaller numbers, interval 100 ms to 60 s); check PASS after two FAIL runs (reading spacing). comp-telemetry re-approved by the owner.
+- p5.4 done (`c48de66`, limits committed first in `d36d27c`): the meter passed its ground-truth validation (helper 256 MiB and 2 s CPU, psutil equal, Ferrum tab 128 MiB buffer); two PASS runs, the first not saved (slip). comp-telemetry approval stale.
 
 ## Done this session (s03)
 
@@ -381,12 +382,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p5.4 (sampler validation against ground truth)
-- session: s08
-- intent: helper program `ferrum-ground-truth` (bin of crates/telemetry, std only, no unsafe): on command it allocates and writes a known number of MiB, frees it, or keeps one thread busy for a known time, then waits. Tolerances in crates/telemetry/tests/ground-truth-tolerances.json, committed in their own commit BEFORE the first validation run (phase rule). Ignored-by-default integration test crates/telemetry/tests/ground_truth.rs (run by the verify script) reads the helper through the sampler (win::read + Sampler::tick) and compares with the expected values and with psutil 7.2.2 (installed today with pip --user; tools/psutil_read.py). Live probe: a Ferrum tab fills a known-size JS buffer and the tree private commit must rise by about that much (closes the metric-tree-private-commit claim). Results, tolerances and any failure written to the metric pages (metric-tree-private-commit, metric-tree-private-working-set, metric-tree-working-set, metric-tree-cpu-time, metric-tree-cpu-cycles; their EX2 tags closed; stales their approvals) and comp-telemetry
-- planned paths: crates/telemetry/{Cargo.toml,src/bin/ferrum-ground-truth.rs,tests/ground_truth.rs,tests/ground-truth-tolerances.json}, tools/psutil_read.py, apps/desktop/tests/smoke/sampler-ground-truth.spec.ts, scripts/verify/p5.4-prove-meter-accurate.ps1, wiki/research/metrics/metric-tree-*.md, wiki/architecture/components/comp-telemetry.md, wiki/raw/evidence/phase-p5-telemetry/{check-p5.4.txt,ground-truth-p5.4.json}, wiki/raw/MANIFEST.sha256, plan/portal/*.json, Cargo.lock
-- builds: target/debug only; never target/release
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task); psutil can stay installed (pip --user)
+(empty: p5.4 finished on 2026-10-18 in c48de66)
 
 ## Blockers
 
@@ -424,14 +420,14 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
-| Last task | p5.3 done: the memory and CPU meter |
-| Next task | p5.4: prove the meter accurate |
+| Last task | p5.4 done: the meter proven accurate |
+| Your part | Re-approve the measurement part's page (changed by p5.4) |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** nothing needed; Claude reports after each task.
+**4. What to tell Claude:** "Re-approve" for the measurement part's page.
 
 ## Pending owner approvals
 

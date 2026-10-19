@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:ef6eb16cba51a66dd2cc7da4fbc99bb32f0e9b0ecdc08a1edbcd8da65f4672ad"
+    "content_hash": "sha256:e6e807ae8f71209c2f46a15180d71d0c05bb5838d4aa324a7f9e1e7db65e2476"
   },
   "entries": [
     {
@@ -5806,6 +5806,31 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-4",
+      "date": "2026-10-18",
+      "time": "19:10",
+      "title": "The memory and CPU meter is proven accurate",
+      "done": "Limits were fixed and saved before any test ran. A helper program used a known 256 MiB of memory and 2 s of CPU; the meter read them within the limits, and psutil, an independent tool, read the same values. A Ferrum tab that filled a 128 MiB buffer raised the memory total by 130 MiB. Slip: the first of two passing runs was not saved.",
+      "next": "You re-approve the measurement part's page; then Claude measures what the meter itself costs (p5.5).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "c48de66",
+      "covers": [
+        "## [2026-10-18] code | p5.4 sampler validated against ground truth"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "memory",
+        "testing"
       ]
     }
   ]

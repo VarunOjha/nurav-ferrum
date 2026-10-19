@@ -5521,6 +5521,26 @@
       "related": [
         "p5.3"
       ]
+    },
+    {
+      "id": "c48de66",
+      "kind": "commit",
+      "title": "Commit c48de66",
+      "summary": "Task p5.4: the memory and CPU meter passed its accuracy test against a helper program with known use, psutil and a Ferrum tab with a known buffer.",
+      "status": "Done",
+      "related": [
+        "p5.4"
+      ]
+    },
+    {
+      "id": "d36d27c",
+      "kind": "commit",
+      "title": "Commit d36d27c",
+      "summary": "Task p5.4: the accuracy limits and test code, saved before the first test run so they could not be loosened afterwards.",
+      "status": "Done",
+      "related": [
+        "p5.4"
+      ]
     }
   ]
 }
