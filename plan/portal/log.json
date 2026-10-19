@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:a5e96444d9ef9cfa3206823dab12ba6c557fb0569a54a31bd1dc8ac707d401cb"
+    "content_hash": "sha256:cd2bdbd9517a5307cf79194717518dd6a14314d6b5820c59aa140d838c794e77"
   },
   "entries": [
     {
@@ -5856,6 +5856,31 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-5",
+      "date": "2026-10-18",
+      "time": "19:25",
+      "title": "What the meter itself costs: very little",
+      "done": "One reading of 17 processes takes about 0.6 ms. Reading every 0.1 s costs 7 ms of CPU per second; every second, under 1 ms. Its memory does not grow. Inside Ferrum, listing its processes takes about 1 ms, though once it took 2.5 s and had to be asked again. These numbers describe the tool, not Ferrum.",
+      "next": "You re-approve the measurement part's page; then the startup timing (p5.6).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "0768362",
+      "covers": [
+        "## [2026-10-18] code | p5.5 sampler overhead characterised"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "memory",
+        "testing"
       ]
     }
   ]

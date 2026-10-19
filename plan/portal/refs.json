@@ -5541,6 +5541,16 @@
       "related": [
         "p5.4"
       ]
+    },
+    {
+      "id": "0768362",
+      "kind": "commit",
+      "title": "Commit 0768362",
+      "summary": "Task p5.5: measured what the memory and CPU meter itself costs at each reading interval, on its own and inside Ferrum.",
+      "status": "Done",
+      "related": [
+        "p5.5"
+      ]
     }
   ]
 }
