@@ -5,9 +5,9 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:6b3bb63f8fe775706a57d230382c300ec978aacfecfdea65414c5158553c84dc"
+    "content_hash": "sha256:367f44cdd381e665e4df2a01fe02cfdeac1cdcf785ba27faa215190196b261a5"
   },
-  "updated": "2026-10-18",
+  "updated": "2026-10-19",
   "where_we_are": [
     {
       "item": "Current phase",
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "phase-p5-telemetry"
+      "state": "Three part pages wait for your re-approval",
+      "ref": "comp-telemetry"
     },
     {
       "item": "Your rule",
@@ -35,26 +35,26 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 10 of 15 tasks done"
+        "state": "In progress: 11 of 15 tasks done"
       },
       {
-        "item": "Your answer",
-        "state": "Measuring off by default",
-        "ref": "Q-230"
-      },
-      {
-        "item": "Next task",
+        "item": "Last task",
         "state": "Settings for measuring and the network log",
         "ref": "p5.11"
+      },
+      {
+        "item": "Your part",
+        "state": "Re-approve three part pages",
+        "ref": "comp-telemetry"
       }
     ],
-    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
+    "why": "Nothing to run. The settings task changed the measuring part, the window part and the shared base part, which cancels your earlier approval of those pages. Claude needs your OK before going on.",
     "script": null,
-    "tell_claude": "Nothing needed; Claude reports after each task"
+    "tell_claude": "\"Re-approve\", or what to change"
   },
   "questions_for_you": {
     "open": 16,

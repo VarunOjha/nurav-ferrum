@@ -3295,3 +3295,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - pages: [ov-open-questions]
 - result: Commit c68fe34 left ov-open-questions.md ending in two line breaks after the new Q-230 section, which tools/quick_lint.py reports as 1 FILE-ENCODING error. The extra line break was removed; no other character changed. Slip (second time this session): the lint ran in the same command as the commit and its error did not stop the commit. From here the lint runs as its own step, and a commit waits for 0 errors.
 - commit: c68fe34
+
+## [2026-10-19] code | p5.11 settings for measuring and the network log; recording during normal use
+- session: s08
+- time: 00:28
+- pages: [comp-telemetry, comp-app-shell, comp-core, ov-arch-configuration]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.11.txt, raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md]
+- result: core gained [telemetry] (off by default, Q-230); ov-arch-configuration corrected (it said enabled = true). The app's new recorder writes one export run per start when on (run line with git commit, Windows build, WebView2 runtime, settings fingerprint; process samples, startup chain, navigation and tab-change records; held until the startup chain is in, then written in time order; its own old runs deleted). The settings screen got two switches, days kept and two open-folder buttons (apply at the next start). Development: three FAIL runs of the new spec (browser number fields blocked the save before Ferrum's check; a stale embedded shell; a wrong snapshot point in the test), then PASS. Check PASS on the first saved run: off no files; on one run accepted by the export checker (5 marks, 42 process and 5 tree samples, 3 navigations, 5 transitions, 0 dropped) and one network log session; off again nothing new. The open-folder buttons are a hand check. Stales approval of comp-telemetry, comp-app-shell and comp-core.
+- commit: 5a172a7
+- next: owner re-approves the three pages; then p5.12 (DevTools targets and renderer mapping).

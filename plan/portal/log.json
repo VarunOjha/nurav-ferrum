@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:1309a3db57add6f05f028d60254f1182633c967f463d9e48e9b294cc727a8fe4"
+    "content_hash": "sha256:78281fada6ebc0b3d9dd77e9bca95b4e8cf2880e1c01b6a3c3e201be3731c132"
   },
   "entries": [
     {
@@ -6225,6 +6225,39 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-11",
+      "date": "2026-10-19",
+      "time": "00:28",
+      "title": "Settings now switch measuring and the network log on and off",
+      "done": "Settings has a new section: switch Ferrum's own measuring and the network log on or off (both off by default), choose how many days their files are kept, and open their folders. Changes apply at the next start. Measuring now really writes its file during normal use. Checked: off writes nothing; on writes a measuring file that passes the format check and a network log; off again writes nothing new.",
+      "next": "You re-approve three part pages; then how tabs map to the browser's processes (p5.12).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measuring part (page changed)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "The window you use (page changed)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "Shared base part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "5a172a7",
+      "covers": [
+        "## [2026-10-19] code | p5.11 settings for measuring and the network log; recording during normal use"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "privacy",
+        "benchmarks"
       ]
     }
   ]

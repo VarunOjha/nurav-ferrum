@@ -5636,6 +5636,16 @@
       "related": [
         "p5.10"
       ]
+    },
+    {
+      "id": "5a172a7",
+      "kind": "commit",
+      "title": "Commit 5a172a7",
+      "summary": "Task p5.11: switches in Settings for measuring and the network log (off by default), days kept, open-folder buttons; measuring recorded during normal use.",
+      "status": "Done",
+      "related": [
+        "p5.11"
+      ]
     }
   ]
 }
