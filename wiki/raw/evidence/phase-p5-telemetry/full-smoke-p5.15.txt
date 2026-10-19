@@ -1,0 +1,263 @@
+Full smoke suite run during p5.15 (session s08, 2026-10-19 01:2x), apps/desktop/tests/smoke, npx playwright test, debug build with the p5.15 request filter (uncommitted at the time). Raw output, masked.
+
+
+Running 147 tests using 1 worker
+
+  ✓    1 address-search.spec.ts:30:1 › typing shows open tabs, bookmarks and history in groups, never under the page (1.1s)
+  ✓    2 address-search.spec.ts:68:1 › arrow keys and Enter: an open tab is switched to; a history page opens (802ms)
+  ✓    3 address-search.spec.ts:84:1 › Shift+Delete forgets a history page; clicking a row opens it (647ms)
+  ✓    4 app-origin.spec.ts:35:1 › a tab's page has no bridge to the app; the shell's does (279ms)
+  ✓    5 app-origin.spec.ts:42:1 › links to Ferrum's own pages are refused and logged (1.2s)
+  ✓    6 app-origin.spec.ts:53:1 › a pop-up to Ferrum's own page opens nothing and is logged (245ms)
+  ✓    7 app-origin.spec.ts:62:1 › typing Ferrum's own address in the address bar does not load it in the tab (356ms)
+  ✓    8 app-origin.spec.ts:71:1 › the shell itself cannot be led to a website (threat T03) (1.5s)
+AUDIT-SAMPLE [{"action":"page","decision":"deny","origin":"https://127.0.0.1:8443","rule":"blocklist","tab":1,"time":"2026-10-19T06:25:13.826Z"},{"action":"request","decision":"deny","origin":"https://127.0.0.1:8443","rule":"blocklist","tab":1,"time":"2026-10-19T06:25:13.832Z"},{"action":"frame","decision":"deny","origin":"https://127.0.0.1:8443","rule":"blocklist","tab":1,"time":"2026-10-19T06:25:13.897Z"},{"action":"request","decision":"deny","origin":"https://127.0.0.1:8443","rule":"blocklist","tab":1,"time":"2026-10-19T06:25:13.909Z"},{"action":"new-window","decision":"deny","origin":"https://127.0.0.1:8443","rule":"blocklist","tab":1,"time":"2026-10-19T06:25:14.242Z"},{"action":"page","decision":"deny","origin":"ms-msdt:","rule":"external-risky","tab":1,"time":"2026-10-19T06:25:14.505Z"}]
+  ✓    9 audit-log.spec.ts:26:1 › each kind of refusal is one schema-valid audit line without page content (1.4s)
+  ✓   10 back-forward-refresh.spec.ts:13:1 › back, forward and refresh behave like a browser (523ms)
+  ✓   11 backup.spec.ts:19:1 › make a backup from the Backup and restore screen (5.5s)
+  ✓   12 backup.spec.ts:56:1 › a fresh Ferrum: wrong passphrase and a changed byte are refused; merge, then replace (33.4s)
+  ✓   13 backup.spec.ts:110:1 › the passphrase is in no log (7ms)
+BLOCK-REQUESTS {"counts":{"typed":"count:1","link":"count:1","redirect":"count:1","frame":"count:1","image":"count:1","fetch":"count:1","allowed":"count:2"},"page_saw":{"image":"error","fetch":"status 0 (opaque)","allowed":"status 200"}}
+  ✓   14 block-requests.spec.ts:21:1 › no request reaches a blocked site, whatever the way in; allowed requests still do (11.1s)
+BLOCK-COST {"build":"debug","page":"/netlog (six requests)","order":"on then off","runs":[{"run":"on","loads":30,"load_ms_median":60,"load_ms_min":47,"load_ms_max":82.19999998807907,"load_ms":[78.10000002384186,60,82.19999998807907,80.60000002384186,70,60.19999998807907,52.89999997615814,52.39999997615814,50.60000002384186,75.60000002384186,59.39999997615814,62.30000001192093,51.30000001192093,55.10000002384186,48.5,70.80000001192093,61.09999996423721,62.89999997615814,59.30000001192093,51.30000001192093,47,76,64,52.59999996423721,52.39999997615814,52.80000001192093,60.29999995231629,50.80000001192093,69.5,57.19999998807907]},{"run":"off","loads":30,"load_ms_median":67.5,"load_ms_min":43.70000004768371,"load_ms_max":90.19999998807909,"load_ms":[74.60000002384186,90.19999998807909,82.5,71.5,72.19999998807907,67.5,78.19999998807907,70.5,74.39999997615814,65.80000001192093,74.40000003576279,83.5,84,62.19999998807907,66.40000003576279,62.40000003576279,67.59999996423721,67.10000002384186,68.39999997615814,63.5,69.10000002384186,62.09999996423721,55,43.70000004768371,47,47.19999998807907,48.39999997615814,53.30000001192093,61.30000001192093,54.89999997615814]}]}
+  ✓   15 block-requests.spec.ts:102:1 › the request filter's cost: 30 loads with it on and off (rough) (12.9s)
+BLOCK-CONTROL filter off: after 3 refused typed tries the allowed visit shows count:4
+  ✓   16 block-requests.spec.ts:109:1 › control: with the filter switched off (debug test mode), the typed attempt reaches the server again (6.3s)
+  ✓   17 bookmarks.spec.ts:22:1 › the star bookmarks the page into the bar; the editor renames and moves it (647ms)
+  ✓   18 bookmarks.spec.ts:43:1 › the bar opens pages; Ctrl+D in the shell bookmarks the page (468ms)
+  ✓   19 bookmarks.spec.ts:57:1 › the sidebar lists every folder; opening and removing from it (384ms)
+  ✓   20 bookmarks.spec.ts:71:1 › only web pages can be bookmarked; websites have no bridge (50ms)
+  ✓   21 bookmarks.spec.ts:80:1 › Ctrl+Shift+B hides the bar; bookmarks and the setting survive a restart (2.1s)
+CRASH-SHARED tab A and tab A2 do not share a page process
+  ✓   22 crash-recovery.spec.ts:35:3 › a tab's page process fails › a crashed tab shows the crash panel, the rest keeps working, and Reload brings the page back (1.2s)
+  ✓   23 crash-recovery.spec.ts:88:1 › a tab's page process fails › crash pages are refused outside the debug test hook (1.6s)
+  ✓   24 crash-recovery.spec.ts:111:3 › the browser engine fails › Ferrum starts again by itself and brings the tabs back (5.7s)
+CROSS-ORIGIN {"frameContentDocument":"null","frameDocument":"SecurityError","corsFetch":"TypeError","noCorsType":"opaque","noCorsStatus":0,"noCorsBody":0,"cookieSeen":false}
+  ✓   25 cross-origin.spec.ts:26:1 › a page cannot read another site's frame, responses or cookies (906ms)
+CROSS-ORIGIN-ARGS {"browsers":1,"checked":"no weakening switch"}
+  ✓   26 cross-origin.spec.ts:66:1 › no browser process runs with a switch that weakens web security or site isolation (1.0s)
+TARGETS-JSON {"mode":"per-site","build":"debug","port_targets":[{"type":"page","url":"localhost/frame?src=https%3A%2F%2Fsite-b.localhost%3A8443%2Flanding%3Ft%3Dframe"},{"type":"iframe","url":"site-b/landing?t=frame"},{"type":"page","url":"site-b/landing?t=b1"},{"type":"page","url":"site-a/landing?t=a2"},{"type":"page","url":"site-a/landing?t=a1"},{"type":"page","url":"about:blank"},{"type":"page","url":"http://tauri.localhost/"}],"tabs":[{"tab":1,"url":"site-a/landing?t=a1","profile":"site-site-a.localhost","renderers":[48980]},{"tab":2,"url":"site-a/landing?t=a2","profile":"site-site-a.localhost","renderers":[49168]},{"tab":3,"url":"site-b/landing?t=b1","profile":"site-site-b.localhost","renderers":[40996]},{"tab":4,"url":"localhost/frame?src=https%3A%2F%2Fsite-b.localhost%3A8443%2Flanding%3Ft%3Dframe","profile":"site-localhost","renderers":[58048]}],"frame":{"url":"site-b/landing?t=frame","renderers":[23004]},"shared_renderers":[],"renderer_count":7,"environments":["shell"],"parents":[{"pid":23004,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":58048,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":40996,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":49168,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":48980,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":59088,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":12488,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":11228,"kind":"utility","environment":"shell","parent":"browser"},{"pid":25912,"kind":"utility","environment":"shell","parent":"browser"},{"pid":44192,"kind":"browser","environment":"shell","parent":"ferrum"},{"pid":57620,"kind":"gpu","environment":"shell","parent":"browser"}]}
+  ✓   27 devtools-targets.spec.ts:33:3 › targets, renderers and parents in the per-site mode (5.3s)
+TARGETS-JSON {"mode":"per-site-udf","build":"debug","port_targets":[{"type":"page","url":"about:blank"},{"type":"page","url":"http://tauri.localhost/"}],"tabs":[{"tab":1,"url":"site-a/landing?t=a1","profile":"site-site-a.localhost","renderers":[58752]},{"tab":2,"url":"site-a/landing?t=a2","profile":"site-site-a.localhost","renderers":[21664]},{"tab":3,"url":"site-b/landing?t=b1","profile":"site-site-b.localhost","renderers":[25972]},{"tab":4,"url":"localhost/frame?src=https%3A%2F%2Fsite-b.localhost%3A8443%2Flanding%3Ft%3Dframe","profile":"site-localhost","renderers":[4392]}],"frame":{"url":"site-b/landing?t=frame","renderers":[54988]},"shared_renderers":[],"renderer_count":7,"environments":["shell","site-localhost","site-site-a.localhost","site-site-b.localhost"],"parents":[{"pid":58844,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":27684,"kind":"renderer","environment":"shell","parent":"browser"},{"pid":41988,"kind":"gpu","environment":"shell","parent":"browser"},{"pid":51844,"kind":"utility","environment":"shell","parent":"browser"},{"pid":56512,"kind":"browser","environment":"shell","parent":"ferrum"},{"pid":57720,"kind":"utility","environment":"shell","parent":"browser"},{"pid":54988,"kind":"renderer","environment":"site-localhost","parent":"browser"},{"pid":4392,"kind":"renderer","environment":"site-localhost","parent":"browser"},{"pid":21020,"kind":"browser","environment":"site-localhost","parent":"ferrum"},{"pid":55012,"kind":"gpu","environment":"site-localhost","parent":"browser"},{"pid":57680,"kind":"utility","environment":"site-localhost","parent":"browser"},{"pid":58184,"kind":"utility","environment":"site-localhost","parent":"browser"},{"pid":21664,"kind":"renderer","environment":"site-site-a.localhost","parent":"browser"},{"pid":58752,"kind":"renderer","environment":"site-site-a.localhost","parent":"browser"},{"pid":24204,"kind":"utility","environment":"site-site-a.localhost","parent":"browser"},{"pid":24912,"kind":"utility","environment":"site-site-a.localhost","parent":"browser"},{"pid":56812,"kind":"browser","environment":"site-site-a.localhost","parent":"ferrum"},{"pid":57452,"kind":"gpu","environment":"site-site-a.localhost","parent":"browser"},{"pid":25972,"kind":"renderer","environment":"site-site-b.localhost","parent":"browser"},{"pid":20752,"kind":"gpu","environment":"site-site-b.localhost","parent":"browser"},{"pid":53532,"kind":"browser","environment":"site-site-b.localhost","parent":"ferrum"},{"pid":56756,"kind":"utility","environment":"site-site-b.localhost","parent":"browser"},{"pid":58164,"kind":"utility","environment":"site-site-b.localhost","parent":"browser"}]}
+  ✓   28 devtools-targets.spec.ts:33:3 › targets, renderers and parents in the per-site-udf mode (4.7s)
+  ✓   29 downloads.spec.ts:29:1 › a download lands in the folder with the right size and contents; the shell shows it done (971ms)
+  ✓   30 downloads.spec.ts:42:1 › the same file again gets a new name; nothing is replaced (280ms)
+  ✓   31 downloads.spec.ts:51:1 › a download that breaks off shows as failed (2.0s)
+  ✓   32 downloads.spec.ts:64:1 › a download opened in a new window: no error panel; the extra tab closes when it is done (p3.16) (601ms)
+  ✓   33 downloads.spec.ts:81:1 › Clear removes finished downloads from the list (54ms)
+  ✓   34 external-schemes.spec.ts:41:3 › default settings: any type, always ask (Q-224) › a custom-scheme link asks first; without the click nothing is launched (2.9s)
+  ✓   35 external-schemes.spec.ts:58:3 › default settings: any type, always ask (Q-224) › always-refused link types never get the bar, clicked or typed (1.0s)
+  ✓   36 external-schemes.spec.ts:85:3 › a list of allowed types in settings › an unlisted type is refused; a listed type still asks and opens only after the click (614ms)
+  ✓   37 google-sign-in.spec.ts:22:1 › the sign-in link shows the banner and does not load in Ferrum (818ms)
+  ✓   38 google-sign-in.spec.ts:35:1 › Dismiss opens nothing; Open in browser opens exactly the sign-in address (137ms)
+  ✓   39 google-sign-in.spec.ts:46:1 › a typed sign-in address is offered the same way (109ms)
+  ✓   40 google-sign-in.spec.ts:55:1 › the real Google sign-in address is caught too (144ms)
+  ✓   41 history.spec.ts:30:1 › an old history.json is imported once and kept as history.json.imported (46ms)
+  ✓   42 history.spec.ts:40:1 › visits are recorded newest first with their titles, searchable, and saved to the data folder (778ms)
+  ✓   43 history.spec.ts:54:1 › back and forward follow the active tab (230ms)
+  ✓   44 history.spec.ts:68:1 › clearing empties the list and the file at once (30ms)
+ISOLATION-MODE {"mode":"shared","cfg":"cfg-ferrum-shared-profile","environments":["shell"],"browsers":1,"kinds":{"renderer":4,"utility":2,"gpu":1,"browser":1},"processes":8,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+  ✓   45 isolation-modes.spec.ts:57:3 › mode shared: the two-site fixture shows the expected separation (2.6s)
+ISOLATION-MODE {"mode":"per-site","cfg":"cfg-ferrum-profile-per-site","environments":["shell"],"browsers":1,"kinds":{"renderer":4,"gpu":1,"utility":2,"browser":1},"processes":8,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+  ✓   46 isolation-modes.spec.ts:57:3 › mode per-site: the two-site fixture shows the expected separation (3.3s)
+ISOLATION-MODE {"mode":"per-site-udf","cfg":"cfg-ferrum-udf-per-site","environments":["shell","site-site-a.localhost","site-site-b.localhost"],"browsers":3,"kinds":{"renderer":4,"browser":3,"utility":6,"gpu":3},"processes":16,"renderers_a":1,"renderers_b":1,"shared_renderers":0}
+  ✓   47 isolation-modes.spec.ts:57:3 › mode per-site-udf: the two-site fixture shows the expected separation (10.8s)
+  ✓   48 isolation-modes.spec.ts:120:1 › a mode change applies after a restart; an unknown mode is refused (11.4s)
+  ✓   49 isolation.spec.ts:45:1 › a site's cookie, localStorage and IndexedDB stay in its own profile (2.2s)
+  ✓   50 isolation.spec.ts:63:1 › clearing site A's data leaves site B's intact (3.3s)
+  ✓   51 isolation.spec.ts:82:1 › a private tab sees no normal data, is kept out of the history, and forgets its own data (5.8s)
+PROCESS-INVENTORY {"environments":["shell"],"mode":"per-site","processes":[{"environment":"shell","frames":["https://site-b.localhost:8443/storage?i=1"],"kind":"renderer","pid":57676},{"environment":"shell","frames":["https://site-a.localhost:8443/storage?i=1"],"kind":"renderer","pid":41408},{"environment":"shell","frames":["about:blank"],"kind":"renderer","pid":58924},{"environment":"shell","frames":["http://tauri.localhost/"],"kind":"renderer","pid":58660},{"environment":"shell","frames":[],"kind":"gpu","pid":24116},{"environment":"shell","frames":[],"kind":"utility","pid":56940},{"environment":"shell","frames":[],"kind":"browser","pid":58072},{"environment":"shell","frames":[],"kind":"utility","pid":58976}],"set":{"host_pid":20508,"members":[{"kind":"host","pid":20508,"source":"host"},{"kind":"gpu","pid":24116,"source":"shell"},{"kind":"renderer","pid":41408,"source":"shell"},{"kind":"utility","pid":56940,"source":"shell"},{"kind":"renderer","pid":57676,"source":"shell"},{"kind":"browser","pid":58072,"source":"shell"},{"kind":"renderer","pid":58660,"source":"shell"},{"kind":"renderer","pid":58924,"source":"shell"},{"kind":"utility","pid":58976,"source":"shell"}]},"set_error":null,"tabs":[{"id":1,"private":false,"profile":"ferrum-default","url":"about:blank"},{"id":12,"private":false,"profile":"site-site-a.localhost","url":"https://site-a.localhost:8443/storage?i=1"},{"id":13,"private":false,"profile":"site-site-b.localhost","url":"https://site-b.localhost:8443/storage?i=1"}]}
+  ✓   52 isolation.spec.ts:102:1 › process inventory: what two site profiles share (1.2s)
+  ✓   53 keep-cookies.spec.ts:9:1 › a persistent cookie survives closing and reopening Ferrum (3.7s)
+LIFECYCLE: 9 records, none refused:
+  1062 ms tab a: (new) -> active (opened)
+  1632 ms tab a: active -> background (user_switch)
+  1632 ms tab b: (new) -> active (opened)
+  1688 ms tab a: background -> active (user_switch)
+  1688 ms tab b: active -> background (user_switch)
+  1737 ms tab a: active -> background (user_switch)
+  1737 ms tab b: background -> active (user_switch)
+  1833 ms tab b: active -> (closed) (closed)
+  1833 ms tab a: background -> active (user_switch)
+  ✓   54 lifecycle.spec.ts:22:1 › switching and closing tabs writes hide and show records that pass the format check (446ms)
+  ✓   55 loading-errors.spec.ts:19:1 › slow page shows the loading state, then loaded (3.0s)
+  ✓   56 loading-errors.spec.ts:42:3 › HTTP 404 is shown as a toolbar status, the site's page stays (153ms)
+  ✓   57 loading-errors.spec.ts:42:3 › HTTP 500 is shown as a toolbar status, the site's page stays (189ms)
+  ✓   58 loading-errors.spec.ts:51:1 › unreachable host shows the shell's error panel, and the app recovers (1.1s)
+  ✓   59 loading-errors.spec.ts:69:1 › the content view never showed the app's own origin (4ms)
+  ✓   60 look.spec.ts:18:1 › light or dark follows Windows; Graphite's colours (573ms)
+  ✓   61 look.spec.ts:29:1 › an empty tab shows the new-tab page; its search box opens the address bar (1.3s)
+  ✓   62 look.spec.ts:53:1 › accent colour and density change at once from Settings and are saved (664ms)
+  ✓   63 look.spec.ts:71:1 › the shell loads only its own fonts and files; less motion when Windows asks (54ms)
+MEASURING-SETTINGS: off: no files; on: run 20261019-062824-<pid>.0000.jsonl with {"lifecycle_transition":5,"nav_timing":3,"process_sample":42,"startup_mark":5,"tree_sample":5}, one network log session; off again: nothing new (os_build 10.0.26200.9711, webview2 155.0.4283.62)
+  ✓   64 measuring-settings.spec.ts:39:1 › switching measuring and the network log on and off writes files or not (22.3s)
+NAVTIMING:
+/landing -> /landing: cross_origin, redirects 0 (page says 0), start 1501.7, response +19.7, DOMContentLoaded +112.1, load +115.9, completed +135.2 ms
+/redirect/301 -> /landing: same_origin, redirects 1 (page says 1), start 1813.4, response +12.1, DOMContentLoaded +23.3, load +23.8, completed +36.4 ms
+/redirect/302 -> /landing: same_origin, redirects 1 (page says 1), start 2030.0, response +12.2, DOMContentLoaded +23.5, load +24.7, completed +28.4 ms
+/redirect/303 -> /landing: same_origin, redirects 1 (page says 1), start 2242.6, response +15.1, DOMContentLoaded +28.3, load +28.7, completed +29.2 ms
+/redirect/307 -> /landing: same_origin, redirects 1 (page says 1), start 2441.3, response +17.3, DOMContentLoaded +27.1, load +27.4, completed +27.6 ms
+/redirect/308 -> /landing: same_origin, redirects 1 (page says 1), start 2664.5, response +13.9, DOMContentLoaded +23.4, load +23.6, completed +23.9 ms
+/redirect/chain -> /landing: same_origin, redirects 2 (page says 2), start 2866.6, response +17.2, DOMContentLoaded +36.4, load +36.7, completed +37.2 ms
+/goto?url=https%3A%2F%2Fsite-b.localhost%3A8443%2Flanding -> site-b/landing: cross_origin, redirects 1 (page says 0), start 3073.0, response +24.2, DOMContentLoaded +110.0, load +110.6, completed +120.0 ms
+/landing -> /landing: cross_origin, redirects 0 (page says 0), start 3373.3, response +7.1, DOMContentLoaded +75.2, load +76.1, completed +86.4 ms
+/ -> /: same_origin, redirects 0 (page says 0), start 3642.0, response +5.3, DOMContentLoaded +42.6, load +42.7, completed +43.8 ms
+  ✓   65 nav-timing.spec.ts:74:1 › redirect count, origin label and timestamp order of each navigation (2.4s)
+NETLOG-COST {"build":"debug","page":"/netlog (six requests)","order":"off then on","runs":[{"run":"off","log":false,"loads":30,"wall_s":6.48,"load_ms_median":106.39999997615814,"load_ms_min":61.69999998807907,"load_ms_max":176.60000002384186,"host_cpu_ms_per_load":57.8125,"tree_cpu_ms_per_load":539.0625,"load_ms":[116.80000001192091,101.39999997615814,84.80000001192093,107.89999997615814,83.69999998807907,69.70000004768372,87.69999998807907,159.19999998807907,98.5,121.39999997615814,120.30000001192091,134.30000001192093,68.79999995231628,61.69999998807907,145.60000002384186,106.39999997615814,89.59999996423721,78.5,90.30000001192091,80.19999998807907,97.5,104.19999998807909,176.60000002384186,162.5,116.29999995231628,110.10000002384186,100.5999999642372,136.30000001192093,146.89999997615814,135.80000001192093]},{"run":"on","log":true,"loads":30,"wall_s":4.619,"load_ms_median":68.29999995231628,"load_ms_min":52.39999997615814,"load_ms_max":124,"host_cpu_ms_per_load":48.4375,"tree_cpu_ms_per_load":347.9166666666667,"load_ms":[67.30000001192093,60.59999996423721,63.89999997615814,71.80000001192093,64.5,69.09999996423721,79.39999997615814,65.60000002384186,67,68.29999995231628,66.19999998807907,89.70000004768372,61.09999996423721,66.69999998807907,52.69999998807907,71.40000003576279,62.30000001192093,70,70,70.29999995231628,62.40000003576279,76.5,64.89999997615814,70.69999998807907,52.39999997615814,62.19999998807907,71.69999998807907,70.10000002384186,76.19999998807907,124]}]}
+  ✓   66 network-log-cost.spec.ts:58:1 › network log on and off: page load time and CPU per load (rough pilot) (20.7s)
+COVERAGE-JSON {"build":"debug","tab":2,"tabs_seen":[2],"rows":[{"kind":"top-level page","how":"the /netlog document","covered":true,"entries":["GET /netlog 200 document"]},{"kind":"sub-resources","how":"stylesheet, script, image of /netlog","covered":true,"entries":["GET /netlog/style.css 200 stylesheet","GET /netlog/app.js 200 script","GET /icon.png 200 image"]},{"kind":"frame of another site","how":"site-b /landing in an iframe","covered":true,"entries":["GET site-b/landing 200 frame"]},{"kind":"fetch from the page","how":"/netlog/data.json","covered":true,"entries":["GET /netlog/data.json 200 fetch"]},{"kind":"sub-resources on a second visit","how":"stylesheet, script, image of /netlog again (the cache may serve them; the log cannot tell)","covered":true,"entries":["GET /netlog/style.css 200 stylesheet","GET /netlog/app.js 200 script","GET /icon.png 200 image"]},{"kind":"redirect hop 1 (301)","how":"/redirect/chain","covered":true,"entries":["GET /redirect/chain 301 document"]},{"kind":"redirect hop 2 (302)","how":"/redirect/302","covered":true,"entries":["GET /redirect/302 302 document"]},{"kind":"redirect target","how":"/landing after the chain","covered":true,"entries":["GET /landing 200 document"]},{"kind":"request with no response","how":"fetch to a port nobody listens on","covered":false,"entries":[]},{"kind":"service worker script","how":"/sw/sw.js","covered":false,"entries":[]},{"kind":"request made by the service worker","how":"/sw/from-worker.json (fetched when it installs)","covered":false,"entries":[]},{"kind":"request answered by the service worker","how":"/sw/via-worker.json (no network)","covered":true,"entries":["GET /sw/via-worker.json 200 null"]},{"kind":"request passed on by the service worker","how":"/sw/passthrough.json","covered":true,"entries":["GET /sw/passthrough.json 200 fetch"]}]}
+COVERAGE: covered     top-level page: GET /netlog 200 document
+COVERAGE: covered     sub-resources: GET /netlog/style.css 200 stylesheet; GET /netlog/app.js 200 script; GET /icon.png 200 image
+COVERAGE: covered     frame of another site: GET site-b/landing 200 frame
+COVERAGE: covered     fetch from the page: GET /netlog/data.json 200 fetch
+COVERAGE: covered     sub-resources on a second visit: GET /netlog/style.css 200 stylesheet; GET /netlog/app.js 200 script; GET /icon.png 200 image
+COVERAGE: covered     redirect hop 1 (301): GET /redirect/chain 301 document
+COVERAGE: covered     redirect hop 2 (302): GET /redirect/302 302 document
+COVERAGE: covered     redirect target: GET /landing 200 document
+COVERAGE: not covered request with no response: (no entry)
+COVERAGE: not covered service worker script: (no entry)
+COVERAGE: not covered request made by the service worker: (no entry)
+COVERAGE: covered     request answered by the service worker: GET /sw/via-worker.json 200 null
+COVERAGE: covered     request passed on by the service worker: GET /sw/passthrough.json 200 fetch
+  ✓   67 network-log-coverage.spec.ts:24:1 › coverage of the network log, kind by kind (11.5s)
+NETLOG: 9 records in 9 lines; the /netlog tab's 9:
+  GET /netlog 200 document 391 B allowed
+  GET /netlog/style.css 200 stylesheet 23 B allowed
+  GET /icon.png 200 image 82 B allowed
+  GET site-b/landing 200 frame 240 B allowed
+  GET /netlog/app.js 200 script 105 B allowed
+  GET /netlog/data.json 200 fetch 16 B allowed
+   https://127.0.0.1:8443/landing null null - B blocked:blocklist
+   https://127.0.0.1:8443/landing null null - B blocked:blocklist
+  GET https://127.0.0.1:8443/landing 403 null - B allowed
+  blocked: 127.0.0.1:8443/landing blocked:blocklist; responses still reported for it: 1
+  ✓   68 network-log.spec.ts:27:3 › network log › switched on: exactly the expected records, metadata only (7.2s)
+NETLOG-OFF: no log folder with the default settings
+  ✓   69 network-log.spec.ts:74:3 › network log › default settings: the log is off and writes nothing (2.2s)
+  ✓   70 new-windows-links.spec.ts:58:3 › default settings (new tab, confirm other apps) › target=_blank opens a new active tab next to the page; the page stays (1.7s)
+  ✓   71 new-windows-links.spec.ts:71:3 › default settings (new tab, confirm other apps) › window.open from a click opens a new tab (1.8s)
+  ✓   72 new-windows-links.spec.ts:79:3 › default settings (new tab, confirm other apps) › a pop-up opened by script opens one new tab at most; a flood is blocked (5.9s)
+  ✓   73 new-windows-links.spec.ts:100:3 › default settings (new tab, confirm other apps) › mailto link asks first; Cancel launches nothing (873ms)
+  ✓   74 new-windows-links.spec.ts:123:3 › default settings (new tab, confirm other apps) › custom-scheme link: Open launches exactly that link, once (375ms)
+  ✓   75 new-windows-links.spec.ts:138:3 › default settings (new tab, confirm other apps) › a typed link to another app asks too (142ms)
+  ✓   76 new-windows-links.spec.ts:156:3 › new_window = same-view (the P2 default) › target=_blank opens in the same view, no extra tab or window (343ms)
+  ✓   77 new-windows-links.spec.ts:173:3 › new_window = system-browser › target=_blank goes to the system browser; the page stays (333ms)
+  ✓   78 no-freeze.spec.ts:12:1 › a burst of tab commands settles without hanging (6.5s)
+PAGE-WHILE-WAITING responsive
+  ✓   79 permissions.spec.ts:54:3 › the question: this time, and a waiting request › the bar names the site; Allow this time lasts until the page is loaded again (840ms)
+  ✓   80 permissions.spec.ts:84:3 › the question: this time, and a waiting request › a waiting request is refused when the tab loads another page (321ms)
+  ✓   81 permissions.spec.ts:93:3 › the question: this time, and a waiting request › a frame of the same site asks like its page (468ms)
+CLIPBOARD-AFTER-ALWAYS granted
+CLIPBOARD-SECOND granted
+  ✓   82 permissions.spec.ts:110:3 › remembered answers › Always allow is saved in Settings and needs no new question (1.1s)
+  ✓   83 permissions.spec.ts:132:3 › remembered answers › Never allow refuses the camera, is saved, and asks no more (1.4s)
+  ✓   84 permissions.spec.ts:157:3 › remembered answers › closing the question three times makes the site quiet (1.2s)
+  ✓   85 permissions.spec.ts:179:3 › no question › a plain-HTTP page is refused without a question (400ms)
+FRAME-ORIGIN-REPORTED ["https://localhost:8443"]
+  ✓   86 permissions.spec.ts:185:3 › no question › a frame of another site: refused unless its page allowed it, then asked under the page's site (1.0s)
+  ✓   87 permissions.spec.ts:211:3 › no question › a private tab offers Allow this time and Block, and saves nothing (865ms)
+  ✓   88 permissions.spec.ts:241:3 › a per-site grant in Settings › is honoured without a question; removed in Settings, the site is asked again (640ms)
+PROCESS-SET round 1: refused (site-site-a.localhost reported no browser process); WebView2 lists: shell:56480:renderer shell:26792:renderer shell:21276:utility shell:49656:browser shell:57396:utility shell:58192:gpu
+PROCESS-SET round 2: Ferrum set 17 (gpu 3, utility 6, renderer 4, browser 3, host 1) over environments shell, site-site-a.localhost, site-site-b.localhost; WebView2 below Ferrum 19 (crash reporters 3, not listed by WebView2); other app's WebView2 processes 9, in set 0
+  ✓   89 process-set.spec.ts:88:1 › Ferrum's process set holds all of Ferrum's WebView2 processes and none of another WebView2 app (9.6s)
+  ✓   90 profiles.spec.ts:41:3 › cookies across sites: per-site (2.9s)
+  ✓   91 profiles.spec.ts:41:3 › cookies across sites: shared (control) (3.3s)
+  ✓   92 profiles.spec.ts:57:1 › one site in two tabs shares one profile; subdomains share; other sites do not (3.7s)
+  ✓   93 profiles.spec.ts:72:1 › a link to another site asks first; Cancel stays, Continue moves the tab (3.8s)
+  ✓   94 profiles.spec.ts:100:1 › per-site settings choose the profile and survive a restart (4.6s)
+  ✓   95 redirects.spec.ts:12:3 › redirect 301 shows the final address (199ms)
+  ✓   96 redirects.spec.ts:12:3 › redirect 302 shows the final address (119ms)
+  ✓   97 redirects.spec.ts:12:3 › redirect 303 shows the final address (128ms)
+  ✓   98 redirects.spec.ts:12:3 › redirect 307 shows the final address (111ms)
+  ✓   99 redirects.spec.ts:12:3 › redirect 308 shows the final address (132ms)
+  ✓  100 redirects.spec.ts:12:3 › redirect chain shows the final address (112ms)
+  ✓  101 redirects.spec.ts:21:1 › a redirect loop ends in the error state (477ms)
+p3.9 result: switch 23 ms, type-and-load 86 ms (threshold 5000 ms each)
+  ✓  102 responsive.spec.ts:15:1 › a busy tab does not block switching tabs or typing in the address bar (1.8s)
+  ✓  103 restore.spec.ts:34:1 › tabs come back after a normal exit, with the same active tab (3.8s)
+  ✓  104 restore.spec.ts:45:1 › tabs come back after a crash (the last save) (5.0s)
+  ✓  105 restore.spec.ts:62:1 › a restored tab whose site is unreachable shows the error panel (1.7s)
+  ✓  106 restore.spec.ts:74:1 › restore_on_startup = false opens the start-up pages instead (1.6s)
+  ✓  107 safe-downloads.spec.ts:51:1 › a name that climbs out of the folder lands inside it, under a plain name (531ms)
+Zone.Identifier on setup.exe: false
+  ✓  108 safe-downloads.spec.ts:60:1 › a program file is saved with the warning and is not opened (1.2s)
+  ✓  109 safe-downloads.spec.ts:72:1 › a right-to-left mark cannot hide a program's real extension (136ms)
+  ✓  110 safe-downloads.spec.ts:80:1 › a Windows device name is not used as a file name (231ms)
+SAMPLER-COST-APP {"set":"Ferrum, per-site-udf, two sites","build":"debug","runs":[{"run":"baseline","interval_ms":20000,"readings":2,"gaps":0,"retries":1,"list_ms_median":2463.9443,"list_ms_max":2463.9443,"host_cpu_ms_per_s":0,"tree_cpu_ms_per_s":10.936953152342383},{"run":"100 ms","interval_ms":100,"readings":20,"gaps":0,"retries":0,"list_ms_median":0.9638,"list_ms_max":1.1248,"host_cpu_ms_per_s":40.69010416666667,"tree_cpu_ms_per_s":48.828125},{"run":"1000 ms","interval_ms":1000,"readings":20,"gaps":0,"retries":0,"list_ms_median":0.9894999999999999,"list_ms_max":1.1103,"host_cpu_ms_per_s":1.6406783220454664,"tree_cpu_ms_per_s":31.993227279886597}]}
+  ✓  111 sampler-cost.spec.ts:43:1 › the sampler's in-app cost at 100 ms and 1000 ms, against a baseline (46.9s)
+JS-PROBE: buffer 128 MiB; tree private commit median 340.0 -> 469.5 MiB, delta 129.5 MiB (allowed 121.6 to 192)
+  ✓  112 sampler-ground-truth.spec.ts:34:1 › a tab that fills a known-size buffer raises the tree's private commit by about that much (4.3s)
+SAMPLER: 5 moments summed, 1 gaps, 1 set retries; processes 17/17/17/17/17; private commit MiB 594.9/589.4/588.7/588.7/593.1; peak 594.9 MiB; CPU s 11.27; interval 500 ms, spacing 510,501,501,501 ms
+  ✓  113 sampler.spec.ts:33:1 › the sampler sums Ferrum's processes at the chosen interval and never writes a smaller number (8.5s)
+  ✓  114 security-navigation.spec.ts:51:1 › a typed blocked address is refused and logged (351ms)
+  ✓  115 security-navigation.spec.ts:59:1 › a redirect from an allowed page to the blocked host is refused and logged (552ms)
+  ✓  116 security-navigation.spec.ts:70:1 › a frame showing the blocked host is refused and logged; an allowed frame loads (465ms)
+  ✓  117 security-navigation.spec.ts:81:1 › window.open of the blocked host opens nothing and is logged; an allowed one opens a tab (1.8s)
+  ✓  118 security-navigation.spec.ts:97:1 › a malformed address is refused and logged (64ms)
+  ✓  119 security-settings.spec.ts:43:1 › blocked sites and site permissions: set in the screen, kept after a restart, enforced, revoked (5.2s)
+  ✓  120 security-settings.spec.ts:111:1 › the not-secure bar shows for a plain-HTTP page and not for HTTPS (2.1s)
+  ✓  121 security-settings.spec.ts:129:1 › Clear data in the screen deletes one site's stored data (4.3s)
+  ✓  122 settings.spec.ts:18:1 › change settings, see them take effect, restart, still there (6.9s)
+  ✓  123 settings.spec.ts:65:1 › invalid input is refused with plain messages; the file is unchanged (3.0s)
+  ✓  124 shortcuts.spec.ts:60:5 › focus in the shell › switching: Ctrl+1, Ctrl+9, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Page Down, Ctrl+Page Up (1.2s)
+  ✓  125 shortcuts.spec.ts:75:5 › focus in the shell › new, close, reopen: Ctrl+T, Ctrl+W, Ctrl+Shift+T (1.6s)
+  ✓  126 shortcuts.spec.ts:88:5 › focus in the shell › address bar: Ctrl+L, Alt+D, F6 (1.5s)
+  ✓  127 shortcuts.spec.ts:96:5 › focus in the shell › back, forward, reload: Alt+Left, Alt+Right, F5, Ctrl+R (1.9s)
+
+  ✓  128 shortcuts.spec.ts:60:5 › focus in the page › switching: Ctrl+1, Ctrl+9, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Page Down, Ctrl+Page Up (9.7s)
+
+  ✓  129 shortcuts.spec.ts:75:5 › focus in the page › new, close, reopen: Ctrl+T, Ctrl+W, Ctrl+Shift+T (5.1s)
+
+  ✘  130 shortcuts.spec.ts:88:5 › focus in the page › address bar: Ctrl+L, Alt+D, F6 (2.9s)
+
+  ✓  131 shortcuts.spec.ts:96:5 › focus in the page › back, forward, reload: Alt+Left, Alt+Right, F5, Ctrl+R (5.9s)
+
+  ✓  132 shortcuts.spec.ts:117:1 › inside a page, Ferrum's shortcuts never reach the page; ordinary keys do (2.3s)
+  ✓  133 sidebar.spec.ts:25:1 › open and close: the tab view shrinks and grows, never overlapping (316ms)
+  ✓  134 sidebar.spec.ts:41:1 › choosing a tab or a history entry in the sidebar (465ms)
+
+  ✓  135 sidebar.spec.ts:60:1 › Ctrl+Shift+S toggles it from the shell and from inside a page (2.4s)
+SMARTSCREEN-ARGS {"mode":"shared","environments":["shell"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+  ✓  136 smartscreen.spec.ts:27:3 › mode shared: no browser process has SmartScreen switched off (3.4s)
+SMARTSCREEN-ARGS {"mode":"per-site","environments":["shell"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+  ✓  137 smartscreen.spec.ts:27:3 › mode per-site: no browser process has SmartScreen switched off (4.2s)
+SMARTSCREEN-ARGS {"mode":"per-site-udf","environments":["shell","site-site-a.localhost","site-site-b.localhost"],"browsers":[{"environment":"shell","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-a.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false},{"environment":"site-site-b.localhost","disable_features":["msWebOOUI,msPdfOOUI"],"autoplay_policy":["no-user-gesture-required"],"smartscreen_off":false}]}
+  ✓  138 smartscreen.spec.ts:27:3 › mode per-site-udf: no browser process has SmartScreen switched off (14.9s)
+SMARTSCREEN-DEMO {"mode":"per-site","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"about:blank","ferrum_error_panel":"Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen","warning_seen":true,"panel_kind":"smartscreen","try_again_shown":false,"audited":1,"profile_question":false}
+  ✓  139 smartscreen.spec.ts:60:3 › mode per-site: Microsoft's SmartScreen demo phishing page, as observed (5.8s)
+SMARTSCREEN-DEMO {"mode":"per-site-udf","tab_title":"Reported Unsafe Site: Navigation Blocked","tab_url":"https://demo.smartscreen.msft.net/phishingdemo.html","ferrum_error_panel":"Unsafe site blocked Microsoft Defender SmartScreen reported this site as unsafe. It may try to steal your information or harm your PC, so Ferrum did not open it. https://demo.smartscreen.msft.net/phishingdemo.html Blocked by Microsoft Defender SmartScreen","warning_seen":true,"panel_kind":"smartscreen","try_again_shown":false,"audited":1,"profile_question":false}
+  ✓  140 smartscreen.spec.ts:60:3 › mode per-site-udf: Microsoft's SmartScreen demo phishing page, as observed (10.8s)
+  ✓  141 smartscreen.spec.ts:103:1 › an ordinary page that breaks off after the server's 200 gets the usual panel, not the SmartScreen one (4.7s)
+STARTUP: process_created 0 ms, window_visible 157 ms, tab_first_contentful_paint 1277 ms, tab_largest_contentful_paint 1277 ms, shell_first_paint 1330 ms (fresh profile, debug build, start page /landing)
+  ✓  142 startup-timing.spec.ts:31:1 › every startup boundary is present and in order (1.5s)
+  ✓  143 startup.spec.ts:18:1 › start-up sites open as tabs, in order, the first active (2.5s)
+  ✓  144 startup.spec.ts:28:1 › an unreadable user settings file is backed up; Ferrum starts with the defaults (2.2s)
+  ✓  145 startup.spec.ts:42:1 › a settings file from a newer Ferrum is left untouched (2.0s)
+  ✓  146 tabs.spec.ts:20:1 › 20 tabs: one view each, only the active one shown, all released on close (5.9s)
+  ✓  147 tabs.spec.ts:69:1 › a tab shows its site's icon (p3.16) (1.3s)
+
+
+  1) shortcuts.spec.ts:88:5 › focus in the page › address bar: Ctrl+L, Alt+D, F6 ───────────────────
+
+    Error: Ferrum was not the active window, so the keys ^l were not sent (NOT-FRONT)
+
+       at ferrum.ts:173
+
+      171 |     .toString()
+      172 |     .trim();
+    > 173 |   if (out !== "SENT") throw new Error(`Ferrum was not the active window, so the keys ${keys} were not sent (${out})`);
+          |                             ^
+      174 | }
+      175 |
+      176 | /** One line of Ferrum's security audit log (p4.9). */
+        at realKeys (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\tests\smoke\ferrum.ts:173:29)
+        at inPage (<USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\tests\smoke\shortcuts.spec.ts:53:3)
+        at <USERPROFILE>\Documents\Projects\ferrum-rust-webclient\apps\desktop\tests\smoke\shortcuts.spec.ts:91:9
+
+    Error Context: test-results\shortcuts-focus-in-the-page-address-bar-Ctrl-L-Alt-D-F6\error-context.md
+
+    Error Context: test-results\shortcuts-focus-in-the-page-address-bar-Ctrl-L-Alt-D-F6\error-context.md
+
+  1 failed
+    shortcuts.spec.ts:88:5 › focus in the page › address bar: Ctrl+L, Alt+D, F6 ────────────────────
+  146 passed (11.7m)
