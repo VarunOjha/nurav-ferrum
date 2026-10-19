@@ -2,9 +2,10 @@
 id: metric-tree-private-commit
 type: metric
 title: "Tree private commit (headline memory metric)"
-status: proposed
-updated: 2026-10-18
+status: defined
+updated: 2026-10-19
 sources:
+  - raw/research/literature-batch-5.md
   - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
@@ -37,7 +38,7 @@ unverified:
 | Field | Value |
 |---|---|
 | Unit | bytes |
-| Support | `unverified`. Nothing has been measured yet |
+| Support | `unverified`. Definition final (p5.13). The in-app meter passed its ground-truth check on this PC ([check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt)); the A/A run and the job-wide comparison below come with the harness (P6) |
 | Validated in | `phase-p5-telemetry` |
 
 **Definition.** Sum of PrivateUsage (private commit charge) over the attributed process set S(t) at sample time t; per trial summarised as the time-average over the measurement window plus values at named checkpoints.

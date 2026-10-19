@@ -2,9 +2,11 @@
 id: metric-tree-cpu-time
 type: metric
 title: "Tree CPU time"
-status: proposed
-updated: 2026-10-18
+status: defined
+updated: 2026-10-19
 sources:
+  - raw/research/literature-batch-5.md
+  - raw/evidence/phase-p5-telemetry/sampler-cost-p5.5.json
   - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
@@ -30,8 +32,6 @@ tags:
 unverified:
   - claim: "msedgewebview2.exe processes of Ferrum/baseline join the harness Job Object (measurement note §2.2 UNCERTAIN)"
     verify_in: phase-p6-benchmark-harness
-  - claim: "GetProcessTimes granularity is fine enough for the idle/background windows used (checked against QueryProcessCycleTime on an idle process)"
-    verify_in: phase-p5-telemetry
 ---
 
 # Tree CPU time
@@ -39,7 +39,7 @@ unverified:
 | Field | Value |
 |---|---|
 | Unit | s |
-| Support | `unverified`. Nothing has been measured yet |
+| Support | `unverified`. Definition final (p5.13). The in-app meter passed its ground-truth check on this PC ([check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt)); the A/A run comes with the harness (P6) |
 | Validated in | `phase-p5-telemetry` |
 
 **Definition.** User + kernel CPU time of all processes that were ever in the target's job during the window, including processes that exited; reported per completed workload and as CPU-seconds per wall-clock minute for idle/background windows.
@@ -56,12 +56,12 @@ unverified:
 
 ## Notes
 - In job-only mode, job accounting includes processes that have already terminated, so short-lived children are counted ([measurement note](../../raw/research/measurement-methodology.md) §2.3 and §3, VERIFIED).
-- Timer granularity of GetProcessTimes is UNVERIFIED[phase-p5-telemetry]. Compare it against [metric-tree-cpu-cycles](metric-tree-cpu-cycles.md) on an idle process.
+- Granularity of GetProcessTimes on this PC: 15.625 ms. Microsoft's page states no granularity ([literature batch 5](../../raw/research/literature-batch-5.md) L10); every CPU total in the p5.5 standalone runs was a whole multiple of 15.625 ms ([sampler-cost-p5.5.json](../../raw/evidence/phase-p5-telemetry/sampler-cost-p5.5.json); so were the p5.3 and p5.4 readings). So a window must hold many steps (reading: at one reading per second, a nearly idle process shows either 0 or 15.6 ms between two readings); report CPU over long windows, and use [metric-tree-cpu-cycles](metric-tree-cpu-cycles.md) for short ones.
 - Windows 11 does not guarantee high timer resolution for windows that are occluded or minimised, and it applies EcoQoS heuristics (§3, VERIFIED). The harness therefore fixes and records the window state (see [ov-research-fairness-protocol](../ov-research-fairness-protocol.md)).
 
 ## Ground-truth validation (p5.4)
 
-[check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt), values in [ground-truth-p5.4.json](../../raw/evidence/phase-p5-telemetry/ground-truth-p5.4.json); limits in [ground-truth-tolerances.json](../../../crates/telemetry/tests/ground-truth-tolerances.json), committed before the first run (d36d27c). The helper keeps one thread busy for 2 s of wall time: limit, CPU time of 85 to 105 percent of the wall time, plus or minus 32 ms; result 2000 ms for 2000 ms. psutil `cpu_times()` (user plus system) matched within 32 ms (limit): 0 ms at three points. The values read so far are whole multiples of 15.625 ms (checks p5.3 and p5.4), which is a first look at the granularity question above, not its answer. This characterises the meter, not Ferrum.
+[check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt), values in [ground-truth-p5.4.json](../../raw/evidence/phase-p5-telemetry/ground-truth-p5.4.json); limits in [ground-truth-tolerances.json](../../../crates/telemetry/tests/ground-truth-tolerances.json), committed before the first run (d36d27c). The helper keeps one thread busy for 2 s of wall time: limit, CPU time of 85 to 105 percent of the wall time, plus or minus 32 ms; result 2000 ms for 2000 ms. psutil `cpu_times()` (user plus system) matched within 32 ms (limit): 0 ms at three points. The values read are whole multiples of 15.625 ms (the granularity note above). This characterises the meter, not Ferrum.
 
 ## Used by
 Experiments and hypotheses that reference this metric are listed in [ov-research-traceability](../ov-research-traceability.md).

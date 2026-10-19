@@ -1,0 +1,12 @@
+Ferrum check p5.13: Reading: measurement methods
+Why: each headline measurement gets a final, cited definition.
+Run at 2026-10-19 01:11 on commit 29b2434 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The reading note: saved, indexed, fingerprinted, each source marked read or not
+         10 sources, each marked; in the index and the fingerprint list
+  PASS   Each headline measurement: defined, cites the note and its accuracy test, no open point for P5
+         six pages defined, each citing the note and its accuracy test; no open point for P5 left on them
+------------------------------------------------------------------------
+RESULT: PASS - p5.13 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.13 check passed".

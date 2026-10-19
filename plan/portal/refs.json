@@ -1010,7 +1010,7 @@
       "kind": "task",
       "title": "P5 task: Reading: measurement methods",
       "summary": "Our methods must match good practice → read the literature on measurement and browser benchmarking → each headline measurement gets a final, cited definition.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -2865,8 +2865,8 @@
       "id": "metric-peak-tree-private-commit",
       "kind": "metric",
       "title": "Peak private memory",
-      "summary": "The highest private memory reached during the test. Unit: MiB.",
-      "status": "Proposed, not checked",
+      "summary": "The highest private memory reached during the test, taken from the added-up series. The definition is final; the harness's own peak counter is checked in P6. Unit: MiB.",
+      "status": "Defined; meter checked",
       "related": [
         "exp-baseline-footprint"
       ]
@@ -2936,8 +2936,8 @@
       "id": "metric-startup-fcp",
       "kind": "metric",
       "title": "Time to first content",
-      "summary": "From launch to the start page showing its first text or image. Ferrum now reads this from the page itself, in a way page code cannot fake; the outside measurement comes in P6. Unit: ms.",
-      "status": "Proposed; recorded in Ferrum",
+      "summary": "From launch to the start page showing its first text or image. Definition final and matches the web standard; Ferrum reads it from the page itself; the outside measurement comes in P6. Unit: ms.",
+      "status": "Defined; recorded in Ferrum",
       "related": [
         "exp-startup"
       ]
@@ -2946,8 +2946,8 @@
       "id": "metric-startup-lcp",
       "kind": "metric",
       "title": "Time to main content",
-      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'. Ferrum now reads this from the page itself; whether the definition matches the standard is checked later in P5. Unit: ms.",
-      "status": "Proposed; recorded in Ferrum",
+      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'. Checked against the web standard: Ferrum's reading matches it. Comparing with Chrome comes in P6. Unit: ms.",
+      "status": "Defined; recorded in Ferrum",
       "related": [
         "exp-startup"
       ]
@@ -2956,8 +2956,8 @@
       "id": "metric-startup-window-visible",
       "kind": "metric",
       "title": "Time to first window",
-      "summary": "From launching the program to its first window appearing. Ferrum now records its own version of this moment; the outside measurement for all browsers comes in P6. Unit: ms.",
-      "status": "Proposed; recorded in Ferrum",
+      "summary": "From launching the program to its first window appearing. Definition final; Ferrum records its own version of this moment; the outside measurement for all browsers comes in P6. Unit: ms.",
+      "status": "Defined; recorded in Ferrum",
       "related": [
         "exp-startup"
       ]
@@ -2976,8 +2976,8 @@
       "id": "metric-tree-cpu-time",
       "kind": "metric",
       "title": "CPU time",
-      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background. The meter read 2 s of known CPU use within limits set in advance (P5). Unit: s.",
-      "status": "Proposed; meter checked",
+      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background. The meter read known CPU use correctly; on this PC the counter moves in steps of about 16 ms, so short windows use the cycle count instead. Unit: s.",
+      "status": "Defined; meter checked",
       "related": [
         "exp-baseline-footprint",
         "exp-navigation",
@@ -2990,8 +2990,8 @@
       "id": "metric-tree-private-commit",
       "kind": "metric",
       "title": "Private memory (main memory measure)",
-      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. The meter passed its accuracy test in P5: a known 256 MiB and a 128 MiB page buffer were read within limits set in advance. Unit: MiB.",
-      "status": "Proposed; meter checked",
+      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. The meter passed its accuracy test in P5; the definition is final. Comparing products needs the benchmark harness (P6). Unit: MiB.",
+      "status": "Defined; meter checked",
       "related": [
         "exp-baseline-footprint",
         "exp-startup",

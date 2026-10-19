@@ -2,9 +2,10 @@
 id: metric-peak-tree-private-commit
 type: metric
 title: "Peak tree private commit"
-status: proposed
-updated: 2026-10-08
+status: defined
+updated: 2026-10-19
 sources:
+  - raw/research/literature-batch-5.md
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -30,7 +31,7 @@ unverified:
   - claim: "msedgewebview2.exe processes of Ferrum/baseline join the harness Job Object (measurement note §2.2 UNCERTAIN)"
     verify_in: phase-p6-benchmark-harness
   - claim: "PeakJobMemoryUsed is commit-based (the same quantity as summed PrivateUsage)"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # Peak tree private commit
@@ -38,7 +39,7 @@ unverified:
 | Field | Value |
 |---|---|
 | Unit | bytes |
-| Support | `unverified`. Nothing has been measured yet |
+| Support | `unverified`. Definition final (p5.13). It is the maximum of the summed series, which the in-app meter reads correctly on this PC ([check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt)); the job-wide peak needs the harness's Job Object (P6) |
 | Validated in | `phase-p5-telemetry` |
 
 **Definition.** Maximum over the window of the summed tree private commit; preferred source is the Job Object PeakJobMemoryUsed when job membership is complete (otherwise the sampled maximum), cross-checked against the maximum of the 1 s sampled sum.
@@ -55,7 +56,7 @@ unverified:
 
 ## Notes
 - The job tracks its peak continuously, so short spikes between samples are not missed ([measurement note](../../raw/research/measurement-methodology.md) §1.2, VERIFIED).
-- Whether PeakJobMemoryUsed is exactly commit-based is UNVERIFIED[phase-p5-telemetry]. To check, compare it with the sampled maximum of the summed PrivateUsage.
+- Whether PeakJobMemoryUsed is exactly commit-based is UNVERIFIED[phase-p6-benchmark-harness]. To check, compare it with the sampled maximum of the summed PrivateUsage. Re-targeted from P5 on 2026-10-19: the Job Object belongs to the harness, built in P6; P5 built only the in-app sampled series.
 - A job-wide peak counts from job creation, which includes startup. A window-only peak therefore uses the sampled maximum, and the report states which of the two was used.
 
 ## Used by

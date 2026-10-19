@@ -782,8 +782,8 @@
     {
       "id": "metric-tree-private-commit",
       "title": "Private memory (main memory measure)",
-      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. The meter passed its accuracy test in P5: a known 256 MiB and a 128 MiB page buffer were read within limits set in advance.",
-      "status": "Proposed; meter checked",
+      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. The meter passed its accuracy test in P5; the definition is final. Comparing products needs the benchmark harness (P6).",
+      "status": "Defined; meter checked",
       "category": "Measure",
       "tags": [
         "memory",
@@ -799,7 +799,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-tree-private-commit.md",
-        "content_hash": "sha256:ced73735d6de01cac90e4b9d4d607e4749396ec00efaa7fb8b9dafc88345a52f"
+        "content_hash": "sha256:51baca47df7058c58d3f76239532b001dcc10c9bea4ebca01ad5ab2b5fafedb7"
       },
       "unit": "MiB"
     },
@@ -846,8 +846,8 @@
     {
       "id": "metric-peak-tree-private-commit",
       "title": "Peak private memory",
-      "summary": "The highest private memory reached during the test.",
-      "status": "Proposed, not checked",
+      "summary": "The highest private memory reached during the test, taken from the added-up series. The definition is final; the harness's own peak counter is checked in P6.",
+      "status": "Defined; meter checked",
       "category": "Measure",
       "tags": [
         "memory",
@@ -859,7 +859,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-peak-tree-private-commit.md",
-        "content_hash": "sha256:ec84284c38792233b3f0a163f263e618148ffc9fe9034bdb9a848ba5be275049"
+        "content_hash": "sha256:993fa39dc60f6c6ecb1abb1fe0367a535308baf34af2751cf926d7490bb65b8e"
       },
       "unit": "MiB"
     },
@@ -887,8 +887,8 @@
     {
       "id": "metric-tree-cpu-time",
       "title": "CPU time",
-      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background. The meter read 2 s of known CPU use within limits set in advance (P5).",
-      "status": "Proposed; meter checked",
+      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background. The meter read known CPU use correctly; on this PC the counter moves in steps of about 16 ms, so short windows use the cycle count instead.",
+      "status": "Defined; meter checked",
       "category": "Measure",
       "tags": [
         "CPU",
@@ -904,7 +904,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-tree-cpu-time.md",
-        "content_hash": "sha256:a08279ce60d02bbb7140ebf481047ca48b99a7a08b12e5d9c7bf847ace76686b"
+        "content_hash": "sha256:b169145a7ef185864aaf30f28aa486ef8573a03994911b2a188a4b73bfe93cea"
       },
       "unit": "s"
     },
@@ -931,8 +931,8 @@
     {
       "id": "metric-startup-window-visible",
       "title": "Time to first window",
-      "summary": "From launching the program to its first window appearing. Ferrum now records its own version of this moment; the outside measurement for all browsers comes in P6.",
-      "status": "Proposed; recorded in Ferrum",
+      "summary": "From launching the program to its first window appearing. Definition final; Ferrum records its own version of this moment; the outside measurement for all browsers comes in P6.",
+      "status": "Defined; recorded in Ferrum",
       "category": "Measure",
       "tags": [
         "benchmarks",
@@ -944,15 +944,15 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-startup-window-visible.md",
-        "content_hash": "sha256:4f319c2a6785c0ddc611b4f92b3d5f9b958864932d3047c043404f4202888460"
+        "content_hash": "sha256:6d372c7b5de8c6a4daa77046de6648af0c18ab9ebfe4ca6cd6d492655b826d6b"
       },
       "unit": "ms"
     },
     {
       "id": "metric-startup-fcp",
       "title": "Time to first content",
-      "summary": "From launch to the start page showing its first text or image. Ferrum now reads this from the page itself, in a way page code cannot fake; the outside measurement comes in P6.",
-      "status": "Proposed; recorded in Ferrum",
+      "summary": "From launch to the start page showing its first text or image. Definition final and matches the web standard; Ferrum reads it from the page itself; the outside measurement comes in P6.",
+      "status": "Defined; recorded in Ferrum",
       "category": "Measure",
       "tags": [
         "benchmarks",
@@ -964,15 +964,15 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-startup-fcp.md",
-        "content_hash": "sha256:009d0d95fdc30f5cdd09a0d4d6302f856122018749642e60b182ca3e6f32762d"
+        "content_hash": "sha256:ba7e7eb232d9b0df8b27ab93ab6532ceaafb851ef758053c103d62a3494dcf66"
       },
       "unit": "ms"
     },
     {
       "id": "metric-startup-lcp",
       "title": "Time to main content",
-      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'. Ferrum now reads this from the page itself; whether the definition matches the standard is checked later in P5.",
-      "status": "Proposed; recorded in Ferrum",
+      "summary": "From launch to the start page showing its largest element. With first content and busy time, it replaces the retired 'time to interactive'. Checked against the web standard: Ferrum's reading matches it. Comparing with Chrome comes in P6.",
+      "status": "Defined; recorded in Ferrum",
       "category": "Measure",
       "tags": [
         "benchmarks",
@@ -984,7 +984,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-startup-lcp.md",
-        "content_hash": "sha256:d2e24bb8e8bca0c1d0d85bdc308ca84e89909a1e40544ee29e6326ddd7baccf9"
+        "content_hash": "sha256:713b79e06c135714f5619eb5e749b4b6bf703cd9081da1820cfefc96a0ee5353"
       },
       "unit": "ms"
     },

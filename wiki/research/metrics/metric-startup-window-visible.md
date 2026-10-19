@@ -2,9 +2,10 @@
 id: metric-startup-window-visible
 type: metric
 title: "Startup: process start to first window visible (T0 to T1)"
-status: proposed
-updated: 2026-10-18
+status: defined
+updated: 2026-10-19
 sources:
+  - raw/research/literature-batch-5.md
   - raw/evidence/phase-p5-telemetry/check-p5.6.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
@@ -38,7 +39,7 @@ unverified:
 | Field | Value |
 |---|---|
 | Unit | ms |
-| Support | `unverified`. Nothing has been measured yet |
+| Support | `unverified`. Definition final (p5.13). Ferrum's in-app chain records it on this PC ([check-p5.6](../../raw/evidence/phase-p5-telemetry/check-p5.6.txt); startup is not part of the p5.4 meter validation); the harness-side measurement for all products comes in P6 |
 | Validated in | `phase-p5-telemetry` |
 
 **Definition.** Elapsed time from the harness creating the target process (T0) to the first top-level window owned by a job process becoming visible (T1).
