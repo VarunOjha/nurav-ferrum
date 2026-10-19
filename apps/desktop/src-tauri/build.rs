@@ -8,6 +8,26 @@ fn main() {
     // The app icon is compiled into the program file; tauri-build does not watch it, so a new icon would be missed
     // by an incremental build (seen in p3.16).
     println!("cargo:rerun-if-changed=icons");
+    // The commit Ferrum is built from, for the measuring files' run line (p5.11): 12 hex characters, and whether
+    // tracked files had uncommitted changes at build time. Without git: 0000000 (unknown) and dirty.
+    let git = |args: &[&str]| {
+        std::process::Command::new("git")
+            .args(args)
+            .output()
+            .ok()
+            .filter(|o| o.status.success())
+            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+    };
+    let sha = git(&["rev-parse", "--short=12", "HEAD"])
+        .filter(|s| (7..=40).contains(&s.len()) && s.bytes().all(|b| b.is_ascii_hexdigit()))
+        .map(|s| s.to_ascii_lowercase())
+        .unwrap_or_else(|| "0000000".into());
+    let dirty =
+        git(&["status", "--porcelain", "--untracked-files=no"]).is_none_or(|s| !s.is_empty());
+    println!("cargo:rustc-env=FERRUM_GIT_SHA={sha}");
+    println!("cargo:rustc-env=FERRUM_GIT_DIRTY={dirty}");
+    println!("cargo:rerun-if-changed=../../../.git/HEAD");
+    println!("cargo:rerun-if-changed=../../../.git/index");
     tauri_build::try_build(tauri_build::Attributes::new().app_manifest(
         tauri_build::AppManifest::new().commands(&[
             "app_ping",
@@ -34,6 +54,9 @@ fn main() {
             "test_nav_timing",
             "test_lifecycle",
             "test_netlog",
+            "test_check_export",
+            "log_folder",
+            "log_folder_open",
             "tab_new_private",
             "site_data_clear",
             "test_focus",

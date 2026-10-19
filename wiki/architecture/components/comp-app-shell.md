@@ -4,8 +4,9 @@ type: component
 title: "Application shell (Tauri host + vanilla-TS shell UI)"
 status: implemented
 last_verified_commit: ebc79ca
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.11.txt
   - raw/owner/2026-10-15-s07-p4-11-probe-folder-fix.md
   - raw/owner/2026-10-15-s07-p4-19-blank-page-fix.md
   - raw/owner/2026-10-15-s07-p4-18-reapproval-and-q226.md
@@ -41,7 +42,7 @@ responsibilities:
   - "Compose and wire all Ferrum crates (channels between telemetry, resource manager and webview manager)"
   - "User confirmation dialogs for external schemes, downloads and permissions; open-in-system-browser for Google OAuth"
 interfaces:
-  - "Tauri commands (PROPOSAL): tab_create, tab_close, tab_activate, tab_navigate, tab_back, tab_forward, tab_reload, tab_stop, settings_get, settings_set, session_list, download_list, external_open_confirm, netlog_open_folder"
+  - "Tauri commands (PROPOSAL): tab_create, tab_close, tab_activate, tab_navigate, tab_back, tab_forward, tab_reload, tab_stop, settings_get, settings_set, session_list, download_list, external_open_confirm, log_folder and log_folder_open (p5.11: the measuring and network log folders)"
   - "Events consumed: tab-updated, tab-blocked, tab-lifecycle, download-updated, permission-request, external-scheme-request"
   - "CLI: --config <path> (experiment override)"
 connects:
@@ -437,3 +438,15 @@ stand-in launcher (the owner's manual mailto check). The smoke robot uses WebVie
   unknown hosts have no HTTP status. Something else that aborts a page after a 200 answer (for example a proxy or
   security program) would also be shown as a SmartScreen block: not observed, not tested. Test-server route
   `/page/broken`. Live spec `smartscreen` ([check-p4.19](../../raw/evidence/phase-p4-security/check-p4.19.txt)).
+
+## Implementation status (P5, measurement)
+
+- p5.11, "Measuring and network log" in the settings screen: two switches (Ferrum's own measuring; the network log),
+  both off by default (owner answers Q-230 and Q-114), and for each the days its files are kept (0: never deleted;
+  more than 3650 is refused with a plain message, and nothing is saved) and an "Open the ... folder" button. The host
+  saves them through `settings_set` (`SettingsView` fields `telemetry_enabled`, `telemetry_retention_days`,
+  `netlog_enabled`, `netlog_retention_days`; left out, a value is kept) and they apply at the next start, as the screen
+  says. `log_folder(kind)` returns the folder and whether it exists; `log_folder_open(kind)` opens it in File Explorer
+  (`explorer.exe` with Ferrum's own folder; only the two kinds `telemetry` and `network`; a missing folder gives "No
+  files yet"). Live spec `measuring-settings` ([check-p5.11](../../raw/evidence/phase-p5-telemetry/check-p5.11.txt)):
+  both switches start unticked with 14 days; 5000 days is refused ("Not saved", the message names the limit); ticked and saved, the user file holds both `enabled = true` and nothing is written until the next start; the next start writes a measuring run and a network log session; unticked again, the start after that writes nothing new. The two buttons are not clicked by the automatic test (they would open Explorer windows): hand check.

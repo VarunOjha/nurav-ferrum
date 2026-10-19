@@ -117,6 +117,7 @@ fn keep_transition(
     let mut g = state.0.lock().unwrap();
     let (log, records) = &mut *g;
     if let Some(r) = f(log) {
+        crate::recorder::push(r.clone());
         if records.len() >= 1000 {
             records.remove(0);
         }
@@ -662,6 +663,9 @@ fn sink(app: &AppHandle, id: u64) -> Rc<dyn Fn(TabEvent)> {
         }
         let mut list_changed = false;
         track_navigation(&h, id, &e);
+        if let TabEvent::NavigationCompleted { success, .. } = &e {
+            record_navigation(&h, id, *success);
+        }
         match &e {
             TabEvent::GotFocus => h
                 .state::<FocusState>()
@@ -1198,7 +1202,7 @@ pub async fn site_data_clear(app: AppHandle, site: String) -> Result<(), String>
 
 /// Every WebView2 environment's process list, gathered on the UI thread: `shell` (Tauri's environment) first, then each
 /// site profile that has its own environment (p4.15). Waits at most 10 s for each answer.
-async fn process_inventories(
+pub(crate) async fn process_inventories(
     app: &AppHandle,
 ) -> Result<Vec<(String, Vec<ferrum_webview_manager::webview2::ProcessEntry>)>, String> {
     let (tx, rx) = std::sync::mpsc::channel();
@@ -1246,7 +1250,7 @@ async fn process_inventories(
 
 /// Ferrum's process set (p5.2, risk-r05): its own process plus every process its WebView2 environments report, from
 /// [`process_inventories`]. Never matched by executable name, so another app that uses WebView2 is never counted.
-fn set_of(
+pub(crate) fn set_of(
     lists: &[(String, Vec<ferrum_webview_manager::webview2::ProcessEntry>)],
 ) -> Result<ferrum_telemetry::attribution::ProcessSet, String> {
     let inventories: Vec<ferrum_telemetry::attribution::Inventory> = lists
@@ -1447,6 +1451,22 @@ fn process_created_unix_ms() -> Result<f64, String> {
     }
 }
 
+/// Test hook (debug builds only): checks a measuring file (p5.11) with the export checker (p5.1) and returns its run
+/// line and how many records of each type it holds, or why it was refused.
+#[tauri::command]
+pub fn test_check_export(path: String) -> Result<Value, String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    let s = ferrum_telemetry::export::validate_file(std::path::Path::new(&path))
+        .map_err(|e| e.to_string())?;
+    let mut kinds = std::collections::BTreeMap::<&str, usize>::new();
+    for r in &s.records {
+        *kinds.entry(r.kind()).or_default() += 1;
+    }
+    Ok(json!({"run": s.run, "kinds": kinds}))
+}
+
 /// Test hook (debug builds only): the network log's session folder (p5.9), or null when the log is off.
 #[tauri::command]
 pub fn test_netlog() -> Result<Value, String> {
@@ -1490,15 +1510,7 @@ pub async fn test_nav_timing(app: AppHandle, tab: u64) -> Result<Value, String> 
         .and_then(|t| t.last().cloned())
         .ok_or("no finished navigation in this tab")?;
     let page = isolated_eval(&app, CdpTarget::Tab(tab), NAV_ENTRY_JS, "navigation-entry").await?;
-    let timing = (|| {
-        Some(ferrum_telemetry::navigation::PageTiming {
-            name: page["name"].as_str()?.to_string(),
-            response_start: page["response_start"].as_f64()?,
-            dom_content_loaded_event_start: page["dom_content_loaded_event_start"].as_f64()?,
-            load_event_end: page["load_event_end"].as_f64()?,
-            redirect_count: u32::try_from(page["redirect_count"].as_u64()?).ok()?,
-        })
-    })();
+    let timing = page_timing(&page);
     let record = ferrum_telemetry::navigation::nav_record(
         &finished,
         timing.as_ref(),
@@ -1524,6 +1536,15 @@ pub async fn test_startup(app: AppHandle) -> Result<Value, String> {
     if !cfg!(debug_assertions) {
         return Err("not available in release builds".into());
     }
+    Ok(startup_chain(&app).await?.0)
+}
+
+/// The startup chain of this start (p5.6): the readings as JSON (the `test_startup` answer) and the `startup_mark`
+/// records, or why the chain was refused. Used by the test hook and by the recorder (p5.11).
+pub(crate) async fn startup_chain(
+    app: &AppHandle,
+) -> Result<(Value, Result<Vec<ferrum_telemetry::export::Record>, String>), String> {
+    let app = app.clone();
     let created = process_created_unix_ms()?;
     let visible = (*app.state::<WindowShown>().0.lock().unwrap())
         .ok_or("the window-visible time was not recorded")?;
@@ -1554,7 +1575,7 @@ pub async fn test_startup(app: AppHandle) -> Result<Value, String> {
         ),
         _ => Err("a paint time is missing".to_string()),
     };
-    Ok(json!({
+    let v = json!({
         "tab": tab,
         "unix_ms": {
             "process_created": created,
@@ -1567,11 +1588,77 @@ pub async fn test_startup(app: AppHandle) -> Result<Value, String> {
         "page": page,
         "marks": marks.as_ref().ok(),
         "error": marks.as_ref().err(),
-    }))
+    });
+    Ok((v, marks))
+}
+
+/// The page's Navigation Timing entry as read by [`NAV_ENTRY_JS`], when complete.
+fn page_timing(page: &Value) -> Option<ferrum_telemetry::navigation::PageTiming> {
+    Some(ferrum_telemetry::navigation::PageTiming {
+        name: page["name"].as_str()?.to_string(),
+        response_start: page["response_start"].as_f64()?,
+        dom_content_loaded_event_start: page["dom_content_loaded_event_start"].as_f64()?,
+        load_event_end: page["load_event_end"].as_f64()?,
+        redirect_count: u32::try_from(page["redirect_count"].as_u64()?).ok()?,
+    })
+}
+
+/// The recorder's startup chain has been asked for (once per start).
+static STARTUP_ASKED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+/// p5.11: with the measuring on, a finished navigation becomes a `nav_timing` record (its page entry read in an
+/// isolated world, as in p5.7), and the first one that loaded starts the reading of the startup chain, after which
+/// the recorder writes (until then it holds its records, so the file's clock never goes backwards).
+fn record_navigation(app: &AppHandle, tab: u64, success: bool) {
+    if !crate::recorder::enabled() {
+        return;
+    }
+    let finished = app
+        .state::<NavTrackers>()
+        .0
+        .lock()
+        .unwrap()
+        .get(&tab)
+        .and_then(|t| t.last().cloned());
+    let h = app.clone();
+    if let Some(f) = finished {
+        tauri::async_runtime::spawn(async move {
+            let page = if f.outcome == ferrum_telemetry::export::NavOutcome::Completed {
+                isolated_eval(&h, CdpTarget::Tab(tab), NAV_ENTRY_JS, "navigation-entry")
+                    .await
+                    .ok()
+            } else {
+                None
+            };
+            let timing = page.as_ref().and_then(page_timing);
+            match process_created_unix_ms().and_then(|c| {
+                ferrum_telemetry::navigation::nav_record(&f, timing.as_ref(), tab, c, unix_now_ms())
+            }) {
+                Ok(r) => crate::recorder::push(r),
+                Err(e) => {
+                    tracing::warn!(target: "ferrum::telemetry", tab, error = %e, "navigation record refused")
+                }
+            }
+        });
+    }
+    if success && !STARTUP_ASKED.swap(true, Ordering::SeqCst) {
+        let h = app.clone();
+        tauri::async_runtime::spawn(async move {
+            // the largest-contentful-paint entry is final once the page is idle (as in the p5.6 test)
+            pause(1000).await;
+            match startup_chain(&h).await {
+                Ok((_, Ok(marks))) => marks.into_iter().for_each(crate::recorder::push),
+                Ok((_, Err(e))) | Err(e) => {
+                    tracing::warn!(target: "ferrum::telemetry", error = %e, "startup chain not recorded")
+                }
+            }
+            crate::recorder::release();
+        });
+    }
 }
 
 /// Waits without holding a runtime thread.
-async fn pause(ms: u64) {
+pub(crate) async fn pause(ms: u64) {
     let _ = tauri::async_runtime::spawn_blocking(move || {
         std::thread::sleep(std::time::Duration::from_millis(ms))
     })

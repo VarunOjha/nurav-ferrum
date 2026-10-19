@@ -541,3 +541,39 @@ fn network_log_is_off_by_default_and_its_limits_are_checked() {
         Err(ConfigError::Parse { .. })
     ));
 }
+
+#[test]
+fn telemetry_is_off_by_default_and_its_limits_are_checked() {
+    // Owner answer Q-230: off unless switched on.
+    let d = Config::default().telemetry;
+    assert!(!d.enabled);
+    assert_eq!(d.dir, PathBuf::from("telemetry"));
+    assert_eq!((d.sample_interval_ms, d.retention_days), (1000, 14));
+    assert_eq!(d.machine_id, "unrecorded");
+    let p = tmp(
+        "telemetry-on.toml",
+        "version = 4\n[telemetry]\nenabled = true\nsample_interval_ms = 250\nmachine_id = \"p1.2-environment\"\n",
+    );
+    let l = config::load(Some(&p), None).unwrap();
+    assert!(l.config.telemetry.enabled);
+    assert_eq!(l.config.telemetry.sample_interval_ms, 250);
+    for (text, key) in [
+        ("sample_interval_ms = 50", "sample_interval_ms"),
+        ("sample_interval_ms = 70000", "sample_interval_ms"),
+        ("retention_days = 4000", "retention_days"),
+        (r"dir = '..\x'", "dir"),
+        ("machine_id = \"a b\"", "machine_id"),
+        ("machine_id = \"\"", "machine_id"),
+    ] {
+        let p = tmp(
+            "telemetry-bad.toml",
+            &format!("version = 4\n[telemetry]\n{text}\n"),
+        );
+        match config::load(Some(&p), None) {
+            Err(ConfigError::InvalidValue { key: k, .. }) => {
+                assert_eq!(k, format!("telemetry.{key}"), "{text}")
+            }
+            other => panic!("{text}: {other:?}"),
+        }
+    }
+}

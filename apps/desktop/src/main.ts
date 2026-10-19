@@ -1169,6 +1169,7 @@ type SiteRow = { site: string; profile: string; permissions?: string[]; never?: 
 type SettingsView = {
   startup_urls: string[]; restore_on_startup: boolean; sites: SiteRow[]; download_folder: string;
   blocklist?: string[]; default_download_folder: string; isolation: string; file: string;
+  telemetry_enabled?: boolean; telemetry_retention_days?: number; netlog_enabled?: boolean; netlog_retention_days?: number;
 };
 const settingsPanel = $<HTMLElement>("settings-panel");
 const settingsForm = $<HTMLFormElement>("settings-form");
@@ -1177,6 +1178,13 @@ const setRestore = $<HTMLInputElement>("set-restore");
 const setSitesBody = document.querySelector("#set-sites tbody") as HTMLTableSectionElement;
 const setFolder = $<HTMLInputElement>("set-folder");
 const setBlocklist = $<HTMLTextAreaElement>("set-blocklist");
+// p5.11: measuring and the network log (they apply at the next start).
+const setTelemetry = $<HTMLInputElement>("set-telemetry");
+const setTelemetryDays = $<HTMLInputElement>("set-telemetry-days");
+const setNetlog = $<HTMLInputElement>("set-netlog");
+const setNetlogDays = $<HTMLInputElement>("set-netlog-days");
+/** A whole number of days from a field, or NaN (the app then refuses it with a message). */
+const daysOf = (i: HTMLInputElement) => (i.value.trim() === "" || !/^\d+$/.test(i.value.trim()) ? NaN : Number(i.value.trim()));
 const settingsErrors = $<HTMLUListElement>("settings-errors");
 const settingsStatus = $<HTMLSpanElement>("settings-status");
 function siteRow(r: SiteRow): HTMLTableRowElement {
@@ -1255,6 +1263,10 @@ function fillSettings(v: SettingsView): void {
   setFolder.value = v.download_folder;
   setFolder.placeholder = v.default_download_folder;
   setBlocklist.value = (v.blocklist ?? []).join("\n");
+  setTelemetry.checked = v.telemetry_enabled ?? false;
+  setTelemetryDays.value = String(v.telemetry_retention_days ?? 14);
+  setNetlog.checked = v.netlog_enabled ?? false;
+  setNetlogDays.value = String(v.netlog_retention_days ?? 14);
   $<HTMLParagraphElement>("set-isolation").textContent =
     v.isolation === "per-site" ? "Each site keeps its own cookies and storage. Sites given the same named profile share one."
       : v.isolation === "per-site-udf" ? "Each site keeps its own cookies and storage in its own data folder, with its own browser engine. Sites given the same named profile share one."
@@ -1308,7 +1320,24 @@ settingsForm.addEventListener("submit", async (e) => {
     download_folder: setFolder.value,
     blocklist: linesOf(setBlocklist.value),
     default_download_folder: "", isolation: "", file: "",
+    telemetry_enabled: setTelemetry.checked,
+    netlog_enabled: setNetlog.checked,
   };
+  const days: [string, HTMLInputElement, "telemetry_retention_days" | "netlog_retention_days"][] = [
+    ["Measuring files", setTelemetryDays, "telemetry_retention_days"],
+    ["Network log files", setNetlogDays, "netlog_retention_days"],
+  ];
+  const dayProblems: string[] = [];
+  for (const [what, field, key] of days) {
+    const d = daysOf(field);
+    if (Number.isNaN(d)) dayProblems.push(`${what}: enter a whole number of days (0: never delete).`);
+    else input[key] = d;
+  }
+  if (dayProblems.length > 0) {
+    settingsErrors.replaceChildren(...dayProblems.map((p) => Object.assign(document.createElement("li"), { textContent: p })));
+    settingsStatus.textContent = "Not saved";
+    return;
+  }
   try {
     fillSettings(await invoke<SettingsView>("settings_set", { input }));
     settingsErrors.replaceChildren();
@@ -1319,6 +1348,16 @@ settingsForm.addEventListener("submit", async (e) => {
     settingsStatus.textContent = "Not saved";
   }
 });
+for (const [id, kind] of [["set-telemetry-open", "telemetry"], ["set-netlog-open", "network"]] as const) {
+  $<HTMLButtonElement>(id).addEventListener("click", async () => {
+    try {
+      await invoke("log_folder_open", { kind });
+      settingsStatus.textContent = "";
+    } catch (err) {
+      settingsStatus.textContent = String(err);
+    }
+  });
+}
 $<HTMLButtonElement>("set-add-site").addEventListener("click", () => setSitesBody.append(siteRow({ site: "", profile: "" })));
 $<HTMLButtonElement>("settings-close").addEventListener("click", () => void closeSettings());
 $<HTMLButtonElement>("settings-btn").addEventListener("click", () => void openSettings());

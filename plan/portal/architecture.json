@@ -195,7 +195,7 @@
     {
       "id": "comp-app-shell",
       "title": "Browser controls",
-      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, a SmartScreen message, a Keep/Delete pop-up for programs, and a question before a site uses your camera and more.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, SmartScreen and program warnings, and permission questions. P5 adds switches for measuring and the network log.",
       "group": "application",
       "layer": "layer-controls",
       "status": "Built (first working app)",
@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:8599899f2d7c2252c594db516ba7ea1d03f9ca1308dc3d40990ad79daab078ac"
+        "content_hash": "sha256:8e8483a3038a268638d4d29f86c8833b802a87c0019f84de58be3376ba95b8f1"
       }
     },
     {
@@ -364,7 +364,7 @@
     {
       "id": "comp-telemetry",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter, startup and page-load timing, and tab state changes. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files; off unless you switch it on. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter, startup and page-load timing, tab state changes, and writing it all during use. A cross-check only. Trusted.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Planned",
@@ -393,7 +393,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-telemetry.md",
-        "content_hash": "sha256:3d803bf41d36f0e0c497dd85ef37fb700c0a363b6c50ebfc344794fa94e1bbfb"
+        "content_hash": "sha256:e9ee6694012ba08b23f4d19d9eecf88bc3459e692f340e3355bdc44603692dc4"
       }
     },
     {
@@ -426,7 +426,7 @@
     {
       "id": "comp-core",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart; since P5 the network log switch), record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart; since P5 the measuring and network log switches), record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted.",
       "group": "application",
       "layer": "layer-base",
       "status": "Built (first working app)",
@@ -436,7 +436,7 @@
       "related": [],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-core.md",
-        "content_hash": "sha256:592d99d0cd4cee64d713e5e63fb055b06afd2e1ddb3fe7da0a25a1cc55ef094a"
+        "content_hash": "sha256:31dc30e38a269826fddee303bf4aa1e882bdb8e1457371ba391ca23365e6f8b6"
       }
     },
     {

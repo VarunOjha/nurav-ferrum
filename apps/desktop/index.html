@@ -130,6 +130,18 @@
             <label for="set-folder">Download folder (empty: your Downloads folder)</label>
             <input id="set-folder" type="text" spellcheck="false" />
           </fieldset>
+          <fieldset>
+            <legend>Measuring and network log</legend>
+            <p class="hint">Both stay on this computer and are off unless you switch them on. Changes apply the next time Ferrum starts.</p>
+            <label class="check"><input id="set-telemetry" type="checkbox" /> Measure Ferrum's own memory, CPU, start-up and page-load times and tab changes (no web addresses)</label>
+            <label for="set-telemetry-days">Delete measuring files after this many days (0: never)</label>
+            <input id="set-telemetry-days" type="text" inputmode="numeric" spellcheck="false" />
+            <button id="set-telemetry-open" type="button">Open the measuring folder</button>
+            <label class="check"><input id="set-netlog" type="checkbox" /> Keep a network log: every address each tab loads, with its result and size (never headers, cookies or page content)</label>
+            <label for="set-netlog-days">Delete network log files after this many days (0: never)</label>
+            <input id="set-netlog-days" type="text" inputmode="numeric" spellcheck="false" />
+            <button id="set-netlog-open" type="button">Open the network log folder</button>
+          </fieldset>
           <ul id="settings-errors" role="alert"></ul>
           <div class="settings-actions">
             <button id="settings-save" type="submit">Save</button>

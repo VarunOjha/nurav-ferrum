@@ -1,0 +1,16 @@
+Ferrum check p5.11: Settings for measuring and logging
+Why: nothing is recorded that you did not choose.
+Run at 2026-10-19 00:18 on commit e35aa07 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Settings: measuring off by default, limits checked; old measuring files deleted safely (19 s)
+         off by default (your answer), limits refused; only Ferrum's own old measuring files deleted; the Windows build reads
+Running 1 test using 1 worker
+MEASURING-SETTINGS: off: no files; on: run 20261019-052102-<pid>.0000.jsonl with {"lifecycle_transition":5,"nav_timing":3,"process_sample":42,"startup_mark":5,"tree_sample":5}, one network log session; off again: nothing new (os_build 10.0.26200.9711, webview2 155.0.4283.62)
+  ✓  1 measuring-settings.spec.ts:39:1 › switching measuring and the network log on and off writes files or not (25.6s)
+  1 passed (2.1m)
+  PASS   Live: switches on the settings screen; files written only when switched on (142 s)
+         off: no files; on: run 20261019-052102-<pid>.0000.jsonl with {"lifecycle_transition":5,"nav_timing":3,"process_sample":42,"startup_mark":5,"tree_sample":5}, one network log session; off again: nothing new (os_build 10.0.26200.9711, webview2 155.0.4283.62)
+------------------------------------------------------------------------
+RESULT: PASS - p5.11 (2 PASS; 161 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.11 check passed".

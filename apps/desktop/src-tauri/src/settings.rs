@@ -45,6 +45,18 @@ pub struct SettingsView {
     /// `=www.example.com` that host only. Missing: keep the current list.
     #[serde(default)]
     pub blocklist: Option<Vec<String>>,
+    /// Ferrum's own measuring on (p5.11; `[telemetry] enabled`, from the next start). Missing: keep.
+    #[serde(default)]
+    pub telemetry_enabled: Option<bool>,
+    /// Days measuring files are kept (0 = never deleted). Missing: keep.
+    #[serde(default)]
+    pub telemetry_retention_days: Option<u32>,
+    /// The network log on (p5.11; `[network_log] enabled`, from the next start). Missing: keep.
+    #[serde(default)]
+    pub netlog_enabled: Option<bool>,
+    /// Days network log sessions are kept (0 = never deleted). Missing: keep.
+    #[serde(default)]
+    pub netlog_retention_days: Option<u32>,
     /// Shown only: the folder used when none is chosen.
     #[serde(default)]
     pub default_download_folder: String,
@@ -77,6 +89,10 @@ fn view_of(app: &AppHandle, c: &Config) -> SettingsView {
             .map(|p| p.display().to_string())
             .unwrap_or_default(),
         blocklist: Some(c.security.blocklist.clone()),
+        telemetry_enabled: Some(c.telemetry.enabled),
+        telemetry_retention_days: Some(c.telemetry.retention_days),
+        netlog_enabled: Some(c.network_log.enabled),
+        netlog_retention_days: Some(c.network_log.retention_days),
         default_download_folder: app
             .path()
             .download_dir()
@@ -193,6 +209,33 @@ pub fn apply(current: &Config, input: &SettingsView) -> Result<Config, Vec<Strin
         }
         Some(p)
     };
+    // p5.11: measuring and the network log (they start or stop at the next start).
+    if let Some(on) = input.telemetry_enabled {
+        next.telemetry.enabled = on;
+    }
+    if let Some(on) = input.netlog_enabled {
+        next.network_log.enabled = on;
+    }
+    for (what, sent, slot) in [
+        (
+            "Measuring files",
+            input.telemetry_retention_days,
+            &mut next.telemetry.retention_days,
+        ),
+        (
+            "Network log files",
+            input.netlog_retention_days,
+            &mut next.network_log.retention_days,
+        ),
+    ] {
+        match sent {
+            Some(d) if d > 3650 => problems.push(format!(
+                "{what}: keep them 0 (never delete) to 3650 days, not {d}."
+            )),
+            Some(d) => *slot = d,
+            None => {}
+        }
+    }
     // The same rules as a settings file (sites, labels, start pages, site lists).
     if let Err(e) = config::validate(next.clone()) {
         problems.push(e.to_string());
@@ -304,6 +347,10 @@ mod tests {
             sites: Vec::new(),
             download_folder: String::new(),
             blocklist: blocklist.map(|b| b.into_iter().map(String::from).collect()),
+            telemetry_enabled: None,
+            telemetry_retention_days: None,
+            netlog_enabled: None,
+            netlog_retention_days: None,
             default_download_folder: String::new(),
             isolation: String::new(),
             file: String::new(),

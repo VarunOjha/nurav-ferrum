@@ -3,8 +3,9 @@ id: ov-arch-configuration
 type: overview
 title: "Architecture: configuration model and lifecycle policy flags"
 status: review
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
+  - raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
   - raw/research/tauri-webview2-capabilities.md
@@ -103,10 +104,12 @@ beta = 0.0
 gamma = 1.0
 budget_per_tick = 1
 
-[telemetry]
-enabled = true
-sample_interval_ms = 1000
-export_dir = "telemetry"        # relative to app data dir
+[telemetry]                     # built in p5.11
+enabled = false                 # owner answer Q-230: off unless switched on (benchmark runs switch it on)
+dir = "telemetry"               # inside the data dir; one export run per start
+sample_interval_ms = 1000       # 100 to 60000
+retention_days = 14             # run files older than this are deleted at start (0 = never)
+machine_id = "unrecorded"       # the machine-inventory record written in each run line
 
 [network_log]                   # adr-0008 metadata only; built in p5.9
 enabled = false                 # owner answer Q-114: off unless switched on (benchmark runs switch it on)
@@ -170,4 +173,4 @@ pages (a version-1 file keeps it off, the P2 behaviour). The session itself is r
 
 ## 5. Persisted runtime state (not config)
 
-`ferrum.db` (built in P3, p3.18, adr-0032: one SQLite file with the history, newest first, at most 50 000 entries, clearable at once with nothing left inside the file, and the bookmarks; it replaced p3.7's `history.json`, which is imported once and kept as `history.json.imported`), `session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), no `profiles.json` (not built: each site's profile is worked out from its registrable domain, and named profiles live in `[[sites]]` in `config.toml`), `audit.jsonl`, `netlogs/<session>/netlog.NNNN.jsonl` (p5.9), `telemetry/*.jsonl`. All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.
+`ferrum.db` (built in P3, p3.18, adr-0032: one SQLite file with the history, newest first, at most 50 000 entries, clearable at once with nothing left inside the file, and the bookmarks; it replaced p3.7's `history.json`, which is imported once and kept as `history.json.imported`), `session.json` (built in P3, p3.5: version 1, the tabs with address, title and profile, and the active tab; saved about once a second while it changes and on exit; lifecycle snapshots for discard are P7), no `profiles.json` (not built: each site's profile is worked out from its registrable domain, and named profiles live in `[[sites]]` in `config.toml`), `audit.jsonl`, `netlogs/<session>/netlog.NNNN.jsonl` (p5.9), `telemetry/<run id>.NNNN.jsonl` (p5.11). All of it lives in the app data dir, is written atomically (temp file + rename) where it is rewritten, and is **never committed**.

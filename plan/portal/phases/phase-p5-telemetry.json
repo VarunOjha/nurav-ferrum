@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 10,
+    "done": 11,
     "total": 15
   },
   "step_order": [
@@ -136,7 +136,7 @@
       "what": "Settings to turn measuring and the network log on or off, open the log folder, and set how long logs are kept.",
       "why": "Measuring and logging write data about your browsing. Without switches you could not stop it, and old logs would pile up.",
       "how": "Add on/off switches, a retention limit and an 'open log folder' button to the settings, and have the meter and the network log check their switch before writing.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "You decide what is recorded → add on/off switches for measurement and the network log, a button to open the log folder, and a retention limit → nothing is recorded that you did not choose.",
       "check": "A quick test flips each switch and confirms files are or are not written.",
       "script": "scripts/verify/p5.11-settings-measuring-logging.ps1"

@@ -990,7 +990,7 @@
       "kind": "task",
       "title": "P5 task: Settings for measuring and logging",
       "summary": "You decide what is recorded → add on/off switches for measurement and the network log, a button to open the log folder, and a retention limit → nothing is recorded that you did not choose.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3173,7 +3173,7 @@
       "id": "comp-app-shell",
       "kind": "component",
       "title": "Browser controls",
-      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, a SmartScreen message, a Keep/Delete pop-up for programs, and a question before a site uses your camera and more.",
+      "summary": "The window you use, built in P2 and P3: tabs, address bar, bookmarks, sidebar, settings, downloads, backup and the Graphite look ([the look you chose](ref:adr-0033)). P4 added block and crash messages, a \"not secure\" bar, site settings, SmartScreen and program warnings, and permission questions. P5 adds switches for measuring and the network log.",
       "status": "Built (first working app)",
       "related": [
         "layer-controls"
@@ -3207,7 +3207,7 @@
       "id": "comp-core",
       "kind": "component",
       "title": "Core library",
-      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart; since P5 the network log switch), record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted. It calls nothing itself.",
+      "summary": "The shared base every Rust part uses: settings with defaults and checks (since P4 also your blocked and allowed sites lists and three ways to keep sites apart; since P5 the measuring and network log switches), record formats, the local database for history and bookmarks, and the passphrase-locked backup file ([decision](ref:adr-0032)). Trusted.",
       "status": "Built (first working app)",
       "related": [
         "layer-base"
@@ -3273,7 +3273,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter, startup and page-load timing, and tab state changes. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files; off unless you switch it on. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter, startup and page-load timing, tab state changes, and writing it all during use. A cross-check only. Trusted.",
       "status": "Planned",
       "related": [
         "layer-engine"

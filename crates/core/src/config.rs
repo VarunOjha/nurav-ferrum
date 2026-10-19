@@ -277,6 +277,35 @@ pub struct Downloads {
     pub folder: Option<PathBuf>,
 }
 
+/// `[telemetry]`: Ferrum's own measuring (p5.11; owner's Q-230 answer: off unless switched on): memory and CPU of its
+/// processes, startup and navigation timing and tab state changes, written as export files (no web addresses).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields, default)]
+pub struct Telemetry {
+    /// Whether the measuring writes files (off by default; benchmark runs switch it on).
+    pub enabled: bool,
+    /// The export folder, relative to the data folder.
+    pub dir: PathBuf,
+    /// Milliseconds between process readings (100 to 60000).
+    pub sample_interval_ms: u32,
+    /// Run files older than this many days are deleted at start (0 = never; at most 3650).
+    pub retention_days: u32,
+    /// Which machine-inventory record describes this PC (written in each run line).
+    pub machine_id: String,
+}
+
+impl Default for Telemetry {
+    fn default() -> Self {
+        Telemetry {
+            enabled: false,
+            dir: PathBuf::from("telemetry"),
+            sample_interval_ms: 1000,
+            retention_days: 14,
+            machine_id: "unrecorded".into(),
+        }
+    }
+}
+
 /// `[network_log]`: the local log of each tab's requests (p5.9; adr-0008, metadata only; owner's Q-114 answer: full
 /// addresses, off unless switched on, files older than 14 days deleted).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -404,6 +433,8 @@ pub struct Config {
     pub downloads: Downloads,
     /// How the shell looks.
     pub appearance: Appearance,
+    /// Ferrum's own measuring (p5.11).
+    pub telemetry: Telemetry,
     /// The network log (p5.9).
     pub network_log: NetworkLog,
 }
@@ -419,6 +450,7 @@ impl Default for Config {
             sites: Vec::new(),
             downloads: Downloads::default(),
             appearance: Appearance::default(),
+            telemetry: Telemetry::default(),
             network_log: NetworkLog::default(),
         }
     }
@@ -743,6 +775,39 @@ pub fn validate(mut config: Config) -> Result<Loaded, ConfigError> {
             )));
         }
     }
+    let plain_dir = |d: &std::path::Path| {
+        d.components().count() > 0
+            && d.components()
+                .all(|c| matches!(c, std::path::Component::Normal(_)))
+    };
+    let tm = &config.telemetry;
+    let bad = |key: &str, reason: &str| ConfigError::InvalidValue {
+        key: format!("telemetry.{key}"),
+        reason: reason.into(),
+    };
+    if !(100..=60_000).contains(&tm.sample_interval_ms) {
+        return Err(bad("sample_interval_ms", "must be 100 to 60000"));
+    }
+    if tm.retention_days > 3650 {
+        return Err(bad("retention_days", "must be 0 (never delete) to 3650"));
+    }
+    if !plain_dir(&tm.dir) {
+        return Err(bad(
+            "dir",
+            "must be a folder name inside the data folder (no drive, no .., not empty)",
+        ));
+    }
+    let id_ok = |s: &str| {
+        (1..=64).contains(&s.len())
+            && s.bytes()
+                .all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'_' || b == b'.')
+    };
+    if !id_ok(&tm.machine_id) {
+        return Err(bad(
+            "machine_id",
+            "must be 1 to 64 letters, digits, '.', '-' or '_'",
+        ));
+    }
     let n = &config.network_log;
     let bad = |key: &str, reason: &str| ConfigError::InvalidValue {
         key: format!("network_log.{key}"),
@@ -757,11 +822,7 @@ pub fn validate(mut config: Config) -> Result<Loaded, ConfigError> {
     if n.retention_days > 3650 {
         return Err(bad("retention_days", "must be 0 (never delete) to 3650"));
     }
-    let plain = n.dir.components().count() > 0
-        && n.dir
-            .components()
-            .all(|c| matches!(c, std::path::Component::Normal(_)));
-    if !plain {
+    if !plain_dir(&n.dir) {
         return Err(bad(
             "dir",
             "must be a folder name inside the data folder (no drive, no .., not empty)",

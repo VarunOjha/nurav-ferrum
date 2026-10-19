@@ -49,3 +49,17 @@ fn an_ended_process_reads_as_gone() {
     assert_eq!(win::read(pid), Reading::Gone, "ended, handle still held");
     drop(child);
 }
+
+#[test]
+fn the_windows_build_reads_as_four_numbers() {
+    let b = ferrum_telemetry::win::os_build().expect("the Windows build is readable");
+    let parts: Vec<&str> = b.split('.').collect();
+    assert_eq!(parts.len(), 4, "{b}");
+    assert!(
+        parts
+            .iter()
+            .all(|p| !p.is_empty() && p.bytes().all(|c| c.is_ascii_digit())),
+        "{b}"
+    );
+    println!("os_build {b}");
+}

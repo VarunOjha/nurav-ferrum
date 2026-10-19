@@ -18,6 +18,7 @@ mod logging;
 mod netlog;
 mod permission_question;
 mod policy;
+mod recorder;
 mod recovery;
 mod selftest;
 mod session;
@@ -250,6 +251,9 @@ fn main() {
             content::test_nav_timing,
             content::test_lifecycle,
             content::test_netlog,
+            content::test_check_export,
+            recorder::log_folder,
+            recorder::log_folder_open,
             recovery::test_crash_tab,
             content::tab_new_private,
             content::site_data_clear,
@@ -332,6 +336,20 @@ fn main() {
                 && let Err(e) = netlog::init(d, &loaded.config.network_log)
             {
                 eprintln!("[ferrum] network log not started: {e}");
+            }
+            // Ferrum's own measuring (p5.11): off unless switched on; the run clock starts at process creation.
+            if let Some(d) = data_dir.as_deref() {
+                let started = match ferrum_telemetry::win::read(std::process::id()) {
+                    ferrum_telemetry::sampler::Reading::Read(c) => {
+                        ferrum_telemetry::startup::filetime_to_unix_ms(c.created_100ns).max(0.0) as u64
+                    }
+                    _ => 0,
+                };
+                match recorder::init(d, &loaded.config, started) {
+                    Ok(Some(_)) => recorder::start_loops(app.handle(), loaded.config.telemetry.sample_interval_ms),
+                    Ok(None) => {}
+                    Err(e) => eprintln!("[ferrum] measuring not started: {e}"),
+                }
             }
             tracing::info!(
                 target: "ferrum::app",
@@ -459,6 +477,7 @@ fn main() {
             // Save the tab list one last time when Ferrum closes normally (p3.5).
             if let tauri::RunEvent::Exit = event {
                 session::save_now(app);
+                recorder::finish(content::run_ms());
                 recovery::restart_if_wanted();
             }
         });

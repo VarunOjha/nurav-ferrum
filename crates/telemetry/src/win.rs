@@ -1,7 +1,9 @@
 //! The Windows calls of the sampler (p5.3): the only `unsafe` code of this crate (adr-0019 point 3; the invariants are
 //! listed on comp-telemetry under "Unsafe invariants"). Direct `windows` crate calls, no `sysinfo`:
 //! `GetProcessMemoryInfo` with `PROCESS_MEMORY_COUNTERS_EX2`, `GetProcessTimes` and `QueryProcessCycleTime`, each on a
-//! handle opened with `PROCESS_QUERY_LIMITED_INFORMATION` only. No WebView2 COM call is made here.
+//! handle opened with `PROCESS_QUERY_LIMITED_INFORMATION` only; and (p5.11) [`os_build`], which reads four values of
+//! `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion` with `RegGetValueW` (read only). No WebView2 COM call is made
+//! here.
 
 use std::mem::size_of;
 
@@ -103,4 +105,61 @@ pub fn read(pid: u32) -> Reading {
 /// Reads every pid in turn (`win::sample(pids)` on comp-telemetry).
 pub fn sample(pids: &[u32]) -> Vec<(u32, Reading)> {
     pids.iter().map(|&pid| (pid, read(pid))).collect()
+}
+
+/// The Windows build as `major.minor.build.revision` (for example `10.0.26200.6584`), from the registry values
+/// `CurrentMajorVersionNumber`, `CurrentMinorVersionNumber`, `CurrentBuildNumber` and `UBR`; `None` if one is missing.
+pub fn os_build() -> Option<String> {
+    use windows::Win32::System::Registry::{
+        HKEY_LOCAL_MACHINE, RRF_RT_REG_DWORD, RRF_RT_REG_SZ, RegGetValueW,
+    };
+    use windows::core::w;
+    let key = w!(r"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+    let dword = |name: windows::core::PCWSTR| -> Option<u32> {
+        let mut v = 0u32;
+        let mut len = size_of::<u32>() as u32;
+        // SAFETY: (read-only registry query) `key` and `name` are static NUL-terminated strings; `v` and `len` are
+        // locals that outlive the call, and `len` holds the buffer's size in bytes.
+        let r = unsafe {
+            RegGetValueW(
+                HKEY_LOCAL_MACHINE,
+                key,
+                name,
+                RRF_RT_REG_DWORD,
+                None,
+                Some(&mut v as *mut u32 as *mut _),
+                Some(&mut len),
+            )
+        };
+        r.is_ok().then_some(v)
+    };
+    let mut buf = [0u16; 32];
+    let mut len = (buf.len() * 2) as u32;
+    // SAFETY: (read-only registry query) as above; `buf` is a local array of `len` bytes, and RegGetValueW
+    // NUL-terminates what it writes or fails (ERROR_MORE_DATA) without writing past `len`.
+    let r = unsafe {
+        RegGetValueW(
+            HKEY_LOCAL_MACHINE,
+            key,
+            w!("CurrentBuildNumber"),
+            RRF_RT_REG_SZ,
+            None,
+            Some(buf.as_mut_ptr() as *mut _),
+            Some(&mut len),
+        )
+    };
+    if r.is_err() {
+        return None;
+    }
+    let end = buf.iter().position(|&c| c == 0).unwrap_or(buf.len());
+    let build = String::from_utf16(&buf[..end]).ok()?;
+    if build.is_empty() || !build.bytes().all(|b| b.is_ascii_digit()) {
+        return None;
+    }
+    Some(format!(
+        "{}.{}.{build}.{}",
+        dword(w!("CurrentMajorVersionNumber"))?,
+        dword(w!("CurrentMinorVersionNumber"))?,
+        dword(w!("UBR"))?
+    ))
 }

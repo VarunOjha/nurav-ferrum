@@ -3,8 +3,10 @@ id: comp-telemetry
 type: component
 title: "Telemetry engine (in-app process sampling, events, exports)"
 status: planned
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.11.txt
+  - raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md
   - raw/evidence/phase-p5-telemetry/check-p5.8.txt
   - raw/evidence/phase-p5-telemetry/check-p5.7.txt
   - raw/00-master-prompt.md
@@ -34,7 +36,8 @@ responsibilities:
 interfaces:
   - "win (p5.3, the crate's only unsafe code): read(pid) -> Reading {Read(Counters), Gone, Unreadable(reason)}; sample(pids) -> Vec<(pid, Reading)> (safe wrappers)"
   - "win::system_memory() -> SystemMemory"
-  - "Recorder: record(Event), flush(), export(dir)"
+  - "Recorder (p5.11, in the app: apps/desktop/src-tauri/src/recorder.rs): init(data dir, config, process start), push(Record), release() after the startup chain, flush(run_ms, force), finish(run_ms), start_loops(app, interval); prune(dir, now, days, keep) deletes only its own run files"
+  - "win::os_build() (p5.11): the Windows build as four numbers, read from the registry (read only)"
   - "sampler (p5.3): SamplerConfig::new(interval_ms, 100 to 60000, default 1000); Sampler::tick(t_ms, set or why refused, read) -> process_sample records plus one tree_sample, or one sample_gap; tree_private_commit(samples); peak_private_commit(series), never a sum of per-process peaks"
   - "export (p5.1): Record (run, process_sample, tree_sample, sample_gap from p5.3, startup_mark, nav_timing, lifecycle_transition from p5.8), ExportWriter::create(dir, RunMeta, max_bytes) / write(&Record) / rotate() / finish(), csv::to_csv / from_csv, validate_file / validate_bytes"
   - "Export schema v1 file: crates/telemetry/schema/v1/record.schema.json (JSON Schema 2020-12)"
@@ -154,7 +157,29 @@ Built in p5.8 (`crates/telemetry/src/lifecycle.rs`, the record in `crates/teleme
 - **What P5 records:** whether each tab's view is shown (active) or hidden (background), from `apply_visibility`, and closing, from `close_tab`. A record is written only on a change. The trigger is `shell_cover` when the selected tab is hidden because the shell's error panel covers it (and when it is shown again), otherwise `user_switch`. A tab gets its first record when its view exists, so a tab whose view is still being made has none yet. The app keeps the newest 1000 records in memory.
 - **Differs from the design sketch:** rule 6 of ov-arch-lifecycle-state-machine lists `reason`, `guard_results` and `t_mono`. v1 has `trigger`, the single guard that blocked, and `t_ms` on the run clock. If P7 needs every guard's result per transition, that is a format change (a version bump after the P5 exit).
 - **Checked** ([check-p5.8](../../raw/evidence/phase-p5-telemetry/check-p5.8.txt)): the file-format tests with the new record (seven record types, six tables, thirteen damaged fixtures refused, schema equal to the types); 3 unit tests on the lifecycle rules; live, two tabs switched back and forth and one closed gave 9 records (each tab opened, two switches each way, b closed and a shown again), all accepted by the checker, in time order. The `shell_cover` trigger is checked by a unit test only.
-- **Not yet:** window minimise and restore (the window does not hide its views today), crash transitions, writing the records into a file during normal use (p5.11).
+- **Not yet:** window minimise and restore (the window does not hide its views today), crash transitions.
+
+## Recording during normal use (p5.11)
+
+Built in p5.11 (`apps/desktop/src-tauri/src/recorder.rs`; settings `[telemetry]` in comp-core). Off by default (owner
+answer Q-230): switched on in the settings screen, or by a benchmark run's settings; a change applies at the next start.
+
+- **One run per start**, in `<data dir>/<[telemetry] dir, default telemetry>/<YYYYMMDD-HHMMSS-pid>.NNNN.jsonl` (export
+  schema v1, 50 MiB per file). The run line carries Ferrum's version, the git commit it was built from and whether
+  tracked files had uncommitted changes at build time (`build.rs`; `0000000` and dirty when git is not available), the
+  Windows build (`win::os_build`, registry), the WebView2 runtime (`tauri::webview_version`), the settings fingerprint,
+  `[telemetry] machine_id` (`unrecorded` by default) and the sample interval. The run clock starts at Ferrum's process
+  creation, as for the startup chain.
+- **What is written:** process samples of Ferrum's set at `sample_interval_ms` (as `test_sample`, with the same one
+  retry of a refused set), the five startup marks (read once, 1 s after the first page loaded), one `nav_timing` per
+  finished navigation (page entry read in an isolated world, p5.7) and every lifecycle transition (p5.8).
+- **The clock never goes backwards in the file:** records wait until the startup chain is in (at most 15 s), then are
+  written once a second, sorted by time. A record older than the last one written is dropped and counted in the app log
+  ("measuring run finished", `dropped`), never written out of order.
+- **Old runs:** at start, run files older than `retention_days` (14 by default; 0 = never) are deleted: only files
+  named like a run (`<start time-pid>.NNNN.jsonl` or `.part`), never the running one (unit test). On exit the run is
+  finished (`.part` renamed).
+- **Checked** ([check-p5.11](../../raw/evidence/phase-p5-telemetry/check-p5.11.txt)): the settings test (off by default, limits), the deletion test and the Windows build read live (10.0.26200.9711); live, through the settings screen with restarts: with the defaults no folder was made; switched on, the next start wrote one run that the export checker accepted, with 5 startup marks, 42 process samples and 5 tree samples (about 5 s at 1 s), 3 navigation records and 5 lifecycle transitions; no record was dropped (app log). Debug build; these are checks of the recorder, not results.
 
 ## Unsafe invariants
 
