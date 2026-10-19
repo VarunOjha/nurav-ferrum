@@ -3288,3 +3288,10 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md]
 - result: Claude noticed that ov-arch-configuration (its own design) has [telemetry] enabled = true, never asked. Owner: "Off by default (Recommended)". ov-arch-configuration is corrected in p5.11 (In-flight written).
 - next: p5.11 settings and shell UI.
+
+## [2026-10-19] correct | ov-open-questions: one final line break (lint FILE-ENCODING)
+- session: s08
+- time: 00:01
+- pages: [ov-open-questions]
+- result: Commit c68fe34 left ov-open-questions.md ending in two line breaks after the new Q-230 section, which tools/quick_lint.py reports as 1 FILE-ENCODING error. The extra line break was removed; no other character changed. Slip (second time this session): the lint ran in the same command as the commit and its error did not stop the commit. From here the lint runs as its own step, and a commit waits for 0 errors.
+- commit: c68fe34

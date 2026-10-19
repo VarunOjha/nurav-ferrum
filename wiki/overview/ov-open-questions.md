@@ -1019,4 +1019,3 @@ tab-change records (no web addresses) to files.
 
 **Question:** (a) off by default, like the network log (Claude recommended this); (b) on by default, as the design said,
 with old files deleted after a set time.
-
