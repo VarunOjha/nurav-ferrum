@@ -47,8 +47,8 @@ related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027,
 approvable: false
 session: s08
 current_phase: phase-p5-telemetry
-current_task: p5.13
-next_action: "p5.13 in flight (see In-flight). Then p5.15 (block requests to blocked sites, Q-229), p5.14 exit review (every remaining P5-targeted UNVERIFIED tag resolved or re-targeted with a reason). Run quick_lint as its own step before every commit. Hand check owed: the two open-folder buttons. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+current_task: p5.15
+next_action: "p5.15: block requests to blocked sites at the network level (owner answer Q-229): WebResourceRequested filter on tab views refusing requests to blocked hosts (pages, frames, sub-resources), fail closed; integration test with the fixture server's request counter (typed, link, redirect, frame and sub-resource attempts count no request; allowed sites still load); the filter's cost measured, raw output saved. Write the In-flight record first; read the P0 draft check script if one exists; run quick_lint as its own step before every commit. Then p5.14 exit review (every remaining P5-targeted UNVERIFIED tag resolved or re-targeted with a reason; owner approves phase-p5-telemetry#exit; then pause). Hand check owed: the two open-folder buttons. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -87,6 +87,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - p5.10 done (`fabfdaf`): network log coverage table (covered: pages, sub-resources, other-site frames, fetches, every redirect hop, requests answered or passed on by a service worker; not covered: requests with no response, a service worker's own script and requests) and a rough on/off cost pilot (no difference beyond run-to-run spread); check PASS. comp-network-logger re-approved by the owner.
 - p5.11 done (`5a172a7`): settings screen switches for measuring and the network log (both off by default, Q-230 and Q-114), days kept, open-folder buttons; measuring now recorded during normal use (one export run per start, accepted by the checker); check PASS. comp-telemetry, comp-app-shell and comp-core re-approved by the owner.
 - p5.12 done (`438ba3e`): DevTools targets and renderer per tab in two isolation modes (per-site: every tab a page target, shell listed; per-site-udf: no tab on the port; each tab its own renderer; WebView2 processes descend from Ferrum); four tags resolved, one re-targeted to P7; check PASS. adr-0012 and comp-telemetry re-approved by the owner.
+- p5.13 done (`b99f027`): literature batch 5 (ten sources: benchmarking methodology, WProf, Speedometer 3, the W3C timing specifications, GetProcessTimes); six headline metric pages defined; LCP definition and CPU-time granularity settled; check PASS. No approval went stale (metric pages are not separate approval keys).
 
 ## Done this session (s03)
 
@@ -390,12 +391,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-- task: p5.13 (research track: literature batch 5, measurement methodology and browser benchmarking practice; headline metric pages to status defined)
-- session: s08
-- intent: New raw research note wiki/raw/research/literature-batch-5.md, written as batches 1 to 4 (every page fetched and read by Claude in this session; VERIFIED only for what was read; access date; no novelty claim): benchmarking methodology papers (Georges et al. 2007, Mytkowicz et al. 2009, Kalibera and Jones 2013, Barrett et al. 2017, read at abstract level), page-load measurement (WProf 2013), browser benchmark practice (BrowserBench Speedometer 3), and the W3C specifications behind the timing metrics (Paint Timing, Largest Contentful Paint, Navigation Timing Level 2), plus Microsoft's GetProcessTimes page for the granularity question. Headline metric pages (metric-tree-private-commit, metric-peak-tree-private-commit, metric-tree-cpu-time, metric-startup-window-visible, metric-startup-fcp, metric-startup-lcp) move to status defined, citing the p5.4 evidence (memory, CPU) or the p5.6 evidence (startup) and the new note; the LCP-definition tag settled against the specification if the reading allows, else re-targeted with the reason. scripts/verify/p5.13-reading-measurement-methods.ps1 replaces its P0 draft (read first). Pages edited stale their approvals.
-- planned paths: wiki/raw/research/literature-batch-5.md, wiki/research/metrics/{metric-tree-private-commit,metric-peak-tree-private-commit,metric-tree-cpu-time,metric-startup-window-visible,metric-startup-fcp,metric-startup-lcp}.md, possibly wiki/research/ov-research-*.md, scripts/verify/p5.13-reading-measurement-methods.ps1, wiki/raw/evidence/phase-p5-telemetry/check-p5.13.txt, wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
-- builds: none
-- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
+(empty: p5.13 finished on 2026-10-19 in b99f027)
 
 ## Blockers
 
@@ -433,9 +429,9 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 4 (security) | Done, signed off by you on 18 Oct; hand checklist still owed |
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
-| Last task | p5.12 done: how tabs map to the browser's processes |
+| Last task | p5.13 done: reading on measurement methods; main measures defined |
 | Q-229 | Answered: block requests to blocked sites fully (new task p5.15) |
-| Next task | p5.13: reading on measurement methods; final definitions of the main measures |
+| Next task | p5.15: stop requests to blocked sites |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 

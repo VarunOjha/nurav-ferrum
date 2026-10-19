@@ -5656,6 +5656,16 @@
       "related": [
         "p5.12"
       ]
+    },
+    {
+      "id": "b99f027",
+      "kind": "commit",
+      "title": "Commit b99f027",
+      "summary": "Task p5.13: reading on measurement methods and the web timing standards; the six main measures get final definitions.",
+      "status": "Done",
+      "related": [
+        "p5.13"
+      ]
     }
   ]
 }

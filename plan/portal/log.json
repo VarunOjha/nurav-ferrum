@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:44486352eda850af4f047b37da94798d2ac4ee07f96ee95fba5e874d1b8e341f"
+    "content_hash": "sha256:21f640db290a6cb2c7f896e66acb7b88dc06c28bd3a8eb09c6cd33c889062576"
   },
   "entries": [
     {
@@ -6349,6 +6349,26 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-13",
+      "date": "2026-10-19",
+      "time": "01:13",
+      "title": "Read the published work on measurement methods; main measures defined",
+      "done": "Read ten sources: four papers on running benchmarks fairly, a study of what makes pages load slowly, the Speedometer browser benchmark, the three web standards behind Ferrum's timings, and Microsoft's page on CPU time. The six main measures now have final definitions. Ferrum's 'largest content' time matches the standard; on this PC the CPU-time counter moves in steps of about 16 ms.",
+      "next": "Claude builds the fix that stops requests to blocked sites (p5.15).",
+      "decisions": [],
+      "approvals": [],
+      "commit": "b99f027",
+      "covers": [
+        "## [2026-10-19] research | p5.13 literature batch 5 and headline metric pages defined"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "benchmarks",
+        "paper"
       ]
     }
   ]

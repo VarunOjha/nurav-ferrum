@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:5bf44bc80d23c6af3011782a4473091b9030ca3f639da91312038898cf49fbc2"
+    "content_hash": "sha256:79bbadac74c8b637ecae9488ebadbc583f2decc008dd6ab244db843d8a0ac921"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -39,12 +39,17 @@
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 12 of 15 tasks done"
+        "state": "In progress: 13 of 15 tasks done"
+      },
+      {
+        "item": "Last task",
+        "state": "Reading on measurement methods; main measures defined",
+        "ref": "p5.13"
       },
       {
         "item": "Next task",
-        "state": "Reading on measurement methods",
-        "ref": "p5.13"
+        "state": "Stop requests to blocked sites",
+        "ref": "p5.15"
       }
     ],
     "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
