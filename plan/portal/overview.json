@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:59f89e9d49d0f65a49ac5e222f1ea28c8e05742524eadd687524caf0a469a14c"
+    "content_hash": "sha256:7c197752a4e49e49facb1a2d0caf61415dec52a46738eb1d05dd4db8d3c95556"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -35,24 +35,23 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
         "state": "14 of 15 tasks done; the end-of-phase review is under way"
       },
       {
-        "item": "First gate run",
-        "state": "Stopped by Claude Code (low memory) after 30 minutes; it found a network log flaw, now fixed",
-        "ref": "Q-231"
+        "item": "Gate runs",
+        "state": "Run 1 stopped (low memory); run 2: 19 checks passed, 4 failed; the causes are fixed",
+        "ref": "p5.14"
       },
       {
         "item": "Your part",
-        "state": "Leave the PC alone while Claude runs the gate; then the hand checks, sign off",
-        "ref": "p5.14"
+        "state": "Close the old Ferrum still open since 18 Oct; then Claude reruns the gate"
       }
     ],
-    "why": "You asked Claude to run the gate. It reruns every Phase 5 check, the earlier test suites and a release build on one commit. Some tests press real keys, so leave the PC alone until Claude reports, and keep other big programs closed: memory ran short last time.",
+    "why": "The release build could not replace the program file because a Ferrum started from the gate's folder on 18 Oct is still open. Claude does not close programs it did not start (your rule). The other failures were faults in two check scripts and Claude's own wiki mistakes; all are fixed. After you close that Ferrum, Claude runs the whole gate again on one saved version.",
     "script": {
       "path": "scripts/gates/p5-gate.ps1",
       "parts": [
@@ -78,7 +77,7 @@
         }
       ]
     },
-    "tell_claude": "Nothing while it runs; Claude reports the result. Then the checklist results item by item, and whether P5 is signed off"
+    "tell_claude": "\"Closed, run\" once that Ferrum is closed; after the gate, the checklist results item by item, and whether P5 is signed off"
   },
   "questions_for_you": {
     "open": 16,

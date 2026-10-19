@@ -3403,3 +3403,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-19-s08-q231-reapprovals.md]
 - result: Owner: "Re approve, and run". Recorded approved for both keys with tools/approvals_record.py. All approvals current. The owner asks Claude to run the P5 gate; the 8 untracked outputs of the stopped run (made by Claude's run) are removed first so the run is on a clean commit.
 - next: Claude runs scripts/gates/p5-gate.ps1 -SaveEvidence with the PC left alone.
+
+## [2026-10-19] gate | phase-p5-telemetry exit run 2: FAIL (19 PASS, 4 FAIL); causes fixed
+- session: s08
+- time: 15:39
+- pages: [phase-p5-telemetry, risk-r07]
+- sources: [scripts/gates/p5-gate.ps1]
+- result: Run at 779babb from 14:41, 3322 s: approvals PASS; every task check PASS except p5.2 and p5.3; fmt and clippy, Rust tests, cargo deny, p5.4 accuracy, p5.5 cost, p5.1 format, p5.9 network log (the Q-231 fix holds), earlier suites (security suite PASS, npm run p3 62 passed, npm run p2 26 passed, p2.3 PASS; the real-keystroke tests passed with the PC left alone), shell checks and the p4.16 no-security check PASS. FAIL: p5.2 (its regex expects `fn set_of`, made `pub(crate)` in p5.11), p5.3 (spec filter `sampler` also runs the p5.4 and p5.5 files: expects 1 passed); both also failed in run 1, which Claude missed when reporting run 1 to the owner. FAIL: release build (target/gate-release ferrum-desktop.exe of 2026-10-18 12:56 still runs and locks the file; not closed by Claude, owner's rule). FAIL: wiki check, Claude's errors: an unescaped quote in STATUS next_action (8 dangling-link errors followed from it), risk-r07 `unverified:` empty, six metric index rows still proposed after p5.13; plus the known Q-221 error. Fixed: both scripts (p5.2 and p5.3 checks rerun PASS), the three wiki errors (lint:wiki: only the Q-221 error left). The run's untracked outputs are removed before the next run, which saves them again. Also noted, not in this gate: spec filters `downloads`, `settings` and `startup` in P3/P4 check scripts also match newer files.
+- next: owner closes the old Ferrum; Claude reruns the gate.

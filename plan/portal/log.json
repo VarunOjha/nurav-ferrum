@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:96d103fc86b240a66c3c8d67d550e219d79c5db2986ad0c854516555758e722b"
+    "content_hash": "sha256:5eee598c4affd2ea27c561e2cd0b66b5d2411be21e565e63f74880f6dd0749d7"
   },
   "entries": [
     {
@@ -6546,6 +6546,26 @@
       "tags": [
         "approvals",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-gate-run2",
+      "date": "2026-10-19",
+      "time": "15:39",
+      "title": "Second gate run: 19 checks passed, 4 failed; causes fixed",
+      "done": "The gate ran for 55 minutes with the PC left alone. Passed: the code checks, all automatic tests, the accuracy and cost tests, the network log check (the fix holds) and the earlier phases' suites. Failed: two check scripts that were out of date, the release build (an old Ferrum is still open and locks its file) and the wiki check (Claude's own mistakes). The scripts and the wiki are fixed.",
+      "next": "You close the old Ferrum; Claude runs the gate again.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] gate | phase-p5-telemetry exit run 2: FAIL (19 PASS, 4 FAIL); causes fixed"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "check scripts"
       ]
     }
   ]
