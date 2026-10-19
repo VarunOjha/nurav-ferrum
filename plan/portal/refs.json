@@ -5646,6 +5646,16 @@
       "related": [
         "p5.11"
       ]
+    },
+    {
+      "id": "438ba3e",
+      "kind": "commit",
+      "title": "Commit 438ba3e",
+      "summary": "Task p5.12: how tabs show up to the test robot and which browser process draws each tab, in two ways of keeping sites apart.",
+      "status": "Done",
+      "related": [
+        "p5.12"
+      ]
     }
   ]
 }

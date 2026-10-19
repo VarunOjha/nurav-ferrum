@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:f15fc63ef49684abe33480372893d757769524fc33abc102b4de42809c28de8f"
+    "content_hash": "sha256:064bd98a4bb7184a1dd11921d97dd7888e64352e4e8b031c2589f199ccc258e2"
   },
   "entries": [
     {
@@ -6290,6 +6290,35 @@
       "category": "Decided",
       "tags": [
         "approvals",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-12",
+      "date": "2026-10-19",
+      "time": "00:56",
+      "title": "Checked how tabs map to the browser's processes",
+      "done": "Opened four tabs in two ways of keeping sites apart and recorded how they look to the test robot and which browser process draws each. With one engine, the robot sees every tab; with an engine per site it sees none, which matters for Phase 6. Each tab had its own page process, and all browser processes are started by Ferrum. Open points on four plan pages are settled; one moves to Phase 7.",
+      "next": "You re-approve two pages; then the reading list on measurement methods (p5.13).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Benchmark tool decision (page changed)",
+          "status": "Waiting for you"
+        },
+        {
+          "what": "Measuring part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "438ba3e",
+      "covers": [
+        "## [2026-10-19] code | p5.12 DevTools targets, renderer per tab and process parents"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "WebView2",
         "benchmarks"
       ]
     }
