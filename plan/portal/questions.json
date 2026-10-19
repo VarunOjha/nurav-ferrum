@@ -5,7 +5,7 @@
   "summary": "Every question Claude has asked you, newest first; the list starts on the open ones. You answer in Claude Code; Claude saves your words and updates the plan.",
   "source": {
     "wiki_path": "wiki/overview/ov-open-questions.md",
-    "content_hash": "sha256:c4901439eec126c4c2d1154b8ac01ac0d07984ebd5afa5a620d63d50db25943b"
+    "content_hash": "sha256:96eb4504211689c7785fba955cf1587bcc55dcfb01a718cc1858d81807eccc95"
   },
   "items": [
     {
@@ -1027,6 +1027,22 @@
       "tags": [
         "privacy",
         "WebView2"
+      ]
+    },
+    {
+      "id": "Q-230",
+      "asked": "2026-10-18",
+      "time": "23:56",
+      "question": "Ferrum's own measuring: on or off by default?",
+      "why_it_matters": "The measuring writes memory, CPU, timing and tab-change files during normal use. The settings design said on by default, but you had never been asked.",
+      "status": "answered",
+      "answer": "Off by default, like the network log: you switch it on in Settings, and benchmark runs switch it on themselves.",
+      "answered_on": "2026-10-18",
+      "blocks": [],
+      "category": "Security & privacy",
+      "tags": [
+        "privacy",
+        "benchmarks"
       ]
     }
   ]

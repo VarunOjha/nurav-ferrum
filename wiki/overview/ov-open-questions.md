@@ -5,6 +5,7 @@ title: "Open questions for the owner (canonical register)"
 status: draft
 updated: 2026-10-18
 sources:
+  - raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md
   - raw/owner/2026-10-18-s08-q229-block-requests-fully.md
   - raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt
   - raw/00-master-prompt.md
@@ -1004,3 +1005,18 @@ addresses were checked; links, redirect hops and frames were not.
 security follow-up task, with a check that the server sees no request and a cost measurement; Claude recommends this);
 (b) keep it as it is and say so plainly in the security pages (the page is hidden, the site may still see one request);
 (c) first check which other ways in (links, redirects, frames) do the same, then decide.
+
+## Q-230 Ferrum's own measuring: on or off by default?
+
+- asked: 2026-10-18 23:56
+- blocking: []
+- status: answered
+- answer: [raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md](../raw/owner/2026-10-18-s08-q230-measuring-off-by-default.md), owner answer (2026-10-18): "Off by default (Recommended)": `[telemetry] enabled` is false by default; switched on in Settings, and by benchmark runs themselves.
+
+**Where we are:** before p5.11, Claude noticed that ov-arch-configuration (Claude's design) gives
+`[telemetry] enabled = true`, which the owner was never asked about. The measuring writes memory, CPU, timing and
+tab-change records (no web addresses) to files.
+
+**Question:** (a) off by default, like the network log (Claude recommended this); (b) on by default, as the design said,
+with old files deleted after a set time.
+

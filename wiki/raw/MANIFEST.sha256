@@ -380,3 +380,5 @@ f77e8ce76653ca06ed50239b1cfdba0a4ce809da5495588eb6f93ad2853e8bd4  owner/2026-10-
 e4598bf34f81108c92fe7388f2d7f2579dcdd45bb5bc40a4950b6ed30d5d2706  evidence/phase-p5-telemetry/check-p5.10.txt
 1ab54fbc0c3dffec74eb9f69778404129c8990c7e2c0c0ba665869a9961b5319  evidence/phase-p5-telemetry/netlog-coverage-p5.10.json
 1b6d41433d88943acea2076b0c14b206e00814d63472b60d75f4c595e3dd0a7c  evidence/phase-p5-telemetry/netlog-cost-p5.10.json
+6975bbc165dc6135f3ed06bf835847ae941147004000bc1ba156299a68e14b49  owner/2026-10-18-s08-p5-10-netlog-reapproval.md
+d956807ab65d0a3a85792ecd702e2a2d7374588818ab6105572c5c9339cdd33d  owner/2026-10-18-s08-q230-measuring-off-by-default.md

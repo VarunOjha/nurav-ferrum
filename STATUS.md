@@ -48,7 +48,7 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.11
-next_action: "Ask the owner to re-approve comp-network-logger (staled by p5.10, fabfdaf: coverage and cost section; overhead claim re-targeted to P6). Then p5.11: settings and shell UI (enable or disable telemetry and network log, open log folder, retention limit; smoke test toggles each setting and asserts files are or are not written). Write the In-flight record first; read the P0 draft check script before replacing it. p5.15 (block requests to blocked sites, Q-229) before the exit review. Still open on P5-targeted claims: EX2 tag on risk-r05 (verified by check-p5.3; close at the exit review), adr-0008 field-availability tag (answered by p5.9; close at the exit review), GetProcessTimes granularity (metric-tree-cpu-time), short-lived cycle capture (metric-tree-cpu-cycles), LCP definition vs the spec (metric-startup-lcp; p5.13 literature), bfcache behaviour (metric-nav-latency). Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "p5.11 in flight (see In-flight). Then p5.12 DevTools targets and renderer mapping. p5.15 (block requests to blocked sites, Q-229) before the exit review. Still open on P5-targeted claims: EX2 tag on risk-r05 (verified by check-p5.3; close at the exit review), adr-0008 field-availability tag (answered by p5.9; close at the exit review), GetProcessTimes granularity (metric-tree-cpu-time), short-lived cycle capture (metric-tree-cpu-cycles), LCP definition vs the spec (metric-startup-lcp; p5.13 literature), bfcache behaviour (metric-nav-latency). Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -84,7 +84,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - p5.7 done (`fac0106`): navigation timing records (host: start, redirect hops, completion, outcome; page: first response, DOMContentLoaded, load, read in an isolated world); origin label against the previous page; check PASS on ten loads with the P2 redirect fixtures. comp-telemetry re-approved by the owner.
 - p5.8 done (`9d9c5f9`): lifecycle transition record in export v1 (all six design states and the P7 triggers defined now), logged for tab hide, show, open and close; check PASS (9 records for two tabs, none refused). comp-telemetry re-approved by the owner.
 - p5.9 done (`4a6fecf`): metadata-only network log (WebResourceResponseReceived, one folder per app session, rotation, 14-day deletion, off by default, blocked navigations logged); check PASS (the test page's six expected records exactly; only the allowed fields; off by default). Finding: a navigation refused by the blocklist still reaches the server; owner answered Q-229 "Block it fully" (task p5.15 added). comp-network-logger, comp-webview-manager, comp-core and phase-p5-telemetry (p5.15 added) re-approved by the owner.
-- p5.10 done (`fabfdaf`): network log coverage table (covered: pages, sub-resources, other-site frames, fetches, every redirect hop, requests answered or passed on by a service worker; not covered: requests with no response, a service worker's own script and requests) and a rough on/off cost pilot (no difference beyond run-to-run spread); check PASS. comp-network-logger approval stale.
+- p5.10 done (`fabfdaf`): network log coverage table (covered: pages, sub-resources, other-site frames, fetches, every redirect hop, requests answered or passed on by a service worker; not covered: requests with no response, a service worker's own script and requests) and a rough on/off cost pilot (no difference beyond run-to-run spread); check PASS. comp-network-logger re-approved by the owner.
 
 ## Done this session (s03)
 
@@ -388,7 +388,12 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p5.10 finished on 2026-10-18 in fabfdaf)
+- task: p5.11 (settings and shell UI: switch measuring and the network log on or off, open their folders, how long their files are kept)
+- session: s08
+- intent: core config: [telemetry] enabled (false by default, Q-230), dir (telemetry), sample_interval_ms (100 to 60000, 1000), retention_days (14, as Q-114 for the log), machine_id (unrecorded); range checks; ov-arch-configuration and comp-core updated (stales their approvals). telemetry: win::os_build (registry, read only). App: build.rs passes the git commit and a dirty flag; recorder module started at launch when on: one export file set per run in <data dir>/telemetry (run line with versions and config hash), the sampler at the set interval, lifecycle transitions, a nav_timing record per finished navigation (page entry read in an isolated world), and the startup chain; records of the first seconds held until the startup chain is known so the file's clock never goes backwards; run files older than retention_days deleted at start (only Ferrum's own export files). Settings screen: two switches, two retention fields, two "open folder" buttons (Explorer on Ferrum's own folder), noted as taking effect at the next start. Smoke spec measuring-settings.spec.ts toggles each setting through the screen, restarts, and asserts files are or are not written (and the written telemetry file passes the export checker). comp-telemetry, comp-app-shell updated (stale their approvals). scripts/verify/p5.11-settings-measuring-logging.ps1 replaces its P0 draft after reading it.
+- planned paths: crates/core/{src/config.rs,tests/config.rs}, crates/telemetry/{Cargo.toml,src/win.rs}, apps/desktop/src-tauri/{build.rs,src/*.rs,capabilities/shell.json,permissions/autogenerated/*.toml}, apps/desktop/{index.html,src/main.ts,src/style.css}, apps/desktop/tests/smoke/measuring-settings.spec.ts, scripts/verify/p5.11-settings-measuring-logging.ps1, wiki/architecture/components/{comp-telemetry.md,comp-app-shell.md,comp-core.md,comp-network-logger.md}, wiki/architecture/ov-arch-configuration.md, wiki/raw/evidence/phase-p5-telemetry/check-p5.11.txt, wiki/raw/MANIFEST.sha256, Cargo.lock, plan/portal/*.json
+- builds: target/debug only; never target/release
+- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 ## Blockers
 
@@ -428,13 +433,13 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
 | Last task | p5.10 done: what the network log sees, and its cost |
 | Q-229 | Answered: block requests to blocked sites fully (new task p5.15) |
-| Your part | Re-approve the network log part's page (changed by p5.10) |
+| Next task | p5.11: settings for measuring and the network log |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** "Re-approve" for the network log part's page.
+**4. What to tell Claude:** nothing needed; Claude reports after each task.
 
 ## Pending owner approvals
 

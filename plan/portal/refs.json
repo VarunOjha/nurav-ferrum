@@ -5455,6 +5455,17 @@
       ]
     },
     {
+      "id": "Q-230",
+      "kind": "question",
+      "title": "Question Q-230: Ferrum's own measuring on or off by default",
+      "summary": "Ferrum's own measuring: on or off by default? Answer: off by default.",
+      "status": "Answered",
+      "related": [
+        "phase-p5-telemetry",
+        "p5.11"
+      ]
+    },
+    {
       "id": "d7114ef",
       "kind": "commit",
       "title": "Commit d7114ef",

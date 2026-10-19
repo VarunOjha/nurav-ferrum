@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:3518901eda321ac6e6b9ed7a545b374425564c42c75be50cf4e932543851c0a3"
+    "content_hash": "sha256:66a48337333e319a77e5b551122a2b50d6baed1eb668aefc5e3300008b40159a"
   },
   "entries": [
     {
@@ -6193,6 +6193,37 @@
       "tags": [
         "privacy",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-10-reapproval",
+      "date": "2026-10-18",
+      "time": "23:55",
+      "title": "You re-approved the network log page and chose: measuring off by default",
+      "done": "You re-approved the network log part's page. Asked whether Ferrum's own measuring should run all the time, you chose off by default, like the network log.",
+      "next": "Claude builds the settings for measuring and the network log (p5.11).",
+      "decisions": [
+        {
+          "what": "Ferrum's own measuring is off by default",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Network log part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] approval | comp-network-logger re-approved after p5.10",
+        "## [2026-10-18] decide | Q-230 answered: Ferrum's own measuring is off by default"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "privacy"
       ]
     }
   ]
