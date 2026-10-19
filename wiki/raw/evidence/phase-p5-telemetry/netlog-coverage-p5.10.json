@@ -1,0 +1,111 @@
+{
+  "build": "debug",
+  "tab": 2,
+  "tabs_seen": [
+    2
+  ],
+  "rows": [
+    {
+      "kind": "top-level page",
+      "how": "the /netlog document",
+      "covered": true,
+      "entries": [
+        "GET /netlog 200 document"
+      ]
+    },
+    {
+      "kind": "sub-resources",
+      "how": "stylesheet, script, image of /netlog",
+      "covered": true,
+      "entries": [
+        "GET /netlog/style.css 200 stylesheet",
+        "GET /netlog/app.js 200 script",
+        "GET /icon.png 200 image"
+      ]
+    },
+    {
+      "kind": "frame of another site",
+      "how": "site-b /landing in an iframe",
+      "covered": true,
+      "entries": [
+        "GET site-b/landing 200 frame"
+      ]
+    },
+    {
+      "kind": "fetch from the page",
+      "how": "/netlog/data.json",
+      "covered": true,
+      "entries": [
+        "GET /netlog/data.json 200 fetch"
+      ]
+    },
+    {
+      "kind": "sub-resources on a second visit",
+      "how": "stylesheet, script, image of /netlog again (the cache may serve them; the log cannot tell)",
+      "covered": true,
+      "entries": [
+        "GET /netlog/style.css 200 stylesheet",
+        "GET /netlog/app.js 200 script",
+        "GET /icon.png 200 image"
+      ]
+    },
+    {
+      "kind": "redirect hop 1 (301)",
+      "how": "/redirect/chain",
+      "covered": true,
+      "entries": [
+        "GET /redirect/chain 301 document"
+      ]
+    },
+    {
+      "kind": "redirect hop 2 (302)",
+      "how": "/redirect/302",
+      "covered": true,
+      "entries": [
+        "GET /redirect/302 302 document"
+      ]
+    },
+    {
+      "kind": "redirect target",
+      "how": "/landing after the chain",
+      "covered": true,
+      "entries": [
+        "GET /landing 200 document"
+      ]
+    },
+    {
+      "kind": "request with no response",
+      "how": "fetch to a port nobody listens on",
+      "covered": false,
+      "entries": []
+    },
+    {
+      "kind": "service worker script",
+      "how": "/sw/sw.js",
+      "covered": false,
+      "entries": []
+    },
+    {
+      "kind": "request made by the service worker",
+      "how": "/sw/from-worker.json (fetched when it installs)",
+      "covered": false,
+      "entries": []
+    },
+    {
+      "kind": "request answered by the service worker",
+      "how": "/sw/via-worker.json (no network)",
+      "covered": true,
+      "entries": [
+        "GET /sw/via-worker.json 200 null"
+      ]
+    },
+    {
+      "kind": "request passed on by the service worker",
+      "how": "/sw/passthrough.json",
+      "covered": true,
+      "entries": [
+        "GET /sw/passthrough.json 200 fetch"
+      ]
+    }
+  ]
+}

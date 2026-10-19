@@ -399,7 +399,7 @@
     {
       "id": "comp-network-logger",
       "title": "Measurement: network log",
-      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; its cost in speed and memory is measured next. Trusted.",
+      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; it misses requests with no reply and a service worker's own requests. Trusted.",
       "group": "application",
       "layer": "layer-engine",
       "status": "Built (measurement)",
@@ -420,7 +420,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-network-logger.md",
-        "content_hash": "sha256:682d5b29bff2735525cdca3aaa51d442a473efbbb24454c32a421eee78268361"
+        "content_hash": "sha256:3a06a2f2ef77c96883d8cb12b418155e4fdada03ae878339c84ac6aa912de0c8"
       }
     },
     {

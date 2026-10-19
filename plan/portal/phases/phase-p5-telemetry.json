@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 9,
+    "done": 10,
     "total": 15
   },
   "step_order": [
@@ -125,7 +125,7 @@
       "what": "A check of which requests the network log catches, plus a small trial of its cost.",
       "why": "If the log quietly misses some requests, a paper that relies on it would draw wrong conclusions. Stating its gaps keeps the claims honest.",
       "how": "Test embedded frames, redirects and background-worker requests and mark each covered or not. Whether frames and workers are reported is not checked yet. Save the trial output.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Some requests may be missed (embedded frames, redirects, background workers) → test each kind and run a small cost trial → the paper states exactly what the log covers.",
       "check": "A coverage table and the cost-trial output are saved as evidence.",
       "script": "scripts/verify/p5.10-network-log-coverage.ps1"

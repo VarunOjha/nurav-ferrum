@@ -238,6 +238,31 @@ pub const ROUTES: &[Route] = &[
         status: 200,
         purpose: "the data /netlog fetches",
     },
+    Route {
+        path: "/netlog/no-response",
+        status: 200,
+        purpose: "a page whose fetch goes to a port nobody listens on, so it gets no response (p5.10); the title becomes 'no-response done'",
+    },
+    Route {
+        path: "/sw/page",
+        status: 200,
+        purpose: "a page controlled by the service worker /sw/sw.js (p5.10): it fetches /sw/via-worker.json (answered by the worker, no network) and /sw/passthrough.json (fetched by the worker); the title becomes 'sw done'",
+    },
+    Route {
+        path: "/sw/sw.js",
+        status: 200,
+        purpose: "the service worker of /sw/page: fetches /sw/from-worker.json when it installs, answers via-worker itself, passes other requests on",
+    },
+    Route {
+        path: "/sw/from-worker.json",
+        status: 200,
+        purpose: "fetched by the service worker itself when it installs",
+    },
+    Route {
+        path: "/sw/passthrough.json",
+        status: 200,
+        purpose: "fetched through the service worker for /sw/page",
+    },
 ];
 
 /// The bytes of `/download/file?bytes=N`: byte `i` is `(31 * i + 7) mod 251`, so any client can check them.
@@ -542,6 +567,60 @@ async fn netlog_data() -> Response {
             HeaderValue::from_static("application/json"),
         )],
         "{\"state\":\"done\"}",
+    )
+        .into_response()
+}
+
+/// p5.10: a fetch that gets no response (port 1 on this machine: nothing listens there).
+async fn netlog_no_response() -> Html<String> {
+    page(
+        "no-response",
+        "<p>Fetching from a port nobody listens on.</p><script>\
+         fetch('https://localhost:1/nothing').catch(() => {}).finally(() => { document.title = 'no-response done'; });\
+         </script>",
+    )
+}
+
+/// p5.10: a page the service worker /sw/sw.js controls (it claims the page when it activates).
+async fn sw_page() -> Html<String> {
+    page(
+        "sw",
+        "<p id=\"sw\">Service worker test.</p><script>\
+         (async () => {\
+           await navigator.serviceWorker.register('/sw/sw.js', { scope: '/sw/' });\
+           await navigator.serviceWorker.ready;\
+           if (!navigator.serviceWorker.controller) {\
+             await new Promise((r) => navigator.serviceWorker.addEventListener('controllerchange', r, { once: true }));\
+           }\
+           const a = await (await fetch('/sw/via-worker.json')).json();\
+           const b = await (await fetch('/sw/passthrough.json')).json();\
+           document.title = 'sw ' + (a.from === 'worker' && b.from === 'server' ? 'done' : 'wrong');\
+         })().catch((e) => { document.title = 'sw failed: ' + e; });\
+         </script>",
+    )
+}
+
+async fn sw_js() -> Response {
+    (
+        [(header::CONTENT_TYPE, HeaderValue::from_static("text/javascript"))],
+        "self.addEventListener('install', (e) => { e.waitUntil(fetch('/sw/from-worker.json').then(() => self.skipWaiting())); });\n\
+         self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });\n\
+         self.addEventListener('fetch', (e) => {\n\
+           if (new URL(e.request.url).pathname === '/sw/via-worker.json') {\n\
+             e.respondWith(new Response('{\"from\":\"worker\"}', { headers: { 'content-type': 'application/json' } }));\n\
+           }\n\
+         });\n",
+    )
+        .into_response()
+}
+
+async fn sw_json() -> Response {
+    (
+        [(
+            header::CONTENT_TYPE,
+            HeaderValue::from_static("application/json"),
+        )],
+        "{\"from\":\"server\"}",
     )
         .into_response()
 }
@@ -887,6 +966,11 @@ pub fn router() -> Router {
         .route("/netlog/style.css", get(netlog_css))
         .route("/netlog/app.js", get(netlog_js))
         .route("/netlog/data.json", get(netlog_data))
+        .route("/netlog/no-response", get(netlog_no_response))
+        .route("/sw/page", get(sw_page))
+        .route("/sw/sw.js", get(sw_js))
+        .route("/sw/from-worker.json", get(sw_json))
+        .route("/sw/passthrough.json", get(sw_json))
 }
 
 /// Serves the fixtures over HTTPS on `addr` until `exit_after` has passed (or forever when `None`), and, when

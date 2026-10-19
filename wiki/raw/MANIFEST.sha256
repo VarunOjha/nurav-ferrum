@@ -377,3 +377,6 @@ ea5716481ab51a81e6e4b78bd14f1a361f97fc21bdb20397ff33c15ae16f120b  evidence/phase
 4059515404a3ba17918ec0fa0390cd807632e19252a80bee642558a1a0f07b61  evidence/phase-p5-telemetry/check-p5.9.txt
 fed261b5b86abcc3266591d76af3ba26e4f6aea3aa1e5a260ee12bdcaffe45f5  owner/2026-10-18-s08-q229-block-requests-fully.md
 f77e8ce76653ca06ed50239b1cfdba0a4ce809da5495588eb6f93ad2853e8bd4  owner/2026-10-18-s08-p5-9-reapprovals.md
+e4598bf34f81108c92fe7388f2d7f2579dcdd45bb5bc40a4950b6ed30d5d2706  evidence/phase-p5-telemetry/check-p5.10.txt
+1ab54fbc0c3dffec74eb9f69778404129c8990c7e2c0c0ba665869a9961b5319  evidence/phase-p5-telemetry/netlog-coverage-p5.10.json
+1b6d41433d88943acea2076b0c14b206e00814d63472b60d75f4c595e3dd0a7c  evidence/phase-p5-telemetry/netlog-cost-p5.10.json

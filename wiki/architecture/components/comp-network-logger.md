@@ -5,6 +5,9 @@ title: "Network logger (metadata-only JSONL)"
 status: planned
 updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.10.txt
+  - raw/evidence/phase-p5-telemetry/netlog-coverage-p5.10.json
+  - raw/evidence/phase-p5-telemetry/netlog-cost-p5.10.json
   - raw/evidence/phase-p5-telemetry/check-p5.9.txt
   - raw/evidence/phase-p5-telemetry/blocked-request-reaches-server-p5.9.txt
   - raw/00-master-prompt.md
@@ -39,7 +42,7 @@ connects:
     crosses_trust_boundary: false
 unverified:
   - claim: "Logging every tab's network events adds acceptable CPU and memory overhead"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # comp-network-logger
@@ -78,4 +81,30 @@ Built in p5.9 (`crates/network-logger/src/lib.rs`; capture in `comp-webview-mana
   the blocklist is the owner's question Q-229.
 - **Checked** ([check-p5.9](../../raw/evidence/phase-p5-telemetry/check-p5.9.txt)): 6 unit tests (fields, checks, resource types, time and folder names, rotation with the file cap, safe deletion of old sessions) and the settings test (off by default, limits); live, with the log on, the `/netlog` test page gave exactly its six expected records (the page as `document`, its stylesheet, script and image, the frame of site-b as `frame`, the fetch as `fetch`; all 200, with their sizes), the refused address a `blocked:blocklist` record, and every record exactly the allowed fields; the same run again showed one response for the refused address (Q-229). With the default settings no log folder was made.
 
-**Privacy.** Log folders sit outside the repo by default (app data dir) and are gitignored if pointed inside it. The schema test asserts that no header, cookie or body field exists. The overhead of logging is UNVERIFIED[phase-p5-telemetry]. It is measured with the logger on and off.
+## Coverage and cost (p5.10)
+
+Kind by kind, what the log sees (`apps/desktop/tests/smoke/network-log-coverage.spec.ts`, log on, one tab, debug
+build; raw table [netlog-coverage-p5.10.json](../../raw/evidence/phase-p5-telemetry/netlog-coverage-p5.10.json),
+run [check-p5.10](../../raw/evidence/phase-p5-telemetry/check-p5.10.txt)):
+
+| Kind | Test request | In the log | Entry or note |
+|---|---|---|---|
+| Top-level page | the /netlog document | yes | `GET /netlog 200 document` |
+| Sub-resources | stylesheet, script, image of /netlog | yes | `GET /netlog/style.css 200 stylesheet`; `GET /netlog/app.js 200 script`; `GET /icon.png 200 image` |
+| Frame of another site | site-b /landing in an iframe | yes | `GET site-b/landing 200 frame` |
+| Fetch from the page | /netlog/data.json | yes | `GET /netlog/data.json 200 fetch` |
+| Sub-resources on a second visit | stylesheet, script, image of /netlog again (the cache may serve them; the log cannot tell) | yes | reported again with 200; whether the cache served them is not in the record |
+| Redirect hop 1 (301) | /redirect/chain | yes | `GET /redirect/chain 301 document` |
+| Redirect hop 2 (302) | /redirect/302 | yes | `GET /redirect/302 302 document` |
+| Redirect target | /landing after the chain | yes | `GET /landing 200 document` |
+| Request with no response | fetch to a port nobody listens on | **no** | no entry (no response came, and nothing was reported) |
+| Service worker script | /sw/sw.js | **no** | no entry (the worker's script was not reported to the tab's view in this run) |
+| Request made by the service worker | /sw/from-worker.json (fetched when it installs) | **no** | no entry (not reported to the tab's view in this run) |
+| Request answered by the service worker | /sw/via-worker.json (no network) | yes | reported as 200 with an empty resource type, although no network request was made |
+| Request passed on by the service worker | /sw/passthrough.json | yes | reported once, as the page's fetch |
+
+**Cost pilot** (`network-log-cost.spec.ts`; raw [netlog-cost-p5.10.json](../../raw/evidence/phase-p5-telemetry/netlog-cost-p5.10.json)):
+30 loads of `/netlog` (six requests each) per run. Log off: page load median 53.7 ms (41.3 to 81.2), Ferrum's process 31.8 ms CPU per load, all its processes 309.9 ms. Log on: 52.4 ms (35.3 to 80.6), 32.8 ms and 285.9 ms. A development run of the same spec just before (not saved; numbers from the session transcript) gave the log-on run the slower one: median 72.2 against 62.2 ms, Ferrum's process 44.8 against 37.0 ms per load. So the spread between runs is larger than any difference the log makes here. This is a rough pilot of the tool, not a result: debug build, one run each way, always off first, and run-to-run
+spread was not measured. No limit applies; whether the cost is acceptable is decided by the P6 A/B check (above).
+
+**Privacy.** Log folders sit outside the repo by default (app data dir) and are gitignored if pointed inside it. The schema test asserts that no header, cookie or body field exists. Whether the overhead of logging is acceptable is UNVERIFIED[phase-p6-benchmark-harness]. It is measured with the logger on and off. Re-targeted from P5 on 2026-10-18: p5.10 ran only a rough pilot (debug build, one run each way, below); adr-0008 puts the A/B check that decides it before the first comparative campaign, with the harness in P6.

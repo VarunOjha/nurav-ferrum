@@ -1,0 +1,48 @@
+Ferrum check p5.10: Network log: coverage and cost
+Why: the paper states exactly what the log covers.
+Run at 2026-10-18 23:41 on commit 92d8399 (with uncommitted changes)
+------------------------------------------------------------------------
+Running 1 test using 1 worker
+COVERAGE-JSON {"build":"debug","tab":2,"tabs_seen":[2],"rows":[{"kind":"top-level page","how":"the /netlog document","covered":true,"entries":["GET /netlog 200 document"]},{"kind":"sub-resources","how":"stylesheet, script, image of /netlog","covered":true,"entries":["GET /netlog/style.css 200 stylesheet","GET /netlog/app.js 200 script","GET /icon.png 200 image"]},{"kind":"frame of another site","how":"site-b /landing in an iframe","covered":true,"entries":["GET site-b/landing 200 frame"]},{"kind":"fetch from the page","how":"/netlog/data.json","covered":true,"entries":["GET /netlog/data.json 200 fetch"]},{"kind":"sub-resources on a second visit","how":"stylesheet, script, image of /netlog again (the cache may serve them; the log cannot tell)","covered":true,"entries":["GET /netlog/style.css 200 stylesheet","GET /netlog/app.js 200 script","GET /icon.png 200 image"]},{"kind":"redirect hop 1 (301)","how":"/redirect/chain","covered":true,"entries":["GET /redirect/chain 301 document"]},{"kind":"redirect hop 2 (302)","how":"/redirect/302","covered":true,"entries":["GET /redirect/302 302 document"]},{"kind":"redirect target","how":"/landing after the chain","covered":true,"entries":["GET /landing 200 document"]},{"kind":"request with no response","how":"fetch to a port nobody listens on","covered":false,"entries":[]},{"kind":"service worker script","how":"/sw/sw.js","covered":false,"entries":[]},{"kind":"request made by the service worker","how":"/sw/from-worker.json (fetched when it installs)","covered":false,"entries":[]},{"kind":"request answered by the service worker","how":"/sw/via-worker.json (no network)","covered":true,"entries":["GET /sw/via-worker.json 200 null"]},{"kind":"request passed on by the service worker","how":"/sw/passthrough.json","covered":true,"entries":["GET /sw/passthrough.json 200 fetch"]}]}
+COVERAGE: covered     top-level page: GET /netlog 200 document
+COVERAGE: covered     sub-resources: GET /netlog/style.css 200 stylesheet; GET /netlog/app.js 200 script; GET /icon.png 200 image
+COVERAGE: covered     frame of another site: GET site-b/landing 200 frame
+COVERAGE: covered     fetch from the page: GET /netlog/data.json 200 fetch
+COVERAGE: covered     sub-resources on a second visit: GET /netlog/style.css 200 stylesheet; GET /netlog/app.js 200 script; GET /icon.png 200 image
+COVERAGE: covered     redirect hop 1 (301): GET /redirect/chain 301 document
+COVERAGE: covered     redirect hop 2 (302): GET /redirect/302 302 document
+COVERAGE: covered     redirect target: GET /landing 200 document
+COVERAGE: not covered request with no response: (no entry)
+COVERAGE: not covered service worker script: (no entry)
+COVERAGE: not covered request made by the service worker: (no entry)
+COVERAGE: covered     request answered by the service worker: GET /sw/via-worker.json 200 null
+COVERAGE: covered     request passed on by the service worker: GET /sw/passthrough.json 200 fetch
+  ✓  1 network-log-coverage.spec.ts:24:1 › coverage of the network log, kind by kind (11.2s)
+  1 passed (1.5m)
+  PASS   Coverage: which kinds of request the log sees (known kinds must stay covered) (120 s)
+         top-level page: covered
+         sub-resources: covered
+         frame of another site: covered
+         fetch from the page: covered
+         sub-resources on a second visit: covered
+         redirect hop 1 (301): covered
+         redirect hop 2 (302): covered
+         redirect target: covered
+         request with no response: not covered
+         service worker script: not covered
+         request made by the service worker: not covered
+         request answered by the service worker: covered
+         request passed on by the service worker: covered
+Running 1 test using 1 worker
+NETLOG-COST {"build":"debug","page":"/netlog (six requests)","order":"off then on","runs":[{"run":"off","log":false,"loads":30,"wall_s":4.595,"load_ms_median":53.69999998807907,"load_ms_min":41.30000001192093,"load_ms_max":81.19999998807907,"host_cpu_ms_per_load":31.770833333333332,"tree_cpu_ms_per_load":309.8958333333333,"load_ms":[54.29999995231629,41.30000001192093,46.19999998807907,46.10000002384186,52.60000002384186,47.80000001192093,59.90000003576279,74.90000003576279,79.70000004768372,81.19999998807907,52.69999998807907,54.20000004768371,52.19999998807907,48.69999998807907,57.79999995231629,51.5,50.89999997615814,57,55.30000001192093,48.60000002384186,53.80000001192093,51.5,58.19999998807907,51.5,68,79,49.20000004768371,50.09999996423721,54.19999998807907,53.69999998807907]},{"run":"on","log":true,"loads":30,"wall_s":4.2,"load_ms_median":52.40000003576279,"load_ms_min":35.30000001192093,"load_ms_max":80.59999996423721,"host_cpu_ms_per_load":32.8125,"tree_cpu_ms_per_load":285.9375,"load_ms":[71.80000001192093,68.90000003576279,64.69999998807907,65.40000003576279,58.89999997615814,62.39999997615814,54.5,52.40000003576279,62.59999996423721,56.89999997615814,74,56.09999996423721,51.89999997615814,80.59999996423721,52.19999998807907,57.40000003576279,62.10000002384186,47,41.19999998807907,40.10000002384186,48,41.09999996423721,45.89999997615814,45.89999997615814,35.30000001192093,43.89999997615814,36.5,44.60000002384186,45.30000001192093,46.69999998807907]}]}
+  ✓  1 network-log-cost.spec.ts:58:1 › network log on and off: page load time and CPU per load (rough pilot) (19.3s)
+  1 passed (1.6m)
+  PASS   Cost trial: 30 loads with the log off, 30 with it on (rough pilot, no limits) (105 s)
+         log off: load 53.7 ms median (41.3 to 81.2), Ferrum process 31.8 ms CPU per load, all its processes 309.9 ms per load
+         log on : load 52.4 ms median (35.3 to 80.6), Ferrum process 32.8 ms CPU per load, all its processes 285.9 ms per load
+  PASS   The component page has the coverage table
+         comp-network-logger has the coverage and cost section
+------------------------------------------------------------------------
+RESULT: PASS - p5.10 (3 PASS; 227 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.10 check passed".

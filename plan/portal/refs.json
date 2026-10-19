@@ -980,7 +980,7 @@
       "kind": "task",
       "title": "P5 task: Network log: coverage and cost",
       "summary": "Some requests may be missed (embedded frames, redirects, background workers) → test each kind and run a small cost trial → the paper states exactly what the log covers.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3225,7 +3225,7 @@
       "id": "comp-network-logger",
       "kind": "component",
       "title": "Measurement: network log",
-      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; its cost in speed and memory is measured next. Trusted.",
+      "summary": "Writes every tab's network calls to a folder you can review: full address, method, status, kind and size, and whether Ferrum blocked it. Never headers, cookies or page content. Off unless you switch it on; files older than 14 days are deleted. Built in P5; it misses requests with no reply and a service worker's own requests. Trusted.",
       "status": "Built (measurement)",
       "related": [
         "layer-engine"
