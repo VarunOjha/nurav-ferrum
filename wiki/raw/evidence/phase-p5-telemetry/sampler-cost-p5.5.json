@@ -1,0 +1,127 @@
+{
+  "standalone": {
+    "build": "release (optimised)",
+    "os": "Windows_NT",
+    "run_s": 20,
+    "runs": [
+      {
+        "cpu_ms": 0.0,
+        "cpu_ms_per_s": 0.0,
+        "cycles": 2573724,
+        "cycles_per_reading": 0,
+        "gaps": 0,
+        "interval_ms": null,
+        "private_commit_change_kib": 0.0,
+        "reading_wall_us_max": 0.0,
+        "reading_wall_us_mean": 0.0,
+        "readings": 0,
+        "wall_s": 20.0067656
+      },
+      {
+        "cpu_ms": 140.625,
+        "cpu_ms_per_s": 7.001771526616075,
+        "cycles": 377102808,
+        "cycles_per_reading": 1885514,
+        "gaps": 0,
+        "interval_ms": 100,
+        "private_commit_change_kib": -88.0,
+        "reading_wall_us_max": 2841.5,
+        "reading_wall_us_mean": 570.88,
+        "readings": 200,
+        "wall_s": 20.0842029
+      },
+      {
+        "cpu_ms": 78.125,
+        "cpu_ms_per_s": 3.891303580772325,
+        "cycles": 158586221,
+        "cycles_per_reading": 1957854,
+        "gaps": 0,
+        "interval_ms": 250,
+        "private_commit_change_kib": 0.0,
+        "reading_wall_us_max": 1085.1000000000001,
+        "reading_wall_us_mean": 597.5679012345679,
+        "readings": 81,
+        "wall_s": 20.0768196
+      },
+      {
+        "cpu_ms": 31.25,
+        "cpu_ms_per_s": 1.5592487714055232,
+        "cycles": 91524085,
+        "cycles_per_reading": 2232294,
+        "gaps": 0,
+        "interval_ms": 500,
+        "private_commit_change_kib": 0.0,
+        "reading_wall_us_max": 2339.1000000000004,
+        "reading_wall_us_mean": 694.7463414634146,
+        "readings": 41,
+        "wall_s": 20.0417025
+      },
+      {
+        "cpu_ms": 15.625,
+        "cpu_ms_per_s": 0.7806102235699155,
+        "cycles": 35686876,
+        "cycles_per_reading": 1699375,
+        "gaps": 0,
+        "interval_ms": 1000,
+        "private_commit_change_kib": 0.0,
+        "reading_wall_us_max": 1033.3,
+        "reading_wall_us_mean": 509.447619047619,
+        "readings": 21,
+        "wall_s": 20.0163917
+      },
+      {
+        "cpu_ms": 0.0,
+        "cpu_ms_per_s": 0.0,
+        "cycles": 18118607,
+        "cycles_per_reading": 1647146,
+        "gaps": 0,
+        "interval_ms": 2000,
+        "private_commit_change_kib": 0.0,
+        "reading_wall_us_max": 546.4000000000001,
+        "reading_wall_us_mean": 491.8181818181818,
+        "readings": 11,
+        "wall_s": 20.0079685
+      }
+    ],
+    "set_size": 17
+  },
+  "in_app": {
+    "set": "Ferrum, per-site-udf, two sites",
+    "build": "debug",
+    "runs": [
+      {
+        "run": "baseline",
+        "interval_ms": 20000,
+        "readings": 2,
+        "gaps": 0,
+        "retries": 1,
+        "list_ms_median": 2482.4505,
+        "list_ms_max": 2482.4505,
+        "host_cpu_ms_per_s": 0,
+        "tree_cpu_ms_per_s": 21.873906304684766
+      },
+      {
+        "run": "100 ms",
+        "interval_ms": 100,
+        "readings": 20,
+        "gaps": 0,
+        "retries": 0,
+        "list_ms_median": 0.9874,
+        "list_ms_max": 1.2312,
+        "host_cpu_ms_per_s": 32.50130005200208,
+        "tree_cpu_ms_per_s": 32.50130005200208
+      },
+      {
+        "run": "1000 ms",
+        "interval_ms": 1000,
+        "readings": 20,
+        "gaps": 0,
+        "retries": 0,
+        "list_ms_median": 1.0142,
+        "list_ms_max": 3.0810999999999997,
+        "host_cpu_ms_per_s": 2.4639928511354077,
+        "tree_cpu_ms_per_s": 25.461259461732546
+      }
+    ]
+  }
+}

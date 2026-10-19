@@ -1183,7 +1183,7 @@ async fn pause(ms: u64) {
 
 /// Test hook (debug builds only): runs the process sampler (p5.3) for `ticks` moments (1 to 20) at `interval_ms`
 /// (sampler limits, default 1 s; each reading one interval after the one before) over Ferrum's real process
-/// set, and returns the records it wrote. A refused set is
+/// set, and returns the records it wrote, with how long each listing of the set took (`list_ms`, p5.5). A refused set is
 /// asked again once after 200 ms; if it is still refused the moment is a `sample_gap` (the p5.2 finding).
 #[tauri::command]
 pub async fn test_sample(
@@ -1205,6 +1205,7 @@ pub async fn test_sample(
     let start = std::time::Instant::now();
     let mut records = Vec::new();
     let mut retries = 0u32;
+    let mut list_ms = Vec::new();
     let interval = std::time::Duration::from_millis(u64::from(config.interval_ms()));
     let mut next = start;
     for _ in 0..ticks {
@@ -1215,7 +1216,9 @@ pub async fn test_sample(
                 .as_millis() as u64,
         )
         .await;
+        let listed = std::time::Instant::now();
         let mut set = process_inventories(&app).await.and_then(|l| set_of(&l));
+        list_ms.push(listed.elapsed().as_secs_f64() * 1000.0);
         if set.is_err() {
             retries += 1;
             pause(200).await;
@@ -1232,6 +1235,7 @@ pub async fn test_sample(
     Ok(json!({
         "interval_ms": config.interval_ms(),
         "retries": retries,
+        "list_ms": list_ms,
         "records": records,
     }))
 }

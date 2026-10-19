@@ -10,6 +10,7 @@ sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/evidence/phase-p5-telemetry/check-p5.3.txt
   - raw/evidence/phase-p5-telemetry/check-p5.4.txt
+  - raw/evidence/phase-p5-telemetry/check-p5.5.txt
 related: [ov-arch-data-flows, ov-arch-crate-graph, ov-arch-webview2-integration, comp-webview-manager, comp-resource-manager, comp-benchmark-harness, comp-research-analysis, comp-core, comp-windows-os, comp-app-shell, risk-r05, phase-p5-telemetry, exp-startup, exp-navigation, exp-baseline-footprint]
 approvable: true
 path: crates/telemetry/
@@ -36,7 +37,7 @@ interfaces:
   - "Export schema v1 file: crates/telemetry/schema/v1/record.schema.json (JSON Schema 2020-12)"
   - "attribution (p5.2): attribute(host_pid, &[Inventory]) -> ProcessSet {host_pid, members: [Member {pid, kind, source}]}; kind_of(webview2 kind name); the app joins every environment's GetProcessExtendedInfos list (shell first, then site environments) and exposes the set through the debug-only test_processes hook"
   - "test tool (p5.4): bin ferrum-ground-truth (alloc <MiB>, free, burn <ms>, quit on stdin), used by tests/ground_truth.rs; not part of the app"
-  - "app hook (p5.3, debug builds only): test_sample(ticks 1 to 20, interval_ms) runs the sampler over the real set and returns its records"
+  - "app hook (p5.3, debug builds only): test_sample(ticks 1 to 20, interval_ms) runs the sampler over the real set and returns its records and, since p5.5, list_ms (how long each first listing of the set took)"
 connects:
   - to: comp-windows-os
     label: "per-process counters (GetProcessMemoryInfo EX2, GetProcessTimes, QueryProcessCycleTime) and system memory status"
@@ -106,6 +107,15 @@ Built in p5.3 (`crates/telemetry/src/sampler.rs`, the Windows calls in `crates/t
 - **Checked** ([check-p5.3](../../raw/evidence/phase-p5-telemetry/check-p5.3.txt)): 8 unit tests on the adding-up rules; the test process reads every counter of itself, and an ended process reads as gone; live, with Ferrum in the per-site-udf mode and two sites open, six readings 500 ms apart (spacing 501 to 502 ms), 17 processes each, every sum equal to its members. In that run the set was refused once and complete on the retry; in an earlier run of the same check the retry was refused too, and the moment was written as a gap. These are checks of the meter in a debug build, not measurement results; accuracy against known amounts is p5.4.
 - **Validated (p5.4)** ([check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt)): against a helper program that uses known amounts (256 MiB written byte by byte, one thread busy for 2 s) and against psutil 7.2.2, and with a Ferrum tab that fills a 128 MiB JavaScript buffer, all 24 comparisons were inside limits committed before the first run (`crates/telemetry/tests/ground-truth-tolerances.json`). The limits and results per counter are on the metric pages (metric-tree-private-commit, metric-tree-private-working-set, metric-tree-working-set, metric-tree-cpu-time, metric-tree-cpu-cycles).
 - **Not built yet.** Writing the samples to files during normal use, and the setting to switch it on, come with p5.11. `win::system_memory()` (the memory-pressure signal) is not built.
+
+## Sampler overhead (p5.5)
+
+What the meter itself costs; this describes the tool, not Ferrum, and has no pass limits. Raw outputs: [check-p5.5](../../raw/evidence/phase-p5-telemetry/check-p5.5.txt) and [sampler-cost-p5.5.json](../../raw/evidence/phase-p5-telemetry/sampler-cost-p5.5.json). There is no separate telemetry quality page, so this section is the one that cites them.
+
+- **The reading itself** (`crates/telemetry/tests/sampler_cost.rs`, optimised build in `target/bench-p5`): 17 processes (the test process and 16 idle helpers, the set size seen live), 20 s per run. One reading took about 0.5 to 0.7 ms of wall time on average (slowest 2.8 ms) and 1.6 to 2.2 million cycles. CPU time per second: 7.0 ms at 100 ms, 3.9 at 250, 1.6 at 500, 0.8 at 1000, and 0 at 2000 ms, where 11 readings stayed under one 15.6 ms step of the CPU-time counter (cycles are the finer measure there). Without reading: 0. Private commit did not grow in any run (change 0 KiB, once -88 KiB).
+- **Inside Ferrum** (`apps/desktop/tests/smoke/sampler-cost.spec.ts`, debug build, per-site-udf mode, two sites, 17 processes; rough): listing the set took about 1 ms (at most 3.1 ms). Ferrum's own process used 32.5 ms CPU per second while reading every 100 ms (20 readings, 2 s), 2.5 ms per second while reading every 1000 ms, and 0 over a 20 s baseline with two readings. Runs this short are coarse against the 15.6 ms counter steps.
+- **Seen in the baseline run:** one listing took 2.5 s and the set was refused, then asked again (the p5.2 empty-list case, here also slow). The 1 ms figure is for the listings after that.
+- **Not covered:** writing records to files (the writer is not wired in until p5.11), and release builds of Ferrum itself.
 
 ## Unsafe invariants
 

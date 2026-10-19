@@ -1,0 +1,25 @@
+Ferrum check p5.5: What the meter itself costs
+Why: we know how much it disturbs results (this describes the tool, not Ferrum).
+Run at 2026-10-18 19:17 on commit 167ce93 (with uncommitted changes)
+------------------------------------------------------------------------
+no reading: 0 readings, CPU 0 ms/s, 0 cycles per reading, 0 us per reading (max 0), memory change 0 KiB
+100 ms: 200 readings, CPU 7.002 ms/s, 1885514 cycles per reading, 571 us per reading (max 2842), memory change -88 KiB
+250 ms: 81 readings, CPU 3.891 ms/s, 1957854 cycles per reading, 598 us per reading (max 1085), memory change 0 KiB
+500 ms: 41 readings, CPU 1.559 ms/s, 2232294 cycles per reading, 695 us per reading (max 2339), memory change 0 KiB
+1000 ms: 21 readings, CPU 0.781 ms/s, 1699375 cycles per reading, 509 us per reading (max 1033), memory change 0 KiB
+2000 ms: 11 readings, CPU 0 ms/s, 1647146 cycles per reading, 492 us per reading (max 546), memory change 0 KiB
+  PASS   The meter's own cost at five intervals, against no reading (17 processes, optimised build) (159 s)
+         6 runs of 20 s over 17 processes (release (optimised))
+Running 1 test using 1 worker
+SAMPLER-COST-APP {"set":"Ferrum, per-site-udf, two sites","build":"debug","runs":[{"run":"baseline","interval_ms":20000,"readings":2,"gaps":0,"retries":1,"list_ms_median":2482.4505,"list_ms_max":2482.4505,"host_cpu_ms_per_s":0,"tree_cpu_ms_per_s":21.873906304684766},{"run":"100 ms","interval_ms":100,"readings":20,"gaps":0,"retries":0,"list_ms_median":0.9874,"list_ms_max":1.2312,"host_cpu_ms_per_s":32.50130005200208,"tree_cpu_ms_per_s":32.50130005200208},{"run":"1000 ms","interval_ms":1000,"readings":20,"gaps":0,"retries":0,"list_ms_median":1.0142,"list_ms_max":3.0810999999999997,"host_cpu_ms_per_s":2.4639928511354077,"tree_cpu_ms_per_s":25.461259461732546}]}
+  ✓  1 sampler-cost.spec.ts:43:1 › the sampler's in-app cost at 100 ms and 1000 ms, against a baseline (46.9s)
+  1 passed (2.7m)
+baseline: 2 readings, listing 2482.5 ms median (max 2482.5), Ferrum process 0.00 ms CPU/s, all its processes 21.87 ms CPU/s
+100 ms: 20 readings, listing 1.0 ms median (max 1.2), Ferrum process 32.50 ms CPU/s, all its processes 32.50 ms CPU/s
+1000 ms: 20 readings, listing 1.0 ms median (max 3.1), Ferrum process 2.46 ms CPU/s, all its processes 25.46 ms CPU/s
+  PASS   Inside Ferrum: listing cost and CPU per second at 100 ms and 1000 ms, against a baseline (rough) (183 s)
+         baseline: 2 readings, listing 2482.5 ms median (max 2482.5), Ferrum process 0.00 ms CPU/s, all its processes 21.87 ms CPU/s; 100 ms: 20 readings, listing 1.0 ms median (max 1.2), Ferrum process 32.50 ms CPU/s, all its processes 32.50 ms CPU/s; 1000 ms: 20 readings, listing 1.0 ms median (max 3.1), Ferrum process 2.46 ms CPU/s, all its processes 25.46 ms CPU/s
+------------------------------------------------------------------------
+RESULT: PASS - p5.5 (2 PASS; 342 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.5 check passed".

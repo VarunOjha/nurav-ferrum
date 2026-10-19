@@ -1060,7 +1060,7 @@
       "kind": "task",
       "title": "P5 task: Measure the meter's own cost",
       "summary": "Measuring uses some CPU and memory itself → measure the meter's own cost at each sampling speed → we know how much it disturbs results (this describes the tool, not Ferrum).",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3262,7 +3262,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, and the memory and CPU meter, which passed its accuracy test. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, and the memory and CPU meter, which passed its accuracy test and costs little. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
       "status": "Planned",
       "related": [
         "layer-engine"

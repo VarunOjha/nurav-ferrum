@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 4,
+    "done": 5,
     "total": 14
   },
   "step_order": [
@@ -70,7 +70,7 @@
       "what": "Measuring the meter's own CPU and memory use at each sampling speed.",
       "why": "Measuring takes some CPU and memory itself. If that cost is unknown, part of what looks like Ferrum's use may be the meter's.",
       "how": "Run the meter at each sampling speed it supports and record the CPU time and private memory the meter itself uses.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Measuring uses some CPU and memory itself → measure the meter's own cost at each sampling speed → we know how much it disturbs results (this describes the tool, not Ferrum).",
       "check": "Raw outputs saved as evidence; no comparison claims made.",
       "script": "scripts/verify/p5.5-meter-own-cost.ps1"
