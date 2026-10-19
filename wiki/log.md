@@ -3419,4 +3419,3 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-19-s08-close-old-gate-ferrum.md]
 - result: Owner said "Closed, run", but process 15808 (target/gate-release ferrum-desktop.exe, started 2026-10-18 12:56) still ran. Asked; owner: "Yes, close it (Recommended)", one-time consent for that process only. Stop-Process then taskkill: the process reports exited but its handle stays open, so the program file stayed locked. Claude renamed it to ferrum-desktop.exe.locked-15808 in the same folder (nothing deleted; a restart releases it), so the gate's release build can write a new file.
 - next: Claude runs the gate (third run).
-
