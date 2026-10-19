@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:4fd7a7b909d7cb34fd8f82cd9a44e8bc8afd3bdb838fd410b84c79eca6a92a0e"
+    "content_hash": "sha256:0aa7921993dbf62eae9452927cc584bd196f1fb9a8140b2a08d58ce9aa026230"
   },
   "entries": [
     {
@@ -6403,6 +6403,39 @@
       "tags": [
         "blocklist",
         "privacy"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-15-reapprovals",
+      "date": "2026-10-19",
+      "time": "01:57",
+      "title": "You re-approved three part pages after the blocked-requests fix",
+      "done": "You re-approved the security part, the browser-engine module and the network log part.",
+      "next": "Claude prepares the end-of-phase review (p5.14).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Security part",
+          "status": "Approved"
+        },
+        {
+          "what": "Browser-engine module",
+          "status": "Approved"
+        },
+        {
+          "what": "Network log part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] approval | comp-security-engine, comp-webview-manager and comp-network-logger re-approved after p5.15"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "blocklist"
       ]
     }
   ]

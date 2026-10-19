@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:7e887448e6d4a12c055d31be21fdcd5bcfcb2634fba6c34c14fa1e1f7cfc7c11"
+    "content_hash": "sha256:05c9c022b7ed20813447d40a576e0c4b06a172c3e93e1658d8ddbda3674e8b3d"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "Three part pages wait for your re-approval",
-      "ref": "comp-security-engine"
+      "state": "All up to date",
+      "ref": "phase-p5-telemetry"
     },
     {
       "item": "Your rule",
@@ -35,31 +35,21 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 14 of 15 tasks done"
+        "state": "14 of 15 tasks done"
       },
       {
-        "item": "Last task",
-        "state": "Requests to blocked sites stopped",
-        "ref": "p5.15"
-      },
-      {
-        "item": "Your part",
-        "state": "Re-approve three part pages",
-        "ref": "comp-security-engine"
-      },
-      {
-        "item": "Then",
-        "state": "The end-of-phase review",
+        "item": "Next task",
+        "state": "End-of-phase review",
         "ref": "p5.14"
       }
     ],
-    "why": "Nothing to run. The fix changed the security part, the browser-engine module and the network log part, which cancels your earlier approval of those pages. Claude needs your OK before the end-of-phase review.",
+    "why": "Nothing to run yet; Claude settles the remaining open points and writes the end-of-phase check, then asks you to run it.",
     "script": null,
-    "tell_claude": "\"Re-approve\", or what to change"
+    "tell_claude": "Nothing needed yet"
   },
   "questions_for_you": {
     "open": 16,

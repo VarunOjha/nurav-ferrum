@@ -3354,3 +3354,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: The security engine gained evaluate_resource; every tab view filters every request (WebResourceRequested for all contexts and source kinds) and answers a refused one with a 403 of its own, so nothing is sent; refusals go to the audit log and the network log. Check PASS on the first saved run: typed, link, redirect, frame, image and fetch attempts to the blocked host left the test server's counter untouched, an allowed fetch was counted, and the control run with the filter's decision switched off (debug-only) leaked the typed attempt again (count 4). Cost rough and inconclusive (on 51.6, off 81.9 ms median, fixed order; the event stays registered in both). Full smoke suite: 146 passed, 1 failed with NOT-FRONT (the real-keystroke shortcut test found another window in front); rerun alone, all four focus-in-the-page shortcut tests failed the same way; not re-run on an idle PC. risk-r07's request-filter claim verified. Stales approval of comp-security-engine, comp-webview-manager and comp-network-logger.
 - commit: e53743c
 - next: owner re-approves the three pages; then p5.14 exit review (with a rerun of the shortcut tests on an idle PC).
+
+## [2026-10-19] approval | comp-security-engine, comp-webview-manager and comp-network-logger re-approved after p5.15
+- session: s08
+- time: 01:57
+- pages: [comp-security-engine, comp-webview-manager, comp-network-logger]
+- sources: [raw/owner/2026-10-19-s08-p5-15-reapprovals.md]
+- result: Owner: "Re approve". Recorded approved for the three keys with tools/approvals_record.py. All approvals current.
+- next: p5.14 exit review (In-flight written).

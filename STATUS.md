@@ -48,7 +48,7 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.14
-next_action: "Ask the owner to re-approve comp-security-engine, comp-webview-manager and comp-network-logger (staled by p5.15, e53743c), and tell him the shortcut tests need the PC idle (NOT-FRONT; ask him to leave the PC alone for a rerun of shortcuts.spec, or rerun them during the exit review). Then p5.14 exit review: run every P5 check script, resolve or re-target every remaining P5-targeted UNVERIFIED tag with a reason, gate script, owner reviews the evidence and approves phase-p5-telemetry#exit; then PAUSE (P6 needs an explicit go). Run quick_lint as its own step and read it before sending any commit. Hand check owed: the two open-folder buttons. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "p5.14 in flight (see In-flight). After the tag sweep and the gate script: ask the owner to re-approve the pages the sweep changed, then to run pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence with the PC left alone (real-keystroke tests), then his hand checks (docs/testing/manual-checklist-p5.md), then his review and phase-p5-telemetry#exit; then PAUSE (P6 needs an explicit go). Run quick_lint as its own step and read it before sending any commit. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -88,7 +88,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - p5.11 done (`5a172a7`): settings screen switches for measuring and the network log (both off by default, Q-230 and Q-114), days kept, open-folder buttons; measuring now recorded during normal use (one export run per start, accepted by the checker); check PASS. comp-telemetry, comp-app-shell and comp-core re-approved by the owner.
 - p5.12 done (`438ba3e`): DevTools targets and renderer per tab in two isolation modes (per-site: every tab a page target, shell listed; per-site-udf: no tab on the port; each tab its own renderer; WebView2 processes descend from Ferrum); four tags resolved, one re-targeted to P7; check PASS. adr-0012 and comp-telemetry re-approved by the owner.
 - p5.13 done (`b99f027`): literature batch 5 (ten sources: benchmarking methodology, WProf, Speedometer 3, the W3C timing specifications, GetProcessTimes); six headline metric pages defined; LCP definition and CPU-time granularity settled; check PASS. No approval went stale (metric pages are not separate approval keys).
-- p5.15 done (`e53743c`, full-suite evidence `8743aff`): requests to blocked sites refused before they are sent (owner answer Q-229): typed, link, redirect, frame, image and fetch reach no blocked server; control with the filter off leaks again; check PASS. Full smoke suite 146 passed, 1 failed with NOT-FRONT (real-keystroke shortcut tests need Ferrum in front; rerun alone 4 such failures). comp-security-engine, comp-webview-manager and comp-network-logger approvals stale.
+- p5.15 done (`e53743c`, full-suite evidence `8743aff`): requests to blocked sites refused before they are sent (owner answer Q-229): typed, link, redirect, frame, image and fetch reach no blocked server; control with the filter off leaks again; check PASS. Full smoke suite 146 passed, 1 failed with NOT-FRONT (real-keystroke shortcut tests need Ferrum in front; rerun alone 4 such failures). comp-security-engine, comp-webview-manager and comp-network-logger re-approved by the owner.
 
 ## Done this session (s03)
 
@@ -392,7 +392,12 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p5.15 finished on 2026-10-19 in e53743c)
+- task: p5.14 (exit gate and owner M4 review)
+- session: s08
+- intent: (1) Tag sweep: every remaining UNVERIFIED[phase-p5-telemetry] tag and verify_in: phase-p5-telemetry claim (32 body tags, 39 frontmatter claims on 22 pages) is resolved where P5 evidence answers it (EX2, FCP and LCP from the host, renderers per frame, cross-origin iframe and service-worker coverage, CDP targets, WebResourceResponseReceived fields, failed requests not observable) or re-targeted with its reason (owner hand checks still owed; the first upload still deferred, Q-221; harness-side items to P6; custom title bar to P7); pages edited stale their approvals. (2) scripts/gates/p5-gate.ps1 replaces its P0 draft (read first: a placeholder), modelled on the P4 gate: approvals current; every P5 task check; the test-gate rows on one commit (fmt, clippy, tests, cargo deny, shell checks, release build in target/gate-release with target/release untouched, P2/P3/P4 regression suites, wiki check with the known Q-221 error as WAIT); the owner's part. (3) docs/testing/manual-checklist-p5.md for the owner's hand checks (privacy check of a logging session, the settings switches, the open-folder buttons). (4) The owner re-approves, runs the gate with the PC left alone, does the hand checks, reviews, and approves phase-p5-telemetry#exit; then pause.
+- planned paths: the 22 pages with P5 tags (wiki/architecture/**, wiki/decisions/adr-0008, adr-0011, adr-0015, wiki/phases/phase-p2-minimal-container.md, phase-p3-tabs-sessions.md, phase-p4-security.md, phase-p5-telemetry.md, wiki/quality/**, wiki/research/metrics/**, wiki/risks/**), scripts/gates/p5-gate.ps1, docs/testing/manual-checklist-p5.md, wiki/raw/evidence/phase-p5-telemetry/* (gate outputs), wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
+- builds: target/debug and target/gate-release only; never target/release
+- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 ## Blockers
 
@@ -432,13 +437,13 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Phase 5 (measurement) | In progress; start check passed on 18 Oct |
 | Last task | p5.15 done: requests to blocked sites stopped |
 | Q-229 | Answered: block requests to blocked sites fully (new task p5.15) |
-| Your part | Re-approve three part pages (security engine, browser-engine module, network log) |
+| Next task | p5.14: end-of-phase review |
 
 **2. Why, and what it does.** Nothing to run. Claude builds the Phase 5 tasks one by one, each with its check and commit.
 
 **3. The script:** none.
 
-**4. What to tell Claude:** "Re-approve" for the three pages.
+**4. What to tell Claude:** nothing needed yet; Claude prepares the review.
 
 ## Pending owner approvals
 
