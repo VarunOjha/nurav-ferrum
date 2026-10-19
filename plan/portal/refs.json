@@ -5561,6 +5561,16 @@
       "related": [
         "p5.6"
       ]
+    },
+    {
+      "id": "fac0106",
+      "kind": "commit",
+      "title": "Commit fac0106",
+      "summary": "Task p5.7: Ferrum records each page load, with its redirects and whether it moved to another site; page times are read from the page by Ferrum itself.",
+      "status": "Done",
+      "related": [
+        "p5.7"
+      ]
     }
   ]
 }

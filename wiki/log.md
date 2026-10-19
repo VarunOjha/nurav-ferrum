@@ -3203,3 +3203,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-18-s08-p5-6-telemetry-webview-reapproval.md]
 - result: Owner: "Reapprove". Recorded approved for both keys with tools/approvals_record.py. All approvals current.
 - next: p5.7 navigation timing records (In-flight written).
+
+## [2026-10-18] code | p5.7 navigation timing records built and checked
+- session: s08
+- time: 20:53
+- pages: [comp-telemetry, metric-nav-latency]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.7.txt]
+- result: telemetry gained the pure navigation module (per-tab tracker of WebView2's NavigationStarting hops and NavigationCompleted; nav_record joins the host's start and completion with the page's own Navigation Timing offsets, used only for the page the navigation ended on); the app feeds the tracker from the tab sink and its debug-only test_nav_timing hook reads the navigation entry in an isolated world (no IPC from page script). Check PASS on the first saved run (the smoke spec had run once alone during development, PASS, not saved): ten loads; redirects 1 for 301, 302, 303, 307 and 308 and 2 for the chain, with the page's own count equal; 1 for the redirect to site-b, where the page's own count is 0 (Navigation Timing hides other-origin hops, so the host's count is the record's); origin labels as expected; times in order. Completion and load come from two clocks; once the completion read 0.3 ms before the load event (noted on the page). Debug build, one run, not a result. The check script was renamed after the run to the name the plan gives it (p5.7-page-load-timing.ps1). Stales approval of comp-telemetry.
+- commit: fac0106
+- next: owner re-approves comp-telemetry; then p5.8 (lifecycle transition records).

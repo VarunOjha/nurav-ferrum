@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e8c9735b4d32bb5d95143e0cff391b234ff7a968bf8a264fbcdcbe46fdf4f37c"
+    "content_hash": "sha256:7bdcf3c71961cc82a03e5aa57dbdc910ecbae4415b7c81266e130a9cdde19e6f"
   },
   "entries": [
     {
@@ -5964,6 +5964,31 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-7",
+      "date": "2026-10-18",
+      "time": "20:53",
+      "title": "Ferrum now times each page load",
+      "done": "Ferrum records each page load: when it started, first reply, content ready, fully loaded and done, how many redirects it followed, and whether it moved to another site. Checked on ten test loads, including six redirect pages and a redirect to another site: every count and label was right and the times were in order (test build, one run, not a result).",
+      "next": "You re-approve the measurement part's page; then tab sleep and wake records (p5.8).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "fac0106",
+      "covers": [
+        "## [2026-10-18] code | p5.7 navigation timing records built and checked"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "benchmarks",
+        "testing"
       ]
     }
   ]
