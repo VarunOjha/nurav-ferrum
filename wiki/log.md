@@ -3195,3 +3195,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: webview-manager gained call_devtools (CallDevToolsProtocolMethod); telemetry gained the pure startup module; the app notes the window-visible time and its debug-only test_startup hook reads the paint entries of the shell and the first tab in an isolated world (Page.createIsolatedWorld, Runtime.evaluate), so no page script sends them. Check: first run FAIL at the metric-page step only (sections not yet written; its live step passed but was not saved); evidence run PASS: process created 0, window visible 107, tab FCP 991, tab LCP 991, shell first paint 992 ms (debug build, one run, not a result). Metric pages got in-app chain sections; the harness-side window detection and clock-alignment claims were re-targeted to P6 (the harness exists only then), with the reason on each page. Stales approval of comp-telemetry and comp-webview-manager.
 - commit: 486d60d
 - next: owner re-approves comp-telemetry and comp-webview-manager; then p5.7 (navigation timing records).
+
+## [2026-10-18] approval | comp-telemetry and comp-webview-manager re-approved after p5.6
+- session: s08
+- time: 20:40
+- pages: [comp-telemetry, comp-webview-manager]
+- sources: [raw/owner/2026-10-18-s08-p5-6-telemetry-webview-reapproval.md]
+- result: Owner: "Reapprove". Recorded approved for both keys with tools/approvals_record.py. All approvals current.
+- next: p5.7 navigation timing records (In-flight written).
