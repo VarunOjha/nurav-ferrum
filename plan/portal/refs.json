@@ -5571,6 +5571,16 @@
       "related": [
         "p5.7"
       ]
+    },
+    {
+      "id": "9d9c5f9",
+      "kind": "commit",
+      "title": "Commit 9d9c5f9",
+      "summary": "Task p5.8: Ferrum records each tab state change (from, to, why, when, which tab), in a format ready for tab sleeping in P7.",
+      "status": "Done",
+      "related": [
+        "p5.8"
+      ]
     }
   ]
 }

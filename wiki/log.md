@@ -3220,3 +3220,12 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-18-s08-p5-7-telemetry-reapproval.md]
 - result: Owner: "Re - approve". Recorded approved with tools/approvals_record.py. All approvals current.
 - next: p5.8 lifecycle transition records (In-flight written).
+
+## [2026-10-18] code | p5.8 lifecycle transition records built and checked
+- session: s08
+- time: 22:29
+- pages: [comp-telemetry]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.8.txt]
+- result: Export v1 gained lifecycle_transition (from, to, trigger, policy, guard, tab, t_ms), with all six states of the lifecycle design and the P7 triggers defined now so P7 needs no new format; guards are written by name (CSV cells are words). The pure lifecycle module writes a record only on a real change; the app feeds it from apply_visibility and close_tab. Check PASS on the first saved run (the smoke spec had run once alone during development, PASS, not saved): 9 records for two tabs switched back and forth and one closed, none refused by the checker, in time order. p5.1 check and the error-panel smoke specs rerun: PASS. v1 differs from rule 6 of the design sketch (single guard, trigger, run clock); noted on comp-telemetry. Slip: the P0 draft check scripts for p5.7 and p5.8 were overwritten without looking first (both were placeholders meant to be replaced, as for p5.6; the drafts stay in git history). Stales approval of comp-telemetry.
+- commit: 9d9c5f9
+- next: owner re-approves comp-telemetry; then p5.9 (network logger).

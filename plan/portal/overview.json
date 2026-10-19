@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:05b0fa1ffe6da9bd9b159035f9d3eb7904b6935f241ec4cf75cb48e72a6acceb"
+    "content_hash": "sha256:febe179729cea9ea9eb5c7cdb31f78119730c44c009cef40b159ff82361cb445"
   },
   "updated": "2026-10-18",
   "where_we_are": [
@@ -21,8 +21,8 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
-      "ref": "phase-p5-telemetry"
+      "state": "Measurement part's page waits for your re-approval",
+      "ref": "comp-telemetry"
     },
     {
       "item": "Your rule",
@@ -35,21 +35,26 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "In progress: 7 of 14 tasks done"
+        "state": "In progress: 8 of 14 tasks done"
       },
       {
-        "item": "Next task",
-        "state": "Tab state change records",
+        "item": "Last task",
+        "state": "Tab state change records built and checked",
         "ref": "p5.8"
+      },
+      {
+        "item": "Your part",
+        "state": "Re-approve the measurement part's page",
+        "ref": "comp-telemetry"
       }
     ],
-    "why": "Nothing to run; Claude continues with the Phase 5 tasks one by one, each with its check and commit.",
+    "why": "Nothing to run. The tab state task added its record to the measurement part's page, which cancels your earlier approval of that page. Claude needs your OK before the next task uses it.",
     "script": null,
-    "tell_claude": "Nothing needed; Claude reports after each task"
+    "tell_claude": "\"Re-approve\", or what to change"
   },
   "questions_for_you": {
     "open": 16,

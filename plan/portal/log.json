@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:14a6a9d520c37e380233414e1a636499b65995d34f981cc60b79265dadfbe112"
+    "content_hash": "sha256:4ac30b56bcf3fe354c5724732990189e7febef80a435995c76a148b47255a28a"
   },
   "entries": [
     {
@@ -6014,6 +6014,31 @@
       "tags": [
         "approvals",
         "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-p5-8",
+      "date": "2026-10-18",
+      "time": "22:29",
+      "title": "Ferrum now records tab state changes",
+      "done": "Ferrum writes a record each time a tab changes state: from what, to what, why, when and which tab. Today that is a tab being opened, shown, hidden or closed; the states and reasons tab sleeping needs in P7 are already in the format. Checked with two tabs switched back and forth and one closed: 9 records, all accepted by the format check.",
+      "next": "You re-approve the measurement part's page; then the network log (p5.9).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part (page changed)",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "9d9c5f9",
+      "covers": [
+        "## [2026-10-18] code | p5.8 lifecycle transition records built and checked"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Built",
+      "tags": [
+        "benchmarks",
+        "testing"
       ]
     }
   ]
