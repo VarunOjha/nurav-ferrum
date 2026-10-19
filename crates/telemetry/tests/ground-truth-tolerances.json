@@ -1,0 +1,56 @@
+{
+  "about": "p5.4 tolerances, committed before the first validation run (phase-p5-telemetry checkpoint rule). Any later change is logged with a reason. Read by crates/telemetry/tests/ground_truth.rs and apps/desktop/tests/smoke/sampler-ground-truth.spec.ts.",
+  "memory": {
+    "alloc_mib": 256,
+    "private_commit_delta_mib": {
+      "min": 255.5,
+      "max": 260
+    },
+    "private_working_set_delta_mib": {
+      "min": 243.2,
+      "max": 260
+    },
+    "working_set_delta_mib": {
+      "min": 243.2,
+      "max": 260
+    },
+    "page_faults_per_touched_page": {
+      "min": 0.9
+    },
+    "after_free_private_commit_above_baseline_mib": {
+      "max": 4
+    }
+  },
+  "cpu": {
+    "burn_ms": 2000,
+    "cpu_per_wall": {
+      "min": 0.85,
+      "max": 1.05
+    },
+    "tick_slack_ms": 32,
+    "cycles_per_cpu_second_ghz": {
+      "min": 0.4,
+      "max": 6.5
+    }
+  },
+  "psutil": {
+    "private_commit_abs_kib": 64,
+    "working_set_abs_kib": 256,
+    "uss_vs_private_working_set_abs_mib": 2,
+    "page_faults_abs": 50,
+    "cpu_abs_ms": 32
+  },
+  "js_probe": {
+    "mib": 128,
+    "tree_private_commit_delta_mib": {
+      "min": 121.6,
+      "max": 192
+    }
+  },
+  "reasons": {
+    "memory": "The helper allocates 256 MiB and writes every byte, so its private commit, private working set and working set must each rise by about 256 MiB. Commit: at least 255.5 (a large block is committed whole; 0.5 MiB for small heap changes), at most 260 (heap bookkeeping). Working sets: at least 95 percent (Windows may trim a few pages), at most 260. Each touched 4 KiB page costs at least 0.9 page faults (demand-zero pages). After free, private commit returns to within 4 MiB of the start (a large block is released to Windows).",
+    "cpu": "One thread busy for 2 s should cost 85 to 105 percent of the wall time in CPU time (less if Windows lets other work run; CPU time is counted in 15.6 ms steps, hence 32 ms slack). Cycles per CPU second must be a plausible processor speed, 0.4 to 6.5 GHz.",
+    "psutil": "Read with the helper idle, psutil reads the same Windows counters, so private commit and page faults must match closely, working set nearly so, CPU within two 15.6 ms steps. psutil's uss is counted another way (pages private to the process), so it gets 2 MiB against PrivateWorkingSetSize.",
+    "js_probe": "A Ferrum tab fills a 128 MiB JavaScript buffer, so the tree's private commit must rise by at least 95 percent of it and at most 64 MiB more (engine overhead, other processes moving)."
+  }
+}
