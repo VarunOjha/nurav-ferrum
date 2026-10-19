@@ -3178,3 +3178,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - result: Standalone (optimised build in target/bench-p5, 17 processes, 20 s per run): about 0.5 to 0.7 ms and 1.6 to 2.2 million cycles per reading; CPU 7.0, 3.9, 1.6, 0.8 and 0 ms per second at 100, 250, 500, 1000 and 2000 ms (the last below one 15.6 ms counter step); private commit unchanged. In Ferrum (debug, two sites, rough): listing about 1 ms, Ferrum's process 32.5 ms CPU/s at 100 ms and 2.5 at 1000 ms, 0 over a 20 s baseline; one baseline listing took 2.5 s and was refused, then retried. Raw outputs saved on the first and only run. No separate telemetry quality page exists, so comp-telemetry carries the section that cites them. No limits, no comparison claim. Stales approval of comp-telemetry.
 - commit: 0768362
 - next: owner re-approves comp-telemetry; then p5.6 (startup timing chain).
+
+## [2026-10-18] approval | comp-telemetry re-approved after p5.5
+- session: s08
+- time: 19:27
+- pages: [comp-telemetry]
+- sources: [raw/owner/2026-10-18-s08-p5-5-telemetry-reapproval.md]
+- result: Owner: "Reapproce", read as "Re-approve" (the only question asked; no change named; noted in the raw file). Recorded approved with tools/approvals_record.py. All approvals current.
+- next: p5.6 startup timing chain (In-flight written).

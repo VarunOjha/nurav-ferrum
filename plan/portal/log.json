@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:cd2bdbd9517a5307cf79194717518dd6a14314d6b5820c59aa140d838c794e77"
+    "content_hash": "sha256:ddc2522915d6928665dde1a241a848166d8c31c9078cf67a7ce6847f6ae0b3fb"
   },
   "entries": [
     {
@@ -5881,6 +5881,31 @@
       "tags": [
         "memory",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-telemetry-reapproval-5",
+      "date": "2026-10-18",
+      "time": "19:27",
+      "title": "You re-approved the measurement part's page after the cost task",
+      "done": "You re-approved the measurement part's page after the meter's own cost was added.",
+      "next": "Claude builds the startup timing (p5.6).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] approval | comp-telemetry re-approved after p5.5"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "benchmarks"
       ]
     }
   ]
