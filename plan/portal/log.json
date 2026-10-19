@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:78281fada6ebc0b3d9dd77e9bca95b4e8cf2880e1c01b6a3c3e201be3731c132"
+    "content_hash": "sha256:f15fc63ef49684abe33480372893d757769524fc33abc102b4de42809c28de8f"
   },
   "entries": [
     {
@@ -6257,6 +6257,39 @@
       "category": "Built",
       "tags": [
         "privacy",
+        "benchmarks"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-11-reapprovals",
+      "date": "2026-10-19",
+      "time": "00:45",
+      "title": "You re-approved three part pages after the settings task",
+      "done": "You re-approved the measuring part, the window part and the shared base part after the settings for measuring and the network log were added.",
+      "next": "Claude checks how tabs map to the browser's processes (p5.12).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measuring part",
+          "status": "Approved"
+        },
+        {
+          "what": "The window you use",
+          "status": "Approved"
+        },
+        {
+          "what": "Shared base part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] approval | comp-telemetry, comp-app-shell and comp-core re-approved after p5.11"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
         "benchmarks"
       ]
     }
