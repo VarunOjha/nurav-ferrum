@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7bdcf3c71961cc82a03e5aa57dbdc910ecbae4415b7c81266e130a9cdde19e6f"
+    "content_hash": "sha256:14a6a9d520c37e380233414e1a636499b65995d34f981cc60b79265dadfbe112"
   },
   "entries": [
     {
@@ -5989,6 +5989,31 @@
       "tags": [
         "benchmarks",
         "testing"
+      ]
+    },
+    {
+      "id": "log-2026-10-18-s08-telemetry-reapproval-7",
+      "date": "2026-10-18",
+      "time": "22:10",
+      "title": "You re-approved the measurement part's page after the page-load task",
+      "done": "You re-approved the measurement part's page after page-load timing was added.",
+      "next": "Claude builds the tab state change records (p5.8).",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "Measurement part",
+          "status": "Approved"
+        }
+      ],
+      "commit": null,
+      "covers": [
+        "## [2026-10-18] approval | comp-telemetry re-approved after p5.7"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
+      "tags": [
+        "approvals",
+        "benchmarks"
       ]
     }
   ]
