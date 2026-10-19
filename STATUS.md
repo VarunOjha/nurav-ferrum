@@ -48,7 +48,7 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.15
-next_action: "p5.15: block requests to blocked sites at the network level (owner answer Q-229): WebResourceRequested filter on tab views refusing requests to blocked hosts (pages, frames, sub-resources), fail closed; integration test with the fixture server's request counter (typed, link, redirect, frame and sub-resource attempts count no request; allowed sites still load); the filter's cost measured, raw output saved. Write the In-flight record first; read the P0 draft check script if one exists; run quick_lint as its own step before every commit. Then p5.14 exit review (every remaining P5-targeted UNVERIFIED tag resolved or re-targeted with a reason; owner approves phase-p5-telemetry#exit; then pause). Hand check owed: the two open-folder buttons. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "p5.15 in flight (see In-flight). Then p5.14 exit review (every remaining P5-targeted UNVERIFIED tag resolved or re-targeted with a reason; owner approves phase-p5-telemetry#exit; then pause). Run quick_lint as its own step and read it before sending any commit. Hand check owed: the two open-folder buttons. Never build into target/release. Owed: P4 checklist (docs/testing/manual-checklist-p4.md), P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -391,7 +391,12 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 > committed. Non-empty on session start = the previous session was interrupted mid-task.
 > `STATUS.md`, `wiki/log.md` and `wiki/index.md` are bookkeeping paths and are implicitly touched.
 
-(empty: p5.13 finished on 2026-10-19 in b99f027)
+- task: p5.15 (security follow-up, owner answer Q-229: requests to blocked sites stopped at the network level)
+- session: s08
+- intent: security engine: a pure check for single requests (http and https only: denied when the blocklist matches and no more specific allowlist entry overrides; an http(s) address that cannot be read is denied; other schemes are left to the navigation rules), unit tests. webview-manager webview2: Handlers gets a request filter; every tab view registers WebResourceRequested with the filter "*" for all resource contexts and all request source kinds (ICoreWebView2_22, so frames and workers are included), and answers a refused request itself with a 403 response made by its environment, so nothing is sent (COM-1/3/4/5; logged if the runtime lacks the interface); comp-webview-manager updated. App: the filter uses the current policy (settings changes apply at once), writes the audit record and the network log's blocked record; debug builds can switch the filter off with an environment variable for the cost comparison only. Smoke spec block-requests.spec.ts: with 127.0.0.1 blocked, typed, link, redirect, frame, image and fetch attempts each leave the test server's request counter untouched, allowed requests still count; cost: the /netlog page loaded 30 times with the filter on and off. comp-security-engine, qual-security-testing-plan (threat T04 and the new behaviour) and risk-r07 (its request-filter claim) updated. Pages edited stale their approvals. scripts/verify/p5.15-block-requests.ps1 (no P0 draft exists).
+- planned paths: crates/security/src/{policy.rs,lib.rs}, crates/security/tests/*, crates/webview-manager/src/webview2.rs, apps/desktop/src-tauri/src/{content.rs,policy.rs,netlog.rs}, apps/desktop/tests/smoke/block-requests.spec.ts, scripts/verify/p5.15-block-requests.ps1, wiki/architecture/components/{comp-security-engine.md,comp-webview-manager.md}, wiki/quality/qual-security-testing-plan.md, wiki/risks/risk-r07-navigation-filter-fail-open.md, wiki/raw/evidence/phase-p5-telemetry/{check-p5.15.txt,block-requests-cost-p5.15.json}, wiki/raw/MANIFEST.sha256, plan/portal/*.json
+- builds: target/debug only; never target/release
+- rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
 ## Blockers
 
