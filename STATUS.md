@@ -48,7 +48,7 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.14
-next_action: "p5.14 in flight; the 11 keys staled by the exit sweep were re-approved (2026-10-19 13:13). Owner, in this order: (1) run pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence from the repo folder, PC left alone (about 1.5 h; real-keystroke tests; needs internet); (3) do docs/testing/manual-checklist-p5.md with the gate's release build and report the results; (3) review and approve phase-p5-telemetry#exit. Claude then commits the gate evidence, writes the manual-checklist evidence in his words, logs gate | phase-p5-telemetry exit, runs scripts/verify/p5.14-gate-review.ps1, and PAUSES (P6 needs an explicit go). Run quick_lint as its own step before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "p5.14 in flight; the 11 keys staled by the exit sweep were re-approved (2026-10-19 13:13). The first gate run (13:36) was stopped by Claude Code for low memory and had failed the p5.9 check; fixed in 2754168 (owner answer Q-231), which stales comp-network-logger and comp-webview-manager. Owner, in this order: (0) re-approve comp-network-logger and comp-webview-manager; (1) run pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence from the repo folder, PC left alone (about 1.5 h; real-keystroke tests; needs internet; close other big programs first, memory ran short; or ask Claude to run it, as the owner did once); (3) do docs/testing/manual-checklist-p5.md with the gate's release build and report the results; (3) review and approve phase-p5-telemetry#exit. Claude then commits the gate evidence, writes the manual-checklist evidence in his words, logs gate | phase-p5-telemetry exit, runs scripts/verify/p5.14-gate-review.ps1, and PAUSES (P6 needs an explicit go). Run quick_lint as its own step before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -396,6 +396,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 - session: s08
 - intent: (1) Tag sweep: every remaining UNVERIFIED[phase-p5-telemetry] tag and verify_in: phase-p5-telemetry claim (32 body tags, 39 frontmatter claims on 22 pages) is resolved where P5 evidence answers it (EX2, FCP and LCP from the host, renderers per frame, cross-origin iframe and service-worker coverage, CDP targets, WebResourceResponseReceived fields, failed requests not observable) or re-targeted with its reason (owner hand checks still owed; the first upload still deferred, Q-221; harness-side items to P6; custom title bar to P7); pages edited stale their approvals. (2) scripts/gates/p5-gate.ps1 replaces its P0 draft (read first: a placeholder), modelled on the P4 gate: approvals current; every P5 task check; the test-gate rows on one commit (fmt, clippy, tests, cargo deny, shell checks, release build in target/gate-release with target/release untouched, P2/P3/P4 regression suites, wiki check with the known Q-221 error as WAIT); the owner's part. (3) docs/testing/manual-checklist-p5.md for the owner's hand checks (privacy check of a logging session, the settings switches, the open-folder buttons). (4) The owner re-approves, runs the gate with the PC left alone, does the hand checks, reviews, and approves phase-p5-telemetry#exit; then pause.
 - planned paths: the 22 pages with P5 tags (wiki/architecture/**, wiki/decisions/adr-0008, adr-0011, adr-0015, wiki/phases/phase-p2-minimal-container.md, phase-p3-tabs-sessions.md, phase-p4-security.md, phase-p5-telemetry.md, wiki/quality/**, wiki/research/metrics/**, wiki/risks/**), scripts/gates/p5-gate.ps1, docs/testing/manual-checklist-p5.md, wiki/raw/evidence/phase-p5-telemetry/* (gate outputs), wiki/raw/MANIFEST.sha256, wiki/index.md, plan/portal/*.json
+- fix (owner answer Q-231, 2026-10-19): the first gate run (stopped by Claude Code for low memory at about 14:06) failed the p5.9 check: its spec filter `network-log` also picks up the p5.10 spec files (4 passed, expects 2), and one refused navigation gives three network log lines (blocked from the navigation check, blocked again from the request filter, `403 allowed` for the filter's own answer). Fix: one `blocked:<rule>` line per refused request (netlog.rs pairs the navigation check's and the request filter's record of the same address); webview2 response_event skips the filter's own 403 answer (reason phrase `Blocked by Ferrum`); network-log.spec.ts asserts one record and no response for the refused address; the p5.9 script names its spec exactly. Paths: crates/webview-manager/src/webview2.rs, apps/desktop/src-tauri/src/netlog.rs, content.rs, policy.rs, apps/desktop/tests/smoke/network-log.spec.ts, scripts/verify/p5.9-network-log-addresses.ps1, wiki/architecture/components/comp-network-logger.md, comp-webview-manager.md, plan/portal/architecture.json. The partial gate outputs (8 untracked evidence files) are replaced by the next run.
 - builds: target/debug and target/gate-release only; never target/release
 - rollback: git restore the planned paths; delete the new files (all created by Claude in this task)
 
@@ -435,16 +436,18 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 |---|---|
 | Phase 5 (measurement) | 14 of 15 tasks done; the end-of-phase review is ready |
 | Open points aimed at P5 | All answered or moved, each with its reason |
-| Approvals | The 11 pages are re-approved; all current |
-| Your part | Run the gate, do the hand checks, sign off |
+| First gate run | Stopped by Claude Code (low memory) after 30 min; it found a network log flaw, now fixed |
+| Approvals | Two part pages changed by the fix wait for your re-approval |
+| Your part | Re-approve the two pages, then the gate, the hand checks, sign off |
 
-**2. Why, and what it does.** The gate reruns every P5 check, the earlier suites and a
+**2. Why, and what it does.** The fix gives one network log line per refused request and changed the network log and
+the web view part pages. The gate reruns every P5 check, the earlier suites and a
 release build on one commit; some tests press real keys, so the PC must be left alone.
 
 **3. The script:** `pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence` (about 1.5 hours; needs internet).
 Then the checklist `docs/testing/manual-checklist-p5.md` with the gate's release build.
 
-**4. What to tell Claude:** after the gate "P5 gate passed" or the FAIL or WAIT lines; then
+**4. What to tell Claude:** first "Re-approve"; after the gate "P5 gate passed" or the FAIL or WAIT lines; then
 the checklist results item by item, and whether P5 is signed off.
 
 ## Pending owner approvals

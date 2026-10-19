@@ -5698,6 +5698,17 @@
       "related": [
         "p5.14"
       ]
+    },
+    {
+      "id": "2754168",
+      "kind": "commit",
+      "title": "Commit 2754168",
+      "summary": "End-of-phase review fix: one network log line per refused request (your answer Q-231).",
+      "status": "Done",
+      "related": [
+        "p5.14",
+        "Q-231"
+      ]
     }
   ]
 }

@@ -3378,3 +3378,20 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-19-s08-p5-14-reapprovals.md]
 - result: Owner: "Reapprove". Recorded approved for adr-0008, adr-0011, adr-0015, comp-app-shell, phase-p2-minimal-container (+#exit), phase-p3-tabs-sessions (+#exit), phase-p4-security (+#exit) and phase-p5-telemetry with tools/approvals_record.py. All approvals current.
 - next: owner runs scripts/gates/p5-gate.ps1 -SaveEvidence with the PC left alone, then the hand checklist.
+
+## [2026-10-19] decide | Q-231 answered: fix the network log's lines for a refused request now
+- session: s08
+- time: 14:14
+- pages: [ov-open-questions]
+- sources: [raw/owner/2026-10-19-s08-q231-netlog-one-line-per-refusal.md]
+- result: Owner asked Claude to run the P5 gate ("Run it yourself ?"); Claude started it at 13:36 at 4ae667d. Claude Code stopped it at about 14:06 for low memory, after parts 1 and 2 and seven rows of part 3 had passed. The p5.9 check had failed: its spec filter also picked up the p5.10 files (4 passed, expected 2), and one refused navigation gave three network log lines (blocked twice, then the request filter's own 403 answer as allowed). Asked as Q-231; owner: "Fix now (Recommended)".
+- next: fix within p5.14, owner re-approves the two part pages, gate rerun.
+
+## [2026-10-19] code | p5.14 fix: one network log line per refused request (Q-231)
+- session: s08
+- time: 14:29
+- pages: [comp-network-logger, comp-webview-manager]
+- sources: [raw/owner/2026-10-19-s08-q231-netlog-one-line-per-refusal.md]
+- result: netlog::blocked pairs the navigation check's and the request filter's record of the same address in the same tab within 2 s (unit test one_line_per_refused_request); webview2 response_event skips the filter's own 403 answer (reason BLOCKED_REASON); network-log.spec.ts asserts one blocked record and no response; the p5.9 script names its spec exactly. fmt, clippy -D warnings, cargo test --workspace, npm lint and typecheck clean; verify p5.9 PASS (one blocked line, responses for it 0), p5.10, p5.11 and p5.15 PASS. Stales approval of comp-network-logger and comp-webview-manager. The 8 untracked outputs of the stopped gate run stay until the next run replaces them.
+- commit: 2754168
+- next: owner re-approves comp-network-logger and comp-webview-manager; then the gate runs again.

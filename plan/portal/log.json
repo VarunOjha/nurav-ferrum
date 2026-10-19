@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:62c3c01cc2f2c925b13478f41fb1f9cda607d7ce0e477ba64473290a56df4911"
+    "content_hash": "sha256:66b78e31b72401ed770133c449692e0b14e5aeb61dcb804be45516a8f4f5e0ee"
   },
   "entries": [
     {
@@ -6486,6 +6486,37 @@
       "tags": [
         "approvals",
         "phases"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-q231",
+      "date": "2026-10-19",
+      "time": "14:14",
+      "title": "First gate run found a network log flaw; you chose to fix it now",
+      "done": "Claude ran the Phase 5 gate for you. Claude Code stopped it after 30 minutes because memory was short. Before that, the network log check failed: one refused request gave three lines, one wrongly marked allowed. Claude fixed it (one line per refused request) and the check's own name mix-up. All affected checks pass again.",
+      "next": "You re-approve the network log and web view part pages; then the gate runs again.",
+      "decisions": [
+        {
+          "what": "Fix the network log's lines for a refused request now, in Phase 5",
+          "by": "you"
+        }
+      ],
+      "approvals": [
+        {
+          "what": "Network log part and web view part",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "2754168",
+      "covers": [
+        "## [2026-10-19] decide | Q-231 answered: fix the network log's lines for a refused request now",
+        "## [2026-10-19] code | p5.14 fix: one network log line per refused request (Q-231)"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Fixed",
+      "tags": [
+        "privacy",
+        "benchmarks"
       ]
     }
   ]
