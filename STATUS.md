@@ -48,7 +48,7 @@ approvable: false
 session: s08
 current_phase: phase-p5-telemetry
 current_task: p5.14
-next_action: "p5.14 in flight; the 11 keys staled by the exit sweep were re-approved (2026-10-19 13:13). The first gate run (13:36) was stopped by Claude Code for low memory and had failed the p5.9 check; fixed in 2754168 (owner answer Q-231), which staled comp-network-logger and comp-webview-manager; both re-approved at 14:35. The owner asked Claude to run the gate ('Re approve, and run'). The second gate run (14:41 to 15:36, at 779babb) gave 19 PASS, 4 FAIL: the p5.2 and p5.3 checks (their scripts out of date since p5.11 and p5.4/p5.5: a function signature and a spec name filter), the release build (the gate-release ferrum-desktop.exe started 2026-10-18 12:56, PID 15808, still runs and locks the file; Claude does not close it, owner's rule) and the wiki check (Claude's errors: a quote in this next_action, risk-r07 unverified empty, six metric index rows); all fixed in the next commit except the known Q-221 error. In this order: (0) the owner closes that Ferrum; (1) Claude runs pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence from the repo folder, PC left alone (about 1.5 h; real-keystroke tests; needs internet; close other big programs first, memory ran short; or ask Claude to run it, as the owner did once); (3) do docs/testing/manual-checklist-p5.md with the gate's release build and report the results; (3) review and approve phase-p5-telemetry#exit. Claude then commits the gate evidence, writes the manual-checklist evidence in his words, logs gate | phase-p5-telemetry exit, runs scripts/verify/p5.14-gate-review.ps1, and PAUSES (P6 needs an explicit go). Run quick_lint as its own step before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "p5.14 in flight; the 11 keys staled by the exit sweep were re-approved (2026-10-19 13:13). The first gate run (13:36) was stopped by Claude Code for low memory and had failed the p5.9 check; fixed in 2754168 (owner answer Q-231), which staled comp-network-logger and comp-webview-manager; both re-approved at 14:35. The owner asked Claude to run the gate ('Re approve, and run'). The second gate run (14:41 to 15:36, at 779babb) gave 19 PASS, 4 FAIL: the p5.2 and p5.3 checks (their scripts out of date since p5.11 and p5.4/p5.5: a function signature and a spec name filter), the release build (the gate-release ferrum-desktop.exe started 2026-10-18 12:56, PID 15808, still runs and locks the file; Claude does not close it, owner's rule) and the wiki check (Claude's errors: a quote in this next_action, risk-r07 unverified empty, six metric index rows); all fixed in the next commit except the known Q-221 error. The owner let Claude close that Ferrum (18:20); it stays listed with its file locked, so the file was renamed to ferrum-desktop.exe.locked-15808 (a restart releases it). In this order: (1) Claude runs pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence from the repo folder, PC left alone (about 1.5 h; real-keystroke tests; needs internet; close other big programs first, memory ran short; or ask Claude to run it, as the owner did once); (3) do docs/testing/manual-checklist-p5.md with the gate's release build and report the results; (3) review and approve phase-p5-telemetry#exit. Claude then commits the gate evidence, writes the manual-checklist evidence in his words, logs gate | phase-p5-telemetry exit, runs scripts/verify/p5.14-gate-review.ps1, and PAUSES (P6 needs an explicit go). Run quick_lint as its own step before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items 1 to 20, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-15-s07
 ---
@@ -438,7 +438,7 @@ Answer them by wave, not all at once, in Claude Code ([ops-approval-workflow §8
 | Open points aimed at P5 | All answered or moved, each with its reason |
 | Gate runs | Run 1 stopped (low memory); run 2: 19 checks passed, 4 failed; the causes are fixed |
 | Approvals | All current (the two pages re-approved) |
-| Your part | Close the old Ferrum still open since 18 Oct; then Claude reruns the gate |
+| Your part | Leave the PC alone while Claude runs the gate (third run); then the hand checks, sign off |
 
 **2. Why, and what it does.** The fix gives one network log line per refused request and changed the network log and
 the web view part pages. The gate reruns every P5 check, the earlier suites and a
@@ -447,7 +447,7 @@ release build on one commit; some tests press real keys, so the PC must be left 
 **3. The script:** `pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence` (about 1.5 hours; needs internet).
 Then the checklist `docs/testing/manual-checklist-p5.md` with the gate's release build.
 
-**4. What to tell Claude:** "Closed, run" once that Ferrum is closed; after the gate "P5 gate passed" or the FAIL or WAIT lines; then
+**4. What to tell Claude:** nothing while it runs; after the gate "P5 gate passed" or the FAIL or WAIT lines; then
 the checklist results item by item, and whether P5 is signed off.
 
 ## Pending owner approvals

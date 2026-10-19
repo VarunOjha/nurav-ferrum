@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:5eee598c4affd2ea27c561e2cd0b66b5d2411be21e565e63f74880f6dd0749d7"
+    "content_hash": "sha256:293b3b8ac27d4c82b1c23a6f6a66599a95c88e2d7658baab253d94617891db72"
   },
   "entries": [
     {
@@ -6563,6 +6563,31 @@
       ],
       "phase": "phase-p5-telemetry",
       "category": "Checked",
+      "tags": [
+        "phases",
+        "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-close-old-ferrum",
+      "date": "2026-10-19",
+      "time": "18:20",
+      "title": "You let Claude close the old Ferrum that blocked the build",
+      "done": "Claude stopped that one program. Windows still kept its file locked, so Claude renamed the file in the same folder (nothing deleted). The release build can now write a new one.",
+      "next": "Claude runs the gate a third time.",
+      "decisions": [
+        {
+          "what": "Claude may close the old gate copy of Ferrum, this once",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] decide | owner lets Claude close the old gate-release Ferrum (process 15808)"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Decided",
       "tags": [
         "phases",
         "check scripts"
