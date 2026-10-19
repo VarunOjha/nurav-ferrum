@@ -1,0 +1,41 @@
+Ferrum check p5.4: Prove the meter accurate
+Why: every later memory and CPU number rests on a meter that has passed.
+Run at 2026-10-18 19:05 on commit d36d27c
+------------------------------------------------------------------------
+  PASS   The limits were committed before any result
+         limits committed in d36d27c test(telemetry): p5.4 tolerances and validation code, committed before the first run [p5.4]
+CHECK idle.psutil_private_commit_diff_kib = 0.000 (allowed - to 64) ok
+CHECK idle.psutil_working_set_diff_kib = 0.000 (allowed - to 256) ok
+CHECK idle.psutil_uss_vs_private_working_set_diff_mib = 0.031 (allowed - to 2) ok
+CHECK idle.psutil_page_faults_diff = 0.000 (allowed - to 50) ok
+CHECK idle.psutil_cpu_diff_ms = 0.000 (allowed - to 32) ok
+CHECK alloc.private_commit_delta_mib = 256.504 (allowed 255.5 to 260) ok
+CHECK alloc.private_working_set_delta_mib = 256.004 (allowed 243.2 to 260) ok
+CHECK alloc.working_set_delta_mib = 256.012 (allowed 243.2 to 260) ok
+CHECK alloc.page_faults_per_touched_page = 1.002 (allowed 0.9 to -) ok
+CHECK allocated.psutil_private_commit_diff_kib = 0.000 (allowed - to 64) ok
+CHECK allocated.psutil_working_set_diff_kib = 0.000 (allowed - to 256) ok
+CHECK allocated.psutil_uss_vs_private_working_set_diff_mib = 0.031 (allowed - to 2) ok
+CHECK allocated.psutil_page_faults_diff = 0.000 (allowed - to 50) ok
+CHECK allocated.psutil_cpu_diff_ms = 0.000 (allowed - to 32) ok
+CHECK free.private_commit_above_baseline_mib = 0.000 (allowed - to 4) ok
+CHECK burn.cpu_ms = 2000.000 (allowed 1668 to 2132) ok
+CHECK burn.cycles_per_cpu_second_ghz = 3.182 (allowed 0.4 to 6.5) ok
+CHECK burn.tree_cpu_delta_minus_helper_ms = 0.000 (allowed 0 to -) ok
+CHECK after_burn.psutil_private_commit_diff_kib = 0.000 (allowed - to 64) ok
+CHECK after_burn.psutil_working_set_diff_kib = 0.000 (allowed - to 256) ok
+CHECK after_burn.psutil_uss_vs_private_working_set_diff_mib = 0.031 (allowed - to 2) ok
+CHECK after_burn.psutil_page_faults_diff = 0.000 (allowed - to 50) ok
+CHECK after_burn.psutil_cpu_diff_ms = 0.000 (allowed - to 32) ok
+  PASS   The meter reads a helper's known memory and CPU within the limits, and psutil agrees (6 s)
+         23 comparisons within the limits (psutil 7.2.2)
+Running 1 test using 1 worker
+JS-PROBE: buffer 128 MiB; tree private commit median 351.8 -> 482.1 MiB, delta 130.3 MiB (allowed 121.6 to 192)
+  ✓  1 sampler-ground-truth.spec.ts:34:1 › a tab that fills a known-size buffer raises the tree's private commit by about that much (4.7s)
+  1 passed (1.6m)
+  PASS   Live: a Ferrum tab fills a 128 MiB buffer; the memory total rises by about that much (110 s)
+         buffer 128 MiB; tree private commit median 351.8 -> 482.1 MiB, delta 130.3 MiB (allowed 121.6 to 192)
+------------------------------------------------------------------------
+RESULT: PASS - p5.4 (3 PASS; 117 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.4 check passed".

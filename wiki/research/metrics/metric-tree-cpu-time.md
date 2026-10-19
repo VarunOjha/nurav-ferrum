@@ -3,8 +3,9 @@ id: metric-tree-cpu-time
 type: metric
 title: "Tree CPU time"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -57,6 +58,10 @@ unverified:
 - In job-only mode, job accounting includes processes that have already terminated, so short-lived children are counted ([measurement note](../../raw/research/measurement-methodology.md) §2.3 and §3, VERIFIED).
 - Timer granularity of GetProcessTimes is UNVERIFIED[phase-p5-telemetry]. Compare it against [metric-tree-cpu-cycles](metric-tree-cpu-cycles.md) on an idle process.
 - Windows 11 does not guarantee high timer resolution for windows that are occluded or minimised, and it applies EcoQoS heuristics (§3, VERIFIED). The harness therefore fixes and records the window state (see [ov-research-fairness-protocol](../ov-research-fairness-protocol.md)).
+
+## Ground-truth validation (p5.4)
+
+[check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt), values in [ground-truth-p5.4.json](../../raw/evidence/phase-p5-telemetry/ground-truth-p5.4.json); limits in [ground-truth-tolerances.json](../../../crates/telemetry/tests/ground-truth-tolerances.json), committed before the first run (d36d27c). The helper keeps one thread busy for 2 s of wall time: limit, CPU time of 85 to 105 percent of the wall time, plus or minus 32 ms; result 2000 ms for 2000 ms. psutil `cpu_times()` (user plus system) matched within 32 ms (limit): 0 ms at three points. The values read so far are whole multiples of 15.625 ms (checks p5.3 and p5.4), which is a first look at the granularity question above, not its answer. This characterises the meter, not Ferrum.
 
 ## Used by
 Experiments and hypotheses that reference this metric are listed in [ov-research-traceability](../ov-research-traceability.md).

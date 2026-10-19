@@ -3,8 +3,9 @@ id: metric-tree-private-working-set
 type: metric
 title: "Tree private working set"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -29,8 +30,6 @@ tags:
 unverified:
   - claim: "msedgewebview2.exe processes of Ferrum/baseline join the harness Job Object (measurement note §2.2 UNCERTAIN)"
     verify_in: phase-p6-benchmark-harness
-  - claim: "PROCESS_MEMORY_COUNTERS_EX2 is available on the benchmark machine"
-    verify_in: phase-p5-telemetry
 ---
 
 # Tree private working set
@@ -56,7 +55,11 @@ unverified:
 ## Notes
 - This metric can be added up across processes. It is the closest thing to "unique resident memory" ([measurement note](../../raw/research/measurement-methodology.md) §1.2, DERIVED from VERIFIED API semantics).
 - It is sensitive to working-set trimming and to system memory pressure (§1.1, VERIFIED). It is reported as a secondary metric next to [metric-tree-private-commit](metric-tree-private-commit.md).
-- EX2 availability on this machine: UNVERIFIED[phase-p5-telemetry].
+- EX2 is available on this PC and its `PrivateWorkingSetSize` is filled ([check-p5.3](../../raw/evidence/phase-p5-telemetry/check-p5.3.txt)).
+
+## Ground-truth validation (p5.4)
+
+[check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt), values in [ground-truth-p5.4.json](../../raw/evidence/phase-p5-telemetry/ground-truth-p5.4.json); limits in [ground-truth-tolerances.json](../../../crates/telemetry/tests/ground-truth-tolerances.json), committed before the first run (d36d27c). The helper allocates 256 MiB and writes every byte: limit, a rise of 243.2 to 260 MiB (Windows may trim a few pages); result 256.0 MiB. psutil's `uss`, counted another way, was within 2 MiB (limit) of `PrivateWorkingSetSize`: 0.03 MiB at three points. This characterises the meter, not Ferrum.
 
 ## Used by
 Experiments and hypotheses that reference this metric are listed in [ov-research-traceability](../ov-research-traceability.md).

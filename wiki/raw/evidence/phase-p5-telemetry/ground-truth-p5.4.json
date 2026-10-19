@@ -1,0 +1,142 @@
+{
+  "after_burn.psutil_cpu_diff_ms": {
+    "max": 32.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "after_burn.psutil_page_faults_diff": {
+    "max": 50.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "after_burn.psutil_private_commit_diff_kib": {
+    "max": 64.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "after_burn.psutil_uss_vs_private_working_set_diff_mib": {
+    "max": 2.0,
+    "min": null,
+    "ok": true,
+    "value": 0.03125
+  },
+  "after_burn.psutil_working_set_diff_kib": {
+    "max": 256.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "alloc.page_faults_per_touched_page": {
+    "max": null,
+    "min": 0.9,
+    "ok": true,
+    "value": 1.0019989013671875
+  },
+  "alloc.private_commit_delta_mib": {
+    "max": 260.0,
+    "min": 255.5,
+    "ok": true,
+    "value": 256.50390625
+  },
+  "alloc.private_working_set_delta_mib": {
+    "max": 260.0,
+    "min": 243.2,
+    "ok": true,
+    "value": 256.00390625
+  },
+  "alloc.working_set_delta_mib": {
+    "max": 260.0,
+    "min": 243.2,
+    "ok": true,
+    "value": 256.01171875
+  },
+  "allocated.psutil_cpu_diff_ms": {
+    "max": 32.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "allocated.psutil_page_faults_diff": {
+    "max": 50.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "allocated.psutil_private_commit_diff_kib": {
+    "max": 64.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "allocated.psutil_uss_vs_private_working_set_diff_mib": {
+    "max": 2.0,
+    "min": null,
+    "ok": true,
+    "value": 0.03125
+  },
+  "allocated.psutil_working_set_diff_kib": {
+    "max": 256.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "burn.cpu_ms": {
+    "max": 2132.0,
+    "min": 1668.0,
+    "ok": true,
+    "value": 2000.0
+  },
+  "burn.cycles_per_cpu_second_ghz": {
+    "max": 6.5,
+    "min": 0.4,
+    "ok": true,
+    "value": 3.1821132105
+  },
+  "burn.tree_cpu_delta_minus_helper_ms": {
+    "max": null,
+    "min": 0.0,
+    "ok": true,
+    "value": 0.0
+  },
+  "burn.wall_ms": 2000.0,
+  "free.private_commit_above_baseline_mib": {
+    "max": 4.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "idle.psutil_cpu_diff_ms": {
+    "max": 32.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "idle.psutil_page_faults_diff": {
+    "max": 50.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "idle.psutil_private_commit_diff_kib": {
+    "max": 64.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "idle.psutil_uss_vs_private_working_set_diff_mib": {
+    "max": 2.0,
+    "min": null,
+    "ok": true,
+    "value": 0.03125
+  },
+  "idle.psutil_working_set_diff_kib": {
+    "max": 256.0,
+    "min": null,
+    "ok": true,
+    "value": 0.0
+  },
+  "psutil_version": "7.2.2"
+}

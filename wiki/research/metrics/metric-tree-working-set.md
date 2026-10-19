@@ -3,8 +3,9 @@ id: metric-tree-working-set
 type: metric
 title: "Tree working set (secondary, over-counts shared pages)"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -55,6 +56,10 @@ unverified:
 Master prompt §7 asks for working set and for private memory to be distinguished from shared physical pages ([raw/00-master-prompt.md](../../raw/00-master-prompt.md)). Adding up working sets double-counts shared DLL and image pages ([measurement note](../../raw/research/measurement-methodology.md) §1.1, VERIFIED). Edge and Evergreen WebView2 binaries can also be hard-linked when their versions match, which means even more shared image pages (§6.2, VERIFIED). This metric is shown only to explain the gap between it and the private metrics.
 
 Do not use `sysinfo::Process::memory()`: on Windows it returns WorkingSetSize (§8, VERIFIED).
+
+## Ground-truth validation (p5.4)
+
+[check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt), values in [ground-truth-p5.4.json](../../raw/evidence/phase-p5-telemetry/ground-truth-p5.4.json); limits in [ground-truth-tolerances.json](../../../crates/telemetry/tests/ground-truth-tolerances.json), committed before the first run (d36d27c). The helper allocates 256 MiB and writes every byte: limit, a rise of 243.2 to 260 MiB; result 256.0 MiB. Every touched 4 KiB page cost 1.0 page faults (limit at least 0.9). psutil `rss` was within 256 KiB (limit) of `WorkingSetSize`: 0 KiB at three points, as was the page-fault count. This characterises the meter, not Ferrum.
 
 ## Used by
 Experiments and hypotheses that reference this metric are listed in [ov-research-traceability](../ov-research-traceability.md).

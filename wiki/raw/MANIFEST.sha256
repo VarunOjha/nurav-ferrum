@@ -361,3 +361,5 @@ fd99c84798744ae6cabfd1e7869267f8cd0f0332ff312080a9e7d64101a9ce1c  evidence/phase
 a9cbf32c49b1318f0a66086c64e791e358c35a510888a7cabd19f1ac5f20ea4c  owner/2026-10-18-s08-p5-2-telemetry-reapproval.md
 23dc5a58f395a1cbefead3834d0fb7becde06a1790f825bc9a076f3a3cd6fae7  evidence/phase-p5-telemetry/check-p5.3.txt
 180f4f2fbdf8d34caab0617a6a42f518849c096d20ef59ca22b9b83a1f44f3d1  owner/2026-10-18-s08-p5-3-telemetry-reapproval.md
+3bc45a44491e90632cc6775dd62817257b0b4406af93d97af6d843253df04051  evidence/phase-p5-telemetry/check-p5.4.txt
+0b74a01698afc35c1d8a0efa1c14d7b07c4fa3659c3772e8ec4d24e6d7b71450  evidence/phase-p5-telemetry/ground-truth-p5.4.json

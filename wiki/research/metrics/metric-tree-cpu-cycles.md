@@ -3,8 +3,9 @@ id: metric-tree-cpu-cycles
 type: metric
 title: "Tree CPU cycles (frequency-sensitive)"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -56,6 +57,10 @@ unverified:
 ## Notes
 - The docs give no way to convert cycles to time ([measurement note](../../raw/research/measurement-methodology.md) §3, VERIFIED). Reporting cycles as seconds would be invalid (DERIVED).
 - Processes that exit within the window lose their counters unless they are sampled first. Coverage of short-lived processes is UNVERIFIED[phase-p5-telemetry]. [metric-tree-cpu-time](metric-tree-cpu-time.md) remains the primary CPU metric.
+
+## Ground-truth validation (p5.4)
+
+[check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt), values in [ground-truth-p5.4.json](../../raw/evidence/phase-p5-telemetry/ground-truth-p5.4.json); limits in [ground-truth-tolerances.json](../../../crates/telemetry/tests/ground-truth-tolerances.json), committed before the first run (d36d27c). Cycles cannot be turned into time (above), so the check is only that they are plausible: over the helper's 2 s busy loop, cycles divided by CPU seconds gave 3.18 billion per second, inside the limit of 0.4 to 6.5 billion. Since p5.3 the sampler keeps the last cycle reading of a process that ends, so a short-lived process is counted up to its last sample; whether that is enough is still the open question above. This characterises the meter, not Ferrum.
 
 ## Used by
 Experiments and hypotheses that reference this metric are listed in [ov-research-traceability](../ov-research-traceability.md).

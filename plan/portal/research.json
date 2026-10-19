@@ -782,8 +782,8 @@
     {
       "id": "metric-tree-private-commit",
       "title": "Private memory (main memory measure)",
-      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. Not checked yet (P5).",
-      "status": "Proposed, not checked",
+      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. The meter passed its accuracy test in P5: a known 256 MiB and a 128 MiB page buffer were read within limits set in advance.",
+      "status": "Proposed; meter checked",
       "category": "Measure",
       "tags": [
         "memory",
@@ -799,15 +799,15 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-tree-private-commit.md",
-        "content_hash": "sha256:4922cd7b55ac05b53a7bf6caa041016a8df4e3acbf64adcceac35e033a015dc8"
+        "content_hash": "sha256:ced73735d6de01cac90e4b9d4d607e4749396ec00efaa7fb8b9dafc88345a52f"
       },
       "unit": "MiB"
     },
     {
       "id": "metric-tree-private-working-set",
       "title": "Private memory held in RAM",
-      "summary": "The part of private memory that sits in RAM. A secondary measure.",
-      "status": "Proposed, not checked",
+      "summary": "The part of private memory that sits in RAM. A secondary measure. The meter read a known 256 MiB within limits set in advance (P5).",
+      "status": "Proposed; meter checked",
       "category": "Measure",
       "tags": [
         "memory",
@@ -819,15 +819,15 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-tree-private-working-set.md",
-        "content_hash": "sha256:ea4a080b2903df4e58434ce3bc28536c87ea9a20199e39dbc98a49a66fd70ea7"
+        "content_hash": "sha256:b55ac7bde64a105637084f4ca3c9d4a97cf9b2a0841da3fe098f3eaf3e9d4cc3"
       },
       "unit": "MiB"
     },
     {
       "id": "metric-tree-working-set",
       "title": "All memory in RAM (over-counts)",
-      "summary": "All memory in RAM, but pages shared by several processes are counted once per process. Shown only with that warning.",
-      "status": "Proposed, not checked",
+      "summary": "All memory in RAM, but pages shared by several processes are counted once per process. Shown only with that warning. The meter read a known 256 MiB within limits set in advance (P5).",
+      "status": "Proposed; meter checked",
       "category": "Measure",
       "tags": [
         "memory",
@@ -839,7 +839,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-tree-working-set.md",
-        "content_hash": "sha256:6d30aab964cdf558c0f2a577da5790c2de42f4f3721e7c34dd848081d0d49aff"
+        "content_hash": "sha256:fb96658f645001ff6324bb366bb8c4eae79e19205a634c3ec278ec49f84e3b52"
       },
       "unit": "MiB"
     },
@@ -887,8 +887,8 @@
     {
       "id": "metric-tree-cpu-time",
       "title": "CPU time",
-      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background.",
-      "status": "Proposed, not checked",
+      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background. The meter read 2 s of known CPU use within limits set in advance (P5).",
+      "status": "Proposed; meter checked",
       "category": "Measure",
       "tags": [
         "CPU",
@@ -904,15 +904,15 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-tree-cpu-time.md",
-        "content_hash": "sha256:5a3dca215a81d06a6783ddb21ac612d56b58fd1a6fc4ada0f9088868992b3e9e"
+        "content_hash": "sha256:a08279ce60d02bbb7140ebf481047ca48b99a7a08b12e5d9c7bf847ace76686b"
       },
       "unit": "s"
     },
     {
       "id": "metric-tree-cpu-cycles",
       "title": "CPU cycles",
-      "summary": "Processor work counted in clock cycles. Reported next to CPU time because it reacts differently when the clock speed changes.",
-      "status": "Proposed, not checked",
+      "summary": "Processor work counted in clock cycles. Reported next to CPU time because it reacts differently when the clock speed changes. In P5 the meter's cycle counts were plausible for a known 2 s of CPU use.",
+      "status": "Proposed; meter checked",
       "category": "Measure",
       "tags": [
         "CPU",
@@ -924,7 +924,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-tree-cpu-cycles.md",
-        "content_hash": "sha256:3b907baffbcbbe379171431f5a36abd0282880a9817d5c466f664a8e6ed685ec"
+        "content_hash": "sha256:b557153925eeeb0a76c27536a2fe11669339444940f05d3616098d11dc5047ef"
       },
       "unit": "cycles"
     },

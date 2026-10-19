@@ -1050,7 +1050,7 @@
       "kind": "task",
       "title": "P5 task: Prove the meter is accurate",
       "summary": "A meter is only useful if it is right → helper programs use a known amount of memory and CPU; the meter and an independent reader are compared with those values, with tolerances written down before the run → a meter that fails blocks P6.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -2955,8 +2955,8 @@
       "id": "metric-tree-cpu-cycles",
       "kind": "metric",
       "title": "CPU cycles",
-      "summary": "Processor work counted in clock cycles. Reported next to CPU time because it reacts differently when the clock speed changes. Unit: cycles.",
-      "status": "Proposed, not checked",
+      "summary": "Processor work counted in clock cycles. Reported next to CPU time because it reacts differently when the clock speed changes. In P5 the meter's cycle counts were plausible for a known 2 s of CPU use. Unit: cycles.",
+      "status": "Proposed; meter checked",
       "related": [
         "exp-baseline-footprint"
       ]
@@ -2965,8 +2965,8 @@
       "id": "metric-tree-cpu-time",
       "kind": "metric",
       "title": "CPU time",
-      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background. Unit: s.",
-      "status": "Proposed, not checked",
+      "summary": "Processor time used by all of the product's processes, per task, or per minute while tabs sit in the background. The meter read 2 s of known CPU use within limits set in advance (P5). Unit: s.",
+      "status": "Proposed; meter checked",
       "related": [
         "exp-baseline-footprint",
         "exp-navigation",
@@ -2979,8 +2979,8 @@
       "id": "metric-tree-private-commit",
       "kind": "metric",
       "title": "Private memory (main memory measure)",
-      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. Not checked yet (P5). Unit: MiB.",
-      "status": "Proposed, not checked",
+      "summary": "Memory reserved only for this product, added up over every process it started and averaged over the test. Shared pages are not counted twice. The meter passed its accuracy test in P5: a known 256 MiB and a 128 MiB page buffer were read within limits set in advance. Unit: MiB.",
+      "status": "Proposed; meter checked",
       "related": [
         "exp-baseline-footprint",
         "exp-startup",
@@ -2993,8 +2993,8 @@
       "id": "metric-tree-private-working-set",
       "kind": "metric",
       "title": "Private memory held in RAM",
-      "summary": "The part of private memory that sits in RAM. A secondary measure. Unit: MiB.",
-      "status": "Proposed, not checked",
+      "summary": "The part of private memory that sits in RAM. A secondary measure. The meter read a known 256 MiB within limits set in advance (P5). Unit: MiB.",
+      "status": "Proposed; meter checked",
       "related": [
         "exp-baseline-footprint"
       ]
@@ -3003,8 +3003,8 @@
       "id": "metric-tree-working-set",
       "kind": "metric",
       "title": "All memory in RAM (over-counts)",
-      "summary": "All memory in RAM, but pages shared by several processes are counted once per process. Shown only with that warning. Unit: MiB.",
-      "status": "Proposed, not checked",
+      "summary": "All memory in RAM, but pages shared by several processes are counted once per process. Shown only with that warning. The meter read a known 256 MiB within limits set in advance (P5). Unit: MiB.",
+      "status": "Proposed; meter checked",
       "related": [
         "exp-baseline-footprint"
       ]
@@ -3262,7 +3262,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, and the memory and CPU meter (a moment it cannot read fully is marked as a gap). A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, and the memory and CPU meter, which passed its accuracy test. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
       "status": "Planned",
       "related": [
         "layer-engine"

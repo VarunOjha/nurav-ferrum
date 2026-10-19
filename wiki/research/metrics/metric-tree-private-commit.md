@@ -3,8 +3,9 @@ id: metric-tree-private-commit
 type: metric
 title: "Tree private commit (headline memory metric)"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
 related:
@@ -29,10 +30,6 @@ tags:
 unverified:
   - claim: "msedgewebview2.exe processes of Ferrum/baseline join the harness Job Object (measurement note §2.2 UNCERTAIN)"
     verify_in: phase-p6-benchmark-harness
-  - claim: "PROCESS_MEMORY_COUNTERS_EX2 can be queried with GetProcessMemoryInfo on the benchmark machine (OS build 10.0.26200)"
-    verify_in: phase-p5-telemetry
-  - claim: "Allocating N MiB of JS heap in a fixture increases tree private commit by at least N MiB within a tolerance set in P5"
-    verify_in: phase-p5-telemetry
 ---
 
 # Tree private commit (headline memory metric)
@@ -62,12 +59,25 @@ Private commit is private by definition, so per-process values can be added up w
 - Never compute a "peak" by adding per-process peaks; see [metric-peak-tree-private-commit](metric-peak-tree-private-commit.md).
 - WebView2 renderers can serve several WebViews on the same user data folder, so **per-tab** private commit is not well-defined. Per-tab figures, if shown at all, are labelled "renderer(s) hosting this tab's frames" and never added up (§2.2, VERIFIED).
 - Chromium's process limit depends on installed RAM, so total RAM is recorded with every trial (§2.1, VERIFIED).
-- Availability of the EX2 struct on the benchmark machine: the docs say Windows 11 22H2 with the September 2023 update or later, and the observed OS build is 10.0.26200 ([raw/01-scoping-decisions.md](../../raw/01-scoping-decisions.md)). The call itself is UNVERIFIED[phase-p5-telemetry].
+- Availability of the EX2 struct on the benchmark machine: the docs say Windows 11 22H2 with the September 2023 update or later, and the observed OS build is 10.0.26200 ([raw/01-scoping-decisions.md](../../raw/01-scoping-decisions.md)). The call works on this PC: Windows fills the EX2 fields ([check-p5.3](../../raw/evidence/phase-p5-telemetry/check-p5.3.txt)).
 
 ## Validation (before support becomes `supported`)
 1. A/A run: the same configuration as two arms shows no practically relevant difference.
-2. Synthetic allocation probe: a fixture page that allocates a known amount of JS heap. The tree private commit increases by at least that amount. The tolerance is set in P5 (UNVERIFIED[phase-p5-telemetry]).
+2. Synthetic allocation probe: a fixture page that allocates a known amount of JS heap. The tree private commit increases by at least that amount. Done in p5.4 (below).
 3. In job-only mode, compare the job-wide peak with the sampled maximum (see [metric-peak-tree-private-commit](metric-peak-tree-private-commit.md)).
+
+## Ground-truth validation (p5.4)
+
+Checked against amounts known in advance; [check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt), values in [ground-truth-p5.4.json](../../raw/evidence/phase-p5-telemetry/ground-truth-p5.4.json); limits in [ground-truth-tolerances.json](../../../crates/telemetry/tests/ground-truth-tolerances.json), committed before the first run (d36d27c).
+
+| Probe | Limit | Result |
+|---|---|---|
+| Helper allocates 256 MiB and writes every byte | rise 255.5 to 260 MiB | 256.5 MiB |
+| Helper frees it | at most 4 MiB above the start | 0.0 MiB |
+| Ferrum tab fills a 128 MiB JavaScript buffer (median of 3 readings before and after) | tree rise 121.6 to 192 MiB | 130.3 MiB (first run: 129.5) |
+| psutil `memory_info().private`, helper idle | within 64 KiB | 0 KiB at three points |
+
+Both runs passed (the first run's raw output was not saved, only its summary line in the log). These results characterise the meter, not Ferrum. Steps 1 and 3 of the validation list are not done yet.
 
 ## Used by
 Experiments and hypotheses that reference this metric are listed in [ov-research-traceability](../ov-research-traceability.md).

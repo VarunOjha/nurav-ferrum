@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 3,
+    "done": 4,
     "total": 14
   },
   "step_order": [
@@ -59,7 +59,7 @@
       "what": "Proof that the meter is accurate.",
       "why": "An unchecked meter could be off by any amount, and every P6 result would carry that error without anyone knowing.",
       "how": "Helper programs use a known amount of memory and CPU. Compare the meter and an independent reader with those values, using tolerances written down before the run.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "A meter is only useful if it is right → helper programs use a known amount of memory and CPU; the meter and an independent reader are compared with those values, with tolerances written down before the run → a meter that fails blocks P6.",
       "check": "Readings fall within the tolerances written beforehand; raw outputs saved as evidence.",
       "script": "scripts/verify/p5.4-prove-meter-accurate.ps1"

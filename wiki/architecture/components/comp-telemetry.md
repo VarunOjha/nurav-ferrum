@@ -9,6 +9,7 @@ sources:
   - raw/research/measurement-methodology.md
   - raw/research/tauri-webview2-capabilities.md
   - raw/evidence/phase-p5-telemetry/check-p5.3.txt
+  - raw/evidence/phase-p5-telemetry/check-p5.4.txt
 related: [ov-arch-data-flows, ov-arch-crate-graph, ov-arch-webview2-integration, comp-webview-manager, comp-resource-manager, comp-benchmark-harness, comp-research-analysis, comp-core, comp-windows-os, comp-app-shell, risk-r05, phase-p5-telemetry, exp-startup, exp-navigation, exp-baseline-footprint]
 approvable: true
 path: crates/telemetry/
@@ -34,6 +35,7 @@ interfaces:
   - "export (p5.1): Record (run, process_sample, tree_sample, sample_gap from p5.3, startup_mark, nav_timing), ExportWriter::create(dir, RunMeta, max_bytes) / write(&Record) / rotate() / finish(), csv::to_csv / from_csv, validate_file / validate_bytes"
   - "Export schema v1 file: crates/telemetry/schema/v1/record.schema.json (JSON Schema 2020-12)"
   - "attribution (p5.2): attribute(host_pid, &[Inventory]) -> ProcessSet {host_pid, members: [Member {pid, kind, source}]}; kind_of(webview2 kind name); the app joins every environment's GetProcessExtendedInfos list (shell first, then site environments) and exposes the set through the debug-only test_processes hook"
+  - "test tool (p5.4): bin ferrum-ground-truth (alloc <MiB>, free, burn <ms>, quit on stdin), used by tests/ground_truth.rs; not part of the app"
   - "app hook (p5.3, debug builds only): test_sample(ticks 1 to 20, interval_ms) runs the sampler over the real set and returns its records"
 connects:
   - to: comp-windows-os
@@ -102,6 +104,7 @@ Built in p5.3 (`crates/telemetry/src/sampler.rs`, the Windows calls in `crates/t
 - **Gaps, never a smaller number.** When the set is refused (the p5.2 finding), the app asks again once after 200 ms; if it is still refused, the moment is a `sample_gap` with reason `set_refused`. A running member that cannot be read, or Ferrum itself missing, gives `counters_unreadable` with the number missing. A gap changes no sampler state.
 - **Interval.** 100 ms to 60 s, 1 s by default (`sample_interval_ms` in ov-arch-configuration). Each reading comes one interval after the one before, plus the time to list the set; a late reading is not caught up with a burst.
 - **Checked** ([check-p5.3](../../raw/evidence/phase-p5-telemetry/check-p5.3.txt)): 8 unit tests on the adding-up rules; the test process reads every counter of itself, and an ended process reads as gone; live, with Ferrum in the per-site-udf mode and two sites open, six readings 500 ms apart (spacing 501 to 502 ms), 17 processes each, every sum equal to its members. In that run the set was refused once and complete on the retry; in an earlier run of the same check the retry was refused too, and the moment was written as a gap. These are checks of the meter in a debug build, not measurement results; accuracy against known amounts is p5.4.
+- **Validated (p5.4)** ([check-p5.4](../../raw/evidence/phase-p5-telemetry/check-p5.4.txt)): against a helper program that uses known amounts (256 MiB written byte by byte, one thread busy for 2 s) and against psutil 7.2.2, and with a Ferrum tab that fills a 128 MiB JavaScript buffer, all 24 comparisons were inside limits committed before the first run (`crates/telemetry/tests/ground-truth-tolerances.json`). The limits and results per counter are on the metric pages (metric-tree-private-commit, metric-tree-private-working-set, metric-tree-working-set, metric-tree-cpu-time, metric-tree-cpu-cycles).
 - **Not built yet.** Writing the samples to files during normal use, and the setting to switch it on, come with p5.11. `win::system_memory()` (the memory-pressure signal) is not built.
 
 ## Unsafe invariants
