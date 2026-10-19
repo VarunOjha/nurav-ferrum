@@ -5677,6 +5677,16 @@
         "p5.15",
         "Q-229"
       ]
+    },
+    {
+      "id": "b7451d2",
+      "kind": "commit",
+      "title": "Commit b7451d2",
+      "summary": "Task p5.14: the end-of-phase gate for Phase 5, its review check and your hand checklist.",
+      "status": "Done",
+      "related": [
+        "p5.14"
+      ]
     }
   ]
 }

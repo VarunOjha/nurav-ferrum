@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:0aa7921993dbf62eae9452927cc584bd196f1fb9a8140b2a08d58ce9aa026230"
+    "content_hash": "sha256:6f3bb7244216c1e0fdf2b23f038287dce01ba5c981bc021caf6603874119b3e5"
   },
   "entries": [
     {
@@ -6436,6 +6436,31 @@
       "tags": [
         "approvals",
         "blocklist"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-14-prepared",
+      "date": "2026-10-19",
+      "time": "02:07",
+      "title": "End-of-phase review prepared: open points settled, gate written",
+      "done": "Every 'not checked yet' point aimed at Phase 5 was either answered from this phase's evidence or moved to a later phase with its reason (your owed hand checks and the GitHub-upload items to P6, benchmark-side measurements to P6, the custom title bar to P7). The end-of-phase gate and your hand checklist are written; the gate has not run yet.",
+      "next": "You re-approve 11 pages, run the gate with the PC left alone, do the hand checks and sign off Phase 5.",
+      "decisions": [],
+      "approvals": [
+        {
+          "what": "11 pages changed by the sweep",
+          "status": "Waiting for you"
+        }
+      ],
+      "commit": "b7451d2",
+      "covers": [
+        "## [2026-10-19] plan | p5.14 exit review prepared: open points settled, gate and hand checklist written"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Planned",
+      "tags": [
+        "phases",
+        "check scripts"
       ]
     }
   ]

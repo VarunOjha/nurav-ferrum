@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:05c9c022b7ed20813447d40a576e0c4b06a172c3e93e1658d8ddbda3674e8b3d"
+    "content_hash": "sha256:35c589683a1c5a16ac465fb6b22bfe6359b32d4f33f20c5bc9a41e4cc4e2d737"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -21,7 +21,7 @@
     },
     {
       "item": "Approvals",
-      "state": "All up to date",
+      "state": "11 pages wait for your re-approval (the end-of-phase sweep)",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -35,21 +35,49 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "14 of 15 tasks done"
+        "state": "14 of 15 tasks done; the end-of-phase review is ready"
       },
       {
-        "item": "Next task",
-        "state": "End-of-phase review",
+        "item": "Open points aimed at P5",
+        "state": "All answered or moved, each with its reason"
+      },
+      {
+        "item": "Your part",
+        "state": "Re-approve 11 pages, run the gate, do the hand checks, sign off",
         "ref": "p5.14"
       }
     ],
-    "why": "Nothing to run yet; Claude settles the remaining open points and writes the end-of-phase check, then asks you to run it.",
-    "script": null,
-    "tell_claude": "Nothing needed yet"
+    "why": "Settling the open points touched 11 approved pages (four are the plans and sign-offs of P2 to P4; only the notes on what was checked changed). The gate then reruns every Phase 5 check, the earlier test suites and a release build on one commit. Some tests press real keys, so the PC must be left alone while it runs.",
+    "script": {
+      "path": "scripts/gates/p5-gate.ps1",
+      "parts": [
+        {
+          "code": "Part 1",
+          "explains": "Checks that your approvals for Phase 5 are current (so re-approve the 11 pages first)."
+        },
+        {
+          "code": "Part 2",
+          "explains": "Runs the check of every Phase 5 task again."
+        },
+        {
+          "code": "Part 3",
+          "explains": "On one commit: code checks, all automatic tests, the licence check, the accuracy and cost tests, the file format and network log tests, the earlier test suites, and a release build in its own folder (your own Ferrum is not touched)."
+        },
+        {
+          "code": "Part 4",
+          "explains": "Lists your part: the hand checklist and your review."
+        },
+        {
+          "code": "-SaveEvidence",
+          "explains": "Saves each result as an evidence file, with personal values masked."
+        }
+      ]
+    },
+    "tell_claude": "First \"Re-approve the 11\"; after the gate \"P5 gate passed\" or the FAIL or WAIT lines; then the checklist results item by item, and whether P5 is signed off"
   },
   "questions_for_you": {
     "open": 16,

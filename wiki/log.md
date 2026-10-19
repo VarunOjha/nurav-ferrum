@@ -3362,3 +3362,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-19-s08-p5-15-reapprovals.md]
 - result: Owner: "Re approve". Recorded approved for the three keys with tools/approvals_record.py. All approvals current.
 - next: p5.14 exit review (In-flight written).
+
+## [2026-10-19] plan | p5.14 exit review prepared: open points settled, gate and hand checklist written
+- session: s08
+- time: 02:07
+- pages: [phase-p5-telemetry, phase-p2-minimal-container, phase-p3-tabs-sessions, phase-p4-security, adr-0008, adr-0011, adr-0015, comp-app-shell, comp-benchmark-harness, ov-arch-data-flows, ov-arch-trust-boundaries, qual-ci-plan, qual-security-testing-plan, qual-testing-strategy, metric-loaf-blocking, metric-nav-latency, metric-policy-eval-latency, metric-tree-cpu-cycles, risk-r02, risk-r08, risk-r20]
+- sources: [raw/evidence/phase-p5-telemetry/check-p5.3.txt, raw/evidence/phase-p5-telemetry/check-p5.6.txt, raw/evidence/phase-p5-telemetry/check-p5.9.txt, raw/evidence/phase-p5-telemetry/netlog-coverage-p5.10.json, raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md]
+- result: Every `UNVERIFIED` tag and `verify_in` claim aimed at P5 (32 tags, 39 claims, 21 pages) answered from P5 evidence or moved with its reason (commit 92cee7a): hand checks still owed and first-push items to P6, harness-side measurements to P6, custom title bar to P7. scripts/gates/p5-gate.ps1 and scripts/verify/p5.14-gate-review.ps1 replace their P0 drafts; docs/testing/manual-checklist-p5.md written (commit b7451d2). The gate has not run. Stales approval of adr-0008, adr-0011, adr-0015, comp-app-shell, phase-p2-minimal-container (+#exit), phase-p3-tabs-sessions (+#exit), phase-p4-security (+#exit), phase-p5-telemetry.
+- next: owner re-approves the 11 keys, runs the gate with the PC left alone, does the hand checks, reviews and approves phase-p5-telemetry#exit; then pause.
