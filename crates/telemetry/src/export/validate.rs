@@ -5,7 +5,9 @@ use std::fmt;
 use std::io::BufRead;
 use std::path::Path;
 
-use super::records::{GapReason, NavTiming, Record, RunMeta, SCHEMA_VERSION};
+use super::records::{
+    GapReason, LifecycleTransition, LifecycleTrigger, NavTiming, Record, RunMeta, SCHEMA_VERSION,
+};
 
 /// Why a file or record was refused. `line` is 1-based; 0 means the file as a whole.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -147,7 +149,32 @@ pub fn validate_record(record: &Record) -> Result<(), String> {
         },
         Record::StartupMark(_) => Ok(()),
         Record::NavTiming(n) => validate_nav(n),
+        Record::LifecycleTransition(l) => validate_transition(l),
     }
+}
+
+fn validate_transition(l: &LifecycleTransition) -> Result<(), String> {
+    use LifecycleTrigger as T;
+    match (l.from, l.to) {
+        (None, None) => return Err("from and to cannot both be null".into()),
+        (Some(a), Some(b)) if a == b => return Err(format!("from and to are both {a:?}")),
+        _ => {}
+    }
+    if (l.from.is_none()) != matches!(l.trigger, T::Opened | T::SessionRestore) {
+        return Err(
+            "from is null exactly when the tab is opened or restored from the session".into(),
+        );
+    }
+    if (l.to.is_none()) != (l.trigger == T::Closed) {
+        return Err("to is null exactly when the tab is closed".into());
+    }
+    if l.policy.is_some() != (l.trigger == T::PolicySelected) {
+        return Err("policy is set exactly for policy_selected".into());
+    }
+    if l.guard.is_some() != (l.trigger == T::GuardFailed) {
+        return Err("guard is set exactly for guard_failed".into());
+    }
+    Ok(())
 }
 
 /// Parses one line strictly: unknown fields, wrong types and unknown record types are refused.

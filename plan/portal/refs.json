@@ -1090,7 +1090,7 @@
       "kind": "task",
       "title": "P5 task: Record tab state changes",
       "summary": "Smart tab sleeping in P7 needs a record of every tab state change → define the record (from, to, why, when, which tab) and log hide and show now → P7 plugs in without a new format.",
-      "status": "Not started",
+      "status": "Done",
       "related": [
         "phase-p5-telemetry"
       ]
@@ -3262,7 +3262,7 @@
       "id": "comp-telemetry",
       "kind": "component",
       "title": "Measurement: memory, CPU and timings",
-      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter (accurate, cheap), startup and page-load timing. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
+      "summary": "Inside the app: records memory and CPU of Ferrum's processes, startup and page timings, and tab sleeps and wakes, as data files. Built so far: the file format, counting only Ferrum's processes, the memory and CPU meter, startup and page-load timing, and tab state changes. A cross-check only: cross-browser numbers come from the benchmark harness. Trusted.",
       "status": "Planned",
       "related": [
         "layer-engine"

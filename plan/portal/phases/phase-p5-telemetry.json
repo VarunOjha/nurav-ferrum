@@ -6,7 +6,7 @@
   "summary": "Ferrum learns to measure itself: memory, CPU, startup and page-load timing, plus a network log of addresses and timings only. Each meter is checked against helper programs with known usage; a meter that fails blocks P6. You chose: full addresses kept, log off unless switched on, logs deleted after 14 days.",
   "status": "In progress",
   "progress": {
-    "done": 7,
+    "done": 8,
     "total": 14
   },
   "step_order": [
@@ -103,7 +103,7 @@
       "what": "A record format for tab state changes (from, to, why, when, which tab), logged now for hide and show.",
       "why": "If tab sleeping in P7 needed a new record format, earlier data could not be compared with later data, and the measuring code would change mid-study.",
       "how": "Add the tab-change record as one more type in the result file format, and have Ferrum write one each time a tab is hidden or shown.",
-      "status": "Not started",
+      "status": "Done",
       "chain": "Smart tab sleeping in P7 needs a record of every tab state change → define the record (from, to, why, when, which tab) and log hide and show now → P7 plugs in without a new format.",
       "check": "Switching tabs produces hide and show records that pass the format check.",
       "script": "scripts/verify/p5.8-record-tab-state.ps1"

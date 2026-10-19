@@ -89,6 +89,41 @@ pub fn note_window_visible(app: &AppHandle) {
     }
 }
 
+/// The tab lifecycle log and the transition records written so far (p5.8; the newest 1000 are kept).
+#[derive(Default)]
+pub struct Lifecycle(
+    pub  Mutex<(
+        ferrum_telemetry::lifecycle::LifecycleLog,
+        Vec<ferrum_telemetry::export::Record>,
+    )>,
+);
+
+/// Milliseconds on the run clock (since Ferrum's process was created), for in-app records.
+fn run_ms() -> u64 {
+    static CREATED: std::sync::OnceLock<f64> = std::sync::OnceLock::new();
+    let created =
+        *CREATED.get_or_init(|| process_created_unix_ms().unwrap_or_else(|_| unix_now_ms()));
+    (unix_now_ms() - created).max(0.0).floor() as u64
+}
+
+/// Keeps a lifecycle record (p5.8).
+fn keep_transition(
+    app: &AppHandle,
+    f: impl FnOnce(
+        &mut ferrum_telemetry::lifecycle::LifecycleLog,
+    ) -> Option<ferrum_telemetry::export::Record>,
+) {
+    let state = app.state::<Lifecycle>();
+    let mut g = state.0.lock().unwrap();
+    let (log, records) = &mut *g;
+    if let Some(r) = f(log) {
+        if records.len() >= 1000 {
+            records.remove(0);
+        }
+        records.push(r);
+    }
+}
+
 /// Each tab's navigations as WebView2 reported them, with wall-clock times (p5.7, navigation timing).
 #[derive(Default)]
 pub struct NavTrackers(pub Mutex<HashMap<u64, ferrum_telemetry::navigation::NavTracker>>);
@@ -792,13 +827,18 @@ fn apply_visibility(app: &AppHandle) {
         )
     };
     let rect = app.get_window("main").and_then(|w| content_rect(&w).ok());
+    let t = run_ms();
     VIEWS.with(|m| {
         for (id, v) in m.borrow().iter() {
-            let show = Some(*id) == active && !covered;
+            let selected = Some(*id) == active;
+            let show = selected && !covered;
             if show && let Some(r) = rect {
                 let _ = v.set_bounds(r);
             }
             let _ = v.set_visible(show);
+            keep_transition(app, |log| {
+                log.shown(*id, show, selected, selected && covered, t)
+            });
         }
     });
 }
@@ -891,6 +931,7 @@ pub fn close_tab(app: &AppHandle, id: u64) -> bool {
         if let Some(v) = view {
             v.close();
         }
+        keep_transition(&h, |log| log.closed(id, run_ms()));
         apply_visibility(&h);
         restore_focus(&h);
     });
@@ -1373,6 +1414,21 @@ fn process_created_unix_ms() -> Result<f64, String> {
         ),
         other => Err(format!("cannot read Ferrum's own process: {other:?}")),
     }
+}
+
+/// Test hook (debug builds only): the `lifecycle_transition` records written so far (p5.8), oldest first, and the
+/// export checker's verdict on each one that it refuses (none expected).
+#[tauri::command]
+pub fn test_lifecycle(app: AppHandle) -> Result<Value, String> {
+    if !cfg!(debug_assertions) {
+        return Err("not available in release builds".into());
+    }
+    let records = app.state::<Lifecycle>().0.lock().unwrap().1.clone();
+    let refused: Vec<String> = records
+        .iter()
+        .filter_map(|r| ferrum_telemetry::export::validate::validate_record(r).err())
+        .collect();
+    Ok(json!({"records": records, "refused": refused}))
 }
 
 /// Test hook (debug builds only): the `nav_timing` record of tab `tab`'s last finished navigation (p5.7): start,

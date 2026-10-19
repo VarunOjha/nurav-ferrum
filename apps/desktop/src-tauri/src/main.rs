@@ -207,6 +207,7 @@ fn main() {
         .manage(MainHwnd::default())
         .manage(content::WindowShown::default())
         .manage(content::NavTrackers::default())
+        .manage(content::Lifecycle::default())
         .manage(TabsState::default())
         .manage(external::PendingExternal::default())
         .manage(external::PopupTimes::default())
@@ -246,6 +247,7 @@ fn main() {
             content::test_sample,
             content::test_startup,
             content::test_nav_timing,
+            content::test_lifecycle,
             recovery::test_crash_tab,
             content::tab_new_private,
             content::site_data_clear,

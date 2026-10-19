@@ -1,4 +1,4 @@
-//! p5.1 tests (p5.3 added the sample_gap record): every record type round-trips through JSONL and CSV; the writer rotates and finishes files safely;
+//! p5.1 tests (p5.3 added the sample_gap record, p5.8 lifecycle_transition): every record type round-trips through JSONL and CSV; the writer rotates and finishes files safely;
 //! the checker accepts what the writer makes and refuses each corrupted fixture; the JSON Schema matches the types.
 
 use std::path::{Path, PathBuf};
@@ -118,6 +118,42 @@ fn samples(t: u64) -> Vec<Record> {
             redirect_count: 0,
             outcome: NavOutcome::Failed,
         }),
+        Record::LifecycleTransition(LifecycleTransition {
+            t_ms: t,
+            tab: 3,
+            from: None,
+            to: Some(LifecycleState::Active),
+            trigger: LifecycleTrigger::Opened,
+            policy: None,
+            guard: None,
+        }),
+        Record::LifecycleTransition(LifecycleTransition {
+            t_ms: t,
+            tab: 3,
+            from: Some(LifecycleState::Idle),
+            to: Some(LifecycleState::DiscardCandidate),
+            trigger: LifecycleTrigger::PolicySelected,
+            policy: Some(LifecyclePolicy::Adaptive),
+            guard: None,
+        }),
+        Record::LifecycleTransition(LifecycleTransition {
+            t_ms: t,
+            tab: 3,
+            from: Some(LifecycleState::DiscardCandidate),
+            to: Some(LifecycleState::Idle),
+            trigger: LifecycleTrigger::GuardFailed,
+            policy: None,
+            guard: Some(LifecycleGuard::G10),
+        }),
+        Record::LifecycleTransition(LifecycleTransition {
+            t_ms: t,
+            tab: 3,
+            from: Some(LifecycleState::Background),
+            to: None,
+            trigger: LifecycleTrigger::Closed,
+            policy: None,
+            guard: None,
+        }),
     ]
 }
 
@@ -153,7 +189,7 @@ fn every_record_type_round_trips_through_json() {
         assert_eq!(&parse_line(&line).unwrap(), r, "{line}");
     }
     let kinds: std::collections::BTreeSet<_> = all.iter().map(Record::kind).collect();
-    assert_eq!(kinds.len(), 6, "a sample of every record type");
+    assert_eq!(kinds.len(), 7, "a sample of every record type");
 }
 
 #[test]
@@ -163,7 +199,8 @@ fn every_table_round_trips_through_csv() {
             .into_iter()
             .filter(|r| r.kind() == kind)
             .collect();
-        assert_eq!(rows.len(), 2, "{kind}");
+        let want = if kind == "lifecycle_transition" { 4 } else { 2 };
+        assert_eq!(rows.len(), want, "{kind}");
         let text = to_csv("test-run_1", kind, &rows).unwrap();
         let (run, back) = from_csv(kind, &text).unwrap();
         assert_eq!(run.as_deref(), Some("test-run_1"));
@@ -328,7 +365,7 @@ fn writer_refuses_bad_input_and_reused_run_ids() {
 fn the_good_fixture_is_accepted() {
     let s = validate_file(&fixture("fixture-good.0000.jsonl")).unwrap();
     assert_eq!(s.run.run_id, "fixture-good");
-    assert_eq!(s.records.len(), 5);
+    assert_eq!(s.records.len(), 6);
 }
 
 #[test]
@@ -353,6 +390,7 @@ fn every_corrupted_fixture_is_refused() {
         ("corrupt-empty-line.jsonl", "empty line"),
         ("corrupt-not-json.jsonl", "line 3"),
         ("corrupt-gap-missing.jsonl", "missing must be null"),
+        ("corrupt-transition-same-state.jsonl", "both Background"),
     ];
     let mut seen = 0;
     for entry in std::fs::read_dir(fixture("")).unwrap() {
@@ -517,6 +555,89 @@ fn json_schema_matches_the_types() {
         enum_of("reason"),
         names(
             reasons
+                .iter()
+                .map(|k| serde_json::to_value(k).unwrap())
+                .collect()
+        )
+    );
+    let to_names = |vals: Vec<Value>| -> Vec<String> {
+        vals.into_iter()
+            .map(|v| v.as_str().unwrap().to_string())
+            .collect()
+    };
+    use LifecycleState as L;
+    let states = [
+        L::Active,
+        L::Background,
+        L::Idle,
+        L::DiscardCandidate,
+        L::Discarded,
+        L::Restoring,
+    ];
+    let states = to_names(
+        states
+            .iter()
+            .map(|k| serde_json::to_value(k).unwrap())
+            .collect(),
+    );
+    assert_eq!(enum_of("from"), states);
+    assert_eq!(enum_of("to"), states);
+    use LifecycleTrigger as T;
+    let triggers = [
+        T::Opened,
+        T::SessionRestore,
+        T::UserSwitch,
+        T::ShellCover,
+        T::WindowMinimized,
+        T::WindowRestored,
+        T::IdleTimeout,
+        T::Activity,
+        T::PolicySelected,
+        T::SelectionWithdrawn,
+        T::GuardFailed,
+        T::DiscardCommitted,
+        T::RestoreCompleted,
+        T::RestoreFailed,
+        T::Crash,
+        T::Closed,
+    ];
+    assert_eq!(
+        enum_of("trigger"),
+        to_names(
+            triggers
+                .iter()
+                .map(|k| serde_json::to_value(k).unwrap())
+                .collect()
+        )
+    );
+    use LifecyclePolicy as Po;
+    let policies = [Po::None, Po::FixedIdle, Po::MemoryPressure, Po::Adaptive];
+    assert_eq!(
+        enum_of("policy"),
+        to_names(
+            policies
+                .iter()
+                .map(|k| serde_json::to_value(k).unwrap())
+                .collect()
+        )
+    );
+    use LifecycleGuard as G;
+    let guards = [
+        G::G1,
+        G::G2,
+        G::G3,
+        G::G4,
+        G::G5,
+        G::G6,
+        G::G7,
+        G::G8,
+        G::G9,
+        G::G10,
+    ];
+    assert_eq!(
+        enum_of("guard"),
+        to_names(
+            guards
                 .iter()
                 .map(|k| serde_json::to_value(k).unwrap())
                 .collect()

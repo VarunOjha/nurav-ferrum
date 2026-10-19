@@ -5,6 +5,7 @@ title: "Telemetry engine (in-app process sampling, events, exports)"
 status: planned
 updated: 2026-10-18
 sources:
+  - raw/evidence/phase-p5-telemetry/check-p5.8.txt
   - raw/evidence/phase-p5-telemetry/check-p5.7.txt
   - raw/00-master-prompt.md
   - raw/research/measurement-methodology.md
@@ -25,7 +26,7 @@ responsibilities:
   - "Collect resource metrics: per-process private commit, working set (secondary), CPU time, cycle time over the WebView2 environment PID set (master prompt 4)"
   - "Track navigation performance from webview-manager navigation events and the page's Navigation Timing entry (master prompt 4)"
   - "Measure startup latency marks: process creation, window visible, first navigation completed (master prompt 4)"
-  - "Record lifecycle transitions from the resource manager (master prompt 4)"
+  - "Record lifecycle transitions: hide and show from P5, the resource manager's from P7 (master prompt 4)"
   - "Export structured datasets as JSONL/CSV with run metadata and config hash (master prompt 4)"
   - "Track experiment metadata: versions (app, WebView2 runtime, OS), config_sha256, run id (master prompt 4)"
   - "Provide the reusable Windows process-sampling library (win module) shared with the benchmark harness"
@@ -35,11 +36,12 @@ interfaces:
   - "win::system_memory() -> SystemMemory"
   - "Recorder: record(Event), flush(), export(dir)"
   - "sampler (p5.3): SamplerConfig::new(interval_ms, 100 to 60000, default 1000); Sampler::tick(t_ms, set or why refused, read) -> process_sample records plus one tree_sample, or one sample_gap; tree_private_commit(samples); peak_private_commit(series), never a sum of per-process peaks"
-  - "export (p5.1): Record (run, process_sample, tree_sample, sample_gap from p5.3, startup_mark, nav_timing), ExportWriter::create(dir, RunMeta, max_bytes) / write(&Record) / rotate() / finish(), csv::to_csv / from_csv, validate_file / validate_bytes"
+  - "export (p5.1): Record (run, process_sample, tree_sample, sample_gap from p5.3, startup_mark, nav_timing, lifecycle_transition from p5.8), ExportWriter::create(dir, RunMeta, max_bytes) / write(&Record) / rotate() / finish(), csv::to_csv / from_csv, validate_file / validate_bytes"
   - "Export schema v1 file: crates/telemetry/schema/v1/record.schema.json (JSON Schema 2020-12)"
   - "attribution (p5.2): attribute(host_pid, &[Inventory]) -> ProcessSet {host_pid, members: [Member {pid, kind, source}]}; kind_of(webview2 kind name); the app joins every environment's GetProcessExtendedInfos list (shell first, then site environments) and exposes the set through the debug-only test_processes hook"
   - "startup (p5.6): StartupTimes {five wall-clock times}; startup_marks(times, tab) -> startup_mark records counted from process creation, or why the chain was refused; filetime_to_unix_ms; app hook test_startup (debug builds only)"
   - "navigation (p5.7): NavTracker per tab (started(nav_id, redirected, allowed, at), completed(nav_id, final address, success, web error status, at), last()); nav_record(finished, page entry, tab, run start, now) -> nav_timing record, or why it was refused; origin_of(address); app hook test_nav_timing(tab) (debug builds only)"
+  - "lifecycle (p5.8): LifecycleLog (shown(tab, shown, selected, covered, t_ms) and closed(tab, t_ms) -> a lifecycle_transition record on a real change only; state(tab)); app hook test_lifecycle (debug builds only) returns the records and any the checker refuses"
   - "test tool (p5.4): bin ferrum-ground-truth (alloc <MiB>, free, burn <ms>, quit on stdin), used by tests/ground_truth.rs; not part of the app"
   - "app hook (p5.3, debug builds only): test_sample(ticks 1 to 20, interval_ms) runs the sampler over the real set and returns its records and, since p5.5, list_ms (how long each first listing of the set took)"
 connects:
@@ -84,12 +86,12 @@ Metric rules taken from the measurement note:
 Built in p5.1 (`crates/telemetry/src/export/`). One JSON object per line (JSONL); the `type` field names the record.
 
 - **Run line first.** Every file starts with a `run` record: `schema_version` 1, `run_id`, `file_seq`, start time, Ferrum version, git commit and whether the tree was dirty, Windows build, WebView2 runtime, `config_sha256` (ov-arch-configuration) and `machine_id` (which machine-inventory record describes the PC). So each file can be read alone and every number traces to its setup.
-- **Records.** `process_sample` (one process: private commit, working set, private working set when available, page faults, user and kernel CPU time, cycles; the process is named by pid plus creation time), `tree_sample` (the sum over the attributed set: the headline series), `sample_gap` (p5.3: a moment with no sum, because the set was refused or a running member could not be read), `startup_mark` (the Q-115 chain: process created, window visible, shell first paint, tab FCP, tab LCP) and `nav_timing` (offsets after navigation start, origin relation, redirect count, outcome). Lifecycle transitions are added by p5.8. Absent values are written as `null`, never left out.
+- **Records.** `process_sample` (one process: private commit, working set, private working set when available, page faults, user and kernel CPU time, cycles; the process is named by pid plus creation time), `tree_sample` (the sum over the attributed set: the headline series), `sample_gap` (p5.3: a moment with no sum, because the set was refused or a running member could not be read), `startup_mark` (the Q-115 chain: process created, window visible, shell first paint, tab FCP, tab LCP) `nav_timing` (offsets after navigation start, origin relation, redirect count, outcome) and `lifecycle_transition` (p5.8: a tab's state before and after, trigger, policy and guard). Absent values are written as `null`, never left out.
 - **Strict reading.** Unknown fields and unknown record types are refused; `t_ms` (milliseconds on the run clock) never goes backwards; a file must end with a line break.
 - **Safe files.** The writer writes `<run_id>.<seq>.jsonl.part`, rotates by size, and renames to `<run_id>.<seq>.jsonl` only after a flush and sync to disk. A crash leaves a `.part` file, which the checker refuses. A run id cannot be reused.
 - **CSV.** One table per record type with `run_id` first; the run line has no table (it is read from the JSONL). Values are numbers, `true`/`false` and snake_case enum names, so no quoting is needed.
 - **Version rule.** v1 may gain record types while P5 is in progress; it is frozen at the P5 exit gate, and any later change bumps the version.
-- **Checks.** `cargo test -p ferrum-telemetry export::` (10 tests: round trips, rotation, crash file, twelve damaged fixtures since p5.3 in `crates/telemetry/tests/fixtures/export-v1/`, the JSON Schema compared with the types); `scripts/verify/p5.1-export-file-format.ps1`.
+- **Checks.** `cargo test -p ferrum-telemetry export::` (10 tests: round trips, rotation, crash file, thirteen damaged fixtures since p5.8 in `crates/telemetry/tests/fixtures/export-v1/`, the JSON Schema compared with the types); `scripts/verify/p5.1-export-file-format.ps1`.
 
 ## Process set (p5.2)
 
@@ -142,6 +144,17 @@ Built in p5.7 (`crates/telemetry/src/navigation.rs`; the app's `NavTrackers`, `t
 - **Origin label:** the origin of the page the navigation ended on against the tab's previous page (the end of its last navigation that loaded). A tab's first page, and a page without a host (`about:blank`, `data:`), counts as another origin.
 - **Checked** ([check-p5.7](../../raw/evidence/phase-p5-telemetry/check-p5.7.txt)): 5 unit tests; live, ten loads (the six P2 redirect pages 301, 302, 303, 307, 308 and the two-hop chain; a redirect to another site; plain loads to another and to the same site) each gave one record with the right redirect count and origin label and the page times in order. The page's own count matched the host's for every same-site redirect and was 0 for the redirect to site-b (host 1). First response 4.7 to 16.3 ms and load 14.0 to 92.4 ms after the page's start; in the chain row the completion (25.7 ms) read before the load event (26.0 ms), the two-clock effect above (debug build, local test server, one run, not a result). The definition is on metric-nav-latency.
 - **Not yet:** recording into a file during normal use (p5.11); back/forward and cached loads (the bfcache question on metric-nav-latency).
+
+## Lifecycle transitions (p5.8)
+
+Built in p5.8 (`crates/telemetry/src/lifecycle.rs`, the record in `crates/telemetry/src/export/records.rs`; the app's `Lifecycle` state, `keep_transition` and `test_lifecycle` hook in `apps/desktop/src-tauri/src/content.rs`). One `lifecycle_transition` record each time a tab changes state, so P7's tab sleeping uses a format that exists before it starts.
+
+- **Record:** `t_ms` (run clock), `tab`, `from` and `to` (one of the six states of ov-arch-lifecycle-state-machine: active, background, idle, discard_candidate, discarded, restoring; `from` is null when the tab opens, `to` when it closes), `trigger` (16 values: the ones P5 uses, `opened`, `user_switch`, `shell_cover`, `closed`, and the ones the design names for P7, such as `idle_timeout`, `policy_selected`, `guard_failed`, `crash`), `policy` (for `policy_selected` only) and `guard` (for `guard_failed` only; the guards G1 to G10 by name, since a CSV cell holds one word).
+- **Checker rules:** `from` and `to` differ and are not both null; `from` is null exactly for `opened` and `session_restore`, `to` exactly for `closed`; `policy` and `guard` are set exactly for their trigger.
+- **What P5 records:** whether each tab's view is shown (active) or hidden (background), from `apply_visibility`, and closing, from `close_tab`. A record is written only on a change. The trigger is `shell_cover` when the selected tab is hidden because the shell's error panel covers it (and when it is shown again), otherwise `user_switch`. A tab gets its first record when its view exists, so a tab whose view is still being made has none yet. The app keeps the newest 1000 records in memory.
+- **Differs from the design sketch:** rule 6 of ov-arch-lifecycle-state-machine lists `reason`, `guard_results` and `t_mono`. v1 has `trigger`, the single guard that blocked, and `t_ms` on the run clock. If P7 needs every guard's result per transition, that is a format change (a version bump after the P5 exit).
+- **Checked** ([check-p5.8](../../raw/evidence/phase-p5-telemetry/check-p5.8.txt)): the file-format tests with the new record (seven record types, six tables, thirteen damaged fixtures refused, schema equal to the types); 3 unit tests on the lifecycle rules; live, two tabs switched back and forth and one closed gave 9 records (each tab opened, two switches each way, b closed and a shown again), all accepted by the checker, in time order. The `shell_cover` trigger is checked by a unit test only.
+- **Not yet:** window minimise and restore (the window does not hide its views today), crash transitions, writing the records into a file during normal use (p5.11).
 
 ## Unsafe invariants
 

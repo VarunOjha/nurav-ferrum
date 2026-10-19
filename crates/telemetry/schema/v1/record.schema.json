@@ -20,6 +20,9 @@
     },
     {
       "$ref": "#/$defs/nav_timing"
+    },
+    {
+      "$ref": "#/$defs/lifecycle_transition"
     }
   ],
   "$defs": {
@@ -386,6 +389,119 @@
             "failed",
             "cancelled"
           ]
+        }
+      }
+    },
+    "lifecycle_transition": {
+      "description": "A tab moved from one lifecycle state to another (p5.8); from is null when the tab opens, to when it closes. P5 records active and background; the other states and triggers are P7's.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "t_ms",
+        "tab",
+        "from",
+        "to",
+        "trigger",
+        "policy",
+        "guard"
+      ],
+      "properties": {
+        "type": {
+          "const": "lifecycle_transition"
+        },
+        "t_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tab": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "from": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "active",
+            "background",
+            "idle",
+            "discard_candidate",
+            "discarded",
+            "restoring",
+            null
+          ]
+        },
+        "to": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "active",
+            "background",
+            "idle",
+            "discard_candidate",
+            "discarded",
+            "restoring",
+            null
+          ]
+        },
+        "trigger": {
+          "type": "string",
+          "enum": [
+            "opened",
+            "session_restore",
+            "user_switch",
+            "shell_cover",
+            "window_minimized",
+            "window_restored",
+            "idle_timeout",
+            "activity",
+            "policy_selected",
+            "selection_withdrawn",
+            "guard_failed",
+            "discard_committed",
+            "restore_completed",
+            "restore_failed",
+            "crash",
+            "closed"
+          ]
+        },
+        "policy": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "none",
+            "fixed_idle",
+            "memory_pressure",
+            "adaptive",
+            null
+          ],
+          "description": "For policy_selected only."
+        },
+        "guard": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "user_exclusion",
+            "download",
+            "media",
+            "unsaved_form",
+            "capture",
+            "devtools",
+            "recent_interaction",
+            "pending_prompt",
+            "navigation",
+            "storage_activity",
+            null
+          ],
+          "description": "For guard_failed only: guards G1 to G10 of the lifecycle design, by name."
         }
       }
     }

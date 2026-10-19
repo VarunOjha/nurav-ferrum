@@ -4,3 +4,4 @@
 {"type":"sample_gap","t_ms":5,"reason":"set_refused","missing":null}
 {"type":"startup_mark","t_ms":10,"mark":"window_visible","tab":null}
 {"type":"nav_timing","t_ms":20,"tab":1,"nav_id":1,"start_ms":12.5,"response_ms":3.0,"dom_content_loaded_ms":5.5,"load_ms":7.0,"complete_ms":7.25,"origin":"same_origin","redirect_count":0,"outcome":"completed"}
+{"type":"lifecycle_transition","t_ms":30,"tab":1,"from":"active","to":"background","trigger":"user_switch","policy":null,"guard":null}

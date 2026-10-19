@@ -27,6 +27,7 @@
     "allow-test-sample",
     "allow-test-startup",
     "allow-test-nav-timing",
+    "allow-test-lifecycle",
     "allow-tab-new-private",
     "allow-site-data-clear",
     "allow-test-focus",

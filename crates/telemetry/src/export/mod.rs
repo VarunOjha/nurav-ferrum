@@ -7,8 +7,9 @@ pub mod validate;
 pub mod writer;
 
 pub use records::{
-    GapReason, NavOutcome, NavTiming, OriginRelation, ProcessKind, ProcessSample, Record, RunMeta,
-    SCHEMA_VERSION, SampleGap, StartupMark, StartupMarkKind, TreeSample,
+    GapReason, LifecycleGuard, LifecyclePolicy, LifecycleState, LifecycleTransition,
+    LifecycleTrigger, NavOutcome, NavTiming, OriginRelation, ProcessKind, ProcessSample, Record,
+    RunMeta, SCHEMA_VERSION, SampleGap, StartupMark, StartupMarkKind, TreeSample,
 };
 pub use validate::{FileSummary, ValidationError, validate_bytes, validate_file};
 pub use writer::ExportWriter;

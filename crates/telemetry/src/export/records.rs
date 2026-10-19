@@ -4,8 +4,8 @@
 //! (code version, Windows build, WebView2 runtime, settings fingerprint, machine). Unknown fields are refused, so a
 //! typo or a newer writer is caught instead of being read silently.
 //!
-//! Version rule: v1 may gain record types while P5 is in progress (p5.3 added `sample_gap`, p5.8 adds lifecycle
-//! transitions); it is frozen at the P5 exit gate. After that any change bumps [`SCHEMA_VERSION`].
+//! Version rule: v1 may gain record types while P5 is in progress (p5.3 added `sample_gap`, p5.8 added
+//! `lifecycle_transition`); it is frozen at the P5 exit gate. After that any change bumps [`SCHEMA_VERSION`].
 
 use serde::{Deserialize, Serialize};
 
@@ -28,6 +28,8 @@ pub enum Record {
     StartupMark(StartupMark),
     /// The timing of one finished navigation.
     NavTiming(NavTiming),
+    /// A tab moved from one lifecycle state to another (p5.8).
+    LifecycleTransition(LifecycleTransition),
 }
 
 impl Record {
@@ -40,6 +42,7 @@ impl Record {
             Record::SampleGap(_) => "sample_gap",
             Record::StartupMark(_) => "startup_mark",
             Record::NavTiming(_) => "nav_timing",
+            Record::LifecycleTransition(_) => "lifecycle_transition",
         }
     }
 
@@ -52,6 +55,7 @@ impl Record {
             Record::SampleGap(r) => Some(r.t_ms),
             Record::StartupMark(r) => Some(r.t_ms),
             Record::NavTiming(r) => Some(r.t_ms),
+            Record::LifecycleTransition(r) => Some(r.t_ms),
         }
     }
 }
@@ -252,4 +256,130 @@ pub struct NavTiming {
     pub redirect_count: u32,
     /// How it ended.
     pub outcome: NavOutcome,
+}
+
+/// A tab's lifecycle state (ov-arch-lifecycle-state-machine section 1). P5 records `active` and `background` only;
+/// the others are P7's, defined now so that P7 needs no new format.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LifecycleState {
+    /// The visible, selected tab.
+    Active,
+    /// Not shown: another tab is selected, the window is minimised, or the shell covers the tab.
+    Background,
+    /// Background and quiet; resources reclaimed without losing the page ("sleep").
+    Idle,
+    /// Chosen for discard; guards being checked.
+    DiscardCandidate,
+    /// The web view is closed; only the snapshot remains.
+    Discarded,
+    /// The web view is being made again from the snapshot.
+    Restoring,
+}
+
+/// Why a tab changed state.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LifecycleTrigger {
+    /// The tab was opened (`from` is null).
+    Opened,
+    /// The tab was restored from the saved session.
+    SessionRestore,
+    /// The user selected this tab or another one.
+    UserSwitch,
+    /// The shell's error panel started or stopped covering the tab.
+    ShellCover,
+    /// The window was minimised.
+    WindowMinimized,
+    /// The window was shown again after being minimised.
+    WindowRestored,
+    /// Quiet for the idle time (P7).
+    IdleTimeout,
+    /// Activity in a sleeping tab (P7).
+    Activity,
+    /// The lifecycle policy chose the tab (P7; `policy` names it).
+    PolicySelected,
+    /// The policy withdrew its choice (P7).
+    SelectionWithdrawn,
+    /// A safety guard blocked the next step (P7; `guard` names it).
+    GuardFailed,
+    /// The final guard check passed and the snapshot was saved (P7).
+    DiscardCommitted,
+    /// The restored page finished loading (P7).
+    RestoreCompleted,
+    /// The web view could not be made again (P7).
+    RestoreFailed,
+    /// The tab's page process ended (crash).
+    Crash,
+    /// The tab was closed (`to` is null).
+    Closed,
+}
+
+/// The lifecycle policy that chose a tab (ov-arch-lifecycle-state-machine section 4).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LifecyclePolicy {
+    /// No lifecycle management (hide only).
+    None,
+    /// Fixed idle-time discard.
+    FixedIdle,
+    /// Memory-pressure-based discard.
+    MemoryPressure,
+    /// Adaptive, cost-aware.
+    Adaptive,
+}
+
+/// A safety guard (ov-arch-lifecycle-state-machine section 3, G1 to G10), written by name (CSV cells are words).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum LifecycleGuard {
+    /// User exclusion or pinned tab.
+    #[serde(rename = "user_exclusion")]
+    G1,
+    /// Active download.
+    #[serde(rename = "download")]
+    G2,
+    /// Media playing or audible.
+    #[serde(rename = "media")]
+    G3,
+    /// Unsaved-form risk.
+    #[serde(rename = "unsaved_form")]
+    G4,
+    /// Camera, microphone, screen capture or WebRTC in use.
+    #[serde(rename = "capture")]
+    G5,
+    /// DevTools open.
+    #[serde(rename = "devtools")]
+    G6,
+    /// Recently interacted.
+    #[serde(rename = "recent_interaction")]
+    G7,
+    /// Pending permission prompt or dialog.
+    #[serde(rename = "pending_prompt")]
+    G8,
+    /// Navigation in progress.
+    #[serde(rename = "navigation")]
+    G9,
+    /// Web Locks or IndexedDB activity.
+    #[serde(rename = "storage_activity")]
+    G10,
+}
+
+/// One tab state change. `from` is null when the tab opens, `to` when it closes.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct LifecycleTransition {
+    /// Milliseconds since the run started.
+    pub t_ms: u64,
+    /// The tab.
+    pub tab: u64,
+    /// The state before (null: the tab is new).
+    pub from: Option<LifecycleState>,
+    /// The state after (null: the tab closed).
+    pub to: Option<LifecycleState>,
+    /// Why.
+    pub trigger: LifecycleTrigger,
+    /// The policy, for `policy_selected` only.
+    pub policy: Option<LifecyclePolicy>,
+    /// The guard, for `guard_failed` only.
+    pub guard: Option<LifecycleGuard>,
 }

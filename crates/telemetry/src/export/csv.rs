@@ -48,17 +48,19 @@ pub fn columns(kind: &str) -> Option<&'static [&'static str]> {
             "redirect_count",
             "outcome",
         ],
+        "lifecycle_transition" => &["t_ms", "tab", "from", "to", "trigger", "policy", "guard"],
         _ => return None,
     })
 }
 
 /// The record types that have a table.
-pub const TABLE_KINDS: [&str; 5] = [
+pub const TABLE_KINDS: [&str; 6] = [
     "process_sample",
     "tree_sample",
     "sample_gap",
     "startup_mark",
     "nav_timing",
+    "lifecycle_transition",
 ];
 
 fn cell(v: &Value) -> Result<String, String> {

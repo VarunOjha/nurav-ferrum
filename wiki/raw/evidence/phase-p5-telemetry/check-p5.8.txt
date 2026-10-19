@@ -1,0 +1,36 @@
+Ferrum check p5.8: Record tab state changes
+Why: P7 plugs in without a new format.
+Run at 2026-10-18 22:20 on commit fab7e96 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The file format has the tab-change record; every record type still saves, reloads and checks (5 s)
+         seven record types (lifecycle_transition new), six tables; good file accepted, damaged files refused; schema matches
+  PASS   Tab changes become records, one per real change; impossible changes are refused
+         three unit tests passed
+Running 1 test using 1 worker
+LIFECYCLE: 9 records, none refused:
+  1346 ms tab a: (new) -> active (opened)
+  1953 ms tab a: active -> background (user_switch)
+  1953 ms tab b: (new) -> active (opened)
+  2001 ms tab a: background -> active (user_switch)
+  2001 ms tab b: active -> background (user_switch)
+  2054 ms tab a: active -> background (user_switch)
+  2054 ms tab b: background -> active (user_switch)
+  2134 ms tab b: active -> (closed) (closed)
+  2134 ms tab a: background -> active (user_switch)
+  ✓  1 lifecycle.spec.ts:22:1 › switching and closing tabs writes hide and show records that pass the format check (366ms)
+  1 passed (1.5m)
+  PASS   Live: switching and closing tabs writes hide and show records that pass the format check (133 s)
+         9 records, none refused:
+         1346 ms tab a: (new) -> active (opened)
+         1953 ms tab a: active -> background (user_switch)
+         1953 ms tab b: (new) -> active (opened)
+         2001 ms tab a: background -> active (user_switch)
+         2001 ms tab b: active -> background (user_switch)
+         2054 ms tab a: active -> background (user_switch)
+         2054 ms tab b: background -> active (user_switch)
+         2134 ms tab b: active -> (closed) (closed)
+         2134 ms tab a: background -> active (user_switch)
+------------------------------------------------------------------------
+RESULT: PASS - p5.8 (3 PASS; 139 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.8 check passed".

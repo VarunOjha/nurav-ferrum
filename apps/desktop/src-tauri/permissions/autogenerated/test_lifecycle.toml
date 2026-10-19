@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-test-lifecycle"
+description = "Enables the test_lifecycle command without any pre-configured scope."
+commands.allow = ["test_lifecycle"]
+
+[[permission]]
+identifier = "deny-test-lifecycle"
+description = "Denies the test_lifecycle command without any pre-configured scope."
+commands.deny = ["test_lifecycle"]

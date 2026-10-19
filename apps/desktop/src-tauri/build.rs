@@ -32,6 +32,7 @@ fn main() {
             "test_sample",
             "test_startup",
             "test_nav_timing",
+            "test_lifecycle",
             "tab_new_private",
             "site_data_clear",
             "test_focus",

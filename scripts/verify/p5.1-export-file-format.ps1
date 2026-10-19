@@ -44,7 +44,7 @@ function Assert-Tests([string[]] $Names) {
 Invoke-Step 'Each record type saves and reloads unchanged (data file and table)' {
     Assert-Tests @('every_record_type_round_trips_through_json', 'every_table_round_trips_through_csv',
         'csv_columns_match_the_record_fields', 'csv_refuses_bad_tables')
-    'six record types as JSON lines, five tables as CSV (sample_gap added by p5.3)'
+    'seven record types as JSON lines, six tables as CSV (sample_gap added by p5.3, lifecycle_transition by p5.8)'
 }
 
 Invoke-Step 'The writer rotates files and leaves no half file under a finished name' {
