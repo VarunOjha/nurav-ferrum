@@ -104,7 +104,9 @@ test_gate:
     - raw/evidence/phase-p5-telemetry/schema-validation.txt
     - raw/evidence/phase-p5-telemetry/network-log-tests.txt
     - raw/evidence/phase-p5-telemetry/regression.txt
-    - raw/evidence/phase-p5-telemetry/devtools-targets.md
+    - raw/evidence/phase-p5-telemetry/nosecurity-absent.txt
+    - raw/evidence/phase-p5-telemetry/p5-gate.txt
+    - raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md
     - raw/evidence/phase-p5-telemetry/wiki-lint.txt
     - raw/evidence/phase-p5-telemetry/manual-checklist.md
 exit_criteria:
