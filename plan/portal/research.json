@@ -924,7 +924,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-tree-cpu-cycles.md",
-        "content_hash": "sha256:b557153925eeeb0a76c27536a2fe11669339444940f05d3616098d11dc5047ef"
+        "content_hash": "sha256:3a05d428734465cf93f64cef926b946b6669556a599ff13aa4268f41df254f46"
       },
       "unit": "cycles"
     },
@@ -1006,7 +1006,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-nav-latency.md",
-        "content_hash": "sha256:22c1ea67c7a22d1293c2989816da52a4ad7830baab3c7f56a0cacf29b8108e4f"
+        "content_hash": "sha256:4181c4ecf5adef4bba98d88553fb5f5a96cb0feed065a48c5f4d13446366f565"
       },
       "unit": "ms"
     },
@@ -1087,7 +1087,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-loaf-blocking.md",
-        "content_hash": "sha256:68c5b1b794cbdc26acfee1baf0cdabe627c012cf756127ed0da69d4f7a9cbdd6"
+        "content_hash": "sha256:7a78a73dd73e7b9e78478ff5ef2c4f72bd7d49e7e451c6fc7084557ba9213e64"
       },
       "unit": "ms per minute"
     },
@@ -1309,7 +1309,7 @@
       ],
       "source": {
         "wiki_path": "wiki/research/metrics/metric-policy-eval-latency.md",
-        "content_hash": "sha256:834f5e9f8543bbb1c51fbafb01fe996db50e60157dd346247c7a9bc10fe565c7"
+        "content_hash": "sha256:462201357903de1f4a739bb56eb57a874fb39bf4719e738eef629b33eee4c7f8"
       },
       "unit": "µs"
     },

@@ -3,7 +3,7 @@ id: ov-arch-data-flows
 type: overview
 title: "Architecture: runtime data flows"
 status: review
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/research/measurement-methodology.md
@@ -16,13 +16,7 @@ approvable: true
 audience: both
 phase: phase-p0-planning
 tags: [data-flow, ipc, telemetry, network-log]
-unverified:
-  - claim: "In-process CDP Network.* events (via GetDevToolsProtocolEventReceiver) provide method, status, resource type, timing and encoded size fields"
-    verify_in: phase-p5-telemetry
-  - claim: "Network.enable on every tab has acceptable overhead (to be quantified, not assumed)"
-    verify_in: phase-p5-telemetry
-  - claim: "FCP/LCP can be read from a tab via host-initiated script or CDP without adding IPC to the page"
-    verify_in: phase-p5-telemetry
+unverified: []
 ---
 
 # Runtime data flows
@@ -106,7 +100,7 @@ sequenceDiagram
 
 Metric definitions follow the [measurement note §1–3](../raw/research/measurement-methodology.md): private commit is the headline, and working set is secondary with a caveat. **In-app samples are not the measurement of record for the cross-browser comparison.** The harness measures every product externally, with a Job Object plus counters ([comp-benchmark-harness](components/comp-benchmark-harness.md)). In-app samples drive policies and serve as cross-checks.
 
-**Startup marks.** Process creation time (`GetProcessTimes`), then `window-visible` (shell reports first paint of its own UI), then first tab NavigationCompleted, then FCP/LCP read from the page. How FCP/LCP are read without adding page→host IPC is UNVERIFIED[phase-p5-telemetry]; candidates are host-initiated `ExecuteScript` and CDP `Runtime.evaluate`.
+**Startup marks.** Process creation time (`GetProcessTimes`), then `window-visible` (shell reports first paint of its own UI), then first tab NavigationCompleted, then FCP/LCP read from the page. FCP/LCP are read without page→host IPC (p5.6, [check-p5.6](../raw/evidence/phase-p5-telemetry/check-p5.6.txt)): the host calls `Page.createIsolatedWorld` and `Runtime.evaluate` in that isolated world through `CallDevToolsProtocolMethod`, so page script can neither send nor change the values.
 
 ## 4. Network-log capture (adr-0008: metadata only, JSONL)
 
@@ -124,9 +118,9 @@ sequenceDiagram
   N->>F: append JSONL (per-session file, size rotation)
 ```
 
-- **Implementation route (accepted adr-0008; config default `route = "web-resource-response"`):** `ICoreWebView2_2::WebResourceResponseReceived`. It fires for every response, including redirects and subresources. It is non-blocking with no ordering guarantee (VERIFIED). Whether it exposes every field in the record schema (resource type, sizes) is UNVERIFIED[phase-p5-telemetry].
-- **Alternative:** in-process DevTools Protocol over COM (`CallDevToolsProtocolMethod("Network.enable")` + `GetDevToolsProtocolEventReceiver`). It needs **no** remote debugging port. That the method and receiver exist is VERIFIED (Tauri note §6); which event fields it provides is UNVERIFIED[phase-p5-telemetry]. A P5 spike checks the fields; switching the route, or using both for cross-validation, requires a superseding decision.
-- The overhead of the chosen route (handler cost, or `Network.enable` if CDP is used) is measured, not assumed: UNVERIFIED[phase-p5-telemetry]. The logger is a runtime toggle so exp-security-overhead / exp-baseline-footprint can run with it off and on.
+- **Implementation route (accepted adr-0008; config default `route = "web-resource-response"`):** `ICoreWebView2_2::WebResourceResponseReceived`. It fires for every response, including redirects and subresources. It is non-blocking with no ordering guarantee (VERIFIED). It gives address, method and status; resource type and size are derived from the request's `Sec-Fetch-Dest` and the response's `Content-Length`, and it gives no timing (p5.9, [check-p5.9](../raw/evidence/phase-p5-telemetry/check-p5.9.txt)).
+- **Alternative:** in-process DevTools Protocol over COM (`CallDevToolsProtocolMethod("Network.enable")` + `GetDevToolsProtocolEventReceiver`). It needs **no** remote debugging port. That the method and receiver exist is VERIFIED (Tauri note §6); which event fields it provides was not checked: the route stayed `WebResourceResponseReceived`, which gave the fields the record needs (p5.9), so no switch was needed. Switching the route, or using both for cross-validation, would require a superseding decision.
+- The overhead of the chosen route is measured, not assumed: UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P5: the p5.10 on/off pilot was rough and inconclusive, run-to-run spread larger than any difference, [netlog-cost-p5.10.json](../raw/evidence/phase-p5-telemetry/netlog-cost-p5.10.json); adr-0008 puts the deciding A/B check before the first comparative campaign). The logger is a runtime toggle so exp-security-overhead / exp-baseline-footprint can run with it off and on.
 - **Privacy:** fields are allow-listed (adr-0008, scoping Q5). Log folders are gitignored and never committed (master prompt §12).
 
 ## 5. Lifecycle transitions

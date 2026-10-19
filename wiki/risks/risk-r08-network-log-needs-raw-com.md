@@ -3,7 +3,7 @@ id: risk-r08
 type: risk
 title: "The network logger needs raw COM or CDP because Tauri has no response hook for https tabs"
 status: open
-updated: 2026-10-08
+updated: 2026-10-19
 sources:
   - raw/research/tauri-webview2-capabilities.md
   - raw/01-scoping-decisions.md
@@ -19,8 +19,6 @@ owner_phase: phase-p5-telemetry
 trigger: "Required metadata fields (status, sizes, timing, resource type) are missing from the event args; events are lost under load; iframe requests are missing; the log contains tokens in query strings that the owner considers sensitive."
 fallback: "CDP Network.* events via GetDevToolsProtocolEventReceiver (after Network.enable), accepting the CDP dependency, or a reduced field set documented in adr-0008."
 unverified:
-  - claim: "WebResourceResponseReceived event args provide every field adr-0008 requires (status, resource type, timing, sizes)"
-    verify_in: phase-p5-telemetry
   - claim: "Logging every response adds overhead below the harness noise floor"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -68,7 +66,7 @@ CDP Network.* events via GetDevToolsProtocolEventReceiver (after Network.enable)
 
 ## Unverified claims
 
-- WebResourceResponseReceived event args provide every field adr-0008 requires (status, resource type, timing, sizes). UNVERIFIED[phase-p5-telemetry]
+- WebResourceResponseReceived event args provide every field adr-0008 requires (status, resource type, timing, sizes): checked in p5.9 ([check-p5.9](../raw/evidence/phase-p5-telemetry/check-p5.9.txt)). Address, method and status come from the event; resource type and size are derived from the `Sec-Fetch-Dest` and `Content-Length` headers; there is no timing in the event, so the record's time is when the response was reported.
 - Logging every response adds overhead below the harness noise floor. UNVERIFIED[phase-p6-benchmark-harness]
 
 ## Affects

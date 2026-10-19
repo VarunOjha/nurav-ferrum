@@ -3,7 +3,7 @@ id: metric-policy-eval-latency
 type: metric
 title: "Navigation policy evaluation latency"
 status: proposed
-updated: 2026-10-15
+updated: 2026-10-19
 sources:
   - raw/evidence/phase-p4-security/microbench-harness-run.txt
   - raw/research/measurement-methodology.md
@@ -28,7 +28,7 @@ tags:
   - metric
 unverified:
   - claim: "tracing span overhead is small relative to the proposed 1 ms p95 threshold of hyp-12"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # Navigation policy evaluation latency
@@ -50,7 +50,7 @@ unverified:
 **Normalisation.** microseconds
 
 ## Notes
-- Instrumentation adds overhead of its own. The span overhead is measured with an empty span and reported next to the result, UNVERIFIED[phase-p5-telemetry].
+- Instrumentation adds overhead of its own. The span overhead is measured with an empty span and reported next to the result, UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P5: P5 did not measure policy-evaluation latency; it belongs to hyp-12's experiment).
 - Security **correctness** tests are kept separate from this performance metric (master prompt §7, [raw/00-master-prompt.md](../../raw/00-master-prompt.md)).
 
 ## Used by

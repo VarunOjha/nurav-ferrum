@@ -71,7 +71,7 @@
       "tasks_total": 18,
       "source": {
         "wiki_path": "wiki/phases/phase-p2-minimal-container.md",
-        "content_hash": "sha256:8265793eca415c608e8edea99e088e87e0baa3983391437dd82d87dff415e3f6"
+        "content_hash": "sha256:60675fdd23a30e76af929d482cf17811e977f84bbeea646324007f6c819f010a"
       }
     },
     {
@@ -84,7 +84,7 @@
       "tasks_total": 23,
       "source": {
         "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-        "content_hash": "sha256:237c23913b1cf56ac25bc30cf6cb241ca343f123ce9d5410c7849e69292eb263"
+        "content_hash": "sha256:95f0b9683ac2e177eba387a3dba905ed2974c7136f5e45df0d21e72ef61cca94"
       }
     },
     {
@@ -97,7 +97,7 @@
       "tasks_total": 20,
       "source": {
         "wiki_path": "wiki/phases/phase-p4-security.md",
-        "content_hash": "sha256:ce304b35fdad51beb8fc0fb53f58770406e855510551adac2085d8923bc31175"
+        "content_hash": "sha256:6e9cd5bebf6a7f192b4dcc3d2bca74c7fa261f75a3b270e114f2bf9e36e748fa"
       }
     },
     {
@@ -110,7 +110,7 @@
       "tasks_total": 15,
       "source": {
         "wiki_path": "wiki/phases/phase-p5-telemetry.md",
-        "content_hash": "sha256:e0590b65987484096849de907ca0530376e200bd0f25bcafe16357ef7142e796"
+        "content_hash": "sha256:0250b48d8e358687ea4177266c8f8ecd0265389af9ed963a644fbf711a8930e3"
       }
     },
     {

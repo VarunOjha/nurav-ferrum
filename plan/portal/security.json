@@ -5,7 +5,7 @@
   "summary": "Ferrum's threat model in plain words: who might attack, where trust changes inside Ferrum, each threat with its protection and whether a test proves it, and what Ferrum does not protect against.",
   "source": {
     "wiki_path": "wiki/quality/qual-security-testing-plan.md",
-    "content_hash": "sha256:c3035ce995434b0e4aa663d8dca891bfe4ae3476c426078de08ea6a6847f2567"
+    "content_hash": "sha256:46fc6f475824f371dfc3cbc1926493926d8c8e28f332a7e02bf89884d3fdea00"
   },
   "words": "Tested = a protection exists and a passing test is saved as evidence. Partly = part of it exists and is tested. Not enforced = Ferrum makes no claim. Nothing is called tested without saved evidence.",
   "adversaries": [

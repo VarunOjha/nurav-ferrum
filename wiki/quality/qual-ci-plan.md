@@ -3,7 +3,7 @@ id: qual-ci-plan
 type: quality
 title: "CI plan: GitHub Actions jobs and local equivalents"
 status: draft
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -24,13 +24,13 @@ tooling:
   - "npm run lint:wiki"
 unverified:
   - claim: "The windows-latest GitHub-hosted runner has the WebView2 runtime and an interactive desktop session sufficient to run Ferrum E2E smoke tests"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
   - claim: "cargo-deny and cargo-audit install and run on windows-latest with the pinned toolchain"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
   - claim: "Pinning third-party actions by full commit SHA works for every action chosen (checkout, setup-node, setup-python, Rust toolchain, cache)"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
   - claim: "Two clean release builds of the same commit on the same pinned toolchain produce byte-identical (or hash-comparable after documented normalisation) Ferrum binaries"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # CI plan
@@ -76,7 +76,7 @@ One workflow file `.github/workflows/ci.yml` with independent jobs, so one failu
 
 ## 2. Jobs
 
-All jobs: `runs-on: windows-latest`, `permissions: contents: read`, no secrets, third-party actions pinned by full commit SHA (UNVERIFIED[phase-p5-telemetry], re-targeted in P4 and earlier in P2 because the first push is still deferred, Q-221: P1 resolved the SHAs of actions/checkout v7.0.1 and actions/setup-node v7.1.0 in `ci.yml`; a run on GitHub waits for the first push, which the owner deferred), tool versions taken from committed lockfiles and toolchain files (risk-r20).
+All jobs: `runs-on: windows-latest`, `permissions: contents: read`, no secrets, third-party actions pinned by full commit SHA (UNVERIFIED[phase-p6-benchmark-harness], re-targeted in P5, in P4 and earlier in P2 because the first push is still deferred, Q-221: P1 resolved the SHAs of actions/checkout v7.0.1 and actions/setup-node v7.1.0 in `ci.yml`; a run on GitHub waits for the first push, which the owner deferred), tool versions taken from committed lockfiles and toolchain files (risk-r20).
 
 | Job | Commands (planned) | Fails when | Introduced |
 |---|---|---|---|
@@ -84,7 +84,7 @@ All jobs: `runs-on: windows-latest`, `permissions: contents: read`, no secrets, 
 | `rust-clippy` | `cargo clippy --locked --workspace --all-targets --all-features -- -D warnings` | any warning | P1 |
 | `rust-test` | `cargo test --locked --workspace --all-targets` | any test fails | P1 |
 | `rust-build` | `cargo build --locked --workspace --release` | any build error, or `Cargo.lock` would need to change | P1 |
-| `rust-deps` | `cargo deny check` (advisories, bans, licences compatible with MIT OR Apache-2.0, sources) (`cargo audit` was not added in P1: cargo-deny's advisories check reads the same RustSec database; running on windows-latest is UNVERIFIED[phase-p5-telemetry], re-targeted in P4: the first push is still deferred, Q-221; locally it passed in P2 and again in P4, [cargo-deny](../raw/evidence/phase-p4-security/cargo-deny.txt)) | an advisory, a banned or unlicensed crate, or an unknown source (a `[patch]` git source must be explicitly allowed, see risk-r01 route b) | P1 |
+| `rust-deps` | `cargo deny check` (advisories, bans, licences compatible with MIT OR Apache-2.0, sources) (`cargo audit` was not added in P1: cargo-deny's advisories check reads the same RustSec database; running on windows-latest is UNVERIFIED[phase-p6-benchmark-harness], re-targeted in P5 and in P4: the first push is still deferred, Q-221; locally it passed in P2 and again in P4, [cargo-deny](../raw/evidence/phase-p4-security/cargo-deny.txt)) | an advisory, a banned or unlicensed crate, or an unknown source (a `[patch]` git source must be explicitly allowed, see risk-r01 route b) | P1 |
 | `shell-ui` | in `apps/desktop/`: `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` | any step fails | P2 |
 | `bench-scripts` | in `benchmarks/runners/`: `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` | any step fails | P6 (first scripts may appear in P5) |
 | `python` | in `analysis/`: install from the committed pinned requirements/lock file only, linter, `pytest` | any step fails | P6 |
@@ -92,11 +92,11 @@ All jobs: `runs-on: windows-latest`, `permissions: contents: read`, no secrets, 
 | `wiki-lint` | in `interactive_plan/`: `npm ci`, then `npm run lint:wiki` | any lint error (warnings are listed, not fatal) | P1 (lint itself built in P0) |
 | `hash-parity` | run the SCHEMA §10.2 Python reference and the TypeScript implementation on the shared test vectors and compare | any mismatch (risk-r22) | P1 |
 | `security-static` | scan capability files for any `remote` section; scan browser-argument configuration for weakening flags; check release configuration does not enable devtools or a debug port; prove the release build has no `bench-nosecurity` ablation (feature off, no marker text, positive control) | any finding (risk-r19, SEC-12) | P2; built so far: the `bench-nosecurity` part (p4.16, `scripts/security-static-check.ps1`, run after `rust-build`, [nosecurity-absent](../raw/evidence/phase-p4-security/nosecurity-absent.txt)); the other scans not yet (the browser-argument part for SmartScreen is checked by the p4.18 check script for now: every web view gets Ferrum's switches and no code line switches SmartScreen off) |
-| `repro-check` | verify the toolchain file and every lockfile are committed and unchanged after the jobs above; optionally build the release binary twice from clean and compare SHA-256 hashes (UNVERIFIED[phase-p5-telemetry], re-targeted in P4: P2, P3 and P4 built release binaries but did not run the comparison; it needs the CI runners, and the first push is deferred, Q-221) | a missing or modified lockfile or toolchain file; a hash mismatch only once the comparison is verified and adopted | P1 |
-| `app-e2e` | build Ferrum in test mode and run the smoke E2E suite | any test fails | after the runner capability is verified (UNVERIFIED[phase-p5-telemetry]; re-targeted in P1, again in P2 and in P4 because the first push is deferred); until then this suite runs only locally (it passed locally in P2, [check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)) |
+| `repro-check` | verify the toolchain file and every lockfile are committed and unchanged after the jobs above; optionally build the release binary twice from clean and compare SHA-256 hashes (UNVERIFIED[phase-p6-benchmark-harness], re-targeted in P5: the first push is still deferred, Q-221; re-targeted in P4: P2, P3 and P4 built release binaries but did not run the comparison; it needs the CI runners, and the first push is deferred, Q-221) | a missing or modified lockfile or toolchain file; a hash mismatch only once the comparison is verified and adopted | P1 |
+| `app-e2e` | build Ferrum in test mode and run the smoke E2E suite | any test fails | after the runner capability is verified (UNVERIFIED[phase-p6-benchmark-harness]; re-targeted in P1, again in P2, in P4 and in P5 because the first push is deferred); until then this suite runs only locally (it passed locally in P2, [check-p2.15](../raw/evidence/phase-p2-minimal-container/check-p2.15.txt)) |
 
 Notes:
-- **Reproducible builds (master prompt §15).** Every Cargo command runs with `--locked`, so a build fails instead of silently updating `Cargo.lock`. Every Node job installs with `npm ci` (never `npm install`), so `package-lock.json` is authoritative. The Rust toolchain is pinned by a committed `rust-toolchain.toml`, Node by `engines`, Python by a pinned requirements file (risk-r20). This gives reproducible *dependency resolution*. Bit-for-bit reproducible binaries are a stronger claim; the `repro-check` hash comparison tests it and stays UNVERIFIED[phase-p5-telemetry] until it runs (not run in P2 or P4; re-targeted in P4: the first push is still deferred, Q-221; its lockfile and toolchain check passed locally, [local CI run](../raw/evidence/phase-p1-foundation/ci-local-p1.11.txt)).
+- **Reproducible builds (master prompt §15).** Every Cargo command runs with `--locked`, so a build fails instead of silently updating `Cargo.lock`. Every Node job installs with `npm ci` (never `npm install`), so `package-lock.json` is authoritative. The Rust toolchain is pinned by a committed `rust-toolchain.toml`, Node by `engines`, Python by a pinned requirements file (risk-r20). This gives reproducible *dependency resolution*. Bit-for-bit reproducible binaries are a stronger claim; the `repro-check` hash comparison tests it and stays UNVERIFIED[phase-p6-benchmark-harness] until it runs (not run in P2, P4 or P5; re-targeted in P5: the first push is still deferred, Q-221; re-targeted in P4: the first push is still deferred, Q-221; its lockfile and toolchain check passed locally, [local CI run](../raw/evidence/phase-p1-foundation/ci-local-p1.11.txt)).
 - **Wiki lint script name.** The script is `lint:wiki` (with `lint:wiki:json`), as defined in [ip-wiki-lint](../interactive-plan/ip-wiki-lint.md) §1. Phase-page test gates that say `npm run wiki:lint` must be changed to `npm run lint:wiki`.
 - **Phase test gates** that run Cargo or npm commands use the same forms as this table (`--locked`, `npm ci` first).
 - Tauri 2.12.1 needs Rust 1.90 or newer ([tauri-webview2-capabilities](../raw/research/tauri-webview2-capabilities.md) §1), so the toolchain file pins a stable version at or above that.

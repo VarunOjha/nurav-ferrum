@@ -80,7 +80,7 @@
       "title": "Safe downloads",
       "what": "Safer downloads: only into the set folder, never opened automatically, a warning for program files, cleaned file names.",
       "why": "A download named to look harmless could be saved outside the folder or start a program by itself. That is a common way to infect a computer.",
-      "how": "Save files only into the set folder, strip unsafe parts from each file name, never open a file by itself, and warn on program types. A local test download was not marked unsafe; real downloads are checked in P5.",
+      "how": "Save files only into the set folder, strip unsafe parts from each file name, never open a file by itself, and warn on program types. A local test download was not marked unsafe; real downloads are checked in P6 (your hand check is still owed).",
       "status": "Done",
       "chain": "Downloads can hide tricks → configured folder only, no auto-open, a warning for programs, cleaned file names → no folder-escape tricks.",
       "check": "Trick names and program files land cleaned in the folder, with a warning.",
@@ -303,6 +303,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p4-security.md",
-    "content_hash": "sha256:ce304b35fdad51beb8fc0fb53f58770406e855510551adac2085d8923bc31175"
+    "content_hash": "sha256:6e9cd5bebf6a7f192b4dcc3d2bca74c7fa261f75a3b270e114f2bf9e36e748fa"
   }
 }

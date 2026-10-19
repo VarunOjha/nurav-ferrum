@@ -17,11 +17,11 @@ phase: phase-p0-planning
 tags: [security, threat-model, trust-boundary]
 unverified:
   - claim: "WebView2 applies Mark-of-the-Web to downloaded files"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
   - claim: "Routing window.open popups into new tabs keeps non-Google OAuth popup flows working"
     verify_in: phase-p6-benchmark-harness
   - claim: "WebView2 blocks a page with a certificate error by default when the app does not handle ServerCertificateErrorDetected"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
   - claim: "Chromium site isolation applies to WebView2 renderers"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -120,8 +120,8 @@ cannot work as built. Keeping the link (WebView2 can hand the request a view of 
 OAuth pop-ups are still open: UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P4: P4's tests use local test pages only and P4 did not change pop-up handling; P6 chooses the real-world workloads, where a sign-in would next matter, risk-r10).
 6. **Google OAuth.** Google forbids OAuth from embedded user agents (VERIFIED, Tauri note §8). Ferrum detects `accounts.google.com` OAuth flows and offers "open in system browser". **It never spoofs the user agent or uses any other workaround** (master prompt §5).
 7. **Permissions.** Default **deny** for camera, microphone, geolocation, notifications, clipboard-read, sensors, MIDI, file-system access and window management, with per-site overrides (PROPOSAL; kinds VERIFIED in Tauri note §4). Ferrum, not the profile, stays authoritative: `SavesInProfile(FALSE)` needs raw COM (VERIFIED).
-8. **Downloads.** Every download fires `on_download`. The engine decides allow/deny and the destination, and the shell shows it. The filename is sanitised. Whether WebView2 applies Mark-of-the-Web to the file is UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: a program file saved from the local test server had no Zone.Identifier mark, [check-p4.6](../raw/evidence/phase-p4-security/check-p4.6.txt), which does not settle downloads from the internet; the owner's hand check with a real program download is still owed, [P4 manual checklist](../raw/evidence/phase-p4-security/manual-checklist.md)).
-9. **Certificates.** Ferrum never handles `ServerCertificateErrorDetected` by bypassing. The default WebView2 behaviour is expected to block the page, and Ferrum leaves it in place (master prompt §5). That default is UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: the P4 security suite has no live certificate-error test; no research note covers it; tested by SEC-13 in [qual-security-testing-plan](../quality/qual-security-testing-plan.md)).
+8. **Downloads.** Every download fires `on_download`. The engine decides allow/deny and the destination, and the shell shows it. The filename is sanitised. Whether WebView2 applies Mark-of-the-Web to the file is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P5: the owner signed off P4 with his hand checks still owed and they were not done during P5 either; they are listed again in docs/testing/manual-checklist-p5.md; re-targeted in P4: a program file saved from the local test server had no Zone.Identifier mark, [check-p4.6](../raw/evidence/phase-p4-security/check-p4.6.txt), which does not settle downloads from the internet; the owner's hand check with a real program download is still owed, [P4 manual checklist](../raw/evidence/phase-p4-security/manual-checklist.md)).
+9. **Certificates.** Ferrum never handles `ServerCertificateErrorDetected` by bypassing. The default WebView2 behaviour is expected to block the page, and Ferrum leaves it in place (master prompt §5). That default is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P5: P5 built no certificate-error test either; SEC-13 needs a second test-server certificate that Windows does not trust; re-targeted in P4: the P4 security suite has no live certificate-error test; no research note covers it; tested by SEC-13 in [qual-security-testing-plan](../quality/qual-security-testing-plan.md)).
 10. **Audit.** Every **denied** action is appended to `audit.jsonl` (timestamp, tab id, origin, action kind, rule id, decision). There are no page contents.
 
 ## 6. Preliminary STRIDE table

@@ -3,7 +3,7 @@ id: metric-nav-latency
 type: metric
 title: "Navigation latency"
 status: proposed
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/evidence/phase-p5-telemetry/check-p5.7.txt
   - raw/research/measurement-methodology.md
@@ -28,7 +28,7 @@ tags:
   - metric
 unverified:
   - claim: "bfcache / PerformanceNavigationTiming.type behaves the same in WebView2"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # Navigation latency
@@ -60,7 +60,7 @@ Ferrum's own record of each navigation (comp-telemetry, `nav_timing`). This is t
 
 ## Notes
 - The navigation is measured inside the page, so the latency of the CDP command does not enter the measurement. This holds only as long as every product is triggered the same way, which the fairness protocol requires ([ov-research-fairness-protocol](../ov-research-fairness-protocol.md)).
-- Back/forward navigations may come from the bfcache, so their timing entries differ. Bfcache use is recorded per navigation (`PerformanceNavigationTiming.type`). Whether this works the same in WebView2 is UNVERIFIED[phase-p5-telemetry].
+- Back/forward navigations may come from the bfcache, so their timing entries differ. Bfcache use is recorded per navigation (`PerformanceNavigationTiming.type`). Whether this works the same in WebView2 is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P5: p5.7 recorded forward navigations only; back/forward workloads come with the harness).
 - Percentile rule: see [ov-research-statistical-analysis-plan](../ov-research-statistical-analysis-plan.md). p95 and p99 are reported only when enough navigations exist per trial.
 
 ## Used by

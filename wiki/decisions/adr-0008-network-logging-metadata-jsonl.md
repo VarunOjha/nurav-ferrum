@@ -3,7 +3,7 @@ id: adr-0008
 type: decision
 title: "Network call logging is metadata-only JSONL written to a folder"
 status: accepted
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -20,10 +20,6 @@ options:
 phase: phase-p0-planning
 tags: [network, logging, privacy, telemetry]
 unverified:
-  - claim: "WebResourceResponseReceived (or CDP Network events) exposes every field in the record schema, in particular resource type and transfer size"
-    verify_in: phase-p5-telemetry
-  - claim: "Net errors / failed requests that receive no response are observable via WebResourceResponseReceived or CDP Network.loadingFailed"
-    verify_in: phase-p5-telemetry
   - claim: "Logging overhead of WebResourceResponseReceived handlers is negligible for benchmark runs"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -77,11 +73,11 @@ Proposed record fields, to be finalised on the `comp-network-logger` page:
 | Request | `tab_id`, `profile`, `url`, `method`, `resource_type` |
 | Response | `status`, `redirect_to` (when present), `timing` (as available), `encoded_size` / `decoded_size` (as available) |
 | Policy | `policy_decision` (`allowed` / `blocked:<rule>`) |
-| Errors | `error` (net error, when present). `WebResourceResponseReceived` fires on responses, so a request that fails with no response may never produce it. Whether failed requests are observable via that event or via CDP `Network.loadingFailed` is UNVERIFIED[phase-p5-telemetry] |
+| Errors | `error` (net error, when present). `WebResourceResponseReceived` fires on responses, so a request that fails with no response may never produce it. Observed in p5.10 ([netlog-coverage-p5.10.json](../raw/evidence/phase-p5-telemetry/netlog-coverage-p5.10.json)): a request that gets no response produces no event, so it is not in the log; CDP `Network.loadingFailed` was not tried, because the CDP route was not taken |
 
 No header values and no bodies, ever.
 
-Implementation source: `WebResourceResponseReceived` through the raw-COM boundary ([ADR-0019](adr-0019-raw-webview2-com-boundary.md)). CDP `Network.*` is the alternative if the needed fields (resource type, sizes) are not available there. Whether `WebResourceResponseReceived` exposes all listed fields is UNVERIFIED[phase-p5-telemetry].
+Implementation source: `WebResourceResponseReceived` through the raw-COM boundary ([ADR-0019](adr-0019-raw-webview2-com-boundary.md)). CDP `Network.*` is the alternative if the needed fields (resource type, sizes) are not available there. It gives address, method and status; resource type and size are derived from two named headers (`Sec-Fetch-Dest`, `Content-Length`), and it has no timing, so the record's time is when the response was reported (p5.9, [check-p5.9](../raw/evidence/phase-p5-telemetry/check-p5.9.txt)).
 
 Policy decisions are joined from `comp-security-engine`'s audit events, by tab and navigation id, so blocked requests appear in the log even though they produce no response.
 

@@ -3,7 +3,7 @@ id: metric-tree-cpu-cycles
 type: metric
 title: "Tree CPU cycles (frequency-sensitive)"
 status: proposed
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/evidence/phase-p5-telemetry/check-p5.4.txt
   - raw/research/measurement-methodology.md
@@ -31,7 +31,7 @@ unverified:
   - claim: "msedgewebview2.exe processes of Ferrum/baseline join the harness Job Object (measurement note §2.2 UNCERTAIN)"
     verify_in: phase-p6-benchmark-harness
   - claim: "Cycle counts of processes that exit inside the window are captured"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # Tree CPU cycles (frequency-sensitive)
@@ -56,7 +56,7 @@ unverified:
 
 ## Notes
 - The docs give no way to convert cycles to time ([measurement note](../../raw/research/measurement-methodology.md) §3, VERIFIED). Reporting cycles as seconds would be invalid (DERIVED).
-- Processes that exit within the window lose their counters unless they are sampled first. Coverage of short-lived processes is UNVERIFIED[phase-p5-telemetry]. [metric-tree-cpu-time](metric-tree-cpu-time.md) remains the primary CPU metric.
+- Processes that exit within the window lose their counters unless they are sampled first. Coverage of short-lived processes is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P5: the in-app sampler keeps an ended process's last reading (p5.3), but what it used after that reading is lost; the harness's Job Object accounting, which keeps ended processes, is P6). [metric-tree-cpu-time](metric-tree-cpu-time.md) remains the primary CPU metric.
 
 ## Ground-truth validation (p5.4)
 

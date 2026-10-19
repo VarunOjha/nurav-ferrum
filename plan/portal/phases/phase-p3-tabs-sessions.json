@@ -316,7 +316,7 @@
       },
       {
         "check": "Your working session",
-        "proves": "You used eight or more tabs, every shortcut, a kill-and-restore and a real download; plus the three P2 checks still open (Alt+Tab, mail link Open, sign-in after restart). You deferred these at your sign-off; the Alt+Tab check moved to P4, then to P5 (P4 was signed off before its hand checks)."
+        "proves": "You used eight or more tabs, every shortcut, a kill-and-restore and a real download; plus the three P2 checks still open (Alt+Tab, mail link Open, sign-in after restart). You deferred these at your sign-off; the Alt+Tab check moved to P4, then to P5, then to P6 (your hand checks are still owed)."
       }
     ],
     "script": "scripts/gates/p3-gate.ps1"
@@ -330,6 +330,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p3-tabs-sessions.md",
-    "content_hash": "sha256:237c23913b1cf56ac25bc30cf6cb241ca343f123ce9d5410c7849e69292eb263"
+    "content_hash": "sha256:95f0b9683ac2e177eba387a3dba905ed2974c7136f5e45df0d21e72ef61cca94"
   }
 }

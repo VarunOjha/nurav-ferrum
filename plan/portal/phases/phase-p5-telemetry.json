@@ -80,7 +80,7 @@
       "title": "Startup timing",
       "what": "Startup timing: process start, window visible, shell first drawn, first content drawn and largest content drawn.",
       "why": "Fast start is one of the things Ferrum is meant to be good at. Timing read by page scripts can change what is being timed, so Ferrum reads it itself.",
-      "how": "Ferrum reads these moments itself through the browser's debugging channel, never through page scripts. Whether the two content moments can be read this way is not checked yet.",
+      "how": "Ferrum reads these moments itself through the browser's debugging channel, never through page scripts. Checked: both content moments are read this way.",
       "status": "Done",
       "chain": "Startup speed is a key result → record when the process starts, the window appears, and the first and largest content are drawn, read by Ferrum itself through the browser's debugging channel → startup can be compared fairly in P6.",
       "check": "On a test page every moment is recorded, in the right order.",
@@ -124,7 +124,7 @@
       "title": "Network log: coverage and cost",
       "what": "A check of which requests the network log catches, plus a small trial of its cost.",
       "why": "If the log quietly misses some requests, a paper that relies on it would draw wrong conclusions. Stating its gaps keeps the claims honest.",
-      "how": "Test embedded frames, redirects and background-worker requests and mark each covered or not. Whether frames and workers are reported is not checked yet. Save the trial output.",
+      "how": "Test embedded frames, redirects and background-worker requests and mark each covered or not. Checked: frames and requests a worker passes on are reported; a worker's own requests are not. Save the trial output.",
       "status": "Done",
       "chain": "Some requests may be missed (embedded frames, redirects, background workers) → test each kind and run a small cost trial → the paper states exactly what the log covers.",
       "check": "A coverage table and the cost-trial output are saved as evidence.",
@@ -239,6 +239,6 @@
   ],
   "source": {
     "wiki_path": "wiki/phases/phase-p5-telemetry.md",
-    "content_hash": "sha256:e0590b65987484096849de907ca0530376e200bd0f25bcafe16357ef7142e796"
+    "content_hash": "sha256:0250b48d8e358687ea4177266c8f8ecd0265389af9ed963a644fbf711a8930e3"
   }
 }

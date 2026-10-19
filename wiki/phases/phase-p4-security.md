@@ -3,7 +3,7 @@ id: phase-p4-security
 type: phase
 title: "P4 Security (Milestone M3): policy engine, permissions, isolation tests, threat model"
 status: done
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -152,7 +152,7 @@ experiments: [exp-security-overhead, exp-isolation-overhead]
 components: [comp-security-engine, comp-webview-manager, comp-app-shell]
 unverified:
   - claim: "WebView2 applies Mark-of-the-Web or equivalent protections to downloaded files"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # P4 Security (Milestone M3)

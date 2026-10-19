@@ -249,7 +249,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0008-network-logging-metadata-jsonl.md",
-        "content_hash": "sha256:b322a89a82c46025532f02581f552be10ca6c3b98c39cedfb28380876d56479b"
+        "content_hash": "sha256:35d7b68a11abb9a57fb8c7844248d0c7cd52906a6083f1dd831a5f9910b12f7e"
       }
     },
     {
@@ -345,7 +345,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0011-git-ci-license.md",
-        "content_hash": "sha256:6f91426ecd3f24ddc7a792cb3885c3bd3fac1c9772226308e02341851d0f6c0a"
+        "content_hash": "sha256:0c61c8e91aa73ae4f29d3f562e5f21ef368571f7cccf87f3e2befbd742bc6a98"
       }
     },
     {
@@ -471,7 +471,7 @@
       ],
       "source": {
         "wiki_path": "wiki/decisions/adr-0015-navigation-posture-open-blocklist.md",
-        "content_hash": "sha256:048f217a6a42365b7c8172ba70fbbad1670f0da13760a2a9ef72c326b4e6738d"
+        "content_hash": "sha256:3013cb1cf6f8dbd9e554956451b19b01cec0ae34b654bf73e94213a4bbeff7bb"
       }
     },
     {

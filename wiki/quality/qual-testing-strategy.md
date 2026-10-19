@@ -3,7 +3,7 @@ id: qual-testing-strategy
 type: quality
 title: "Testing strategy: phase-wise, rigorous, per-language test pyramid"
 status: draft
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -27,7 +27,7 @@ tooling:
   - "npm run lint:wiki (wiki lint, see ip-wiki-lint)"
 unverified:
   - claim: "A GitHub-hosted windows-latest runner can launch a Tauri WebView2 window for E2E smoke tests"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
   - claim: "pytest is the test runner chosen for the Python analysis code and runs on the installed Python 3.12.10"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -201,5 +201,5 @@ Manual checks are done by the owner at milestone reviews (adr-0014) and recorded
 - proptest availability on the pinned toolchain: compatible by its metadata (proptest 1.12.0 needs Rust 1.88; [claim checks](../raw/evidence/phase-p1-foundation/p1-claim-checks.txt) §2).
 - Playwright over CDP driving both the shell and the tabs in a test build (stated in 2.2). See the inline tag there.
 - Vitest with jsdom for the vanilla TypeScript shell (stated in 2.2). See the inline tag there.
-- A hosted windows-latest runner launching a Tauri WebView2 window. UNVERIFIED[phase-p5-telemetry] (re-targeted in P1, P2, P3 and P4: the first push is deferred, Q-221).
+- A hosted windows-latest runner launching a Tauri WebView2 window. UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P1, P2, P3, P4 and P5: the first push is deferred, Q-221).
 - pytest as the Python runner on Python 3.12.10. UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P1: the Python environment tool is open, Q-121, and analysis code starts in P6).

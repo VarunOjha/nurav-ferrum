@@ -3,7 +3,7 @@ id: comp-benchmark-harness
 type: component
 title: "Benchmark harness (Rust orchestrator + Node/TS Playwright runners)"
 status: planned
-updated: 2026-10-08
+updated: 2026-10-19
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -72,8 +72,6 @@ unverified:
     verify_in: phase-p6-benchmark-harness
   - claim: "WebView2 processes spawned for Ferrum/baseline (msedgewebview2.exe browser, renderer, GPU, utility, crashpad) are descendants of the host process and join the harness Job Object (measurement note 2.2: parent/child relationship UNCERTAIN; risk-r05)"
     verify_in: phase-p6-benchmark-harness
-  - claim: "Multiple Ferrum tab WebViews appear as distinct CDP targets usable by Playwright"
-    verify_in: phase-p5-telemetry
   - claim: "Applying remote-debugging-port to all products has negligible measurement overhead"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -91,7 +89,7 @@ The recommendations below come from the [measurement note §2](../../raw/researc
    - **Early check (proposed).** This plan proposes verifying it before P6, as an added check on the P1 spike S1 build: run it inside a Job Object, compare job membership against `GetProcessExtendedInfos` and the crashpad process, and record the result in the spike report. Adding this check to the P1 task list is a change to `phase-p1-foundation` that needs owner approval. Until that check or the P6 A/A validation passes, the attribution mode stays open.
    - **Attribution modes.** *Mode J (job-only)*: used only if the check shows every environment PID inside the job. *Mode U (union, fallback)*: the attributed set for Ferrum/baseline is the union of job members and the `GetProcessExtendedInfos` PID set (VERIFIED to exclude crashpad, measurement note §2.2), plus crashpad found by tree/ETW, or crashpad excluded from **all** products symmetrically, recorded per run. Every PID is paired with its process creation time (`GetProcessTimes`) to guard against PID reuse. Chrome/Edge use job membership (plus ETW cross-check) in both modes.
    - **Trial invalidation.** In Mode J, a trial fails if a browser-reported PID (`GetProcessExtendedInfos` for WebView2) lies outside the job. In Mode U, a trial fails only if a PID cannot be attributed by either source, or if a PID/creation-time pair changes identity mid-trial. The run manifest records which mode the spike or A/A validation validated.
-2. **Driving.** Playwright `connectOverCDP` for every product, so all products share the same automation path ([Tauri note §7](../../raw/research/tauri-webview2-capabilities.md): CDP is "significantly lower fidelity", risk-r06). Ferrum gets `--remote-debugging-port` through `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS`, and its overhead is piloted (UNVERIFIED[phase-p6-benchmark-harness]). How tab WebViews map to CDP targets is UNVERIFIED[phase-p5-telemetry].
+2. **Driving.** Playwright `connectOverCDP` for every product, so all products share the same automation path ([Tauri note §7](../../raw/research/tauri-webview2-capabilities.md): CDP is "significantly lower fidelity", risk-r06). Ferrum gets `--remote-debugging-port` through `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS`, and its overhead is piloted (UNVERIFIED[phase-p6-benchmark-harness]). How tab WebViews map to CDP targets was checked in p5.12 ([note](../../raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md)): in the per-site mode every tab is its own page target (the shell is listed too); in the per-site-udf mode no tab is on the port, so workloads in that mode need a test-only Ferrum command or are left out of CDP driving (adr-0012).
 3. **Elevation split.** Ferrum must **not** run elevated, because environment browser flags are ignored for elevated apps (VERIFIED, Tauri note §7). An energy sampler that needs admin (risk-r04) therefore runs as a **separate elevated process** writing a timestamped file. Its tool and driver choice (e.g. PawnIO-based) awaits owner answers; a wall-power meter may be required (measurement note).
 4. **Fairness.** As-shipped browser defaults give the headline result. Flags are used only in labelled ablations. Policies such as Edge sleeping tabs and Chrome Memory Saver are recorded per trial (measurement note §5).
 5. **Outputs.** Results go to `benchmarks/results/<run-id>/` (gitignored). Complete runs are archived unedited to `wiki/raw/bench/<run-id>/` and never cherry-picked (master prompt §10).

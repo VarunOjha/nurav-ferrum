@@ -3,7 +3,7 @@ id: metric-loaf-blocking
 type: metric
 title: "Long-animation-frame blocking time"
 status: proposed
-updated: 2026-10-08
+updated: 2026-10-19
 sources:
   - raw/research/measurement-methodology.md
   - raw/00-master-prompt.md
@@ -27,7 +27,7 @@ tags:
   - metric
 unverified:
   - claim: "Long Animation Frames API is available in WebView2 154"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
 ---
 
 # Long-animation-frame blocking time
@@ -50,7 +50,7 @@ unverified:
 
 ## Notes
 - This is a responsiveness signal: it counts rendering updates delayed by more than 50 ms ([measurement note](../../raw/research/measurement-methodology.md) §4.1, VERIFIED, shipped in Chrome 123).
-- Availability in WebView2 154 is UNVERIFIED[phase-p5-telemetry].
+- Availability in WebView2 is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P5: P5 built no long-animation-frame reading; the metric is read by the harness's workloads).
 
 ## Used by
 Experiments and hypotheses that reference this metric are listed in [ov-research-traceability](../ov-research-traceability.md).

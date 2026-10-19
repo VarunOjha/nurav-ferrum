@@ -3,7 +3,7 @@ id: phase-p5-telemetry
 type: phase
 title: "P5 Telemetry and network logger (Milestone M4): validated process metrics, timing, metadata-only network log"
 status: in-progress
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/owner/2026-10-18-s08-q229-block-requests-fully.md
   - raw/00-master-prompt.md
@@ -116,15 +116,7 @@ risks: [risk-r03, risk-r05, risk-r08]
 decisions: [adr-0008, adr-0012, adr-0014]
 experiments: [exp-baseline-footprint, exp-startup, exp-navigation]
 components: [comp-telemetry, comp-network-logger, comp-webview-manager]
-unverified:
-  - claim: "PrivateWorkingSetSize (PROCESS_MEMORY_COUNTERS_EX2) is available on this machine's Windows build"
-    verify_in: phase-p5-telemetry
-  - claim: "First contentful paint and largest contentful paint can be read from the host through DevTools Protocol calls on a WebView2 tab"
-    verify_in: phase-p5-telemetry
-  - claim: "GetProcessExtendedInfos associates renderer processes with specific WebViews or frames"
-    verify_in: phase-p5-telemetry
-  - claim: "WebResourceResponseReceived reports responses from cross-origin iframes and service-worker fetches"
-    verify_in: phase-p5-telemetry
+unverified: []
 ---
 
 # P5 Telemetry and network logger (Milestone M4)
@@ -189,6 +181,22 @@ flowchart LR
 
 - Validation tolerances are committed before the validation run (p5.4) so that a resumed session cannot loosen them after seeing results. Any later change is logged with a reason.
 - Raw validation outputs go to `raw/evidence/phase-p5-telemetry/` immediately after each run, so nothing depends on terminal scrollback.
+
+## Open points settled at the exit review (p5.14)
+
+The four points this page listed as unverified were answered during P5:
+
+- `PrivateWorkingSetSize` (`PROCESS_MEMORY_COUNTERS_EX2`) is filled on this PC ([check-p5.3](../raw/evidence/phase-p5-telemetry/check-p5.3.txt)).
+- First and largest contentful paint are read from the host through DevTools calls in an isolated world of the page
+  ([check-p5.6](../raw/evidence/phase-p5-telemetry/check-p5.6.txt)).
+- `GetProcessExtendedInfos` reports the frames each renderer draws, so a tab's renderer, and its other-site frames',
+  are found by address ([devtools-targets-p5.12-note](../raw/evidence/phase-p5-telemetry/devtools-targets-p5.12-note.md)).
+- `WebResourceResponseReceived` reports responses of an other-site iframe and requests a service worker answers or
+  passes on, but not the worker's own script or requests, nor requests that get no response
+  ([netlog-coverage-p5.10.json](../raw/evidence/phase-p5-telemetry/netlog-coverage-p5.10.json)).
+
+The other P5-targeted points on other pages were answered or moved to a later phase, each with its reason, in the
+same review (log entry of p5.14).
 
 ## Owner review checkpoint (adr-0014)
 

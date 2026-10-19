@@ -38,7 +38,7 @@
       "summary": "Many web views in one window needs a Tauri feature marked experimental. Known bugs: hangs, blank views, lost keyboard focus.",
       "likelihood": 4,
       "impact": 4,
-      "mitigation": "Tested in P1: create views only from background code and keep the shell above the tabs. Copy and paste work; after Alt+Tab the keyboard needed a click. P2 built a fix; your check of it is still owed (P4 was signed off before its hand checks; now P5).",
+      "mitigation": "Tested in P1: create views only from background code and keep the shell above the tabs. Copy and paste work; after Alt+Tab the keyboard needed a click. P2 built a fix; your check of it is still owed (moved to P6; it is on the P5 hand checklist).",
       "phase": "phase-p1-foundation",
       "status": "Being reduced",
       "category": "The app",
@@ -57,7 +57,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r02-tauri-multiwebview-unstable.md",
-        "content_hash": "sha256:34ec266a4eb999b1da10a07dac58bb161ec6ab7dd5a19b0313b2abc2ed518cc9"
+        "content_hash": "sha256:bdcb44a9cf5002d43b38e48fbfcb3a475246b2526e283bd4a9483200b8073d81"
       }
     },
     {
@@ -212,7 +212,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r08-network-log-needs-raw-com.md",
-        "content_hash": "sha256:621bb06bc16163cd428a3e5a77d3d9bd07c74e8d2010d0e30f3f18fff48065bb"
+        "content_hash": "sha256:096431d68216b9f27c99317c2742ba10f99ced5205eacf19d6db5c1c9a519931"
       }
     },
     {
@@ -541,7 +541,7 @@
       ],
       "source": {
         "wiki_path": "wiki/risks/risk-r20-dependency-toolchain-churn.md",
-        "content_hash": "sha256:381d867216ca819110582bbd98ebe7bc0e7acabd35f3fe936e9a71b3110ef862"
+        "content_hash": "sha256:a949bd9f82bd61eae652e997115816b76235c51042d60550912a6fc33f4bb2c2"
       }
     },
     {

@@ -3,7 +3,7 @@ id: adr-0015
 type: decision
 title: "Default navigation posture is open browsing + blocklist"
 status: accepted
-updated: 2026-10-18
+updated: 2026-10-19
 sources:
   - raw/00-master-prompt.md
   - raw/01-scoping-decisions.md
@@ -22,7 +22,7 @@ phase: phase-p0-planning
 tags: [security, navigation, policy]
 unverified:
   - claim: "Cancelling LaunchingExternalUriScheme alone stops WebView2 from starting the other app on Ferrum's tab views (FrameNavigationStarting and the event itself verified in P4)"
-    verify_in: phase-p5-telemetry
+    verify_in: phase-p6-benchmark-harness
   - claim: "Google refuses OAuth sign-in in a Ferrum (WebView2) tab in practice"
     verify_in: phase-p6-benchmark-harness
 ---
@@ -80,7 +80,7 @@ Everything below in this section is Claude's elaboration of the owner's choice. 
      - *Override:* an allowlist entry that is more specific than a matching blocklist rule wins (for example, allow `docs.example.com` while `example.com` and its subdomains are blocked). At equal specificity, block wins.
      - *Allowlist-only mode:* an optional mode, set globally or per profile, in which only allowlisted hosts may be navigated to and everything else is denied (this is option B, kept available as a configuration).
    - Default: open mode with an empty allowlist, per Q12. Every rule is re-evaluated on each redirect hop and for frames.
-3. **Fail closed.** The security engine itself parses URLs. **Unparsable URLs are denied**, whatever Tauri's fail-open default does. Iframe navigations and external-scheme launches are intercepted through raw COM, `FrameNavigationStarting` and `LaunchingExternalUriScheme` ([ADR-0019](adr-0019-raw-webview2-com-boundary.md)). On the tab controllers Ferrum creates (adr-0029), P4 verified both: a frame showing a blocked host is refused ([check-p4.3](../raw/evidence/phase-p4-security/check-p4.3.txt)), and a custom-scheme link raises `LaunchingExternalUriScheme`, which Ferrum cancels and turns into its confirmation bar, with nothing launched without the click ([check-p4.4](../raw/evidence/phase-p4-security/check-p4.4.txt)). That the cancel alone would stop WebView2 from starting the other app is UNVERIFIED[phase-p5-telemetry] (re-targeted in P4: the live test mocks Ferrum's own launcher and does not watch for an app WebView2 might start itself; the risky link types were refused by the policy first); spike S3 showed raw COM events work on such views.
+3. **Fail closed.** The security engine itself parses URLs. **Unparsable URLs are denied**, whatever Tauri's fail-open default does. Iframe navigations and external-scheme launches are intercepted through raw COM, `FrameNavigationStarting` and `LaunchingExternalUriScheme` ([ADR-0019](adr-0019-raw-webview2-com-boundary.md)). On the tab controllers Ferrum creates (adr-0029), P4 verified both: a frame showing a blocked host is refused ([check-p4.3](../raw/evidence/phase-p4-security/check-p4.3.txt)), and a custom-scheme link raises `LaunchingExternalUriScheme`, which Ferrum cancels and turns into its confirmation bar, with nothing launched without the click ([check-p4.4](../raw/evidence/phase-p4-security/check-p4.4.txt)). That the cancel alone would stop WebView2 from starting the other app is UNVERIFIED[phase-p6-benchmark-harness] (re-targeted in P5: P5 added no test that watches for an app WebView2 might start itself; re-targeted in P4: the live test mocks Ferrum's own launcher and does not watch for an app WebView2 might start itself; the risky link types were refused by the policy first); spike S3 showed raw COM events work on such views.
 4. **Certificate errors are never bypassed.** There is no "proceed anyway" for TLS errors.
 5. **Popups** (`on_new_window`) open as a new Ferrum tab under the same policy once tabs exist (P3). In P2, which has no tabs, they open in the same view or in the system browser, per configuration. They are never allowed as an uncontrolled native window.
 6. **Downloads** are always routed through Ferrum's handler. The default destination is the user's Downloads folder, and executable file types need a confirmation prompt. The final policy is set in P4.

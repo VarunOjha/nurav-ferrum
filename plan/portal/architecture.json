@@ -227,7 +227,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-app-shell.md",
-        "content_hash": "sha256:8e8483a3038a268638d4d29f86c8833b802a87c0019f84de58be3376ba95b8f1"
+        "content_hash": "sha256:0b5f282ab0f6ac2973a0112186f2f81da60e83b26edab979c28bba0a2a311dac"
       }
     },
     {
@@ -526,7 +526,7 @@
       ],
       "source": {
         "wiki_path": "wiki/architecture/components/comp-benchmark-harness.md",
-        "content_hash": "sha256:61b57ab6e11a7cab90c57f58e5b620c287d23eadc0bb824bd0b379257636c575"
+        "content_hash": "sha256:8d7225086ad1a5c6fb2b7c29b5f5218bf8ff0a8cde96a6b47eb90446f2401e44"
       }
     },
     {
