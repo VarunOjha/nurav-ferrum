@@ -3443,3 +3443,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-20-s09-claude-runs-p5-gate.md]
 - result: Session start: tree clean, no stash, In-flight p5.14 unchanged, no p5-gate.txt yet. Claude asked first, as STATUS said; owner: "You can run it now yourself here in Claude code, memory is a lot more free now". Free memory 17.6 GB of 27.8 GB. No restart happened, so the renamed locked file in target/gate-release stays for now. Claude starts the gate in its own PowerShell window so Claude Code's low-memory reaper cannot stop it.
 - next: Claude runs scripts/gates/p5-gate.ps1 -SaveEvidence with the PC left alone, then reads every result line.
+
+## [2026-10-20] gate | phase-p5-telemetry exit run 4: FAIL (21 PASS, 1 FAIL, 1 WAIT); cause fixed
+- session: s09
+- time: 02:05
+- pages: [phase-p5-telemetry]
+- sources: [scripts/gates/p5-gate.ps1]
+- result: Run at 9b3274b from 01:19 in its own PowerShell window, 2461 s, not stopped. PASS: approvals, all 10 part-2 task checks, fmt and clippy, Rust tests, cargo deny, p5.4 accuracy, p5.5 cost, p5.1 format, p5.9 network log, shell checks, release build in target/gate-release, p4.16 no-security check. WAIT: wiki check (only the known Q-221 error). FAIL: earlier suites row, one test only: isolation-modes.spec.ts mode per-site-udf expected environments in a fixed order, but the inventory lists them in answer order (site B came first); the P3 suite (62 passed), P2 suite (26 passed) and p2.3 passed. Fix in 8228edd (test compares without order); p4.15 check rerun PASS (4 passed). Run 4's untracked outputs are replaced by the next run.
+- next: Claude runs the gate again (run 5) with the PC left alone.

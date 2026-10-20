@@ -5709,6 +5709,16 @@
         "p5.14",
         "Q-231"
       ]
+    },
+    {
+      "id": "8228edd",
+      "kind": "commit",
+      "title": "Commit 8228edd: test fix after gate run 4",
+      "summary": "Makes one isolation test check the list of browser environments without its order, because Ferrum lists them in the order they answer.",
+      "status": "Done",
+      "related": [
+        "phase-p5-telemetry"
+      ]
     }
   ]
 }

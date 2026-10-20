@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:ba5c60b64fec7ad6560c0b426147da0c5134421c37f04f569aa4e52934cbf556"
+    "content_hash": "sha256:6d213207fa2cad9a359bd4f36b2ea510daa334af82d7724e6522ade3de22d16c"
   },
   "updated": "2026-10-20",
   "where_we_are": [
@@ -43,7 +43,7 @@
       },
       {
         "item": "Gate runs",
-        "state": "Run 2 failed (causes fixed); run 3 passed everything it reached, then Claude Code stopped it (low memory)",
+        "state": "Run 4 (20 Oct): everything passed except one test that wrongly expected a fixed order; fixed. Run 5 next",
         "ref": "p5.14"
       },
       {

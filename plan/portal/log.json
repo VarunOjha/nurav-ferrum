@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:211445bc70dc87bfe0e142461d8d921fbecc5b7821c7cfd7793a06a4ecb67b82"
+    "content_hash": "sha256:191930e029e2f8bcb6561c530816795c7986d328c0e58f83300f05263fc5621a"
   },
   "entries": [
     {
@@ -6655,6 +6655,31 @@
       "commit": null,
       "covers": [
         "## [2026-10-20] resume | session s09 starts; the owner asks Claude to run the P5 gate"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-20-s09-gate-run-4",
+      "date": "2026-10-20",
+      "time": "02:05",
+      "title": "Phase 5 gate run 4: one test fault, fixed",
+      "done": "The gate ran to the end without being stopped. 21 checks passed and the wiki check waits on the known history cleanup. One test failed: it expected two websites' browser processes to be listed in a fixed order, but Ferrum lists them in the order they answer. The test now checks the list without its order, and passes.",
+      "next": "Claude runs the gate again with the PC left alone.",
+      "decisions": [
+        {
+          "what": "Fix the test, not Ferrum: the order of that list does not matter",
+          "by": "Claude"
+        }
+      ],
+      "approvals": [],
+      "commit": "8228edd",
+      "covers": [
+        "## [2026-10-20] gate | phase-p5-telemetry exit run 4: FAIL (21 PASS, 1 FAIL, 1 WAIT); cause fixed"
       ],
       "phase": "phase-p5-telemetry",
       "category": "Checked",
