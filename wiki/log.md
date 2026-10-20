@@ -3419,3 +3419,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-19-s08-close-old-gate-ferrum.md]
 - result: Owner said "Closed, run", but process 15808 (target/gate-release ferrum-desktop.exe, started 2026-10-18 12:56) still ran. Asked; owner: "Yes, close it (Recommended)", one-time consent for that process only. Stop-Process then taskkill: the process reports exited but its handle stays open, so the program file stayed locked. Claude renamed it to ferrum-desktop.exe.locked-15808 in the same folder (nothing deleted; a restart releases it), so the gate's release build can write a new file.
 - next: Claude runs the gate (third run).
+
+## [2026-10-19] gate | phase-p5-telemetry exit run 3 stopped by Claude Code (low memory)
+- session: s08
+- time: 19:06
+- pages: [phase-p5-telemetry]
+- sources: [scripts/gates/p5-gate.ps1]
+- result: Run at 9eb9ea6. Before Claude Code stopped it for low memory (during the earlier phases' suites), every row had passed: approvals, all 15 task checks (p5.2 and p5.3 included), fmt and clippy, Rust tests, cargo deny, p5.4, p5.5, p5.1 and p5.9. No verdict; its 8 untracked outputs removed (made by Claude's run). Free memory about 5 GB; 25 msedgewebview2.exe of other programs and the exited process 15808 still listed (not touched).
+- next: owner runs the gate in his own PowerShell window (a background run in Claude Code is stopped when memory runs short), or restarts Claude Code with CLAUDE_CODE_DISABLE_BG_SHELL_PRESSURE_REAP=1 and asks Claude to run it.

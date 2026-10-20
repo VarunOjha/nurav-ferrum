@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:e4646c8618136f85857e9814fe2e2d3793aad58dc4c3882a169aa17436f8f496"
+    "content_hash": "sha256:602aa402074b742a6aac7cc8cfc1ed3872d88fb35f7cf13cdd318fba5fb836ac"
   },
   "entries": [
     {
@@ -6588,6 +6588,26 @@
       ],
       "phase": "phase-p5-telemetry",
       "category": "Decided",
+      "tags": [
+        "phases",
+        "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-p5-gate-run3",
+      "date": "2026-10-19",
+      "time": "19:06",
+      "title": "Third gate run: everything it reached passed, then it was stopped",
+      "done": "Every check up to the network log passed, including the two fixed task checks. Then Claude Code stopped the run because the PC was short of memory, so there is no result.",
+      "next": "You run the gate in your own PowerShell window.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] gate | phase-p5-telemetry exit run 3 stopped by Claude Code (low memory)"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
       "tags": [
         "phases",
         "check scripts"

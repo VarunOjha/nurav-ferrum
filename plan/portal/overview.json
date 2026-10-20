@@ -5,7 +5,7 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:1e82538c7ea2a919443eedcc74b6f33bf073b504674a1d62de47c6dc39d64169"
+    "content_hash": "sha256:a0474109e7aa2130ef29e71ffff60f817ed77813e9adf415451a1a65320f88ba"
   },
   "updated": "2026-10-19",
   "where_we_are": [
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
@@ -43,15 +43,15 @@
       },
       {
         "item": "Gate runs",
-        "state": "Run 1 stopped (low memory); run 2: 19 checks passed, 4 failed; the causes are fixed",
+        "state": "Run 2 failed (causes fixed); run 3 passed everything it reached, then was stopped (low memory)",
         "ref": "p5.14"
       },
       {
         "item": "Your part",
-        "state": "Leave the PC alone while Claude runs the gate (third run); then the hand checks, sign off"
+        "state": "Run the gate in your own PowerShell window; then the hand checks, sign off"
       }
     ],
-    "why": "You let Claude close the old Ferrum. Its program file stayed locked, so Claude renamed it (nothing deleted; a restart frees it) and the release build can write a new one. Now the whole gate runs again on one saved version. Some tests press real keys, so leave the PC alone until Claude reports.",
+    "why": "Claude Code stops long background jobs when the PC runs short of memory, and it stopped two gate runs that way. In your own PowerShell window it is not stopped. The gate reruns every Phase 5 check, the earlier test suites and a release build on one saved version. Some tests press real keys, so leave the PC alone while it runs.",
     "script": {
       "path": "scripts/gates/p5-gate.ps1",
       "parts": [
@@ -77,7 +77,7 @@
         }
       ]
     },
-    "tell_claude": "Nothing while it runs; Claude reports the result. Then the checklist results item by item, and whether P5 is signed off"
+    "tell_claude": "After the gate \"P5 gate passed\" or the FAIL or WAIT lines; then the checklist results item by item, and whether P5 is signed off"
   },
   "questions_for_you": {
     "open": 16,
