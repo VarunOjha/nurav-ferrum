@@ -5,13 +5,13 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:a0474109e7aa2130ef29e71ffff60f817ed77813e9adf415451a1a65320f88ba"
+    "content_hash": "sha256:97068ca5e9b2e62da075a68dd1bc7b13a9439c2ec8741f59dfc0e436f9f0b46b"
   },
   "updated": "2026-10-19",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P5 Measurement: in progress",
+      "state": "P5 Measurement: end-of-phase review; waiting for your gate run",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -39,19 +39,19 @@
     "where_we_are": [
       {
         "item": "Phase 5",
-        "state": "14 of 15 tasks done; the end-of-phase review is under way"
+        "state": "14 of 15 tasks done; only the end-of-phase review is left"
       },
       {
         "item": "Gate runs",
-        "state": "Run 2 failed (causes fixed); run 3 passed everything it reached, then was stopped (low memory)",
+        "state": "Run 2 failed (causes fixed); run 3 passed everything it reached, then Claude Code stopped it (low memory)",
         "ref": "p5.14"
       },
       {
         "item": "Your part",
-        "state": "Run the gate in your own PowerShell window; then the hand checks, sign off"
+        "state": "Restart the PC, stop Docker, close apps, run the gate; then the hand checks, sign off"
       }
     ],
-    "why": "Claude Code stops long background jobs when the PC runs short of memory, and it stopped two gate runs that way. In your own PowerShell window it is not stopped. The gate reruns every Phase 5 check, the earlier test suites and a release build on one saved version. Some tests press real keys, so leave the PC alone while it runs.",
+    "why": "Claude Code stops long background jobs when the PC is short of memory, so you run the gate yourself after a restart. It reruns every Phase 5 check, the earlier test suites and a release build on one saved version. Some tests press real keys, so leave the PC alone while it runs. The next Claude session asks you about it first.",
     "script": {
       "path": "scripts/gates/p5-gate.ps1",
       "parts": [
@@ -77,7 +77,7 @@
         }
       ]
     },
-    "tell_claude": "After the gate \"P5 gate passed\" or the FAIL or WAIT lines; then the checklist results item by item, and whether P5 is signed off"
+    "tell_claude": "\"P5 gate passed\", or the FAIL or WAIT lines (or just \"I ran the gate\": Claude reads the saved result); then the checklist results item by item, and whether P5 is signed off"
   },
   "questions_for_you": {
     "open": 16,

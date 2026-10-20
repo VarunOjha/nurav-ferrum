@@ -257,6 +257,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 - [handoff-2026-10-13-s04](operations/handoffs/handoff-2026-10-13-s04.md) | final | Handoff s04 (2026-10-13): P4 tasks p4.5 to p4.9 done (9 of 17); p4.10 next | P4 at 9 of 17; all approvals current; full smoke 106 passed
 - [handoff-2026-10-14-s06](operations/handoffs/handoff-2026-10-14-s06.md) | partial | Handoff s06 (2026-10-14): p4.15 to p4.17 done (13 of 18); p4.18 SmartScreen next | Nothing in flight; all approvals current; mishap in p4.16 recorded
 - [handoff-2026-10-15-s07](operations/handoffs/handoff-2026-10-15-s07.md) | partial | Handoff s07 (2026-10-14 to 2026-10-15): p4.18, p4.19, p4.11, p4.12, p4.13 done (18 of 19); exit gate p4.14 next | Written early before the exit gate; nothing in flight
+- [handoff-2026-10-19-s08](operations/handoffs/handoff-2026-10-19-s08.md) | final | Handoff s08 (2026-10-18 to 2026-10-19): P4 signed off; P5 tasks 1 to 13 and 15 done; exit gate p5.14 waits on the owner's run | Next session asks the owner about the P5 gate first
 
 ## Interactive plan
 
@@ -364,6 +365,7 @@ Catalogue of every wiki page and raw source (SCHEMA §11; raw evidence and bench
 - [2026-10-19-s08-q231-netlog-one-line-per-refusal](raw/owner/2026-10-19-s08-q231-netlog-one-line-per-refusal.md) | raw | RAW SOURCE — Owner answers Q-231: fix the network log's lines for a refused request now, in P5 (session s08, 2026-10-19) | Q-231 answered: one line per refused request, fixed in p5.14
 - [2026-10-19-s08-q231-reapprovals](raw/owner/2026-10-19-s08-q231-reapprovals.md) | raw | RAW SOURCE — Owner re-approves two pages after the Q-231 fix and asks Claude to run the gate (session s08, 2026-10-19) | two pages re-approved; Claude runs the gate
 - [2026-10-19-s08-close-old-gate-ferrum](raw/owner/2026-10-19-s08-close-old-gate-ferrum.md) | raw | RAW SOURCE — Owner lets Claude close the old gate-release Ferrum before the third P5 gate run (session s08, 2026-10-19) | one-time consent to stop process 15808
+- [2026-10-19-s08-session-end-owner-runs-gate](raw/owner/2026-10-19-s08-session-end-owner-runs-gate.md) | raw | RAW SOURCE — Owner ends session s08: he restarts the PC and runs the P5 gate himself (session s08, 2026-10-19) | next session prompts for the gate first; owner updates the git remote himself
 - [2026-10-15-s07-p4-19-blank-page-fix](raw/owner/2026-10-15-s07-p4-19-blank-page-fix.md) | raw | RAW SOURCE — Owner asks Claude to fix the profile question on SmartScreen's warning page within p4.19 (session s07, 2026-10-15) | A blank page after a SmartScreen block raises no profile question; the blocked site is named
 - [2026-10-15-s07-p4-19-components-reapproval](raw/owner/2026-10-15-s07-p4-19-components-reapproval.md) | raw | RAW SOURCE — Owner re-approves comp-app-shell after p4.19 (session s07, 2026-10-15) | comp-app-shell re-approved; p4.11 may start
 - [2026-10-15-s07-p4-11-probe-folder-fix](raw/owner/2026-10-15-s07-p4-11-probe-folder-fix.md) | raw | RAW SOURCE — Owner asks Claude to fix the self-test probe's data folder and rerun (session s07, 2026-10-15) | The self-test's probe view still used the real data folder; fixed in p4.11

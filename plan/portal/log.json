@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:602aa402074b742a6aac7cc8cfc1ed3872d88fb35f7cf13cdd318fba5fb836ac"
+    "content_hash": "sha256:7215bac007f2808128a4c13124bfa0c365e50b3467f1e6e1d644e899536e7019"
   },
   "entries": [
     {
@@ -6605,6 +6605,31 @@
       "commit": null,
       "covers": [
         "## [2026-10-19] gate | phase-p5-telemetry exit run 3 stopped by Claude Code (low memory)"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-19-s08-handoff",
+      "date": "2026-10-19",
+      "time": "23:27",
+      "title": "Session ends: you run the Phase 5 gate after a restart",
+      "done": "Claude saved the state for the next session: the handoff note, the status page, the log and this portal. Nothing is left half-done. The next Claude session asks you about the gate first.",
+      "next": "You restart the PC, stop Docker, close apps and run the gate; then you tell the next session the result.",
+      "decisions": [
+        {
+          "what": "You run the gate yourself after a restart; you update the GitHub address yourself",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-19] handoff | session s08 ends; the owner runs the P5 gate after a restart"
       ],
       "phase": "phase-p5-telemetry",
       "category": "Checked",

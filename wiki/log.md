@@ -3427,3 +3427,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [scripts/gates/p5-gate.ps1]
 - result: Run at 9eb9ea6. Before Claude Code stopped it for low memory (during the earlier phases' suites), every row had passed: approvals, all 15 task checks (p5.2 and p5.3 included), fmt and clippy, Rust tests, cargo deny, p5.4, p5.5, p5.1 and p5.9. No verdict; its 8 untracked outputs removed (made by Claude's run). Free memory about 5 GB; 25 msedgewebview2.exe of other programs and the exited process 15808 still listed (not touched).
 - next: owner runs the gate in his own PowerShell window (a background run in Claude Code is stopped when memory runs short), or restarts Claude Code with CLAUDE_CODE_DISABLE_BG_SHELL_PRESSURE_REAP=1 and asks Claude to run it.
+
+## [2026-10-19] handoff | session s08 ends; the owner runs the P5 gate after a restart
+- session: s08
+- time: 23:27
+- pages: [handoff-2026-10-19-s08, phase-p5-telemetry]
+- sources: [raw/owner/2026-10-19-s08-session-end-owner-runs-gate.md]
+- result: Owner: he restarts the PC, stops Docker and runs the gate himself; the next session first prompts him to run it; he updates the git remote himself (not an answer to Q-221 or Q-105). Handoff written; STATUS next_action and the portal's next step say so. Cleanup: no untracked files left (the stopped runs' outputs were removed); the renamed locked file in target/gate-release is deleted after the restart. quick_lint 0 errors; lint:wiki only the known Q-221 error; portal-sync clean.
+- next: next session asks the owner about the P5 gate first (STATUS next_action).
