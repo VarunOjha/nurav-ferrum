@@ -75,7 +75,8 @@ for (const m of MODES) {
       const hosts = (site: string) => inv.processes.filter((p) => p.kind === "renderer" && p.frames.some((u) => u.startsWith(site)));
       if (m.mode === "per-site-udf") {
         // Tauri's environment (shell, empty tabs) plus one per open site, each with its own browser process.
-        expect(inv.environments).toEqual(["shell", "site-site-a.localhost", "site-site-b.localhost"]);
+        // The inventory lists environments in the order they answer, so compare without order (gate run 4).
+        expect([...inv.environments].sort()).toEqual(["shell", "site-site-a.localhost", "site-site-b.localhost"]);
         expect(browsers.length).toBe(3);
         expect(new Set(browsers.map((p) => p.environment)).size).toBe(3);
         expect(hosts(A).every((p) => p.environment === "site-site-a.localhost")).toBe(true);
