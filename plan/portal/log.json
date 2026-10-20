@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:191930e029e2f8bcb6561c530816795c7986d328c0e58f83300f05263fc5621a"
+    "content_hash": "sha256:9f65d46cbecaed31060fe1e32d4415ab2ab1e15af7eadd30754d2c31dd75c39a"
   },
   "entries": [
     {
@@ -6680,6 +6680,26 @@
       "commit": "8228edd",
       "covers": [
         "## [2026-10-20] gate | phase-p5-telemetry exit run 4: FAIL (21 PASS, 1 FAIL, 1 WAIT); cause fixed"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-20-s09-gate-run-5",
+      "date": "2026-10-20",
+      "time": "02:50",
+      "title": "Phase 5 gate run 5: all automatic checks passed",
+      "done": "The gate ran to the end with the PC left alone. All 22 automatic checks passed: every Phase 5 task, code checks, all tests, the accuracy and cost tests, the network log tests, the earlier phases' tests and the release build. The wiki check waits only on the history cleanup before the first upload. The results are saved as evidence.",
+      "next": "You do the hand checklist with the gate's build and tell Claude the results.",
+      "decisions": [],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-20] gate | phase-p5-telemetry exit run 5: NOT READY (22 PASS, 1 WAIT, 2 YOURS); test gate passed"
       ],
       "phase": "phase-p5-telemetry",
       "category": "Checked",

@@ -49,7 +49,7 @@ approvable: false
 session: s09
 current_phase: phase-p5-telemetry
 current_task: p5.14
-next_action: "Session s09: the owner asked Claude to run the P5 gate (raw/owner/2026-10-20-s09-claude-runs-p5-gate.md); Claude started pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence in its own PowerShell window, output copied to the scratchpad. If this session was cut off: ask the owner whether that window finished. When it has, read wiki/raw/evidence/phase-p5-telemetry/p5-gate.txt and the other new files there, report in plain words, commit the evidence (mask.ps1 --scan 0 first; MANIFEST lines), log gate | phase-p5-telemetry exit. Expected verdict WAIT (the known Q-221 wiki error alone); any FAIL is fixed and the gate rerun. Then the owner does docs/testing/manual-checklist-p5.md with target/gate-release/release/ferrum-desktop.exe (one-way settings step), Claude writes manual-checklist.md in his words, runs scripts/verify/p5.14-gate-review.ps1, the owner approves phase-p5-telemetry#exit, phase set done, then PAUSE (P6 needs his explicit go). Also: delete target/gate-release/release/ferrum-desktop.exe.locked-15808 after his restart (cleanup he asked for). History of this gate: handoff-2026-10-19-s08. Run quick_lint and npm run lint:wiki as their own steps before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "Session s09: the P5 gate passed its automated part (run 5 at a2cfae4: 22 PASS, the known Q-221 WAIT; evidence in wiki/raw/evidence/phase-p5-telemetry/p5-gate.txt, committed). Next, the owner does docs/testing/manual-checklist-p5.md with target/gate-release/release/ferrum-desktop.exe (close his own Ferrum first; one-way settings step) and tells Claude the results item by item. Claude then writes wiki/raw/evidence/phase-p5-telemetry/manual-checklist.md in his words, runs scripts/verify/p5.14-gate-review.ps1, the owner approves phase-p5-telemetry#exit, phase set done, then PAUSE (P6 needs his explicit go). Also: delete target/gate-release/release/ferrum-desktop.exe.locked-15808 after his next restart (cleanup he asked for). Run quick_lint and npm run lint:wiki as their own steps before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-19-s08
 ---
@@ -72,7 +72,7 @@ P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check 
 ## Done this session (s09)
 
 - Session start; owner: "You can run it now yourself here in Claude code". Claude runs the P5 gate (free memory 17.6 GB).
-- Gate run 4: 21 PASS, 1 FAIL, 1 WAIT. The FAIL was a test that expected a fixed order; fixed in 8228edd (p4.15 check PASS). Gate run 5 next.
+- Gate run 4: 21 PASS, 1 FAIL, 1 WAIT. The FAIL was a test that expected a fixed order; fixed in 8228edd (p4.15 check PASS). Gate run 5 (a2cfae4): 22 PASS, the known Q-221 WAIT, no FAIL; evidence committed. Owner's hand checklist next.
 
 ## Done this session (s08)
 

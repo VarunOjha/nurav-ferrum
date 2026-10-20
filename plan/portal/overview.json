@@ -5,13 +5,13 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:6d213207fa2cad9a359bd4f36b2ea510daa334af82d7724e6522ade3de22d16c"
+    "content_hash": "sha256:a998acafa327a2e5ac198c33d926ed4f2c0c7e196a10ed83b806c5f2aa68125a"
   },
   "updated": "2026-10-20",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P5 Measurement: end-of-phase review; Claude is running the gate (you asked on 20 Oct)",
+      "state": "P5 Measurement: end-of-phase review; the gate passed its automatic part; your hand checks next",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -35,49 +35,49 @@
     }
   ],
   "next_action": {
-    "who": "claude",
+    "who": "you",
     "where_we_are": [
       {
         "item": "Phase 5",
         "state": "14 of 15 tasks done; only the end-of-phase review is left"
       },
       {
-        "item": "Gate runs",
-        "state": "Run 4 (20 Oct): everything passed except one test that wrongly expected a fixed order; fixed. Run 5 next",
+        "item": "Gate run 5 (20 Oct)",
+        "state": "22 checks passed, none failed; the wiki check waits only on the history cleanup",
         "ref": "p5.14"
       },
       {
         "item": "Your part",
-        "state": "Leave the PC alone while the gate runs; then the hand checks and your sign-off"
+        "state": "The hand checklist with the gate's build, then your sign-off"
       }
     ],
-    "why": "You asked Claude to run the gate here, since memory is now free (17.6 GB). Claude starts it in its own PowerShell window, so Claude Code cannot stop it for low memory. It reruns every Phase 5 check, the earlier test suites and a release build on one saved version. Some tests press real keys, so leave the PC alone while it runs (about an hour and a half).",
+    "why": "Robots cannot judge everything. You switch on measuring and the network log in the new build, browse for about 15 minutes, and look at what was saved: one line per request, and no cookies, passwords, form contents or page text. This proves the logging is private and does not get in the way. Close your own Ferrum first. After this, keep using the new build, because its settings file has two new sections that the old build does not understand.",
     "script": {
-      "path": "scripts/gates/p5-gate.ps1",
+      "path": "docs/testing/manual-checklist-p5.md",
       "parts": [
         {
-          "code": "Part 1",
-          "explains": "Checks that your approvals for Phase 5 are current (they are)."
+          "code": "& \".\\target\\gate-release\\release\\ferrum-desktop.exe\"",
+          "explains": "Starts the build the gate made, from the repo folder (close your own Ferrum first)."
         },
         {
-          "code": "Part 2",
-          "explains": "Runs the check of every Phase 5 task again."
+          "code": "Items 1-2",
+          "explains": "Settings: both switches off at first; tick them, set 7 days, save, restart, check they stayed."
         },
         {
-          "code": "Part 3",
-          "explains": "On one commit: code checks, all automatic tests, the licence check, the accuracy and cost tests, the file format and network log tests, the earlier test suites, and a release build in its own folder (your own Ferrum is not touched)."
+          "code": "Items 3-5",
+          "explains": "Browse about 15 minutes; open the network log folder and the measuring folder and look inside."
         },
         {
-          "code": "Part 4",
-          "explains": "Lists your part: the hand checklist and your review."
+          "code": "Item 6",
+          "explains": "Untick both, restart, browse: nothing new is written."
         },
         {
-          "code": "-SaveEvidence",
-          "explains": "Saves each result as an evidence file, with personal values masked."
+          "code": "Items 7-8",
+          "explains": "Optional, owed from earlier phases: typing after Alt+Tab, and the download safety note."
         }
       ]
     },
-    "tell_claude": "Nothing while it runs. Claude reads every result line and reports back; then you do the hand checks and say whether P5 is signed off."
+    "tell_claude": "The results item by item in your own words (yes / no and anything odd), and whether Phase 5 is signed off."
   },
   "questions_for_you": {
     "open": 16,

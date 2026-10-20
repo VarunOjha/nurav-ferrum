@@ -3451,3 +3451,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [scripts/gates/p5-gate.ps1]
 - result: Run at 9b3274b from 01:19 in its own PowerShell window, 2461 s, not stopped. PASS: approvals, all 10 part-2 task checks, fmt and clippy, Rust tests, cargo deny, p5.4 accuracy, p5.5 cost, p5.1 format, p5.9 network log, shell checks, release build in target/gate-release, p4.16 no-security check. WAIT: wiki check (only the known Q-221 error). FAIL: earlier suites row, one test only: isolation-modes.spec.ts mode per-site-udf expected environments in a fixed order, but the inventory lists them in answer order (site B came first); the P3 suite (62 passed), P2 suite (26 passed) and p2.3 passed. Fix in 8228edd (test compares without order); p4.15 check rerun PASS (4 passed). Run 4's untracked outputs are replaced by the next run.
 - next: Claude runs the gate again (run 5) with the PC left alone.
+
+## [2026-10-20] gate | phase-p5-telemetry exit run 5: NOT READY (22 PASS, 1 WAIT, 2 YOURS); test gate passed
+- session: s09
+- time: 02:50
+- pages: [phase-p5-telemetry]
+- sources: [raw/evidence/phase-p5-telemetry/p5-gate.txt, raw/evidence/phase-p5-telemetry/regression.txt]
+- result: Run at a2cfae4 from 02:06 in its own PowerShell window, 2532 s, PC left alone. Every automated row PASS: approvals, the 10 part-2 task checks, fmt and clippy, Rust tests, cargo deny, p5.4 accuracy, p5.5 cost, p5.1 format, p5.9 network log, earlier suites (security suite 75 passed, npm run p3 62 passed, npm run p2 26 passed, p2.3 PASS), shell checks, release build in target/gate-release, p4.16 no-security check. WAIT: wiki check, only the known Q-221 error. YOURS: the hand checklist and the review. 14 evidence files committed (mask scan 0, MANIFEST lines). The expected verdict.
+- next: owner does docs/testing/manual-checklist-p5.md with target/gate-release/release/ferrum-desktop.exe and tells Claude the results item by item.
