@@ -3,7 +3,7 @@ id: status-live
 type: status
 title: "Ferrum live status and next action"
 status: active
-updated: 2026-10-19
+updated: 2026-10-20
 sources:
   - raw/01-scoping-decisions.md
   - raw/research/nextjs-stack.md
@@ -43,12 +43,13 @@ sources:
   - raw/owner/2026-10-15-s07-p4-20-components-reapproval.md
   - raw/owner/2026-10-18-s07-ip-routes-reapproval.md
   - raw/owner/2026-10-18-s08-p4-signoff-and-p5-go.md
+  - raw/owner/2026-10-20-s09-claude-runs-p5-gate.md
 related: [ops-portal-pipeline, adr-0023, adr-0024, adr-0025, adr-0026, adr-0027, phase-p0-planning, phase-p1-foundation, ops-approval-workflow, ip-build-plan, ops-session-protocol, ops-resume-after-interruption, ops-environment-setup, ops-multi-agent-workflow, ops-wiki-maintenance, ov-open-questions, schema]
 approvable: false
-session: s08
+session: s09
 current_phase: phase-p5-telemetry
 current_task: p5.14
-next_action: "FIRST, before any other work (owner's instruction of 2026-10-19): ask the owner whether he has run the P5 gate. If not, give him the four-part instruction below: restart the PC, stop Docker, close other apps, then from the repo folder pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence, PC left alone (about an hour; real-keystroke tests; needs internet). If he has, read wiki/raw/evidence/phase-p5-telemetry/p5-gate.txt and the other new files there, report in plain words, commit the evidence (mask.ps1 --scan 0 first; MANIFEST lines), log gate | phase-p5-telemetry exit. Expected verdict WAIT (the known Q-221 wiki error alone); any FAIL is fixed and the gate rerun. Then the owner does docs/testing/manual-checklist-p5.md with target/gate-release/release/ferrum-desktop.exe (one-way settings step), Claude writes manual-checklist.md in his words, runs scripts/verify/p5.14-gate-review.ps1, the owner approves phase-p5-telemetry#exit, phase set done, then PAUSE (P6 needs his explicit go). Also: delete target/gate-release/release/ferrum-desktop.exe.locked-15808 after his restart (cleanup he asked for). History of this gate: handoff-2026-10-19-s08. Run quick_lint and npm run lint:wiki as their own steps before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items, history cleanup (Q-221), the owner's push (Q-105)."
+next_action: "Session s09: the owner asked Claude to run the P5 gate (raw/owner/2026-10-20-s09-claude-runs-p5-gate.md); Claude started pwsh -NoProfile -File scripts/gates/p5-gate.ps1 -SaveEvidence in its own PowerShell window, output copied to the scratchpad. If this session was cut off: ask the owner whether that window finished. When it has, read wiki/raw/evidence/phase-p5-telemetry/p5-gate.txt and the other new files there, report in plain words, commit the evidence (mask.ps1 --scan 0 first; MANIFEST lines), log gate | phase-p5-telemetry exit. Expected verdict WAIT (the known Q-221 wiki error alone); any FAIL is fixed and the gate rerun. Then the owner does docs/testing/manual-checklist-p5.md with target/gate-release/release/ferrum-desktop.exe (one-way settings step), Claude writes manual-checklist.md in his words, runs scripts/verify/p5.14-gate-review.ps1, the owner approves phase-p5-telemetry#exit, phase set done, then PAUSE (P6 needs his explicit go). Also: delete target/gate-release/release/ferrum-desktop.exe.locked-15808 after his restart (cleanup he asked for). History of this gate: handoff-2026-10-19-s08. Run quick_lint and npm run lint:wiki as their own steps before every commit. Never build into target/release. Owed: P4 checklist, P3 end-check rerun and checklist items, history cleanup (Q-221), the owner's push (Q-105)."
 blocked_on: []
 last_handoff: handoff-2026-10-19-s08
 ---
@@ -67,6 +68,10 @@ without the hand checklist, answered Q-114, Q-115 and Q-203 and approved the sev
 for the owner's review. Standing rule: no kill commands and no deleting of things Claude did not create without asking.
 
 P0 to P4 are done and signed off. Owed: the P4 hand checklist, the P3 end-check rerun and checklist items 1 to 20.
+
+## Done this session (s09)
+
+- Session start; owner: "You can run it now yourself here in Claude code". Claude runs the P5 gate (free memory 17.6 GB).
 
 ## Done this session (s08)
 

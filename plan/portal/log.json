@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:7215bac007f2808128a4c13124bfa0c365e50b3467f1e6e1d644e899536e7019"
+    "content_hash": "sha256:211445bc70dc87bfe0e142461d8d921fbecc5b7821c7cfd7793a06a4ecb67b82"
   },
   "entries": [
     {
@@ -6630,6 +6630,31 @@
       "commit": null,
       "covers": [
         "## [2026-10-19] handoff | session s08 ends; the owner runs the P5 gate after a restart"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-20-s09-resume",
+      "date": "2026-10-20",
+      "time": "01:17",
+      "title": "Session 9 starts: Claude runs the Phase 5 gate for you",
+      "done": "Claude checked the state (nothing half-done) and asked whether you had run the gate. You asked Claude to run it here, since memory is now free.",
+      "next": "Claude runs the gate in its own window with the PC left alone, then reports every result line.",
+      "decisions": [
+        {
+          "what": "Claude runs the gate in Claude Code instead of you",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-20] resume | session s09 starts; the owner asks Claude to run the P5 gate"
       ],
       "phase": "phase-p5-telemetry",
       "category": "Checked",

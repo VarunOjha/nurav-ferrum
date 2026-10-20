@@ -3435,3 +3435,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/owner/2026-10-19-s08-session-end-owner-runs-gate.md]
 - result: Owner: he restarts the PC, stops Docker and runs the gate himself; the next session first prompts him to run it; he updates the git remote himself (not an answer to Q-221 or Q-105). Handoff written; STATUS next_action and the portal's next step say so. Cleanup: no untracked files left (the stopped runs' outputs were removed); the renamed locked file in target/gate-release is deleted after the restart. quick_lint 0 errors; lint:wiki only the known Q-221 error; portal-sync clean.
 - next: next session asks the owner about the P5 gate first (STATUS next_action).
+
+## [2026-10-20] resume | session s09 starts; the owner asks Claude to run the P5 gate
+- session: s09
+- time: 01:17
+- pages: [phase-p5-telemetry]
+- sources: [raw/owner/2026-10-20-s09-claude-runs-p5-gate.md]
+- result: Session start: tree clean, no stash, In-flight p5.14 unchanged, no p5-gate.txt yet. Claude asked first, as STATUS said; owner: "You can run it now yourself here in Claude code, memory is a lot more free now". Free memory 17.6 GB of 27.8 GB. No restart happened, so the renamed locked file in target/gate-release stays for now. Claude starts the gate in its own PowerShell window so Claude Code's low-memory reaper cannot stop it.
+- next: Claude runs scripts/gates/p5-gate.ps1 -SaveEvidence with the PC left alone, then reads every result line.

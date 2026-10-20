@@ -5,13 +5,13 @@
   "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:97068ca5e9b2e62da075a68dd1bc7b13a9439c2ec8741f59dfc0e436f9f0b46b"
+    "content_hash": "sha256:ba5c60b64fec7ad6560c0b426147da0c5134421c37f04f569aa4e52934cbf556"
   },
-  "updated": "2026-10-19",
+  "updated": "2026-10-20",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P5 Measurement: end-of-phase review; waiting for your gate run",
+      "state": "P5 Measurement: end-of-phase review; Claude is running the gate (you asked on 20 Oct)",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -35,7 +35,7 @@
     }
   ],
   "next_action": {
-    "who": "you",
+    "who": "claude",
     "where_we_are": [
       {
         "item": "Phase 5",
@@ -48,10 +48,10 @@
       },
       {
         "item": "Your part",
-        "state": "Restart the PC, stop Docker, close apps, run the gate; then the hand checks, sign off"
+        "state": "Leave the PC alone while the gate runs; then the hand checks and your sign-off"
       }
     ],
-    "why": "Claude Code stops long background jobs when the PC is short of memory, so you run the gate yourself after a restart. It reruns every Phase 5 check, the earlier test suites and a release build on one saved version. Some tests press real keys, so leave the PC alone while it runs. The next Claude session asks you about it first.",
+    "why": "You asked Claude to run the gate here, since memory is now free (17.6 GB). Claude starts it in its own PowerShell window, so Claude Code cannot stop it for low memory. It reruns every Phase 5 check, the earlier test suites and a release build on one saved version. Some tests press real keys, so leave the PC alone while it runs (about an hour and a half).",
     "script": {
       "path": "scripts/gates/p5-gate.ps1",
       "parts": [
@@ -77,7 +77,7 @@
         }
       ]
     },
-    "tell_claude": "\"P5 gate passed\", or the FAIL or WAIT lines (or just \"I ran the gate\": Claude reads the saved result); then the checklist results item by item, and whether P5 is signed off"
+    "tell_claude": "Nothing while it runs. Claude reads every result line and reports back; then you do the hand checks and say whether P5 is signed off."
   },
   "questions_for_you": {
     "open": 16,
