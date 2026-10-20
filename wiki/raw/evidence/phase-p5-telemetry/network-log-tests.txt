@@ -1,0 +1,27 @@
+Command output saved by scripts/gates/p5-gate.ps1 on 2026-10-20 02:29 at commit a2cfae4 (with uncommitted changes)
+Exit code: 0
+
+Ferrum check p5.9: Network log: addresses and timings only
+Why: useful for research without storing private data.
+Run at 2026-10-20 02:28 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The record: only the allowed fields, bad records refused, rotation, old sessions deleted safely
+         six unit tests passed (including the negative test: no header, cookie or body field)
+  PASS   The settings: off by default, limits checked (2 s)
+         off by default, 14 days kept; out-of-range values and a folder outside the data folder refused
+  PASS   Live: exactly the expected entries; a refused address logged as blocked; off by default (80 s)
+         NETLOG: 7 records in 7 lines; the /netlog tab's 7:
+         GET /netlog 200 document 391 B allowed
+         GET site-b/landing 200 frame 240 B allowed
+         GET /netlog/style.css 200 stylesheet 23 B allowed
+         GET /netlog/app.js 200 script 105 B allowed
+         GET /icon.png 200 image 82 B allowed
+         GET /netlog/data.json 200 fetch 16 B allowed
+         https://127.0.0.1:8443/landing null null - B blocked:blocklist
+         blocked: 127.0.0.1:8443/landing blocked:blocklist; responses still reported for it: 0
+         NETLOG-OFF: no log folder with the default settings
+         NETLOG-OFF: no log folder with the default settings
+------------------------------------------------------------------------
+RESULT: PASS - p5.9 (3 PASS; 83 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.9 check passed".

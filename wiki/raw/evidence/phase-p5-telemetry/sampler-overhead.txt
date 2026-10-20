@@ -1,0 +1,15 @@
+Command output saved by scripts/gates/p5-gate.ps1 on 2026-10-20 02:28 at commit a2cfae4 (with uncommitted changes)
+Exit code: 0
+
+Ferrum check p5.5: What the meter itself costs
+Why: we know how much it disturbs results (this describes the tool, not Ferrum).
+Run at 2026-10-20 02:24 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The meter's own cost at five intervals, against no reading (17 processes, optimised build) (122 s)
+         6 runs of 20 s over 17 processes (release (optimised))
+  PASS   Inside Ferrum: listing cost and CPU per second at 100 ms and 1000 ms, against a baseline (rough) (120 s)
+         baseline: 2 readings, listing 1.0 ms median (max 1.0), Ferrum process 0.00 ms CPU/s, all its processes 25.78 ms CPU/s; 100 ms: 20 readings, listing 0.9 ms median (max 1.2), Ferrum process 40.67 ms CPU/s, all its processes 40.67 ms CPU/s; 1000 ms: 20 readings, listing 1.0 ms median (max 1.1), Ferrum process 0.82 ms CPU/s, all its processes 18.89 ms CPU/s
+------------------------------------------------------------------------
+RESULT: PASS - p5.5 (2 PASS; 243 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.5 check passed".

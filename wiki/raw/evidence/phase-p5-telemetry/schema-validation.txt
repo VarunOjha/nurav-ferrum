@@ -1,0 +1,19 @@
+Command output saved by scripts/gates/p5-gate.ps1 on 2026-10-20 02:28 at commit a2cfae4 (with uncommitted changes)
+Exit code: 0
+
+Ferrum check p5.1: Export file format and run labels
+Why: any number can be traced to the exact setup that made it.
+Run at 2026-10-20 02:28 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Each record type saves and reloads unchanged (data file and table) (2 s)
+         seven record types as JSON lines, six tables as CSV (sample_gap added by p5.3, lifecycle_transition by p5.8)
+  PASS   The writer rotates files and leaves no half file under a finished name
+         rotation by size; a crash leaves a .part file that the checker refuses
+  PASS   The checker accepts good files and refuses each damaged one
+         good test file accepted; 13 damaged test files refused, each for its own reason
+  PASS   The published format description matches the code
+         crates/telemetry/schema/v1/record.schema.json
+------------------------------------------------------------------------
+RESULT: PASS - p5.1 (4 PASS; 2 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.1 check passed".

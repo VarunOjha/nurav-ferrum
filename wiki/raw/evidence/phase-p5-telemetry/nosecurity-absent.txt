@@ -1,0 +1,19 @@
+Command output saved by scripts/gates/p5-gate.ps1 on 2026-10-20 02:47 at commit a2cfae4 (with uncommitted changes)
+Exit code: 0
+
+Ferrum check p4.16: Benchmark-only no-security build
+Why: no risk of shipping it.
+Run at 2026-10-20 02:45 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: the switch allows web addresses only; without it the rules decide (4 s)
+         three unit tests passed (one normal, two with the switch)
+  PASS   Release check: the normal release build has no switch; the benchmark build refuses to start without --benchmark-mode (123 s)
+         no switch in the normal release program; markers found in the benchmark program; start refused without the argument
+  PASS   Without its own data folder the benchmark build refuses to start; with one it starts, logs what it is, and closes (8 s)
+         refused without its own data folder (exit 2); with one it started, logged 'benchmark build without site rules' in the run folder, closed with exit 0
+  PASS   CI and the local CI script run the release check
+         both run it after the release build
+------------------------------------------------------------------------
+RESULT: PASS - p4.16 (4 PASS; 136 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.16 check passed".

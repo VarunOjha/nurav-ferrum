@@ -1,0 +1,108 @@
+Command output saved by scripts/gates/p5-gate.ps1 on 2026-10-20 02:48 at commit a2cfae4 (with uncommitted changes)
+Exit code: 1
+
+
+> interactive_plan@0.1.0 lint:wiki
+> vitest run --config vitest.lint.config.mts
+
+
+ RUN  v5.0.3 <USERPROFILE>/Documents/Projects/ferrum-rust-webclient/interactive_plan
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > loads every page and reports zero FM-* errors
+real wiki: 351 files loaded (232 ids), 414 log entries, 64 open-question sections; loader findings by code: {}
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > every `sources` path entry names an existing wiki file (SCHEMA §5.1, REF-DANGLING)
+real wiki: 914 sources path entries checked
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > the slug algorithm agrees with every heading anchor written in the real wiki
+real wiki: 87 body links with a heading anchor into a loaded page checked
+
+stdout | tests/lint/real-wiki-loader.test.ts > real wiki/ (integration, read-only) > body links to missing files (informational; the REF-DANGLING rule is enforced by lint:wiki, IP-5)
+real wiki: 0 body links to missing files
+
+ ✓ tests/lint/real-wiki-loader.test.ts (6 tests) 730ms
+stdout | tests/lint/wiki-lint.test.ts > wiki lint (real wiki, read-only) > runs every rule and prints the report
+wiki lint: wiki wiki, status STATUS.md, approvals plan/approvals.json (valid), git ok, today 2026-10-20
+ERROR RAW-IMMUTABLE wiki/raw/MANIFEST.sha256  commit ff7292e modified a raw file (MANIFEST.sha256 changed other than by appending lines)
+WARN UNV-MIRROR STATUS.md  inline tags name phase-p5-telemetry but the frontmatter unverified list does not (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/architecture/ov-arch-configuration.md  the frontmatter unverified list names phase-p7-lifecycle but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/architecture/ov-arch-data-flows.md  inline tags name phase-p6-benchmark-harness but the frontmatter unverified list does not (SCHEMA §7.1)
+WARN CONTRADICTION wiki/decisions/adr-0009-benchmark-hardware-energy.md:42  open CONTRADICTION blockquote (registered as Q-116, Q-122, Q-123)
+WARN CONTRADICTION wiki/decisions/adr-0010-isolation-webview2-profiles.md:42  open CONTRADICTION blockquote (registered as Q-107)
+WARN STALE-UPDATED wiki/decisions/adr-0029-profile-route-raw-com-tab-controllers.md  updated 2026-10-11 is older than the last commit of the file (2026-10-12)
+WARN ADR-SECTIONS wiki/decisions/adr-0034-permission-question-chrome-style.md  missing or out of order: ## Verification / evidence (SCHEMA §6.4)
+WARN STALE-UPDATED wiki/index.md  updated 2026-10-11 is older than the last commit of the file (2026-10-20)
+WARN STALE-UPDATED wiki/log.md  updated 2026-10-11 is older than the last commit of the file (2026-10-20)
+WARN ORPHAN wiki/operations/handoffs/handoff-2026-10-12-s02.md  handoff-2026-10-12-s02 has no inbound reference from another page
+WARN ORPHAN wiki/operations/handoffs/handoff-2026-10-13-s02.md  handoff-2026-10-13-s02 has no inbound reference from another page
+WARN HANDOFF-SECTIONS wiki/operations/handoffs/handoff-2026-10-13-s03.md  missing: ## In progress, ## Next, ## Blockers, ## Notes for next session (SCHEMA §6.15)
+WARN HANDOFF-SECTIONS wiki/operations/handoffs/handoff-2026-10-13-s04.md  missing: ## In progress, ## Next, ## Blockers, ## Notes for next session (SCHEMA §6.15)
+WARN INT-NUMBER-NOSRC wiki/overview/ov-open-questions.md:597  "100 MB" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN UNV-MIRROR wiki/phases/phase-p6-benchmark-harness.md  the frontmatter unverified list names phase-p6-benchmark-harness but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p7-lifecycle.md  the frontmatter unverified list names phase-p7-lifecycle but no inline tag does (SCHEMA §7.1)
+WARN UNV-MIRROR wiki/phases/phase-p8-research-paper.md  the frontmatter unverified list names phase-p8-research-paper but no inline tag does (SCHEMA §7.1)
+WARN INT-NUMBER-NOSRC wiki/research/experiments/exp-navigation.md:75  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-01-idle-memory-vs-browsers.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-02-overhead-vs-tauri-baseline.md:35  "20%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-03-background-cpu-without-lifecycle.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-04-startup-window-visible.md:39  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-05-navigation-non-inferiority.md:35  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-06-rendering-non-inferiority.md:40  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-07-energy-per-workload.md:36  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-08-adaptive-reduces-memory.md:38  "15%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-10-adaptive-restore-latency.md:35  "20%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-11-lifecycle-safety.md:34  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-12-security-overhead-small.md:39  "1 ms" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-13-profiles-cheaper-than-udfs.md:36  "10%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-14-memory-growth-non-inferior.md:36  "10 MiB" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/hypotheses/hyp-15-restore-and-recovery.md:37  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-loaf-blocking.md:51  "50 ms" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-memory-growth-slope.md:45  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-nav-failure-rate.md:40  "30 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-nav-latency.md:56  "92.4 ms" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-peak-tree-private-commit.md:45  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-recovery-time.md:45  "60 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-tree-private-commit.md:48  "1 s" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/metrics/metric-tree-private-commit.md:74  "256 MiB" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN MERMAID-RULES wiki/research/ov-research-plan.md:41  mermaid block: about 31 nodes (more than 30; split it) (SCHEMA §14)
+WARN INT-NUMBER-NOSRC wiki/research/ov-research-related-work-seed.md:94  "28%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/ov-research-statistical-analysis-plan.md:84  "95%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+WARN INT-NUMBER-NOSRC wiki/research/ov-research-statistical-analysis-plan.md:112  "80%" with no raw/bench/ or raw/evidence/ link in the same paragraph (heuristic; needs a disposition)
+INFO SCHEMA-SPLIT CLAUDE.md  compare CLAUDE.md rules with SCHEMA.md (manual; not mechanically checkable, SCHEMA §9.3, §9.6)
+INFO CONTRADICTION wiki/  reminder: also do the semantic contradiction pass (claims that disagree between pages, with an accepted ADR or a raw source)
+lint: 1 errors, 44 warnings, 2 info (pages: 232)
+
+ ❯ tests/lint/wiki-lint.test.ts (3 tests | 1 failed | 1 skipped) 19500ms
+   ❯ wiki lint (real wiki, read-only) (3)
+     ✓ runs every rule and prints the report 4ms
+     × reports zero errors 7ms
+     ↓ reports zero warnings (WIKI_LINT_STRICT=1)
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 7 passed | 1 skipped (9)
+   Start at  02:47:57
+   Duration  22.13s (tests 84%, import 14%, transform 2%)
+[33mThe plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the [1mresolve.tsconfigPaths[22m option. You can remove the plugin and set [1mresolve.tsconfigPaths: true[22m in your Vite config instead.[39m
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/lint/wiki-lint.test.ts > wiki lint (real wiki, read-only) > reports zero errors
+AssertionError: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "ERROR RAW-IMMUTABLE wiki/raw/MANIFEST.sha256  commit ff7292e modified a raw file (MANIFEST.sha256 changed other than by appending lines)",
++ ]
+
+ ❯ tests/lint/wiki-lint.test.ts:66:86
+     64|
+     65|   it("reports zero errors", () => {
+     66|     expect(report.findings.filter((f) => f.severity === "error").map(f…
+       |                                                                                      ^
+     67|   });
+     68|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

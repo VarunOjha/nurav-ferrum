@@ -1,0 +1,157 @@
+Command output saved by scripts/gates/p5-gate.ps1 on 2026-10-20 02:44 at commit a2cfae4 (with uncommitted changes)
+Exit code: 0
+
+### scripts/security-suite.ps1 (exit 0)
+Ferrum check security-suite: Security test suite (master prompt section 11, items 1 to 10)
+Why: you can rerun every security test after any change and see each area's result.
+Run at 2026-10-20 02:29 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Security engine tests (rules, allowlist and blocklist, malformed addresses; 100 percent branch coverage in p4.2) (7 s)
+         test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s; test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s; test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.78s; test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s; test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+  PASS   Other unit tests: app, tab and view manager, core; shell (28 s)
+         104 Rust tests passed; shell: ℹ pass 27
+serving https://localhost:8443/ (exit after: Some(50s))
+  PASS   Item 3: IPC self-test, a website tries every way into the app (61 s)
+         every probed call refused; tab views have no bridge (own throwaway settings and data folder)
+  PASS   Live security tests (items 1 to 10, audit log, SmartScreen) (241 s)
+         75 passed (3.8m) (16 spec files)
+  PASS   Release build scan: no "no security" benchmark switch (SEC-12; own build folder) (128 s)
+         release build has no bench-nosecurity feature or marker texts; positive control found them in the benchmark build
+  PASS   The app never sets a debugging port itself (SEC-11)
+         no remote-debugging-port in the app's code (tests and benchmarks set it for their own runs only)
+------------------------------------------------------------------------
+RESULT: PASS - security-suite (6 PASS; 465 s)
+Everything this script can check is fine.
+What to tell Claude: "security suite passed".
+[ferrum selftest] {"all_probe_calls_refused":true,"content_view":{"events":8,"no_bridge":true,"ready":true,"report":{"bridge":false,"ipc":false}},"pass":true,"probe_url":"https://localhost:8443/ipc-probe","selftest":"ipc","shell_positive_control_pings":1,"tauri_view":{"all_calls_refused":true,"created":true,"report":{"app_command":{"error":"app_ping not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-app-ping","ok":false},"appearance_command":{"error":"appearance_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-appearance-set","ok":false},"backup_command":{"error":"backup_export not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-backup-export","ok":false},"bookmark_command":{"error":"bookmark_add not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-bookmark-add","ok":false},"bridge":true,"channel_fetch":{"error":"missing channel id header","ok":false},"event_emit":{"error":"event.emit not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-emit","ok":false},"event_listen":{"error":"event.listen not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-listen","ok":false},"history_command":{"error":"history_list not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-history-list","ok":false},"ipc":true,"permission_command":{"error":"permission_answer not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-permission-answer","ok":false},"plugin_app":{"error":"app.version not allowed. Permissions associated with this command: core:app:allow-version, core:app:default","ok":false},"plugin_path":{"error":"path.resolve_directory not allowed. Permissions associated with this command: core:path:allow-resolve-directory, core:path:default","ok":false},"plugin_webview":{"error":"webview.get_all_webviews not allowed. Permissions associated with this command: core:webview:allow-get-all-webviews, core:webview:default","ok":false},"plugin_window":{"error":"window.title not allowed. Permissions associated with this command: core:window:allow-title, core:window:default","ok":false},"private_tab_command":{"error":"tab_new_private not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-tab-new-private","ok":false},"processes_command":{"error":"test_processes not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-test-processes","ok":false},"settings_command":{"error":"settings_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-settings-set","ok":false},"site_clear_command":{"error":"site_data_clear not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-site-data-clear","ok":false},"suggest_command":{"error":"library_suggest not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-library-suggest","ok":false}}}}
+[1020/023043.363:ERROR:ui\gfx\win\window_impl.cc:172] Failed to unregister class Chrome_WidgetWin_0. Error = 1412
+
+### npm run p3 (exit 0)
+
+Running 62 tests using 1 worker
+
+  ✓   1 address-search.spec.ts:30:1 › typing shows open tabs, bookmarks and history in groups, never under the page (887ms)
+  ✓   2 address-search.spec.ts:68:1 › arrow keys and Enter: an open tab is switched to; a history page opens (790ms)
+  ✓   3 address-search.spec.ts:84:1 › Shift+Delete forgets a history page; clicking a row opens it (747ms)
+  ✓   4 backup.spec.ts:19:1 › make a backup from the Backup and restore screen (4.6s)
+  ✓   5 backup.spec.ts:56:1 › a fresh Ferrum: wrong passphrase and a changed byte are refused; merge, then replace (20.9s)
+  ✓   6 backup.spec.ts:110:1 › the passphrase is in no log (7ms)
+  ✓   7 bookmarks.spec.ts:22:1 › the star bookmarks the page into the bar; the editor renames and moves it (333ms)
+  ✓   8 bookmarks.spec.ts:43:1 › the bar opens pages; Ctrl+D in the shell bookmarks the page (224ms)
+  ✓   9 bookmarks.spec.ts:57:1 › the sidebar lists every folder; opening and removing from it (248ms)
+  ✓  10 bookmarks.spec.ts:71:1 › only web pages can be bookmarked; websites have no bridge (31ms)
+  ✓  11 bookmarks.spec.ts:80:1 › Ctrl+Shift+B hides the bar; bookmarks and the setting survive a restart (1.2s)
+  ✓  12 downloads.spec.ts:29:1 › a download lands in the folder with the right size and contents; the shell shows it done (944ms)
+  ✓  13 downloads.spec.ts:42:1 › the same file again gets a new name; nothing is replaced (253ms)
+  ✓  14 downloads.spec.ts:51:1 › a download that breaks off shows as failed (1.9s)
+  ✓  15 downloads.spec.ts:64:1 › a download opened in a new window: no error panel; the extra tab closes when it is done (p3.16) (421ms)
+  ✓  16 downloads.spec.ts:81:1 › Clear removes finished downloads from the list (24ms)
+  ✓  17 history.spec.ts:30:1 › an old history.json is imported once and kept as history.json.imported (34ms)
+  ✓  18 history.spec.ts:40:1 › visits are recorded newest first with their titles, searchable, and saved to the data folder (692ms)
+  ✓  19 history.spec.ts:54:1 › back and forward follow the active tab (214ms)
+  ✓  20 history.spec.ts:68:1 › clearing empties the list and the file at once (50ms)
+  ✓  21 look.spec.ts:18:1 › light or dark follows Windows; Graphite's colours (268ms)
+  ✓  22 look.spec.ts:29:1 › an empty tab shows the new-tab page; its search box opens the address bar (1.1s)
+  ✓  23 look.spec.ts:53:1 › accent colour and density change at once from Settings and are saved (589ms)
+  ✓  24 look.spec.ts:71:1 › the shell loads only its own fonts and files; less motion when Windows asks (40ms)
+MEASURING-SETTINGS: off: no files; on: run 20261020-073945-<pid>.0000.jsonl with {"lifecycle_transition":5,"nav_timing":3,"process_sample":42,"startup_mark":5,"tree_sample":5}, one network log session; off again: nothing new (os_build 10.0.26200.9711, webview2 155.0.4283.62)
+  ✓  25 measuring-settings.spec.ts:39:1 › switching measuring and the network log on and off writes files or not (18.3s)
+  ✓  26 no-freeze.spec.ts:12:1 › a burst of tab commands settles without hanging (4.9s)
+  ✓  27 profiles.spec.ts:41:3 › cookies across sites: per-site (3.4s)
+  ✓  28 profiles.spec.ts:41:3 › cookies across sites: shared (control) (2.4s)
+  ✓  29 profiles.spec.ts:57:1 › one site in two tabs shares one profile; subdomains share; other sites do not (4.1s)
+  ✓  30 profiles.spec.ts:72:1 › a link to another site asks first; Cancel stays, Continue moves the tab (3.3s)
+  ✓  31 profiles.spec.ts:100:1 › per-site settings choose the profile and survive a restart (3.8s)
+p3.9 result: switch 24 ms, type-and-load 98 ms (threshold 5000 ms each)
+  ✓  32 responsive.spec.ts:15:1 › a busy tab does not block switching tabs or typing in the address bar (2.3s)
+  ✓  33 restore.spec.ts:34:1 › tabs come back after a normal exit, with the same active tab (3.2s)
+  ✓  34 restore.spec.ts:45:1 › tabs come back after a crash (the last save) (4.1s)
+  ✓  35 restore.spec.ts:62:1 › a restored tab whose site is unreachable shows the error panel (1.9s)
+  ✓  36 restore.spec.ts:74:1 › restore_on_startup = false opens the start-up pages instead (1.6s)
+  ✓  37 safe-downloads.spec.ts:51:1 › a name that climbs out of the folder lands inside it, under a plain name (411ms)
+Zone.Identifier on setup.exe: false
+  ✓  38 safe-downloads.spec.ts:60:1 › a program file is saved with the warning and is not opened (1.2s)
+  ✓  39 safe-downloads.spec.ts:72:1 › a right-to-left mark cannot hide a program's real extension (133ms)
+  ✓  40 safe-downloads.spec.ts:80:1 › a Windows device name is not used as a file name (227ms)
+  ✓  41 security-settings.spec.ts:43:1 › blocked sites and site permissions: set in the screen, kept after a restart, enforced, revoked (4.3s)
+  ✓  42 security-settings.spec.ts:111:1 › the not-secure bar shows for a plain-HTTP page and not for HTTPS (1.9s)
+  ✓  43 security-settings.spec.ts:129:1 › Clear data in the screen deletes one site's stored data (4.1s)
+  ✓  44 settings.spec.ts:18:1 › change settings, see them take effect, restart, still there (4.0s)
+  ✓  45 settings.spec.ts:65:1 › invalid input is refused with plain messages; the file is unchanged (1.8s)
+  ✓  46 shortcuts.spec.ts:60:5 › focus in the shell › switching: Ctrl+1, Ctrl+9, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Page Down, Ctrl+Page Up (891ms)
+  ✓  47 shortcuts.spec.ts:75:5 › focus in the shell › new, close, reopen: Ctrl+T, Ctrl+W, Ctrl+Shift+T (755ms)
+  ✓  48 shortcuts.spec.ts:88:5 › focus in the shell › address bar: Ctrl+L, Alt+D, F6 (623ms)
+  ✓  49 shortcuts.spec.ts:96:5 › focus in the shell › back, forward, reload: Alt+Left, Alt+Right, F5, Ctrl+R (1.0s)
+
+  ✓  50 shortcuts.spec.ts:60:5 › focus in the page › switching: Ctrl+1, Ctrl+9, Ctrl+Tab, Ctrl+Shift+Tab, Ctrl+Page Down, Ctrl+Page Up (6.2s)
+
+  ✓  51 shortcuts.spec.ts:75:5 › focus in the page › new, close, reopen: Ctrl+T, Ctrl+W, Ctrl+Shift+T (3.5s)
+
+  ✓  52 shortcuts.spec.ts:88:5 › focus in the page › address bar: Ctrl+L, Alt+D, F6 (3.4s)
+
+  ✓  53 shortcuts.spec.ts:96:5 › focus in the page › back, forward, reload: Alt+Left, Alt+Right, F5, Ctrl+R (4.5s)
+
+  ✓  54 shortcuts.spec.ts:117:1 › inside a page, Ferrum's shortcuts never reach the page; ordinary keys do (2.0s)
+  ✓  55 sidebar.spec.ts:25:1 › open and close: the tab view shrinks and grows, never overlapping (312ms)
+  ✓  56 sidebar.spec.ts:41:1 › choosing a tab or a history entry in the sidebar (389ms)
+
+  ✓  57 sidebar.spec.ts:60:1 › Ctrl+Shift+S toggles it from the shell and from inside a page (2.0s)
+  ✓  58 startup.spec.ts:18:1 › start-up sites open as tabs, in order, the first active (1.7s)
+  ✓  59 startup.spec.ts:28:1 › an unreadable user settings file is backed up; Ferrum starts with the defaults (1.7s)
+  ✓  60 startup.spec.ts:42:1 › a settings file from a newer Ferrum is left untouched (1.4s)
+  ✓  61 tabs.spec.ts:20:1 › 20 tabs: one view each, only the active one shown, all released on close (3.8s)
+  ✓  62 tabs.spec.ts:69:1 › a tab shows its site's icon (p3.16) (1.4s)
+
+  62 passed (3.7m)
+
+### npm run p2 (exit 0)
+
+Running 26 tests using 1 worker
+
+  ✓   1 back-forward-refresh.spec.ts:13:1 › back, forward and refresh behave like a browser (562ms)
+  ✓   2 google-sign-in.spec.ts:22:1 › the sign-in link shows the banner and does not load in Ferrum (851ms)
+  ✓   3 google-sign-in.spec.ts:35:1 › Dismiss opens nothing; Open in browser opens exactly the sign-in address (138ms)
+  ✓   4 google-sign-in.spec.ts:46:1 › a typed sign-in address is offered the same way (84ms)
+  ✓   5 google-sign-in.spec.ts:55:1 › the real Google sign-in address is caught too (124ms)
+  ✓   6 keep-cookies.spec.ts:9:1 › a persistent cookie survives closing and reopening Ferrum (2.9s)
+  ✓   7 loading-errors.spec.ts:19:1 › slow page shows the loading state, then loaded (3.0s)
+  ✓   8 loading-errors.spec.ts:42:3 › HTTP 404 is shown as a toolbar status, the site's page stays (90ms)
+  ✓   9 loading-errors.spec.ts:42:3 › HTTP 500 is shown as a toolbar status, the site's page stays (102ms)
+  ✓  10 loading-errors.spec.ts:51:1 › unreachable host shows the shell's error panel, and the app recovers (560ms)
+  ✓  11 loading-errors.spec.ts:69:1 › the content view never showed the app's own origin (1ms)
+  ✓  12 new-windows-links.spec.ts:58:3 › default settings (new tab, confirm other apps) › target=_blank opens a new active tab next to the page; the page stays (1.6s)
+  ✓  13 new-windows-links.spec.ts:71:3 › default settings (new tab, confirm other apps) › window.open from a click opens a new tab (1.4s)
+  ✓  14 new-windows-links.spec.ts:79:3 › default settings (new tab, confirm other apps) › a pop-up opened by script opens one new tab at most; a flood is blocked (5.8s)
+  ✓  15 new-windows-links.spec.ts:100:3 › default settings (new tab, confirm other apps) › mailto link asks first; Cancel launches nothing (838ms)
+  ✓  16 new-windows-links.spec.ts:123:3 › default settings (new tab, confirm other apps) › custom-scheme link: Open launches exactly that link, once (299ms)
+  ✓  17 new-windows-links.spec.ts:138:3 › default settings (new tab, confirm other apps) › a typed link to another app asks too (90ms)
+  ✓  18 new-windows-links.spec.ts:156:3 › new_window = same-view (the P2 default) › target=_blank opens in the same view, no extra tab or window (305ms)
+  ✓  19 new-windows-links.spec.ts:173:3 › new_window = system-browser › target=_blank goes to the system browser; the page stays (287ms)
+  ✓  20 redirects.spec.ts:12:3 › redirect 301 shows the final address (158ms)
+  ✓  21 redirects.spec.ts:12:3 › redirect 302 shows the final address (92ms)
+  ✓  22 redirects.spec.ts:12:3 › redirect 303 shows the final address (81ms)
+  ✓  23 redirects.spec.ts:12:3 › redirect 307 shows the final address (90ms)
+  ✓  24 redirects.spec.ts:12:3 › redirect 308 shows the final address (98ms)
+  ✓  25 redirects.spec.ts:12:3 › redirect chain shows the final address (81ms)
+  ✓  26 redirects.spec.ts:21:1 › a redirect loop ends in the error state (347ms)
+
+  26 passed (1.5m)
+
+### scripts/verify/p2.3-lock-bridge-app.ps1 (exit 0)
+Ferrum check p2.3: Lock the bridge to the app
+Why: a website cannot control Ferrum.
+Run at 2026-10-20 02:43 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Only the shell has a capability, and none allows remote pages
+         shell.json: webviews ["shell"], no remote section
+  PASS   The app declares its commands at build time
+         build.rs: AppManifest commands declared
+serving https://localhost:8443/ (exit after: Some(50s))
+  PASS   Self-test: website calls refused in a Tauri view; no bridge at all in the Ferrum-created view; the shell works (64 s)
+         Tauri view: 9 calls refused (bridge, events, settings, bookmarks, history, suggestions, backup, appearance); content view: no bridge; shell pings: 1
+------------------------------------------------------------------------
+RESULT: PASS - p2.3 (3 PASS; 64 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p2.3 check passed".
+[ferrum selftest] {"all_probe_calls_refused":true,"content_view":{"events":3,"no_bridge":true,"ready":true,"report":{"bridge":false,"ipc":false}},"pass":true,"probe_url":"https://localhost:8443/ipc-probe","selftest":"ipc","shell_positive_control_pings":1,"tauri_view":{"all_calls_refused":true,"created":true,"report":{"app_command":{"error":"app_ping not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-app-ping","ok":false},"appearance_command":{"error":"appearance_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-appearance-set","ok":false},"backup_command":{"error":"backup_export not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-backup-export","ok":false},"bookmark_command":{"error":"bookmark_add not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-bookmark-add","ok":false},"bridge":true,"channel_fetch":{"error":"missing channel id header","ok":false},"event_emit":{"error":"event.emit not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-emit","ok":false},"event_listen":{"error":"event.listen not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-listen","ok":false},"history_command":{"error":"history_list not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-history-list","ok":false},"ipc":true,"permission_command":{"error":"permission_answer not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-permission-answer","ok":false},"plugin_app":{"error":"app.version not allowed. Permissions associated with this command: core:app:allow-version, core:app:default","ok":false},"plugin_path":{"error":"path.resolve_directory not allowed. Permissions associated with this command: core:path:allow-resolve-directory, core:path:default","ok":false},"plugin_webview":{"error":"webview.get_all_webviews not allowed. Permissions associated with this command: core:webview:allow-get-all-webviews, core:webview:default","ok":false},"plugin_window":{"error":"window.title not allowed. Permissions associated with this command: core:window:allow-title, core:window:default","ok":false},"private_tab_command":{"error":"tab_new_private not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-tab-new-private","ok":false},"processes_command":{"error":"test_processes not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-test-processes","ok":false},"settings_command":{"error":"settings_set not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-settings-set","ok":false},"site_clear_command":{"error":"site_data_clear not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-site-data-clear","ok":false},"suggest_command":{"error":"library_suggest not allowed on window \"main\", webview \"probe\", URL: https://localhost:8443/\n\nallowed on: [webviews: \"shell\", URL: local]\n\nreferenced by: capability: shell, permission: allow-library-suggest","ok":false}}}}
+[1020/024344.598:ERROR:ui\gfx\win\window_impl.cc:172] Failed to unregister class Chrome_WidgetWin_0. Error = 1412

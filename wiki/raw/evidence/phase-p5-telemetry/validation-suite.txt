@@ -1,0 +1,17 @@
+Command output saved by scripts/gates/p5-gate.ps1 on 2026-10-20 02:24 at commit a2cfae4 (with uncommitted changes)
+Exit code: 0
+
+Ferrum check p5.4: Prove the meter accurate
+Why: every later memory and CPU number rests on a meter that has passed.
+Run at 2026-10-20 02:22 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The limits were committed before any result
+         limits committed in d36d27c test(telemetry): p5.4 tolerances and validation code, committed before the first run [p5.4]
+  PASS   The meter reads a helper's known memory and CPU within the limits, and psutil agrees (5 s)
+         23 comparisons within the limits (psutil 7.2.2)
+  PASS   Live: a Ferrum tab fills a 128 MiB buffer; the memory total rises by about that much (89 s)
+         buffer 128 MiB; tree private commit median 346.8 -> 476.2 MiB, delta 129.4 MiB (allowed 121.6 to 192)
+------------------------------------------------------------------------
+RESULT: PASS - p5.4 (3 PASS; 94 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.4 check passed".

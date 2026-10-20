@@ -1,0 +1,433 @@
+Ferrum check P5-gate: Measurement: end-of-phase gate
+Why: only a passing gate and your approval let the next phase start.
+Run at 2026-10-20 02:06 on commit a2cfae4
+------------------------------------------------------------------------
+
+Part 1 - Your approvals for P5 are current
+approvals.json entries: 59
+  APPROVED                 adr-0001
+  APPROVED                 adr-0002
+  APPROVED                 adr-0003
+  APPROVED                 adr-0004
+  APPROVED                 adr-0006
+  APPROVED                 adr-0007
+  APPROVED                 adr-0008
+  APPROVED                 adr-0010
+  APPROVED                 adr-0011
+  APPROVED                 adr-0012
+  APPROVED                 adr-0014
+  APPROVED                 adr-0015
+  APPROVED                 adr-0018
+  APPROVED                 adr-0019
+  APPROVED                 adr-0021
+  APPROVED                 adr-0023
+  APPROVED                 adr-0024
+  APPROVED                 adr-0025
+  APPROVED                 adr-0026
+  APPROVED                 adr-0027
+  APPROVED                 adr-0029
+  APPROVED_VOLATILE_DRIFT  adr-0030
+  APPROVED_VOLATILE_DRIFT  adr-0031
+  APPROVED                 adr-0032
+  APPROVED                 adr-0033
+  APPROVED                 adr-0034
+  APPROVED                 comp-app-shell
+  APPROVED                 comp-core
+  APPROVED                 comp-interactive-plan
+  APPROVED                 comp-network-logger
+  APPROVED                 comp-security-engine
+  APPROVED                 comp-tab-content
+  APPROVED                 comp-telemetry
+  APPROVED                 comp-webview-manager
+  APPROVED                 comp-webview2-runtime
+  APPROVED                 comp-windows-os
+  APPROVED                 exp-baseline-footprint
+  APPROVED                 exp-isolation-overhead
+  APPROVED                 exp-navigation
+  APPROVED                 exp-security-overhead
+  APPROVED                 exp-startup
+  APPROVED                 ip-data-contract
+  APPROVED                 ip-routes-and-views
+  APPROVED                 ip-spec
+  APPROVED                 ip-testing
+  APPROVED                 ip-wiki-lint
+  APPROVED                 ov-project
+  APPROVED                 phase-p0-planning
+  APPROVED                 phase-p0-planning#exit
+  APPROVED_VOLATILE_DRIFT  phase-p1-foundation
+  APPROVED_VOLATILE_DRIFT  phase-p1-foundation#exit
+  APPROVED                 phase-p2-minimal-container
+  APPROVED                 phase-p2-minimal-container#exit
+  APPROVED                 phase-p3-tabs-sessions
+  APPROVED                 phase-p3-tabs-sessions#exit
+  APPROVED                 phase-p4-security
+  APPROVED                 phase-p4-security#exit
+  APPROVED                 phase-p5-telemetry
+  APPROVED                 schema
+  depends_on phase-p4-security: status=done exit=APPROVED
+  APPROVED                 adr-0008
+  APPROVED                 adr-0012
+  APPROVED                 adr-0014
+  APPROVED                 comp-network-logger
+  APPROVED                 comp-telemetry
+  APPROVED                 comp-webview-manager
+  APPROVED                 exp-baseline-footprint
+  APPROVED                 exp-navigation
+  APPROVED                 exp-startup
+  APPROVED                 phase-p5-telemetry
+  APPROVED                 schema
+ENTRY GATE: PASS
+  PASS   Approvals for P5 recorded and current; no question blocks it
+         all P5 approvals current
+
+Part 2 - Every P5 task, checked
+    --- output of scripts/verify/p5.2-count-ferrum-processes.ps1 (exit 0) ---
+Ferrum check p5.2: Count exactly Ferrum's processes
+Why: memory and CPU numbers are not inflated by other apps.
+Run at 2026-10-20 02:06 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   The counting rule: own process plus the engine lists, each once, bad lists refused (1 s)
+         five unit tests passed
+  PASS   No counting code matches processes by program name
+         attribution.rs and the app's process-set code use only the engine's own lists
+  PASS   Live: another engine app beside Ferrum; Ferrum's set matches the Windows process list (149 s)
+         round 2: Ferrum set 17 (gpu 3, utility 6, browser 3, renderer 4, host 1) over environments shell, site-site-a.localhost, site-site-b.localhost; WebView2 below Ferrum 19 (crash reporters 3, not listed by WebView2); other app's WebView2 processes 9, in set 0
+------------------------------------------------------------------------
+RESULT: PASS - p5.2 (3 PASS; 150 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.2 check passed".
+    --- end of scripts/verify/p5.2-count-ferrum-processes.ps1 ---
+  PASS   Task p5.2: Count only Ferrum's own processes (151 s)
+         scripts/verify/p5.2-count-ferrum-processes.ps1: RESULT: PASS - p5.2 (3 PASS; 150 s)
+    --- output of scripts/verify/p5.3-memory-cpu-meter.ps1 (exit 0) ---
+Ferrum check p5.3: Memory and CPU meter
+Why: one fair total per moment; peaks come from the total, never from adding per-process peaks.
+Run at 2026-10-20 02:08 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   The adding-up rules: sums, peaks from the total, ended and reused processes, gaps, interval (1 s)
+         eight unit tests passed
+  PASS   The saved-data format with the new gap record
+         six record types; the damaged test files, one new, are all refused
+  PASS   Windows fills every counter on this PC
+         memory, private working set, page faults, CPU time and cycles all read; an ended process reads as gone
+  PASS   Unsafe code only in the Windows module of the measurement part
+         win.rs only: 7 unsafe blocks, each with its SAFETY comment
+  PASS   Live: six readings over Ferrum's processes, each a correct total (81 s)
+         5 moments summed, 1 gaps, 1 set retries; processes 17/17/17/17/17; private commit MiB 598.7/596.8/588.6/588.6/588.8; peak 598.7 MiB; CPU s 7.30; interval 500 ms, spacing 501,501,501,502 ms
+------------------------------------------------------------------------
+RESULT: PASS - p5.3 (5 PASS; 82 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.3 check passed".
+    --- end of scripts/verify/p5.3-memory-cpu-meter.ps1 ---
+  PASS   Task p5.3: Memory and CPU meter (83 s)
+         scripts/verify/p5.3-memory-cpu-meter.ps1: RESULT: PASS - p5.3 (5 PASS; 82 s)
+    --- output of scripts/verify/p5.6-startup-timing.ps1 (exit 0) ---
+Ferrum check p5.6: Startup timing
+Why: startup can be compared fairly later.
+Run at 2026-10-20 02:10 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   The startup records: complete, in order, counted from process creation (1 s)
+         three unit tests passed
+  PASS   The metric pages define the in-app boundaries
+         window visible, first contentful paint and largest contentful paint pages each describe the in-app boundary
+  PASS   Live: all five startup moments present and in order (test page as the start page) (74 s)
+         process_created 0 ms, window_visible 100 ms, shell_first_paint 903 ms, tab_first_contentful_paint 922 ms, tab_largest_contentful_paint 922 ms (fresh profile, debug build, start page /landing)
+------------------------------------------------------------------------
+RESULT: PASS - p5.6 (3 PASS; 75 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.6 check passed".
+    --- end of scripts/verify/p5.6-startup-timing.ps1 ---
+  PASS   Task p5.6: Startup timing (76 s)
+         scripts/verify/p5.6-startup-timing.ps1: RESULT: PASS - p5.6 (3 PASS; 75 s)
+    --- output of scripts/verify/p5.7-page-load-timing.ps1 (exit 0) ---
+Ferrum check p5.7: Navigation timing
+Why: page loads can be compared fairly later.
+Run at 2026-10-20 02:11 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   The navigation records: redirects counted, site label, times in order (1 s)
+         five unit tests passed
+  PASS   The metric page defines the in-app record
+         the navigation latency page describes the in-app record
+  PASS   Live: redirect fixtures, another site and plain loads give ordered records with the right counts (75 s)
+         10 navigations recorded:
+         /landing -> /landing: cross_origin, redirects 0 (page says 0), start 1009.5, response +6.9, DOMContentLoaded +60.3, load +60.9, completed +68.3 ms
+         /redirect/301 -> /landing: same_origin, redirects 1 (page says 1), start 1241.5, response +9.6, DOMContentLoaded +17.0, load +17.2, completed +17.5 ms
+         /redirect/302 -> /landing: same_origin, redirects 1 (page says 1), start 1466.8, response +9.9, DOMContentLoaded +21.4, load +21.6, completed +22.7 ms
+         /redirect/303 -> /landing: same_origin, redirects 1 (page says 1), start 1657.0, response +8.8, DOMContentLoaded +17.2, load +17.6, completed +20.0 ms
+         /redirect/307 -> /landing: same_origin, redirects 1 (page says 1), start 1848.7, response +13.2, DOMContentLoaded +21.0, load +21.2, completed +21.5 ms
+         /redirect/308 -> /landing: same_origin, redirects 1 (page says 1), start 2025.4, response +11.8, DOMContentLoaded +19.6, load +19.8, completed +20.1 ms
+         /redirect/chain -> /landing: same_origin, redirects 2 (page says 2), start 2200.1, response +12.9, DOMContentLoaded +20.5, load +20.7, completed +21.2 ms
+         /goto?url=https%3A%2F%2Fsite-b.localhost%3A8443%2Flanding -> site-b/landing: cross_origin, redirects 1 (page says 0), start 2396.8, response +14.6, DOMContentLoaded +81.4, load +82.2, completed +90.1 ms
+         /landing -> /landing: cross_origin, redirects 0 (page says 0), start 2661.8, response +8.2, DOMContentLoaded +65.6, load +66.3, completed +74.5 ms
+         / -> /: same_origin, redirects 0 (page says 0), start 2903.7, response +5.5, DOMContentLoaded +26.0, load +26.0, completed +25.6 ms
+------------------------------------------------------------------------
+RESULT: PASS - p5.7 (3 PASS; 77 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.7 check passed".
+    --- end of scripts/verify/p5.7-page-load-timing.ps1 ---
+  PASS   Task p5.7: Page-load timing (77 s)
+         scripts/verify/p5.7-page-load-timing.ps1: RESULT: PASS - p5.7 (3 PASS; 77 s)
+    --- output of scripts/verify/p5.8-record-tab-state.ps1 (exit 0) ---
+Ferrum check p5.8: Record tab state changes
+Why: P7 plugs in without a new format.
+Run at 2026-10-20 02:12 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   The file format has the tab-change record; every record type still saves, reloads and checks (1 s)
+         seven record types (lifecycle_transition new), six tables; good file accepted, damaged files refused; schema matches
+  PASS   Tab changes become records, one per real change; impossible changes are refused
+         three unit tests passed
+  PASS   Live: switching and closing tabs writes hide and show records that pass the format check (74 s)
+         9 records, none refused:
+         707 ms tab a: (new) -> active (opened)
+         1015 ms tab b: (new) -> active (opened)
+         1015 ms tab a: active -> background (user_switch)
+         1037 ms tab b: active -> background (user_switch)
+         1037 ms tab a: background -> active (user_switch)
+         1053 ms tab b: background -> active (user_switch)
+         1053 ms tab a: active -> background (user_switch)
+         1103 ms tab b: active -> (closed) (closed)
+         1103 ms tab a: background -> active (user_switch)
+------------------------------------------------------------------------
+RESULT: PASS - p5.8 (3 PASS; 76 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.8 check passed".
+    --- end of scripts/verify/p5.8-record-tab-state.ps1 ---
+  PASS   Task p5.8: Record tab state changes (76 s)
+         scripts/verify/p5.8-record-tab-state.ps1: RESULT: PASS - p5.8 (3 PASS; 76 s)
+    --- output of scripts/verify/p5.10-network-log-coverage.ps1 (exit 0) ---
+Ferrum check p5.10: Network log: coverage and cost
+Why: the paper states exactly what the log covers.
+Run at 2026-10-20 02:13 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   Coverage: which kinds of request the log sees (known kinds must stay covered) (85 s)
+         top-level page: covered
+         sub-resources: covered
+         frame of another site: covered
+         fetch from the page: covered
+         sub-resources on a second visit: covered
+         redirect hop 1 (301): covered
+         redirect hop 2 (302): covered
+         redirect target: covered
+         request with no response: not covered
+         service worker script: not covered
+         request made by the service worker: not covered
+         request answered by the service worker: covered
+         request passed on by the service worker: covered
+  PASS   Cost trial: 30 loads with the log off, 30 with it on (rough pilot, no limits) (86 s)
+         log off: load 44.2 ms median (40.3 to 48.8), Ferrum process 25.0 ms CPU per load, all its processes 208.3 ms per load
+         log on : load 45.0 ms median (40.4 to 55.1), Ferrum process 25.5 ms CPU per load, all its processes 203.1 ms per load
+  PASS   The component page has the coverage table
+         comp-network-logger has the coverage and cost section
+------------------------------------------------------------------------
+RESULT: PASS - p5.10 (3 PASS; 172 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.10 check passed".
+    --- end of scripts/verify/p5.10-network-log-coverage.ps1 ---
+  PASS   Task p5.10: Network log: coverage and cost (172 s)
+         scripts/verify/p5.10-network-log-coverage.ps1: RESULT: PASS - p5.10 (3 PASS; 172 s)
+    --- output of scripts/verify/p5.11-settings-measuring-logging.ps1 (exit 0) ---
+Ferrum check p5.11: Settings for measuring and logging
+Why: nothing is recorded that you did not choose.
+Run at 2026-10-20 02:16 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   Settings: measuring off by default, limits checked; old measuring files deleted safely (17 s)
+         off by default (your answer), limits refused; only Ferrum's own old measuring files deleted; the Windows build reads
+  PASS   Live: switches on the settings screen; files written only when switched on (86 s)
+         off: no files; on: run 20261020-071818-<pid>.0000.jsonl with {"lifecycle_transition":5,"nav_timing":3,"process_sample":42,"startup_mark":5,"tree_sample":5}, one network log session; off again: nothing new (os_build 10.0.26200.9711, webview2 155.0.4283.62)
+------------------------------------------------------------------------
+RESULT: PASS - p5.11 (2 PASS; 104 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.11 check passed".
+    --- end of scripts/verify/p5.11-settings-measuring-logging.ps1 ---
+  PASS   Task p5.11: Settings for measuring and logging (104 s)
+         scripts/verify/p5.11-settings-measuring-logging.ps1: RESULT: PASS - p5.11 (2 PASS; 104 s)
+    --- output of scripts/verify/p5.12-tabs-to-processes.ps1 (exit 0) ---
+Ferrum check p5.12: Which browser process serves each tab
+Why: P6 and P7 know how far per-tab numbers can be trusted.
+Run at 2026-10-20 02:18 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   Live: debugging-port targets, renderer per tab and frame, process parents (both isolation modes) (86 s)
+         per-site: port lists 6 pages and 1 frames (shell listed: True); 4 tabs with their own renderer, 0 shared; frame renderer 11996; 1 engines started by Ferrum, 0 processes with another parent
+         per-site-udf: port lists 2 pages and 0 frames (shell listed: True); 4 tabs with their own renderer, 0 shared; frame renderer 3004; 4 engines started by Ferrum, 0 processes with another parent
+------------------------------------------------------------------------
+RESULT: PASS - p5.12 (1 PASS; 86 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.12 check passed".
+    --- end of scripts/verify/p5.12-tabs-to-processes.ps1 ---
+  PASS   Task p5.12: Map tabs to browser processes (87 s)
+         scripts/verify/p5.12-tabs-to-processes.ps1: RESULT: PASS - p5.12 (1 PASS; 86 s)
+    --- output of scripts/verify/p5.13-reading-measurement-methods.ps1 (exit 0) ---
+Ferrum check p5.13: Reading: measurement methods
+Why: each headline measurement gets a final, cited definition.
+Run at 2026-10-20 02:19 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   The reading note: saved, indexed, fingerprinted, each source marked read or not
+         10 sources, each marked; in the index and the fingerprint list
+  PASS   Each headline measurement: defined, cites the note and its accuracy test, no open point for P5
+         six pages defined, each citing the note and its accuracy test; no open point for P5 left on them
+------------------------------------------------------------------------
+RESULT: PASS - p5.13 (2 PASS; 0 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.13 check passed".
+    --- end of scripts/verify/p5.13-reading-measurement-methods.ps1 ---
+  PASS   Task p5.13: Reading: measurement methods
+         scripts/verify/p5.13-reading-measurement-methods.ps1: RESULT: PASS - p5.13 (2 PASS; 0 s)
+    --- output of scripts/verify/p5.15-block-requests.ps1 (exit 0) ---
+Ferrum check p5.15: Stop requests to blocked sites
+Why: a blocked site really gets nothing.
+Run at 2026-10-20 02:19 on commit a2cfae4
+------------------------------------------------------------------------
+  PASS   The request check: blocked hosts refused in every spelling, allow override, unreadable addresses refused (3 s)
+         four tests passed (two of them on random input)
+  PASS   Live: no request of any kind reaches the blocked site; allowed requests do; the control catches a leak (99 s)
+         counts after one allowed visit each (count:1 = the blocked attempt never arrived): typed count:1, link count:1, redirect count:1, frame count:1, image count:1, fetch count:1, allowed count:2
+         filter off: after 3 refused typed tries the allowed visit shows count:4
+         cost (rough, debug, on first): filter on: load 43.2 ms median (38.6 to 50.5); filter off: load 43.6 ms median (39.7 to 50.5)
+------------------------------------------------------------------------
+RESULT: PASS - p5.15 (2 PASS; 103 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.15 check passed".
+    --- end of scripts/verify/p5.15-block-requests.ps1 ---
+  PASS   Task p5.15: Stop requests to blocked sites (103 s)
+         scripts/verify/p5.15-block-requests.ps1: RESULT: PASS - p5.15 (2 PASS; 103 s)
+
+Part 3 - Test gate on one commit
+         saved wiki/raw/evidence/phase-p5-telemetry/cargo-fmt.txt
+         saved wiki/raw/evidence/phase-p5-telemetry/cargo-clippy.txt
+  PASS   Formatting and code warnings (20 s)
+         cargo fmt --check and cargo clippy -D warnings: exit 0
+         saved wiki/raw/evidence/phase-p5-telemetry/cargo-test.txt
+  PASS   Rust tests (32 s)
+         cargo test --workspace: exit 0
+         saved wiki/raw/evidence/phase-p5-telemetry/cargo-deny.txt
+  PASS   Licences and alerts (14 s)
+         cargo deny check: exit 0
+    --- output of scripts/verify/p5.4-prove-meter-accurate.ps1 (exit 0) ---
+Ferrum check p5.4: Prove the meter accurate
+Why: every later memory and CPU number rests on a meter that has passed.
+Run at 2026-10-20 02:22 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The limits were committed before any result
+         limits committed in d36d27c test(telemetry): p5.4 tolerances and validation code, committed before the first run [p5.4]
+  PASS   The meter reads a helper's known memory and CPU within the limits, and psutil agrees (5 s)
+         23 comparisons within the limits (psutil 7.2.2)
+  PASS   Live: a Ferrum tab fills a 128 MiB buffer; the memory total rises by about that much (89 s)
+         buffer 128 MiB; tree private commit median 346.8 -> 476.2 MiB, delta 129.4 MiB (allowed 121.6 to 192)
+------------------------------------------------------------------------
+RESULT: PASS - p5.4 (3 PASS; 94 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.4 check passed".
+    --- end of scripts/verify/p5.4-prove-meter-accurate.ps1 ---
+         saved wiki/raw/evidence/phase-p5-telemetry/validation-suite.txt
+  PASS   Accuracy suite (task p5.4 check: known memory and CPU, limits set in advance) (95 s)
+         RESULT: PASS - p5.4 (3 PASS; 94 s)
+    --- output of scripts/verify/p5.5-meter-own-cost.ps1 (exit 0) ---
+Ferrum check p5.5: What the meter itself costs
+Why: we know how much it disturbs results (this describes the tool, not Ferrum).
+Run at 2026-10-20 02:24 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The meter's own cost at five intervals, against no reading (17 processes, optimised build) (122 s)
+         6 runs of 20 s over 17 processes (release (optimised))
+  PASS   Inside Ferrum: listing cost and CPU per second at 100 ms and 1000 ms, against a baseline (rough) (120 s)
+         baseline: 2 readings, listing 1.0 ms median (max 1.0), Ferrum process 0.00 ms CPU/s, all its processes 25.78 ms CPU/s; 100 ms: 20 readings, listing 0.9 ms median (max 1.2), Ferrum process 40.67 ms CPU/s, all its processes 40.67 ms CPU/s; 1000 ms: 20 readings, listing 1.0 ms median (max 1.1), Ferrum process 0.82 ms CPU/s, all its processes 18.89 ms CPU/s
+------------------------------------------------------------------------
+RESULT: PASS - p5.5 (2 PASS; 243 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.5 check passed".
+    --- end of scripts/verify/p5.5-meter-own-cost.ps1 ---
+         saved wiki/raw/evidence/phase-p5-telemetry/sampler-overhead.txt
+  PASS   The meter's own cost (task p5.5 check) (244 s)
+         RESULT: PASS - p5.5 (2 PASS; 243 s)
+    --- output of scripts/verify/p5.1-export-file-format.ps1 (exit 0) ---
+Ferrum check p5.1: Export file format and run labels
+Why: any number can be traced to the exact setup that made it.
+Run at 2026-10-20 02:28 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Each record type saves and reloads unchanged (data file and table) (2 s)
+         seven record types as JSON lines, six tables as CSV (sample_gap added by p5.3, lifecycle_transition by p5.8)
+  PASS   The writer rotates files and leaves no half file under a finished name
+         rotation by size; a crash leaves a .part file that the checker refuses
+  PASS   The checker accepts good files and refuses each damaged one
+         good test file accepted; 13 damaged test files refused, each for its own reason
+  PASS   The published format description matches the code
+         crates/telemetry/schema/v1/record.schema.json
+------------------------------------------------------------------------
+RESULT: PASS - p5.1 (4 PASS; 2 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.1 check passed".
+    --- end of scripts/verify/p5.1-export-file-format.ps1 ---
+         saved wiki/raw/evidence/phase-p5-telemetry/schema-validation.txt
+  PASS   File format (task p5.1 check) (3 s)
+         RESULT: PASS - p5.1 (4 PASS; 2 s)
+    --- output of scripts/verify/p5.9-network-log-addresses.ps1 (exit 0) ---
+Ferrum check p5.9: Network log: addresses and timings only
+Why: useful for research without storing private data.
+Run at 2026-10-20 02:28 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   The record: only the allowed fields, bad records refused, rotation, old sessions deleted safely
+         six unit tests passed (including the negative test: no header, cookie or body field)
+  PASS   The settings: off by default, limits checked (2 s)
+         off by default, 14 days kept; out-of-range values and a folder outside the data folder refused
+  PASS   Live: exactly the expected entries; a refused address logged as blocked; off by default (80 s)
+         NETLOG: 7 records in 7 lines; the /netlog tab's 7:
+         GET /netlog 200 document 391 B allowed
+         GET site-b/landing 200 frame 240 B allowed
+         GET /netlog/style.css 200 stylesheet 23 B allowed
+         GET /netlog/app.js 200 script 105 B allowed
+         GET /icon.png 200 image 82 B allowed
+         GET /netlog/data.json 200 fetch 16 B allowed
+         https://127.0.0.1:8443/landing null null - B blocked:blocklist
+         blocked: 127.0.0.1:8443/landing blocked:blocklist; responses still reported for it: 0
+         NETLOG-OFF: no log folder with the default settings
+         NETLOG-OFF: no log folder with the default settings
+------------------------------------------------------------------------
+RESULT: PASS - p5.9 (3 PASS; 83 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p5.9 check passed".
+    --- end of scripts/verify/p5.9-network-log-addresses.ps1 ---
+         saved wiki/raw/evidence/phase-p5-telemetry/network-log-tests.txt
+  PASS   Network log: exact entries, no headers or content (task p5.9 check) (84 s)
+         RESULT: PASS - p5.9 (3 PASS; 83 s)
+         saved wiki/raw/evidence/phase-p5-telemetry/regression.txt
+  PASS   Earlier tests again: security suite, P3 suite (npm run p3), P2 app tests (npm run p2), bridge lockdown (p2.3) (878 s)
+         security suite: PASS; npm run p3: 62 passed; npm run p2: 26 passed; p2.3: PASS
+         saved wiki/raw/evidence/phase-p5-telemetry/shell-tests.txt
+  PASS   Shell checks (lint, types, unit tests) (2 s)
+         npm run lint, typecheck, test: exit 0
+         saved wiki/raw/evidence/phase-p5-telemetry/release-build.txt
+  PASS   Release build (own folder target/gate-release; target/release is not touched) (65 s)
+         npm run tauri -- build --no-bundle: exit 0 (target/gate-release/release/ferrum-desktop.exe; target/release unchanged)
+    --- output of scripts/verify/p4.16-no-security-switch.ps1 (exit 0) ---
+Ferrum check p4.16: Benchmark-only no-security build
+Why: no risk of shipping it.
+Run at 2026-10-20 02:45 on commit a2cfae4 (with uncommitted changes)
+------------------------------------------------------------------------
+  PASS   Unit tests: the switch allows web addresses only; without it the rules decide (4 s)
+         three unit tests passed (one normal, two with the switch)
+  PASS   Release check: the normal release build has no switch; the benchmark build refuses to start without --benchmark-mode (123 s)
+         no switch in the normal release program; markers found in the benchmark program; start refused without the argument
+  PASS   Without its own data folder the benchmark build refuses to start; with one it starts, logs what it is, and closes (8 s)
+         refused without its own data folder (exit 2); with one it started, logged 'benchmark build without site rules' in the run folder, closed with exit 0
+  PASS   CI and the local CI script run the release check
+         both run it after the release build
+------------------------------------------------------------------------
+RESULT: PASS - p4.16 (4 PASS; 136 s)
+Everything this script can check is fine.
+What to tell Claude: nothing is needed. If you ran it for a review, say "p4.16 check passed".
+    --- end of scripts/verify/p4.16-no-security-switch.ps1 ---
+         saved wiki/raw/evidence/phase-p5-telemetry/nosecurity-absent.txt
+  PASS   No-security switch absent from the release build (task p4.16 check) (137 s)
+         RESULT: PASS - p4.16 (4 PASS; 136 s)
+         saved wiki/raw/evidence/phase-p5-telemetry/wiki-lint.txt
+  WAIT   Wiki check (26 s)
+         Only the known wiki error remains (commit ff7292e changed MANIFEST.sha256; removed by the history cleanup you approve before the first upload, question Q-221).
+
+Part 4 - Your part (your review)
+  YOURS  Your checks
+         With the release build the gate made, you switched measuring and the network log on, browsed for a while, and found nothing in the log folder that should not be there; the switches, the days kept and the open-folder buttons behaved as described (docs/testing/manual-checklist-p5.md).
+  YOURS  Your review
+         You looked at the changed pages and the evidence, and said whether P5 is signed off.
+------------------------------------------------------------------------
+RESULT: NOT READY - P5-gate (22 PASS, 1 WAIT, 2 YOURS; 2532 s)
+Not finished yet, and nothing is broken. Waiting on: Wiki check.
+What to tell Claude: nothing, unless you expected this to be finished.
