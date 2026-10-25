@@ -3459,3 +3459,11 @@ Append-only, chronological (SCHEMA §12). New entries go at the end; existing en
 - sources: [raw/evidence/phase-p5-telemetry/p5-gate.txt, raw/evidence/phase-p5-telemetry/regression.txt]
 - result: Run at a2cfae4 from 02:06 in its own PowerShell window, 2532 s, PC left alone. Every automated row PASS: approvals, the 10 part-2 task checks, fmt and clippy, Rust tests, cargo deny, p5.4 accuracy, p5.5 cost, p5.1 format, p5.9 network log, earlier suites (security suite 75 passed, npm run p3 62 passed, npm run p2 26 passed, p2.3 PASS), shell checks, release build in target/gate-release, p4.16 no-security check. WAIT: wiki check, only the known Q-221 error. YOURS: the hand checklist and the review. 14 evidence files committed (mask scan 0, MANIFEST lines). The expected verdict.
 - next: owner does docs/testing/manual-checklist-p5.md with target/gate-release/release/ferrum-desktop.exe and tells Claude the results item by item.
+
+## [2026-10-24] handoff | session s09 ends; the owner does the P5 hand checklist next
+- session: s09
+- time: 20:24
+- pages: [handoff-2026-10-24-s09, phase-p5-telemetry]
+- sources: [raw/owner/2026-10-24-s09-session-end-checklist-next.md]
+- result: Owner: "Save the above as the last output and action on me, I have to move to another session and get back to this project in a few days". Claude's last four-part instruction (the P5 hand checklist with the gate's build) saved verbatim in the raw file; handoff written; STATUS next_action and the portal's next step say the next session asks him about the checklist first. Gate: run 4 one test fault fixed (8228edd); run 5 22 PASS, the known Q-221 WAIT (evidence a9cff00). Nothing in flight beyond p5.14 waiting on the owner. quick_lint 0 errors; lint:wiki only the known Q-221 error; portal-sync clean.
+- next: next session asks the owner whether he has done the P5 hand checklist (STATUS next_action).

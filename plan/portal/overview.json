@@ -2,16 +2,16 @@
   "$schema": "schema/overview.schema.json",
   "id": "overview",
   "title": "Where we are",
-  "summary": "Phase 4 (security) is done: you signed it off on 18 Oct, with the hand checklist for later. Phase 5 (measurement) has started: you answered its questions and approved its plan pages.",
+  "summary": "Phase 5 (measurement): all automatic end-of-phase checks passed on 20 Oct. Your hand checklist with the new build is next, then your sign-off.",
   "source": {
     "wiki_path": "STATUS.md",
-    "content_hash": "sha256:a998acafa327a2e5ac198c33d926ed4f2c0c7e196a10ed83b806c5f2aa68125a"
+    "content_hash": "sha256:4bb60b734f28a9f05da5ce0f7478543589d9f4833740147fde7ec11f83de8b1d"
   },
-  "updated": "2026-10-20",
+  "updated": "2026-10-24",
   "where_we_are": [
     {
       "item": "Current phase",
-      "state": "P5 Measurement: end-of-phase review; the gate passed its automatic part; your hand checks next",
+      "state": "P5 Measurement: the gate passed its automatic part; waiting for your hand checklist",
       "ref": "phase-p5-telemetry"
     },
     {
@@ -77,7 +77,7 @@
         }
       ]
     },
-    "tell_claude": "The results item by item in your own words (yes / no and anything odd), and whether Phase 5 is signed off."
+    "tell_claude": "The results item by item in your own words (yes / no and anything odd), and whether Phase 5 is signed off. The next Claude session asks you about this first."
   },
   "questions_for_you": {
     "open": 16,

@@ -5,7 +5,7 @@
   "summary": "What happened in the project, in plain words. Each entry says what was done, what comes next, who decided what, and the saved commit.",
   "source": {
     "wiki_path": "wiki/log.md",
-    "content_hash": "sha256:9f65d46cbecaed31060fe1e32d4415ab2ab1e15af7eadd30754d2c31dd75c39a"
+    "content_hash": "sha256:c429683c4f8521d562ab36473e9755abd311a1475e25ec1af68dd4910071269e"
   },
   "entries": [
     {
@@ -6700,6 +6700,31 @@
       "commit": null,
       "covers": [
         "## [2026-10-20] gate | phase-p5-telemetry exit run 5: NOT READY (22 PASS, 1 WAIT, 2 YOURS); test gate passed"
+      ],
+      "phase": "phase-p5-telemetry",
+      "category": "Checked",
+      "tags": [
+        "phases",
+        "check scripts"
+      ]
+    },
+    {
+      "id": "log-2026-10-24-s09-handoff",
+      "date": "2026-10-24",
+      "time": "20:24",
+      "title": "Session ends: your hand checklist for Phase 5 is next",
+      "done": "Claude saved the state for the next session: the handoff note, the status page, the log and this portal. Your next step (the hand checklist with the gate's build) is saved word for word. Nothing is half-done.",
+      "next": "You do the hand checklist when you are back; the next Claude session asks you about it first.",
+      "decisions": [
+        {
+          "what": "Pause the project for a few days; the hand checklist waits for you",
+          "by": "you"
+        }
+      ],
+      "approvals": [],
+      "commit": null,
+      "covers": [
+        "## [2026-10-24] handoff | session s09 ends; the owner does the P5 hand checklist next"
       ],
       "phase": "phase-p5-telemetry",
       "category": "Checked",
